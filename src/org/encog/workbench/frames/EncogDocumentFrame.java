@@ -24,6 +24,7 @@ import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.CreateObject;
+import org.encog.workbench.dialogs.UserInput;
 import org.encog.workbench.models.EncogListModel;
 import org.encog.workbench.training.RunAnneal;
 import org.encog.workbench.training.RunBackpropagation;
@@ -190,8 +191,9 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 			performFileClose();
 		else if (event.getActionCommand().equals(EncogDocumentFrame.TRAIN_BACKPROPAGATION))
 		{
-			RunBackpropagation train = new RunBackpropagation();
-			train.begin();
+			UserInput dialog = new UserInput(new javax.swing.JFrame(), true);
+			dialog.show(true);
+			
 		}
 		else if (event.getActionCommand().equals(EncogDocumentFrame.TRAIN_GENETIC))
 		{

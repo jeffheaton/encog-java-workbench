@@ -8,4 +8,10 @@ public class RunAnneal extends RunTraining {
 		
 	}
 
+	@Override
+	void begin(TrainingInput trainingInput) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

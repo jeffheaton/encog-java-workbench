@@ -8,4 +8,10 @@ public class RunGenetic extends RunTraining {
 		
 	}
 
+	@Override
+	void begin(TrainingInput trainingInput) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

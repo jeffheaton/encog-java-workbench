@@ -10,29 +10,15 @@ import org.encog.workbench.EncogWorkBench;
 
 public class RunBackpropagation extends RunTraining {
 
-	private double momentum;
-	private double learningRate;
-	private double maximumError;
 	private NeuralDataSet trainingData;
 	private BasicNetwork neuralNetwork;
 	
 	@Override
-	public void begin() {
+	public void begin(TrainingInput ti) {
 		
-		// these are the parameters that define how this training
-		// is to take place.  It is at this point that you should
-		// pop open a modal dialog box and prompt for these values
-		// for now I will just hard code them. 
-		this.momentum = 0.07;
-		this.learningRate = 0.07;
-		this.maximumError = 0.01;
-		String trainingDataName = "data-1"; // for this one just do a combo box with every training set in the current file
-		String neuralNetworkName = "network-1";// also a combo box of every neural network
-		
-		// now load the training set
 		EncogPersistedCollection currentFile = EncogWorkBench.getInstance().getCurrentFile();
-		this.trainingData = (NeuralDataSet)currentFile.find(trainingDataName);
-		this.neuralNetwork = (BasicNetwork)currentFile.find(neuralNetworkName);
+		this.trainingData = (NeuralDataSet)currentFile.find(ti.gettrainingDataName());
+		this.neuralNetwork = (BasicNetwork)currentFile.find(ti.getneuralNetworkName());
 		
 		// we have the data, now train.  I am doing this in the console
 		// create a dialog box that displays the results.  Display the current, the epoc(iteration)
@@ -44,8 +30,8 @@ public class RunBackpropagation extends RunTraining {
 		final Train train = new Backpropagation(
 				this.neuralNetwork, 
 				this.trainingData,
-				this.learningRate, 
-				this.momentum);
+				ti.getlearningRate(), 
+				ti.getmomentum());
 
 		int epoch = 1;
 
@@ -54,10 +40,16 @@ public class RunBackpropagation extends RunTraining {
 			System.out
 					.println("Epoch #" + epoch + " Error:" + train.getError());
 			epoch++;
-		} while ( train.getError() > this.maximumError);
+		} while ( train.getError() > ti.getmaximumError());
 
 		
 		
+		
+	}
+
+	@Override
+	public void begin() {
+		// TODO Auto-generated method stub
 		
 	}
 
