@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.FileFilter;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -27,7 +26,6 @@ import org.encog.workbench.dialogs.CreateObject;
 import org.encog.workbench.dialogs.UserInput;
 import org.encog.workbench.models.EncogListModel;
 import org.encog.workbench.training.RunAnneal;
-import org.encog.workbench.training.RunBackpropagation;
 import org.encog.workbench.training.RunGenetic;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.NeuralConst;
@@ -191,7 +189,7 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 			performFileClose();
 		else if (event.getActionCommand().equals(EncogDocumentFrame.TRAIN_BACKPROPAGATION))
 		{
-			UserInput dialog = new UserInput(new javax.swing.JFrame(), true);
+			UserInput dialog = new UserInput(new javax.swing.JFrame());
 			dialog.show(true);
 			
 		}

@@ -5,8 +5,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JList;

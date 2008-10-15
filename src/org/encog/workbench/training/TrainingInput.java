@@ -1,8 +1,5 @@
 package org.encog.workbench.training;
 
-import java.lang.*;
-
-import org.encog.neural.data.NeuralDataSet;
 
 public class TrainingInput {
 	

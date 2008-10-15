@@ -1,144 +1,103 @@
 package org.encog.workbench.dialogs;
 
+
+import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.EventQueue;
+import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
-
-
-/*
- * UsersInput.java
- *
- * Created on October 10, 2008, 11:07 PM
- */
-
-
-
-/**
- *
- * @author  manoj.talreja
- */
 import org.encog.workbench.training.RunBackpropagation;
 import org.encog.workbench.training.TrainingInput;
-import org.encog.workbench.util.StringConst;
-import org.jdesktop.layout.GroupLayout;
-import org.jdesktop.layout.LayoutStyle;
 
-import sun.io.Converters;
 
 public class UserInput extends JDialog implements ActionListener  {
-    /** Creates new form UsersInput */
-    public UserInput(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/** Creates new form UsersInput */
+    public UserInput(Frame owner) {
+    	super(owner, true);
+    	this.setSize(300, 240);
+    	this.setLocation(200, 100);
+    	 lblmomentum = new JLabel();
+         lbllearningRate = new JLabel();
+         lblmaximumError = new JLabel();
+         lbltrainingDataName = new JLabel();
+         lblneuralNetworkName = new JLabel();
+         txtmomentum = new JTextField();
+         txtlearningRate = new JTextField();
+         txtmaximumError = new JTextField();
+         btnSubmit = new JButton();
+         JButton btnCancel = new JButton();
+         cbotrainingDataName = new JComboBox();
+         cboneuralNetworkName = new JComboBox();
+         lbllearningRate1 = new JLabel();
+         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+         lblmomentum.setText("Momentum");
+         lbllearningRate.setText("LearningRate");
+         lblmaximumError.setText("MaximumError");
+         lbltrainingDataName.setText("TrainingDataName");
+         lblneuralNetworkName.setText("NeuralNetworkName");
+         btnSubmit.setText("Submit");
+         btnCancel.setText("Close");
+         btnSubmit.addActionListener(new ActionListener() {
+             public void actionPerformed(ActionEvent evt) {
+                 btnSubmitActionPerformed(evt);
+             }
+         });
+         btnCancel.addActionListener(new ActionListener() {
+             public void actionPerformed(ActionEvent evt) {
+                 btnCancelActionPerformed(evt);
+             }
+         });
+         cbotrainingDataName.setModel(new DefaultComboBoxModel(new String[] { "data-1" }));
+         cboneuralNetworkName.setModel(new DefaultComboBoxModel(new String[] { "network-1" }));
+         lbllearningRate1.setText("LearningRate");
+         Container content = this.getContentPane();
+         
+         JPanel jp = new JPanel();
+         jp.setLayout(new GridLayout(6,1,10,10));
+
+         jp.add(lblmomentum);
+         jp.add(txtmomentum); 
+         
+         jp.add(lbllearningRate);
+         jp.add(txtlearningRate);
+         
+         jp.add(lblmaximumError);
+         jp.add(txtmaximumError); 
+         
+         jp.add(lbltrainingDataName);
+         jp.add(cbotrainingDataName);
+         
+         jp.add(lblneuralNetworkName);
+         jp.add(cboneuralNetworkName);
+         
+         
+         jp.add(btnSubmit);
+         jp.add(btnCancel);
+         
+         content.add(jp, BorderLayout.CENTER);
+         
+
     }
 
-    private void initComponents() {
-
-        lblmomentum = new javax.swing.JLabel();
-        lbllearningRate = new javax.swing.JLabel();
-        lblmaximumError = new javax.swing.JLabel();
-        lbltrainingDataName = new javax.swing.JLabel();
-        lblneuralNetworkName = new javax.swing.JLabel();
-        txtmomentum = new javax.swing.JTextField();
-        txtlearningRate = new javax.swing.JTextField();
-        txtmaximumError = new javax.swing.JTextField();
-        btnSubmit = new javax.swing.JButton();
-        cbotrainingDataName = new javax.swing.JComboBox();
-        cboneuralNetworkName = new javax.swing.JComboBox();
-        lbllearningRate1 = new javax.swing.JLabel();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        lblmomentum.setText("Momentum");
-
-        lbllearningRate.setText("LearningRate");
-
-        lblmaximumError.setText("MaximumError");
-
-        lbltrainingDataName.setText("TrainingDataName");
-
-        lblneuralNetworkName.setText("NeuralNetworkName");
-
-        btnSubmit.setText("Submit");
-        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSubmitActionPerformed(evt);
-            }
-        });
-        cbotrainingDataName.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "data-1" }));
-
-        cboneuralNetworkName.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "network-1" }));
-
-        lbllearningRate1.setText("LearningRate");
-
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-        layout.createParallelGroup(GroupLayout.LEADING)
-              .add(layout.createSequentialGroup()
-              .add(25, 25, 25)
-              .add(layout.createParallelGroup(GroupLayout.TRAILING)
-              .add(lblneuralNetworkName)
-              .add(lblmomentum)
-              .add(lbltrainingDataName)
-                    .add(lblmaximumError)
-                    .add(lbllearningRate))
-                .add(18, 18, 18)
-                .add(layout.createParallelGroup(GroupLayout.LEADING, false)
-                    .add(btnSubmit)
-                    .add(txtmomentum, GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                    .add(txtmaximumError, GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                    .add(txtlearningRate, GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                    .add(cbotrainingDataName, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(cboneuralNetworkName, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(layout.createParallelGroup(GroupLayout.BASELINE)
-                    .add(lblmomentum)
-                    .add(txtmomentum, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .add(21, 21, 21)
-                .add(layout.createParallelGroup(GroupLayout.BASELINE)
-                    .add(txtlearningRate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .add(layout.createSequentialGroup()
-                        .addPreferredGap(LayoutStyle.RELATED)
-                        .add(lbllearningRate)))
-                .add(18, 18, 18)
-                .add(layout.createParallelGroup(GroupLayout.BASELINE)
-                    .add(lblmaximumError)
-                    .add(txtmaximumError, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .add(18, 18, 18)
-                .add(layout.createParallelGroup(GroupLayout.BASELINE)
-                    .add(lbltrainingDataName)
-                    .add(cbotrainingDataName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .add(18, 18, 18)
-                .add(layout.createParallelGroup(GroupLayout.BASELINE)
-                    .add(lblneuralNetworkName)
-                    .add(cboneuralNetworkName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(LayoutStyle.UNRELATED)
-                .add(btnSubmit)
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-  
+  private void btnCancelActionPerformed(java.awt.event.ActionEvent evt)
+	  {
+	  	this.dispose();
+	  }
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {
     	TrainingInput trainingInput = new TrainingInput();
     	trainingInput.setlearningRate(Double.parseDouble(txtlearningRate.getText()));
