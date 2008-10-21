@@ -2,6 +2,8 @@ package org.encog.workbench.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -15,10 +17,15 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
+import javax.swing.ListModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 import org.encog.EncogError;
+import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.Network;
 import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
@@ -31,7 +38,7 @@ import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.NeuralConst;
 
 public class EncogDocumentFrame extends JFrame implements WindowListener,
-		ActionListener {
+		ActionListener, MouseListener {
 
 	public static final String FILE_NEW = "New";
 	public static final String FILE_CLOSE = "Close";
@@ -42,12 +49,10 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 
 	public static final String OBJECTS_CREATE = "Create Object...";
 	public static final String OBJECTS_DELETE = "Delete Object...";
-	
+
 	public static final String TRAIN_BACKPROPAGATION = "Train Backpropagation...";
 	public static final String TRAIN_SIMULATED_ANNEALING = "Train Simulated Annealing...";
 	public static final String TRAIN_GENETIC = "Train Genetically...";
-
-	
 
 	private JMenuBar menuBar;
 	private JMenu menuFile;
@@ -65,8 +70,10 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 
 	public EncogDocumentFrame() {
 		this.addWindowListener(this);
-		EncogWorkBench.getInstance().setCurrentFile(new EncogPersistedCollection());
-		this.encogListModel = new EncogListModel(EncogWorkBench.getInstance().getCurrentFile());
+		EncogWorkBench.getInstance().setCurrentFile(
+				new EncogPersistedCollection());
+		this.encogListModel = new EncogListModel(EncogWorkBench.getInstance()
+				.getCurrentFile());
 	}
 
 	/**
@@ -105,7 +112,7 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 	}
 
 	public void windowOpened(WindowEvent e) {
-		
+
 		this.setSize(640, 480);
 
 		// menu bar
@@ -152,6 +159,7 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 		this.contents = new JList(this.encogListModel);
 		this.contents.setCellRenderer(new EncogItemRenderer());
 		this.contents.setFixedCellHeight(72);
+		this.contents.addMouseListener(this);
 
 		JScrollPane scrollPane = new JScrollPane(this.contents);
 
@@ -187,19 +195,17 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 			performFileClose();
 		else if (event.getActionCommand().equals(EncogDocumentFrame.FILE_NEW))
 			performFileClose();
-		else if (event.getActionCommand().equals(EncogDocumentFrame.TRAIN_BACKPROPAGATION))
-		{
+		else if (event.getActionCommand().equals(
+				EncogDocumentFrame.TRAIN_BACKPROPAGATION)) {
 			UserInput dialog = new UserInput(new javax.swing.JFrame());
 			dialog.show(true);
-			
-		}
-		else if (event.getActionCommand().equals(EncogDocumentFrame.TRAIN_GENETIC))
-		{
+
+		} else if (event.getActionCommand().equals(
+				EncogDocumentFrame.TRAIN_GENETIC)) {
 			RunGenetic train = new RunGenetic();
 			train.begin();
-		}
-		else if (event.getActionCommand().equals(EncogDocumentFrame.TRAIN_SIMULATED_ANNEALING))
-		{
+		} else if (event.getActionCommand().equals(
+				EncogDocumentFrame.TRAIN_SIMULATED_ANNEALING)) {
 			RunAnneal train = new RunAnneal();
 			train.begin();
 		}
@@ -228,7 +234,8 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 			if (EncogWorkBench.getInstance().getCurrentFileName() == null) {
 				performFileSaveAs();
 			} else {
-				EncogWorkBench.getInstance().getCurrentFile().save(EncogWorkBench.getInstance().getCurrentFileName());
+				EncogWorkBench.getInstance().getCurrentFile().save(
+						EncogWorkBench.getInstance().getCurrentFileName());
 			}
 		} catch (EncogError e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(),
@@ -245,7 +252,7 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
 
-				// no extension     
+				// no extension
 				if (ExtensionFilter.getExtension(file) == null) {
 					file = new File(file.getPath() + ".eg");
 				}
@@ -321,17 +328,20 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 			if (JOptionPane.showConfirmDialog(this,
 					"Are you sure you want to delete this object?", "Warning",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				EncogWorkBench.getInstance().getCurrentFile().getList().remove(object);
+				EncogWorkBench.getInstance().getCurrentFile().getList().remove(
+						object);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
 		}
 	}
 
 	private boolean checkSave() {
-		String currentFileName = EncogWorkBench.getInstance().getCurrentFileName();
-		
+		String currentFileName = EncogWorkBench.getInstance()
+				.getCurrentFileName();
+
 		if (currentFileName != null
-				|| EncogWorkBench.getInstance().getCurrentFile().getList().size() > 0) {
+				|| EncogWorkBench.getInstance().getCurrentFile().getList()
+						.size() > 0) {
 			String f = currentFileName != null ? currentFileName : "Untitled";
 			int response = JOptionPane.showConfirmDialog(null, "Save " + f
 					+ ", first?", "Save", JOptionPane.YES_NO_CANCEL_OPTION,
@@ -350,7 +360,7 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 	}
 
 	public void redraw() {
-		
+
 		// set the title properly
 		if (EncogWorkBench.getInstance().getCurrentFileName() == null) {
 			this.setTitle(EncogDocumentFrame.WINDOW_TITLE + " : Untitled");
@@ -358,9 +368,54 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 			this.setTitle(EncogDocumentFrame.WINDOW_TITLE + " : "
 					+ EncogWorkBench.getInstance().getCurrentFileName());
 		}
-		
+
 		// redraw the list
 		this.encogListModel.invalidate();
 	}
-	
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (e.getClickCount() == 2) {
+			int index = this.contents.locationToIndex(e.getPoint());
+			ListModel dlm = this.contents.getModel();
+			Object item = dlm.getElementAt(index);
+			this.contents.ensureIndexIsVisible(index);
+			
+			if( item instanceof NeuralDataSet )
+			{
+				TrainingDataFrame frame = new TrainingDataFrame((BasicNeuralDataSet)item);
+				frame.setVisible(true);
+			}
+			else if( item instanceof Network )
+			{
+				// coming soon!
+			}
+			
+		}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
