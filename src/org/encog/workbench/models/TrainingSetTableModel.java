@@ -23,22 +23,18 @@ public class TrainingSetTableModel implements TableModel {
 		this.data = data;
 	}
 	
-	@Override
 	public void addTableModelListener(TableModelListener listner) {
 		this.listeners.add(listner);		
 	}
 
-	@Override
 	public Class<?> getColumnClass(int arg0) {
 		return Double.class;
 	}
 
-	@Override
 	public int getColumnCount() {		
 		return data.getIdealSize()+data.getInputSize();
 	}
 
-	@Override
 	public String getColumnName(int columnIndex) {
 		if( (columnIndex< data.getInputSize()) )
 			return "Input " + (columnIndex+1);
@@ -46,7 +42,6 @@ public class TrainingSetTableModel implements TableModel {
 		return "Ideal " + ((columnIndex+1)-data.getInputSize());
 	}
 
-	@Override
 	public int getRowCount() {
 		int i=0;
 		for(@SuppressWarnings("unused")
@@ -57,7 +52,6 @@ public class TrainingSetTableModel implements TableModel {
 		return i;
 	}
 
-	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		for( NeuralDataPair pair: this.data)
 		{
@@ -71,18 +65,15 @@ public class TrainingSetTableModel implements TableModel {
 		}
 		return null;
 	}
-
-	@Override
+	
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return true;
 	}
 
-	@Override
 	public void removeTableModelListener(TableModelListener l) {
 		this.listeners.remove(l);		
 	}
 
-	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
 		for( NeuralDataPair pair: this.data)
 		{

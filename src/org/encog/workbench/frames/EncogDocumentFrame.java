@@ -7,6 +7,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -28,6 +30,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.Network;
 import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.persist.EncogPersistedCollection;
+import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.CreateObject;
 import org.encog.workbench.dialogs.UserInput;
@@ -62,6 +65,8 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 	private JToolBar toolBar;
 	private int trainingCount = 1;
 	private int networkCount = 1;
+	
+	private List<JFrame> subwindows = new ArrayList<JFrame>();
 
 	private EncogListModel encogListModel;
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
@@ -373,7 +378,6 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 		this.encogListModel.invalidate();
 	}
 
-	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() == 2) {
 			int index = this.contents.locationToIndex(e.getPoint());
@@ -383,8 +387,17 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 			
 			if( item instanceof NeuralDataSet )
 			{
-				TrainingDataFrame frame = new TrainingDataFrame((BasicNeuralDataSet)item);
-				frame.setVisible(true);
+				JFrame frame = findSubWindow((EncogPersistedObject)item);
+				if( frame==null )
+				{
+					frame = new TrainingDataFrame((BasicNeuralDataSet)item);
+					frame.setVisible(true);
+					this.subwindows.add(frame);
+				}
+				else
+				{
+					frame.toFront();
+				}
 			}
 			else if( item instanceof Network )
 			{
@@ -394,28 +407,47 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 		}
 	}
 
-	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 
 	}
+	
+	public JFrame findSubWindow(EncogPersistedObject object)
+	{
+		for(JFrame frame: this.subwindows )
+		{
+			if( frame instanceof TrainingDataFrame )
+			{
+				TrainingDataFrame t = (TrainingDataFrame)frame;
+				if( t.getData()==object )
+					return frame;
+			}
+		}
+		return null;
+	}
+	
+	public void closeSubWindow(JFrame sub)
+	{
+		this.subwindows.remove(sub);
+		redraw();
+		sub.setVisible(false);
+		sub.dispose();
+	}
+
 
 }

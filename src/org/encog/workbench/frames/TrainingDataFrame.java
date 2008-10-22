@@ -21,6 +21,7 @@ import javax.swing.JToolBar;
 
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.models.TrainingSetTableModel;
 
 public class TrainingDataFrame extends JFrame implements WindowListener, ActionListener {
@@ -41,43 +42,36 @@ public class TrainingDataFrame extends JFrame implements WindowListener, ActionL
 		this.addWindowListener(this);
 	}
 
-	@Override
 	public void windowActivated(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
-	@Override
 	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
+		EncogWorkBench.getInstance().getMainWindow().closeSubWindow(this);
 		
 	}
 
-	@Override
 	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void windowDeiconified(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void windowIconified(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
+	
 	public void windowOpened(WindowEvent e) {
 		setSize(640,480);
 		Container content = this.getContentPane();
@@ -101,7 +95,6 @@ public class TrainingDataFrame extends JFrame implements WindowListener, ActionL
 		//
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent action) {
 		int row = this.table.getSelectedRow();
 		int col = this.table.getSelectedColumn();
@@ -140,6 +133,11 @@ public class TrainingDataFrame extends JFrame implements WindowListener, ActionL
 				this.model.delRow(row);
 		}
 		
+	}
+	
+	public BasicNeuralDataSet getData()
+	{
+		return this.data;
 	}
 
 }
