@@ -93,6 +93,7 @@ public class TrainingDataFrame extends JFrame implements WindowListener, ActionL
 		this.table = new JTable(model);		
 		content.add(new JScrollPane(table),BorderLayout.CENTER);
 		//
+		setTitle("Edit Training Data");
 	}
 
 	public void actionPerformed(ActionEvent action) {

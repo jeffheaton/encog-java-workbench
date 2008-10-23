@@ -8,10 +8,9 @@ import javax.swing.event.ListDataListener;
 
 import org.encog.neural.persist.EncogPersistedCollection;
 
-public class EncogListModel implements ListModel {
+public class EncogListModel extends CommonListModel {
 
-	private EncogPersistedCollection encogCollection;
-	private List<ListDataListener> listeners = new ArrayList<ListDataListener>();
+	private EncogPersistedCollection encogCollection;	
 	
 	public EncogListModel(EncogPersistedCollection theEncogCollection)
 	{
@@ -19,7 +18,7 @@ public class EncogListModel implements ListModel {
 	}
 	
 	public void addListDataListener(ListDataListener listener) {
-		listeners.add(listener);		
+		this.getListeners().add(listener);		
 	}
 
 	public Object getElementAt(int i) {
@@ -34,7 +33,7 @@ public class EncogListModel implements ListModel {
 	}
 
 	public void removeListDataListener(ListDataListener listener) {
-		this.listeners.remove(listener);		
+		this.getListeners().remove(listener);		
 	}
 
 	/**
@@ -44,13 +43,6 @@ public class EncogListModel implements ListModel {
 		return encogCollection;
 	}
 
-	public void invalidate() {
-		for(ListDataListener listener: this.listeners)
-		{
-			listener.contentsChanged(null);
-		}
-		
-	}
 	
 	
 

@@ -79,6 +79,7 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 				new EncogPersistedCollection());
 		this.encogListModel = new EncogListModel(EncogWorkBench.getInstance()
 				.getCurrentFile());
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	/**
@@ -401,9 +402,18 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 			}
 			else if( item instanceof Network )
 			{
-				// coming soon!
-			}
-			
+				JFrame frame = findSubWindow((EncogPersistedObject)item);
+				if( frame==null )
+				{
+					frame = new NetworkFrame((BasicNetwork)item);
+					frame.setVisible(true);
+					this.subwindows.add(frame);
+				}
+				else
+				{
+					frame.toFront();
+				}
+			}			
 		}
 	}
 
@@ -435,6 +445,12 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 			{
 				TrainingDataFrame t = (TrainingDataFrame)frame;
 				if( t.getData()==object )
+					return frame;
+			}
+			else if( frame instanceof NetworkFrame )
+			{
+				NetworkFrame n = (NetworkFrame)frame;
+				if( n.getData()==object )
 					return frame;
 			}
 		}
