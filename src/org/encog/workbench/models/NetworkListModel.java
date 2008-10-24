@@ -15,12 +15,10 @@ public class NetworkListModel extends CommonListModel {
 		this.network = network;
 	}
 	
-	@Override
 	public Object getElementAt(int i) {
 		return this.network.getLayers().get(i);
 	}
 
-	@Override
 	public int getSize() {
 		return this.network.getLayers().size();
 	}
