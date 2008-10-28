@@ -63,7 +63,6 @@ public class EditNetworkProperties extends JDialog  implements WindowListener, A
 		
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource()== this.ctrlOK )
 		{
@@ -109,44 +108,36 @@ public class EditNetworkProperties extends JDialog  implements WindowListener, A
 		this.resultDescription = resultDescription;
 	}
 
-
-	@Override
 	public void windowActivated(WindowEvent e) {
 		this.ctrlName.setText(this.resultName);
 		this.ctrlDescription.setText(this.resultDescription);		
 	}
 
-	@Override
 	public void windowClosed(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void windowDeiconified(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void windowIconified(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void windowOpened(WindowEvent e) {
 
 		
