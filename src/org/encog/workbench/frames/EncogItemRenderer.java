@@ -37,10 +37,7 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
     	this.regularFont = new Font("serif",0,12);
     }
     
-    
-    // This is the only method defined by ListCellRenderer.
-    // We just reconfigure the JLabel each time we're called.
-
+   
     public Component getListCellRendererComponent(
       JList list,
       Object value,            // value to display

@@ -115,7 +115,9 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 		this.model  = new NetworkListModel(this.data);
 		this.contents = new JList(this.model);
 		this.contents.addMouseListener(this);
+		this.contents.setCellRenderer(new NetworkLayerRenderer());
 		content2.add(new JScrollPane(this.contents),BorderLayout.CENTER);
+		this.contents.setFixedCellHeight(72);
 		
 		this.setTitle("Edit Neural Network");
 		
