@@ -31,7 +31,10 @@ import org.encog.util.NormalizeInput.NormalizationType;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.CreateLayer;
 import org.encog.workbench.dialogs.EditFeedforwardLayer;
+import org.encog.workbench.dialogs.EditHopfieldLayer;
 import org.encog.workbench.dialogs.EditNetworkProperties;
+import org.encog.workbench.dialogs.EditSOMLayer;
+import org.encog.workbench.dialogs.EditSimpleLayer;
 import org.encog.workbench.dialogs.CreateLayer.CreateLayerResult;
 import org.encog.workbench.models.NetworkListModel;
 
@@ -273,6 +276,65 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 				if( layer.getNeuronCount()!=dialog.getResultNeuronCount() )
 				{
 					layer.setNeuronCount(dialog.getResultNeuronCount());
+				}
+			}
+		}
+		else if( item instanceof HopfieldLayer )
+		{
+			HopfieldLayer layer = (HopfieldLayer)item;
+			EditHopfieldLayer dialog = new EditHopfieldLayer(this);
+			dialog.setResultDescription(layer.getDescription());
+			dialog.setResultName(layer.getName());
+			dialog.setResultNeuronCount(layer.getNeuronCount());
+			dialog.setVisible(true);
+			if( dialog.getCommand()== EditHopfieldLayer.Command.OK)
+			{
+				layer.setName(dialog.getResultName());
+				layer.setDescription(dialog.getResultDescription());
+				// was there a neuron count change?
+				if( layer.getNeuronCount()!=dialog.getResultNeuronCount() )
+				{
+					//layer.setNeuronCount(dialog.getResultNeuronCount());
+				}
+			}
+		}
+		else if( item instanceof BasicLayer )
+		{
+			BasicLayer layer = (BasicLayer)item;
+			EditSimpleLayer dialog = new EditSimpleLayer(this);
+			dialog.setResultDescription(layer.getDescription());
+			dialog.setResultName(layer.getName());
+			dialog.setResultNeuronCount(layer.getNeuronCount());
+			dialog.setVisible(true);
+			if( dialog.getCommand()== EditSimpleLayer.Command.OK)
+			{
+				layer.setName(dialog.getResultName());
+				layer.setDescription(dialog.getResultDescription());
+				// was there a neuron count change?
+				if( layer.getNeuronCount()!=dialog.getResultNeuronCount() )
+				{
+					//layer.setNeuronCount(dialog.getResultNeuronCount());
+				}
+			}
+		}
+		else if( item instanceof SOMLayer )
+		{
+			SOMLayer layer = (SOMLayer)item;
+			EditSOMLayer dialog = new EditSOMLayer(this);
+			dialog.setResultNormalization(layer.getNormalizationType());
+			dialog.setResultDescription(layer.getDescription());
+			dialog.setResultName(layer.getName());
+			dialog.setResultNeuronCount(layer.getNeuronCount());
+			dialog.setVisible(true);
+			if( dialog.getCommand()== EditSOMLayer.Command.OK)
+			{
+				layer.setName(dialog.getResultName());
+				layer.setDescription(dialog.getResultDescription());
+				//layer.setNormalizationType(dialog.getResultNormalization());
+				// was there a neuron count change?
+				if( layer.getNeuronCount()!=dialog.getResultNeuronCount() )
+				{
+					//layer.setNeuronCount(dialog.getResultNeuronCount());
 				}
 			}
 		}

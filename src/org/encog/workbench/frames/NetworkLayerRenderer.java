@@ -11,6 +11,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
+import org.encog.matrix.Matrix;
 import org.encog.neural.activation.ActivationFunction;
 import org.encog.neural.activation.ActivationLinear;
 import org.encog.neural.activation.ActivationSigmoid;
@@ -20,6 +21,7 @@ import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.networks.layers.HopfieldLayer;
 import org.encog.neural.networks.layers.SOMLayer;
+import org.encog.util.NormalizeInput;
 
 public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 
@@ -93,6 +95,30 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 			return "Unknown";
 	}
 	
+	private String getNormalizationType(SOMLayer som)
+	{
+		if( som.getNormalizationType()==NormalizeInput.NormalizationType.MULTIPLICATIVE)
+		{
+			return "Multiplicative";
+		}
+		else if( som.getNormalizationType()==NormalizeInput.NormalizationType.Z_AXIS)
+		{
+			return "Z-Axis";
+		}
+		else
+		{
+			return "Unknown";
+		}
+	}
+	
+	public String getMatrix(Matrix matrix)
+	{
+		if( matrix==null )
+			return "N/A";
+		else
+			return matrix.getRows() + "x" + matrix.getCols()+ " (rows x cols)";
+	}
+	
 	public void paint(Graphics g)
 	{
 		int width = this.getWidth();
@@ -138,6 +164,8 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 			g.drawString("Neurons: " + ff.getNeuronCount(), 70, y);
 			y+=regularMetrics.getHeight();
 			g.drawString("Activation Function:" + getActivationType(ff.getActivationFunction()), 70, y);
+			y+=regularMetrics.getHeight();
+			g.drawString("Matrix Size:" + getMatrix(ff.getMatrix()), 70, y);
 		}
 		else if( this.getLayer() instanceof HopfieldLayer )
 		{
@@ -158,6 +186,8 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 				y+=regularMetrics.getHeight();
 			}
 			g.drawString("Neurons: " + hop.getNeuronCount(), 70, y);
+			y+=regularMetrics.getHeight();
+			g.drawString("Matrix Size:" + getMatrix(hop.getMatrix()), 70, y);
 		}
 		else if( this.getLayer() instanceof SOMLayer )
 		{
@@ -178,6 +208,10 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 				y+=regularMetrics.getHeight();
 			}
 			g.drawString("Neurons: " + som.getNeuronCount(), 70, y);
+			y+=regularMetrics.getHeight();
+			g.drawString("Normalization: " + getNormalizationType(som), 70, y);
+			y+=regularMetrics.getHeight();
+			g.drawString("Matrix Size:" + getMatrix(som.getMatrix()), 70, y);
 		}
 		else if( this.getLayer() instanceof BasicLayer )
 		{
@@ -198,6 +232,7 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 				y+=regularMetrics.getHeight();
 			}
 			g.drawString("Neurons: " + basic.getNeuronCount(), 70, y);
+			
 		}
 		
 	}
