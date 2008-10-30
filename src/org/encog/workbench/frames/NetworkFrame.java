@@ -287,7 +287,7 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 				// was there a neuron count change?
 				if( layer.getNeuronCount()!=dialog.getResultNeuronCount() )
 				{
-					//layer.setNeuronCount(dialog.getResultNeuronCount());
+					layer.setNeuronCount(dialog.getResultNeuronCount());
 				}
 			}
 		}
@@ -306,7 +306,7 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 				// was there a neuron count change?
 				if( layer.getNeuronCount()!=dialog.getResultNeuronCount() )
 				{
-					//layer.setNeuronCount(dialog.getResultNeuronCount());
+					layer.setNeuronCount(dialog.getResultNeuronCount());
 				}
 			}
 		}
@@ -323,11 +323,11 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 			{
 				layer.setName(dialog.getResultName());
 				layer.setDescription(dialog.getResultDescription());
-				//layer.setNormalizationType(dialog.getResultNormalization());
+				layer.setNormalizationType(dialog.getResultNormalization());
 				// was there a neuron count change?
 				if( layer.getNeuronCount()!=dialog.getResultNeuronCount() )
 				{
-					//layer.setNeuronCount(dialog.getResultNeuronCount());
+					layer.setNeuronCount(dialog.getResultNeuronCount());
 				}
 			}
 		}
