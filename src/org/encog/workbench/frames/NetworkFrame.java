@@ -30,9 +30,9 @@ import org.encog.neural.networks.layers.SOMLayer;
 import org.encog.util.NormalizeInput.NormalizationType;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.CreateLayer;
+import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EditFeedforwardLayer;
 import org.encog.workbench.dialogs.EditHopfieldLayer;
-import org.encog.workbench.dialogs.EditNetworkProperties;
 import org.encog.workbench.dialogs.EditSOMLayer;
 import org.encog.workbench.dialogs.EditSimpleLayer;
 import org.encog.workbench.dialogs.CreateLayer.CreateLayerResult;
@@ -207,15 +207,8 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 	
 	public void performProperties()
 	{
-		EditNetworkProperties dialog = new EditNetworkProperties(this); 
-		dialog.setResultName(this.data.getName());
-		dialog.setResultDescription(this.data.getDescription());
-		dialog.setVisible(true);
-		if( dialog.getCommand()==EditNetworkProperties.Command.OK )
-		{
-			this.data.setName(dialog.getResultName());
-			this.data.setDescription(dialog.getResultDescription());
-		}
+		EditEncogObjectProperties dialog = new EditEncogObjectProperties(this,this.data);
+		dialog.process();
 	}
 
 	/**

@@ -8,40 +8,36 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.encog.neural.activation.ActivationFunction;
-import org.encog.neural.activation.ActivationLinear;
-import org.encog.neural.activation.ActivationSigmoid;
-import org.encog.neural.activation.ActivationTANH;
-import org.encog.workbench.dialogs.EditFeedforwardLayer.Command;
+import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.networks.Network;
+import org.encog.neural.persist.EncogPersistedObject;
 
-public class EditNetworkProperties extends JDialog  implements WindowListener, ActionListener {
-
-	public enum Command
-	{
-		OK,
-		CANCEL
-	};
+public class EditEncogObjectProperties extends JDialog  implements WindowListener, ActionListener {
 	
 	private JTextField ctrlName;
 	private JTextField ctrlDescription;
 	private JButton ctrlOK;
 	private JButton ctrlCancel;
-	private String resultName;
-	private String resultDescription;
-	private Command command;
+	private EncogPersistedObject object;
 	
-	public EditNetworkProperties(Frame owner) {
+	public EditEncogObjectProperties(Frame owner, EncogPersistedObject object) {
 		super(owner, true);
 		
 		this.setLocation(200, 100);
-		setTitle("Network Properties");
+		
+		if( object instanceof Network )
+		{
+			setTitle("Network Properties");
+		}
+		else if (object instanceof NeuralDataSet )
+		{
+			setTitle("Neural Data Set Properties");
+		}
 		
 		Container content = this.getContentPane();		
 		content.setLayout(new GridLayout(3,1,10,10));
@@ -61,56 +57,27 @@ public class EditNetworkProperties extends JDialog  implements WindowListener, A
 		this.ctrlCancel.addActionListener(this);
 		this.addWindowListener(this);
 		
+		this.object = object;
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource()== this.ctrlOK )
 		{
-			this.resultName = this.ctrlName.getText();
-			this.resultDescription = this.ctrlDescription.getText();
-						
-			this.command = Command.OK;
+			this.object.setName(ctrlName.getText());
+			this.object.setDescription(ctrlDescription.getText());
 			this.dispose();
 		}
 		else if( e.getSource()== this.ctrlCancel )
 		{
-			this.command = Command.CANCEL;
 			this.dispose();
 		}
 		
 	}
 
-	/**
-	 * @return the resultName
-	 */
-	public String getResultName() {
-		return resultName;
-	}
-
-	/**
-	 * @param resultName the resultName to set
-	 */
-	public void setResultName(String resultName) {
-		this.resultName = resultName;
-	}
-
-	/**
-	 * @return the resultDescription
-	 */
-	public String getResultDescription() {
-		return resultDescription;
-	}
-
-	/**
-	 * @param resultDescription the resultDescription to set
-	 */
-	public void setResultDescription(String resultDescription) {
-		this.resultDescription = resultDescription;
-	}
-
 	public void windowActivated(WindowEvent e) {
-		this.ctrlName.setText(this.resultName);
-		this.ctrlDescription.setText(this.resultDescription);		
+		this.ctrlName.setText(object.getName());
+		this.ctrlDescription.setText(object.getDescription());		
 	}
 
 	public void windowClosed(WindowEvent e) {
@@ -142,19 +109,10 @@ public class EditNetworkProperties extends JDialog  implements WindowListener, A
 
 		
 	}
-
-	/**
-	 * @return the command
-	 */
-	public Command getCommand() {
-		return command;
-	}
-
-	/**
-	 * @param command the command to set
-	 */
-	public void setCommand(Command command) {
-		this.command = command;
+	
+	public void process()
+	{
+		this.setVisible(true);
 	}
 	
 	

@@ -17,6 +17,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.ListModel;
@@ -33,6 +34,7 @@ import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.CreateObject;
+import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.UserInput;
 import org.encog.workbench.models.EncogListModel;
 import org.encog.workbench.training.RunAnneal;
@@ -65,6 +67,16 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 	private JToolBar toolBar;
 	private int trainingCount = 1;
 	private int networkCount = 1;
+	
+	private JPopupMenu popupNetwork;
+	private JMenuItem popupNetworkDelete;
+	private JMenuItem popupNetworkProperties;
+	private JMenuItem popupNetworkOpen;
+	
+	private JPopupMenu popupData;
+	private JMenuItem popupDataDelete;
+	private JMenuItem popupDataProperties;
+	private JMenuItem popupDataOpen;
 	
 	private List<JFrame> subwindows = new ArrayList<JFrame>();
 
@@ -171,9 +183,31 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 
 		this.getContentPane().add(scrollPane);
 		redraw();
+		
+		
+		// build network popup menu
+		this.popupNetwork = new JPopupMenu();
+		this.popupNetworkDelete = addItem(this.popupNetwork, "Delete",'d');
+		this.popupNetworkOpen = addItem(this.popupNetwork, "Open",'o');
+		this.popupNetworkProperties = addItem(this.popupNetwork, "Properties",'p');
+		
+		this.popupData = new JPopupMenu();
+		this.popupDataDelete = addItem(this.popupData, "Delete",'d');
+		this.popupDataOpen = addItem(this.popupData, "Open",'o');
+		this.popupDataProperties = addItem(this.popupData, "Properties",'p');
+		
+		
 	}
 
 	protected JMenuItem addItem(JMenu m, String s, int key) {
+
+		JMenuItem mi = new JMenuItem(s, key);
+		mi.addActionListener(this);
+		m.add(mi);
+		return mi;
+	}
+	
+	protected JMenuItem addItem(JPopupMenu m, String s, int key) {
 
 		JMenuItem mi = new JMenuItem(s, key);
 		mi.addActionListener(this);
@@ -214,6 +248,33 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 				EncogDocumentFrame.TRAIN_SIMULATED_ANNEALING)) {
 			RunAnneal train = new RunAnneal();
 			train.begin();
+		}
+		
+		if( event.getSource()==this.popupNetworkDelete )
+		{
+			performObjectsDelete();
+		}
+		else if(event.getSource()==this.popupNetworkOpen )
+		{
+			openItem(this.contents.getSelectedValue());
+		}
+		else if( event.getSource()==this.popupNetworkProperties)
+		{
+			EditEncogObjectProperties dialog = new EditEncogObjectProperties(this,(EncogPersistedObject) this.contents.getSelectedValue());
+			dialog.process();
+		}
+		else if( event.getSource()==this.popupDataDelete )
+		{
+			performObjectsDelete();
+		}
+		else if(event.getSource()==this.popupDataOpen )
+		{
+			openItem(this.contents.getSelectedValue());
+		}
+		else if( event.getSource()==this.popupDataProperties)
+		{
+			EditEncogObjectProperties dialog = new EditEncogObjectProperties(this,(EncogPersistedObject) this.contents.getSelectedValue());
+			dialog.process();
 		}
 	}
 
@@ -378,43 +439,71 @@ public class EncogDocumentFrame extends JFrame implements WindowListener,
 		// redraw the list
 		this.encogListModel.invalidate();
 	}
+	
+	public void rightMouseClicked(MouseEvent e, Object item)
+	{
+		if( item instanceof Network )
+		{		
+			this.popupNetwork.show( e.getComponent(),
+				e.getX(), e.getY() );
+		}
+		else if( item instanceof NeuralDataSet )
+		{		
+			this.popupData.show( e.getComponent(),
+				e.getX(), e.getY() );
+		}
+
+	}
 
 	public void mouseClicked(MouseEvent e) {
-		if (e.getClickCount() == 2) {
-			int index = this.contents.locationToIndex(e.getPoint());
-			ListModel dlm = this.contents.getModel();
-			Object item = dlm.getElementAt(index);
-			this.contents.ensureIndexIsVisible(index);
-			
-			if( item instanceof NeuralDataSet )
-			{
-				JFrame frame = findSubWindow((EncogPersistedObject)item);
-				if( frame==null )
-				{
-					frame = new TrainingDataFrame((BasicNeuralDataSet)item);
-					frame.setVisible(true);
-					this.subwindows.add(frame);
-				}
-				else
-				{
-					frame.toFront();
-				}
-			}
-			else if( item instanceof Network )
-			{
-				JFrame frame = findSubWindow((EncogPersistedObject)item);
-				if( frame==null )
-				{
-					frame = new NetworkFrame((BasicNetwork)item);
-					frame.setVisible(true);
-					this.subwindows.add(frame);
-				}
-				else
-				{
-					frame.toFront();
-				}
-			}			
+
+		int index = this.contents.locationToIndex(e.getPoint());
+		ListModel dlm = this.contents.getModel();
+		Object item = dlm.getElementAt(index);
+		this.contents.ensureIndexIsVisible(index);
+		this.contents.setSelectedIndex(index);
+				
+		if( e.getButton()==MouseEvent.BUTTON3 )
+		{
+			rightMouseClicked(e, item);
 		}
+		
+		if (e.getClickCount() == 2) {
+			
+				openItem(item);		
+		}
+	}
+	
+	private void openItem(Object item)
+	{
+		if( item instanceof NeuralDataSet )
+		{
+			JFrame frame = findSubWindow((EncogPersistedObject)item);
+			if( frame==null )
+			{
+				frame = new TrainingDataFrame((BasicNeuralDataSet)item);
+				frame.setVisible(true);
+				this.subwindows.add(frame);
+			}
+			else
+			{
+				frame.toFront();
+			}
+		}
+		else if( item instanceof Network )
+		{
+			JFrame frame = findSubWindow((EncogPersistedObject)item);
+			if( frame==null )
+			{
+				frame = new NetworkFrame((BasicNetwork)item);
+				frame.setVisible(true);
+				this.subwindows.add(frame);
+			}
+			else
+			{
+				frame.toFront();
+			}
+		}		
 	}
 
 	public void mouseEntered(MouseEvent arg0) {
