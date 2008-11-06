@@ -21,6 +21,7 @@ import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.networks.layers.HopfieldLayer;
 import org.encog.neural.networks.layers.SOMLayer;
+import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.util.NormalizeInput;
 
 public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
@@ -154,7 +155,7 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 			
 			g.setFont(this.regularFont);
 			
-			if( ff.getName()!=null || ff.getDescription()!=null )
+			if( shouldDisplayName(ff) )
 			{
 				g.drawString(ff.getDescription()
 						+"("+ff.getName()
@@ -178,7 +179,7 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 			
 			g.setFont(this.regularFont);
 			
-			if( hop.getName()!=null || hop.getDescription()!=null )
+			if( shouldDisplayName(hop) )
 			{
 				g.drawString(hop.getDescription()
 						+"("+hop.getName()
@@ -200,7 +201,7 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 			
 			g.setFont(this.regularFont);
 			
-			if( som.getName()!=null || som.getDescription()!=null )
+			if( shouldDisplayName(som) )
 			{
 				g.drawString(som.getDescription()
 						+"("+som.getName()
@@ -224,7 +225,7 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 			
 			g.setFont(this.regularFont);
 			
-			if( basic.getName()!=null || basic.getDescription()!=null )
+			if( shouldDisplayName(basic) )
 			{
 				g.drawString(basic.getDescription()
 						+"("+basic.getName()
@@ -265,6 +266,26 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 	 */
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+	
+	private boolean shouldDisplayName(EncogPersistedObject obj)
+	{
+		if( obj.getName()==null && obj.getDescription()==null )
+		{
+			return false;
+		}
+		
+		if( obj.getName()!=null && obj.getName().length()>0 )
+		{
+			return true;
+		}
+		
+		if( obj.getDescription()!=null && obj.getDescription().length()>0 )
+		{
+			return true;
+		}
+		
+		return false;
 	}
 
 }

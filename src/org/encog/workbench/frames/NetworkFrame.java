@@ -14,8 +14,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.ListModel;
@@ -23,10 +26,12 @@ import javax.swing.ListModel;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.Layer;
+import org.encog.neural.networks.Network;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.networks.layers.HopfieldLayer;
 import org.encog.neural.networks.layers.SOMLayer;
+import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.util.NormalizeInput.NormalizationType;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.CreateLayer;
@@ -35,10 +40,13 @@ import org.encog.workbench.dialogs.EditFeedforwardLayer;
 import org.encog.workbench.dialogs.EditHopfieldLayer;
 import org.encog.workbench.dialogs.EditSOMLayer;
 import org.encog.workbench.dialogs.EditSimpleLayer;
+import org.encog.workbench.dialogs.UserInput;
 import org.encog.workbench.dialogs.CreateLayer.CreateLayerResult;
 import org.encog.workbench.models.NetworkListModel;
+import org.encog.workbench.training.RunAnneal;
+import org.encog.workbench.training.RunGenetic;
 
-public class NetworkFrame extends JFrame implements WindowListener, ActionListener, MouseListener
+public class NetworkFrame extends EncogListFrame
 {
 
 	private BasicNetwork data;
@@ -47,41 +55,20 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 	private JButton deleteLayer;
 	private JButton editLayer;
 	private JButton properties;
-	private JList contents;
 	private NetworkListModel model;
+	
+	private JPopupMenu popupNetworkLayer;
+	private JMenuItem popupNetworkLayerDelete;
+	private JMenuItem popupNetworkLayerEdit;
+	
 	
 	public NetworkFrame(BasicNetwork data) {
 		this.data = data;	
 		addWindowListener(this);		
 	}
 
-	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public void windowClosing(WindowEvent arg0) {		
 		EncogWorkBench.getInstance().getMainWindow().closeSubWindow(this);
-	}
-
-	public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void windowOpened(WindowEvent arg0) {
@@ -124,22 +111,24 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 		
 		this.setTitle("Edit Neural Network");
 		
+		this.popupNetworkLayer = new JPopupMenu();
+		this.popupNetworkLayerEdit = this.addItem(this.popupNetworkLayer, "Edit", 'e');
+		this.popupNetworkLayerDelete = this.addItem(this.popupNetworkLayer, "Delete", 'd');
+		
 	}
 
 	public void actionPerformed(ActionEvent action) {
-		if( action.getSource()==this.addLayer )
-		{
-			performAddLayer();
-		}
-		else if( action.getSource()==this.editLayer )
+		if( (action.getSource()==this.editLayer) ||
+				 (action.getSource()==this.popupNetworkLayerEdit))
 		{
 			performEditLayer();
 		}
-		else if( action.getSource()==this.deleteLayer )
+		else if(  (action.getSource()==this.deleteLayer) ||
+				 (action.getSource()==this.popupNetworkLayerDelete))
 		{
 			performDeleteLayer();
 		}
-		else if( action.getSource()==this.properties )
+		else if( (action.getSource()==this.properties) )
 		{
 			performProperties();
 		}
@@ -161,7 +150,7 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 
 	private void performEditLayer() {
 		Object item = this.contents.getSelectedValue();
-		editLayer(item);
+		openItem(item);
 	}
 
 	private void performAddLayer() {
@@ -218,39 +207,8 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 		return data;
 	}
 
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseReleased(MouseEvent e) {
-		if (e.getClickCount() == 2) {
-			int index = this.contents.locationToIndex(e.getPoint());
-			ListModel dlm = this.contents.getModel();
-			Object item = dlm.getElementAt(index);
-			this.contents.ensureIndexIsVisible(index);
-			editLayer(item);
-		}
-		
-	}
-	
-	private void editLayer(Object item)
-	{
+	@Override
+	protected void openItem(Object item) {
 		if( item instanceof FeedforwardLayer )
 		{
 			FeedforwardLayer layer = (FeedforwardLayer)item;
@@ -290,26 +248,7 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 					layer.setNeuronCount(dialog.getResultNeuronCount());
 				}
 			}
-		}
-		else if( item instanceof BasicLayer )
-		{
-			BasicLayer layer = (BasicLayer)item;
-			EditSimpleLayer dialog = new EditSimpleLayer(this);
-			dialog.setResultDescription(layer.getDescription());
-			dialog.setResultName(layer.getName());
-			dialog.setResultNeuronCount(layer.getNeuronCount());
-			dialog.setVisible(true);
-			if( dialog.getCommand()== EditSimpleLayer.Command.OK)
-			{
-				layer.setName(dialog.getResultName());
-				layer.setDescription(dialog.getResultDescription());
-				// was there a neuron count change?
-				if( layer.getNeuronCount()!=dialog.getResultNeuronCount() )
-				{
-					layer.setNeuronCount(dialog.getResultNeuronCount());
-				}
-			}
-		}
+		}		
 		else if( item instanceof SOMLayer )
 		{
 			SOMLayer layer = (SOMLayer)item;
@@ -331,6 +270,32 @@ public class NetworkFrame extends JFrame implements WindowListener, ActionListen
 				}
 			}
 		}
-	}		
+		else if( item instanceof BasicLayer )
+		{
+			BasicLayer layer = (BasicLayer)item;
+			EditSimpleLayer dialog = new EditSimpleLayer(this);
+			dialog.setResultDescription(layer.getDescription());
+			dialog.setResultName(layer.getName());
+			dialog.setResultNeuronCount(layer.getNeuronCount());
+			dialog.setVisible(true);
+			if( dialog.getCommand()== EditSimpleLayer.Command.OK)
+			{
+				layer.setName(dialog.getResultName());
+				layer.setDescription(dialog.getResultDescription());
+				// was there a neuron count change?
+				if( layer.getNeuronCount()!=dialog.getResultNeuronCount() )
+				{
+					layer.setNeuronCount(dialog.getResultNeuronCount());
+				}
+			}
+		}
+		
+	}
 
+	@Override
+	public void rightMouseClicked(MouseEvent e, Object item) {
+		if (item != null) {
+			this.popupNetworkLayer.show(e.getComponent(), e.getX(), e.getY());			
+		} 			
+	}		
 }

@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -25,7 +26,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.models.TrainingSetTableModel;
 
-public class TrainingDataFrame extends JFrame implements WindowListener, ActionListener {
+public class TrainingDataFrame extends EncogCommonFrame {
 
 	private BasicNeuralDataSet data;
 	private TrainingSetTableModel model;
@@ -44,33 +45,9 @@ public class TrainingDataFrame extends JFrame implements WindowListener, ActionL
 		this.addWindowListener(this);
 	}
 
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void windowClosed(WindowEvent e) {
-		
-		
-	}
 
 	public void windowClosing(WindowEvent e) {
 		EncogWorkBench.getInstance().getMainWindow().closeSubWindow(this);
-		
-	}
-
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 	
@@ -148,6 +125,11 @@ public class TrainingDataFrame extends JFrame implements WindowListener, ActionL
 	public BasicNeuralDataSet getData()
 	{
 		return this.data;
+	}
+
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
