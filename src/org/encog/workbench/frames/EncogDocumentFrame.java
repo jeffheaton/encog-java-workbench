@@ -50,6 +50,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 	public static final String FILE_SAVE = "Save";
 	public static final String FILE_SAVE_AS = "Save As...";
 	public static final String FILE_QUIT = "Quit...";
+	public static final String FILE_IMPORT =  "Import CSV...";
 
 	public static final String OBJECTS_CREATE = "Create Object...";
 	public static final String OBJECTS_DELETE = "Delete Object...";
@@ -123,6 +124,9 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.menuFile.add(addItem(this.menuFile,
 				EncogDocumentFrame.FILE_SAVE_AS, 'a'));
 		this.menuFile.addSeparator();
+		this.menuFile.add(addItem(this.menuFile,
+				EncogDocumentFrame.FILE_IMPORT, 'i'));
+		this.menuFile.addSeparator();
 		this.menuFile.add(addItem(this.menuFile, EncogDocumentFrame.FILE_QUIT,
 				'q'));
 		this.menuFile.addActionListener(this);
@@ -178,6 +182,8 @@ public class EncogDocumentFrame extends EncogListFrame {
 		else if (event.getActionCommand().equals(
 				EncogDocumentFrame.FILE_SAVE_AS))
 			performFileSaveAs();
+		else if( event.getActionCommand().equals(EncogDocumentFrame.FILE_IMPORT))
+			performImport();
 		else if (event.getActionCommand().equals(EncogDocumentFrame.FILE_QUIT))
 			System.exit(0);
 		else if (event.getActionCommand().equals(
@@ -448,4 +454,9 @@ public class EncogDocumentFrame extends EncogListFrame {
 		sub.dispose();
 	}
 
+	private void performImport() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
