@@ -33,9 +33,10 @@ import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.CreateObject;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.UserInput;
+import org.encog.workbench.dialogs.select.SelectDialog;
+import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.models.EncogListModel;
 import org.encog.workbench.training.RunAnneal;
 import org.encog.workbench.training.RunGenetic;
@@ -316,14 +317,15 @@ public class EncogDocumentFrame extends EncogListFrame {
 	}
 
 	public void performObjectsCreate() {
-		CreateObject co = new CreateObject(this);
-		co.pack();
-		co.setVisible(true);
+		
+		SelectItem itemTraining,itemNetwork;
+		List<SelectItem> list = new ArrayList<SelectItem>();
+		list.add(itemTraining = new SelectItem("Training Data"));
+		list.add(itemNetwork = new SelectItem("Neural Network"));
+		SelectDialog dialog = new SelectDialog(this,list);
+		SelectItem result = dialog.process();
 
-		if (co.getSelected() != null) {
-
-			switch (co.getSelected()) {
-			case NEURAL_NETWORK:
+		if( result==itemNetwork ) {
 				BasicNetwork network = new BasicNetwork();
 				network.addLayer(new FeedforwardLayer(2));
 				network.addLayer(new FeedforwardLayer(3));
@@ -333,18 +335,16 @@ public class EncogDocumentFrame extends EncogListFrame {
 				network.setDescription("A neural network");
 				EncogWorkBench.getInstance().getCurrentFile().add(network);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
-				break;
-
-			case TRAINING_DATA:
+		}
+		else if( result == itemTraining )
+		{
 				BasicNeuralDataSet trainingData = new BasicNeuralDataSet(
 						NeuralConst.XOR_INPUT, NeuralConst.XOR_IDEAL);
 
 				trainingData.setName("data-" + (trainingCount++));
 				trainingData.setDescription("Training data");
 				EncogWorkBench.getInstance().getCurrentFile().add(trainingData);
-				EncogWorkBench.getInstance().getMainWindow().redraw();
-				break;
-			}
+				EncogWorkBench.getInstance().getMainWindow().redraw();		
 		}
 	}
 

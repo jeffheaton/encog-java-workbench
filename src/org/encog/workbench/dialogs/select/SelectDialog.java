@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
-import org.encog.workbench.dialogs.CreateObject.CreateObjectResult;
 import org.encog.workbench.util.StringConst;
 
 public class SelectDialog  extends JDialog implements ActionListener {
@@ -69,6 +68,14 @@ public class SelectDialog  extends JDialog implements ActionListener {
 	 */
 	public SelectItem getSelected() {
 		return selected;
+	}
+	
+	public SelectItem process()
+	{
+		this.selected = null;
+		pack();
+		setVisible(true);
+		return this.getSelected();
 	}
 	
 

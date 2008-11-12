@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
-import org.encog.workbench.dialogs.CreateObject.CreateObjectResult;
 import org.encog.workbench.util.StringConst;
 
 public class SelectItem   {
