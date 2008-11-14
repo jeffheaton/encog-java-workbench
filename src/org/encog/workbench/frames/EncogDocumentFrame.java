@@ -1,12 +1,10 @@
 package org.encog.workbench.frames;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +23,9 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import org.encog.EncogError;
+import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.Network;
@@ -33,6 +33,7 @@ import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.CreateDataSet;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.UserInput;
 import org.encog.workbench.dialogs.select.SelectDialog;
@@ -41,6 +42,7 @@ import org.encog.workbench.models.EncogListModel;
 import org.encog.workbench.training.RunAnneal;
 import org.encog.workbench.training.RunGenetic;
 import org.encog.workbench.util.ExtensionFilter;
+import org.encog.workbench.util.ImportExportUtility;
 import org.encog.workbench.util.NeuralConst;
 
 public class EncogDocumentFrame extends EncogListFrame {
@@ -51,7 +53,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 	public static final String FILE_SAVE = "Save";
 	public static final String FILE_SAVE_AS = "Save As...";
 	public static final String FILE_QUIT = "Quit...";
-	public static final String FILE_IMPORT =  "Import CSV...";
+	public static final String FILE_IMPORT = "Import CSV...";
 
 	public static final String OBJECTS_CREATE = "Create Object...";
 	public static final String OBJECTS_DELETE = "Delete Object...";
@@ -72,17 +74,22 @@ public class EncogDocumentFrame extends EncogListFrame {
 	private JMenuItem popupNetworkDelete;
 	private JMenuItem popupNetworkProperties;
 	private JMenuItem popupNetworkOpen;
+	private JMenuItem popupNetworkQuery;
 
 	private JPopupMenu popupData;
 	private JMenuItem popupDataDelete;
 	private JMenuItem popupDataProperties;
 	private JMenuItem popupDataOpen;
+	private JMenuItem popupDataImport;
+	private JMenuItem popupDataExport;
 
 	private List<JFrame> subwindows = new ArrayList<JFrame>();
 
 	private EncogListModel encogListModel;
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files", ".eg");
+	public static final ExtensionFilter CSV_FILTER = new ExtensionFilter(
+			"CSV Files", ".csv");
 	public static final String WINDOW_TITLE = "Encog Workbench 1.0";
 
 	public EncogDocumentFrame() {
@@ -168,11 +175,14 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.popupNetworkOpen = addItem(this.popupNetwork, "Open", 'o');
 		this.popupNetworkProperties = addItem(this.popupNetwork, "Properties",
 				'p');
+		this.popupNetworkQuery = addItem(this.popupNetwork, "Query", 'q');
 
 		this.popupData = new JPopupMenu();
 		this.popupDataDelete = addItem(this.popupData, "Delete", 'd');
 		this.popupDataOpen = addItem(this.popupData, "Open", 'o');
 		this.popupDataProperties = addItem(this.popupData, "Properties", 'p');
+		this.popupDataImport = addItem(this.popupData, "Import...", 'i');
+		this.popupDataExport = addItem(this.popupData, "Export...", 'e');
 	}
 
 	public void actionPerformed(ActionEvent event) {
@@ -183,8 +193,9 @@ public class EncogDocumentFrame extends EncogListFrame {
 		else if (event.getActionCommand().equals(
 				EncogDocumentFrame.FILE_SAVE_AS))
 			performFileSaveAs();
-		else if( event.getActionCommand().equals(EncogDocumentFrame.FILE_IMPORT))
-			performImport();
+		else if (event.getActionCommand()
+				.equals(EncogDocumentFrame.FILE_IMPORT))
+			performImport(null);
 		else if (event.getActionCommand().equals(EncogDocumentFrame.FILE_QUIT))
 			System.exit(0);
 		else if (event.getActionCommand().equals(
@@ -210,10 +221,13 @@ public class EncogDocumentFrame extends EncogListFrame {
 				EncogDocumentFrame.TRAIN_SIMULATED_ANNEALING)) {
 			RunAnneal train = new RunAnneal();
 			train.begin();
-		} 
+		}
 
 		if (event.getSource() == this.popupNetworkDelete) {
 			performObjectsDelete();
+		}
+			else if (event.getSource() == this.popupNetworkQuery) {
+				performNetworkQuery();				
 		} else if (event.getSource() == this.popupNetworkOpen) {
 			openItem(this.contents.getSelectedValue());
 		} else if (event.getSource() == this.popupNetworkProperties) {
@@ -230,8 +244,11 @@ public class EncogDocumentFrame extends EncogListFrame {
 					this, (EncogPersistedObject) this.contents
 							.getSelectedValue());
 			dialog.process();
+		} else if (event.getSource() == this.popupDataImport) {
+			performImport(this.contents.getSelectedValue());
+		} else if (event.getSource() == this.popupDataExport) {
+			performExport(this.contents.getSelectedValue());
 		}
-		
 	}
 
 	private void performFileOpen() {
@@ -317,34 +334,32 @@ public class EncogDocumentFrame extends EncogListFrame {
 	}
 
 	public void performObjectsCreate() {
-		
-		SelectItem itemTraining,itemNetwork;
+
+		SelectItem itemTraining, itemNetwork;
 		List<SelectItem> list = new ArrayList<SelectItem>();
 		list.add(itemTraining = new SelectItem("Training Data"));
 		list.add(itemNetwork = new SelectItem("Neural Network"));
-		SelectDialog dialog = new SelectDialog(this,list);
+		SelectDialog dialog = new SelectDialog(this, list);
 		SelectItem result = dialog.process();
 
-		if( result==itemNetwork ) {
-				BasicNetwork network = new BasicNetwork();
-				network.addLayer(new FeedforwardLayer(2));
-				network.addLayer(new FeedforwardLayer(3));
-				network.addLayer(new FeedforwardLayer(1));
-				network.reset();
-				network.setName("network-" + (networkCount++));
-				network.setDescription("A neural network");
-				EncogWorkBench.getInstance().getCurrentFile().add(network);
-				EncogWorkBench.getInstance().getMainWindow().redraw();
-		}
-		else if( result == itemTraining )
-		{
-				BasicNeuralDataSet trainingData = new BasicNeuralDataSet(
-						NeuralConst.XOR_INPUT, NeuralConst.XOR_IDEAL);
+		if (result == itemNetwork) {
+			BasicNetwork network = new BasicNetwork();
+			network.addLayer(new FeedforwardLayer(2));
+			network.addLayer(new FeedforwardLayer(3));
+			network.addLayer(new FeedforwardLayer(1));
+			network.reset();
+			network.setName("network-" + (networkCount++));
+			network.setDescription("A neural network");
+			EncogWorkBench.getInstance().getCurrentFile().add(network);
+			EncogWorkBench.getInstance().getMainWindow().redraw();
+		} else if (result == itemTraining) {
+			BasicNeuralDataSet trainingData = new BasicNeuralDataSet(
+					NeuralConst.XOR_INPUT, NeuralConst.XOR_IDEAL);
 
-				trainingData.setName("data-" + (trainingCount++));
-				trainingData.setDescription("Training data");
-				EncogWorkBench.getInstance().getCurrentFile().add(trainingData);
-				EncogWorkBench.getInstance().getMainWindow().redraw();		
+			trainingData.setName("data-" + (trainingCount++));
+			trainingData.setDescription("Training data");
+			EncogWorkBench.getInstance().getCurrentFile().add(trainingData);
+			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 	}
 
@@ -408,8 +423,6 @@ public class EncogDocumentFrame extends EncogListFrame {
 
 	}
 
-
-
 	protected void openItem(Object item) {
 		if (item instanceof NeuralDataSet) {
 			JFrame frame = findSubWindow((EncogPersistedObject) item);
@@ -454,9 +467,123 @@ public class EncogDocumentFrame extends EncogListFrame {
 		sub.dispose();
 	}
 
-	private void performImport() {
-		// TODO Auto-generated method stub
-		
+	private void performImport(Object obj) {
+
+		JFileChooser fc = new JFileChooser();
+		fc.addChoosableFileFilter(EncogDocumentFrame.CSV_FILTER);
+		int result = fc.showOpenDialog(this);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			BasicNeuralDataSet set = (BasicNeuralDataSet) obj;
+			boolean clear = false;
+			boolean addit = false;
+
+			if (obj != null) {
+				int o = JOptionPane
+						.showConfirmDialog(
+								this,
+								"Do you wish to delete information already in this result set?",
+								"Delete", JOptionPane.YES_NO_CANCEL_OPTION);
+
+
+
+				if (o == JOptionPane.CANCEL_OPTION)
+					return;
+				else if (o == JOptionPane.YES_OPTION) {
+					clear = true;
+				}
+			}
+			else
+			{
+				CreateDataSet dialog = new CreateDataSet(this);
+				if( !dialog.process() )
+				{
+					return;
+				}
+				
+				set = new BasicNeuralDataSet();
+				NeuralData input = null;
+				NeuralData ideal = null;
+				input = new BasicNeuralData(dialog.getInputSize());
+				if( dialog.getIdealSize()>0 )
+				{
+					ideal = new BasicNeuralData(dialog.getIdealSize());
+				}
+				set.add(input,ideal);
+				set.setName(dialog.getName());
+				set.setDescription(dialog.getDescription());
+				clear = true;
+				addit = true;
+			}
+
+			try {
+				ImportExportUtility.importCSV(set, fc.getSelectedFile()
+						.toString(), clear);
+				if(addit)
+				{
+					EncogWorkBench.getInstance().getCurrentFile().add(set);
+					EncogWorkBench.getInstance().getMainWindow().redraw();
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(),
+						"Can't Import File", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+
+	public void performExport(Object obj) {
+		if (obj instanceof BasicNeuralDataSet) {
+			SelectItem itemCSV, itemXML;
+			List<SelectItem> list = new ArrayList<SelectItem>();
+			list.add(itemCSV = new SelectItem("Export CSV"));
+			list.add(itemXML = new SelectItem("Export XML (EG format)"));
+			SelectDialog dialog = new SelectDialog(this, list);
+			SelectItem result = dialog.process();
+
+			if (result == null)
+				return;
+
+			JFileChooser fc = new JFileChooser();
+
+			if (result == itemCSV)
+				fc.setFileFilter(EncogDocumentFrame.CSV_FILTER);
+			else
+				fc.setFileFilter(EncogDocumentFrame.ENCOG_FILTER);
+
+			int r = fc.showSaveDialog(this);
+
+			if (r != JFileChooser.APPROVE_OPTION) {
+				return;
+			}
+
+			try {
+
+				if (result == itemCSV) {
+					ImportExportUtility.exportCSV((NeuralDataSet) obj, fc
+							.getSelectedFile().toString());
+				} else if (result == itemXML) {
+					ImportExportUtility.exportXML((BasicNeuralDataSet) obj, fc
+							.getSelectedFile().toString());
+				}
+				JOptionPane.showMessageDialog(this, "Export succssful.",
+						"Complete", JOptionPane.INFORMATION_MESSAGE);
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(),
+						"Can't Export File", JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 	
+	public void performNetworkQuery()
+	{
+		Object item = this.contents.getSelectedValue();
+		
+		JFrame frame = findSubWindow((EncogPersistedObject) item);
+		if (frame == null) {
+			frame = new NetworkQueryFrame((BasicNetwork) item);
+			frame.setVisible(true);
+			this.subwindows.add(frame);
+		} else {
+			frame.toFront();
+		}
+	}
 }

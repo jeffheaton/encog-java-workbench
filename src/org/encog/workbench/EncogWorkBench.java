@@ -1,5 +1,7 @@
 package org.encog.workbench;
 
+import javax.swing.JOptionPane;
+
 import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.workbench.frames.EncogDocumentFrame;
 
@@ -91,6 +93,12 @@ public class EncogWorkBench {
 		this.currentFile.clear();
 		this.currentFileName = null;
 		this.mainWindow.redraw();
+	}
+	
+	public static void displayError(String title,String message)
+	{
+		JOptionPane.showMessageDialog(getInstance().getMainWindow(), message,
+				title, JOptionPane.ERROR_MESSAGE);
 	}
 
 

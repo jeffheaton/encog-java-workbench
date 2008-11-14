@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.Network;
 import org.encog.neural.persist.EncogPersistedObject;
+import org.encog.workbench.EncogWorkBench;
 
 public class EditEncogObjectProperties extends JDialog  implements WindowListener, ActionListener {
 	
@@ -64,6 +65,16 @@ public class EditEncogObjectProperties extends JDialog  implements WindowListene
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource()== this.ctrlOK )
 		{
+			if( EncogWorkBench.getInstance().getCurrentFile().find(ctrlName.getText().trim())!=null )
+			{
+				EncogWorkBench.displayError("Data Error", "That name is already in use, please choose another.");
+				return;
+			}
+			if(ctrlName.getText().trim().length()<1 )
+			{
+				EncogWorkBench.displayError("Data Error", "You must provide a name.");
+				return;
+			}
 			this.object.setName(ctrlName.getText());
 			this.object.setDescription(ctrlDescription.getText());
 			this.dispose();
