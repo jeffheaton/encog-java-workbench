@@ -5,6 +5,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JList;
 import javax.swing.ListModel;
 
+import org.encog.workbench.util.MouseUtil;
+
 public abstract class EncogListFrame extends EncogCommonFrame {
 
 	protected JList contents;
@@ -23,7 +25,7 @@ public abstract class EncogListFrame extends EncogCommonFrame {
 		this.contents.ensureIndexIsVisible(index);
 		this.contents.setSelectedIndex(index);
 
-		if (e.getButton() == MouseEvent.BUTTON3) {
+		if (MouseUtil.isRightClick(e)) {
 			rightMouseClicked(e, item);
 		}
 
