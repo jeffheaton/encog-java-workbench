@@ -74,6 +74,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 	private JMenuItem popupNetworkDelete;
 	private JMenuItem popupNetworkProperties;
 	private JMenuItem popupNetworkOpen;
+	private JMenuItem popupNetworkVisualize;
 	private JMenuItem popupNetworkQuery;
 
 	private JPopupMenu popupData;
@@ -175,6 +176,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.popupNetworkOpen = addItem(this.popupNetwork, "Open", 'o');
 		this.popupNetworkProperties = addItem(this.popupNetwork, "Properties",
 				'p');
+		this.popupNetworkVisualize = addItem(this.popupNetwork, "Visualize", 'v');
 		this.popupNetworkQuery = addItem(this.popupNetwork, "Query", 'q');
 
 		this.popupData = new JPopupMenu();
@@ -228,7 +230,10 @@ public class EncogDocumentFrame extends EncogListFrame {
 		}
 			else if (event.getSource() == this.popupNetworkQuery) {
 				performNetworkQuery();				
-		} else if (event.getSource() == this.popupNetworkOpen) {
+		} else if( event.getSource() == this.popupNetworkVisualize ) {
+			performNetworkVisualize();
+		}
+			else if (event.getSource() == this.popupNetworkOpen) {
 			openItem(this.contents.getSelectedValue());
 		} else if (event.getSource() == this.popupNetworkProperties) {
 			EditEncogObjectProperties dialog = new EditEncogObjectProperties(
@@ -580,6 +585,20 @@ public class EncogDocumentFrame extends EncogListFrame {
 		JFrame frame = findSubWindow((EncogPersistedObject) item);
 		if (frame == null) {
 			frame = new NetworkQueryFrame((BasicNetwork) item);
+			frame.setVisible(true);
+			this.subwindows.add(frame);
+		} else {
+			frame.toFront();
+		}
+	}
+	
+	public void performNetworkVisualize()
+	{
+		Object item = this.contents.getSelectedValue();
+		
+		JFrame frame = findSubWindow((EncogPersistedObject) item);
+		if (frame == null) {
+			frame = new NetworkVisualizeFrame((BasicNetwork) item);
 			frame.setVisible(true);
 			this.subwindows.add(frame);
 		} else {
