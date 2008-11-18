@@ -40,8 +40,6 @@ import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.dialogs.training.backpropagation.InputBackpropagation;
 import org.encog.workbench.frames.visualize.NetworkVisualizeFrame;
 import org.encog.workbench.models.EncogListModel;
-import org.encog.workbench.training.RunAnneal;
-import org.encog.workbench.training.RunGenetic;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.ImportExportUtility;
 import org.encog.workbench.util.NeuralConst;
@@ -218,12 +216,10 @@ public class EncogDocumentFrame extends EncogListFrame {
 
 		} else if (event.getActionCommand().equals(
 				EncogDocumentFrame.TRAIN_GENETIC)) {
-			RunGenetic train = new RunGenetic();
-			train.begin();
+
 		} else if (event.getActionCommand().equals(
 				EncogDocumentFrame.TRAIN_SIMULATED_ANNEALING)) {
-			RunAnneal train = new RunAnneal();
-			train.begin();
+
 		}
 
 		if (event.getSource() == this.popupNetworkDelete) {

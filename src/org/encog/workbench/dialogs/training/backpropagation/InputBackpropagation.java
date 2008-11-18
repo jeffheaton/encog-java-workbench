@@ -25,8 +25,6 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.backpropagation.Backpropagation;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.training.RunBackpropagation;
-import org.encog.workbench.training.TrainingInput;
 
 
 public class InputBackpropagation extends JDialog implements ActionListener  {
@@ -112,14 +110,7 @@ public class InputBackpropagation extends JDialog implements ActionListener  {
 	  	this.dispose();
 	  }
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {
-    	TrainingInput trainingInput = new TrainingInput();
-    	trainingInput.setlearningRate(Double.parseDouble(txtlearningRate.getText()));
-    	trainingInput.setmaximumError(Double.parseDouble(txtmaximumError.getText()));
-    	trainingInput.setmomentum(Double.parseDouble(txtmomentum.getText()));
-    	trainingInput.setneuralNetworkName(cboneuralNetworkName.getSelectedItem().toString());
-    	trainingInput.settrainingDataName(cbotrainingDataName.getSelectedItem().toString());
-    	//RunBackpropagation train = new RunBackpropagation();
-		//train.begin(trainingInput);
+    	
     	dispose();
     	
     	String nameNetwork = cboneuralNetworkName.getSelectedItem().toString();

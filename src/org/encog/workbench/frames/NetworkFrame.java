@@ -44,8 +44,6 @@ import org.encog.workbench.dialogs.EditSimpleLayer;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.models.NetworkListModel;
-import org.encog.workbench.training.RunAnneal;
-import org.encog.workbench.training.RunGenetic;
 
 public class NetworkFrame extends EncogListFrame {
 
