@@ -3,6 +3,7 @@ package org.encog.workbench.dialogs.training;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,10 +16,11 @@ public abstract class BasicTrainingProgress extends JDialog implements Runnable,
 	private JButton buttonStart;
 	private JButton buttonStop;
 	private JButton buttonClose;
-	protected JPanel panelBody;
+	private JPanel panelBody;
 	private JPanel panelButtons;
 	private Thread thread;
 	private boolean cancel;
+	protected TrainingStatusPanel statusPanel;
 	
 	public BasicTrainingProgress(Frame owner)
 	{
@@ -41,6 +43,8 @@ public abstract class BasicTrainingProgress extends JDialog implements Runnable,
 		panelButtons.add(this.buttonClose);
 		content.add(this.panelBody,BorderLayout.CENTER);
 		content.add(this.panelButtons,BorderLayout.SOUTH);
+		this.panelBody.setLayout(new BorderLayout());
+		this.panelBody.add(this.statusPanel = new TrainingStatusPanel(this),BorderLayout.NORTH);
 		
 		this.buttonStop.setEnabled(false);		
 	}
@@ -86,4 +90,5 @@ public abstract class BasicTrainingProgress extends JDialog implements Runnable,
 	public abstract void startup();
 	public abstract void shutdown();
 	public abstract void iteration();
+	public abstract void paintStatus(Graphics g);
 }

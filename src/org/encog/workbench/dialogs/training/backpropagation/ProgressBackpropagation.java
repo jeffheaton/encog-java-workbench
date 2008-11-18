@@ -1,7 +1,12 @@
 package org.encog.workbench.dialogs.training.backpropagation;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.text.NumberFormat;
 
 import javax.swing.JLabel;
 
@@ -20,8 +25,12 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 	private double momentum;
 	private double maxError;
 	private int iteration;
-	private JLabel labelIteration;
-	private JLabel labelCurrentError;
+	private Font headFont;
+	private Font bodyFont;
+	private double currentError;
+	private double lastError;
+	private double errorImprovement;
+	private NumberFormat nf = NumberFormat.getInstance();
 	
 	public ProgressBackpropagation(
 			Frame owner,
@@ -37,21 +46,19 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 		this.learningRate = learningRate;
 		this.momentum = momentum;
 		this.maxError = maxError;
-		
-        this.panelBody.setLayout(new GridLayout(2,2,10,10));
-        this.panelBody.add(new JLabel("Iteration #"));
-        this.panelBody.add(this.labelIteration = new JLabel("1"));
-        this.panelBody.add(new JLabel("Current Error"));
-        this.panelBody.add(this.labelCurrentError = new JLabel("80%"));
+		this.headFont = new Font("Sans",Font.BOLD,12);
+		this.bodyFont = new Font("Sans",0,12);
         
 	}
 
 	@Override
 	public void iteration() {
 		this.iteration++;
-		this.labelIteration.setText(""+this.iteration);
-		this.labelCurrentError.setText(""+this.train.getError());
+		this.lastError = train.getError();
 		train.iteration();
+		this.currentError = train.getError();
+		this.errorImprovement = (this.lastError-this.currentError)/this.lastError;
+		this.statusPanel.repaint();
 		
 	}
 
@@ -66,6 +73,31 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 				this.trainingData,
 				this.learningRate, 
 				this.momentum);		
+	}
+
+	@Override
+	public void paintStatus(Graphics g) {
+		g.setColor(Color.white);
+		int width = this.getWidth();
+		int height = this.getHeight();
+		g.fillRect(0, 0, width, height);
+		g.setColor(Color.black);
+		g.setFont(this.headFont);
+		FontMetrics fm = g.getFontMetrics();
+		int y = fm.getHeight();
+		g.drawString("Iteration:", 10, y);
+		y+=fm.getHeight();
+		g.drawString("Current Error:", 10, y);
+		y+=fm.getHeight();
+		g.drawString("Error Improvement:", 10, y);
+		
+		y = fm.getHeight();
+		g.setFont(this.bodyFont);
+		g.drawString(nf.format(iteration), 150, y);
+		y+=fm.getHeight();
+		g.drawString(""+(100.0*this.currentError)+"%", 150, y);
+		y+=fm.getHeight();
+		g.drawString(""+(100.0*this.errorImprovement)+"%", 150, y);
 	}
 	
 }

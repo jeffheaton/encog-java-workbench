@@ -25,13 +25,13 @@ import org.encog.workbench.training.RunBackpropagation;
 import org.encog.workbench.training.TrainingInput;
 
 
-public class UserInput extends JDialog implements ActionListener  {
+public class InputBackpropagation extends JDialog implements ActionListener  {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	/** Creates new form UsersInput */
-    public UserInput(Frame owner) {
+    public InputBackpropagation(Frame owner) {
     	super(owner, true);
     	this.setSize(300, 240);
     	this.setLocation(200, 100);

@@ -37,7 +37,7 @@ import org.encog.workbench.dialogs.CreateDataSet;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
-import org.encog.workbench.dialogs.training.backpropagation.UserInput;
+import org.encog.workbench.dialogs.training.backpropagation.InputBackpropagation;
 import org.encog.workbench.frames.visualize.NetworkVisualizeFrame;
 import org.encog.workbench.models.EncogListModel;
 import org.encog.workbench.training.RunAnneal;
@@ -213,7 +213,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 			performFileClose();
 		else if (event.getActionCommand().equals(
 				EncogDocumentFrame.TRAIN_BACKPROPAGATION)) {
-			UserInput dialog = new UserInput(new javax.swing.JFrame());
+			InputBackpropagation dialog = new InputBackpropagation(new javax.swing.JFrame());
 			dialog.show(true);
 
 		} else if (event.getActionCommand().equals(
