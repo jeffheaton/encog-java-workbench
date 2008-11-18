@@ -35,9 +35,10 @@ import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.CreateDataSet;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
-import org.encog.workbench.dialogs.UserInput;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
+import org.encog.workbench.dialogs.training.backpropagation.UserInput;
+import org.encog.workbench.frames.visualize.NetworkVisualizeFrame;
 import org.encog.workbench.models.EncogListModel;
 import org.encog.workbench.training.RunAnneal;
 import org.encog.workbench.training.RunGenetic;
@@ -265,7 +266,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 			JFileChooser fc = new JFileChooser();
 			fc.addChoosableFileFilter(EncogDocumentFrame.ENCOG_FILTER);
 			int result = fc.showOpenDialog(this);
-			if (result == JFileChooser.APPROVE_OPTION) {
+			if (result == JFileChooser.APPROVE_OPTION) {				
 				EncogWorkBench.load(fc.getSelectedFile().getAbsolutePath());
 			}
 		} catch (EncogError e) {

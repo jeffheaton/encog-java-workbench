@@ -1,4 +1,4 @@
-package org.encog.workbench.dialogs;
+package org.encog.workbench.dialogs.training.backpropagation;
 
 
 import java.awt.BorderLayout;
@@ -17,6 +17,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.training.backpropagation.Backpropagation;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.training.RunBackpropagation;
 import org.encog.workbench.training.TrainingInput;
 
@@ -105,8 +109,27 @@ public class UserInput extends JDialog implements ActionListener  {
     	trainingInput.setmomentum(Double.parseDouble(txtmomentum.getText()));
     	trainingInput.setneuralNetworkName(cboneuralNetworkName.getSelectedItem().toString());
     	trainingInput.settrainingDataName(cbotrainingDataName.getSelectedItem().toString());
-    	RunBackpropagation train = new RunBackpropagation();
-		train.begin(trainingInput);
+    	//RunBackpropagation train = new RunBackpropagation();
+		//train.begin(trainingInput);
+    	dispose();
+    	
+    	String nameNetwork = cboneuralNetworkName.getSelectedItem().toString();
+    	String nameTraining = cbotrainingDataName.getSelectedItem().toString();
+    	
+    	BasicNetwork network = (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(nameNetwork);
+    	NeuralDataSet training = (NeuralDataSet)EncogWorkBench.getInstance().getCurrentFile().find(nameTraining);
+    	    	
+    	ProgressBackpropagation train = new ProgressBackpropagation(
+    			EncogWorkBench.getInstance().getMainWindow(),
+    			network,
+    			training,
+    	    	Double.parseDouble(txtlearningRate.getText()),
+    	    	Double.parseDouble(txtmaximumError.getText()),
+    	    	Double.parseDouble(txtmomentum.getText()));
+
+    			
+    	train.setVisible(true);
+    	
     }
    
     // Variables declaration 

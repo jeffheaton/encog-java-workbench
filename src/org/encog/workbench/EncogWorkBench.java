@@ -77,6 +77,7 @@ public class EncogWorkBench {
 	public static void load(String filename)
 	{
 		getInstance().setCurrentFileName(filename);
+		getInstance().getCurrentFile().clear();
 		getInstance().getCurrentFile().load(filename);
 		getInstance().getMainWindow().redraw();
 	}

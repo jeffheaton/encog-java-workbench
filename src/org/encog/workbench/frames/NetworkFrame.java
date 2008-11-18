@@ -41,9 +41,9 @@ import org.encog.workbench.dialogs.EditFeedforwardLayer;
 import org.encog.workbench.dialogs.EditHopfieldLayer;
 import org.encog.workbench.dialogs.EditSOMLayer;
 import org.encog.workbench.dialogs.EditSimpleLayer;
-import org.encog.workbench.dialogs.UserInput;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
+import org.encog.workbench.dialogs.training.backpropagation.UserInput;
 import org.encog.workbench.models.NetworkListModel;
 import org.encog.workbench.training.RunAnneal;
 import org.encog.workbench.training.RunGenetic;
@@ -54,13 +54,14 @@ public class NetworkFrame extends EncogListFrame {
 	private JToolBar toolbar;
 	private JButton addLayer;
 	private JButton deleteLayer;
-	private JButton editLayer;
+	private JButton editLayer;	
 	private JButton properties;
 	private NetworkListModel model;
 
 	private JPopupMenu popupNetworkLayer;
 	private JMenuItem popupNetworkLayerDelete;
 	private JMenuItem popupNetworkLayerEdit;
+	private JMenuItem popupEditMatrix;
 
 	public NetworkFrame(BasicNetwork data) {
 		this.data = data;
@@ -79,7 +80,7 @@ public class NetworkFrame extends EncogListFrame {
 		this.toolbar.setFloatable(false);
 		this.toolbar.add(this.deleteLayer = new JButton("Delete Layer"));
 		this.toolbar.add(this.addLayer = new JButton("Add Layer"));
-		this.toolbar.add(this.editLayer = new JButton("Edit Layer"));
+		this.toolbar.add(this.editLayer = new JButton("Edit Layer"));		
 		this.toolbar.add(this.properties = new JButton("Network Properties"));
 
 		this.addLayer.addActionListener(this);
@@ -113,7 +114,9 @@ public class NetworkFrame extends EncogListFrame {
 
 		this.popupNetworkLayer = new JPopupMenu();
 		this.popupNetworkLayerEdit = this.addItem(this.popupNetworkLayer,
-				"Edit", 'e');
+				"Edit Layer", 'e');
+		this.popupEditMatrix = this.addItem(this.popupNetworkLayer,
+				"Edit Matrix", 'm');
 		this.popupNetworkLayerDelete = this.addItem(this.popupNetworkLayer,
 				"Delete", 'd');
 
@@ -130,7 +133,22 @@ public class NetworkFrame extends EncogListFrame {
 			performProperties();
 		} else if( action.getSource()== this.addLayer ) {
 			performAddLayer();
+		} else if( action.getSource() == this.popupEditMatrix )
+		{
+			performEditMatrix();
 		}
+	}
+
+	private void performEditMatrix() {
+		Layer item = (Layer)this.contents.getSelectedValue();
+		if( item.getMatrix()==null)
+		{
+			EncogWorkBench.displayError("Error", "This layer does not have a matrix.");
+			return;
+		}
+		MatrixFrame frame = new MatrixFrame(this.data,item.getMatrix());
+		frame.setVisible(true);
+		
 	}
 
 	private void performDeleteLayer() {
