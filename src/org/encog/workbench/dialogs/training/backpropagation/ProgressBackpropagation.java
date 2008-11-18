@@ -7,6 +7,7 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.text.NumberFormat;
+import java.util.Date;
 
 import javax.swing.JLabel;
 
@@ -30,6 +31,8 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 	private double currentError;
 	private double lastError;
 	private double errorImprovement;
+	private Date started;
+	private long lastUpdate;
 	private NumberFormat nf = NumberFormat.getInstance();
 	
 	public ProgressBackpropagation(
@@ -58,7 +61,11 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 		train.iteration();
 		this.currentError = train.getError();
 		this.errorImprovement = (this.lastError-this.currentError)/this.lastError;
-		this.statusPanel.repaint();
+		if( (System.currentTimeMillis()-this.lastUpdate)>1000 )
+		{
+			this.statusPanel.repaint();
+			this.lastUpdate = System.currentTimeMillis();
+		}
 		
 	}
 
@@ -72,7 +79,8 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 				this.network, 
 				this.trainingData,
 				this.learningRate, 
-				this.momentum);		
+				this.momentum);	
+		this.started = new Date();
 	}
 
 	@Override

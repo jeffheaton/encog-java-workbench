@@ -7,6 +7,8 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -18,14 +20,20 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.backpropagation.Backpropagation;
+import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.training.RunBackpropagation;
 import org.encog.workbench.training.TrainingInput;
 
 
 public class InputBackpropagation extends JDialog implements ActionListener  {
+	
+	private List<String> trainingSets = new ArrayList<String>();
+	private List<String> networks = new ArrayList<String>();
+	
     /**
 	 * 
 	 */
@@ -33,6 +41,7 @@ public class InputBackpropagation extends JDialog implements ActionListener  {
 	/** Creates new form UsersInput */
     public InputBackpropagation(Frame owner) {
     	super(owner, true);
+    	findData();
     	this.setSize(300, 240);
     	this.setLocation(200, 100);
     	 lblmomentum = new JLabel();
@@ -66,8 +75,8 @@ public class InputBackpropagation extends JDialog implements ActionListener  {
                  btnCancelActionPerformed(evt);
              }
          });
-         cbotrainingDataName.setModel(new DefaultComboBoxModel(new String[] { "data-1" }));
-         cboneuralNetworkName.setModel(new DefaultComboBoxModel(new String[] { "network-1" }));
+         cbotrainingDataName.setModel(new DefaultComboBoxModel(this.trainingSets.toArray()));
+         cboneuralNetworkName.setModel(new DefaultComboBoxModel(this.networks.toArray()));
          lbllearningRate1.setText("LearningRate");
          Container content = this.getContentPane();
          
@@ -130,6 +139,21 @@ public class InputBackpropagation extends JDialog implements ActionListener  {
     			
     	train.setVisible(true);
     	
+    }
+    
+    public void findData()
+    {
+    	for(EncogPersistedObject obj:EncogWorkBench.getInstance().getCurrentFile().getList())
+    	{
+    		if( obj instanceof BasicNetwork )
+    		{
+    			this.networks.add(obj.getName());
+    		}
+    		else if( obj instanceof BasicNeuralDataSet )
+    		{
+    			this.trainingSets.add(obj.getName());
+    		}
+    	}
     }
    
     // Variables declaration 
