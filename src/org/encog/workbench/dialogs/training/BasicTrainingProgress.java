@@ -45,7 +45,7 @@ public abstract class BasicTrainingProgress extends JDialog implements Runnable,
 		content.add(this.panelButtons,BorderLayout.SOUTH);
 		this.panelBody.setLayout(new BorderLayout());
 		this.panelBody.add(this.statusPanel = new TrainingStatusPanel(this),BorderLayout.NORTH);
-		
+		this.panelBody.add(new ChartPane(),BorderLayout.SOUTH);
 		this.buttonStop.setEnabled(false);		
 	}
 

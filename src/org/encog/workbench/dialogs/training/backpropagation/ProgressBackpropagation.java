@@ -44,6 +44,7 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 			double maxError)
 	{
 		super(owner);
+		setTitle("Backpropagation Training");
 		this.network = network;
 		this.trainingData = trainingData;
 		this.learningRate = learningRate;
