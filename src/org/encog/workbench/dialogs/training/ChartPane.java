@@ -15,32 +15,64 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.chart.title.TextTitle;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.RegularTimePeriod;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 public class ChartPane extends JPanel {
 	
+	XYSeries series1;
+	XYSeries series2;
+	XYSeriesCollection dataset1;
+	XYSeriesCollection dataset2;
+	JFreeChart chart;
+	ChartPanel chartPanel;
+	int count;
+	
     public ChartPane() {
+		this.series1 = new XYSeries("Current Error");
+		this.dataset1 = new XYSeriesCollection();
+		this.dataset1.addSeries(series1);
+		this.series1.setMaximumItemCount(50);
+		
+		this.series2 = new XYSeries("Error Improvement");
+		this.dataset2 = new XYSeriesCollection();
+		this.dataset2.addSeries(series2);
+		this.series2.setMaximumItemCount(50);
+		
+		//addData(1,1,0.01);
+
+    	
         JFreeChart chart = createChart();
-        ChartPanel chartPanel = new ChartPanel(chart);
+        this.chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(600, 270));
         chartPanel.setDomainZoomable(true);
         chartPanel.setRangeZoomable(true);
         this.setLayout(new BorderLayout());
         add(chartPanel,BorderLayout.CENTER);
+        
+
     }
 
-	private static JFreeChart createChart() {
+	private JFreeChart createChart() {
 
-		XYDataset dataset1 = createDataset("Current Error", 100.0, new Minute(), 200);
 
-		JFreeChart chart = ChartFactory.createTimeSeriesChart(
+		/*JFreeChart chart = ChartFactory.createTimeSeriesChart(
 				null, "Iteration", "Current Error",
-				dataset1, true, true, false);
+				dataset1, true, true, false);*/
+		
+		chart = ChartFactory.createXYLineChart(
+	            null,
+	            "Iteration",
+	            "Current Error",
+	            this.dataset1,
+	            PlotOrientation.VERTICAL,
+	            true,
+	            true,
+	            false
+	        );
 
 		XYPlot plot = (XYPlot) chart.getPlot();
 		plot.setOrientation(PlotOrientation.VERTICAL);
@@ -56,9 +88,7 @@ public class ChartPane extends JPanel {
 		plot.setRangeAxis(1, axis2);
 		plot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
 
-		XYDataset dataset2 = createDataset("Error Improvement", 1000.0, new Minute(),
-				170);
-		plot.setDataset(1, dataset2);
+		plot.setDataset(1, this.dataset2);
 		plot.mapDatasetToRangeAxis(1, 1);
 		XYItemRenderer renderer2 = new StandardXYItemRenderer();
 		renderer2.setSeriesPaint(0, Color.red);
@@ -69,24 +99,18 @@ public class ChartPane extends JPanel {
 
 		return chart;
 	}
-
-	private static XYDataset createDataset(String name, double base,
-			RegularTimePeriod start, int count) {
-
-		TimeSeries series = new TimeSeries(name, start.getClass());
-		RegularTimePeriod period = start;
-		double value = base;
-		for (int i = 0; i < count; i++) {
-			series.add(period, value);
-			period = period.next();
-			value = value * (1 + (Math.random() - 0.495) / 10.0);
+	
+	public void addData(int iteration,double error,double improvement)
+	{
+		if( iteration>10 )
+		{
+			series1.add(iteration,error*100.0);
+			series2.add(iteration,improvement*100.0);
 		}
-
-		TimeSeriesCollection dataset = new TimeSeriesCollection();
-		dataset.addSeries(series);
-
-		return dataset;
-
+//		this.chartPanel.invalidate();
+		
 	}
+
+	
 
 }

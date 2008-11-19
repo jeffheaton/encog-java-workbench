@@ -21,6 +21,7 @@ public abstract class BasicTrainingProgress extends JDialog implements Runnable,
 	private Thread thread;
 	private boolean cancel;
 	protected TrainingStatusPanel statusPanel;
+	protected ChartPane chartPanel;
 	
 	public BasicTrainingProgress(Frame owner)
 	{
@@ -45,7 +46,7 @@ public abstract class BasicTrainingProgress extends JDialog implements Runnable,
 		content.add(this.panelButtons,BorderLayout.SOUTH);
 		this.panelBody.setLayout(new BorderLayout());
 		this.panelBody.add(this.statusPanel = new TrainingStatusPanel(this),BorderLayout.NORTH);
-		this.panelBody.add(new ChartPane(),BorderLayout.SOUTH);
+		this.panelBody.add(this.chartPanel = new ChartPane(),BorderLayout.SOUTH);
 		this.buttonStop.setEnabled(false);		
 	}
 

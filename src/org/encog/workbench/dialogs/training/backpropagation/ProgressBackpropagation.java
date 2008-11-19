@@ -71,6 +71,7 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 		{
 			this.statusPanel.repaint();
 			this.lastUpdate = System.currentTimeMillis();
+			this.chartPanel.addData(this.iteration, train.getError(), this.errorImprovement);
 		}
 		
 		Date now = new Date();
