@@ -25,7 +25,7 @@ public abstract class BasicTrainingProgress extends JDialog implements Runnable,
 	public BasicTrainingProgress(Frame owner)
 	{
 		super(owner);
-		this.setSize(320,200);
+		this.setSize(640,400);
 		Container content = this.getContentPane();
 		this.buttonStart = new JButton("Start");
 		this.buttonStop = new JButton("Stop");

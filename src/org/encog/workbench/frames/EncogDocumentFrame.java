@@ -35,6 +35,7 @@ import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.CreateDataSet;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
+import org.encog.workbench.dialogs.GenerateCode;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.dialogs.training.backpropagation.InputBackpropagation;
@@ -60,11 +61,14 @@ public class EncogDocumentFrame extends EncogListFrame {
 	public static final String TRAIN_BACKPROPAGATION = "Train Backpropagation...";
 	public static final String TRAIN_SIMULATED_ANNEALING = "Train Simulated Annealing...";
 	public static final String TRAIN_GENETIC = "Train Genetically...";
+	
+	public static final String TOOLS_CODE = "Generate Code...";
 
 	private JMenuBar menuBar;
 	private JMenu menuFile;
 	private JMenu menuObjects;
 	private JMenu menuTrain;
+	private JMenu menuTools;
 	private JToolBar toolBar;
 	private int trainingCount = 1;
 	private int networkCount = 1;
@@ -148,14 +152,19 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.menuBar.add(this.menuObjects);
 
 		this.menuTrain = new JMenu("Train");
-		this.menuTrain.add(addItem(this.menuObjects,
-				EncogDocumentFrame.TRAIN_BACKPROPAGATION, 'b'));
+		addItem(this.menuTrain,
+				EncogDocumentFrame.TRAIN_BACKPROPAGATION, 'b');
 		this.menuTrain.add(addItem(this.menuObjects,
 				EncogDocumentFrame.TRAIN_SIMULATED_ANNEALING, 'a'));
 		this.menuTrain.add(addItem(this.menuObjects,
 				EncogDocumentFrame.TRAIN_GENETIC, 'g'));
 		this.menuBar.add(this.menuTrain);
-
+		
+		this.menuTools = new JMenu("Tools");
+		addItem(this.menuTools,
+				EncogDocumentFrame.TOOLS_CODE, 'g');
+		this.menuBar.add(this.menuTools);	
+		
 		this.setJMenuBar(this.menuBar);
 
 		// setup the contents list
@@ -250,6 +259,9 @@ public class EncogDocumentFrame extends EncogListFrame {
 			performImport(this.contents.getSelectedValue());
 		} else if (event.getSource() == this.popupDataExport) {
 			performExport(this.contents.getSelectedValue());
+		} else if (event.getActionCommand().equals(
+				EncogDocumentFrame.TOOLS_CODE)) {
+			performGenerateCode();
 		}
 	}
 
@@ -601,5 +613,11 @@ public class EncogDocumentFrame extends EncogListFrame {
 		} else {
 			frame.toFront();
 		}
+	}
+	
+	private void performGenerateCode() {
+		GenerateCode dialog = new GenerateCode(this);
+		dialog.setVisible(true);
+		
 	}
 }

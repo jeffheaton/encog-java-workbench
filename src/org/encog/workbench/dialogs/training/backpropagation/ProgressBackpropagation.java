@@ -34,6 +34,10 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 	private Date started;
 	private long lastUpdate;
 	private NumberFormat nf = NumberFormat.getInstance();
+	private NumberFormat nfShort = NumberFormat.getInstance();
+	private int performanceCount;
+	private Date performanceLast;
+	private int performanceLastIteration;
 	
 	public ProgressBackpropagation(
 			Frame owner,
@@ -52,6 +56,7 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 		this.maxError = maxError;
 		this.headFont = new Font("Sans",Font.BOLD,12);
 		this.bodyFont = new Font("Sans",0,12);
+		nfShort.setMaximumFractionDigits(2);
         
 	}
 
@@ -68,6 +73,13 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 			this.lastUpdate = System.currentTimeMillis();
 		}
 		
+		Date now = new Date();
+		if( (now.getTime()-this.performanceLast.getTime())>60000 )
+		{
+			this.performanceLast = now;
+			this.performanceCount = this.iteration - this.performanceLastIteration;
+			this.performanceLastIteration = this.iteration;
+		}
 	}
 
 	@Override
@@ -82,6 +94,9 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 				this.learningRate, 
 				this.momentum);	
 		this.started = new Date();
+		this.performanceLast = this.started;
+		this.performanceCount = -1;
+		this.performanceLastIteration = 0;
 	}
 
 	@Override
@@ -101,12 +116,72 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 		g.drawString("Error Improvement:", 10, y);
 		
 		y = fm.getHeight();
+		g.drawString("Elapsed Time:", 400, y);
+		
+		y = fm.getHeight();
 		g.setFont(this.bodyFont);
-		g.drawString(nf.format(iteration), 150, y);
+		String str = nf.format(iteration);
+		if( this.performanceCount==-1 )
+			str+="  (calculating performance)";
+		else
+		{
+			double d = this.performanceCount/60.0;
+			str+="  ("+nfShort.format(d)+"/sec)";
+		}
+		g.drawString(str, 150, y);
 		y+=fm.getHeight();
 		g.drawString(""+(100.0*this.currentError)+"%", 150, y);
 		y+=fm.getHeight();
 		g.drawString(""+(100.0*this.errorImprovement)+"%", 150, y);
+		y = fm.getHeight();
+		
+		long seconds = 0;
+		if( this.started!=null )
+		{
+			Date now = new Date();
+			seconds = (now.getTime() - this.started.getTime())/1000;			
+		}
+		g.drawString(formatTime(seconds), 500, y);
+		
 	}
 	
+	public static final int SECONDS_IN_MINUTE = 60;
+	public static final int SECONDS_IN_HOUR = (SECONDS_IN_MINUTE*60);
+	public static final int SECONDS_IN_DAY = (SECONDS_IN_HOUR*24);
+	
+	String formatTime(long seconds)
+	{
+		StringBuilder result = new StringBuilder();
+		long days = seconds/SECONDS_IN_DAY;
+		seconds = seconds - (days*SECONDS_IN_DAY);
+		long hours = seconds/SECONDS_IN_HOUR;
+		seconds = seconds - (hours*SECONDS_IN_HOUR);
+		long minutes = seconds/SECONDS_IN_MINUTE;
+		seconds = seconds - (minutes*SECONDS_IN_MINUTE);
+		
+		if( days>0 )
+		{
+			result.append(days);
+			result.append(" days, ");
+		}
+		
+		result.append(formatDigit(hours));
+		result.append(':');
+		result.append(formatDigit(minutes));
+		result.append(':');
+		result.append(formatDigit(seconds));
+			
+		return result.toString();
+	}
+	
+	String formatDigit(long d)
+	{
+		StringBuilder result = new StringBuilder();
+		if( d<10 )
+		{
+			result.append('0');
+		}
+		result.append(d);
+		return result.toString();
+	}
 }

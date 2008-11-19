@@ -12,7 +12,7 @@ public class TrainingStatusPanel extends JPanel {
 	public TrainingStatusPanel(BasicTrainingProgress parent)
 	{
 		this.parent = parent;
-		this.setPreferredSize(new Dimension(320,50));
+		this.setPreferredSize(new Dimension(640,65));
 	}
 	
 	public void paint(Graphics g)

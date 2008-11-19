@@ -1,5 +1,4 @@
-package org.encog.workbench.dialogs.training.backpropagation;
-
+package org.encog.workbench.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -50,42 +49,47 @@ import org.encog.workbench.EncogWorkBench;
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-public class InputBackpropagation extends JDialog implements ActionListener  {
-	
+public class GenerateCode extends JDialog implements ActionListener {
+
 	private List<String> trainingSets = new ArrayList<String>();
 	private List<String> networks = new ArrayList<String>();
+
+	// Variables declaration
+	private JButton btnSubmit;
+	public JComboBox cboneuralNetworkName;
+	public JComboBox cbotrainingDataName;
+	public JComboBox cbLanguage;
+	public JComboBox cbTraining;
+	public JComboBox cbSaveEG;
+
+	// End of variables declaration
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+	}
+
 	
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	/** Creates new form UsersInput */
-    public InputBackpropagation(Frame owner) {
+    public GenerateCode(Frame owner) {
     	super(owner, true);
     	findData();
+    	this.setTitle("Generate Code");
     	this.setSize(300, 240);
     	this.setLocation(200, 100);
-    	 lblmomentum = new JLabel();
-         lbllearningRate = new JLabel();
-         lblmaximumError = new JLabel();
-         lbltrainingDataName = new JLabel();
-         lblneuralNetworkName = new JLabel();
-         txtmomentum = new JTextField();
-         txtlearningRate = new JTextField();
-         txtmaximumError = new JTextField();
+
+         cbSaveEG = new JComboBox();
+         cbLanguage = new JComboBox();
+         cbTraining = new JComboBox();
          btnSubmit = new JButton();
          JButton btnCancel = new JButton();
          cbotrainingDataName = new JComboBox();
          cboneuralNetworkName = new JComboBox();
-         lbllearningRate1 = new JLabel();
          setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-         lblmomentum.setText("Momentum");
-         lbllearningRate.setText("LearningRate");
-         lblmaximumError.setText("MaximumError");
-         lbltrainingDataName.setText("TrainingDataName");
-         lblneuralNetworkName.setText("NeuralNetworkName");
-         btnSubmit.setText("Submit");
-         btnCancel.setText("Close");
+         btnSubmit.setText("Generate");
+         btnCancel.setText("Cancel");
          btnSubmit.addActionListener(new ActionListener() {
              public void actionPerformed(ActionEvent evt) {
                  btnSubmitActionPerformed(evt);
@@ -98,25 +102,31 @@ public class InputBackpropagation extends JDialog implements ActionListener  {
          });
          cbotrainingDataName.setModel(new DefaultComboBoxModel(this.trainingSets.toArray()));
          cboneuralNetworkName.setModel(new DefaultComboBoxModel(this.networks.toArray()));
-         lbllearningRate1.setText("LearningRate");
+         String[] languages = {"Java","C#","VB.Net"};
+         cbLanguage.setModel(new DefaultComboBoxModel(languages));
+         String[] training = {"Backpropagation","Genetic Algorithm", "Simulated Annealing"};
+         cbTraining.setModel(new DefaultComboBoxModel(training));
+         String[] save = {"Yes","No"};
+         cbSaveEG.setModel(new DefaultComboBoxModel(save));
+         
          Container content = this.getContentPane();
          
          JPanel jp = new JPanel();
          jp.setLayout(new GridLayout(6,1,10,10));
 
-         jp.add(lblmomentum);
-         jp.add(txtmomentum); 
+         jp.add(new JLabel("Language"));
+         jp.add(cbLanguage); 
          
-         jp.add(lbllearningRate);
-         jp.add(txtlearningRate);
+         jp.add(new JLabel("Training Method"));
+         jp.add(cbTraining);
          
-         jp.add(lblmaximumError);
-         jp.add(txtmaximumError); 
+         jp.add(new JLabel("Save Network"));
+         jp.add(cbSaveEG); 
          
-         jp.add(lbltrainingDataName);
+         jp.add(new JLabel("Network Name"));
          jp.add(cbotrainingDataName);
          
-         jp.add(lblneuralNetworkName);
+         jp.add(new JLabel("Training Set Name"));
          jp.add(cboneuralNetworkName);
          
          
@@ -133,26 +143,7 @@ public class InputBackpropagation extends JDialog implements ActionListener  {
 	  	this.dispose();
 	  }
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {
-    	
-    	dispose();
-    	
-    	String nameNetwork = cboneuralNetworkName.getSelectedItem().toString();
-    	String nameTraining = cbotrainingDataName.getSelectedItem().toString();
-    	
-    	BasicNetwork network = (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(nameNetwork);
-    	NeuralDataSet training = (NeuralDataSet)EncogWorkBench.getInstance().getCurrentFile().find(nameTraining);
     	    	
-    	ProgressBackpropagation train = new ProgressBackpropagation(
-    			EncogWorkBench.getInstance().getMainWindow(),
-    			network,
-    			training,
-    	    	Double.parseDouble(txtlearningRate.getText()),
-    	    	Double.parseDouble(txtmaximumError.getText()),
-    	    	Double.parseDouble(txtmomentum.getText()));
-
-    			
-    	train.setVisible(true);
-    	
     }
     
     public void findData()
@@ -170,23 +161,6 @@ public class InputBackpropagation extends JDialog implements ActionListener  {
     	}
     }
    
-    // Variables declaration 
-    private JButton btnSubmit;
-    public JComboBox cboneuralNetworkName;
-    public JComboBox cbotrainingDataName;
-    private JLabel lbllearningRate;
-    private JLabel lbllearningRate1;
-    private JLabel lblmaximumError;
-    private JLabel lblmomentum;
-    private JLabel lblneuralNetworkName;
-    private JLabel lbltrainingDataName;
-    public  JTextField txtlearningRate;
-    public JTextField txtmaximumError;
-    public JTextField txtmomentum;
-    // End of variables declaration
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		
-	}
-
+	
 }
