@@ -179,7 +179,7 @@ public class NetworkFrame extends EncogListFrame {
 		Layer layer;
 		Layer baseLayer = null;
 		int index = this.contents.getSelectedIndex();
-		if (index != -1) {
+		if (index != -1 && (index<this.data.getLayers().size()) ) {
 			baseLayer = this.data.getLayers().get(index);
 		}
 

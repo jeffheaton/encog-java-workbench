@@ -68,7 +68,9 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 	
 	private String getLayerType(Layer layer)
 	{
-		if( layer.isHidden())
+		if( layer.isInput() && layer.isOutput() )
+			return "Input & Output";
+		else if( layer.isHidden())
 			return "Hidden";
 		else if(layer.isInput())
 			return "Input";
