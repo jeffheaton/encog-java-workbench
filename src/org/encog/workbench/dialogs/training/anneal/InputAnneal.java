@@ -1,4 +1,4 @@
-package org.encog.workbench.dialogs.training.backpropagation;
+package org.encog.workbench.dialogs.training.anneal;
 
 import java.awt.Container;
 import java.awt.Frame;
@@ -43,11 +43,12 @@ import org.encog.workbench.dialogs.training.BasicTrainingInput;
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-public class InputBackpropagation extends BasicTrainingInput 
+public class InputAnneal extends BasicTrainingInput 
 		{
 
 	// Variables declaration
 	public JTextField txtlearningRate;
+	public JTextField txtmaximumError;
 	public JTextField txtmomentum;
 	private double learningRate;
 	private double momentum;
@@ -59,20 +60,25 @@ public class InputBackpropagation extends BasicTrainingInput
 	private static final long serialVersionUID = 1L;
 
 	/** Creates new form UsersInput */
-	public InputBackpropagation(Frame owner) {
+	public InputAnneal(Frame owner) {
 		super(owner);
-		setTitle("Train Backpropagation");
+		setTitle("Train Simulated Annealing");
 
 		this.setSize(300, 240);
 		this.setLocation(200, 100);
 
 		txtmomentum = new JTextField();
 		txtlearningRate = new JTextField();
+		txtmaximumError = new JTextField();
 
 
 		Container content = this.getBodyPanel();
 
 		content.setLayout(new GridLayout(6, 1, 10, 10));
+
+
+		content.add(new JLabel("Maximum Error"));
+		content.add(txtmaximumError);
 
 		content.add(new JLabel("Momentum"));
 		content.add(txtmomentum);
@@ -82,6 +88,7 @@ public class InputBackpropagation extends BasicTrainingInput
 
 		this.txtlearningRate.setText("0.7");
 		this.txtmomentum.setText("0.7");
+		this.txtmaximumError.setText("0.01");
 
 	}
 
@@ -112,10 +119,5 @@ public class InputBackpropagation extends BasicTrainingInput
 	 */
 	public double getMomentum() {
 		return momentum;
-	}
-
-
-
-	
-	
+	}	
 }

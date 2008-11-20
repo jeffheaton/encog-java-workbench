@@ -41,6 +41,7 @@ import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.dialogs.training.backpropagation.InputBackpropagation;
 import org.encog.workbench.frames.visualize.NetworkVisualizeFrame;
 import org.encog.workbench.models.EncogListModel;
+import org.encog.workbench.process.Training;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.ImportExportUtility;
 import org.encog.workbench.util.NeuralConst;
@@ -220,15 +221,14 @@ public class EncogDocumentFrame extends EncogListFrame {
 			performFileClose();
 		else if (event.getActionCommand().equals(
 				EncogDocumentFrame.TRAIN_BACKPROPAGATION)) {
-			InputBackpropagation dialog = new InputBackpropagation(new javax.swing.JFrame());
-			dialog.show(true);
+			Training.performBackpropagation();
 
 		} else if (event.getActionCommand().equals(
 				EncogDocumentFrame.TRAIN_GENETIC)) {
 
 		} else if (event.getActionCommand().equals(
 				EncogDocumentFrame.TRAIN_SIMULATED_ANNEALING)) {
-
+			Training.performAnneal();
 		}
 
 		if (event.getSource() == this.popupNetworkDelete) {
