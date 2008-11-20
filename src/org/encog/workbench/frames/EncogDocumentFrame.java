@@ -225,6 +225,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 
 		} else if (event.getActionCommand().equals(
 				EncogDocumentFrame.TRAIN_GENETIC)) {
+			Training.performGenetic();
 
 		} else if (event.getActionCommand().equals(
 				EncogDocumentFrame.TRAIN_SIMULATED_ANNEALING)) {

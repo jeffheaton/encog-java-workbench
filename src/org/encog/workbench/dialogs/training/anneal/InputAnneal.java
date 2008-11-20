@@ -47,11 +47,12 @@ public class InputAnneal extends BasicTrainingInput
 		{
 
 	// Variables declaration
-	public JTextField txtlearningRate;
-	public JTextField txtmaximumError;
-	public JTextField txtmomentum;
-	private double learningRate;
-	private double momentum;
+	public JTextField txtStartTemp;
+	public JTextField txtEndTemp;
+	public JTextField txtCycles;
+	private double startTemp;
+	private double endTemp;
+	private int cycles;
 
 
 	/**
@@ -67,9 +68,9 @@ public class InputAnneal extends BasicTrainingInput
 		this.setSize(300, 240);
 		this.setLocation(200, 100);
 
-		txtmomentum = new JTextField();
-		txtlearningRate = new JTextField();
-		txtmaximumError = new JTextField();
+		txtStartTemp = new JTextField();
+		txtEndTemp = new JTextField();
+		txtCycles = new JTextField();
 
 
 		Container content = this.getBodyPanel();
@@ -77,26 +78,27 @@ public class InputAnneal extends BasicTrainingInput
 		content.setLayout(new GridLayout(6, 1, 10, 10));
 
 
-		content.add(new JLabel("Maximum Error"));
-		content.add(txtmaximumError);
+		content.add(new JLabel("Starting Temperature"));
+		content.add(txtStartTemp);
 
-		content.add(new JLabel("Momentum"));
-		content.add(txtmomentum);
+		content.add(new JLabel("Ending Temperature"));
+		content.add(txtEndTemp);
 
-		content.add(new JLabel("Learning Rate"));
-		content.add(txtlearningRate);
+		content.add(new JLabel("Cycles"));
+		content.add(txtCycles);
 
-		this.txtlearningRate.setText("0.7");
-		this.txtmomentum.setText("0.7");
-		this.txtmaximumError.setText("0.01");
+		this.txtStartTemp.setText("1");
+		this.txtEndTemp.setText("20");
+		this.txtCycles.setText("10");
 
 	}
 
 	@Override
 	public void collectFields() throws ValidationException {
 		super.collectFields();
-		this.learningRate = this.validateFieldNumeric("learning rate", this.txtlearningRate);
-		this.momentum = this.validateFieldNumeric("momentum", this.txtmomentum);
+		this.startTemp = this.validateFieldNumeric("starting temperature", this.txtStartTemp);
+		this.endTemp = this.validateFieldNumeric("ending temperature", this.txtEndTemp);
+		this.cycles = (int)this.validateFieldNumeric("cycles", this.txtCycles);
 	}
 
 
@@ -106,18 +108,20 @@ public class InputAnneal extends BasicTrainingInput
 		// TODO Auto-generated method stub
 
 	}
-	
-	/**
-	 * @return the learningRate
-	 */
-	public double getLearningRate() {
-		return learningRate;
+
+	public double getStartTemp() {
+		return startTemp;
 	}
 
-	/**
-	 * @return the momentum
-	 */
-	public double getMomentum() {
-		return momentum;
-	}	
+	public double getEndTemp() {
+		return endTemp;
+	}
+
+	public int getCycles() {
+		return cycles;
+	}
+	
+	
+	
+
 }

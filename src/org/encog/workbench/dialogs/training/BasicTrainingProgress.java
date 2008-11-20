@@ -93,14 +93,19 @@ public abstract class BasicTrainingProgress extends JDialog implements Runnable,
 			this.lastError = train.getError();
 			
 			iteration();
+		
 			
 			this.currentError = train.getError();
-			this.errorImprovement = (this.lastError-this.currentError)/this.lastError;
-			if( (System.currentTimeMillis()-this.lastUpdate)>1000 )
+			
+			if( this.currentError< this.maxError )
 			{
-				this.statusPanel.repaint();
-				this.lastUpdate = System.currentTimeMillis();
-				this.chartPanel.addData(this.iteration, train.getError(), this.errorImprovement);
+				cancel = true;
+			}
+			
+			this.errorImprovement = (this.lastError-this.currentError)/this.lastError;
+			if( (System.currentTimeMillis()-this.lastUpdate)>1000 || cancel )
+			{
+				redraw();
 			}
 			
 			Date now = new Date();
@@ -265,6 +270,12 @@ public abstract class BasicTrainingProgress extends JDialog implements Runnable,
 		this.maxError = maxError;
 	}
 	
+	public void redraw()
+	{
+		this.statusPanel.repaint();
+		this.lastUpdate = System.currentTimeMillis();
+		this.chartPanel.addData(this.iteration, train.getError(), this.errorImprovement);
+	}
 
 	
 	

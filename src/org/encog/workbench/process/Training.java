@@ -7,6 +7,8 @@ import org.encog.workbench.dialogs.training.anneal.InputAnneal;
 import org.encog.workbench.dialogs.training.anneal.ProgressAnneal;
 import org.encog.workbench.dialogs.training.backpropagation.InputBackpropagation;
 import org.encog.workbench.dialogs.training.backpropagation.ProgressBackpropagation;
+import org.encog.workbench.dialogs.training.genetic.InputGenetic;
+import org.encog.workbench.dialogs.training.genetic.ProgressGenetic;
 
 public class Training {
 	public static void performBackpropagation() {
@@ -23,8 +25,9 @@ public class Training {
 
 			ProgressBackpropagation train = new ProgressBackpropagation(
 					EncogWorkBench.getInstance().getMainWindow(), network,
-					training, dialog.getLearningRate(), dialog.getMaxError(),
-					dialog.getMomentum());
+					training, dialog.getLearningRate(), 
+					dialog.getMomentum(),
+					dialog.getMaxError());
 
 			train.setVisible(true);
 		}
@@ -42,10 +45,39 @@ public class Training {
 			NeuralDataSet training = (NeuralDataSet) EncogWorkBench
 					.getInstance().getCurrentFile().find(nameTraining);
 
-			ProgressAnneal train = new ProgressAnneal(EncogWorkBench
-					.getInstance().getMainWindow(), network, training, dialog
-					.getLearningRate(), dialog.getMaxError(), dialog
-					.getMomentum());
+			ProgressAnneal train = new ProgressAnneal(
+					EncogWorkBench.getInstance().getMainWindow(), 
+					network, 
+					training, 
+					dialog.getMaxError(), 
+					dialog.getStartTemp(), 
+					dialog.getEndTemp(),
+					dialog.getCycles());
+
+			train.setVisible(true);
+		}
+	}
+	
+	public static void performGenetic() {
+		InputGenetic dialog = new InputGenetic(EncogWorkBench.getInstance()
+				.getMainWindow());
+		if (dialog.process()) {
+			String nameNetwork = dialog.getNetwork();
+			String nameTraining = dialog.getTrainingSet();
+
+			BasicNetwork network = (BasicNetwork) EncogWorkBench.getInstance()
+					.getCurrentFile().find(nameNetwork);
+			NeuralDataSet training = (NeuralDataSet) EncogWorkBench
+					.getInstance().getCurrentFile().find(nameTraining);
+
+			ProgressGenetic train = new ProgressGenetic(
+					EncogWorkBench.getInstance().getMainWindow(), 
+					network, 
+					training, 
+					dialog.getMaxError(), 
+					dialog.getPopulationSize(), 
+					dialog.getMutationPercent(),
+					dialog.getPercentToMate());
 
 			train.setVisible(true);
 		}

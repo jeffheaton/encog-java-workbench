@@ -107,7 +107,6 @@ public class ChartPane extends JPanel {
 			series1.add(iteration,error*100.0);
 			series2.add(iteration,improvement*100.0);
 		}
-//		this.chartPanel.invalidate();
 		
 	}
 
