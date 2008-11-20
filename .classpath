@@ -4,6 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="jar/jcommon-1.0.14.jar"/>
 	<classpathentry kind="lib" path="jar/jfreechart-1.0.11.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/encog-core"/>
+	<classpathentry kind="lib" path="jar/encog-core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
