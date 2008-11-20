@@ -618,7 +618,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 	
 	private void performGenerateCode() {
 		GenerateCode dialog = new GenerateCode(this);
-		dialog.setVisible(true);
+		dialog.process();
 		
 	}
 }

@@ -15,39 +15,18 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
+import org.encog.workbench.dialogs.common.NetworkAndTrainingDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 
-public abstract class BasicTrainingInput extends EncogCommonDialog {
+public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 
-	private JComboBox cboneuralNetworkName;
-	private JComboBox cbotrainingDataName;
 	private JTextField txtmaximumError;
-	private String network;
-	private String trainingSet;
 	private double maxError;
-	private List<String> trainingSets = new ArrayList<String>();
-	private List<String> networks = new ArrayList<String>();
 	
 	public BasicTrainingInput(Frame owner) {
 		super(owner);
 		
-		findData();
-		
-		cbotrainingDataName = new JComboBox();
-		cboneuralNetworkName = new JComboBox();
-
-		cbotrainingDataName.setModel(new DefaultComboBoxModel(this.trainingSets
-				.toArray()));
-		cboneuralNetworkName.setModel(new DefaultComboBoxModel(this.networks
-				.toArray()));
-		
 		JPanel content = this.getBodyPanel();
-		
-		content.add(new JLabel("Training Set"));
-		content.add(cbotrainingDataName);
-
-		content.add(new JLabel("Network Name"));
-		content.add(cboneuralNetworkName);	
 		
 		content.add(new JLabel("Maximum Error"));
 		content.add(txtmaximumError = new JTextField());
@@ -55,16 +34,6 @@ public abstract class BasicTrainingInput extends EncogCommonDialog {
 		this.txtmaximumError.setText("0.01");
 	}
 	
-	public void findData() {
-		for (EncogPersistedObject obj : EncogWorkBench.getInstance()
-				.getCurrentFile().getList()) {
-			if (obj instanceof BasicNetwork) {
-				this.networks.add(obj.getName());
-			} else if (obj instanceof BasicNeuralDataSet) {
-				this.trainingSets.add(obj.getName());
-			}
-		}
-	}
 
 	/**
 	 * @return the maxError
@@ -73,23 +42,10 @@ public abstract class BasicTrainingInput extends EncogCommonDialog {
 		return maxError;
 	}
 	
-	/**
-	 * @return the network
-	 */
-	public String getNetwork() {
-		return network;
-	}
 
-	/**
-	 * @return the trainingSet
-	 */
-	public String getTrainingSet() {
-		return trainingSet;
-	}
 	
 	public void collectFields() throws ValidationException {
-		this.network = validateFieldString("network",this.cboneuralNetworkName,true);
-		this.trainingSet = validateFieldString("training set", this.cbotrainingDataName,true);
+		super.collectFields();
 		this.maxError = this.validateFieldNumeric("maximum error", this.txtmaximumError);
 	}
 
