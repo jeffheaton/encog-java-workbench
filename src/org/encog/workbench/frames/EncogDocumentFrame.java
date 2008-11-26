@@ -98,12 +98,18 @@ public class EncogDocumentFrame extends EncogListFrame {
 	public static final String WINDOW_TITLE = "Encog Workbench 1.0";
 
 	public EncogDocumentFrame() {
+		this.setSize(640, 480);
+		
 		this.addWindowListener(this);
 		EncogWorkBench.getInstance().setCurrentFile(
 				new EncogPersistedCollection());
 		this.encogListModel = new EncogListModel(EncogWorkBench.getInstance()
 				.getCurrentFile());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		initMenuBar();
+		initContents();
+		initPopup();
 	}
 
 	/**
@@ -115,11 +121,9 @@ public class EncogDocumentFrame extends EncogListFrame {
 		System.exit(0);
 
 	}
-
-	public void windowOpened(WindowEvent e) {
-
-		this.setSize(640, 480);
-
+	
+	private void initMenuBar()
+	{
 		// menu bar
 		this.menuBar = new JMenuBar();
 		this.menuFile = new JMenu("File");
@@ -167,18 +171,10 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.menuBar.add(this.menuTools);	
 		
 		this.setJMenuBar(this.menuBar);
-
-		// setup the contents list
-		this.contents = new JList(this.encogListModel);
-		this.contents.setCellRenderer(new EncogItemRenderer());
-		this.contents.setFixedCellHeight(72);
-		this.contents.addMouseListener(this);
-
-		JScrollPane scrollPane = new JScrollPane(this.contents);
-
-		this.getContentPane().add(scrollPane);
-		redraw();
-
+	}
+	
+	private void initPopup()
+	{
 		// build network popup menu
 		this.popupNetwork = new JPopupMenu();
 		this.popupNetworkDelete = addItem(this.popupNetwork, "Delete", 'd');
@@ -194,6 +190,29 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.popupDataProperties = addItem(this.popupData, "Properties", 'p');
 		this.popupDataImport = addItem(this.popupData, "Import...", 'i');
 		this.popupDataExport = addItem(this.popupData, "Export...", 'e');
+	}
+	
+	private void initContents()
+	{
+		// setup the contents list
+		this.contents = new JList(this.encogListModel);
+		this.contents.setCellRenderer(new EncogItemRenderer());
+		this.contents.setFixedCellHeight(72);
+		this.contents.addMouseListener(this);
+
+		JScrollPane scrollPane = new JScrollPane(this.contents);
+
+		this.getContentPane().add(scrollPane);
+		redraw();
+	}
+
+	public void windowOpened(WindowEvent e) {
+
+
+
+		
+
+
 	}
 
 	public void actionPerformed(ActionEvent event) {
