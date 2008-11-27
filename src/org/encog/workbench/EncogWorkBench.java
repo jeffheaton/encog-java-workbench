@@ -107,6 +107,12 @@ public class EncogWorkBench {
 	{
 		EncogWorkBench workBench = EncogWorkBench.getInstance();
 		workBench.setMainWindow(new EncogDocumentFrame());
+		
+		if( args.length>0 )
+		{
+			EncogWorkBench.load(args[0]);
+		}
+		
 		workBench.getMainWindow().setVisible(true);
 	}
 }
