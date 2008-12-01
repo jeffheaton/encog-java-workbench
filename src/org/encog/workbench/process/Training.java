@@ -12,19 +12,15 @@ import org.encog.workbench.dialogs.training.genetic.InputGenetic;
 import org.encog.workbench.dialogs.training.genetic.ProgressGenetic;
 import org.encog.workbench.dialogs.training.hopfield.InputHopfield;
 import org.encog.workbench.dialogs.training.som.InputSOM;
+import org.encog.workbench.dialogs.training.som.ProgressSOM;
 
 public class Training {
 	public static void performBackpropagation() {
 		InputBackpropagation dialog = new InputBackpropagation(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
-			String nameNetwork = dialog.getNetwork();
-			String nameTraining = dialog.getTrainingSet();
-
-			BasicNetwork network = (BasicNetwork) EncogWorkBench.getInstance()
-					.getCurrentFile().find(nameNetwork);
-			NeuralDataSet training = (NeuralDataSet) EncogWorkBench
-					.getInstance().getCurrentFile().find(nameTraining);
+			BasicNetwork network = dialog.getNetwork();
+			NeuralDataSet training = dialog.getTrainingSet();
 
 			ProgressBackpropagation train = new ProgressBackpropagation(
 					EncogWorkBench.getInstance().getMainWindow(), network,
@@ -40,13 +36,8 @@ public class Training {
 		InputAnneal dialog = new InputAnneal(EncogWorkBench.getInstance()
 				.getMainWindow());
 		if (dialog.process()) {
-			String nameNetwork = dialog.getNetwork();
-			String nameTraining = dialog.getTrainingSet();
-
-			BasicNetwork network = (BasicNetwork) EncogWorkBench.getInstance()
-					.getCurrentFile().find(nameNetwork);
-			NeuralDataSet training = (NeuralDataSet) EncogWorkBench
-					.getInstance().getCurrentFile().find(nameTraining);
+			BasicNetwork network = dialog.getNetwork();
+			NeuralDataSet training = dialog.getTrainingSet();
 
 			ProgressAnneal train = new ProgressAnneal(
 					EncogWorkBench.getInstance().getMainWindow(), 
@@ -65,14 +56,9 @@ public class Training {
 		InputGenetic dialog = new InputGenetic(EncogWorkBench.getInstance()
 				.getMainWindow());
 		if (dialog.process()) {
-			String nameNetwork = dialog.getNetwork();
-			String nameTraining = dialog.getTrainingSet();
-
-			BasicNetwork network = (BasicNetwork) EncogWorkBench.getInstance()
-					.getCurrentFile().find(nameNetwork);
-			NeuralDataSet training = (NeuralDataSet) EncogWorkBench
-					.getInstance().getCurrentFile().find(nameTraining);
-
+			BasicNetwork network = dialog.getNetwork();
+			NeuralDataSet training = dialog.getTrainingSet();
+			
 			ProgressGenetic train = new ProgressGenetic(
 					EncogWorkBench.getInstance().getMainWindow(), 
 					network, 
@@ -92,13 +78,9 @@ public class Training {
 		
 		if( dialog.process())
 		{
-			String nameNetwork = dialog.getNetwork();
-			String nameTraining = dialog.getTrainingSet();
-
-			BasicNetwork network = (BasicNetwork) EncogWorkBench.getInstance()
-					.getCurrentFile().find(nameNetwork);
-			NeuralDataSet training = (NeuralDataSet) EncogWorkBench
-					.getInstance().getCurrentFile().find(nameTraining);
+			BasicNetwork network = dialog.getNetwork();
+			NeuralDataSet training = dialog.getTrainingSet();
+			
 			TrainHopfield train = new TrainHopfield(training,network);
 			train.iteration();
 			EncogWorkBench.displayMessage("Train Hopfield","Training Complete");
@@ -112,6 +94,18 @@ public class Training {
 		
 		if( dialog.process())
 		{
+			BasicNetwork network = dialog.getNetwork();
+			NeuralDataSet training = dialog.getTrainingSet();
+
+			ProgressSOM train = new ProgressSOM(
+					EncogWorkBench.getInstance().getMainWindow(), 
+					network, 
+					training, 
+					dialog.getMaxError(), 
+					dialog.getMethod(),
+					dialog.getLearningRate());
+
+			train.setVisible(true);			
 		}
 		
 	}

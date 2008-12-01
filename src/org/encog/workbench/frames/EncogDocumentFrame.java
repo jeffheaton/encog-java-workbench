@@ -42,6 +42,7 @@ import org.encog.workbench.dialogs.training.backpropagation.InputBackpropagation
 import org.encog.workbench.frames.visualize.NetworkVisualizeFrame;
 import org.encog.workbench.models.EncogListModel;
 import org.encog.workbench.process.Training;
+import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.ImportExportUtility;
 import org.encog.workbench.util.NeuralConst;
@@ -653,8 +654,8 @@ public class EncogDocumentFrame extends EncogListFrame {
 	}
 	
 	private void performGenerateCode() {
-		GenerateCode dialog = new GenerateCode(this);
-		dialog.process();
+		CodeGeneration code = new CodeGeneration();
+		code.processCodeGeneration();
 		
 	}
 }

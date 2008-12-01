@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.persist.EncogPersistedObject;
@@ -21,8 +22,8 @@ public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
 
 	private JComboBox cboneuralNetworkName;
 	private JComboBox cbotrainingDataName;
-	private String network;
-	private String trainingSet;
+	private BasicNetwork network;
+	private NeuralDataSet trainingSet;
 
 	private List<String> trainingSets = new ArrayList<String>();
 	private List<String> networks = new ArrayList<String>();
@@ -64,20 +65,23 @@ public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
 	/**
 	 * @return the network
 	 */
-	public String getNetwork() {
+	public BasicNetwork getNetwork() {
 		return network;
 	}
 
 	/**
 	 * @return the trainingSet
 	 */
-	public String getTrainingSet() {
+	public NeuralDataSet getTrainingSet() {
 		return trainingSet;
 	}
 	
 	public void collectFields() throws ValidationException {
-		this.network = validateFieldString("network",this.cboneuralNetworkName,true);
-		this.trainingSet = validateFieldString("training set", this.cbotrainingDataName,true);
+		String networkName = validateFieldString("network",this.cboneuralNetworkName,true);
+		String trainingSetName = validateFieldString("training set", this.cbotrainingDataName,true);
+		
+		this.network = (BasicNetwork) EncogWorkBench.getInstance().getCurrentFile().find(networkName);
+		this.trainingSet = (NeuralDataSet) EncogWorkBench.getInstance().getCurrentFile().find(trainingSetName);
 	}
 
 }

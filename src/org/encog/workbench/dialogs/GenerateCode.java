@@ -27,6 +27,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.NetworkAndTrainingDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
+import org.encog.workbench.process.generate.Generate.GenerateLanguage;
 
 /*
  * Encog Workbench v1.x
@@ -54,9 +55,11 @@ import org.encog.workbench.dialogs.common.ValidationException;
  */
 public class GenerateCode extends NetworkAndTrainingDialog {
 
-	public JComboBox cbLanguage;
-	public JComboBox cbTraining;
-	public JComboBox cbSaveEG;
+	private JComboBox cbLanguage;
+	private JComboBox cbTraining;
+	private JComboBox cbCopyTraining;
+	
+	private GenerateLanguage language;
 	
     /**
 	 * 
@@ -70,7 +73,7 @@ public class GenerateCode extends NetworkAndTrainingDialog {
     	this.setSize(300, 240);
     	this.setLocation(200, 100);
 
-         cbSaveEG = new JComboBox();
+    		cbCopyTraining = new JComboBox();
          cbLanguage = new JComboBox();
          cbTraining = new JComboBox();
 
@@ -81,7 +84,7 @@ public class GenerateCode extends NetworkAndTrainingDialog {
          String[] training = {"Backpropagation","Genetic Algorithm", "Simulated Annealing"};
          cbTraining.setModel(new DefaultComboBoxModel(training));
          String[] save = {"Yes","No"};
-         cbSaveEG.setModel(new DefaultComboBoxModel(save));
+         cbCopyTraining.setModel(new DefaultComboBoxModel(save));
         
          
          JPanel jp = this.getBodyPanel();
@@ -93,15 +96,26 @@ public class GenerateCode extends NetworkAndTrainingDialog {
          jp.add(new JLabel("Training Method"));
          jp.add(cbTraining);
          
-         jp.add(new JLabel("Save Network"));
-         jp.add(cbSaveEG); 
+         jp.add(new JLabel("Copy Training Set to Code"));
+         jp.add(cbCopyTraining); 
       
     }
 
 
 	@Override
 	public void collectFields() throws ValidationException {
-		// TODO Auto-generated method stub
+		switch( this.cbLanguage.getSelectedIndex() )
+		{
+			case 0:
+				this.language = GenerateLanguage.Java;
+				break;
+			case 1:
+				this.language = GenerateLanguage.CS;
+				break;
+			case 2:
+				this.language = GenerateLanguage.VB;
+				break;
+		}
 		
 	}
 
@@ -110,7 +124,15 @@ public class GenerateCode extends NetworkAndTrainingDialog {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	/**
+	 * @return the language
+	 */
+	public GenerateLanguage getLanguage() {
+		return language;
+	}
    
-		
+	
 	
 }

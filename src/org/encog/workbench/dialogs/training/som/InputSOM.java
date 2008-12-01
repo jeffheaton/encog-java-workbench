@@ -14,6 +14,7 @@ import javax.swing.WindowConstants;
 
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.training.som.TrainSelfOrganizingMap.LearningMethod;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.ValidationException;
@@ -47,8 +48,10 @@ public class InputSOM extends BasicTrainingInput
 		{
 
 	// Variables declaration
-	public JTextField txtlearningRate;
+	private JTextField txtlearningRate;
 	private double learningRate;
+	private JComboBox cbMethod;
+	private LearningMethod method;
 
 
 	/**
@@ -59,7 +62,7 @@ public class InputSOM extends BasicTrainingInput
 	/** Creates new form UsersInput */
 	public InputSOM(Frame owner) {
 		super(owner);
-		setTitle("Train Backpropagation");
+		setTitle("Train SOM Layers");
 
 		this.setSize(300, 240);
 		this.setLocation(200, 100);
@@ -68,11 +71,21 @@ public class InputSOM extends BasicTrainingInput
 
 
 		Container content = this.getBodyPanel();
-
 		content.setLayout(new GridLayout(6, 1, 10, 10));
+		
+		this.cbMethod = new JComboBox();
+		String[] languages = {"Additive","Subtractive"};
+				 
+		/**
+		 * Subtractive learning.
+		 */		
+        this.cbMethod.setModel(new DefaultComboBoxModel(languages));		
 
 		content.add(new JLabel("Learning Rate"));
 		content.add(txtlearningRate);
+		
+		content.add(new JLabel("Method"));
+		content.add(this.cbMethod);
 
 		this.txtlearningRate.setText("0.7");
 
@@ -82,6 +95,10 @@ public class InputSOM extends BasicTrainingInput
 	public void collectFields() throws ValidationException {
 		super.collectFields();
 		this.learningRate = this.validateFieldNumeric("learning rate", this.txtlearningRate);
+		if( this.cbMethod.getSelectedIndex()==1 )
+			this.method = LearningMethod.ADDITIVE;
+		else this.method = LearningMethod.SUBTRACTIVE;
+			
 	}
 
 
@@ -97,5 +114,14 @@ public class InputSOM extends BasicTrainingInput
 	 */
 	public double getLearningRate() {
 		return learningRate;
+	}
+
+	/**
+	 * @return the method
+	 */
+	public LearningMethod getMethod() {
+		return method;
 	}	
+	
+	
 }
