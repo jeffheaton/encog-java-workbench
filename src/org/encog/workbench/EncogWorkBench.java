@@ -115,4 +115,10 @@ public class EncogWorkBench {
 		
 		workBench.getMainWindow().setVisible(true);
 	}
+
+
+	public static void displayMessage(String title, String message) {
+		JOptionPane.showMessageDialog(getInstance().getMainWindow(), message,
+				title, JOptionPane.INFORMATION_MESSAGE);
+	}
 }

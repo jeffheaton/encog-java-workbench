@@ -62,6 +62,8 @@ public class EncogDocumentFrame extends EncogListFrame {
 	public static final String TRAIN_BACKPROPAGATION = "Train Backpropagation...";
 	public static final String TRAIN_SIMULATED_ANNEALING = "Train Simulated Annealing...";
 	public static final String TRAIN_GENETIC = "Train Genetically...";
+	public static final String TRAIN_HOPFIELD = "Train Hopfield Layers...";
+	public static final String TRAIN_SOM = "Train SOM Layers...";
 	
 	public static final String TOOLS_CODE = "Generate Code...";
 
@@ -163,6 +165,12 @@ public class EncogDocumentFrame extends EncogListFrame {
 				EncogDocumentFrame.TRAIN_SIMULATED_ANNEALING, 'a'));
 		this.menuTrain.add(addItem(this.menuObjects,
 				EncogDocumentFrame.TRAIN_GENETIC, 'g'));
+		this.menuTrain.addSeparator();
+		this.menuTrain.add(addItem(this.menuObjects,
+				EncogDocumentFrame.TRAIN_HOPFIELD, 'h'));
+		this.menuTrain.add(addItem(this.menuObjects,
+				EncogDocumentFrame.TRAIN_SOM, 's'));
+		
 		this.menuBar.add(this.menuTrain);
 		
 		this.menuTools = new JMenu("Tools");
@@ -246,7 +254,16 @@ public class EncogDocumentFrame extends EncogListFrame {
 				EncogDocumentFrame.TRAIN_GENETIC)) {
 			Training.performGenetic();
 
+		}else if (event.getActionCommand().equals(
+				EncogDocumentFrame.TRAIN_HOPFIELD)) {
+			Training.performHopfield();
+
 		} else if (event.getActionCommand().equals(
+				EncogDocumentFrame.TRAIN_SOM)) {
+			Training.performSOM();
+
+		} 
+		else if (event.getActionCommand().equals(
 				EncogDocumentFrame.TRAIN_SIMULATED_ANNEALING)) {
 			Training.performAnneal();
 		}
