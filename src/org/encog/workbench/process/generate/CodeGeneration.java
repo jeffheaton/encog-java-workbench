@@ -29,7 +29,7 @@ public class CodeGeneration {
 			}
 			
 			
-			String source = gen.generate(null, null, false, null);
+			String source = gen.generate(dialog.getNetwork(),dialog.getTrainingSet(), false, null);
 			text.setText(source);
 			text.setVisible(true);
 		}

@@ -104,6 +104,7 @@ public class GenerateCode extends NetworkAndTrainingDialog {
 
 	@Override
 	public void collectFields() throws ValidationException {
+		super.collectFields();
 		switch( this.cbLanguage.getSelectedIndex() )
 		{
 			case 0:
