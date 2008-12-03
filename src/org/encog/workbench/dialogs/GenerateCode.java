@@ -28,6 +28,7 @@ import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.NetworkAndTrainingDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.process.generate.Generate.GenerateLanguage;
+import org.encog.workbench.process.generate.Generate.TrainingMethod;
 
 /*
  * Encog Workbench v1.x
@@ -58,74 +59,102 @@ public class GenerateCode extends NetworkAndTrainingDialog {
 	private JComboBox cbLanguage;
 	private JComboBox cbTraining;
 	private JComboBox cbCopyTraining;
-	
+
 	private GenerateLanguage language;
-	
-    /**
+	private TrainingMethod trainingMethod;
+	private boolean copyTraining;
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	/** Creates new form UsersInput */
-    public GenerateCode(Frame owner) {
-    	super(owner);
-    	findData();
-    	this.setTitle("Generate Code");
-    	this.setSize(300, 240);
-    	this.setLocation(200, 100);
+	public GenerateCode(Frame owner) {
+		super(owner);
+		findData();
+		this.setTitle("Generate Code");
+		this.setSize(300, 240);
+		this.setLocation(200, 100);
 
-    		cbCopyTraining = new JComboBox();
-         cbLanguage = new JComboBox();
-         cbTraining = new JComboBox();
+		cbCopyTraining = new JComboBox();
+		cbLanguage = new JComboBox();
+		cbTraining = new JComboBox();
 
-         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-         String[] languages = {"Java","C#","VB.Net"};
-         cbLanguage.setModel(new DefaultComboBoxModel(languages));
-         String[] training = {"Backpropagation","Genetic Algorithm", "Simulated Annealing"};
-         cbTraining.setModel(new DefaultComboBoxModel(training));
-         String[] save = {"Yes","No"};
-         cbCopyTraining.setModel(new DefaultComboBoxModel(save));
-        
-         
-         JPanel jp = this.getBodyPanel();
-         jp.setLayout(new GridLayout(6,1,10,10));
+		String[] languages = { "Java", "C#", "VB.Net" };
+		cbLanguage.setModel(new DefaultComboBoxModel(languages));
+		String[] training = { "Backpropagation", "Genetic Algorithm",
+				"Simulated Annealing", "Hopfield", "Self Organizing",
+				"Do Not Train/Already Trained" };
+		cbTraining.setModel(new DefaultComboBoxModel(training));
+		String[] save = { "Yes", "No" };
+		cbCopyTraining.setModel(new DefaultComboBoxModel(save));
 
-         jp.add(new JLabel("Language"));
-         jp.add(cbLanguage); 
-         
-         jp.add(new JLabel("Training Method"));
-         jp.add(cbTraining);
-         
-         jp.add(new JLabel("Copy Training Set to Code"));
-         jp.add(cbCopyTraining); 
-      
-    }
+		JPanel jp = this.getBodyPanel();
+		jp.setLayout(new GridLayout(6, 1, 10, 10));
 
+		jp.add(new JLabel("Language"));
+		jp.add(cbLanguage);
+
+		jp.add(new JLabel("Training Method"));
+		jp.add(cbTraining);
+
+		jp.add(new JLabel("Copy Training Set to Code"));
+		jp.add(cbCopyTraining);
+
+	}
 
 	@Override
 	public void collectFields() throws ValidationException {
 		super.collectFields();
-		switch( this.cbLanguage.getSelectedIndex() )
-		{
-			case 0:
-				this.language = GenerateLanguage.Java;
-				break;
-			case 1:
-				this.language = GenerateLanguage.CS;
-				break;
-			case 2:
-				this.language = GenerateLanguage.VB;
-				break;
+		switch (this.cbLanguage.getSelectedIndex()) {
+		case 0:
+			this.language = GenerateLanguage.Java;
+			break;
+		case 1:
+			this.language = GenerateLanguage.CS;
+			break;
+		case 2:
+			this.language = GenerateLanguage.VB;
+			break;
+		}
+
+		switch (this.cbTraining.getSelectedIndex()) {
+		case 0:
+			this.trainingMethod = TrainingMethod.Backpropagation;
+			break;
+		case 1:
+			this.trainingMethod = TrainingMethod.Genetic;
+			break;
+		case 2:
+			this.trainingMethod = TrainingMethod.Anneal;
+			break;
+		case 3:
+			this.trainingMethod = TrainingMethod.TrainHopfield;
+			break;
+		case 4:
+			this.trainingMethod = TrainingMethod.TrainSOM;
+			break;
+		case 5:
+			this.trainingMethod = TrainingMethod.NoTraining;
+			break;
 		}
 		
+		if( this.cbCopyTraining.getSelectedIndex()==0 ) {
+			this.copyTraining = true;
+		}
+		else
+			this.copyTraining = false;
+
 	}
 
 	@Override
 	public void setFields() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	/**
 	 * @return the language
@@ -133,7 +162,19 @@ public class GenerateCode extends NetworkAndTrainingDialog {
 	public GenerateLanguage getLanguage() {
 		return language;
 	}
-   
-	
-	
+
+	/**
+	 * @return the trainingMethod
+	 */
+	public TrainingMethod getTrainingMethod() {
+		return trainingMethod;
+	}
+
+	/**
+	 * @return the copyTraining
+	 */
+	public boolean isCopyTraining() {
+		return copyTraining;
+	}
+
 }

@@ -21,7 +21,8 @@ public interface Generate {
 		Genetic,
 		Anneal,
 		TrainSOM,
-		TrainHopfield
+		TrainHopfield, 
+		NoTraining
 	}
 	
 	public String generate(

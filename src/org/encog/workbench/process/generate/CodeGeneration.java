@@ -27,9 +27,8 @@ public class CodeGeneration {
 					gen = new GenerateVB();
 					break;
 			}
-			
-			
-			String source = gen.generate(dialog.getNetwork(),dialog.getTrainingSet(), false, null);
+						
+			String source = gen.generate(dialog.getNetwork(),dialog.getTrainingSet(), dialog.isCopyTraining(), dialog.getTrainingMethod());
 			text.setText(source);
 			text.setVisible(true);
 		}
