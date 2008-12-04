@@ -1,6 +1,8 @@
 package org.encog.workbench;
 
-import javax.swing.JOptionPane;
+import java.awt.*;
+
+import javax.swing.*;
 
 import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.workbench.frames.EncogDocumentFrame;
@@ -126,5 +128,18 @@ public class EncogWorkBench {
 	{
 		return JOptionPane.showConfirmDialog(getInstance().getMainWindow(), question,
 				title, JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION;
+	}
+	
+	public static Frame getCurrentFocus()
+	{
+	  Frame[] frames = JFrame.getFrames();
+	  for(int i=0;i<frames.length;i++)
+	  {
+	    if(frames[i].hasFocus())
+	    {
+	      return frames[i];
+	    }
+	  }
+	  return null;
 	}
 }

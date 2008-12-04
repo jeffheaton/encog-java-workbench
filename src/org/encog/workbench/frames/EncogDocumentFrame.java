@@ -1,5 +1,6 @@
 package org.encog.workbench.frames;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -34,6 +35,7 @@ import org.encog.workbench.dialogs.CreateDataSet;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
+import org.encog.workbench.frames.manager.*;
 import org.encog.workbench.frames.render.EncogItemRenderer;
 import org.encog.workbench.frames.visualize.NetworkVisualizeFrame;
 import org.encog.workbench.models.EncogListModel;
@@ -312,18 +314,32 @@ public class EncogDocumentFrame extends EncogListFrame {
 	}
 
 	private void performEditPaste() {
-
+	  Frame frame = EncogWorkBench.getCurrentFocus();
+	  if( frame instanceof EncogCommonFrame )
+	  {
+	    EncogCommonFrame ecf = (EncogCommonFrame)frame;
+	    ecf.paste();
+	  }
 		
 	}
 
 	private void performEditCopy() {
-		// TODO Auto-generated method stub
+    Frame frame = EncogWorkBench.getCurrentFocus();
+    if( frame instanceof EncogCommonFrame )
+    {
+      EncogCommonFrame ecf = (EncogCommonFrame)frame;
+      ecf.copy();
+    }
 		
 	}
 
 	private void performEditCut() {
-
-		
+    Frame frame = EncogWorkBench.getCurrentFocus();
+    if( frame instanceof EncogCommonFrame )
+    {
+      EncogCommonFrame ecf = (EncogCommonFrame)frame;
+      ecf.cut();
+    }
 	}
 
 	private void performFileOpen() {
