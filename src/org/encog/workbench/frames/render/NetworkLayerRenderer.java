@@ -1,4 +1,4 @@
-package org.encog.workbench.frames;
+package org.encog.workbench.frames.render;
 
 import java.awt.Color;
 import java.awt.Component;

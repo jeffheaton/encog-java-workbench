@@ -15,7 +15,7 @@ import javax.swing.JScrollPane;
 import org.encog.matrix.Matrix;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.Layer;
-import org.encog.workbench.frames.EncogCommonFrame;
+import org.encog.workbench.frames.manager.EncogCommonFrame;
 
 public class NetworkVisualizeFrame extends EncogCommonFrame {
 

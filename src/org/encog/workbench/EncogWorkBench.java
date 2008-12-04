@@ -98,7 +98,7 @@ public class EncogWorkBench {
 	
 	public static void displayError(String title,String message)
 	{
-		JOptionPane.showMessageDialog(getInstance().getMainWindow(), message,
+		JOptionPane.showMessageDialog(null, message,
 				title, JOptionPane.ERROR_MESSAGE);
 	}
 
@@ -118,7 +118,13 @@ public class EncogWorkBench {
 
 
 	public static void displayMessage(String title, String message) {
-		JOptionPane.showMessageDialog(getInstance().getMainWindow(), message,
+		JOptionPane.showMessageDialog(null, message,
 				title, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	public static boolean askQuestion(String title,String question)
+	{
+		return JOptionPane.showConfirmDialog(getInstance().getMainWindow(), question,
+				title, JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION;
 	}
 }

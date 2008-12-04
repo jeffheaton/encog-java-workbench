@@ -1,4 +1,4 @@
-package org.encog.workbench.frames;
+package org.encog.workbench.frames.manager;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -11,9 +11,22 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.encog.neural.persist.EncogPersistedObject;
+import org.encog.workbench.EncogWorkBench;
+
 public abstract class EncogCommonFrame extends JFrame implements WindowListener,
 ActionListener, MouseListener {
 
+	private EncogPersistedObject encogObject;
+	private EncogFrameManager subwindows;
+	private EncogCommonFrame parent;
+	
+	public EncogCommonFrame()
+	{
+		this.subwindows = new EncogFrameManager(this);
+		this.addWindowListener(this);
+	}
+	
 	protected JMenuItem addItem(JMenu m, String s, int key) {
 
 		JMenuItem mi = new JMenuItem(s, key);
@@ -36,7 +49,16 @@ ActionListener, MouseListener {
 	}
 	
 	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
+		if( this.getParent()!=null )
+		{
+			this.getParent().getSubwindows().remove(this);
+			this.getParent().redraw();
+		}
+		
+		for(EncogCommonFrame frame: this.getSubwindows().getFrames())
+		{
+			frame.dispose();
+		}
 
 	}
 
@@ -77,8 +99,61 @@ ActionListener, MouseListener {
 
 
 	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
+
+		
+	}
+
+	/**
+	 * @return the encogObject
+	 */
+	public EncogPersistedObject getEncogObject() {
+		return encogObject;
+	}
+
+	/**
+	 * @param encogObject the encogObject to set
+	 */
+	public void setEncogObject(EncogPersistedObject encogObject) {
+		this.encogObject = encogObject;
+	}
+
+	/**
+	 * @return the subwindows
+	 */
+	public EncogFrameManager getSubwindows() {
+		return subwindows;
+	}
+
+	/**
+	 * @return the parent
+	 */
+	public EncogCommonFrame getParent() {
+		return parent;
+	}
+
+	/**
+	 * @param parent the parent to set
+	 */
+	public void setParent(EncogCommonFrame parent) {
+		this.parent = parent;
+	}
+	
+	public void redraw()
+	{		
+	}
+	
+	public void cut()
+	{
 		
 	}
 	
+	public void copy()
+	{
+		
+	}
+	
+	public void paste()
+	{
+		
+	}
 }

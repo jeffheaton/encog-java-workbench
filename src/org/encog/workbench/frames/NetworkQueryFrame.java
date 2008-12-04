@@ -16,11 +16,11 @@ import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.NetworkQueryModel;
 
 public class NetworkQueryFrame extends EncogCommonFrame {
 
-	private BasicNetwork data;
 	private JTable inputTable;
 	private JTable outputTable;
 	private int inputCount;
@@ -28,17 +28,17 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 	private JButton calculateButton;
 	
 	public NetworkQueryFrame(BasicNetwork data)  {
-		this.data = data;
+		this.setEncogObject(data);
 		addWindowListener(this);
 	}
 
 	public void windowOpened(WindowEvent e) {
 		//
-		this.inputCount = data.getInputLayer().getNeuronCount();
-		this.outputCount = data.getOutputLayer().getNeuronCount();
+		this.inputCount = getData().getInputLayer().getNeuronCount();
+		this.outputCount = getData().getOutputLayer().getNeuronCount();
 		
 		// create the graphic objects
-		this.setTitle("Query Network: " + this.data.getName());
+		this.setTitle("Query Network: " + this.getData().getName());
 		this.setSize(640,480);
 		Container contents = this.getContentPane();
 		contents.setLayout(new BorderLayout());
@@ -92,7 +92,7 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 				input.setData(i,value);
 			}
 			
-			NeuralData output = this.data.compute(input);
+			NeuralData output = this.getData().compute(input);
 			
 			for(int i=0;i<this.outputCount;i++)
 			{
@@ -104,6 +104,11 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 		
 		
 		
+	}
+	
+	public BasicNetwork getData()
+	{
+		return (BasicNetwork)this.getEncogObject();
 	}
 
 	public void mouseClicked(MouseEvent e) {

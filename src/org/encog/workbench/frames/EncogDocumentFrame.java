@@ -18,9 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
-import javax.swing.ListModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 
 import org.encog.EncogError;
 import org.encog.neural.data.NeuralData;
@@ -35,10 +32,9 @@ import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.CreateDataSet;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
-import org.encog.workbench.dialogs.GenerateCode;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
-import org.encog.workbench.dialogs.training.backpropagation.InputBackpropagation;
+import org.encog.workbench.frames.render.EncogItemRenderer;
 import org.encog.workbench.frames.visualize.NetworkVisualizeFrame;
 import org.encog.workbench.models.EncogListModel;
 import org.encog.workbench.process.Training;
@@ -56,6 +52,10 @@ public class EncogDocumentFrame extends EncogListFrame {
 	public static final String FILE_SAVE_AS = "Save As...";
 	public static final String FILE_QUIT = "Quit...";
 	public static final String FILE_IMPORT = "Import CSV...";
+	
+	public static final String EDIT_CUT = "Cut";
+	public static final String EDIT_COPY = "Copy";
+	public static final String EDIT_PASTE = "Paste";
 
 	public static final String OBJECTS_CREATE = "Create Object...";
 	public static final String OBJECTS_DELETE = "Delete Object...";
@@ -70,6 +70,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 
 	private JMenuBar menuBar;
 	private JMenu menuFile;
+	private JMenu menuEdit;
 	private JMenu menuObjects;
 	private JMenu menuTrain;
 	private JMenu menuTools;
@@ -91,14 +92,13 @@ public class EncogDocumentFrame extends EncogListFrame {
 	private JMenuItem popupDataImport;
 	private JMenuItem popupDataExport;
 
-	private List<JFrame> subwindows = new ArrayList<JFrame>();
-
 	private EncogListModel encogListModel;
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files", ".eg");
 	public static final ExtensionFilter CSV_FILTER = new ExtensionFilter(
 			"CSV Files", ".csv");
 	public static final String WINDOW_TITLE = "Encog Workbench 1.0";
+
 
 	public EncogDocumentFrame() {
 		this.setSize(640, 480);
@@ -151,6 +151,15 @@ public class EncogDocumentFrame extends EncogListFrame {
 				'q'));
 		this.menuFile.addActionListener(this);
 		this.menuBar.add(this.menuFile);
+		
+		this.menuEdit = new JMenu("Edit");
+		this.menuEdit.add(addItem(this.menuEdit,
+				EncogDocumentFrame.EDIT_CUT, 'x'));
+		this.menuEdit.add(addItem(this.menuEdit,
+				EncogDocumentFrame.EDIT_COPY, 'c'));
+		this.menuEdit.add(addItem(this.menuEdit,
+				EncogDocumentFrame.EDIT_PASTE, 'v'));
+		this.menuBar.add(this.menuEdit);
 
 		this.menuObjects = new JMenu("Objects");
 		this.menuObjects.add(addItem(this.menuObjects,
@@ -216,12 +225,6 @@ public class EncogDocumentFrame extends EncogListFrame {
 	}
 
 	public void windowOpened(WindowEvent e) {
-
-
-
-		
-
-
 	}
 
 	public void actionPerformed(ActionEvent event) {
@@ -300,7 +303,27 @@ public class EncogDocumentFrame extends EncogListFrame {
 		} else if (event.getActionCommand().equals(
 				EncogDocumentFrame.TOOLS_CODE)) {
 			performGenerateCode();
-		}
+		} else if (event.getActionCommand().equals(EncogDocumentFrame.EDIT_CUT))
+			performEditCut();
+		else if (event.getActionCommand().equals(EncogDocumentFrame.EDIT_COPY))
+			performEditCopy();
+		else if (event.getActionCommand().equals(EncogDocumentFrame.EDIT_PASTE))
+			performEditPaste();
+	}
+
+	private void performEditPaste() {
+
+		
+	}
+
+	private void performEditCopy() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void performEditCut() {
+
+		
 	}
 
 	private void performFileOpen() {
@@ -418,6 +441,13 @@ public class EncogDocumentFrame extends EncogListFrame {
 	public void performObjectsDelete() {
 		Object object = this.contents.getSelectedValue();
 		if (object != null) {
+			if( this.getSubwindows().find((EncogPersistedObject) object)!=null)
+			{
+				EncogWorkBench.displayError("Can't Delete Object", "This object can not be deleted while it is open.");
+				return;
+			}
+			
+			
 			if (JOptionPane.showConfirmDialog(this,
 					"Are you sure you want to delete this object?", "Warning",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -477,46 +507,23 @@ public class EncogDocumentFrame extends EncogListFrame {
 
 	protected void openItem(Object item) {
 		if (item instanceof NeuralDataSet) {
-			JFrame frame = findSubWindow((EncogPersistedObject) item);
-			if (frame == null) {
-				frame = new TrainingDataFrame((BasicNeuralDataSet) item);
+			BasicNeuralDataSet nds = (BasicNeuralDataSet)item;
+			if( this.getSubwindows().checkBeforeOpen(nds, TrainingDataFrame.class))
+			{
+				TrainingDataFrame frame = new TrainingDataFrame((BasicNeuralDataSet) item);
 				frame.setVisible(true);
-				this.subwindows.add(frame);
-			} else {
-				frame.toFront();
-			}
+				this.getSubwindows().add(frame);
+			}			
 		} else if (item instanceof Network) {
-			JFrame frame = findSubWindow((EncogPersistedObject) item);
-			if (frame == null) {
-				frame = new NetworkFrame((BasicNetwork) item);
+			
+			BasicNetwork net = (BasicNetwork)item;
+			if( this.getSubwindows().checkBeforeOpen(net, TrainingDataFrame.class))
+			{
+				NetworkFrame frame = new NetworkFrame(net);
 				frame.setVisible(true);
-				this.subwindows.add(frame);
-			} else {
-				frame.toFront();
+				this.getSubwindows().add(frame);
 			}
 		}
-	}
-
-	public JFrame findSubWindow(EncogPersistedObject object) {
-		for (JFrame frame : this.subwindows) {
-			if (frame instanceof TrainingDataFrame) {
-				TrainingDataFrame t = (TrainingDataFrame) frame;
-				if (t.getData() == object)
-					return frame;
-			} else if (frame instanceof NetworkFrame) {
-				NetworkFrame n = (NetworkFrame) frame;
-				if (n.getData() == object)
-					return frame;
-			}
-		}
-		return null;
-	}
-
-	public void closeSubWindow(JFrame sub) {
-		this.subwindows.remove(sub);
-		redraw();
-		sub.setVisible(false);
-		sub.dispose();
 	}
 
 	private void performImport(Object obj) {
@@ -627,29 +634,26 @@ public class EncogDocumentFrame extends EncogListFrame {
 	
 	public void performNetworkQuery()
 	{
-		Object item = this.contents.getSelectedValue();
+		BasicNetwork item = (BasicNetwork)this.contents.getSelectedValue();
 		
-		JFrame frame = findSubWindow((EncogPersistedObject) item);
-		if (frame == null) {
-			frame = new NetworkQueryFrame((BasicNetwork) item);
+		if( this.getSubwindows().checkBeforeOpen(item, NetworkQueryFrame.class) )
+		{
+			NetworkQueryFrame frame = new NetworkQueryFrame(item);
 			frame.setVisible(true);
-			this.subwindows.add(frame);
-		} else {
-			frame.toFront();
+			this.getSubwindows().add(frame);
 		}
+
 	}
 	
 	public void performNetworkVisualize()
 	{
-		Object item = this.contents.getSelectedValue();
-		
-		JFrame frame = findSubWindow((EncogPersistedObject) item);
-		if (frame == null) {
-			frame = new NetworkVisualizeFrame((BasicNetwork) item);
+		BasicNetwork item = (BasicNetwork)this.contents.getSelectedValue();
+	
+		if( this.getSubwindows().checkBeforeOpen(item, NetworkVisualizeFrame.class))
+		{		
+			NetworkVisualizeFrame frame = new NetworkVisualizeFrame(item);
 			frame.setVisible(true);
-			this.subwindows.add(frame);
-		} else {
-			frame.toFront();
+			this.getSubwindows().add(frame);
 		}
 	}
 	

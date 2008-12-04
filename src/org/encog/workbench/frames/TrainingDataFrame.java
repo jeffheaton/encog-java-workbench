@@ -24,11 +24,11 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
+import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.TrainingSetTableModel;
 
 public class TrainingDataFrame extends EncogCommonFrame {
-
-	private BasicNeuralDataSet data;
+	
 	private TrainingSetTableModel model;
 	private JToolBar toolbar;
 	private JTable table;
@@ -41,14 +41,8 @@ public class TrainingDataFrame extends EncogCommonFrame {
 	private JButton properties;
 	
 	public TrainingDataFrame(BasicNeuralDataSet data) {
-		this.data = data;
+		this.setEncogObject(data);
 		this.addWindowListener(this);
-	}
-
-
-	public void windowClosing(WindowEvent e) {
-		EncogWorkBench.getInstance().getMainWindow().closeSubWindow(this);
-		
 	}
 	
 	public void windowOpened(WindowEvent e) {
@@ -70,7 +64,7 @@ public class TrainingDataFrame extends EncogCommonFrame {
 		this.delRow.addActionListener(this);
 		this.properties.addActionListener(this);
 		content.add(this.toolbar,BorderLayout.PAGE_START);
-		this.model = new TrainingSetTableModel(this.data);
+		this.model = new TrainingSetTableModel(this.getData());
 		this.table = new JTable(model);		
 		content.add(new JScrollPane(table),BorderLayout.CENTER);
 		//
@@ -91,7 +85,7 @@ public class TrainingDataFrame extends EncogCommonFrame {
 			{
 				JOptionPane.showMessageDialog(this, "Please move to the column you wish to delete.", "Error", JOptionPane.ERROR_MESSAGE);
 			}
-			else if( col< this.data.getInputSize() && this.data.getInputSize()<=1 ){
+			else if( col< this.getData().getInputSize() && this.getData().getInputSize()<=1 ){
 				JOptionPane.showMessageDialog(this, "There must be at least one input column.", "Error", JOptionPane.ERROR_MESSAGE);				
 			}
 			else
@@ -116,7 +110,7 @@ public class TrainingDataFrame extends EncogCommonFrame {
 		}
 		else if (action.getSource()==this.properties)
 		{
-			EditEncogObjectProperties dialog = new EditEncogObjectProperties(this,this.data);
+			EditEncogObjectProperties dialog = new EditEncogObjectProperties(this,this.getData());
 			dialog.process();
 		}
 		
@@ -124,7 +118,7 @@ public class TrainingDataFrame extends EncogCommonFrame {
 	
 	public BasicNeuralDataSet getData()
 	{
-		return this.data;
+		return (BasicNeuralDataSet)this.getEncogObject();
 	}
 
 	public void mouseClicked(MouseEvent e) {

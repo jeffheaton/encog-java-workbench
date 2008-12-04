@@ -25,6 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.ListModel;
 
+import org.encog.matrix.Matrix;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.Layer;
@@ -43,11 +44,11 @@ import org.encog.workbench.dialogs.EditSOMLayer;
 import org.encog.workbench.dialogs.EditSimpleLayer;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
+import org.encog.workbench.frames.render.NetworkLayerRenderer;
 import org.encog.workbench.models.NetworkListModel;
 
 public class NetworkFrame extends EncogListFrame {
 
-	private BasicNetwork data;
 	private JToolBar toolbar;
 	private JButton addLayer;
 	private JButton deleteLayer;
@@ -61,12 +62,8 @@ public class NetworkFrame extends EncogListFrame {
 	private JMenuItem popupEditMatrix;
 
 	public NetworkFrame(BasicNetwork data) {
-		this.data = data;
+		this.setEncogObject(data);
 		addWindowListener(this);
-	}
-
-	public void windowClosing(WindowEvent arg0) {
-		EncogWorkBench.getInstance().getMainWindow().closeSubWindow(this);
 	}
 
 	public void windowOpened(WindowEvent arg0) {
@@ -100,7 +97,7 @@ public class NetworkFrame extends EncogListFrame {
 		content2.add(topPanel, BorderLayout.NORTH);
 		content2.add(bottomPanel, BorderLayout.SOUTH);
 
-		this.model = new NetworkListModel(this.data);
+		this.model = new NetworkListModel(this.getData());
 		this.contents = new JList(this.model);
 		this.contents.addMouseListener(this);
 		this.contents.setCellRenderer(new NetworkLayerRenderer());
@@ -143,14 +140,28 @@ public class NetworkFrame extends EncogListFrame {
 			EncogWorkBench.displayError("Error", "This layer does not have a matrix.");
 			return;
 		}
-		MatrixFrame frame = new MatrixFrame(this.data,item.getMatrix());
-		frame.setVisible(true);
+		
+		if( this.getSubwindows().checkBeforeOpen(item.getMatrix(), MatrixFrame.class))			
+		{
+			MatrixFrame frame = new MatrixFrame(this.getData(),item.getMatrix());
+			frame.setVisible(true);
+			this.getSubwindows().add(frame);
+		}
+		
+		
 		
 	}
 
 	private void performDeleteLayer() {
 		int index = this.contents.getSelectedIndex();
+		
 		if (index != -1) {
+			if( this.getSubwindows().getFrames().size()>0 )
+			{
+				EncogWorkBench.displayError("Can't Delete Layer", "Can't delete this layer while matrix windows are open.");
+				return;
+			}
+			
 			this.model.deleteLayer(index);
 		} else {
 			JOptionPane.showMessageDialog(this,
@@ -179,8 +190,8 @@ public class NetworkFrame extends EncogListFrame {
 		Layer layer;
 		Layer baseLayer = null;
 		int index = this.contents.getSelectedIndex();
-		if (index != -1 && (index<this.data.getLayers().size()) ) {
-			baseLayer = this.data.getLayers().get(index);
+		if (index != -1 && (index<this.getData().getLayers().size()) ) {
+			baseLayer = this.getData().getLayers().get(index);
 		}
 
 		if (result == itemFeedfoward) {
@@ -201,7 +212,7 @@ public class NetworkFrame extends EncogListFrame {
 
 	public void performProperties() {
 		EditEncogObjectProperties dialog = new EditEncogObjectProperties(this,
-				this.data);
+				this.getData());
 		dialog.process();
 	}
 
@@ -209,11 +220,18 @@ public class NetworkFrame extends EncogListFrame {
 	 * @return the data
 	 */
 	public BasicNetwork getData() {
-		return data;
+		return (BasicNetwork)getEncogObject();
 	}
 
 	@Override
 	protected void openItem(Object item) {
+		
+		if( this.getSubwindows().getFrames().size()>0 )
+		{
+			EncogWorkBench.displayError("Can't Edit Layer", "Can't edit layers while matrix windows are open.");
+			return;
+		}
+		
 		if (item instanceof FeedforwardLayer) {
 			FeedforwardLayer layer = (FeedforwardLayer) item;
 			EditFeedforwardLayer dialog = new EditFeedforwardLayer(this);
