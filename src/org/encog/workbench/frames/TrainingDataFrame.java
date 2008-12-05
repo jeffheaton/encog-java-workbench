@@ -1,53 +1,119 @@
+/*
+ * Encog Workbench v1.x
+ * http://www.heatonresearch.com/encog/
+ * http://code.google.com/p/encog-java/
+ * 
+ * Copyright 2008, Heaton Research Inc., and individual contributors.
+ * See the copyright.txt in the distribution for a full listing of 
+ * individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 package org.encog.workbench.frames;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
-import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.TrainingSetTableModel;
 
 public class TrainingDataFrame extends EncogCommonFrame {
-	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private TrainingSetTableModel model;
 	private JToolBar toolbar;
 	private JTable table;
-	
+
 	private JButton addInputColumn;
 	private JButton delColumn;
 	private JButton addIdealColumn;
 	private JButton addRow;
 	private JButton delRow;
 	private JButton properties;
-	
-	public TrainingDataFrame(BasicNeuralDataSet data) {
-		this.setEncogObject(data);
-		this.addWindowListener(this);
+
+	public TrainingDataFrame(final BasicNeuralDataSet data) {
+		setEncogObject(data);
+		addWindowListener(this);
 	}
-	
-	public void windowOpened(WindowEvent e) {
-		setSize(640,480);
-		Container content = this.getContentPane();
+
+	public void actionPerformed(final ActionEvent action) {
+		final int row = this.table.getSelectedRow();
+		final int col = this.table.getSelectedColumn();
+
+		if (action.getSource() == this.addInputColumn) {
+			this.model.addInputColumn();
+		} else if (action.getSource() == this.delColumn) {
+			if (col == -1) {
+				JOptionPane.showMessageDialog(this,
+						"Please move to the column you wish to delete.",
+						"Error", JOptionPane.ERROR_MESSAGE);
+			} else if (col < getData().getInputSize()
+					&& getData().getInputSize() <= 1) {
+				JOptionPane.showMessageDialog(this,
+						"There must be at least one input column.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				this.model.delColumn(col);
+			}
+		} else if (action.getSource() == this.addIdealColumn) {
+			this.model.addIdealColumn();
+		} else if (action.getSource() == this.addRow) {
+			this.model.addRow(row);
+		} else if (action.getSource() == this.delRow) {
+			if (row == -1) {
+				JOptionPane.showMessageDialog(this,
+						"Please move to the row you wish to delete.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				this.model.delRow(row);
+			}
+		} else if (action.getSource() == this.properties) {
+			final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
+					this, getData());
+			dialog.process();
+		}
+
+	}
+
+	public BasicNeuralDataSet getData() {
+		return (BasicNeuralDataSet) getEncogObject();
+	}
+
+	public void mouseClicked(final MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void windowOpened(final WindowEvent e) {
+		setSize(640, 480);
+		final Container content = getContentPane();
 		content.setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);
@@ -63,67 +129,12 @@ public class TrainingDataFrame extends EncogCommonFrame {
 		this.addRow.addActionListener(this);
 		this.delRow.addActionListener(this);
 		this.properties.addActionListener(this);
-		content.add(this.toolbar,BorderLayout.PAGE_START);
-		this.model = new TrainingSetTableModel(this.getData());
-		this.table = new JTable(model);		
-		content.add(new JScrollPane(table),BorderLayout.CENTER);
+		content.add(this.toolbar, BorderLayout.PAGE_START);
+		this.model = new TrainingSetTableModel(getData());
+		this.table = new JTable(this.model);
+		content.add(new JScrollPane(this.table), BorderLayout.CENTER);
 		//
 		setTitle("Edit Training Data");
-	}
-
-	public void actionPerformed(ActionEvent action) {
-		int row = this.table.getSelectedRow();
-		int col = this.table.getSelectedColumn();
-		
-		if( action.getSource() == this.addInputColumn )
-		{
-			this.model.addInputColumn();
-		}
-		else if( action.getSource() == this.delColumn )
-		{
-			if( col==-1 )
-			{
-				JOptionPane.showMessageDialog(this, "Please move to the column you wish to delete.", "Error", JOptionPane.ERROR_MESSAGE);
-			}
-			else if( col< this.getData().getInputSize() && this.getData().getInputSize()<=1 ){
-				JOptionPane.showMessageDialog(this, "There must be at least one input column.", "Error", JOptionPane.ERROR_MESSAGE);				
-			}
-			else
-				this.model.delColumn(col);
-		}
-		else if( action.getSource() == this.addIdealColumn )
-		{
-			this.model.addIdealColumn();
-		}
-		else if( action.getSource() == this.addRow )
-		{
-			this.model.addRow(row);
-		}
-		else if( action.getSource() == this.delRow )
-		{
-			if( row==-1 )
-			{
-				JOptionPane.showMessageDialog(this, "Please move to the row you wish to delete.", "Error", JOptionPane.ERROR_MESSAGE);
-			}
-			else
-				this.model.delRow(row);
-		}
-		else if (action.getSource()==this.properties)
-		{
-			EditEncogObjectProperties dialog = new EditEncogObjectProperties(this,this.getData());
-			dialog.process();
-		}
-		
-	}
-	
-	public BasicNeuralDataSet getData()
-	{
-		return (BasicNeuralDataSet)this.getEncogObject();
-	}
-
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

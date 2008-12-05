@@ -1,3 +1,27 @@
+/*
+ * Encog Workbench v1.x
+ * http://www.heatonresearch.com/encog/
+ * http://code.google.com/p/encog-java/
+ * 
+ * Copyright 2008, Heaton Research Inc., and individual contributors.
+ * See the copyright.txt in the distribution for a full listing of 
+ * individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 package org.encog.workbench.frames.render;
 
 import java.awt.Color;
@@ -17,124 +41,114 @@ import org.encog.neural.networks.Network;
 import org.encog.neural.persist.EncogPersistedObject;
 
 public class EncogItemRenderer extends JPanel implements ListCellRenderer {
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 987233162876263335L;
 
-    private EncogPersistedObject encogObject;
-    private boolean selected;
-    private Font titleFont;
-    private Font regularFont;
-    private ImageIcon iconNeuralNet;
-    private ImageIcon iconTrainingSet;
+	private EncogPersistedObject encogObject;
+	private boolean selected;
+	private final Font titleFont;
+	private final Font regularFont;
+	private final ImageIcon iconNeuralNet;
+	private final ImageIcon iconTrainingSet;
 
-    public EncogItemRenderer()
-    {
-    	this.iconNeuralNet = new ImageIcon(this.getClass().getResource("/resource/iconNeuralNet.png"));
-    	this.iconTrainingSet = new ImageIcon(this.getClass().getResource("/resource/iconTrain.png"));
-    	this.titleFont = new Font("sansserif",Font.BOLD,12);
-    	this.regularFont = new Font("serif",0,12);
-    }
-    
-   
-    public Component getListCellRendererComponent(
-      JList list,
-      Object value,            // value to display
-      int index,               // cell index
-      boolean isSelected,      // is the cell selected
-      boolean cellHasFocus)    // the list and the cell have the focus
-    {
-        this.setEncogObject((EncogPersistedObject)value);
-        this.setSelected(isSelected);
-        return this;
-    }
+	public EncogItemRenderer() {
+		this.iconNeuralNet = new ImageIcon(this.getClass().getResource(
+				"/resource/iconNeuralNet.png"));
+		this.iconTrainingSet = new ImageIcon(this.getClass().getResource(
+				"/resource/iconTrain.png"));
+		this.titleFont = new Font("sansserif", Font.BOLD, 12);
+		this.regularFont = new Font("serif", 0, 12);
+	}
 
 	/**
 	 * @return the encogObject
 	 */
 	public EncogPersistedObject getEncogObject() {
-		return encogObject;
+		return this.encogObject;
 	}
 
-	/**
-	 * @param encogObject the encogObject to set
-	 */
-	public void setEncogObject(EncogPersistedObject encogObject) {
-		this.encogObject = encogObject;
-	} 
-	
-	
-	
+	public Component getListCellRendererComponent(final JList list,
+			final Object value, // value to display
+			final int index, // cell index
+			final boolean isSelected, // is the cell selected
+			final boolean cellHasFocus) // the list and the cell have the focus
+	{
+		setEncogObject((EncogPersistedObject) value);
+		setSelected(isSelected);
+		return this;
+	}
+
 	/**
 	 * @return the selected
 	 */
 	public boolean isSelected() {
-		return selected;
+		return this.selected;
 	}
 
-	/**
-	 * @param selected the selected to set
-	 */
-	public void setSelected(boolean selected) {
-		this.selected = selected;
-	}
+	public void paint(final Graphics g) {
+		final int width = getWidth();
+		final int height = getHeight();
 
-	public void paint(Graphics g)
-	{
-		int width = this.getWidth();
-		int height = this.getHeight();
-		
-		if( this.selected )
-		{
+		if (this.selected) {
 			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(0,0, width, height);
-		}
-		else
-		{
+			g.fillRect(0, 0, width, height);
+		} else {
 			g.setColor(Color.WHITE);
-			g.fillRect(0,0, width, height);
+			g.fillRect(0, 0, width, height);
 		}
-		
+
 		g.setColor(Color.GRAY);
-		g.drawRect(0, 0, width-1, height-1);
-		
-		FontMetrics titleMetrics = g.getFontMetrics(this.titleFont);
-		FontMetrics regularMetrics = g.getFontMetrics(this.regularFont);
-		
+		g.drawRect(0, 0, width - 1, height - 1);
+
+		final FontMetrics titleMetrics = g.getFontMetrics(this.titleFont);
+		final FontMetrics regularMetrics = g.getFontMetrics(this.regularFont);
+
 		int y = titleMetrics.getHeight();
-		
-		if( this.getEncogObject() instanceof Network )
-		{
+
+		if (getEncogObject() instanceof Network) {
 			this.iconNeuralNet.paintIcon(this, g, 4, 4);
 			g.setFont(this.titleFont);
 			g.setColor(Color.BLACK);
 			g.drawString("Neural Network", 70, y);
-			y+=titleMetrics.getHeight();
+			y += titleMetrics.getHeight();
 			g.setFont(this.regularFont);
-			g.drawString(this.getEncogObject().getDescription()
-					+"("+this.getEncogObject().getName()
-					+")", 70, y);
-			y+=regularMetrics.getHeight();
-			BasicNetwork network = (BasicNetwork)this.getEncogObject();
+			g.drawString(getEncogObject().getDescription() + "("
+					+ getEncogObject().getName() + ")", 70, y);
+			y += regularMetrics.getHeight();
+			final BasicNetwork network = (BasicNetwork) getEncogObject();
 			g.drawString("Layers: " + network.getLayers().size(), 70, y);
-		}
-		else if( this.getEncogObject() instanceof NeuralDataSet )
-		{
-			this.iconTrainingSet.paintIcon(this, g, 4, 4);	
+		} else if (getEncogObject() instanceof NeuralDataSet) {
+			this.iconTrainingSet.paintIcon(this, g, 4, 4);
 			g.setFont(this.titleFont);
 			g.setColor(Color.BLACK);
 			g.drawString("Training Data", 70, y);
-			y+=titleMetrics.getHeight();
+			y += titleMetrics.getHeight();
 			g.setFont(this.regularFont);
-			g.drawString(this.getEncogObject().getDescription()
-					+"("+this.getEncogObject().getName()
-					+")", 70, y);
-			y+=regularMetrics.getHeight();
-			NeuralDataSet data = (NeuralDataSet)this.getEncogObject();
-			g.drawString("Ideal Size: " + data.getIdealSize()+","+
-					"Input Size: " + data.getInputSize(), 70, y);
+			g.drawString(getEncogObject().getDescription() + "("
+					+ getEncogObject().getName() + ")", 70, y);
+			y += regularMetrics.getHeight();
+			final NeuralDataSet data = (NeuralDataSet) getEncogObject();
+			g.drawString("Ideal Size: " + data.getIdealSize() + ","
+					+ "Input Size: " + data.getInputSize(), 70, y);
 
 		}
+	}
+
+	/**
+	 * @param encogObject
+	 *            the encogObject to set
+	 */
+	public void setEncogObject(final EncogPersistedObject encogObject) {
+		this.encogObject = encogObject;
+	}
+
+	/**
+	 * @param selected
+	 *            the selected to set
+	 */
+	public void setSelected(final boolean selected) {
+		this.selected = selected;
 	}
 }

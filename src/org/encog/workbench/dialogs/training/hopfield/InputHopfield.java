@@ -1,12 +1,3 @@
-package org.encog.workbench.dialogs.training.hopfield;
-
-import java.awt.Container;
-import java.awt.Frame;
-import java.awt.GridLayout;
-
-import org.encog.workbench.dialogs.common.ValidationException;
-import org.encog.workbench.dialogs.training.BasicTrainingInput;
-
 /*
  * Encog Workbench v1.x
  * http://www.heatonresearch.com/encog/
@@ -31,8 +22,16 @@ import org.encog.workbench.dialogs.training.BasicTrainingInput;
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-public class InputHopfield extends BasicTrainingInput 
-		{
+package org.encog.workbench.dialogs.training.hopfield;
+
+import java.awt.Container;
+import java.awt.Frame;
+import java.awt.GridLayout;
+
+import org.encog.workbench.dialogs.common.ValidationException;
+import org.encog.workbench.dialogs.training.BasicTrainingInput;
+
+public class InputHopfield extends BasicTrainingInput {
 
 	/**
 	 * 
@@ -40,15 +39,14 @@ public class InputHopfield extends BasicTrainingInput
 	private static final long serialVersionUID = 1L;
 
 	/** Creates new form UsersInput */
-	public InputHopfield(Frame owner) {
+	public InputHopfield(final Frame owner) {
 		super(owner);
 		setTitle("Train Hopfield Layers");
 
 		this.setSize(300, 240);
 		this.setLocation(200, 100);
 
-
-		Container content = this.getBodyPanel();
+		final Container content = getBodyPanel();
 
 		content.setLayout(new GridLayout(6, 1, 10, 10));
 
@@ -59,11 +57,9 @@ public class InputHopfield extends BasicTrainingInput
 		super.collectFields();
 	}
 
-
-
 	@Override
 	public void setFields() {
 		// TODO Auto-generated method stub
 
-	}	
+	}
 }

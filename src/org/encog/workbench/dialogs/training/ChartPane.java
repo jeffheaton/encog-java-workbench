@@ -1,3 +1,27 @@
+/*
+ * Encog Workbench v1.x
+ * http://www.heatonresearch.com/encog/
+ * http://code.google.com/p/encog-java/
+ * 
+ * Copyright 2008, Heaton Research Inc., and individual contributors.
+ * See the copyright.txt in the distribution for a full listing of 
+ * individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 package org.encog.workbench.dialogs.training;
 
 import java.awt.BorderLayout;
@@ -15,14 +39,15 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.time.Minute;
-import org.jfree.data.time.RegularTimePeriod;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 public class ChartPane extends JPanel {
-	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	XYSeries series1;
 	XYSeries series2;
 	XYSeriesCollection dataset1;
@@ -30,57 +55,57 @@ public class ChartPane extends JPanel {
 	JFreeChart chart;
 	ChartPanel chartPanel;
 	int count;
-	
-    public ChartPane() {
+
+	public ChartPane() {
 		this.series1 = new XYSeries("Current Error");
 		this.dataset1 = new XYSeriesCollection();
-		this.dataset1.addSeries(series1);
+		this.dataset1.addSeries(this.series1);
 		this.series1.setMaximumItemCount(50);
-		
+
 		this.series2 = new XYSeries("Error Improvement");
 		this.dataset2 = new XYSeriesCollection();
-		this.dataset2.addSeries(series2);
+		this.dataset2.addSeries(this.series2);
 		this.series2.setMaximumItemCount(50);
-		
-		//addData(1,1,0.01);
 
-    	
-        JFreeChart chart = createChart();
-        this.chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(600, 270));
-        chartPanel.setDomainZoomable(true);
-        chartPanel.setRangeZoomable(true);
-        this.setLayout(new BorderLayout());
-        add(chartPanel,BorderLayout.CENTER);
-        
+		// addData(1,1,0.01);
 
-    }
+		final JFreeChart chart = createChart();
+		this.chartPanel = new ChartPanel(chart);
+		this.chartPanel.setPreferredSize(new java.awt.Dimension(600, 270));
+		this.chartPanel.setDomainZoomable(true);
+		this.chartPanel.setRangeZoomable(true);
+		setLayout(new BorderLayout());
+		add(this.chartPanel, BorderLayout.CENTER);
+
+	}
+
+	public void addData(final int iteration, final double error,
+			final double improvement) {
+		if (iteration > 10) {
+			this.series1.add(iteration, error * 100.0);
+			this.series2.add(iteration, improvement * 100.0);
+		}
+
+	}
 
 	private JFreeChart createChart() {
 
+		/*
+		 * JFreeChart chart = ChartFactory.createTimeSeriesChart( null,
+		 * "Iteration", "Current Error", dataset1, true, true, false);
+		 */
 
-		/*JFreeChart chart = ChartFactory.createTimeSeriesChart(
-				null, "Iteration", "Current Error",
-				dataset1, true, true, false);*/
-		
-		chart = ChartFactory.createXYLineChart(
-	            null,
-	            "Iteration",
-	            "Current Error",
-	            this.dataset1,
-	            PlotOrientation.VERTICAL,
-	            true,
-	            true,
-	            false
-	        );
+		this.chart = ChartFactory.createXYLineChart(null, "Iteration",
+				"Current Error", this.dataset1, PlotOrientation.VERTICAL, true,
+				true, false);
 
-		XYPlot plot = (XYPlot) chart.getPlot();
+		final XYPlot plot = (XYPlot) this.chart.getPlot();
 		plot.setOrientation(PlotOrientation.VERTICAL);
 
 		plot.getRangeAxis().setFixedDimension(15.0);
 
 		// AXIS 2
-		NumberAxis axis2 = new NumberAxis("Error Improvement");
+		final NumberAxis axis2 = new NumberAxis("Error Improvement");
 		axis2.setFixedDimension(10.0);
 		axis2.setAutoRangeIncludesZero(false);
 		axis2.setLabelPaint(Color.red);
@@ -90,26 +115,13 @@ public class ChartPane extends JPanel {
 
 		plot.setDataset(1, this.dataset2);
 		plot.mapDatasetToRangeAxis(1, 1);
-		XYItemRenderer renderer2 = new StandardXYItemRenderer();
+		final XYItemRenderer renderer2 = new StandardXYItemRenderer();
 		renderer2.setSeriesPaint(0, Color.red);
 		plot.setRenderer(1, renderer2);
 
+		ChartUtilities.applyCurrentTheme(this.chart);
 
-		ChartUtilities.applyCurrentTheme(chart);
-
-		return chart;
+		return this.chart;
 	}
-	
-	public void addData(int iteration,double error,double improvement)
-	{
-		if( iteration>10 )
-		{
-			series1.add(iteration,error*100.0);
-			series2.add(iteration,improvement*100.0);
-		}
-		
-	}
-
-	
 
 }

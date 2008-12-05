@@ -1,3 +1,27 @@
+/*
+ * Encog Workbench v1.x
+ * http://www.heatonresearch.com/encog/
+ * http://code.google.com/p/encog-java/
+ * 
+ * Copyright 2008, Heaton Research Inc., and individual contributors.
+ * See the copyright.txt in the distribution for a full listing of 
+ * individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 package org.encog.workbench.dialogs;
 
 import java.awt.Container;
@@ -18,115 +42,111 @@ import org.encog.neural.networks.Network;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 
-public class EditEncogObjectProperties extends JDialog  implements WindowListener, ActionListener {
-	
+public class EditEncogObjectProperties extends JDialog implements
+		WindowListener, ActionListener {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField ctrlName;
 	private JTextField ctrlDescription;
 	private JButton ctrlOK;
 	private JButton ctrlCancel;
-	private EncogPersistedObject object;
-	
-	public EditEncogObjectProperties(Frame owner, EncogPersistedObject object) {
+	private final EncogPersistedObject object;
+
+	public EditEncogObjectProperties(final Frame owner,
+			final EncogPersistedObject object) {
 		super(owner, true);
-		
+
 		this.setLocation(200, 100);
-		
-		if( object instanceof Network )
-		{
+
+		if (object instanceof Network) {
 			setTitle("Network Properties");
-		}
-		else if (object instanceof NeuralDataSet )
-		{
+		} else if (object instanceof NeuralDataSet) {
 			setTitle("Neural Data Set Properties");
 		}
-		
-		Container content = this.getContentPane();		
-		content.setLayout(new GridLayout(3,1,10,10));
+
+		final Container content = getContentPane();
+		content.setLayout(new GridLayout(3, 1, 10, 10));
 		content.add(new JLabel("Name"));
 		content.add(this.ctrlName = new JTextField());
 		content.add(new JLabel("Description"));
 		content.add(this.ctrlDescription = new JTextField());
-		content.add(ctrlOK = new JButton("OK"));
-		content.add(ctrlCancel = new JButton("Cancel"));			
-		
-		this.setModal(true);
-		this.setResizable(false);
-		
+		content.add(this.ctrlOK = new JButton("OK"));
+		content.add(this.ctrlCancel = new JButton("Cancel"));
+
+		setModal(true);
+		setResizable(false);
+
 		pack();
-		
+
 		this.ctrlOK.addActionListener(this);
 		this.ctrlCancel.addActionListener(this);
-		this.addWindowListener(this);
-		
+		addWindowListener(this);
+
 		this.object = object;
-		
+
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		if( e.getSource()== this.ctrlOK )
-		{
-			if( EncogWorkBench.getInstance().getCurrentFile().find(ctrlName.getText().trim())!=null )
-			{
-				EncogWorkBench.displayError("Data Error", "That name is already in use, please choose another.");
+	public void actionPerformed(final ActionEvent e) {
+		if (e.getSource() == this.ctrlOK) {
+			if (EncogWorkBench.getInstance().getCurrentFile().find(
+					this.ctrlName.getText().trim()) != null) {
+				EncogWorkBench.displayError("Data Error",
+						"That name is already in use, please choose another.");
 				return;
 			}
-			if(ctrlName.getText().trim().length()<1 )
-			{
-				EncogWorkBench.displayError("Data Error", "You must provide a name.");
+			if (this.ctrlName.getText().trim().length() < 1) {
+				EncogWorkBench.displayError("Data Error",
+						"You must provide a name.");
 				return;
 			}
-			this.object.setName(ctrlName.getText());
-			this.object.setDescription(ctrlDescription.getText());
-			this.dispose();
+			this.object.setName(this.ctrlName.getText());
+			this.object.setDescription(this.ctrlDescription.getText());
+			dispose();
+		} else if (e.getSource() == this.ctrlCancel) {
+			dispose();
 		}
-		else if( e.getSource()== this.ctrlCancel )
-		{
-			this.dispose();
-		}
-		
+
 	}
 
-	public void windowActivated(WindowEvent e) {
-		this.ctrlName.setText(object.getName());
-		this.ctrlDescription.setText(object.getDescription());		
+	public void process() {
+		setVisible(true);
 	}
 
-	public void windowClosed(WindowEvent e) {
+	public void windowActivated(final WindowEvent e) {
+		this.ctrlName.setText(this.object.getName());
+		this.ctrlDescription.setText(this.object.getDescription());
+	}
+
+	public void windowClosed(final WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	public void windowClosing(WindowEvent e) {
+	public void windowClosing(final WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	public void windowDeactivated(WindowEvent e) {
+	public void windowDeactivated(final WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	public void windowDeiconified(WindowEvent e) {
+	public void windowDeiconified(final WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	public void windowIconified(WindowEvent e) {
+	public void windowIconified(final WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	public void windowOpened(WindowEvent e) {
+	public void windowOpened(final WindowEvent e) {
 
-		
 	}
-	
-	public void process()
-	{
-		this.setVisible(true);
-	}
-	
-	
-	
-	
+
 }

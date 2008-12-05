@@ -1,25 +1,3 @@
-package org.encog.workbench.dialogs.training.som;
-
-import java.awt.Container;
-import java.awt.Frame;
-import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
-import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.training.som.TrainSelfOrganizingMap.LearningMethod;
-import org.encog.neural.persist.EncogPersistedObject;
-import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.common.ValidationException;
-import org.encog.workbench.dialogs.training.BasicTrainingInput;
-
 /*
  * Encog Workbench v1.x
  * http://www.heatonresearch.com/encog/
@@ -44,46 +22,58 @@ import org.encog.workbench.dialogs.training.BasicTrainingInput;
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-public class InputSOM extends BasicTrainingInput 
-		{
+package org.encog.workbench.dialogs.training.som;
 
-	// Variables declaration
-	private JTextField txtlearningRate;
-	private double learningRate;
-	private JComboBox cbMethod;
-	private LearningMethod method;
+import java.awt.Container;
+import java.awt.Frame;
+import java.awt.GridLayout;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import org.encog.neural.networks.training.som.TrainSelfOrganizingMap.LearningMethod;
+import org.encog.workbench.dialogs.common.ValidationException;
+import org.encog.workbench.dialogs.training.BasicTrainingInput;
+
+public class InputSOM extends BasicTrainingInput {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	// Variables declaration
+	private final JTextField txtlearningRate;
+	private double learningRate;
+	private final JComboBox cbMethod;
+
+	private LearningMethod method;
 
 	/** Creates new form UsersInput */
-	public InputSOM(Frame owner) {
+	public InputSOM(final Frame owner) {
 		super(owner);
 		setTitle("Train SOM Layers");
 
 		this.setSize(300, 240);
 		this.setLocation(200, 100);
 
-		txtlearningRate = new JTextField();
+		this.txtlearningRate = new JTextField();
 
-
-		Container content = this.getBodyPanel();
+		final Container content = getBodyPanel();
 		content.setLayout(new GridLayout(6, 1, 10, 10));
-		
+
 		this.cbMethod = new JComboBox();
-		String[] languages = {"Additive","Subtractive"};
-				 
+		final String[] languages = { "Additive", "Subtractive" };
+
 		/**
 		 * Subtractive learning.
-		 */		
-        this.cbMethod.setModel(new DefaultComboBoxModel(languages));		
+		 */
+		this.cbMethod.setModel(new DefaultComboBoxModel(languages));
 
 		content.add(new JLabel("Learning Rate"));
-		content.add(txtlearningRate);
-		
+		content.add(this.txtlearningRate);
+
 		content.add(new JLabel("Method"));
 		content.add(this.cbMethod);
 
@@ -94,34 +84,34 @@ public class InputSOM extends BasicTrainingInput
 	@Override
 	public void collectFields() throws ValidationException {
 		super.collectFields();
-		this.learningRate = this.validateFieldNumeric("learning rate", this.txtlearningRate);
-		if( this.cbMethod.getSelectedIndex()==1 )
+		this.learningRate = this.validateFieldNumeric("learning rate",
+				this.txtlearningRate);
+		if (this.cbMethod.getSelectedIndex() == 1) {
 			this.method = LearningMethod.ADDITIVE;
-		else this.method = LearningMethod.SUBTRACTIVE;
-			
-	}
-
-
-
-	@Override
-	public void setFields() {
-		// TODO Auto-generated method stub
+		} else {
+			this.method = LearningMethod.SUBTRACTIVE;
+		}
 
 	}
-	
+
 	/**
 	 * @return the learningRate
 	 */
 	public double getLearningRate() {
-		return learningRate;
+		return this.learningRate;
 	}
 
 	/**
 	 * @return the method
 	 */
 	public LearningMethod getMethod() {
-		return method;
-	}	
-	
-	
+		return this.method;
+	}
+
+	@Override
+	public void setFields() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

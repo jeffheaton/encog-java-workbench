@@ -1,18 +1,3 @@
-package org.encog.workbench.dialogs.select;
-
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-
-import org.encog.workbench.util.StringConst;
-
 /*
  * Encog Workbench v1.x
  * http://www.heatonresearch.com/encog/
@@ -37,18 +22,19 @@ import org.encog.workbench.util.StringConst;
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-public class SelectItem   {
-	
-	private String text;
-	
-	public SelectItem(String text)
-	{
+package org.encog.workbench.dialogs.select;
+
+
+public class SelectItem {
+
+	private final String text;
+
+	public SelectItem(final String text) {
 		this.text = text;
 	}
-	
-	public String getText()
-	{
+
+	public String getText() {
 		return this.text;
 	}
-		
+
 }

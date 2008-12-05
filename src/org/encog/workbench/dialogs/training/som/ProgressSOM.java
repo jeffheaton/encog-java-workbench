@@ -1,69 +1,77 @@
+/*
+ * Encog Workbench v1.x
+ * http://www.heatonresearch.com/encog/
+ * http://code.google.com/p/encog-java/
+ * 
+ * Copyright 2008, Heaton Research Inc., and individual contributors.
+ * See the copyright.txt in the distribution for a full listing of 
+ * individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 package org.encog.workbench.dialogs.training.som;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.text.NumberFormat;
-import java.util.Date;
-
-import javax.swing.JLabel;
 
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.Train;
-import org.encog.neural.networks.training.backpropagation.Backpropagation;
 import org.encog.neural.networks.training.som.TrainSelfOrganizingMap;
 import org.encog.neural.networks.training.som.TrainSelfOrganizingMap.LearningMethod;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
-import org.encog.workbench.util.TimeSpanFormatter;
 
 public class ProgressSOM extends BasicTrainingProgress {
-	
-	private double learningRate;
-	private LearningMethod method;
-		
-	public ProgressSOM(
-			Frame owner,
-			BasicNetwork network,
-			NeuralDataSet trainingData,
-			double learningRate,
-			LearningMethod method,
-			double maxError)
-	{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final double learningRate;
+	private final LearningMethod method;
+
+	public ProgressSOM(final Frame owner, final BasicNetwork network,
+			final NeuralDataSet trainingData, final double learningRate,
+			final LearningMethod method, final double maxError) {
 		super(owner);
 		setTitle("SOM Training");
-		this.setNetwork( network );
-		this.setTrainingData( trainingData );
+		setNetwork(network);
+		setTrainingData(trainingData);
 		this.learningRate = learningRate;
 		this.method = method;
-		this.setMaxError( maxError);
-        
+		setMaxError(maxError);
+
 	}
 
 	@Override
 	public void iteration() {
 
-		this.getTrain().iteration();
+		getTrain().iteration();
 
 	}
 
 	@Override
-	public void shutdown() {		
+	public void shutdown() {
 	}
 
 	@Override
 	public void startup() {
-		Train train = new TrainSelfOrganizingMap(
-				this.getNetwork(), 
-				this.getTrainingData(),
-				this.method, 
-				this.learningRate);	
-		
+		final Train train = new TrainSelfOrganizingMap(getNetwork(),
+				getTrainingData(), this.method, this.learningRate);
+
 		setTrain(train);
 	}
-
 
 }

@@ -1,24 +1,3 @@
-package org.encog.workbench.dialogs.training.backpropagation;
-
-import java.awt.Container;
-import java.awt.Frame;
-import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
-import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.persist.EncogPersistedObject;
-import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.common.ValidationException;
-import org.encog.workbench.dialogs.training.BasicTrainingInput;
-
 /*
  * Encog Workbench v1.x
  * http://www.heatonresearch.com/encog/
@@ -43,42 +22,51 @@ import org.encog.workbench.dialogs.training.BasicTrainingInput;
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-public class InputBackpropagation extends BasicTrainingInput 
-		{
+package org.encog.workbench.dialogs.training.backpropagation;
 
-	// Variables declaration
-	public JTextField txtlearningRate;
-	public JTextField txtmomentum;
-	private double learningRate;
-	private double momentum;
+import java.awt.Container;
+import java.awt.Frame;
+import java.awt.GridLayout;
 
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import org.encog.workbench.dialogs.common.ValidationException;
+import org.encog.workbench.dialogs.training.BasicTrainingInput;
+
+public class InputBackpropagation extends BasicTrainingInput {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	// Variables declaration
+	public JTextField txtlearningRate;
+	public JTextField txtmomentum;
+	private double learningRate;
+
+	private double momentum;
 
 	/** Creates new form UsersInput */
-	public InputBackpropagation(Frame owner) {
+	public InputBackpropagation(final Frame owner) {
 		super(owner);
 		setTitle("Train Backpropagation");
 
 		this.setSize(300, 240);
 		this.setLocation(200, 100);
 
-		txtmomentum = new JTextField();
-		txtlearningRate = new JTextField();
+		this.txtmomentum = new JTextField();
+		this.txtlearningRate = new JTextField();
 
-
-		Container content = this.getBodyPanel();
+		final Container content = getBodyPanel();
 
 		content.setLayout(new GridLayout(6, 1, 10, 10));
 
 		content.add(new JLabel("Momentum"));
-		content.add(txtmomentum);
+		content.add(this.txtmomentum);
 
 		content.add(new JLabel("Learning Rate"));
-		content.add(txtlearningRate);
+		content.add(this.txtlearningRate);
 
 		this.txtlearningRate.setText("0.7");
 		this.txtmomentum.setText("0.7");
@@ -88,34 +76,29 @@ public class InputBackpropagation extends BasicTrainingInput
 	@Override
 	public void collectFields() throws ValidationException {
 		super.collectFields();
-		this.learningRate = this.validateFieldNumeric("learning rate", this.txtlearningRate);
+		this.learningRate = this.validateFieldNumeric("learning rate",
+				this.txtlearningRate);
 		this.momentum = this.validateFieldNumeric("momentum", this.txtmomentum);
 	}
 
-
-
-	@Override
-	public void setFields() {
-		// TODO Auto-generated method stub
-
-	}
-	
 	/**
 	 * @return the learningRate
 	 */
 	public double getLearningRate() {
-		return learningRate;
+		return this.learningRate;
 	}
 
 	/**
 	 * @return the momentum
 	 */
 	public double getMomentum() {
-		return momentum;
+		return this.momentum;
 	}
 
+	@Override
+	public void setFields() {
+		// TODO Auto-generated method stub
 
+	}
 
-	
-	
 }

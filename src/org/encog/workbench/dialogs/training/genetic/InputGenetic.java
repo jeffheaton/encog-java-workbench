@@ -1,15 +1,3 @@
-package org.encog.workbench.dialogs.training.genetic;
-
-import java.awt.Container;
-import java.awt.Frame;
-import java.awt.GridLayout;
-
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
-import org.encog.workbench.dialogs.common.ValidationException;
-import org.encog.workbench.dialogs.training.BasicTrainingInput;
-
 /*
  * Encog Workbench v1.x
  * http://www.heatonresearch.com/encog/
@@ -34,49 +22,57 @@ import org.encog.workbench.dialogs.training.BasicTrainingInput;
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-public class InputGenetic extends BasicTrainingInput 
-		{
+package org.encog.workbench.dialogs.training.genetic;
 
-	// Variables declaration
-	private JTextField txtPopulationSize;
-	private JTextField txtMutationPercent;
-	private JTextField txtPercentToMate;
-	private int populationSize;
-	private double mutationPercent;
-	private double percentToMate;
+import java.awt.Container;
+import java.awt.Frame;
+import java.awt.GridLayout;
 
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import org.encog.workbench.dialogs.common.ValidationException;
+import org.encog.workbench.dialogs.training.BasicTrainingInput;
+
+public class InputGenetic extends BasicTrainingInput {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	// Variables declaration
+	private final JTextField txtPopulationSize;
+	private final JTextField txtMutationPercent;
+	private final JTextField txtPercentToMate;
+	private int populationSize;
+	private double mutationPercent;
+
+	private double percentToMate;
 
 	/** Creates new form UsersInput */
-	public InputGenetic(Frame owner) {
+	public InputGenetic(final Frame owner) {
 		super(owner);
 		setTitle("Train Simulated Annealing");
 
 		this.setSize(300, 240);
 		this.setLocation(200, 100);
 
-		txtPopulationSize = new JTextField();
-		txtMutationPercent = new JTextField();
-		txtPercentToMate = new JTextField();
+		this.txtPopulationSize = new JTextField();
+		this.txtMutationPercent = new JTextField();
+		this.txtPercentToMate = new JTextField();
 
-
-		Container content = this.getBodyPanel();
+		final Container content = getBodyPanel();
 
 		content.setLayout(new GridLayout(6, 1, 10, 10));
 
-
 		content.add(new JLabel("Population Size"));
-		content.add(txtPopulationSize);
+		content.add(this.txtPopulationSize);
 
 		content.add(new JLabel("Mutation Percent"));
-		content.add(txtMutationPercent);
+		content.add(this.txtMutationPercent);
 
 		content.add(new JLabel("Percent to Mate"));
-		content.add(txtPercentToMate);
+		content.add(this.txtPercentToMate);
 
 		this.txtPopulationSize.setText("5000");
 		this.txtMutationPercent.setText("0.1");
@@ -87,28 +83,29 @@ public class InputGenetic extends BasicTrainingInput
 	@Override
 	public void collectFields() throws ValidationException {
 		super.collectFields();
-		this.populationSize = (int)this.validateFieldNumeric("population size", this.txtPopulationSize);
-		this.percentToMate = this.validateFieldNumeric("percent to mate", this.txtPercentToMate);
-		this.mutationPercent = this.validateFieldNumeric("mutation percent", this.txtMutationPercent);
+		this.populationSize = (int) this.validateFieldNumeric(
+				"population size", this.txtPopulationSize);
+		this.percentToMate = this.validateFieldNumeric("percent to mate",
+				this.txtPercentToMate);
+		this.mutationPercent = this.validateFieldNumeric("mutation percent",
+				this.txtMutationPercent);
 	}
 
+	public double getMutationPercent() {
+		return this.mutationPercent;
+	}
 
+	public double getPercentToMate() {
+		return this.percentToMate;
+	}
+
+	public int getPopulationSize() {
+		return this.populationSize;
+	}
 
 	@Override
 	public void setFields() {
 		// TODO Auto-generated method stub
 
-	}
-
-	public int getPopulationSize() {
-		return populationSize;
-	}
-
-	public double getMutationPercent() {
-		return mutationPercent;
-	}
-
-	public double getPercentToMate() {
-		return percentToMate;
 	}
 }

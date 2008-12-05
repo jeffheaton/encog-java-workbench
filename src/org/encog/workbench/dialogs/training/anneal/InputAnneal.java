@@ -1,24 +1,3 @@
-package org.encog.workbench.dialogs.training.anneal;
-
-import java.awt.Container;
-import java.awt.Frame;
-import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
-import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.persist.EncogPersistedObject;
-import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.common.ValidationException;
-import org.encog.workbench.dialogs.training.BasicTrainingInput;
-
 /*
  * Encog Workbench v1.x
  * http://www.heatonresearch.com/encog/
@@ -43,49 +22,57 @@ import org.encog.workbench.dialogs.training.BasicTrainingInput;
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-public class InputAnneal extends BasicTrainingInput 
-		{
+package org.encog.workbench.dialogs.training.anneal;
 
+import java.awt.Container;
+import java.awt.Frame;
+import java.awt.GridLayout;
+
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import org.encog.workbench.dialogs.common.ValidationException;
+import org.encog.workbench.dialogs.training.BasicTrainingInput;
+
+public class InputAnneal extends BasicTrainingInput {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Variables declaration
 	public JTextField txtStartTemp;
 	public JTextField txtEndTemp;
 	public JTextField txtCycles;
 	private double startTemp;
 	private double endTemp;
+
 	private int cycles;
 
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/** Creates new form UsersInput */
-	public InputAnneal(Frame owner) {
+	public InputAnneal(final Frame owner) {
 		super(owner);
 		setTitle("Train Simulated Annealing");
 
 		this.setSize(300, 240);
 		this.setLocation(200, 100);
 
-		txtStartTemp = new JTextField();
-		txtEndTemp = new JTextField();
-		txtCycles = new JTextField();
+		this.txtStartTemp = new JTextField();
+		this.txtEndTemp = new JTextField();
+		this.txtCycles = new JTextField();
 
-
-		Container content = this.getBodyPanel();
+		final Container content = getBodyPanel();
 
 		content.setLayout(new GridLayout(6, 1, 10, 10));
 
-
 		content.add(new JLabel("Starting Temperature"));
-		content.add(txtStartTemp);
+		content.add(this.txtStartTemp);
 
 		content.add(new JLabel("Ending Temperature"));
-		content.add(txtEndTemp);
+		content.add(this.txtEndTemp);
 
 		content.add(new JLabel("Cycles"));
-		content.add(txtCycles);
+		content.add(this.txtCycles);
 
 		this.txtStartTemp.setText("1");
 		this.txtEndTemp.setText("20");
@@ -96,32 +83,29 @@ public class InputAnneal extends BasicTrainingInput
 	@Override
 	public void collectFields() throws ValidationException {
 		super.collectFields();
-		this.startTemp = this.validateFieldNumeric("starting temperature", this.txtStartTemp);
-		this.endTemp = this.validateFieldNumeric("ending temperature", this.txtEndTemp);
-		this.cycles = (int)this.validateFieldNumeric("cycles", this.txtCycles);
+		this.startTemp = this.validateFieldNumeric("starting temperature",
+				this.txtStartTemp);
+		this.endTemp = this.validateFieldNumeric("ending temperature",
+				this.txtEndTemp);
+		this.cycles = (int) this.validateFieldNumeric("cycles", this.txtCycles);
 	}
 
+	public int getCycles() {
+		return this.cycles;
+	}
 
+	public double getEndTemp() {
+		return this.endTemp;
+	}
+
+	public double getStartTemp() {
+		return this.startTemp;
+	}
 
 	@Override
 	public void setFields() {
 		// TODO Auto-generated method stub
 
 	}
-
-	public double getStartTemp() {
-		return startTemp;
-	}
-
-	public double getEndTemp() {
-		return endTemp;
-	}
-
-	public int getCycles() {
-		return cycles;
-	}
-	
-	
-	
 
 }

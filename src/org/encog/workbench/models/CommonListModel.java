@@ -1,3 +1,27 @@
+/*
+ * Encog Workbench v1.x
+ * http://www.heatonresearch.com/encog/
+ * http://code.google.com/p/encog-java/
+ * 
+ * Copyright 2008, Heaton Research Inc., and individual contributors.
+ * See the copyright.txt in the distribution for a full listing of 
+ * individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 package org.encog.workbench.models;
 
 import java.util.ArrayList;
@@ -6,38 +30,37 @@ import java.util.List;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
-public abstract class CommonListModel  implements ListModel {
+public abstract class CommonListModel implements ListModel {
 	private List<ListDataListener> listeners = new ArrayList<ListDataListener>();
 
-	public void invalidate() {
-	for(ListDataListener listener: this.listeners)
-	{
-			listener.contentsChanged(null);
-		}
+	public void addListDataListener(final ListDataListener listener) {
+		getListeners().add(listener);
 	}
 
 	/**
 	 * @return the listeners
 	 */
 	public List<ListDataListener> getListeners() {
-		return listeners;
+		return this.listeners;
+	}
+
+	public void invalidate() {
+		for (final ListDataListener listener : this.listeners) {
+			listener.contentsChanged(null);
+		}
+	}
+
+	public void removeListDataListener(final ListDataListener arg0) {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
-	 * @param listeners the listeners to set
+	 * @param listeners
+	 *            the listeners to set
 	 */
-	public void setListeners(List<ListDataListener> listeners) {
+	public void setListeners(final List<ListDataListener> listeners) {
 		this.listeners = listeners;
 	}
-	
-	public void addListDataListener(ListDataListener listener) {
-		this.getListeners().add(listener);		
-	}
-	
-	public void removeListDataListener(ListDataListener arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
+
 }

@@ -1,35 +1,3 @@
-package org.encog.workbench.dialogs;
-
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Frame;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.training.backpropagation.Backpropagation;
-import org.encog.neural.persist.EncogPersistedObject;
-import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.common.EncogCommonDialog;
-import org.encog.workbench.dialogs.common.NetworkAndTrainingDialog;
-import org.encog.workbench.dialogs.common.ValidationException;
-import org.encog.workbench.process.generate.Generate.GenerateLanguage;
-import org.encog.workbench.process.generate.Generate.TrainingMethod;
-
 /*
  * Encog Workbench v1.x
  * http://www.heatonresearch.com/encog/
@@ -54,55 +22,71 @@ import org.encog.workbench.process.generate.Generate.TrainingMethod;
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+package org.encog.workbench.dialogs;
+
+import java.awt.Frame;
+import java.awt.GridLayout;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+
+import org.encog.workbench.dialogs.common.NetworkAndTrainingDialog;
+import org.encog.workbench.dialogs.common.ValidationException;
+import org.encog.workbench.process.generate.Generate.GenerateLanguage;
+import org.encog.workbench.process.generate.Generate.TrainingMethod;
+
 public class GenerateCode extends NetworkAndTrainingDialog {
-
-	private JComboBox cbLanguage;
-	private JComboBox cbTraining;
-	private JComboBox cbCopyTraining;
-
-	private GenerateLanguage language;
-	private TrainingMethod trainingMethod;
-	private boolean copyTraining;
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private final JComboBox cbLanguage;
+	private final JComboBox cbTraining;
+
+	private final JComboBox cbCopyTraining;
+	private GenerateLanguage language;
+	private TrainingMethod trainingMethod;
+
+	private boolean copyTraining;
 
 	/** Creates new form UsersInput */
-	public GenerateCode(Frame owner) {
+	public GenerateCode(final Frame owner) {
 		super(owner);
 		findData();
-		this.setTitle("Generate Code");
+		setTitle("Generate Code");
 		this.setSize(300, 240);
 		this.setLocation(200, 100);
 
-		cbCopyTraining = new JComboBox();
-		cbLanguage = new JComboBox();
-		cbTraining = new JComboBox();
+		this.cbCopyTraining = new JComboBox();
+		this.cbLanguage = new JComboBox();
+		this.cbTraining = new JComboBox();
 
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-		String[] languages = { "Java", "C#", "VB.Net" };
-		cbLanguage.setModel(new DefaultComboBoxModel(languages));
-		String[] training = { "Backpropagation", "Genetic Algorithm",
+		final String[] languages = { "Java", "C#", "VB.Net" };
+		this.cbLanguage.setModel(new DefaultComboBoxModel(languages));
+		final String[] training = { "Backpropagation", "Genetic Algorithm",
 				"Simulated Annealing", "Hopfield", "Self Organizing",
 				"Do Not Train/Already Trained" };
-		cbTraining.setModel(new DefaultComboBoxModel(training));
-		String[] save = { "Yes", "No" };
-		cbCopyTraining.setModel(new DefaultComboBoxModel(save));
+		this.cbTraining.setModel(new DefaultComboBoxModel(training));
+		final String[] save = { "Yes", "No" };
+		this.cbCopyTraining.setModel(new DefaultComboBoxModel(save));
 
-		JPanel jp = this.getBodyPanel();
+		final JPanel jp = getBodyPanel();
 		jp.setLayout(new GridLayout(6, 1, 10, 10));
 
 		jp.add(new JLabel("Language"));
-		jp.add(cbLanguage);
+		jp.add(this.cbLanguage);
 
 		jp.add(new JLabel("Training Method"));
-		jp.add(cbTraining);
+		jp.add(this.cbTraining);
 
 		jp.add(new JLabel("Copy Training Set to Code"));
-		jp.add(cbCopyTraining);
+		jp.add(this.cbCopyTraining);
 
 	}
 
@@ -141,18 +125,12 @@ public class GenerateCode extends NetworkAndTrainingDialog {
 			this.trainingMethod = TrainingMethod.NoTraining;
 			break;
 		}
-		
-		if( this.cbCopyTraining.getSelectedIndex()==0 ) {
+
+		if (this.cbCopyTraining.getSelectedIndex() == 0) {
 			this.copyTraining = true;
-		}
-		else
+		} else {
 			this.copyTraining = false;
-
-	}
-
-	@Override
-	public void setFields() {
-		// TODO Auto-generated method stub
+		}
 
 	}
 
@@ -160,21 +138,27 @@ public class GenerateCode extends NetworkAndTrainingDialog {
 	 * @return the language
 	 */
 	public GenerateLanguage getLanguage() {
-		return language;
+		return this.language;
 	}
 
 	/**
 	 * @return the trainingMethod
 	 */
 	public TrainingMethod getTrainingMethod() {
-		return trainingMethod;
+		return this.trainingMethod;
 	}
 
 	/**
 	 * @return the copyTraining
 	 */
 	public boolean isCopyTraining() {
-		return copyTraining;
+		return this.copyTraining;
+	}
+
+	@Override
+	public void setFields() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -1,3 +1,27 @@
+/*
+ * Encog Workbench v1.x
+ * http://www.heatonresearch.com/encog/
+ * http://code.google.com/p/encog-java/
+ * 
+ * Copyright 2008, Heaton Research Inc., and individual contributors.
+ * See the copyright.txt in the distribution for a full listing of 
+ * individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
 package org.encog.workbench.dialogs.common;
 
 import java.awt.BorderLayout;
@@ -19,14 +43,14 @@ abstract public class EncogCommonDialog extends JDialog implements
 
 	private JButton ctrlOK;
 	private JButton ctrlCancel;
-	private JPanel bodyPanel;
-	private JPanel buttonPanel;
+	private final JPanel bodyPanel;
+	private final JPanel buttonPanel;
 	private boolean shouldProcess;
 
-	public EncogCommonDialog(Frame owner) {
+	public EncogCommonDialog(final Frame owner) {
 		super(owner, true);
 
-		Container content = this.getContentPane();
+		final Container content = getContentPane();
 		content.setLayout(new BorderLayout());
 
 		this.bodyPanel = new JPanel();
@@ -42,31 +66,7 @@ abstract public class EncogCommonDialog extends JDialog implements
 		content.add(this.buttonPanel, BorderLayout.SOUTH);
 	}
 
-	public double validateFieldNumeric(String name, JTextField field)
-			throws ValidationException {
-		try {
-			double d = Double.parseDouble(field.getText());
-			return d;
-		} catch (NumberFormatException e) {
-			throw new ValidationException("Must enter a valid number for: "
-					+ name);
-		}
-	}
-
-	public double validateFieldNumeric(String name, JTextField field,
-			double low, double high) throws ValidationException {
-		double d = validateFieldNumeric(name, field);
-		if (d < low)
-			throw new ValidationException("Must enter a value above " + low
-					+ " for: " + name);
-		if (d > high)
-			throw new ValidationException("Must enter a value below " + low
-					+ " for: " + name);
-
-		return d;
-	}
-
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 
 		if (e.getSource() == this.ctrlOK) {
 			if (collect()) {
@@ -79,51 +79,11 @@ abstract public class EncogCommonDialog extends JDialog implements
 		}
 	}
 
-	public boolean process() {
-		this.setVisible(true);
-		return this.shouldProcess;
-	}
-
-	public String validateFieldString(String name, JComboBox field,
-			boolean required) throws ValidationException {
-		String result = (String) field.getSelectedItem();
-		if (result == null && required) {
-			throw new ValidationException("The " + name + " field is required.");
-		}
-
-		result = result.trim();
-
-		return result;
-	}
-
-	public String validateFieldString(String name, JTextField field,
-			boolean required) throws ValidationException {
-		String result = field.getText().trim();
-		if (result.length() < 1 && required) {
-			throw new ValidationException("The " + name + " field is required.");
-		}
-		return result;
-	}
-
-	/**
-	 * @return the bodyPanel
-	 */
-	public JPanel getBodyPanel() {
-		return bodyPanel;
-	}
-
-	/**
-	 * @return the buttonPanel
-	 */
-	public JPanel getButtonPanel() {
-		return buttonPanel;
-	}
-
 	public boolean collect() {
 		try {
 			collectFields();
 			return true;
-		} catch (ValidationException e) {
+		} catch (final ValidationException e) {
 			EncogWorkBench.displayError("Validation Error", e.getMessage());
 			return false;
 		}
@@ -131,6 +91,76 @@ abstract public class EncogCommonDialog extends JDialog implements
 
 	abstract public void collectFields() throws ValidationException;
 
+	/**
+	 * @return the bodyPanel
+	 */
+	public JPanel getBodyPanel() {
+		return this.bodyPanel;
+	}
+
+	/**
+	 * @return the buttonPanel
+	 */
+	public JPanel getButtonPanel() {
+		return this.buttonPanel;
+	}
+
+	public boolean process() {
+		setVisible(true);
+		return this.shouldProcess;
+	}
+
 	abstract public void setFields();
+
+	public double validateFieldNumeric(final String name, final JTextField field)
+			throws ValidationException {
+		try {
+			final double d = Double.parseDouble(field.getText());
+			return d;
+		} catch (final NumberFormatException e) {
+			throw new ValidationException("Must enter a valid number for: "
+					+ name);
+		}
+	}
+
+	public double validateFieldNumeric(final String name,
+			final JTextField field, final double low, final double high)
+			throws ValidationException {
+		final double d = validateFieldNumeric(name, field);
+		if (d < low) {
+			throw new ValidationException("Must enter a value above " + low
+					+ " for: " + name);
+		}
+		if (d > high) {
+			throw new ValidationException("Must enter a value below " + low
+					+ " for: " + name);
+		}
+
+		return d;
+	}
+
+	public String validateFieldString(final String name, final JComboBox field,
+			final boolean required) throws ValidationException {
+		String result = (String) field.getSelectedItem();
+		if (result == null && required) {
+			throw new ValidationException("The " + name + " field is required.");
+		}
+
+		if (result != null) {
+			result = result.trim();
+		}
+
+		return result;
+	}
+
+	public String validateFieldString(final String name,
+			final JTextField field, final boolean required)
+			throws ValidationException {
+		final String result = field.getText().trim();
+		if (result.length() < 1 && required) {
+			throw new ValidationException("The " + name + " field is required.");
+		}
+		return result;
+	}
 
 }
