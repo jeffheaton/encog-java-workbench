@@ -404,11 +404,10 @@ public class EncogDocumentFrame extends EncogListFrame {
 			list.add(itemCSV = new SelectItem("Export CSV"));
 			list.add(itemXML = new SelectItem("Export XML (EG format)"));
 			final SelectDialog dialog = new SelectDialog(this, list);
-			final SelectItem result = dialog.process();
-
-			if (result == null) {
+			if( !dialog.process() )
 				return;
-			}
+			
+			SelectItem result = dialog.getSelected();
 
 			final JFileChooser fc = new JFileChooser();
 
@@ -618,7 +617,10 @@ public class EncogDocumentFrame extends EncogListFrame {
 		list.add(itemTraining = new SelectItem("Training Data"));
 		list.add(itemNetwork = new SelectItem("Neural Network"));
 		final SelectDialog dialog = new SelectDialog(this, list);
-		final SelectItem result = dialog.process();
+		if(! dialog.process() )
+			return;
+		
+		final SelectItem result = dialog.getSelected();
 
 		if (result == itemNetwork) {
 			final BasicNetwork network = new BasicNetwork();

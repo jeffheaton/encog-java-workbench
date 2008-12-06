@@ -24,12 +24,20 @@
  */
 package org.encog.workbench.dialogs.common;
 
+/**
+ * Thrown when a validation occurs with an Encog dialog box.
+ * @author jheaton
+ */
 public class ValidationException extends Exception {
 	/**
-	 * 
+	 * The serial id.
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Construct a message based exception.
+	 * @param message The message to display for this exception.
+	 */
 	public ValidationException(final String message) {
 		super(message);
 	}

@@ -39,16 +39,49 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 
+/**
+ * Basic dialog box that displays two combo boxes used to select
+ * the training set and network to be used.  Subclasses can
+ * add additional fields.  This class is based on the Encog
+ * common dialog box.
+ * @author jheaton
+ */
 public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
 
+	/**
+	 * The network combo box.
+	 */
 	private final JComboBox cboneuralNetworkName;
+	
+	/**
+	 * The training set combo box.
+	 */
 	private final JComboBox cbotrainingDataName;
+	
+	/**
+	 * The network that was chosen.
+	 */
 	private BasicNetwork network;
+	
+	/**
+	 * The training set that was chosen.
+	 */
 	private NeuralDataSet trainingSet;
 
+	/**
+	 * All available training sets to display in the combo box.
+	 */
 	private final List<String> trainingSets = new ArrayList<String>();
+	
+	/**
+	 * All available networks to display in the combo box.
+	 */
 	private final List<String> networks = new ArrayList<String>();
 
+	/**
+	 * Construct the dialog box.
+	 * @param owner The owner of the dialog box.
+	 */
 	public NetworkAndTrainingDialog(final Frame owner) {
 		super(owner);
 
@@ -72,6 +105,9 @@ public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
 
 	}
 
+	/**
+	 * Collect the network and training set fields.
+	 */
 	public void collectFields() throws ValidationException {
 		final String networkName = validateFieldString("network",
 				this.cboneuralNetworkName, true);
@@ -84,7 +120,11 @@ public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
 				.getCurrentFile().find(trainingSetName);
 	}
 
-	public void findData() {
+	/**
+	 * Obtain the data needed to fill in the network and training set
+	 * combo boxes.
+	 */
+	private void findData() {
 		for (final EncogPersistedObject obj : EncogWorkBench.getInstance()
 				.getCurrentFile().getList()) {
 			if (obj instanceof BasicNetwork) {
@@ -96,14 +136,14 @@ public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
 	}
 
 	/**
-	 * @return the network
+	 * @return The network that the user chose.
 	 */
 	public BasicNetwork getNetwork() {
 		return this.network;
 	}
 
 	/**
-	 * @return the trainingSet
+	 * @return The training set that the user chose.
 	 */
 	public NeuralDataSet getTrainingSet() {
 		return this.trainingSet;

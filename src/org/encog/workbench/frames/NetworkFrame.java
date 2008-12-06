@@ -193,7 +193,10 @@ public class NetworkFrame extends EncogListFrame {
 		list.add(itemSOM = new SelectItem("SOM Layer"));
 		list.add(itemHopfield = new SelectItem("Hopfield Layer"));
 		final SelectDialog dialog = new SelectDialog(this, list);
-		final SelectItem result = dialog.process();
+		if( !dialog.process() )
+			return;
+		
+		final SelectItem result = dialog.getSelected();
 
 		Layer layer;
 		Layer baseLayer = null;

@@ -56,7 +56,7 @@ public class GenerateCode extends NetworkAndTrainingDialog {
 	/** Creates new form UsersInput */
 	public GenerateCode(final Frame owner) {
 		super(owner);
-		findData();
+
 		setTitle("Generate Code");
 		this.setSize(300, 240);
 		this.setLocation(200, 100);

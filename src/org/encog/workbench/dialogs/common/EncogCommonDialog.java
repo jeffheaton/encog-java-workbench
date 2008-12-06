@@ -38,15 +38,45 @@ import javax.swing.JTextField;
 
 import org.encog.workbench.EncogWorkBench;
 
+/**
+ * Common dialog box for use in the workbench.  Provides an ok and cancel
+ * button.  Also provides methods for collecting and validating values
+ * from the dialog box.
+ * @author jheaton
+ */
 abstract public class EncogCommonDialog extends JDialog implements
 		ActionListener {
 
+	/**
+	 * The OK button.
+	 */
 	private JButton ctrlOK;
+	
+	/**
+	 * The cancel button.
+	 */
 	private JButton ctrlCancel;
+	
+	/**
+	 * The pannel that holds the body of this dialog.
+	 */
 	private final JPanel bodyPanel;
+	
+	/**
+	 * The panel that holds the OK and cancel button.
+	 */
 	private final JPanel buttonPanel;
+	
+	/**
+	 * True if the user clicked OK and this dialog should
+	 * be processed.
+	 */
 	private boolean shouldProcess;
 
+	/**
+	 * Construct the common dialog box.
+	 * @param owner The owner of this dialog box.
+	 */
 	public EncogCommonDialog(final Frame owner) {
 		super(owner, true);
 
@@ -66,6 +96,10 @@ abstract public class EncogCommonDialog extends JDialog implements
 		content.add(this.buttonPanel, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * Process action events.
+	 * @param e The action event.
+	 */
 	public void actionPerformed(final ActionEvent e) {
 
 		if (e.getSource() == this.ctrlOK) {
@@ -79,6 +113,10 @@ abstract public class EncogCommonDialog extends JDialog implements
 		}
 	}
 
+	/**
+	 * Collect the values from all of the fields.
+	 * @return True if no validation errors occured.
+	 */
 	public boolean collect() {
 		try {
 			collectFields();
@@ -89,6 +127,10 @@ abstract public class EncogCommonDialog extends JDialog implements
 		}
 	}
 
+	/**
+	 * Implmented by child classes to collect data from their fields.
+	 * @throws ValidationException A validation error occured.
+	 */
 	abstract public void collectFields() throws ValidationException;
 
 	/**
@@ -105,13 +147,28 @@ abstract public class EncogCommonDialog extends JDialog implements
 		return this.buttonPanel;
 	}
 
+	/**
+	 * Called to display the dialog box and wait for the user
+	 * to click OK or Cancel.
+	 * @return True if the dialog box should be processed.
+	 */
 	public boolean process() {
 		setVisible(true);
 		return this.shouldProcess;
 	}
 
+	/**
+	 * Implemented by subclasses to set the fields of the dialog box.
+	 */
 	abstract public void setFields();
 
+	/**
+	 * Validate and collect the value from a numeric field.
+	 * @param name The name of the field.
+	 * @param field The field.
+	 * @return The numeric value collected from the field.
+	 * @throws ValidationException Thrown if a validation error occurs.
+	 */
 	public double validateFieldNumeric(final String name, final JTextField field)
 			throws ValidationException {
 		try {
@@ -123,6 +180,14 @@ abstract public class EncogCommonDialog extends JDialog implements
 		}
 	}
 
+	/**
+	 * Validate and collect the value from a numeric field.
+	 * @param name The name of the field.
+	 * @param field The field.
+	 * @param low The low value for the field.
+	 * @return The numeric value collected from the field.
+	 * @throws ValidationException Thrown if a validation error occurs.
+	 */
 	public double validateFieldNumeric(final String name,
 			final JTextField field, final double low, final double high)
 			throws ValidationException {
@@ -139,6 +204,14 @@ abstract public class EncogCommonDialog extends JDialog implements
 		return d;
 	}
 
+	/**
+	 * Validate and collect the value from a string field.
+	 * @param name The name of the field.
+	 * @param field The field.
+	 * @param required Is this field required?
+	 * @return The value collected.
+	 * @throws ValidationException A validation error occured.
+	 */
 	public String validateFieldString(final String name, final JComboBox field,
 			final boolean required) throws ValidationException {
 		String result = (String) field.getSelectedItem();
@@ -153,6 +226,14 @@ abstract public class EncogCommonDialog extends JDialog implements
 		return result;
 	}
 
+	/**
+	 * Validate and collect the value from a string field.
+	 * @param name The name of the field.
+	 * @param field The field.
+	 * @param required Is this field required.
+	 * @return The value collected.
+	 * @throws ValidationException A validation error occured.
+	 */
 	public String validateFieldString(final String name,
 			final JTextField field, final boolean required)
 			throws ValidationException {

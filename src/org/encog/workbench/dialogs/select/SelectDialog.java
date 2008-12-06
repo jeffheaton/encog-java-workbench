@@ -26,6 +26,7 @@ package org.encog.workbench.dialogs.select;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -36,20 +37,23 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
+import org.encog.workbench.dialogs.common.EncogCommonDialog;
+import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.util.StringConst;
 
-public class SelectDialog extends JDialog implements ActionListener {
+/**
+ * Common dialog box used to select from a choice list.
+ * @author jheaton
+ *
+ */
+public class SelectDialog extends EncogCommonDialog  {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private final JList choices;
 	private final List<SelectItem> choiceList;
 	private SelectItem selected;
 
 	public SelectDialog(final JFrame owner, final List<SelectItem> choiceList) {
-		super(owner, true);
+		super(owner);
 		final Container content = getContentPane();
 		this.choiceList = choiceList;
 
@@ -93,11 +97,16 @@ public class SelectDialog extends JDialog implements ActionListener {
 		return this.selected;
 	}
 
-	public SelectItem process() {
-		this.selected = null;
-		pack();
-		setVisible(true);
-		return getSelected();
+	@Override
+	public void collectFields() throws ValidationException {
+		this.selected = (SelectItem) this.choices.getSelectedValue();
+		
+	}
+
+	@Override
+	public void setFields() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
