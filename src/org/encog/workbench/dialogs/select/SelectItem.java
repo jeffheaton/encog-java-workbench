@@ -24,15 +24,31 @@
  */
 package org.encog.workbench.dialogs.select;
 
-
+/**
+ * Used to provide individual items to the SelectDialog.  Currently
+ * just holds the text for an item, but will likely be expanded later
+ * to hold icons as well.
+ * @author jeff
+ *
+ */
 public class SelectItem {
 
+	/**
+	 * The text to display.
+	 */
 	private final String text;
 
+	/**
+	 * Construct this item with the specified text.
+	 * @param text The text to display for this item.
+	 */
 	public SelectItem(final String text) {
 		this.text = text;
 	}
 
+	/**
+	 * @return The text to display.
+	 */
 	public String getText() {
 		return this.text;
 	}

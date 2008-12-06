@@ -48,6 +48,11 @@ abstract public class EncogCommonDialog extends JDialog implements
 		ActionListener {
 
 	/**
+	 * The serial id.
+	 */
+	private static final long serialVersionUID = 8307697052772231235L;
+
+	/**
 	 * The OK button.
 	 */
 	private JButton ctrlOK;

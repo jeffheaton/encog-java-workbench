@@ -49,6 +49,11 @@ import org.encog.workbench.EncogWorkBench;
 public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
 
 	/**
+	 * The serial id.
+	 */
+	private static final long serialVersionUID = 3506669325409959724L;
+
+	/**
 	 * The network combo box.
 	 */
 	private final JComboBox cboneuralNetworkName;

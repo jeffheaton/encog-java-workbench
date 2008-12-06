@@ -26,35 +26,49 @@ package org.encog.workbench.dialogs.select;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.JPanel;
-
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
-import org.encog.workbench.util.StringConst;
 
 /**
- * Common dialog box used to select from a choice list.
+ * Common dialog box used to select from a choice list.  A collection
+ * of SelectItems are provided that the user should select from.
  * @author jheaton
  *
  */
 public class SelectDialog extends EncogCommonDialog  {
 
+	/**
+	 * Serial id.
+	 */
+	private static final long serialVersionUID = 217379094416842461L;
+	
+	/**
+	 * The choice combo box that the user selects from.
+	 */
 	private final JList choices;
+	
+	/**
+	 * The SelectItems that form the list.
+	 */
 	private final List<SelectItem> choiceList;
+	
+	/**
+	 * The item that the user chose.
+	 */
 	private SelectItem selected;
 
+	/**
+	 * Construct the selection dialog box.
+	 * @param owner The owner of the dialog box.
+	 * @param choiceList The choices.
+	 */
 	public SelectDialog(final JFrame owner, final List<SelectItem> choiceList) {
 		super(owner);
-		final Container content = getContentPane();
+		final Container content = this.getBodyPanel();
 		this.choiceList = choiceList;
 
 		final String[] list = new String[choiceList.size()];
@@ -65,30 +79,11 @@ public class SelectDialog extends EncogCommonDialog  {
 		this.choices = new JList(list);
 		content.setLayout(new BorderLayout());
 		content.add(this.choices, BorderLayout.CENTER);
-		final JPanel panel = new JPanel();
-		panel.add(createButton(StringConst.CREATE));
-		panel.add(createButton(StringConst.CANCEL));
-		content.add(panel, BorderLayout.SOUTH);
 		setTitle("Create Object");
 		this.choices.setSelectedIndex(0);
+		pack();
 	}
 
-	public void actionPerformed(final ActionEvent event) {
-		if (event.getActionCommand().equals(StringConst.CANCEL)) {
-			dispose();
-		} else if (event.getActionCommand().equals(StringConst.CREATE)) {
-			this.selected = this.choiceList
-					.get(this.choices.getSelectedIndex());
-			dispose();
-		}
-
-	}
-
-	public JButton createButton(final String name) {
-		final JButton result = new JButton(name);
-		result.addActionListener(this);
-		return result;
-	}
 
 	/**
 	 * @return the selected
@@ -97,15 +92,26 @@ public class SelectDialog extends EncogCommonDialog  {
 		return this.selected;
 	}
 
+	/**
+	 * Collect the data when the user clicks OK.
+	 */
 	@Override
 	public void collectFields() throws ValidationException {
-		this.selected = (SelectItem) this.choices.getSelectedValue();
+		int index = this.choices.getSelectedIndex();
+		if( index>=0 )
+			this.selected = this.choiceList.get(index);
+		else
+			this.selected = null;
 		
 	}
 
+	/**
+	 * Set the initial state of the fields.  Simply select the first
+	 * item in the choice list.
+	 */
 	@Override
 	public void setFields() {
-		// TODO Auto-generated method stub
+		this.choices.setSelectedIndex(0);
 		
 	}
 

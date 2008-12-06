@@ -35,6 +35,10 @@ import org.encog.workbench.dialogs.common.ValidationException;
 
 public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 
+	/**
+	 * The serial id.
+	 */
+	private static final long serialVersionUID = 6577905476465280583L;
 	private JTextField txtmaximumError;
 	private double maxError;
 
