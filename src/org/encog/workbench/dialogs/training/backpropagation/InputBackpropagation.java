@@ -34,20 +34,43 @@ import javax.swing.JTextField;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
+/**
+ * A dialog box that inputs for the parameters to use with
+ * the backpropagation training method.
+ * @author jheaton
+ *
+ */
 public class InputBackpropagation extends BasicTrainingInput {
 
 	/**
-	 * 
+	 * The serial ID.
 	 */
 	private static final long serialVersionUID = 1L;
-	// Variables declaration
+
+	/**
+	 * Text field for the learning rate.
+	 */
 	public JTextField txtlearningRate;
+	
+	/**
+	 * Text field for the momentum.
+	 */
 	public JTextField txtmomentum;
+	
+	/**
+	 * The learning rate.
+	 */
 	private double learningRate;
 
+	/**
+	 * The momentum.
+	 */
 	private double momentum;
 
-	/** Creates new form UsersInput */
+	/**
+	 * Construct the dialog box.
+	 * @param owner
+	 */
 	public InputBackpropagation(final Frame owner) {
 		super(owner);
 		setTitle("Train Backpropagation");
@@ -73,6 +96,9 @@ public class InputBackpropagation extends BasicTrainingInput {
 
 	}
 
+	/**
+	 * Collect the data from all fields.
+	 */
 	@Override
 	public void collectFields() throws ValidationException {
 		super.collectFields();
@@ -95,10 +121,11 @@ public class InputBackpropagation extends BasicTrainingInput {
 		return this.momentum;
 	}
 
+	/**
+	 * Not used.
+	 */
 	@Override
 	public void setFields() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

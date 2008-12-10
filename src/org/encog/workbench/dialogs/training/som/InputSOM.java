@@ -37,20 +37,42 @@ import org.encog.neural.networks.training.som.TrainSelfOrganizingMap.LearningMet
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
+/**
+ * Input data to train a SOM network.
+ * @author jheaton
+ *
+ */
 public class InputSOM extends BasicTrainingInput {
 
 	/**
-	 * 
+	 * The serial ID.
 	 */
 	private static final long serialVersionUID = 1L;
-	// Variables declaration
+
+	/**
+	 * The text field for the learning rate.
+	 */
 	private final JTextField txtlearningRate;
+	
+	/**
+	 * The learning rate.
+	 */
 	private double learningRate;
+	
+	/**
+	 * Combo box for the learning method.
+	 */
 	private final JComboBox cbMethod;
 
+	/**
+	 * The learning method.
+	 */
 	private LearningMethod method;
 
-	/** Creates new form UsersInput */
+	/**
+	 * Construct the dialog box.
+	 * @param owner The owner.
+	 */
 	public InputSOM(final Frame owner) {
 		super(owner);
 		setTitle("Train SOM Layers");
@@ -66,9 +88,6 @@ public class InputSOM extends BasicTrainingInput {
 		this.cbMethod = new JComboBox();
 		final String[] languages = { "Additive", "Subtractive" };
 
-		/**
-		 * Subtractive learning.
-		 */
 		this.cbMethod.setModel(new DefaultComboBoxModel(languages));
 
 		content.add(new JLabel("Learning Rate"));
@@ -81,6 +100,9 @@ public class InputSOM extends BasicTrainingInput {
 
 	}
 
+	/**
+	 * Collect data from the fields.
+	 */
 	@Override
 	public void collectFields() throws ValidationException {
 		super.collectFields();
@@ -95,23 +117,24 @@ public class InputSOM extends BasicTrainingInput {
 	}
 
 	/**
-	 * @return the learningRate
+	 * @return The learning rate.
 	 */
 	public double getLearningRate() {
 		return this.learningRate;
 	}
 
 	/**
-	 * @return the method
+	 * @return The learning method.
 	 */
 	public LearningMethod getMethod() {
 		return this.method;
 	}
 
+	/**
+	 * Not used.
+	 */
 	@Override
 	public void setFields() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

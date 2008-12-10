@@ -32,16 +32,42 @@ import org.encog.neural.networks.Train;
 import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
+/**
+ * Dialog box to display the progress as the simulated annealing
+ * training occurs.
+ */
 public class ProgressAnneal extends BasicTrainingProgress {
 
 	/**
-	 * 
+	 * The serial id.
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * The starting temperature. 
+	 */
 	private final double startTemp;
+	
+	/**
+	 * The ending temperature. 
+	 */
 	private final double endTemp;
+	
+	/**
+	 * The cycles.
+	 */
 	private final int cycles;
 
+	/**
+	 * Construct the dialog box.
+	 * @param owner The owner of this dialog box.
+	 * @param network The network for this dialog box.
+	 * @param trainingData The training data to be used.
+	 * @param maxError The max allowed error.
+	 * @param startTemp The starting temperature.
+	 * @param endTemp The ending temperature.
+	 * @param cycles The cycles.
+	 */
 	public ProgressAnneal(final Frame owner, final BasicNetwork network,
 			final NeuralDataSet trainingData, final double maxError,
 			final double startTemp, final double endTemp, final int cycles) {
@@ -56,6 +82,9 @@ public class ProgressAnneal extends BasicTrainingProgress {
 
 	}
 
+	/**
+	 * Perform one training iteration.
+	 */
 	@Override
 	public void iteration() {
 
@@ -63,10 +92,16 @@ public class ProgressAnneal extends BasicTrainingProgress {
 
 	}
 
+	/**
+	 * Not used.
+	 */
 	@Override
 	public void shutdown() {
 	}
 
+	/**
+	 * Construct the training objects.
+	 */
 	@Override
 	public void startup() {
 		final Train train = new NeuralSimulatedAnnealing(getNetwork(),

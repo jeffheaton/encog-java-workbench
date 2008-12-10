@@ -31,10 +31,13 @@ import java.awt.GridLayout;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
+/**
+ * Input the training parameters for Hopfield training.
+ */
 public class InputHopfield extends BasicTrainingInput {
 
 	/**
-	 * 
+	 * The serial id.
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -52,14 +55,18 @@ public class InputHopfield extends BasicTrainingInput {
 
 	}
 
+	/**
+	 * Collect the data.
+	 */
 	@Override
 	public void collectFields() throws ValidationException {
 		super.collectFields();
 	}
 
+	/**
+	 * Not used.
+	 */
 	@Override
 	public void setFields() {
-		// TODO Auto-generated method stub
-
 	}
 }

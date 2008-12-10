@@ -28,6 +28,12 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
+/**
+ * A filter for the Java standard file open and save dialogs that allows files
+ * to be filtered by extension.
+ * @author jheaton
+ *
+ */
 public class ExtensionFilter extends FileFilter {
 	public static String getExtension(final File file) {
 		final String filename = file.getName();
@@ -36,8 +42,14 @@ public class ExtensionFilter extends FileFilter {
 		return ext;
 	}
 
+	/**
+	 * Extensions supported.
+	 */
 	private final String extensions[];
 
+	/**
+	 * The description of these extensions.
+	 */
 	private final String description;
 
 	public ExtensionFilter(final String description, final String extension) {
@@ -65,6 +77,9 @@ public class ExtensionFilter extends FileFilter {
 		return false;
 	}
 
+	/**
+	 * Get the description.
+	 */
 	public String getDescription() {
 		return this.description == null ? this.extensions[0] : this.description;
 	}

@@ -34,22 +34,51 @@ import javax.swing.JTextField;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
+/**
+ * Dialog box to input data for simulated annealing training.
+ */
 public class InputAnneal extends BasicTrainingInput {
 
 	/**
-	 * 
+	 * The serial id for this class.
 	 */
 	private static final long serialVersionUID = 1L;
-	// Variables declaration
+	
+	/**
+	 * Text field to hold the starting temperature.
+	 */
 	public JTextField txtStartTemp;
+	
+	/**
+	 * Text field to hold the ending temperature.
+	 */
 	public JTextField txtEndTemp;
+	
+	/**
+	 * Text field to hold the number of cycles.
+	 */
 	public JTextField txtCycles;
+	
+	/**
+	 * The starting temperature. 
+	 */
 	private double startTemp;
+	
+	/**
+	 * The ending temperature.
+	 */
 	private double endTemp;
 
+	
+	/**
+	 * The number of cycles.
+	 */
 	private int cycles;
 
-	/** Creates new form UsersInput */
+	/**
+	 * Construct the dialog box.
+	 * @param owner The owner of the dialog box.
+	 */
 	public InputAnneal(final Frame owner) {
 		super(owner);
 		setTitle("Train Simulated Annealing");
@@ -80,6 +109,9 @@ public class InputAnneal extends BasicTrainingInput {
 
 	}
 
+	/**
+	 * Collect data from the fields.
+	 */
 	@Override
 	public void collectFields() throws ValidationException {
 		super.collectFields();
@@ -90,21 +122,32 @@ public class InputAnneal extends BasicTrainingInput {
 		this.cycles = (int) this.validateFieldNumeric("cycles", this.txtCycles);
 	}
 
+	/**
+	 * @return The cycles.
+	 */
 	public int getCycles() {
 		return this.cycles;
 	}
 
+	/**
+	 * @return The ending temp.
+	 */
 	public double getEndTemp() {
 		return this.endTemp;
 	}
 
+	/**
+	 * @return The starting temperature.
+	 */
 	public double getStartTemp() {
 		return this.startTemp;
 	}
 
+	/**
+	 * Not used, the fields do not need starting values.
+	 */
 	@Override
 	public void setFields() {
-		// TODO Auto-generated method stub
 
 	}
 

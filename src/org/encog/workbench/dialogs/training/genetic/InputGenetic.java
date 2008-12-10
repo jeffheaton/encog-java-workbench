@@ -34,22 +34,50 @@ import javax.swing.JTextField;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
+/**
+ * Dialog box to input the parameters for genetic training.
+ */
 public class InputGenetic extends BasicTrainingInput {
 
 	/**
-	 * 
+	 * The serial id.
 	 */
 	private static final long serialVersionUID = 1L;
-	// Variables declaration
+	
+	/**
+	 * Text field to hold the population size.
+	 */
 	private final JTextField txtPopulationSize;
+	
+	/**
+	 * Text field to hold the mutation percent.
+	 */
 	private final JTextField txtMutationPercent;
+	
+	/**
+	 * Text field to hold the percent to mate.
+	 */
 	private final JTextField txtPercentToMate;
+	
+	/**
+	 * The population size.
+	 */
 	private int populationSize;
+	
+	/**
+	 * The mutation percent. 
+	 */
 	private double mutationPercent;
 
+	/**
+	 * The percent to mate. 
+	 */
 	private double percentToMate;
 
-	/** Creates new form UsersInput */
+	/**
+	 * Construct the dialog.
+	 * @param owner The owner.
+	 */
 	public InputGenetic(final Frame owner) {
 		super(owner);
 		setTitle("Train Simulated Annealing");
@@ -80,6 +108,9 @@ public class InputGenetic extends BasicTrainingInput {
 
 	}
 
+	/**
+	 * Collect data from the fields.
+	 */
 	@Override
 	public void collectFields() throws ValidationException {
 		super.collectFields();
@@ -91,21 +122,31 @@ public class InputGenetic extends BasicTrainingInput {
 				this.txtMutationPercent);
 	}
 
+	/**
+	 * @return The mutation percent.
+	 */
 	public double getMutationPercent() {
 		return this.mutationPercent;
 	}
 
+	/**
+	 * @return The percent to mate.
+	 */
 	public double getPercentToMate() {
 		return this.percentToMate;
 	}
 
+	/**
+	 * @return The population size.
+	 */
 	public int getPopulationSize() {
 		return this.populationSize;
 	}
 
+	/**
+	 * Not used.
+	 */
 	@Override
 	public void setFields() {
-		// TODO Auto-generated method stub
-
 	}
 }

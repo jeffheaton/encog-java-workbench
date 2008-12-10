@@ -31,25 +31,69 @@ import javax.swing.JOptionPane;
 import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.workbench.frames.EncogDocumentFrame;
 
+/**
+ * Main class for the Encog Workbench.  The main method in this class
+ * starts up the application.  This is a singleton.
+ * @author jheaton
+ *
+ */
 public class EncogWorkBench {
 
+	/**
+	 * The singleton instance.
+	 */
 	private static EncogWorkBench instance;
 
+	/**
+	 * The main window.
+	 */
+	private EncogDocumentFrame mainWindow;
+
+	/**
+	 * The current file being edited.
+	 */
+	private EncogPersistedCollection currentFile;
+
+	/**
+	 * The current filename being edited.
+	 */
+	private String currentFileName;
+
+	/**
+	 * Display a dialog box to ask a question.
+	 * @param title The title of the dialog box.
+	 * @param question The question to ask.
+	 * @return True if the user answered yes.
+	 */
 	public static boolean askQuestion(final String title, final String question) {
 		return JOptionPane.showConfirmDialog(getInstance().getMainWindow(),
 				question, title, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
 	}
 
+	/**
+	 * Display an error dialog.
+	 * @param title The title of the error dialog.
+	 * @param message The message to display.
+	 */
 	public static void displayError(final String title, final String message) {
 		JOptionPane.showMessageDialog(null, message, title,
 				JOptionPane.ERROR_MESSAGE);
 	}
 
+	/**
+	 * Display a message dialog.
+	 * @param title The title of the message dialog.
+	 * @param message The message to be displayed.
+	 */
 	public static void displayMessage(final String title, final String message) {
 		JOptionPane.showMessageDialog(null, message, title,
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	/**
+	 * Determine which top-level frame has the focus.
+	 * @return The frame that has the focus.
+	 */
 	public static Frame getCurrentFocus() {
 		final Frame[] frames = Frame.getFrames();
 		for (int i = 0; i < frames.length; i++) {
@@ -60,6 +104,10 @@ public class EncogWorkBench {
 		return null;
 	}
 
+	/**
+	 * Get the singleton instance.
+	 * @return The instance of the application.
+	 */
 	public static EncogWorkBench getInstance() {
 		if (EncogWorkBench.instance == null) {
 			EncogWorkBench.instance = new EncogWorkBench();
@@ -75,29 +123,15 @@ public class EncogWorkBench {
 		getInstance().getMainWindow().redraw();
 	}
 
-	public static void main(final String args[]) {
-		final EncogWorkBench workBench = EncogWorkBench.getInstance();
-		workBench.setMainWindow(new EncogDocumentFrame());
-
-		if (args.length > 0) {
-			EncogWorkBench.load(args[0]);
-		}
-
-		workBench.getMainWindow().setVisible(true);
-	}
-
 	public static void save(final String filename) {
 		getInstance().setCurrentFileName(filename);
 		getInstance().getCurrentFile().save(filename);
 		getInstance().getMainWindow().redraw();
 	}
 
-	private EncogDocumentFrame mainWindow;
-
-	private EncogPersistedCollection currentFile;
-
-	private String currentFileName;
-
+	/**
+	 * Close the current file.
+	 */
 	public void close() {
 		this.currentFile.clear();
 		this.currentFileName = null;
@@ -148,4 +182,22 @@ public class EncogWorkBench {
 	public void setMainWindow(final EncogDocumentFrame mainWindow) {
 		this.mainWindow = mainWindow;
 	}
+
+	/**
+	 * The main entry point into the program.  To support opening documents
+	 * by double clicking their file, the first parameter specifies a file
+	 * to open.
+	 * @param args The first argument specifies an option file to open.
+	 */
+	public static void main(final String args[]) {
+		final EncogWorkBench workBench = EncogWorkBench.getInstance();
+		workBench.setMainWindow(new EncogDocumentFrame());
+
+		if (args.length > 0) {
+			EncogWorkBench.load(args[0]);
+		}
+
+		workBench.getMainWindow().setVisible(true);
+	}
+
 }

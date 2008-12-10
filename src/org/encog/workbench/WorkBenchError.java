@@ -25,14 +25,15 @@
 package org.encog.workbench;
 
 /**
- * General error class for Encog.
+ * General error class for Encog.  All encog errors descend from this.
+ * It is implemented as a RuntimeException, as a result it is non-checked.
  * 
  * @author jheaton
  */
 public class WorkBenchError extends RuntimeException {
 
 	/**
-	 * 
+	 * The serial id.
 	 */
 	private static final long serialVersionUID = -5909341149180956178L;
 

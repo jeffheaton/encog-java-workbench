@@ -42,20 +42,56 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+/**
+ * Simple pane that holds the chart of training.  This uses JFreeChart
+ * @author jheaton
+ *
+ */
 public class ChartPane extends JPanel {
 
 	/**
-	 * 
+	 * The serial id.
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Series 1 holds the current error.
+	 */
 	XYSeries series1;
+	
+	/**
+	 * Series 2 holds the error improvement.
+	 */
 	XYSeries series2;
+	
+	/**
+	 * The data set for the current error.
+	 */
 	XYSeriesCollection dataset1;
+	
+	/**
+	 * The 
+	 */
 	XYSeriesCollection dataset2;
+	
+	/**
+	 * The chart.
+	 */
 	JFreeChart chart;
+	
+	/**
+	 * The panel that the chart is drawn upon.
+	 */
 	ChartPanel chartPanel;
+	
+	/**
+	 * How many data points have been displayed.
+	 */
 	int count;
 
+	/**
+	 * Construct the pane.
+	 */
 	public ChartPane() {
 		this.series1 = new XYSeries("Current Error");
 		this.dataset1 = new XYSeriesCollection();
@@ -79,6 +115,13 @@ public class ChartPane extends JPanel {
 
 	}
 
+	/**
+	 * Add a data point to the chart.
+	 * @param iteration Which iteration is this.
+	 * @param error What is the error at this point.
+	 * @param improvement What is the error improvement from the last
+	 * iteration.
+	 */
 	public void addData(final int iteration, final double error,
 			final double improvement) {
 		if (iteration > 10) {
@@ -88,12 +131,11 @@ public class ChartPane extends JPanel {
 
 	}
 
+	/**
+	 * Create the initial chart.
+	 * @return The chart.
+	 */
 	private JFreeChart createChart() {
-
-		/*
-		 * JFreeChart chart = ChartFactory.createTimeSeriesChart( null,
-		 * "Iteration", "Current Error", dataset1, true, true, false);
-		 */
 
 		this.chart = ChartFactory.createXYLineChart(null, "Iteration",
 				"Current Error", this.dataset1, PlotOrientation.VERTICAL, true,

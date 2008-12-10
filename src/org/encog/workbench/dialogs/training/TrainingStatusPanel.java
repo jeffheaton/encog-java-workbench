@@ -29,19 +29,31 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+/**
+ * Panel to display the current training status.
+ * @author jheaton
+ *
+ */
 public class TrainingStatusPanel extends JPanel {
 
 	/**
-	 * 
+	 * The serial id.
 	 */
 	private static final long serialVersionUID = 1L;
 	private final BasicTrainingProgress parent;
 
+	/**
+	 * Construct the panel.
+	 * @param parent The parent.
+	 */
 	public TrainingStatusPanel(final BasicTrainingProgress parent) {
 		this.parent = parent;
 		setPreferredSize(new Dimension(640, 65));
 	}
 
+	/**
+	 * Paint the panel, use the parent to do the painting.
+	 */
 	public void paint(final Graphics g) {
 		this.parent.paintStatus(g);
 	}

@@ -32,16 +32,42 @@ import org.encog.neural.networks.Train;
 import org.encog.neural.networks.training.genetic.TrainingSetNeuralGeneticAlgorithm;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
+/**
+ * Display a dialog box to show the progress of the genetic training.
+ * @author jheaton
+ */
 public class ProgressGenetic extends BasicTrainingProgress {
 
 	/**
-	 * 
+	 * The serial id.
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * The population size.
+	 */
 	private final int populationSize;
+	
+	/**
+	 * The mutation percent.
+	 */
 	private final double mutationPercent;
+	
+	/**
+	 * The percent to mate.
+	 */
 	private final double percentToMate;
 
+	/**
+	 * Construct the dialog box.
+	 * @param owner The owner of this dialog box.
+	 * @param network The network to train.
+	 * @param trainingData The training data to use.
+	 * @param maxError The maximum error.
+	 * @param populationSize The population size.
+	 * @param mutationPercent The mutation percent.
+	 * @param percentToMate The percent to mate.
+	 */
 	public ProgressGenetic(final Frame owner, final BasicNetwork network,
 			final NeuralDataSet trainingData, final double maxError,
 			final int populationSize, final double mutationPercent,
@@ -57,6 +83,9 @@ public class ProgressGenetic extends BasicTrainingProgress {
 
 	}
 
+	/**
+	 * Perform one training iteration.
+	 */
 	@Override
 	public void iteration() {
 
@@ -64,10 +93,16 @@ public class ProgressGenetic extends BasicTrainingProgress {
 
 	}
 
+	/**
+	 * Not used.
+	 */
 	@Override
 	public void shutdown() {
 	}
 
+	/**
+	 * Construct the training objects.
+	 */
 	@Override
 	public void startup() {
 		final Train train = new TrainingSetNeuralGeneticAlgorithm(getNetwork(),

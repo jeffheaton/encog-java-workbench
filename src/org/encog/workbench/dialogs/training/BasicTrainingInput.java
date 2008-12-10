@@ -33,13 +33,26 @@ import javax.swing.JTextField;
 import org.encog.workbench.dialogs.common.NetworkAndTrainingDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 
+/**
+ * A common training input dialog box used by all of the other training
+ * input boxes.
+ * @author jheaton
+ */
 public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 
 	/**
 	 * The serial id.
 	 */
 	private static final long serialVersionUID = 6577905476465280583L;
+	
+	/**
+	 * Text field that holds the maximum training error.
+	 */
 	private JTextField txtmaximumError;
+	
+	/**
+	 * The maximum allowed error.
+	 */
 	private double maxError;
 
 	public BasicTrainingInput(final Frame owner) {
@@ -53,6 +66,9 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 		this.txtmaximumError.setText("0.01");
 	}
 
+	/**
+	 * Collect the data from the fields.
+	 */
 	public void collectFields() throws ValidationException {
 		super.collectFields();
 		this.maxError = this.validateFieldNumeric("maximum error",

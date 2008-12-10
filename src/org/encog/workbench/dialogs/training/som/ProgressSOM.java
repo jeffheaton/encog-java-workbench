@@ -33,15 +33,36 @@ import org.encog.neural.networks.training.som.TrainSelfOrganizingMap;
 import org.encog.neural.networks.training.som.TrainSelfOrganizingMap.LearningMethod;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
+/**
+ * Display progress as a SOM is trained.
+ * @author jheaton
+ */
 public class ProgressSOM extends BasicTrainingProgress {
 
 	/**
-	 * 
+	 * The serial id. 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * The learning rate.
+	 */
 	private final double learningRate;
+	
+	/**
+	 * The learning method.
+	 */
 	private final LearningMethod method;
 
+	/**
+	 * Construct the dialog box.
+	 * @param owner The owner of this dialog box.
+	 * @param network The network to be trained.
+	 * @param trainingData The training data.
+	 * @param learningRate The learning rate.
+	 * @param method The training method.
+	 * @param maxError The max allowed error.
+	 */
 	public ProgressSOM(final Frame owner, final BasicNetwork network,
 			final NeuralDataSet trainingData, final double learningRate,
 			final LearningMethod method, final double maxError) {
@@ -55,6 +76,9 @@ public class ProgressSOM extends BasicTrainingProgress {
 
 	}
 
+	/**
+	 * Perform a training iteration.
+	 */
 	@Override
 	public void iteration() {
 
@@ -62,10 +86,16 @@ public class ProgressSOM extends BasicTrainingProgress {
 
 	}
 
+	/**
+	 * Not used.
+	 */
 	@Override
 	public void shutdown() {
 	}
 
+	/**
+	 * Construct the training objects.
+	 */
 	@Override
 	public void startup() {
 		final Train train = new TrainSelfOrganizingMap(getNetwork(),
