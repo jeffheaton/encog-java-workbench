@@ -56,6 +56,7 @@ import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.CreateDataSet;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
+import org.encog.workbench.dialogs.about.AboutEncog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
@@ -92,6 +93,8 @@ public class EncogDocumentFrame extends EncogListFrame {
 	public static final String TRAIN_SOM = "Train SOM Layers...";
 
 	public static final String TOOLS_CODE = "Generate Code...";
+	
+	public static final String HELP_ABOUT = "About Encog Workbench...";
 
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files", ".eg");
@@ -107,6 +110,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 	private JMenu menuEdit;
 	private JMenu menuObjects;
 	private JMenu menuTrain;
+	private JMenu menuHelp;
 
 	private JMenu menuTools;
 	private int trainingCount = 1;
@@ -227,7 +231,15 @@ public class EncogDocumentFrame extends EncogListFrame {
 		} else if (event.getActionCommand().equals(
 				EncogDocumentFrame.EDIT_PASTE)) {
 			performEditPaste();
+		} else if (event.getActionCommand().equals(
+				EncogDocumentFrame.HELP_ABOUT)) {
+			performHelpAbout();
 		}
+	}
+
+	private void performHelpAbout() {
+		AboutEncog dialog = new AboutEncog();
+		dialog.process();		
 	}
 
 	private boolean checkSave() {
@@ -303,7 +315,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.menuEdit.add(addItem(this.menuEdit, EncogDocumentFrame.EDIT_PASTE,
 				'v'));
 		this.menuBar.add(this.menuEdit);
-
+		
 		this.menuObjects = new JMenu("Objects");
 		this.menuObjects.add(addItem(this.menuObjects,
 				EncogDocumentFrame.OBJECTS_CREATE, 'c'));
@@ -328,6 +340,10 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.menuTools = new JMenu("Tools");
 		addItem(this.menuTools, EncogDocumentFrame.TOOLS_CODE, 'g');
 		this.menuBar.add(this.menuTools);
+		
+		this.menuHelp = new JMenu("Help");
+		this.menuHelp.add(addItem(this.menuHelp, EncogDocumentFrame.HELP_ABOUT, 'a'));
+		this.menuBar.add(this.menuHelp);
 
 		setJMenuBar(this.menuBar);
 	}

@@ -44,6 +44,7 @@ import javax.swing.WindowConstants;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.Train;
+import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.TimeSpanFormatter;
 
 /**
@@ -227,6 +228,8 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		this.buttonStop.setEnabled(false);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.shouldExit = false;
+		this.bodyFont = EncogFonts.getInstance().getBodyFont();
+		this.headFont = EncogFonts.getInstance().getHeadFont();
 
 	}
 

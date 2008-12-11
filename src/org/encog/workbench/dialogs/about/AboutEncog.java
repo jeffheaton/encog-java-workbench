@@ -22,55 +22,56 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.encog.workbench.frames;
+package org.encog.workbench.dialogs.about;
 
-import java.awt.Font;
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
 
-import org.encog.workbench.frames.manager.EncogCommonFrame;
-import org.encog.workbench.util.EncogFonts;
-
-public class TextFrame extends EncogCommonFrame {
+/**
+ * The about box for Encog Workbench.
+ * @author jheaton
+ */
+public class AboutEncog extends JDialog implements ActionListener {
 
 	/**
-	 * 
+	 * The serial id.
 	 */
 	private static final long serialVersionUID = 1L;
-	private final JTextArea text;
-	private final JScrollPane scroll;
 
-	public TextFrame(final String title, boolean readOnly) {
-		setTitle(title);
-		this.setSize(640, 480);
-		this.text = new JTextArea();
-		this.text.setFont(EncogFonts.getInstance().getCodeFont());
-		this.text.setEditable(!readOnly);
-		this.scroll = new JScrollPane(this.text);
-		getContentPane().add(this.scroll);
+	/**
+	 * Construct the dialog box.
+	 */
+	public AboutEncog() {
+		this.setSize(500, 300);
+		setTitle("About Encog Workbench");
+		final Container content = getContentPane();
+		content.setLayout(new BorderLayout());
+		content.add(new AboutEncogPanel(), BorderLayout.CENTER);
+		final JPanel buttonPanel = new JPanel();
+		final JButton ok = new JButton("OK");
+		buttonPanel.add(ok);
+		content.add(buttonPanel, BorderLayout.SOUTH);
+		ok.addActionListener(this);
+
 	}
 
+	/**
+	 * Handle the OK button.
+	 */
 	public void actionPerformed(final ActionEvent e) {
-		// TODO Auto-generated method stub
-
+		dispose();
 	}
 
-	public void mouseClicked(final MouseEvent e) {
-		// TODO Auto-generated method stub
-
+	/**
+	 * Display the dialog box.
+	 */
+	public void process() {
+		setVisible(true);
 	}
-
-	public void setText(final String t) {
-		this.text.setText(t);
-	}
-
-	public void windowOpened(final WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
