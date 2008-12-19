@@ -93,6 +93,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 	public static final String TRAIN_SOM = "Train SOM Layers...";
 
 	public static final String TOOLS_CODE = "Generate Code...";
+	public static final String TOOLS_CHAT = "Chat with Encog NLP...";
 	
 	public static final String HELP_ABOUT = "About Encog Workbench...";
 
@@ -234,7 +235,17 @@ public class EncogDocumentFrame extends EncogListFrame {
 		} else if (event.getActionCommand().equals(
 				EncogDocumentFrame.HELP_ABOUT)) {
 			performHelpAbout();
+		}if (event.getActionCommand().equals(
+				EncogDocumentFrame.TOOLS_CHAT)) {
+			performChat();
 		}
+	}
+
+	private void performChat() {
+		Conversation conv = new Conversation("Encog");
+		conv.setName("Human");
+		conv.show();
+		
 	}
 
 	private void performHelpAbout() {
@@ -339,6 +350,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 
 		this.menuTools = new JMenu("Tools");
 		addItem(this.menuTools, EncogDocumentFrame.TOOLS_CODE, 'g');
+		addItem(this.menuTools, EncogDocumentFrame.TOOLS_CHAT, 'c');
 		this.menuBar.add(this.menuTools);
 		
 		this.menuHelp = new JMenu("Help");
