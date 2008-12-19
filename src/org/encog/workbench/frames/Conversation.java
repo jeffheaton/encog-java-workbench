@@ -6,7 +6,15 @@
 
 package org.encog.workbench.frames;
 
+import java.io.IOException;
+
 import javax.swing.*;
+
+import org.encog.nlp.Context;
+import org.encog.nlp.memory.RomMemory;
+
+//import org.encog.nlp.Context;
+///import org.encog.nlp.memory.RomMemory;
 
 /**
  *
@@ -18,11 +26,20 @@ public class Conversation extends javax.swing.JFrame {
     public static final String COLOR_RED = "#ff0000";
     public String who;
     private String listing = "";
+    private Context context;
     
     /** Creates new form Conversation */
     public Conversation(String title) {
         setTitle(title);
         initComponents();
+        context = new Context();
+    try {
+		context.init();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+        RomMemory.load(context.getMemory());       
         fromBoth.setContentType("text/html");        
     }
     
