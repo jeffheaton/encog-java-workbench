@@ -242,9 +242,11 @@ public class EncogDocumentFrame extends EncogListFrame {
 	}
 
 	private void performChat() {
-		Conversation conv = new Conversation("Encog");
-		conv.setName("Human");
-		conv.show();
+		String you = System.getProperty("user.name");
+		if(you==null)
+			you = "You";
+		Conversation conv = new Conversation("Conversation",you,"Encog");
+		conv.setVisible(true);
 		
 	}
 
