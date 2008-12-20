@@ -40,7 +40,7 @@ import org.encog.neural.persist.EncogPersistedObject;
 public abstract class EncogCommonFrame extends JFrame implements
 		WindowListener, ActionListener, MouseListener {
 
-	private EncogPersistedObject encogObject;
+	private Object encogObject;
 	private final EncogFrameManager subwindows;
 	private EncogCommonFrame parent;
 
@@ -77,7 +77,7 @@ public abstract class EncogCommonFrame extends JFrame implements
 	/**
 	 * @return the encogObject
 	 */
-	public EncogPersistedObject getEncogObject() {
+	public Object getEncogObject() {
 		return this.encogObject;
 	}
 
@@ -126,7 +126,7 @@ public abstract class EncogCommonFrame extends JFrame implements
 	 * @param encogObject
 	 *            the encogObject to set
 	 */
-	public void setEncogObject(final EncogPersistedObject encogObject) {
+	public void setEncogObject(final Object encogObject) {
 		this.encogObject = encogObject;
 	}
 
