@@ -44,6 +44,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
 import org.encog.EncogError;
+import org.encog.bot.spider.SpiderOptions;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralData;
@@ -53,6 +54,7 @@ import org.encog.neural.networks.Network;
 import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.neural.persist.EncogPersistedObject;
+import org.encog.parse.ParseTemplate;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.CreateDataSet;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
@@ -94,6 +96,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 
 	public static final String TOOLS_CODE = "Generate Code...";
 	public static final String TOOLS_CHAT = "Chat with Encog NLP...";
+	public static final String TOOLS_BROWSE = "Browse Web Data...";
 	
 	public static final String HELP_ABOUT = "About Encog Workbench...";
 
@@ -116,6 +119,8 @@ public class EncogDocumentFrame extends EncogListFrame {
 	private JMenu menuTools;
 	private int trainingCount = 1;
 	private int networkCount = 1;
+	private int spiderCount = 1;
+	private int parseCount = 1;
 	private JPopupMenu popupNetwork;
 	private JMenuItem popupNetworkDelete;
 
@@ -238,7 +243,15 @@ public class EncogDocumentFrame extends EncogListFrame {
 		}if (event.getActionCommand().equals(
 				EncogDocumentFrame.TOOLS_CHAT)) {
 			performChat();
+		}if (event.getActionCommand().equals(
+				EncogDocumentFrame.TOOLS_BROWSE)) {
+			performBrowse();
 		}
+	}
+
+	private void performBrowse() {
+		BrowserFrame browse = new BrowserFrame();
+		browse.setVisible(true);
 	}
 
 	private void performChat() {
@@ -353,6 +366,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.menuTools = new JMenu("Tools");
 		addItem(this.menuTools, EncogDocumentFrame.TOOLS_CODE, 'g');
 		addItem(this.menuTools, EncogDocumentFrame.TOOLS_CHAT, 'c');
+		addItem(this.menuTools, EncogDocumentFrame.TOOLS_BROWSE, 'b');
 		this.menuBar.add(this.menuTools);
 		
 		this.menuHelp = new JMenu("Help");
@@ -642,10 +656,12 @@ public class EncogDocumentFrame extends EncogListFrame {
 
 	public void performObjectsCreate() {
 
-		SelectItem itemTraining, itemNetwork;
+		SelectItem itemTraining, itemNetwork, itemTemplate, itemSpider;
 		final List<SelectItem> list = new ArrayList<SelectItem>();
 		list.add(itemTraining = new SelectItem("Training Data"));
 		list.add(itemNetwork = new SelectItem("Neural Network"));
+		list.add(itemTemplate = new SelectItem("Parser Template"));
+		list.add(itemSpider = new SelectItem("Spider Options"));
 		final SelectDialog dialog = new SelectDialog(this, list);
 		if(! dialog.process() )
 			return;
@@ -669,6 +685,18 @@ public class EncogDocumentFrame extends EncogListFrame {
 			trainingData.setName("data-" + this.trainingCount++);
 			trainingData.setDescription("Training data");
 			EncogWorkBench.getInstance().getCurrentFile().add(trainingData);
+			EncogWorkBench.getInstance().getMainWindow().redraw();
+		} else if( result == itemSpider ) {
+			final SpiderOptions options = new SpiderOptions();
+			options.setName("spider-" + this.spiderCount++);
+			options.setDescription("Spider options");
+			EncogWorkBench.getInstance().getCurrentFile().add(options);
+			EncogWorkBench.getInstance().getMainWindow().redraw();
+		} else if( result == itemTemplate ) {
+			final ParseTemplate template = new ParseTemplate();
+			template.setName("parse-" + this.parseCount++);
+			template.setDescription("A parse template");
+			EncogWorkBench.getInstance().getCurrentFile().add(template);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 	}
