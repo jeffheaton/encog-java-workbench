@@ -51,7 +51,7 @@ public class InputHopfield extends BasicTrainingInput {
 
 		final Container content = getBodyPanel();
 
-		content.setLayout(new GridLayout(6, 1, 10, 10));
+		content.setLayout(new GridLayout(3, 2, 10, 10));
 
 	}
 
