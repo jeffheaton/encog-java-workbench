@@ -256,8 +256,7 @@ public class NetworkFrame extends EncogListFrame {
 
 		if (getSubwindows()
 				.checkBeforeOpen(item.getMatrix(), MatrixFrame.class)) {
-			final MatrixFrame frame = new MatrixFrame(getData(), item
-					.getMatrix());
+			final MatrixFrame frame = new MatrixFrame((BasicNetwork)getData(), item);
 			frame.setVisible(true);
 			getSubwindows().add(frame);
 		}
