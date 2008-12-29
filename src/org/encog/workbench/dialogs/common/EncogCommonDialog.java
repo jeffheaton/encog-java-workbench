@@ -158,6 +158,7 @@ abstract public class EncogCommonDialog extends JDialog implements
 	 * @return True if the dialog box should be processed.
 	 */
 	public boolean process() {
+		setFields();
 		setVisible(true);
 		return this.shouldProcess;
 	}

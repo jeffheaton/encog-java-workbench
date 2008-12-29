@@ -37,6 +37,8 @@ import javax.swing.ListCellRenderer;
 
 import org.encog.bot.spider.SpiderOptions;
 import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.data.PropertyData;
+import org.encog.neural.data.TextData;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.Network;
 import org.encog.neural.persist.EncogPersistedObject;
@@ -56,6 +58,8 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 	private final ImageIcon iconTrainingSet;
 	private final ImageIcon iconSpiderTemplate;
 	private final ImageIcon iconParseTemplate;
+	private final ImageIcon iconProp;
+	private final ImageIcon iconText;
 
 	public EncogItemRenderer() {
 		this.iconNeuralNet = new ImageIcon(this.getClass().getResource(
@@ -66,6 +70,10 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 				"/resource/iconSpiderTemplate.png"));
 		this.iconParseTemplate = new ImageIcon(this.getClass().getResource(
 				"/resource/iconParseTemplate.png"));
+		this.iconText = new ImageIcon(this.getClass().getResource(
+			"/resource/iconParseTemplate.png"));
+		this.iconProp = new ImageIcon(this.getClass().getResource(
+			"/resource/iconParseTemplate.png"));
 		this.titleFont = new Font("sansserif", Font.BOLD, 12);
 		this.regularFont = new Font("serif", 0, 12);
 	}
@@ -168,6 +176,32 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 			/*g.drawString("Ideal Size: " + data.getIdealSize() + ","
 					+ "Input Size: " + data.getInputSize(), 70, y);*/
 
+		} else if (getEncogObject() instanceof TextData ) {
+			this.iconText.paintIcon(this, g, 4, 4);
+			g.setFont(this.titleFont);
+			g.setColor(Color.BLACK);
+			g.drawString("Text File", 70, y);
+			y += titleMetrics.getHeight();
+			g.setFont(this.regularFont);
+			g.drawString(getEncogObject().getDescription() + "("
+					+ getEncogObject().getName() + ")", 70, y);
+			y += regularMetrics.getHeight();
+			final TextData data = (TextData) getEncogObject();
+			/*g.drawString("Ideal Size: " + data.getIdealSize() + ","
+					+ "Input Size: " + data.getInputSize(), 70, y);*/
+		} else if (getEncogObject() instanceof PropertyData ) {
+			this.iconText.paintIcon(this, g, 4, 4);
+			g.setFont(this.titleFont);
+			g.setColor(Color.BLACK);
+			g.drawString("Property Data", 70, y);
+			y += titleMetrics.getHeight();
+			g.setFont(this.regularFont);
+			g.drawString(getEncogObject().getDescription() + "("
+					+ getEncogObject().getName() + ")", 70, y);
+			y += regularMetrics.getHeight();
+			final PropertyData data = (PropertyData) getEncogObject();
+			/*g.drawString("Ideal Size: " + data.getIdealSize() + ","
+					+ "Input Size: " + data.getInputSize(), 70, y);*/
 		}
 		
 	}

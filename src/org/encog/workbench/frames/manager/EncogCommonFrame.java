@@ -49,7 +49,7 @@ public abstract class EncogCommonFrame extends JFrame implements
 		addWindowListener(this);
 	}
 
-	protected JMenuItem addItem(final JMenu m, final String s, final int key) {
+	public JMenuItem addItem(final JMenu m, final String s, final int key) {
 
 		final JMenuItem mi = new JMenuItem(s, key);
 		mi.addActionListener(this);
@@ -57,7 +57,7 @@ public abstract class EncogCommonFrame extends JFrame implements
 		return mi;
 	}
 
-	protected JMenuItem addItem(final JPopupMenu m, final String s,
+	public JMenuItem addItem(final JPopupMenu m, final String s,
 			final int key) {
 
 		final JMenuItem mi = new JMenuItem(s, key);

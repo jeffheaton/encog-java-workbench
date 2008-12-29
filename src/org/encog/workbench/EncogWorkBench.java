@@ -29,7 +29,7 @@ import java.awt.Frame;
 import javax.swing.JOptionPane;
 
 import org.encog.neural.persist.EncogPersistedCollection;
-import org.encog.workbench.frames.EncogDocumentFrame;
+import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 /**
  * Main class for the Encog Workbench.  The main method in this class

@@ -45,6 +45,7 @@ public class TextFrame extends EncogCommonFrame {
 	private final JScrollPane scroll;
 
 	public TextFrame(final String title, boolean readOnly) {
+		super();
 		setTitle(title);
 		this.setSize(640, 480);
 		this.text = new JTextArea();
@@ -66,6 +67,11 @@ public class TextFrame extends EncogCommonFrame {
 
 	public void setText(final String t) {
 		this.text.setText(t);
+	}
+	
+	public String getText()
+	{
+		return this.text.getText();
 	}
 
 	public void windowOpened(final WindowEvent e) {
