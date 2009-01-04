@@ -66,7 +66,7 @@ public class EncogWorkBench {
 	 * @return True if the user answered yes.
 	 */
 	public static boolean askQuestion(final String title, final String question) {
-		return JOptionPane.showConfirmDialog(getInstance().getMainWindow(),
+		return JOptionPane.showConfirmDialog(null,
 				question, title, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
 	}
 
@@ -198,6 +198,11 @@ public class EncogWorkBench {
 		}
 
 		workBench.getMainWindow().setVisible(true);
+	}
+
+	public static String displayInput(String prompt) {
+		return JOptionPane.showInputDialog(null, 
+				prompt,"");
 	}
 
 }

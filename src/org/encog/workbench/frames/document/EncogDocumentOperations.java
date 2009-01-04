@@ -28,6 +28,7 @@ import org.encog.workbench.frames.BrowserFrame;
 import org.encog.workbench.frames.Conversation;
 import org.encog.workbench.frames.NetworkFrame;
 import org.encog.workbench.frames.NetworkQueryFrame;
+import org.encog.workbench.frames.ParseTemplateFrame;
 import org.encog.workbench.frames.PropertyDataFrame;
 import org.encog.workbench.frames.TextEditorFrame;
 import org.encog.workbench.frames.TrainingDataFrame;
@@ -81,6 +82,13 @@ public class EncogDocumentOperations {
 			PropertyData prop = (PropertyData)item;
 			if (owner.getSubwindows().checkBeforeOpen(prop, PropertyData.class)) {
 				final PropertyDataFrame frame = new PropertyDataFrame(prop);
+				frame.setVisible(true);
+				owner.getSubwindows().add(frame);
+			}
+		} else if( item instanceof ParseTemplate  ) {
+			ParseTemplate data = (ParseTemplate)item;
+			if (owner.getSubwindows().checkBeforeOpen(data, ParseTemplate.class)) {
+				final ParseTemplateFrame frame = new ParseTemplateFrame(data);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
@@ -285,8 +293,8 @@ public class EncogDocumentOperations {
 		SelectItem itemTraining, itemNetwork, itemTemplate, itemSpider, itemOptions, itemText;
 		final List<SelectItem> list = new ArrayList<SelectItem>();
 		list.add(itemNetwork = new SelectItem("Neural Network"));
-		list.add(itemOptions = new SelectItem("Options"));
 		list.add(itemTemplate = new SelectItem("Parser Template"));
+		list.add(itemOptions = new SelectItem("Property Data"));
 		list.add(itemSpider = new SelectItem("Spider Options"));
 		list.add(itemText = new SelectItem("Text"));
 		list.add(itemTraining = new SelectItem("Training Data"));
@@ -330,14 +338,14 @@ public class EncogDocumentOperations {
 		} else if(result == itemText)
 		{
 			final TextData text = new TextData();
-			text.setName("text-" + this.parseCount++);
+			text.setName("text-" + this.textCount++);
 			text.setDescription("A text file");
 			EncogWorkBench.getInstance().getCurrentFile().add(text);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		} else if( result == itemOptions )
 		{
 			final PropertyData prop = new PropertyData();
-			prop.setName("properties-" + this.parseCount++);
+			prop.setName("properties-" + this.optionsCount++);
 			prop.setDescription("Some property data");
 			EncogWorkBench.getInstance().getCurrentFile().add(prop);
 			EncogWorkBench.getInstance().getMainWindow().redraw();

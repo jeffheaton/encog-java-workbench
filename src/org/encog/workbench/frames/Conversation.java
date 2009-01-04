@@ -44,12 +44,9 @@ public class Conversation extends JFrame implements ActionListener {
 		setTitle(title);
 		initComponents();
 		context = new Context();
-		try {
-			context.init();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+			//context.init();
+		
 		RomMemory.load(context.getMemory());
 		fromBoth.setContentType("text/html");
 	}
