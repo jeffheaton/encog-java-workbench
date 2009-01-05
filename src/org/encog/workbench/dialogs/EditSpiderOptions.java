@@ -12,8 +12,6 @@ import javax.swing.JTextField;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 
-import sun.org.mozilla.javascript.internal.Context;
-
 public class EditSpiderOptions extends EncogCommonDialog {
 
 	private JTextField txtName;
