@@ -71,9 +71,9 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 		this.iconParseTemplate = new ImageIcon(this.getClass().getResource(
 				"/resource/iconParseTemplate.png"));
 		this.iconText = new ImageIcon(this.getClass().getResource(
-			"/resource/iconParseTemplate.png"));
+			"/resource/iconText.png"));
 		this.iconProp = new ImageIcon(this.getClass().getResource(
-			"/resource/iconParseTemplate.png"));
+			"/resource/iconOptions.png"));
 		this.titleFont = new Font("sansserif", Font.BOLD, 12);
 		this.regularFont = new Font("serif", 0, 12);
 	}
@@ -190,7 +190,7 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 			/*g.drawString("Ideal Size: " + data.getIdealSize() + ","
 					+ "Input Size: " + data.getInputSize(), 70, y);*/
 		} else if (getEncogObject() instanceof PropertyData ) {
-			this.iconText.paintIcon(this, g, 4, 4);
+			this.iconProp.paintIcon(this, g, 4, 4);
 			g.setFont(this.titleFont);
 			g.setColor(Color.BLACK);
 			g.drawString("Property Data", 70, y);
