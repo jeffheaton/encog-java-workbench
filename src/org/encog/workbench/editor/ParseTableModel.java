@@ -1,4 +1,4 @@
-package org.encog.workbench.models;
+package org.encog.workbench.editor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -15,17 +15,20 @@ import org.encog.workbench.WorkBenchError;
 
 public class ParseTableModel implements TableModel {
 	public static final String[] BOOLEAN_VALUES = {"True","False"};
-	private Object data;
+	private PropertyCollection data;
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();
-	private List<Field> fields = new ArrayList<Field>();
-	private List<String> fieldNames = new ArrayList<String>();
+
+	public ParseTableModel(PropertyCollection data)
+	{
+		this.data = data;
+	}
 
 	public void addTableModelListener(TableModelListener listener) {
 		this.listeners.add(listener);
 	}
 
 	public Class<?> getColumnClass(int arg0) {
-		return String.class;
+		return Object.class;
 	}
 
 	public int getColumnCount() {
@@ -42,7 +45,7 @@ public class ParseTableModel implements TableModel {
 	public int getRowCount() {
 		if (this.data == null)
 			return 0;
-		return this.fields.size();
+		return this.data.size();
 	}
 
 	public Object getValueAt(int row, int col) {
@@ -50,10 +53,11 @@ public class ParseTableModel implements TableModel {
 			return null;
 		else {
 			if (col == 0) {
-				return fieldNames.get(row);
+				return this.data.getFieldName(row);
 			} else {
 				try {
-					return fields.get(row).get(this.data);
+					Object value = data.getField(row).get(this.data.getData());
+					return value;
 				} catch (IllegalArgumentException e) {
 					throw new WorkBenchError(e);
 				} catch (IllegalAccessException e) {
@@ -79,7 +83,7 @@ public class ParseTableModel implements TableModel {
 	public void setValueAt(Object value, int row, int col) {
 		if (col == 1) {
 			try {
-				Field field = fields.get(row);
+				Field field = this.data.getField(row);
 				Class<?> type = field.getType();
 
 				if (type == byte.class) { 
@@ -101,7 +105,7 @@ public class ParseTableModel implements TableModel {
 					field.setFloat(this.data, Float.parseFloat((String)value));
 				}
 			} catch (IllegalArgumentException e) {
-				EncogWorkBench.displayError("Error Setting Value:" + this.fieldNames.get(row), e
+				EncogWorkBench.displayError("Error Setting Value:" + this.data.getFieldName(row), e
 						.getMessage());
 			} catch (IllegalAccessException e) {
 				throw new WorkBenchError(e);
@@ -118,42 +122,6 @@ public class ParseTableModel implements TableModel {
 		return data;
 	}
 
-	/**
-	 * @param data
-	 *            the data to set
-	 */
-	public void setData(Object data) {
-		// first find the table used with this
-		for (TableModelListener listener : this.listeners) {
-			System.out.println(listener);
-		}
-		
-		//
-		this.data = data;
-		this.fields.clear();
-		this.fieldNames.clear();
-		Field[] f = data.getClass().getDeclaredFields();
-		for (int i = 0; i < f.length; i++) {
-			if ((f[i].getModifiers() & Modifier.FINAL) == 0) {
-				Class c = f[i].getType();
-				if (isDirectEditableType(c)) {
-					f[i].setAccessible(true);
-					this.fields.add(f[i]);
-					this.fieldNames.add(f[i].getName());
-				}
-			}
-		}
-		updateListeners();
-	}
-
-	private boolean isDirectEditableType(Class<?> c) {
-		if ((c == int.class) || (c == short.class)
-				|| (c == char.class) || (c == long.class)
-				|| (c == byte.class) || (c == String.class)) {
-			return true;
-		}
-		return false;
-	}
 
 	public void updateListeners() {
 		TableModelEvent event = new TableModelEvent(this);

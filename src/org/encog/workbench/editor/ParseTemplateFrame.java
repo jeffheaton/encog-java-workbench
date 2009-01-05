@@ -1,4 +1,4 @@
-package org.encog.workbench.frames;
+package org.encog.workbench.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -6,12 +6,17 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.Field;
+import java.util.Collection;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTree;
+import javax.swing.ListModel;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -22,15 +27,16 @@ import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.parse.Parse;
 import org.encog.parse.ParseTemplate;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
-import org.encog.workbench.models.ParseTableModel;
+import org.encog.workbench.util.MouseUtil;
 import org.encog.parse.recognize.Recognize;
 import org.encog.parse.recognize.RecognizeElement;
 
 public class ParseTemplateFrame extends EncogCommonFrame implements
 		TreeSelectionListener {
 
-	private ParseTemplate data;
+	private Object data;
 	private JTable table;
 	private JTree tree;
 	private JScrollPane scrollTree;
@@ -41,17 +47,17 @@ public class ParseTemplateFrame extends EncogCommonFrame implements
 	private JButton btnProperties;
 	private JButton btnNewRecognizer;
 	private JButton btnLoadDefault;
-	private ParseTableModel tableModel;
+	private PropertyCollection properties;
 
-	public ParseTemplateFrame(ParseTemplate data) {
+	public ParseTemplateFrame(Object data) {
 		setSize(400, 400);
 		setTitle("Parser Template");
 		this.data = data;
+		this.properties = new PropertyCollection(data, this.table);
 		Container content = this.getContentPane();
 		content.setLayout(new BorderLayout());
-		this.tableModel = new ParseTableModel();
-		this.table = new JTable(this.tableModel);
-		this.root = new DefaultMutableTreeNode("Template");
+		this.table = new JTable(this.properties.getModel());
+		this.root = new DefaultMutableTreeNode(data);
 		this.treeModel = new DefaultTreeModel(this.root);
 		this.tree = new JTree(this.treeModel);
 		this.scrollTable = new JScrollPane(this.table);
@@ -71,6 +77,10 @@ public class ParseTemplateFrame extends EncogCommonFrame implements
 		this.btnNewRecognizer.addActionListener(this);
 		this.btnLoadDefault.addActionListener(this);
 		this.tree.addTreeSelectionListener(this);
+
+		this.table.setDefaultEditor(Boolean.class, new DefaultCellEditor(
+				new JComboBox(PropertyCollection.booleanValues)));
+
 		generateTree();
 	}
 
@@ -82,7 +92,7 @@ public class ParseTemplateFrame extends EncogCommonFrame implements
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == this.btnNewRecognizer) {
 			Recognize r = new Recognize("New");
-			this.data.addRecognizer(r);
+			//this.data.addRecognizer(r);
 			generateTree();
 		} else if (e.getSource() == this.btnLoadDefault) {
 			if (EncogWorkBench
@@ -99,29 +109,38 @@ public class ParseTemplateFrame extends EncogCommonFrame implements
 
 	}
 
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
 	private void generateTree() {
-		this.root.removeAllChildren();
-		for (Recognize r : this.data.getRecognizers()) {
-			DefaultMutableTreeNode n = new DefaultMutableTreeNode(r);
-			this.root.add(n);
-			generateRecognizerNode(r, n);
-		}
+		try {
+			this.root.removeAllChildren();
 
-		treeModel.reload();
-		tree.invalidate();
-		pack();
+			Field fields[] = this.data.getClass().getDeclaredFields();
+			for (int i = 0; i < fields.length; i++) {
+				Field field = fields[i];
+				field.setAccessible(true);
+				Class c = field.getClass();
+				Object value = field.get(this.data);
+				if (value instanceof Collection) {
+					DefaultMutableTreeNode n = new DefaultMutableTreeNode(field
+							.getName());
+					this.root.add(n);
+					generateTreeCollection(n, (Collection)value);
+				}
+			}
+
+			treeModel.reload();
+			tree.invalidate();
+			pack();
+		} catch (IllegalAccessException e) {
+			throw new WorkBenchError(e);
+		}
 	}
 
-	private void generateRecognizerNode(Recognize r,
-			DefaultMutableTreeNode parent) {
-		for (RecognizeElement d : r.getPattern()) {
-			DefaultMutableTreeNode n = new DefaultMutableTreeNode(d);
-			parent.add(n);
+	private void generateTreeCollection(DefaultMutableTreeNode parentNode,
+			Collection parentObject) {
+		for (Object obj : parentObject) {
+
+			DefaultMutableTreeNode n = new DefaultMutableTreeNode(obj);
+			parentNode.add(n);
 		}
 	}
 
@@ -130,8 +149,35 @@ public class ParseTemplateFrame extends EncogCommonFrame implements
 		if (path != null) {
 			DefaultMutableTreeNode n = (DefaultMutableTreeNode) path
 					.getLastPathComponent();
-			this.tableModel.setData(n.getUserObject());
+			Object obj = n.getUserObject();
+			
+			// if its a String, then it is just a label
+			if( obj instanceof String )
+				this.properties.setData(null);
+			else
+				this.properties.setData(obj);
 		}
+	}
+	
+	public void mouseClicked(final MouseEvent e) {
+/*
+		final int index = this.contents.locationToIndex(e.getPoint());
+		final ListModel dlm = this.contents.getModel();
+		Object item = null;
+		if (index != -1) {
+			item = dlm.getElementAt(index);
+		}
+		this.contents.ensureIndexIsVisible(index);
+		this.contents.setSelectedIndex(index);
+
+		if (MouseUtil.isRightClick(e)) {
+			rightMouseClicked(e, item);
+		}
+
+		if (e.getClickCount() == 2) {
+
+			openItem(item);
+		}*/
 	}
 
 }

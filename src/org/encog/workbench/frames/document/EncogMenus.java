@@ -22,6 +22,7 @@ public class EncogMenus {
 	public static final String EDIT_CUT = "Cut";
 	public static final String EDIT_COPY = "Copy";
 	public static final String EDIT_PASTE = "Paste";
+	public static final String EDIT_CONFIG = "Config...";
 
 	public static final String OBJECTS_CREATE = "Create Object...";
 	public static final String OBJECTS_DELETE = "Delete Object...";
@@ -85,6 +86,9 @@ public class EncogMenus {
 				'c'));
 		this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_PASTE,
 				'v'));
+		this.menuEdit.addSeparator();
+		this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_CONFIG,
+		'f'));
 		this.menuBar.add(this.menuEdit);
 		
 		this.menuObjects = new JMenu("Objects");
@@ -176,6 +180,9 @@ public class EncogMenus {
 		} else if (event.getActionCommand().equals(
 				EncogMenus.EDIT_PASTE)) {
 			owner.getOperations().performEditPaste();
+		} else if (event.getActionCommand().equals(
+				EncogMenus.EDIT_CONFIG)) {
+			owner.getOperations().performEditConfig();
 		} else if (event.getActionCommand().equals(
 				EncogMenus.HELP_ABOUT)) {
 			owner.getOperations().performHelpAbout();

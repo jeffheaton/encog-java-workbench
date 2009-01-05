@@ -29,6 +29,7 @@ import java.awt.Frame;
 import javax.swing.JOptionPane;
 
 import org.encog.neural.persist.EncogPersistedCollection;
+import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 /**
@@ -53,11 +54,21 @@ public class EncogWorkBench {
 	 * The current file being edited.
 	 */
 	private EncogPersistedCollection currentFile;
+	
+	/**
+	 * Config info for the workbench.
+	 */
+	private EncogWorkBenchConfig config;
 
 	/**
 	 * The current filename being edited.
 	 */
 	private String currentFileName;
+	
+	public EncogWorkBench()
+	{
+		this.config = new EncogWorkBenchConfig();
+	}
 
 	/**
 	 * Display a dialog box to ask a question.
@@ -203,6 +214,11 @@ public class EncogWorkBench {
 	public static String displayInput(String prompt) {
 		return JOptionPane.showInputDialog(null, 
 				prompt,"");
+	}
+	
+	public EncogWorkBenchConfig getConfig()
+	{
+		return this.config;
 	}
 
 }
