@@ -57,6 +57,8 @@ public class ParseTemplateFrame extends EncogCommonFrame implements
 		Container content = this.getContentPane();
 		content.setLayout(new BorderLayout());
 		this.table = new JTable(this.properties.getModel());
+		this.table.getColumnModel().getColumn(1).setCellEditor(new EditorCellEditor());
+		this.table.setCellEditor(new EditorCellEditor());
 		this.root = new DefaultMutableTreeNode(data);
 		this.treeModel = new DefaultTreeModel(this.root);
 		this.tree = new JTree(this.treeModel);
@@ -77,9 +79,6 @@ public class ParseTemplateFrame extends EncogCommonFrame implements
 		this.btnNewRecognizer.addActionListener(this);
 		this.btnLoadDefault.addActionListener(this);
 		this.tree.addTreeSelectionListener(this);
-
-		this.table.setDefaultEditor(Boolean.class, new DefaultCellEditor(
-				new JComboBox(PropertyCollection.booleanValues)));
 
 		generateTree();
 	}
