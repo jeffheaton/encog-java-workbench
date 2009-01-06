@@ -14,7 +14,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 
 public class ParseTableModel implements TableModel {
-	public static final String[] BOOLEAN_VALUES = {"True","False"};
+
 	private PropertyCollection data;
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();
 
@@ -87,25 +87,25 @@ public class ParseTableModel implements TableModel {
 				Class<?> type = field.getType();
 
 				if (type == byte.class) { 
-					field.setByte(this.data, Byte.parseByte((String)value));
+					field.setByte(this.data.getData(), Byte.parseByte((String)value));
 				}
 				else if (type == short.class) {
-					field.setShort(this.data, Short.parseShort((String)value));
+					field.setShort(this.data.getData(), Short.parseShort((String)value));
 				}
 				else if (type == int.class ) {
-					field.setInt(this.data, Integer.parseInt((String)value));
+					field.setInt(this.data.getData(), Integer.parseInt((String)value));
 				}
 				else if (type == long.class) {
-					field.setLong(this.data, Long.parseLong((String)value));
+					field.setLong(this.data.getData(), Long.parseLong((String)value));
 				} else if (type == String.class) {
-					field.set(this.data, value);
+					field.set(this.data.getData(), value);
 				} else if (type == double.class) {
-					field.setDouble(this.data, Double.parseDouble((String)value));
+					field.setDouble(this.data.getData(), Double.parseDouble((String)value));
 				} else if (type == float.class) {
-					field.setFloat(this.data, Float.parseFloat((String)value));
+					field.setFloat(this.data.getData(), Float.parseFloat((String)value));
 				}
 			} catch (IllegalArgumentException e) {
-				EncogWorkBench.displayError("Error Setting Value:" + this.data.getFieldName(row), e
+				EncogWorkBench.displayError("Error Setting Value: " + this.data.getFieldName(row), e
 						.getMessage());
 			} catch (IllegalAccessException e) {
 				throw new WorkBenchError(e);

@@ -19,7 +19,7 @@ public class PropertyCollection {
 	private List<String> fieldNames = new ArrayList<String>();
 	public final static String[] booleanValues = { "true", "false" };
 
-	public PropertyCollection(Object data, JTable table) {
+	public PropertyCollection(Object data) {
 		this.data = data;
 		this.model = new ParseTableModel(this);
 

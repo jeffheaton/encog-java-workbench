@@ -48,21 +48,20 @@ public class ParseTemplateFrame extends EncogCommonFrame implements
 	private JButton btnNewRecognizer;
 	private JButton btnLoadDefault;
 	private PropertyCollection properties;
+	private EditorCellEditor editor;
 
 	public ParseTemplateFrame(Object data) {
 		setSize(400, 400);
 		setTitle("Parser Template");
 		this.data = data;
-		this.properties = new PropertyCollection(data, this.table);
+		this.properties = new PropertyCollection(data);
 		Container content = this.getContentPane();
 		content.setLayout(new BorderLayout());
-		this.table = new JTable(this.properties.getModel());
-		this.table.getColumnModel().getColumn(1).setCellEditor(new EditorCellEditor());
-		this.table.setCellEditor(new EditorCellEditor());
+	
 		this.root = new DefaultMutableTreeNode(data);
 		this.treeModel = new DefaultTreeModel(this.root);
 		this.tree = new JTree(this.treeModel);
-		this.scrollTable = new JScrollPane(this.table);
+		this.scrollTable = new JScrollPane();
 		this.scrollTree = new JScrollPane(this.tree);
 		this.buttons = new JPanel();
 		content.add(this.buttons, BorderLayout.NORTH);
@@ -79,8 +78,19 @@ public class ParseTemplateFrame extends EncogCommonFrame implements
 		this.btnNewRecognizer.addActionListener(this);
 		this.btnLoadDefault.addActionListener(this);
 		this.tree.addTreeSelectionListener(this);
-
+		this.tree.addMouseListener(this);
+		this.removeMouseListener(this);
+		
+		resetTable();
 		generateTree();
+	}
+	
+	private void resetTable()
+	{
+		this.table = new JTable(this.properties.getModel());
+		this.table.getColumnModel().getColumn(1).setCellEditor(this.editor = new EditorCellEditor());
+		this.scrollTable.setViewportView(this.table);
+		
 	}
 
 	public void windowOpened(WindowEvent e) {
@@ -145,20 +155,32 @@ public class ParseTemplateFrame extends EncogCommonFrame implements
 
 	public void valueChanged(TreeSelectionEvent e) {
 		TreePath path = this.tree.getSelectionPath();
+		
 		if (path != null) {
 			DefaultMutableTreeNode n = (DefaultMutableTreeNode) path
 					.getLastPathComponent();
 			Object obj = n.getUserObject();
+			
+			// clear the selection pointer
+			resetTable();
 			
 			// if its a String, then it is just a label
 			if( obj instanceof String )
 				this.properties.setData(null);
 			else
 				this.properties.setData(obj);
+			
 		}
 	}
 	
 	public void mouseClicked(final MouseEvent e) {
+		
+		if (MouseUtil.isRightClick(e)) {
+			TreePath path = this.tree.getPathForLocation(e.getX(), e.getY()); 
+			Object obj = path.getLastPathComponent();
+			System.out.println("right click:" + obj);
+		}
+		
 /*
 		final int index = this.contents.locationToIndex(e.getPoint());
 		final ListModel dlm = this.contents.getModel();
