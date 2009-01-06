@@ -95,6 +95,7 @@ public class EditorCellEditor implements TableCellEditor {
 	public boolean stopCellEditing() {
 		if( this.currentClass == Boolean.class ) {
 			this.value = this.editorBoolean.getSelectedIndex()==0;
+			System.out.println(this.value);
 			this.editorBoolean.setVisible(false);
 		}
 		else

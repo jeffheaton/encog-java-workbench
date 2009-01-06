@@ -103,6 +103,8 @@ public class ParseTableModel implements TableModel {
 					field.setDouble(this.data.getData(), Double.parseDouble((String)value));
 				} else if (type == float.class) {
 					field.setFloat(this.data.getData(), Float.parseFloat((String)value));
+				} else if (type == boolean.class) {
+					field.setBoolean(this.data.getData(), (Boolean)value);
 				}
 			} catch (IllegalArgumentException e) {
 				EncogWorkBench.displayError("Error Setting Value: " + this.data.getFieldName(row), e
