@@ -24,11 +24,12 @@ import org.encog.workbench.dialogs.EditSpiderOptions;
 import org.encog.workbench.dialogs.about.AboutEncog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
-import org.encog.workbench.editor.ParseTemplateFrame;
+import org.encog.workbench.editor.ObjectEditorFrame;
 import org.encog.workbench.frames.BrowserFrame;
 import org.encog.workbench.frames.Conversation;
 import org.encog.workbench.frames.NetworkFrame;
 import org.encog.workbench.frames.NetworkQueryFrame;
+import org.encog.workbench.frames.ParseTemplateFrame;
 import org.encog.workbench.frames.PropertyDataFrame;
 import org.encog.workbench.frames.TextEditorFrame;
 import org.encog.workbench.frames.TrainingDataFrame;
@@ -95,8 +96,11 @@ public class EncogDocumentOperations {
 		}
 		else if( item instanceof SpiderOptions )
 		{
-			EditSpiderOptions dialog = new EditSpiderOptions(owner);
 			SpiderOptions so = (SpiderOptions)item;
+			ObjectEditorFrame frame = new ObjectEditorFrame(so);
+			frame.show();
+			EditSpiderOptions dialog = new EditSpiderOptions(owner);
+			
 			
 			dialog.setObjectName(so.getName());
 			dialog.setObjectDescription(so.getDescription());
@@ -417,7 +421,7 @@ public class EncogDocumentOperations {
 	}
 
 	public void performEditConfig() {
-		ParseTemplateFrame config = new ParseTemplateFrame(EncogWorkBench.getInstance().getConfig());
+		ObjectEditorFrame config = new ObjectEditorFrame(EncogWorkBench.getInstance().getConfig());
 		config.setVisible(true);
 	}
 

@@ -13,12 +13,12 @@ import javax.swing.table.TableModel;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 
-public class ParseTableModel implements TableModel {
+public class ObjectEditorModel implements TableModel {
 
 	private PropertyCollection data;
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();
 
-	public ParseTableModel(PropertyCollection data)
+	public ObjectEditorModel(PropertyCollection data)
 	{
 		this.data = data;
 	}

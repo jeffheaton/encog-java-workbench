@@ -13,7 +13,7 @@ import org.encog.neural.persist.EncogPersistedObject;
 
 public class PropertyCollection {
 
-	private ParseTableModel model;
+	private ObjectEditorModel model;
 	private Object data;
 	private List<Field> fields = new ArrayList<Field>();
 	private List<String> fieldNames = new ArrayList<String>();
@@ -21,7 +21,7 @@ public class PropertyCollection {
 
 	public PropertyCollection(Object data) {
 		this.data = data;
-		this.model = new ParseTableModel(this);
+		this.model = new ObjectEditorModel(this);
 
 	}
 
@@ -82,7 +82,7 @@ public class PropertyCollection {
 	/**
 	 * @return the model
 	 */
-	public ParseTableModel getModel() {
+	public ObjectEditorModel getModel() {
 		return model;
 	}
 
