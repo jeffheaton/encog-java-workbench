@@ -24,62 +24,20 @@
  */
 package org.encog.workbench.frames.document;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
-import org.encog.EncogError;
-import org.encog.bot.spider.SpiderOptions;
-import org.encog.neural.data.NeuralData;
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.PropertyData;
-import org.encog.neural.data.TextData;
-import org.encog.neural.data.basic.BasicNeuralData;
-import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Network;
-import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.persist.EncogPersistedCollection;
-import org.encog.neural.persist.EncogPersistedObject;
-import org.encog.parse.ParseTemplate;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.CreateDataSet;
-import org.encog.workbench.dialogs.EditEncogObjectProperties;
-import org.encog.workbench.dialogs.EditSpiderOptions;
-import org.encog.workbench.dialogs.about.AboutEncog;
-import org.encog.workbench.dialogs.select.SelectDialog;
-import org.encog.workbench.dialogs.select.SelectItem;
-import org.encog.workbench.frames.BrowserFrame;
-import org.encog.workbench.frames.Conversation;
 import org.encog.workbench.frames.EncogListFrame;
-import org.encog.workbench.frames.NetworkFrame;
-import org.encog.workbench.frames.NetworkQueryFrame;
-import org.encog.workbench.frames.TrainingDataFrame;
-import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.render.EncogItemRenderer;
-import org.encog.workbench.frames.visualize.NetworkVisualizeFrame;
 import org.encog.workbench.models.EncogListModel;
-import org.encog.workbench.process.ImportExport;
-import org.encog.workbench.process.Training;
-import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.util.ExtensionFilter;
-import org.encog.workbench.util.ImportExportUtility;
-import org.encog.workbench.util.NeuralConst;
 
 public class EncogDocumentFrame extends EncogListFrame {
 

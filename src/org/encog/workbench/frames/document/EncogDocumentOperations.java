@@ -9,7 +9,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.encog.EncogError;
-import org.encog.bot.spider.SpiderOptions;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
@@ -20,7 +19,6 @@ import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.parse.ParseTemplate;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.EditSpiderOptions;
 import org.encog.workbench.dialogs.about.AboutEncog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
@@ -92,56 +90,6 @@ public class EncogDocumentOperations {
 				final ParseTemplateFrame frame = new ParseTemplateFrame(data);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
-			}
-		}
-		else if( item instanceof SpiderOptions )
-		{
-			SpiderOptions so = (SpiderOptions)item;
-			ObjectEditorFrame frame = new ObjectEditorFrame(so);
-			frame.show();
-			EditSpiderOptions dialog = new EditSpiderOptions(owner);
-			
-			
-			dialog.setObjectName(so.getName());
-			dialog.setObjectDescription(so.getDescription());
-			dialog.setTimeout(so.getTimeout());		
-			dialog.setMaxDepth(so.getMaxDepth());
-			dialog.setUserAgent(so.getUserAgent());
-			dialog.setCorePoolSize(so.getCorePoolSize());
-			dialog.setPoolSize(so.getMaximumPoolSize());
-			dialog.setKeepAlive(so.getKeepAliveTime());
-			dialog.setDbDriver(so.getDbClass());
-			dialog.setDbPWD(so.getDbPWD());
-			dialog.setDbUID(so.getDbUID());
-			dialog.setDbURL(so.getDbURL());
-			dialog.setWorkload(so.getWorkloadManager());
-			if( so.getFilter().size()>0 )
-			{
-				dialog.setFilter(so.getFilter().get(0));
-			}
-			dialog.setStartup(so.getStartup());
-			
-			if(dialog.process())
-			{
-				so.setName(dialog.getObjectName());
-				so.setDescription(dialog.getObjectDescription());
-				so.setTimeout(dialog.getTimeout());		
-				so.setMaxDepth(dialog.getMaxDepth());
-				so.setUserAgent(dialog.getUserAgent());
-				so.setCorePoolSize(dialog.getCorePoolSize());
-				so.setMaximumPoolSize(dialog.getPoolSize());
-				so.setKeepAliveTime(dialog.getKeepAlive());
-				so.setDbClass(dialog.getDbDriver());
-				so.setDbPWD(dialog.getDbPWD());
-				so.setDbUID(dialog.getDbUID());
-				so.setDbURL(dialog.getDbURL());
-				so.setWorkloadManager(dialog.getWorkload());
-				so.getFilter().clear();
-				if( dialog.getFilter()!=null && dialog.getFilter().length()>0 )
-				{
-					so.getFilter().add(dialog.getFilter());
-				}
-				so.setStartup(dialog.getStartup());
 			}
 		}
 	}
@@ -299,7 +247,6 @@ public class EncogDocumentOperations {
 		list.add(itemNetwork = new SelectItem("Neural Network"));
 		list.add(itemTemplate = new SelectItem("Parser Template"));
 		list.add(itemOptions = new SelectItem("Property Data"));
-		list.add(itemSpider = new SelectItem("Spider Options"));
 		list.add(itemText = new SelectItem("Text"));
 		list.add(itemTraining = new SelectItem("Training Data"));
 				
@@ -327,13 +274,7 @@ public class EncogDocumentOperations {
 			trainingData.setDescription("Training data");
 			EncogWorkBench.getInstance().getCurrentFile().add(trainingData);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
-		} else if( result == itemSpider ) {
-			final SpiderOptions options = new SpiderOptions();
-			options.setName("spider-" + this.spiderCount++);
-			options.setDescription("Spider options");
-			EncogWorkBench.getInstance().getCurrentFile().add(options);
-			EncogWorkBench.getInstance().getMainWindow().redraw();
-		} else if( result == itemTemplate ) {
+		}  else if( result == itemTemplate ) {
 			final ParseTemplate template = new ParseTemplate();
 			template.setName("parse-" + this.parseCount++);
 			template.setDescription("A parse template");
