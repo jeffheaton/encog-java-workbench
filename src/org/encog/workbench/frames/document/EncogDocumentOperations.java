@@ -44,7 +44,6 @@ public class EncogDocumentOperations {
 	
 	private int trainingCount = 1;
 	private int networkCount = 1;
-	private int spiderCount = 1;
 	private int parseCount = 1;
 	private int optionsCount = 1;
 	private int textCount = 1;
