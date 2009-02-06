@@ -26,32 +26,43 @@ package org.encog.workbench;
 
 import java.awt.Frame;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.swing.JOptionPane;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.sax.TransformerHandler;
 
 import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.neural.persist.persistors.generic.Object2XML;
+import org.encog.neural.persist.persistors.generic.XML2Object;
 import org.encog.util.XMLUtil;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import java.util.List;
+
 /**
- * Main class for the Encog Workbench.  The main method in this class
- * starts up the application.  This is a singleton.
+ * Main class for the Encog Workbench. The main method in this class starts up
+ * the application. This is a singleton.
+ * 
  * @author jheaton
- *
+ * 
  */
 public class EncogWorkBench {
 
 	public final static String CONFIG_FILENAME = "EncogWorkbench.conf";
-	
+
 	/**
 	 * The singleton instance.
 	 */
@@ -66,7 +77,7 @@ public class EncogWorkBench {
 	 * The current file being edited.
 	 */
 	private EncogPersistedCollection currentFile;
-	
+
 	/**
 	 * Config info for the workbench.
 	 */
@@ -76,27 +87,32 @@ public class EncogWorkBench {
 	 * The current filename being edited.
 	 */
 	private String currentFileName;
-	
-	public EncogWorkBench()
-	{
+
+	public EncogWorkBench() {
 		this.config = new EncogWorkBenchConfig();
 	}
 
 	/**
 	 * Display a dialog box to ask a question.
-	 * @param title The title of the dialog box.
-	 * @param question The question to ask.
+	 * 
+	 * @param title
+	 *            The title of the dialog box.
+	 * @param question
+	 *            The question to ask.
 	 * @return True if the user answered yes.
 	 */
 	public static boolean askQuestion(final String title, final String question) {
-		return JOptionPane.showConfirmDialog(null,
-				question, title, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+		return JOptionPane.showConfirmDialog(null, question, title,
+				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
 	}
 
 	/**
 	 * Display an error dialog.
-	 * @param title The title of the error dialog.
-	 * @param message The message to display.
+	 * 
+	 * @param title
+	 *            The title of the error dialog.
+	 * @param message
+	 *            The message to display.
 	 */
 	public static void displayError(final String title, final String message) {
 		JOptionPane.showMessageDialog(null, message, title,
@@ -105,8 +121,11 @@ public class EncogWorkBench {
 
 	/**
 	 * Display a message dialog.
-	 * @param title The title of the message dialog.
-	 * @param message The message to be displayed.
+	 * 
+	 * @param title
+	 *            The title of the message dialog.
+	 * @param message
+	 *            The message to be displayed.
 	 */
 	public static void displayMessage(final String title, final String message) {
 		JOptionPane.showMessageDialog(null, message, title,
@@ -115,6 +134,7 @@ public class EncogWorkBench {
 
 	/**
 	 * Determine which top-level frame has the focus.
+	 * 
 	 * @return The frame that has the focus.
 	 */
 	public static Frame getCurrentFocus() {
@@ -129,6 +149,7 @@ public class EncogWorkBench {
 
 	/**
 	 * Get the singleton instance.
+	 * 
 	 * @return The instance of the application.
 	 */
 	public static EncogWorkBench getInstance() {
@@ -207,10 +228,11 @@ public class EncogWorkBench {
 	}
 
 	/**
-	 * The main entry point into the program.  To support opening documents
-	 * by double clicking their file, the first parameter specifies a file
-	 * to open.
-	 * @param args The first argument specifies an option file to open.
+	 * The main entry point into the program. To support opening documents by
+	 * double clicking their file, the first parameter specifies a file to open.
+	 * 
+	 * @param args
+	 *            The first argument specifies an option file to open.
 	 */
 	public static void main(final String args[]) {
 		final EncogWorkBench workBench = EncogWorkBench.getInstance();
@@ -219,21 +241,19 @@ public class EncogWorkBench {
 		if (args.length > 0) {
 			EncogWorkBench.load(args[0]);
 		}
-		try
-		{
+		try {
 			loadConfig();
 			workBench.getMainWindow().setVisible(true);
 			saveConfig();
-		}
-		catch(Throwable t)
-		{
+		} catch (Throwable t) {
 			t.printStackTrace();
 		}
 	}
 
-	private static void saveConfig() throws TransformerConfigurationException, IOException, SAXException {
+	private static void saveConfig() throws TransformerConfigurationException,
+			IOException, SAXException {
 		String home = System.getProperty("user.home");
-		File file = new File(home,CONFIG_FILENAME);
+		File file = new File(home, CONFIG_FILENAME);
 		OutputStream os = new FileOutputStream(file);
 		final TransformerHandler hd = XMLUtil.saveXML(os);
 		hd.startDocument();
@@ -241,22 +261,39 @@ public class EncogWorkBench {
 		conv.save(EncogWorkBench.getInstance().getConfig(), hd);
 		hd.endDocument();
 		os.close();
-		
+
 	}
 
-	private static void loadConfig() {
+	private static void loadConfig() throws ParserConfigurationException,
+			SAXException {
 		String home = System.getProperty("user.home");
-		File file = new File(home,CONFIG_FILENAME);
-		
+		File file = new File(home, CONFIG_FILENAME);
+
+		try {
+			InputStream is = new FileInputStream(file);
+			final DocumentBuilderFactory dbf = DocumentBuilderFactory
+					.newInstance();
+
+			DocumentBuilder db = null;
+			db = dbf.newDocumentBuilder();
+
+			Document doc = null;
+			doc = db.parse(is);
+			final Element element = doc.getDocumentElement();
+
+			XML2Object conv = new XML2Object();
+			conv.loadObject(element,EncogWorkBench.getInstance().getConfig());
+			is.close();
+		} catch (IOException e) {
+			// error reading file, will create it later!
+		}
 	}
 
 	public static String displayInput(String prompt) {
-		return JOptionPane.showInputDialog(null, 
-				prompt,"");
+		return JOptionPane.showInputDialog(null, prompt, "");
 	}
-	
-	public EncogWorkBenchConfig getConfig()
-	{
+
+	public EncogWorkBenchConfig getConfig() {
 		return this.config;
 	}
 
