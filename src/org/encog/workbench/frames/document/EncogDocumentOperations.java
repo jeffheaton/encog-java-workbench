@@ -321,6 +321,15 @@ public class EncogDocumentOperations {
 	}
 
 	public void performChat() {
+		
+		String str = EncogWorkBench.getInstance().getConfig().getDatabaseConnectionString();
+		
+		if( str==null || str.length()==0)
+		{
+			EncogWorkBench.displayError("Can't Start Conversation", "Encog NLP requires a database connection that\n points to a valid Encog database. Please configure such a database under the 'Config' menu.");
+			return;
+		}
+		
 		String you = System.getProperty("user.name");
 		if(you==null)
 			you = "You";

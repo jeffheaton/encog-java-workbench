@@ -32,6 +32,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  * The about box for Encog Workbench.
@@ -43,6 +44,9 @@ public class AboutEncog extends JDialog implements ActionListener {
 	 * The serial id.
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private AboutEncogPanel aboutPanel;
+	private JScrollPane scroll;
 
 	/**
 	 * Construct the dialog box.
@@ -52,7 +56,9 @@ public class AboutEncog extends JDialog implements ActionListener {
 		setTitle("About Encog Workbench");
 		final Container content = getContentPane();
 		content.setLayout(new BorderLayout());
-		content.add(new AboutEncogPanel(), BorderLayout.CENTER);
+		this.aboutPanel = new AboutEncogPanel();
+		this.scroll = new JScrollPane(this.aboutPanel);
+		content.add(this.scroll, BorderLayout.CENTER);
 		final JPanel buttonPanel = new JPanel();
 		final JButton ok = new JButton("OK");
 		buttonPanel.add(ok);

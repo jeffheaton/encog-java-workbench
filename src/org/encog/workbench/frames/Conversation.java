@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
-import org.encog.nlp.Context;
+import org.encog.nlp.EncogNLP;
 import org.encog.nlp.memory.RomMemory;
 
 /**
@@ -31,7 +31,7 @@ public class Conversation extends JFrame implements ActionListener {
 	public String yourName;
 	public String otherName;
 	private StringBuilder listing = new StringBuilder();
-	private Context context;
+	private EncogNLP nlp;
 
 	private JTextPane fromBoth;
 	private JTextPane fromYou;
@@ -43,11 +43,8 @@ public class Conversation extends JFrame implements ActionListener {
 		this.otherName = otherName;
 		setTitle(title);
 		initComponents();
-		context = new Context();
-		
-			//context.init();
-		
-		RomMemory.load(context.getMemory());
+		nlp = new EncogNLP(null);
+
 		fromBoth.setContentType("text/html");
 	}
 
@@ -108,7 +105,7 @@ public class Conversation extends JFrame implements ActionListener {
 		String message = fromYou.getText().trim();
 		if (message.length() > 0) {
 			addMessage(COLOR_RED, this.yourName, message);
-			String response = context.getEvaluate().parse(message);
+			String response = this.nlp.getEvaluate().parse(message);
 			addMessage(COLOR_BLUE, this.otherName, response);
 			fromYou.setText("");
 		}

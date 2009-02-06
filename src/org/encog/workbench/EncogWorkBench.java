@@ -25,12 +25,22 @@
 package org.encog.workbench;
 
 import java.awt.Frame;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import javax.swing.JOptionPane;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.sax.TransformerHandler;
 
 import org.encog.neural.persist.EncogPersistedCollection;
+import org.encog.neural.persist.persistors.generic.Object2XML;
+import org.encog.util.XMLUtil;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.xml.sax.SAXException;
 
 /**
  * Main class for the Encog Workbench.  The main method in this class
@@ -40,6 +50,8 @@ import org.encog.workbench.frames.document.EncogDocumentFrame;
  */
 public class EncogWorkBench {
 
+	public final static String CONFIG_FILENAME = "EncogWorkbench.conf";
+	
 	/**
 	 * The singleton instance.
 	 */
@@ -207,8 +219,35 @@ public class EncogWorkBench {
 		if (args.length > 0) {
 			EncogWorkBench.load(args[0]);
 		}
+		try
+		{
+			loadConfig();
+			workBench.getMainWindow().setVisible(true);
+			saveConfig();
+		}
+		catch(Throwable t)
+		{
+			t.printStackTrace();
+		}
+	}
 
-		workBench.getMainWindow().setVisible(true);
+	private static void saveConfig() throws TransformerConfigurationException, IOException, SAXException {
+		String home = System.getProperty("user.home");
+		File file = new File(home,CONFIG_FILENAME);
+		OutputStream os = new FileOutputStream(file);
+		final TransformerHandler hd = XMLUtil.saveXML(os);
+		hd.startDocument();
+		Object2XML conv = new Object2XML();
+		conv.save(EncogWorkBench.getInstance().getConfig(), hd);
+		hd.endDocument();
+		os.close();
+		
+	}
+
+	private static void loadConfig() {
+		String home = System.getProperty("user.home");
+		File file = new File(home,CONFIG_FILENAME);
+		
 	}
 
 	public static String displayInput(String prompt) {

@@ -24,6 +24,7 @@
  */
 package org.encog.workbench.dialogs.about;
 
+import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.io.File;
@@ -35,6 +36,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.encog.workbench.util.EncogFonts;
 import org.encog.Encog;
@@ -59,6 +61,9 @@ public class AboutEncogPanel extends JPanel {
 	 * Construct the panel.
 	 */
 	public AboutEncogPanel() {
+		
+		setPreferredSize(new Dimension(800, 3000));
+		
 		final String path = System.getProperty("java.class.path");
 		final StringTokenizer tok = new StringTokenizer(path, ""
 				+ File.pathSeparatorChar);
@@ -79,18 +84,7 @@ public class AboutEncogPanel extends JPanel {
 
 	}
 
-	/**
-	 * Center the specified line of text.
-	 * @param g The graphics object to use.
-	 * @param s The string to display.
-	 * @param y The y-coordinate.
-	 */
-	private void center(final Graphics g, final String s, final int y) {
-		final FontMetrics fm = g.getFontMetrics();
-		final int width = this.getBounds().width;
-		final int strWidth = fm.stringWidth(s);
-		g.drawString(s, width / 2 - strWidth / 2, y);
-	}
+
 
 	/**
 	 * Paint the panel.
@@ -102,13 +96,13 @@ public class AboutEncogPanel extends JPanel {
 		g.setFont(EncogFonts.getInstance().getTitleFont());
 		int y = fm.getHeight();
 		g.setFont(EncogFonts.getInstance().getTitleFont());
-		center(g, "Encog Workbench v1.0", y);
+		g.drawString("Encog Workbench v1.2", 0, y);
 		y += g.getFontMetrics().getHeight();
 
 		g.setFont(EncogFonts.getInstance().getBodyFont());
-		center(g, "Copyright 2008 by Heaton Research, Inc.", y);
+		g.drawString( "Copyright 2009 by Heaton Research, Inc.", 0, y);
 		y += g.getFontMetrics().getHeight();
-		center(g, "Released under the LGPL license", y);
+		g.drawString( "Released under the LGPL license", 0, y);
 		y += g.getFontMetrics().getHeight();
 		y += g.getFontMetrics().getHeight();
 
