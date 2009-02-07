@@ -2,11 +2,13 @@ package org.encog.workbench.frames.document;
 
 import java.awt.Frame;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.xml.transform.TransformerConfigurationException;
 
 import org.encog.EncogError;
 import org.encog.neural.data.NeuralDataSet;
@@ -19,6 +21,7 @@ import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.parse.ParseTemplate;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.about.AboutEncog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
@@ -37,6 +40,7 @@ import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.NeuralConst;
+import org.xml.sax.SAXException;
 
 public class EncogDocumentOperations {
 
@@ -372,6 +376,14 @@ public class EncogDocumentOperations {
 	public void performEditConfig() {
 		ObjectEditorFrame config = new ObjectEditorFrame(EncogWorkBench.getInstance().getConfig());
 		config.setVisible(true);
+
+	}
+
+	public void performObjectsProperties() {
+		final EncogPersistedObject selected = (EncogPersistedObject)owner.getContents().getSelectedValue();
+		final EditEncogObjectProperties dialog = new EditEncogObjectProperties
+		(owner, selected);
+		dialog.process();		
 	}
 
 }

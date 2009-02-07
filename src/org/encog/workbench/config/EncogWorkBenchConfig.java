@@ -8,6 +8,7 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	private String databaseDriver = "";
 	private String databaseUserID = "";
 	private String databasePassword = "";
+	private String databaseDialect = "";
 	public String getDatabaseConnectionString() {
 		return databaseConnectionString;
 	}
@@ -49,6 +50,12 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	}
 	
 	public void setName(String theName) {
+	}
+	public String getDatabaseDialect() {
+		return databaseDialect;
+	}
+	public void setDatabaseDialect(String databaseDialect) {
+		this.databaseDialect = databaseDialect;
 	}
 	
 	

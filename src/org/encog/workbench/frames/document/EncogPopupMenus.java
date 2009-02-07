@@ -32,6 +32,7 @@ public class EncogPopupMenus {
 	private JPopupMenu popupGeneral;
 	private JMenuItem popupGeneralOpen;
 	private JMenuItem popupGeneralDelete;
+	private JMenuItem popupGeneralProperties;
 	private EncogDocumentFrame owner;
 	
 	public EncogPopupMenus(EncogDocumentFrame owner) {
@@ -59,6 +60,7 @@ public class EncogPopupMenus {
 		this.popupGeneral = new JPopupMenu();
 		this.popupGeneralDelete = owner.addItem(this.popupGeneral, "Delete", 'd');
 		this.popupGeneralOpen = owner.addItem(this.popupGeneral, "Open", 'o');
+		this.popupGeneralProperties = owner.addItem(this.popupGeneral, "Properties", 'p');
 	}
 
 
@@ -93,6 +95,8 @@ public class EncogPopupMenus {
 			owner.getOperations().performObjectsDelete();
 		} else if (event.getSource() == this.popupGeneralOpen) {
 			owner.getOperations().openItem(selected);
+		} else if (event.getSource() == this.popupGeneralProperties) {
+			owner.getOperations().performObjectsProperties();
 		}
 	}
 	

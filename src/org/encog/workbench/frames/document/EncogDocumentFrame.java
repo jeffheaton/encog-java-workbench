@@ -27,10 +27,12 @@ package org.encog.workbench.frames.document;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.xml.transform.TransformerConfigurationException;
 
 import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
@@ -38,6 +40,7 @@ import org.encog.workbench.frames.EncogListFrame;
 import org.encog.workbench.frames.render.EncogItemRenderer;
 import org.encog.workbench.models.EncogListModel;
 import org.encog.workbench.util.ExtensionFilter;
+import org.xml.sax.SAXException;
 
 public class EncogDocumentFrame extends EncogListFrame {
 
@@ -123,12 +126,29 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.popupMenus.rightMouseClicked(e, item);
 	}
 
-	public void windowClosed(final WindowEvent e) {
+	public void windowClosed(final WindowEvent e) {		
 		System.exit(0);
 
 	}
 
 	public void windowOpened(final WindowEvent e) {
+	}
+	
+	public void windowClosing(final WindowEvent e)
+	{
+		super.windowClosing(e);
+		try
+		{
+			EncogWorkBench.saveConfig();
+		}
+		catch(IOException ex)
+		{
+			EncogWorkBench.displayError("Error Saving Config", ex.getMessage());
+		} catch (TransformerConfigurationException ex) {
+
+		} catch (SAXException ex) {
+
+		}
 	}
 
 	/**

@@ -58,6 +58,8 @@ public class EditEncogObjectProperties extends JDialog implements
 	public EditEncogObjectProperties(final Frame owner,
 			final EncogPersistedObject object) {
 		super(owner, true);
+		
+		setTitle("Edit: " + object.getClass().getSimpleName());
 
 		this.setLocation(200, 100);
 

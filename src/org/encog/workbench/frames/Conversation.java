@@ -19,6 +19,8 @@ import javax.swing.JTextPane;
 
 import org.encog.nlp.EncogNLP;
 import org.encog.nlp.memory.RomMemory;
+import org.encog.util.orm.ORMSession;
+import org.encog.workbench.EncogWorkBench;
 
 /**
  * 
@@ -43,7 +45,8 @@ public class Conversation extends JFrame implements ActionListener {
 		this.otherName = otherName;
 		setTitle(title);
 		initComponents();
-		nlp = new EncogNLP(null);
+		ORMSession session = EncogWorkBench.getInstance().openDatabaseSession();
+		nlp = new EncogNLP(session);
 
 		fromBoth.setContentType("text/html");
 	}

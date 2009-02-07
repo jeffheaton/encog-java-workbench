@@ -44,6 +44,8 @@ import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.neural.persist.persistors.generic.Object2XML;
 import org.encog.neural.persist.persistors.generic.XML2Object;
 import org.encog.util.XMLUtil;
+import org.encog.util.orm.ORMSession;
+import org.encog.util.orm.SessionManager;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.w3c.dom.Document;
@@ -82,6 +84,8 @@ public class EncogWorkBench {
 	 * Config info for the workbench.
 	 */
 	private EncogWorkBenchConfig config;
+
+	private SessionManager sessionManager;
 
 	/**
 	 * The current filename being edited.
@@ -244,13 +248,12 @@ public class EncogWorkBench {
 		try {
 			loadConfig();
 			workBench.getMainWindow().setVisible(true);
-			saveConfig();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
 	}
 
-	private static void saveConfig() throws TransformerConfigurationException,
+	public static void saveConfig() throws TransformerConfigurationException,
 			IOException, SAXException {
 		String home = System.getProperty("user.home");
 		File file = new File(home, CONFIG_FILENAME);
@@ -264,7 +267,7 @@ public class EncogWorkBench {
 
 	}
 
-	private static void loadConfig() throws ParserConfigurationException,
+	public static void loadConfig() throws ParserConfigurationException,
 			SAXException {
 		String home = System.getProperty("user.home");
 		File file = new File(home, CONFIG_FILENAME);
@@ -282,10 +285,10 @@ public class EncogWorkBench {
 			final Element element = doc.getDocumentElement();
 
 			XML2Object conv = new XML2Object();
-			conv.loadObject(element,EncogWorkBench.getInstance().getConfig());
+			conv.load(element, EncogWorkBench.getInstance().getConfig());
 			is.close();
-		} catch (IOException e) {
-			// error reading file, will create it later!
+		} catch (Exception e) {
+			displayError("Error Reading Config File", e.getMessage());
 		}
 	}
 
@@ -295,6 +298,26 @@ public class EncogWorkBench {
 
 	public EncogWorkBenchConfig getConfig() {
 		return this.config;
+	}
+
+	public ORMSession openDatabaseSession() {
+		try {
+			if (this.sessionManager == null) {
+				this.sessionManager = new SessionManager(this.config
+						.getDatabaseDriver(), this.config
+						.getDatabaseConnectionString(), this.config
+						.getDatabaseUserID(),
+						this.config.getDatabasePassword(), this.config
+								.getDatabaseDialect());
+			}
+			
+			return this.sessionManager.openSession();
+			
+		} catch (Exception e) {
+			this.sessionManager = null;
+			displayError("Can't connect to database", e.getMessage());
+		}
+		return null;
 	}
 
 }
