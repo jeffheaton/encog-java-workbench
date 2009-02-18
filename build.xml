@@ -7,7 +7,7 @@
 	<property name="build" location="bin" />
 	<property name="dist" location="lib" />
 	<property name="ext_jar" location="jar" />
-	<property name="classpath" value="jar/encog-core.jar:jar/jfreechart-1.0.11.jar:jar/jcommon-1.0.14.jar" />
+	<property name="classpath" value="jar/encog-core.jar:jar/jfreechart-1.0.11.jar:jar/jcommon-1.0.14.jar:jar/antlr-2.7.6.jar:jar/commons-collections-3.1.jar:jar/dom4j-1.6.1.jar:jar/ejb3-persistence.jar:jar/hibernate3.jar:jar/hibernate-annotations.jar:jar/hibernate-commons-annotations.jar:jar/hibernate-core.jar:jar/javassist-3.4.GA.jar:jar/jta-1.1.jar:jar/slf4j-api-1.5.6.jar:jar/slf4j-jdk14-1.5.6.jar" />
 
 
 	<target name="init">
