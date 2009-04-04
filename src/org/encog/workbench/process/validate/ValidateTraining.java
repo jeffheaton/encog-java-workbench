@@ -26,10 +26,7 @@ package org.encog.workbench.process.validate;
 
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Layer;
-import org.encog.neural.networks.layers.FeedforwardLayer;
-import org.encog.neural.networks.layers.HopfieldLayer;
-import org.encog.neural.networks.layers.SOMLayer;
+import org.encog.neural.networks.layers.Layer;
 import org.encog.workbench.EncogWorkBench;
 
 public class ValidateTraining {
@@ -45,7 +42,7 @@ public class ValidateTraining {
 
 	@SuppressWarnings("unchecked")
 	public boolean validateContainsLayer(final Class layerType) {
-		for (final Layer layer : this.network.getLayers()) {
+		for (final Layer layer : this.network.getStructure().getLayers()) {
 			if (layer.getClass().getName().equals(layerType.getName())) {
 				return true;
 			}

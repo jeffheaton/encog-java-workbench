@@ -43,7 +43,7 @@ import javax.swing.WindowConstants;
 
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Train;
+import org.encog.neural.networks.training.Train;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.TimeSpanFormatter;
 

@@ -150,7 +150,7 @@ public class Training {
 
 			final ProgressSOM train = new ProgressSOM(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
-					.getMaxError(), dialog.getMethod(), dialog
+					.getMaxError(),  dialog
 					.getLearningRate());
 
 			train.setVisible(true);

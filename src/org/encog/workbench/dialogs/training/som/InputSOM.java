@@ -33,7 +33,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.encog.neural.networks.training.som.TrainSelfOrganizingMap.LearningMethod;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
@@ -59,15 +58,7 @@ public class InputSOM extends BasicTrainingInput {
 	 */
 	private double learningRate;
 	
-	/**
-	 * Combo box for the learning method.
-	 */
-	private final JComboBox cbMethod;
-
-	/**
-	 * The learning method.
-	 */
-	private LearningMethod method;
+	
 
 	/**
 	 * Construct the dialog box.
@@ -85,17 +76,8 @@ public class InputSOM extends BasicTrainingInput {
 		final Container content = getBodyPanel();
 		content.setLayout(new GridLayout(6, 1, 10, 10));
 
-		this.cbMethod = new JComboBox();
-		final String[] languages = { "Additive", "Subtractive" };
-
-		this.cbMethod.setModel(new DefaultComboBoxModel(languages));
-
 		content.add(new JLabel("Learning Rate"));
 		content.add(this.txtlearningRate);
-
-		content.add(new JLabel("Method"));
-		content.add(this.cbMethod);
-
 		this.txtlearningRate.setText("0.7");
 
 	}
@@ -108,11 +90,7 @@ public class InputSOM extends BasicTrainingInput {
 		super.collectFields();
 		this.learningRate = this.validateFieldNumeric("learning rate",
 				this.txtlearningRate);
-		if (this.cbMethod.getSelectedIndex() == 1) {
-			this.method = LearningMethod.ADDITIVE;
-		} else {
-			this.method = LearningMethod.SUBTRACTIVE;
-		}
+		
 
 	}
 
@@ -121,13 +99,6 @@ public class InputSOM extends BasicTrainingInput {
 	 */
 	public double getLearningRate() {
 		return this.learningRate;
-	}
-
-	/**
-	 * @return The learning method.
-	 */
-	public LearningMethod getMethod() {
-		return this.method;
 	}
 
 	/**

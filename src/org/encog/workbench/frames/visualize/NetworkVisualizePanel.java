@@ -34,7 +34,6 @@ import javax.swing.JPanel;
 
 import org.encog.matrix.Matrix;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Layer;
 
 public class NetworkVisualizePanel extends JPanel {
 

@@ -28,8 +28,9 @@ import java.awt.Frame;
 
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Train;
+import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.genetic.TrainingSetNeuralGeneticAlgorithm;
+import org.encog.util.randomize.RangeRandomizer;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
 /**
@@ -106,7 +107,7 @@ public class ProgressGenetic extends BasicTrainingProgress {
 	@Override
 	public void startup() {
 		final Train train = new TrainingSetNeuralGeneticAlgorithm(getNetwork(),
-				true, getTrainingData(), this.populationSize,
+				new RangeRandomizer(-1,1), getTrainingData(), this.populationSize,
 				this.mutationPercent, this.percentToMate);
 
 		setTrain(train);

@@ -97,8 +97,6 @@ public class BrowserFrame extends EncogCommonFrame implements TreeSelectionListe
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource()==this.goButton )
 		{
-			try
-			{
 				this.browser = new Browser();
 				browser.navigate(this.address.getText());
 				this.page = browser.getCurrentPage();
@@ -111,11 +109,7 @@ public class BrowserFrame extends EncogCommonFrame implements TreeSelectionListe
 				model.reload();
 				tree.invalidate();
 				
-			}
-			catch(IOException ex)
-			{
-				EncogWorkBench.displayError("Error",ex.getMessage());
-			}
+	
 		}
 		
 	}

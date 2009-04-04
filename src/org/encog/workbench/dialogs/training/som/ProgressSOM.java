@@ -28,9 +28,9 @@ import java.awt.Frame;
 
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Train;
-import org.encog.neural.networks.training.som.TrainSelfOrganizingMap;
-import org.encog.neural.networks.training.som.TrainSelfOrganizingMap.LearningMethod;
+import org.encog.neural.networks.training.Train;
+import org.encog.neural.networks.training.competitive.CompetitiveTraining;
+import org.encog.neural.networks.training.competitive.neighborhood.NeighborhoodSingle;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
 /**
@@ -48,11 +48,6 @@ public class ProgressSOM extends BasicTrainingProgress {
 	 * The learning rate.
 	 */
 	private final double learningRate;
-	
-	/**
-	 * The learning method.
-	 */
-	private final LearningMethod method;
 
 	/**
 	 * Construct the dialog box.
@@ -65,13 +60,12 @@ public class ProgressSOM extends BasicTrainingProgress {
 	 */
 	public ProgressSOM(final Frame owner, final BasicNetwork network,
 			final NeuralDataSet trainingData, final double learningRate,
-			final LearningMethod method, final double maxError) {
+			final double maxError) {
 		super(owner);
 		setTitle("SOM Training");
 		setNetwork(network);
 		setTrainingData(trainingData);
 		this.learningRate = learningRate;
-		this.method = method;
 		setMaxError(maxError);
 
 	}
@@ -98,8 +92,8 @@ public class ProgressSOM extends BasicTrainingProgress {
 	 */
 	@Override
 	public void startup() {
-		final Train train = new TrainSelfOrganizingMap(getNetwork(),
-				getTrainingData(), this.method, this.learningRate);
+		final Train train = new CompetitiveTraining(getNetwork(),
+				this.learningRate,getTrainingData(),  new NeighborhoodSingle());
 
 		setTrain(train);
 	}
