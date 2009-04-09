@@ -33,7 +33,7 @@ import javax.swing.JTable;
 
 import org.encog.matrix.Matrix;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Layer;
+import org.encog.neural.networks.layers.Layer;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.MatrixTableModel;
 

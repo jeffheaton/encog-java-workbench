@@ -130,14 +130,14 @@ public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
 	 * combo boxes.
 	 */
 	private void findData() {
-		for (final EncogPersistedObject obj : EncogWorkBench.getInstance()
-				.getCurrentFile().getList()) {
+		/*for (final DirectoryEntry obj : EncogWorkBench.getInstance()
+				.getCurrentFile().getDirectory()) {
 			if (obj instanceof BasicNetwork) {
 				this.networks.add(obj.getName());
 			} else if (obj instanceof BasicNeuralDataSet) {
 				this.trainingSets.add(obj.getName());
 			}
-		}
+		}*/
 	}
 
 	/**

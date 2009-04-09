@@ -1,9 +1,11 @@
 package org.encog.workbench.config;
 
+import org.encog.EncogError;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.neural.persist.Persistor;
 
 public class EncogWorkBenchConfig implements EncogPersistedObject {
+	
 	private String databaseConnectionString = "";
 	private String databaseDriver = "";
 	private String databaseUserID = "";
@@ -58,6 +60,10 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 		this.databaseDialect = databaseDialect;
 	}
 	
+	public Object clone()
+	{
+		throw new EncogError("Clone not supported");
+	}
 	
 	
 }

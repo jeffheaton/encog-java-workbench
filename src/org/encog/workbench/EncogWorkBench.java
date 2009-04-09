@@ -27,23 +27,17 @@ package org.encog.workbench;
 import java.awt.Frame;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.sax.TransformerHandler;
 
 import org.encog.neural.persist.EncogPersistedCollection;
-import org.encog.neural.persist.persistors.generic.Object2XML;
 import org.encog.neural.persist.persistors.generic.XML2Object;
-import org.encog.util.XMLUtil;
 import org.encog.util.orm.ORMSession;
 import org.encog.util.orm.SessionManager;
 import org.encog.workbench.config.EncogWorkBenchConfig;
@@ -51,8 +45,6 @@ import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
-
-import java.util.List;
 
 /**
  * Main class for the Encog Workbench. The main method in this class starts up
@@ -64,7 +56,8 @@ import java.util.List;
 public class EncogWorkBench {
 
 	public final static String CONFIG_FILENAME = "EncogWorkbench.conf";
-
+	public final static String TEMP_FILENAME = "encog.tmp";
+	
 	/**
 	 * The singleton instance.
 	 */
@@ -86,6 +79,8 @@ public class EncogWorkBench {
 	private EncogWorkBenchConfig config;
 
 	private SessionManager sessionManager;
+	
+	private File tempFile;
 
 	/**
 	 * The current filename being edited.
@@ -94,6 +89,13 @@ public class EncogWorkBench {
 
 	public EncogWorkBench() {
 		this.config = new EncogWorkBenchConfig();
+		
+		// create a temp file to hold new objects
+		this.tempFile = new File(
+				System.getProperty("java.io.tmpdir"),
+				EncogWorkBench.TEMP_FILENAME);
+		this.currentFile = new EncogPersistedCollection(this.tempFile);
+		this.currentFile.create();
 	}
 
 	/**
@@ -166,14 +168,13 @@ public class EncogWorkBench {
 
 	public static void load(final String filename) {
 		getInstance().setCurrentFileName(filename);
-		getInstance().getCurrentFile().clear();
-		getInstance().getCurrentFile().load(filename);
+		getInstance().setCurrentFile(new EncogPersistedCollection(filename));
 		getInstance().getMainWindow().redraw();
 	}
 
 	public static void save(final String filename) {
 		getInstance().setCurrentFileName(filename);
-		getInstance().getCurrentFile().save(filename);
+		//getInstance().getCurrentFile().save(filename);
 		getInstance().getMainWindow().redraw();
 	}
 
@@ -257,13 +258,7 @@ public class EncogWorkBench {
 			IOException, SAXException {
 		String home = System.getProperty("user.home");
 		File file = new File(home, CONFIG_FILENAME);
-		OutputStream os = new FileOutputStream(file);
-		final TransformerHandler hd = XMLUtil.saveXML(os);
-		hd.startDocument();
-		Object2XML conv = new Object2XML();
-		conv.save(EncogWorkBench.getInstance().getConfig(), hd);
-		hd.endDocument();
-		os.close();
+
 
 	}
 

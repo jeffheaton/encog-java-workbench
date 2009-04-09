@@ -133,7 +133,7 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 					+ getEncogObject().getName() + ")", 70, y);
 			y += regularMetrics.getHeight();
 			final BasicNetwork network = (BasicNetwork) getEncogObject();
-			g.drawString("Layers: " + network.getLayers().size(), 70, y);
+			//g.drawString("Layers: " + network.getLayers().size(), 70, y);
 		} else if (getEncogObject() instanceof NeuralDataSet) {
 			this.iconTrainingSet.paintIcon(this, g, 4, 4);
 			g.setFont(this.titleFont);

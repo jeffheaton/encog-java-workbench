@@ -32,9 +32,6 @@ import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Layer;
-import org.encog.neural.networks.layers.FeedforwardLayer;
-import org.encog.neural.networks.layers.SOMLayer;
 import org.encog.util.NormalizeInput;
 import org.encog.workbench.EncogWorkBench;
 
@@ -207,7 +204,7 @@ public class GenerateVB implements Generate {
 	}
 
 	private void generateNetwork() {
-		addUsing("Encog.Neural.Networks.Layers");
+/*		addUsing("Encog.Neural.Networks.Layers");
 		addUsing("Encog.Neural.Networks");
 		this.source.append("Private Function GetNetwork() As BasicNetwork\n");
 		this.source.append("  Dim network As New BasicNetwork()\n");
@@ -246,7 +243,7 @@ public class GenerateVB implements Generate {
 
 		this.source.append("  network.Reset()\n");
 		this.source.append("  Return network\n");
-		this.source.append("End Function\n");
+		this.source.append("End Function\n");*/
 	}
 
 	public void generateQuery() {

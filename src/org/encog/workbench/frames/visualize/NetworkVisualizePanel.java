@@ -54,7 +54,7 @@ public class NetworkVisualizePanel extends JPanel {
 	}
 
 	public void centerLayers(final int neuronWidth) {
-		int maxLayers = 0;
+		/*int maxLayers = 0;
 		int layerCount = 0;
 		for (final Layer layer : this.data.getLayers()) {
 			if (layer.getNeuronCount() > maxLayers) {
@@ -70,7 +70,7 @@ public class NetworkVisualizePanel extends JPanel {
 		for (final Layer layer : this.data.getLayers()) {
 			this.layerStarts[i++] = center - layer.getNeuronCount()
 					* neuronWidth / 2;
-		}
+		}*/
 	}
 
 	public void drawNeuron(final Graphics g, final int x, final int y,
@@ -125,7 +125,7 @@ public class NetworkVisualizePanel extends JPanel {
 		int hidden = 0;
 
 		int y = 0;
-		for (final Layer layer : this.data.getLayers()) {
+		/*for (final Layer layer : this.data.getLayers()) {
 			if (layer.isHidden()) {
 				hidden++;
 			}
@@ -174,6 +174,6 @@ public class NetworkVisualizePanel extends JPanel {
 			}
 			layerNum++;
 			y += NEURON_BOUNDS * 2;
-		}
+		}*/
 	}
 }

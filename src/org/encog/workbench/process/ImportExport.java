@@ -68,7 +68,7 @@ public class ImportExport {
 				ImportExportUtility.importCSV(set, fc.getSelectedFile()
 						.toString(), clear);
 				if (addit) {
-					EncogWorkBench.getInstance().getCurrentFile().add(set);
+//					EncogWorkBench.getInstance().getCurrentFile().add(set);
 					EncogWorkBench.getInstance().getMainWindow().redraw();
 				}
 			} catch (final Exception e) {

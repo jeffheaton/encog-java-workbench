@@ -40,10 +40,10 @@ public class ParseTemplateFrame extends ObjectEditorFrame {
 					.askQuestion(
 							"Are you sure?",
 							"Would you like to reset this parse template to the\ndefault Encog template? This will discard all changes.")) {
-				EncogPersistedCollection encog = new EncogPersistedCollection();
-				encog.loadResource(Parse.RESOURCE_NAME);
-				this.setData( (ParseTemplate) encog
-						.find(Parse.RESOURCE_ITEM_NAME) );
+				//EncogPersistedCollection encog = new EncogPersistedCollection();
+				//encog.loadResource(Parse.RESOURCE_NAME);
+				//this.setData( (ParseTemplate) encog
+				//		.find(Parse.RESOURCE_ITEM_NAME) );
 				generateTree();
 			}
 		} 

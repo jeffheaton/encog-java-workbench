@@ -59,9 +59,9 @@ public class ValidateTraining {
 			return false;
 		}
 
-		if (!validateContainsLayer(FeedforwardLayer.class)) {
+/*		if (!validateContainsLayer(FeedforwardLayer.class)) {
 			return false;
-		}
+		}*/
 
 		if (!validateInputSize()) {
 			return false;
@@ -79,9 +79,9 @@ public class ValidateTraining {
 			return false;
 		}
 
-		if (!validateContainsLayer(HopfieldLayer.class)) {
+/*		if (!validateContainsLayer(HopfieldLayer.class)) {
 			return false;
-		}
+		}*/
 
 		if (!validateIsSupervised()) {
 			return false;
@@ -158,9 +158,9 @@ public class ValidateTraining {
 			return false;
 		}
 
-		if (!validateContainsLayer(SOMLayer.class)) {
+/*		if (!validateContainsLayer(SOMLayer.class)) {
 			return false;
-		}
+		}*/
 
 		if (!validateInputSize()) {
 			return false;

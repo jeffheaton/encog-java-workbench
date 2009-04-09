@@ -49,52 +49,22 @@ public class MatrixTableModel implements TableModel {
 	}
 
 	public int getColumnCount() {
-		return this.layer.getMatrix().getCols() + 1;
+		return 0;//this.layer.getMatrix().getCols() + 1;
 	}
 
 	public String getColumnName(final int columnIndex) {
-		if (columnIndex == 0) {
-			return "";
-		}
-		
-		if( this.layer instanceof HopfieldLayer )
-		{
-			return "Neuron " + columnIndex;	
-		}
-		else
-		{
-		return "Next Layer: " + columnIndex;
-		}
+		return "";
+
 	}
 
 	public int getRowCount() {
-		return this.layer.getMatrix().getRows();
+		return 0;// this.layer.getMatrix().getRows();
 	}
 
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
 		
-		if( this.layer instanceof HopfieldLayer )
-
-		{
-			if (columnIndex == 0) {
-
-				return "Neuron " + (rowIndex + 1);
-
-			}
-			return "" + this.layer.getMatrix().get(rowIndex, columnIndex - 1);			
-		}
-		else
-		{
-			
-			if (columnIndex == 0) {
-				if (rowIndex == this.layer.getMatrix().getRows() - 1) {
-					return "Threshold: ";
-				}
-				return "This Layer: " + (rowIndex + 1);
-
-			}
-			return "" + this.layer.getMatrix().get(rowIndex, columnIndex - 1);
-			}		
+		return "";
+		
 	}
 
 	public boolean isCellEditable(final int rowIndex, final int columnIndex) {
@@ -111,7 +81,6 @@ public class MatrixTableModel implements TableModel {
 
 	public void setValueAt(final Object value, final int rowIndex,
 			final int columnIndex) {
-		this.layer.getMatrix().set(rowIndex, columnIndex - 1, Double
-				.parseDouble((String) value));
+		
 	}
 }

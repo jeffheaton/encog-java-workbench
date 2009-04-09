@@ -25,7 +25,8 @@
 package org.encog.workbench.models;
 
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Layer;
+import org.encog.neural.networks.layers.Layer;
+
 
 public class NetworkListModel extends CommonListModel {
 
@@ -37,7 +38,7 @@ public class NetworkListModel extends CommonListModel {
 
 	public void addLayer(final Layer base, final Layer layer) {
 		if (base != null) {
-			this.network.addLayer(base, layer);
+			//this.network.addLayer(base, layer);
 		} else {
 			this.network.addLayer(layer);
 		}
@@ -45,16 +46,16 @@ public class NetworkListModel extends CommonListModel {
 	}
 
 	public void deleteLayer(final int index) {
-		final Layer layer = this.network.getLayers().get(index);
-		this.network.removeLayer(layer);
+		//final Layer layer = this.network.getLayers().get(index);
+		//this.network.removeLayer(layer);
 		invalidate();
 	}
 
 	public Object getElementAt(final int i) {
-		return this.network.getLayers().get(i);
+		return 0;//this.network.getLayers().get(i);
 	}
 
 	public int getSize() {
-		return this.network.getLayers().size();
+		return 0;//this.network.getLayers().size();
 	}
 }

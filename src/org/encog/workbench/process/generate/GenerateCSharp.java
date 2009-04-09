@@ -32,9 +32,6 @@ import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Layer;
-import org.encog.neural.networks.layers.FeedforwardLayer;
-import org.encog.neural.networks.layers.SOMLayer;
 import org.encog.util.NormalizeInput;
 import org.encog.workbench.EncogWorkBench;
 
@@ -206,7 +203,7 @@ public class GenerateCSharp implements Generate {
 		addUsing("Encog.Neural.Networks");
 		this.source.append("private static BasicNetwork GetNetwork() {\n");
 		this.source.append("  BasicNetwork network = new BasicNetwork();\n");
-
+/*
 		for (final Layer layer : this.network.getLayers()) {
 			this.source.append("  network.AddLayer(new ");
 			this.source.append(layer.getClass().getSimpleName());
@@ -241,7 +238,7 @@ public class GenerateCSharp implements Generate {
 
 		this.source.append("  network.Reset();\n");
 		this.source.append("  return network;\n");
-		this.source.append("}\n");
+		this.source.append("}\n");*/
 	}
 
 	public void generateQuery() {

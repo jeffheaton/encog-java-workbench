@@ -74,9 +74,9 @@ public class ImportExportUtility {
 
 	public static void exportXML(final BasicNeuralDataSet obj,
 			final String filename) {
-		final EncogPersistedCollection save = new EncogPersistedCollection();
-		save.add(obj);
-		save.save(filename);
+		//final EncogPersistedCollection save = new EncogPersistedCollection();
+		//save.add(obj);
+		//save.save(filename);
 	}
 
 	public static void importCSV(final BasicNeuralDataSet set,

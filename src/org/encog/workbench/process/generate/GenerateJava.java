@@ -27,23 +27,12 @@ package org.encog.workbench.process.generate;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.encog.neural.activation.ActivationSigmoid;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Layer;
-import org.encog.neural.networks.Train;
-import org.encog.neural.networks.layers.FeedforwardLayer;
-import org.encog.neural.networks.layers.SOMLayer;
-import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
-import org.encog.neural.networks.training.backpropagation.Backpropagation;
-import org.encog.neural.networks.training.genetic.TrainingSetNeuralGeneticAlgorithm;
-import org.encog.neural.networks.training.hopfield.TrainHopfield;
-import org.encog.neural.networks.training.som.TrainSelfOrganizingMap;
 import org.encog.neural.persist.EncogPersistedCollection;
-import org.encog.util.NormalizeInput;
 import org.encog.workbench.EncogWorkBench;
 
 public class GenerateJava implements Generate {
@@ -118,7 +107,7 @@ public class GenerateJava implements Generate {
 	}
 
 	private void generateConst() {
-		this.source
+/*		this.source
 				.append("  // fill these in with your training parameters\n");
 		switch (this.trainMethod) {
 		case Backpropagation:
@@ -173,7 +162,7 @@ public class GenerateJava implements Generate {
 			
 		case NoTraining:
 			break;
-		}
+		}*/
 	}
 
 	private String generateImports() {
@@ -226,7 +215,7 @@ public class GenerateJava implements Generate {
 	}
 
 	private void generateNetwork() {
-		addClass(BasicNetwork.class);
+/*		addClass(BasicNetwork.class);
 		this.source.append("private static BasicNetwork getNetwork() {\n");
 		this.source.append("  BasicNetwork network = new BasicNetwork();\n");
 
@@ -265,7 +254,7 @@ public class GenerateJava implements Generate {
 
 		this.source.append("  network.reset();\n");
 		this.source.append("  return network;\n");
-		this.source.append("}\n");
+		this.source.append("}\n");*/
 	}
 
 	public void generateQuery() {
@@ -312,7 +301,7 @@ public class GenerateJava implements Generate {
 	}
 
 	public void generateTraining() {
-
+/*
 		addClass(Train.class);
 		this.source
 				.append("  public static BasicNetwork trainNetwork(BasicNetwork network,NeuralDataSet trainingSet) {\n");
@@ -388,7 +377,7 @@ public class GenerateJava implements Generate {
 
 		this.source.append("    return (BasicNetwork)train.getNetwork();\n");
 		this.source.append("  }\n");
-
+*/
 	}
 
 	private void generateTrainingData() {

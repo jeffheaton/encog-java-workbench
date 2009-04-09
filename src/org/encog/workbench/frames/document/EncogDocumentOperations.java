@@ -17,7 +17,6 @@ import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.Network;
-import org.encog.neural.networks.layers.FeedforwardLayer;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.parse.ParseTemplate;
 import org.encog.workbench.EncogWorkBench;
@@ -153,7 +152,7 @@ public class EncogDocumentOperations {
 	}
 
 	public void performFileSave() {
-		try {
+/*		try {
 			if (EncogWorkBench.getInstance().getCurrentFileName() == null) {
 				performFileSaveAs();
 			} else {
@@ -163,7 +162,7 @@ public class EncogDocumentOperations {
 		} catch (final EncogError e) {
 			JOptionPane.showMessageDialog(owner, e.getMessage(),
 					"Can't Open File", JOptionPane.ERROR_MESSAGE);
-		}
+		}*/
 	}
 
 	public void performFileSaveAs() {
@@ -258,7 +257,7 @@ public class EncogDocumentOperations {
 			return;
 		
 		final SelectItem result = dialog.getSelected();
-
+/*
 		if (result == itemNetwork) {
 			final BasicNetwork network = new BasicNetwork();
 			network.addLayer(new FeedforwardLayer(2));
@@ -297,7 +296,7 @@ public class EncogDocumentOperations {
 			prop.setDescription("Some property data");
 			EncogWorkBench.getInstance().getCurrentFile().add(prop);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
-		}
+		}*/
 	}
 	public void performObjectsDelete() {
 		final Object object = owner.getContents().getSelectedValue();
@@ -311,8 +310,7 @@ public class EncogDocumentOperations {
 			if (JOptionPane.showConfirmDialog(owner,
 					"Are you sure you want to delete this object?", "Warning",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				EncogWorkBench.getInstance().getCurrentFile().getList().remove(
-						object);
+				//EncogWorkBench.getInstance().getCurrentFile().delete(object);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
 		}
@@ -352,7 +350,7 @@ public class EncogDocumentOperations {
 				.getCurrentFileName();
 
 		if (currentFileName != null
-				|| EncogWorkBench.getInstance().getCurrentFile().getList()
+				|| EncogWorkBench.getInstance().getCurrentFile().getDirectory()
 						.size() > 0) {
 			final String f = currentFileName != null ? currentFileName
 					: "Untitled";

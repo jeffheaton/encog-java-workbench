@@ -41,10 +41,10 @@ public class EncogListModel extends CommonListModel {
 	}
 
 	public Object getElementAt(final int i) {
-		if (i >= this.encogCollection.getList().size()) {
+		if (i >= this.encogCollection.getDirectory().size()) {
 			return null;
 		} 
-		return this.encogCollection.getList().get(i);
+		return this.encogCollection.getDirectory().get(i);
 		
 	}
 
@@ -56,7 +56,7 @@ public class EncogListModel extends CommonListModel {
 	}
 
 	public int getSize() {
-		return this.encogCollection.getList().size();
+		return this.encogCollection.getDirectory().size();
 	}
 
 	public void removeListDataListener(final ListDataListener listener) {

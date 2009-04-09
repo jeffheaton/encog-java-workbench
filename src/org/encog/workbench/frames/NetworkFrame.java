@@ -44,11 +44,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Layer;
 import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.layers.FeedforwardLayer;
-import org.encog.neural.networks.layers.HopfieldLayer;
-import org.encog.neural.networks.layers.SOMLayer;
+import org.encog.neural.networks.layers.Layer;
 import org.encog.util.NormalizeInput.NormalizationType;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
@@ -116,6 +113,7 @@ public class NetworkFrame extends EncogListFrame {
 			return;
 		}
 
+		/*
 		if (item instanceof FeedforwardLayer) {
 			final FeedforwardLayer layer = (FeedforwardLayer) item;
 			final EditFeedforwardLayer dialog = new EditFeedforwardLayer(this);
@@ -180,13 +178,13 @@ public class NetworkFrame extends EncogListFrame {
 					layer.setNeuronCount(dialog.getResultNeuronCount());
 				}
 			}
-		}
+		}*/
 
 	}
 
 	private void performAddLayer() {
 
-		SelectItem itemFeedfoward, itemSimple, itemSOM, itemHopfield;
+/*		SelectItem itemFeedfoward, itemSimple, itemSOM, itemHopfield;
 		final List<SelectItem> list = new ArrayList<SelectItem>();
 		list.add(itemFeedfoward = new SelectItem("Feedforward Layer"));
 		list.add(itemSimple = new SelectItem("Simple Layer"));
@@ -217,7 +215,7 @@ public class NetworkFrame extends EncogListFrame {
 		} else if (result == itemHopfield) {
 			layer = new HopfieldLayer(2);
 			this.model.addLayer(baseLayer, layer);
-		}
+		}*/
 
 	}
 
@@ -247,7 +245,7 @@ public class NetworkFrame extends EncogListFrame {
 	}
 
 	private void performEditMatrix() {
-		final Layer item = (Layer) this.contents.getSelectedValue();
+		/*final Layer item = (Layer) this.contents.getSelectedValue();
 		if (item.getMatrix() == null) {
 			EncogWorkBench.displayError("Error",
 					"This layer does not have a matrix.");
@@ -259,7 +257,7 @@ public class NetworkFrame extends EncogListFrame {
 			final MatrixFrame frame = new MatrixFrame((BasicNetwork)getData(), item);
 			frame.setVisible(true);
 			getSubwindows().add(frame);
-		}
+		}*/
 
 	}
 

@@ -40,11 +40,8 @@ import org.encog.neural.activation.ActivationFunction;
 import org.encog.neural.activation.ActivationLinear;
 import org.encog.neural.activation.ActivationSigmoid;
 import org.encog.neural.activation.ActivationTANH;
-import org.encog.neural.networks.Layer;
 import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.layers.FeedforwardLayer;
-import org.encog.neural.networks.layers.HopfieldLayer;
-import org.encog.neural.networks.layers.SOMLayer;
+import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.util.NormalizeInput;
 
@@ -102,7 +99,7 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 	}
 
 	private String getLayerType(final Layer layer) {
-		if (layer.isInput() && layer.isOutput()) {
+		/*if (layer.isInput() && layer.isOutput()) {
 			return "Input & Output";
 		} else if (layer.isHidden()) {
 			return "Hidden";
@@ -112,7 +109,8 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 			return "Output";
 		} else {
 			return "Unknown";
-		}
+		}*/
+		return "";
 	}
 
 	public Component getListCellRendererComponent(final JList list,
@@ -136,15 +134,7 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 
 	}
 
-	private String getNormalizationType(final SOMLayer som) {
-		if (som.getNormalizationType() == NormalizeInput.NormalizationType.MULTIPLICATIVE) {
-			return "Multiplicative";
-		} else if (som.getNormalizationType() == NormalizeInput.NormalizationType.Z_AXIS) {
-			return "Z-Axis";
-		} else {
-			return "Unknown";
-		}
-	}
+	
 
 	/**
 	 * @return the selected
@@ -173,84 +163,7 @@ public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {
 
 		int y = titleMetrics.getHeight();
 
-		if (getLayer() instanceof FeedforwardLayer) {
-			final FeedforwardLayer ff = (FeedforwardLayer) getLayer();
-			this.iconFeedforward.paintIcon(this, g, 4, 4);
-			g.setFont(this.titleFont);
-			g.setColor(Color.BLACK);
-			g.drawString("Feedforward Layer (" + getLayerType(ff) + ")", 70, y);
-			y += titleMetrics.getHeight();
-
-			g.setFont(this.regularFont);
-
-			if (shouldDisplayName(ff)) {
-				g.drawString(ff.getDescription() + "(" + ff.getName() + ")",
-						70, y);
-				y += regularMetrics.getHeight();
-			}
-			g.drawString("Neurons: " + ff.getNeuronCount(), 70, y);
-			y += regularMetrics.getHeight();
-			g.drawString("Activation Function:"
-					+ getActivationType(ff.getActivationFunction()), 70, y);
-			y += regularMetrics.getHeight();
-			g.drawString("Matrix Size:" + getMatrix(ff.getMatrix()), 70, y);
-		} else if (getLayer() instanceof HopfieldLayer) {
-			final HopfieldLayer hop = (HopfieldLayer) getLayer();
-			this.iconHopfield.paintIcon(this, g, 4, 4);
-			g.setFont(this.titleFont);
-			g.setColor(Color.BLACK);
-			g.drawString("Hopfield Layer (" + getLayerType(hop) + ")", 70, y);
-			y += titleMetrics.getHeight();
-
-			g.setFont(this.regularFont);
-
-			if (shouldDisplayName(hop)) {
-				g.drawString(hop.getDescription() + "(" + hop.getName() + ")",
-						70, y);
-				y += regularMetrics.getHeight();
-			}
-			g.drawString("Neurons: " + hop.getNeuronCount(), 70, y);
-			y += regularMetrics.getHeight();
-			g.drawString("Matrix Size:" + getMatrix(hop.getMatrix()), 70, y);
-		} else if (getLayer() instanceof SOMLayer) {
-			final SOMLayer som = (SOMLayer) getLayer();
-			this.iconSOM.paintIcon(this, g, 4, 4);
-			g.setFont(this.titleFont);
-			g.setColor(Color.BLACK);
-			g.drawString("Self Organizing Map (SOM) Layer ("
-					+ getLayerType(som) + ")", 70, y);
-			y += titleMetrics.getHeight();
-
-			g.setFont(this.regularFont);
-
-			if (shouldDisplayName(som)) {
-				g.drawString(som.getDescription() + "(" + som.getName() + ")",
-						70, y);
-				y += regularMetrics.getHeight();
-			}
-			g.drawString("Neurons: " + som.getNeuronCount(), 70, y);
-			y += regularMetrics.getHeight();
-			g.drawString("Normalization: " + getNormalizationType(som), 70, y);
-			y += regularMetrics.getHeight();
-			g.drawString("Matrix Size:" + getMatrix(som.getMatrix()), 70, y);
-		} else if (getLayer() instanceof BasicLayer) {
-			final BasicLayer basic = (BasicLayer) getLayer();
-			this.iconSimple.paintIcon(this, g, 4, 4);
-			g.setFont(this.titleFont);
-			g.setColor(Color.BLACK);
-			g.drawString("Simple Layer (" + getLayerType(basic) + ")", 70, y);
-			y += titleMetrics.getHeight();
-
-			g.setFont(this.regularFont);
-
-			if (shouldDisplayName(basic)) {
-				g.drawString(basic.getDescription() + "(" + basic.getName()
-						+ ")", 70, y);
-				y += regularMetrics.getHeight();
-			}
-			g.drawString("Neurons: " + basic.getNeuronCount(), 70, y);
-
-		}
+		
 
 	}
 
