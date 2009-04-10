@@ -27,6 +27,7 @@ package org.encog.workbench.frames.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.encog.neural.persist.DirectoryEntry;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 
@@ -44,7 +45,7 @@ public class EncogFrameManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public boolean checkBeforeOpen(final EncogPersistedObject object,
+	public boolean checkBeforeOpen(final DirectoryEntry object,
 			final Class c) {
 		final EncogCommonFrame existing = find(object);
 		if (existing == null) {
@@ -62,7 +63,7 @@ public class EncogFrameManager {
 		return false;
 	}
 
-	public EncogCommonFrame find(final EncogPersistedObject object) {
+	public EncogCommonFrame find(final DirectoryEntry object) {
 		for (final EncogCommonFrame frame : this.frames) {
 			if (frame.getEncogObject() == object) {
 				return frame;

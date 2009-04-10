@@ -59,7 +59,7 @@ public class EncogDocumentOperations {
 	
 	public void openItem(final Object item) {
 		if (item instanceof NeuralDataSet) {
-			final BasicNeuralDataSet nds = (BasicNeuralDataSet) item;
+			final DirectoryEntry nds = (DirectoryEntry) item;
 			if (owner.getSubwindows().checkBeforeOpen(nds, TrainingDataFrame.class)) {
 				final TrainingDataFrame frame = new TrainingDataFrame(
 						(BasicNeuralDataSet) item);
@@ -68,30 +68,34 @@ public class EncogDocumentOperations {
 			}
 		} else if (item instanceof Network) {
 
-			final BasicNetwork net = (BasicNetwork) item;
+			final DirectoryEntry net = (DirectoryEntry) item;
 			if (owner.getSubwindows().checkBeforeOpen(net, TrainingDataFrame.class)) {
-				final NetworkFrame frame = new NetworkFrame(net);
+				BasicNetwork net2 = (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(net);
+				final NetworkFrame frame = new NetworkFrame(net2);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
 		} else if( item instanceof TextData ) {
-			TextData text = (TextData)item;
+			DirectoryEntry text = (DirectoryEntry)item;
 			if (owner.getSubwindows().checkBeforeOpen(text, TextData.class)) {
-				final TextEditorFrame frame = new TextEditorFrame(text);
+				TextData text2 = (TextData)EncogWorkBench.getInstance().getCurrentFile().find(text);
+				final TextEditorFrame frame = new TextEditorFrame(text2);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
 		}else if( item instanceof PropertyData  ) {
-			PropertyData prop = (PropertyData)item;
+			DirectoryEntry prop = (DirectoryEntry)item;
 			if (owner.getSubwindows().checkBeforeOpen(prop, PropertyData.class)) {
-				final PropertyDataFrame frame = new PropertyDataFrame(prop);
+				PropertyData prop2 = (PropertyData)EncogWorkBench.getInstance().getCurrentFile().find(prop);
+				final PropertyDataFrame frame = new PropertyDataFrame(prop2);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
 		} else if( item instanceof ParseTemplate  ) {
-			ParseTemplate data = (ParseTemplate)item;
+			DirectoryEntry data = (DirectoryEntry)item;
 			if (owner.getSubwindows().checkBeforeOpen(data, ParseTemplate.class)) {
-				final ParseTemplateFrame frame = new ParseTemplateFrame(data);
+				ParseTemplate data2 = (ParseTemplate)EncogWorkBench.getInstance().getCurrentFile().find(data);
+				final ParseTemplateFrame frame = new ParseTemplateFrame(data2);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
@@ -223,10 +227,11 @@ public class EncogDocumentOperations {
 	}
 
 	public void performNetworkQuery() {
-		final BasicNetwork item = (BasicNetwork) owner.getContents().getSelectedValue();
+		final DirectoryEntry item = (DirectoryEntry) owner.getContents().getSelectedValue();
 
 		if (owner.getSubwindows().checkBeforeOpen(item, NetworkQueryFrame.class)) {
-			final NetworkQueryFrame frame = new NetworkQueryFrame(item);
+			BasicNetwork net = (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(item);
+			final NetworkQueryFrame frame = new NetworkQueryFrame(net);
 			frame.setVisible(true);
 			owner.getSubwindows().add(frame);
 		}
@@ -234,14 +239,14 @@ public class EncogDocumentOperations {
 	}
 
 	public void performNetworkVisualize() {
-		final BasicNetwork item = (BasicNetwork) this.owner.getContents()
+		/*final BasicNetwork item = (DirectoryEntry) this.owner.getContents()
 				.getSelectedValue();
 
 		if (owner.getSubwindows().checkBeforeOpen(item, NetworkVisualizeFrame.class)) {
 			final NetworkVisualizeFrame frame = new NetworkVisualizeFrame(item);
 			frame.setVisible(true);
 			owner.getSubwindows().add(frame);
-		}
+		}*/
 	}
 	
 	private BasicNetwork createXOR()
@@ -304,7 +309,7 @@ public class EncogDocumentOperations {
 	public void performObjectsDelete() {
 		final Object object = owner.getContents().getSelectedValue();
 		if (object != null) {
-			if (owner.getSubwindows().find((EncogPersistedObject) object) != null) {
+			if (owner.getSubwindows().find((DirectoryEntry) object) != null) {
 				EncogWorkBench.displayError("Can't Delete Object",
 						"This object can not be deleted while it is open.");
 				return;
@@ -313,7 +318,7 @@ public class EncogDocumentOperations {
 			if (JOptionPane.showConfirmDialog(owner,
 					"Are you sure you want to delete this object?", "Warning",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				//EncogWorkBench.getInstance().getCurrentFile().delete(object);
+				EncogWorkBench.getInstance().getCurrentFile().delete((DirectoryEntry)object);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
 		}

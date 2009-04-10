@@ -52,7 +52,7 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 	private final ImageIcon iconTrainingSet;
 	private final ImageIcon iconSpiderTemplate;
 	private final ImageIcon iconParseTemplate;
-	private final ImageIcon iconProp;
+	//private final ImageIcon iconProp;
 	private final ImageIcon iconText;
 	private final ImageIcon iconUnknown;
 
@@ -67,8 +67,8 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 				"/resource/iconParseTemplate.png"));
 		this.iconText = new ImageIcon(this.getClass().getResource(
 			"/resource/iconText.png"));
-		this.iconProp = new ImageIcon(this.getClass().getResource(
-			"/resource/iconOptions.png"));
+		//this.iconProp = new ImageIcon(this.getClass().getResource(
+		//	"/resource/iconOptions.png"));
 		this.iconUnknown = new ImageIcon(this.getClass().getResource(
 			"/resource/iconUnknown.png"));
 		this.titleFont = new Font("sansserif", Font.BOLD, 12);
