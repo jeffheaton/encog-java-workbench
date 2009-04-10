@@ -73,8 +73,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 		addWindowListener(this);
 		//EncogWorkBench.getInstance().setCurrentFile(
 				//new EncogPersistedCollection());
-		this.encogListModel = new EncogListModel(EncogWorkBench.getInstance()
-				.getCurrentFile());
+		this.encogListModel = new EncogListModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.menus.initMenuBar();

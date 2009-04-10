@@ -17,6 +17,8 @@ import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.Network;
+import org.encog.neural.networks.layers.BasicLayer;
+import org.encog.neural.persist.DirectoryEntry;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.parse.ParseTemplate;
 import org.encog.workbench.EncogWorkBench;
@@ -241,6 +243,17 @@ public class EncogDocumentOperations {
 			owner.getSubwindows().add(frame);
 		}
 	}
+	
+	private BasicNetwork createXOR()
+	{
+		BasicNetwork network = new BasicNetwork();
+		network.addLayer(new BasicLayer(2));
+		network.addLayer(new BasicLayer(3));
+		network.addLayer(new BasicLayer(1));
+		network.getStructure().finalizeStructure();
+		network.reset();
+		return network;
+	}
 
 	public void performObjectsCreate() {
 
@@ -257,46 +270,36 @@ public class EncogDocumentOperations {
 			return;
 		
 		final SelectItem result = dialog.getSelected();
-/*
+
 		if (result == itemNetwork) {
-			final BasicNetwork network = new BasicNetwork();
-			network.addLayer(new FeedforwardLayer(2));
-			network.addLayer(new FeedforwardLayer(3));
-			network.addLayer(new FeedforwardLayer(1));
-			network.reset();
-			network.setName("network-" + this.networkCount++);
+			final BasicNetwork network = createXOR();
 			network.setDescription("A neural network");
-			EncogWorkBench.getInstance().getCurrentFile().add(network);
+			EncogWorkBench.getInstance().getCurrentFile().add("network-" + this.networkCount++,network);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		} else if (result == itemTraining) {
 			final BasicNeuralDataSet trainingData = new BasicNeuralDataSet(
 					NeuralConst.XOR_INPUT, NeuralConst.XOR_IDEAL);
-
-			trainingData.setName("data-" + this.trainingCount++);
 			trainingData.setDescription("Training data");
-			EncogWorkBench.getInstance().getCurrentFile().add(trainingData);
+			EncogWorkBench.getInstance().getCurrentFile().add("data-" + this.trainingCount++,trainingData);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}  else if( result == itemTemplate ) {
 			final ParseTemplate template = new ParseTemplate();
-			template.setName("parse-" + this.parseCount++);
 			template.setDescription("A parse template");
-			EncogWorkBench.getInstance().getCurrentFile().add(template);
+			EncogWorkBench.getInstance().getCurrentFile().add("parse-" + this.parseCount++,template);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		} else if(result == itemText)
 		{
 			final TextData text = new TextData();
-			text.setName("text-" + this.textCount++);
 			text.setDescription("A text file");
-			EncogWorkBench.getInstance().getCurrentFile().add(text);
+			EncogWorkBench.getInstance().getCurrentFile().add("text-" + this.textCount++,text);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		} else if( result == itemOptions )
 		{
 			final PropertyData prop = new PropertyData();
-			prop.setName("properties-" + this.optionsCount++);
 			prop.setDescription("Some property data");
-			EncogWorkBench.getInstance().getCurrentFile().add(prop);
+			EncogWorkBench.getInstance().getCurrentFile().add("properties-" + this.optionsCount++,prop);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
-		}*/
+		}
 	}
 	public void performObjectsDelete() {
 		final Object object = owner.getContents().getSelectedValue();
@@ -378,7 +381,7 @@ public class EncogDocumentOperations {
 	}
 
 	public void performObjectsProperties() {
-		final EncogPersistedObject selected = (EncogPersistedObject)owner.getContents().getSelectedValue();
+		final DirectoryEntry selected = (DirectoryEntry)owner.getContents().getSelectedValue();
 		final EditEncogObjectProperties dialog = new EditEncogObjectProperties
 		(owner, selected);
 		dialog.process();		

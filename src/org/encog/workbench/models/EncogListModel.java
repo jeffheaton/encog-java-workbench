@@ -27,36 +27,25 @@ package org.encog.workbench.models;
 import javax.swing.event.ListDataListener;
 
 import org.encog.neural.persist.EncogPersistedCollection;
+import org.encog.workbench.EncogWorkBench;
 
 public class EncogListModel extends CommonListModel {
-
-	private final EncogPersistedCollection encogCollection;
-
-	public EncogListModel(final EncogPersistedCollection theEncogCollection) {
-		this.encogCollection = theEncogCollection;
-	}
 
 	public void addListDataListener(final ListDataListener listener) {
 		getListeners().add(listener);
 	}
 
 	public Object getElementAt(final int i) {
-		if (i >= this.encogCollection.getDirectory().size()) {
+		if (i >= EncogWorkBench.getInstance().getCurrentFile().getDirectory().size()) {
 			return null;
 		} 
-		return this.encogCollection.getDirectory().get(i);
+		return EncogWorkBench.getInstance().getCurrentFile().getDirectory().get(i);
 		
 	}
 
-	/**
-	 * @return the encogCollection
-	 */
-	public EncogPersistedCollection getEncogCollection() {
-		return this.encogCollection;
-	}
 
 	public int getSize() {
-		return this.encogCollection.getDirectory().size();
+		return EncogWorkBench.getInstance().getCurrentFile().getDirectory().size();
 	}
 
 	public void removeListDataListener(final ListDataListener listener) {

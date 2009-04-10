@@ -35,13 +35,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.PropertyData;
-import org.encog.neural.data.TextData;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Network;
-import org.encog.neural.persist.EncogPersistedObject;
-import org.encog.parse.ParseTemplate;
+import org.encog.neural.persist.DirectoryEntry;
+import org.encog.neural.persist.EncogPersistedCollection;
 
 public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 	/**
@@ -49,7 +44,7 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 	 */
 	private static final long serialVersionUID = 987233162876263335L;
 
-	private EncogPersistedObject encogObject;
+	private DirectoryEntry encogObject;
 	private boolean selected;
 	private final Font titleFont;
 	private final Font regularFont;
@@ -59,6 +54,7 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 	private final ImageIcon iconParseTemplate;
 	private final ImageIcon iconProp;
 	private final ImageIcon iconText;
+	private final ImageIcon iconUnknown;
 
 	public EncogItemRenderer() {
 		this.iconNeuralNet = new ImageIcon(this.getClass().getResource(
@@ -73,6 +69,8 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 			"/resource/iconText.png"));
 		this.iconProp = new ImageIcon(this.getClass().getResource(
 			"/resource/iconOptions.png"));
+		this.iconUnknown = new ImageIcon(this.getClass().getResource(
+			"/resource/iconUnknown.png"));
 		this.titleFont = new Font("sansserif", Font.BOLD, 12);
 		this.regularFont = new Font("serif", 0, 12);
 	}
@@ -80,7 +78,7 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 	/**
 	 * @return the encogObject
 	 */
-	public EncogPersistedObject getEncogObject() {
+	public DirectoryEntry getEncogObject() {
 		return this.encogObject;
 	}
 
@@ -90,7 +88,7 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 			final boolean isSelected, // is the cell selected
 			final boolean cellHasFocus) // the list and the cell have the focus
 	{
-		setEncogObject((EncogPersistedObject) value);
+		setEncogObject((DirectoryEntry) value);
 		setSelected(isSelected);
 		return this;
 	}
@@ -121,82 +119,60 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 		final FontMetrics regularMetrics = g.getFontMetrics(this.regularFont);
 
 		int y = titleMetrics.getHeight();
-
-		if (getEncogObject() instanceof Network) {
-			this.iconNeuralNet.paintIcon(this, g, 4, 4);
-			g.setFont(this.titleFont);
-			g.setColor(Color.BLACK);
-			g.drawString("Neural Network", 70, y);
-			y += titleMetrics.getHeight();
-			g.setFont(this.regularFont);
-			g.drawString(getEncogObject().getDescription() + "("
-					+ getEncogObject().getName() + ")", 70, y);
-			y += regularMetrics.getHeight();
-			final BasicNetwork network = (BasicNetwork) getEncogObject();
-			//g.drawString("Layers: " + network.getLayers().size(), 70, y);
-		} else if (getEncogObject() instanceof NeuralDataSet) {
-			this.iconTrainingSet.paintIcon(this, g, 4, 4);
-			g.setFont(this.titleFont);
-			g.setColor(Color.BLACK);
-			g.drawString("Training Data", 70, y);
-			y += titleMetrics.getHeight();
-			g.setFont(this.regularFont);
-			g.drawString(getEncogObject().getDescription() + "("
-					+ getEncogObject().getName() + ")", 70, y);
-			y += regularMetrics.getHeight();
-			final NeuralDataSet data = (NeuralDataSet) getEncogObject();
-			g.drawString("Ideal Size: " + data.getIdealSize() + ","
-					+ "Input Size: " + data.getInputSize(), 70, y);
-
-		} else if (getEncogObject() instanceof ParseTemplate) {
-			this.iconParseTemplate.paintIcon(this, g, 4, 4);
-			g.setFont(this.titleFont);
-			g.setColor(Color.BLACK);
-			g.drawString("Parse Template", 70, y);
-			y += titleMetrics.getHeight();
-			g.setFont(this.regularFont);
-			g.drawString(getEncogObject().getDescription() + "("
-					+ getEncogObject().getName() + ")", 70, y);
-			y += regularMetrics.getHeight();
-			final ParseTemplate data = (ParseTemplate) getEncogObject();
-			/*g.drawString("Ideal Size: " + data.getIdealSize() + ","
-					+ "Input Size: " + data.getInputSize(), 70, y);*/
-
-		} else if (getEncogObject() instanceof TextData ) {
-			this.iconText.paintIcon(this, g, 4, 4);
-			g.setFont(this.titleFont);
-			g.setColor(Color.BLACK);
-			g.drawString("Text File", 70, y);
-			y += titleMetrics.getHeight();
-			g.setFont(this.regularFont);
-			g.drawString(getEncogObject().getDescription() + "("
-					+ getEncogObject().getName() + ")", 70, y);
-			y += regularMetrics.getHeight();
-			final TextData data = (TextData) getEncogObject();
-			/*g.drawString("Ideal Size: " + data.getIdealSize() + ","
-					+ "Input Size: " + data.getInputSize(), 70, y);*/
-		} else if (getEncogObject() instanceof PropertyData ) {
-			this.iconProp.paintIcon(this, g, 4, 4);
-			g.setFont(this.titleFont);
-			g.setColor(Color.BLACK);
-			g.drawString("Property Data", 70, y);
-			y += titleMetrics.getHeight();
-			g.setFont(this.regularFont);
-			g.drawString(getEncogObject().getDescription() + "("
-					+ getEncogObject().getName() + ")", 70, y);
-			y += regularMetrics.getHeight();
-			final PropertyData data = (PropertyData) getEncogObject();
-			/*g.drawString("Ideal Size: " + data.getIdealSize() + ","
-					+ "Input Size: " + data.getInputSize(), 70, y);*/
-		}
 		
+		getIcon().paintIcon(this, g, 4, 4);
+		
+		g.setFont(this.titleFont);
+		g.setColor(Color.BLACK);
+		
+		
+		g.drawString(getObjectName(), 70, y);
+		y += titleMetrics.getHeight();
+		g.setFont(this.regularFont);
+		g.drawString(getEncogObject().getDescription() + "("
+				+ getEncogObject().getName() + ")", 70, y);
+		y += regularMetrics.getHeight();
+		
+		
+	}
+	
+	private ImageIcon getIcon()
+	{
+		if( EncogPersistedCollection.TYPE_BASIC_NET.equals(this.getEncogObject().getType()) )
+		{
+			return this.iconNeuralNet;
+		}
+		else if( EncogPersistedCollection.TYPE_TRAINING.equals(this.getEncogObject().getType()) )
+		{
+			return this.iconTrainingSet;
+		}
+		else
+		{
+			return this.iconUnknown;
+		}
+	}
+	
+	private String getObjectName()
+	{
+		if( EncogPersistedCollection.TYPE_BASIC_NET.equals(this.getEncogObject().getType()) )
+		{
+			return "Neural Network";
+		}
+		else if( EncogPersistedCollection.TYPE_TRAINING.equals(this.getEncogObject().getType()) )
+		{
+			return "Training Set";
+		}
+		else
+		{
+			return "Unknown Object: " + getEncogObject().getType();
+		}
 	}
 
 	/**
 	 * @param encogObject
 	 *            the encogObject to set
 	 */
-	public void setEncogObject(final EncogPersistedObject encogObject) {
+	public void setEncogObject(final DirectoryEntry encogObject) {
 		this.encogObject = encogObject;
 	}
 

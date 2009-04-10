@@ -8,6 +8,8 @@ import javax.swing.JPopupMenu;
 
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.Network;
+import org.encog.neural.persist.DirectoryEntry;
+import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.process.Training;
@@ -65,7 +67,7 @@ public class EncogPopupMenus {
 
 
 	public void actionPerformed(final ActionEvent event) {
-		EncogPersistedObject selected = (EncogPersistedObject) this.owner.getContents().getSelectedValue();
+		DirectoryEntry selected = (DirectoryEntry) this.owner.getContents().getSelectedValue();
 
 		if (event.getSource() == this.popupNetworkDelete) {
 			owner.getOperations().performObjectsDelete();
@@ -101,13 +103,24 @@ public class EncogPopupMenus {
 	}
 	
 	public void rightMouseClicked(final MouseEvent e, final Object item) {
-		if (item instanceof Network) {
-			this.popupNetwork.show(e.getComponent(), e.getX(), e.getY());
-		} else if (item instanceof NeuralDataSet) {
-			this.popupData.show(e.getComponent(), e.getX(), e.getY());
-		} else if (item instanceof EncogPersistedObject ) {
-			this.popupGeneral.show(e.getComponent(), e.getX(), e.getY());
+		
+		if( item instanceof DirectoryEntry )
+		{
+			DirectoryEntry entry = (DirectoryEntry)item;
+			if( EncogPersistedCollection.TYPE_BASIC_NET.equals(entry.getType()) )
+			{
+				this.popupNetwork.show(e.getComponent(), e.getX(), e.getY());
+			}
+			else if( EncogPersistedCollection.TYPE_BASIC_NET.equals(entry.getType()) )
+			{
+				this.popupData.show(e.getComponent(), e.getX(), e.getY());
+			}
+			else
+			{
+				this.popupGeneral.show(e.getComponent(), e.getX(), e.getY());
+			}
 		}
+		
 	}
 	
 }

@@ -95,9 +95,9 @@ public class TrainingDataFrame extends EncogCommonFrame {
 				this.model.delRow(row);
 			}
 		} else if (action.getSource() == this.properties) {
-			final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
+			/*final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
 					this, getData());
-			dialog.process();
+			dialog.process();*/
 		}
 
 	}

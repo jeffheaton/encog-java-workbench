@@ -262,9 +262,9 @@ public class NetworkFrame extends EncogListFrame {
 	}
 
 	public void performProperties() {
-		final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
+		/*final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
 				this, getData());
-		dialog.process();
+		dialog.process();*/
 	}
 
 	@Override
