@@ -97,17 +97,25 @@ public class EditEncogObjectProperties extends JDialog implements
 
 	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource() == this.ctrlOK) {
-			if (EncogWorkBench.getInstance().getCurrentFile().find(
-					this.ctrlName.getText().trim()) != null) {
+			
+			String name = this.ctrlName.getText().trim();
+			String desc = this.ctrlDescription.getText().trim();
+			
+			if( !this.entry.getName().equals(name))
+			{
+			
+			if (EncogWorkBench.getInstance().getCurrentFile().find(name) != null) {
 				EncogWorkBench.displayError("Data Error",
 						"That name is already in use, please choose another.");
 				return;
+			}
 			}
 			if (this.ctrlName.getText().trim().length() < 1) {
 				EncogWorkBench.displayError("Data Error",
 						"You must provide a name.");
 				return;
 			}
+			EncogWorkBench.getInstance().getCurrentFile().updateProperties(this.entry.getName(),name,desc);
 			//this.object.setName(this.ctrlName.getText());
 			//this.object.setDescription(this.ctrlDescription.getText());
 			dispose();

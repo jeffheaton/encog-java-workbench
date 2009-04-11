@@ -56,7 +56,7 @@ import org.xml.sax.SAXException;
 public class EncogWorkBench {
 
 	public final static String CONFIG_FILENAME = "EncogWorkbench.conf";
-	public final static String TEMP_FILENAME = "encog.tmp";
+	public final static String TEMP_FILENAME = "encoguntitled.eg";
 	
 	/**
 	 * The singleton instance.
