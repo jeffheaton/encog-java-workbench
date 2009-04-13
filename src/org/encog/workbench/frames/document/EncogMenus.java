@@ -6,7 +6,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import org.encog.neural.persist.EncogPersistedObject;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.process.Training;
 

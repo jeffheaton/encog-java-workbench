@@ -39,9 +39,9 @@ import javax.swing.JTextField;
 
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.Network;
-import org.encog.neural.persist.DirectoryEntry;
-import org.encog.neural.persist.EncogPersistedCollection;
-import org.encog.neural.persist.EncogPersistedObject;
+import org.encog.persist.DirectoryEntry;
+import org.encog.persist.EncogPersistedCollection;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 
 public class EditEncogObjectProperties extends JDialog implements

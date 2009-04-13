@@ -1,8 +1,8 @@
 package org.encog.workbench.config;
 
 import org.encog.EncogError;
-import org.encog.neural.persist.EncogPersistedObject;
-import org.encog.neural.persist.Persistor;
+import org.encog.persist.EncogPersistedObject;
+import org.encog.persist.Persistor;
 
 public class EncogWorkBenchConfig implements EncogPersistedObject {
 	

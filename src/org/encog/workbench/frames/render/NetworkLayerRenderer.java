@@ -42,7 +42,7 @@ import org.encog.neural.activation.ActivationSigmoid;
 import org.encog.neural.activation.ActivationTANH;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.Layer;
-import org.encog.neural.persist.EncogPersistedObject;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.util.NormalizeInput;
 
 public class NetworkLayerRenderer extends JPanel implements ListCellRenderer {

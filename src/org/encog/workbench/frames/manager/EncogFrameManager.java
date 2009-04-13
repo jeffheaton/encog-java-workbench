@@ -27,8 +27,8 @@ package org.encog.workbench.frames.manager;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.encog.neural.persist.DirectoryEntry;
-import org.encog.neural.persist.EncogPersistedObject;
+import org.encog.persist.DirectoryEntry;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 
 public class EncogFrameManager {

@@ -34,7 +34,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.xml.transform.TransformerConfigurationException;
 
-import org.encog.neural.persist.EncogPersistedCollection;
+import org.encog.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogListFrame;
 import org.encog.workbench.frames.render.EncogItemRenderer;

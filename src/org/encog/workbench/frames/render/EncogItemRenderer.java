@@ -35,8 +35,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import org.encog.neural.persist.DirectoryEntry;
-import org.encog.neural.persist.EncogPersistedCollection;
+import org.encog.persist.DirectoryEntry;
+import org.encog.persist.EncogPersistedCollection;
 
 public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 	/**

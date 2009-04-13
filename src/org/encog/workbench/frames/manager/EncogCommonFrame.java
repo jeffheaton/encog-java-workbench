@@ -35,7 +35,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.encog.neural.persist.EncogPersistedObject;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 
 public abstract class EncogCommonFrame extends JFrame implements

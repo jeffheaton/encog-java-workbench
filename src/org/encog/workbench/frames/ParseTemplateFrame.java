@@ -8,9 +8,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.parse.Parse;
 import org.encog.parse.ParseTemplate;
+import org.encog.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.editor.ObjectEditorFrame;
 

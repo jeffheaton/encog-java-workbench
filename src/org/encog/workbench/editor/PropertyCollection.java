@@ -9,7 +9,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 
-import org.encog.neural.persist.EncogPersistedObject;
+import org.encog.persist.EncogPersistedObject;
 
 public class PropertyCollection {
 

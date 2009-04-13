@@ -34,7 +34,7 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.data.basic.BasicNeuralDataPair;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.persist.EncogPersistedCollection;
+import org.encog.persist.EncogPersistedCollection;
 import org.encog.util.ReadCSV;
 import org.encog.workbench.WorkBenchError;
 

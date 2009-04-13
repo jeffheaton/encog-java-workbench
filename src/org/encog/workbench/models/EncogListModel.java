@@ -26,7 +26,7 @@ package org.encog.workbench.models;
 
 import javax.swing.event.ListDataListener;
 
-import org.encog.neural.persist.EncogPersistedCollection;
+import org.encog.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
 
 public class EncogListModel extends CommonListModel {

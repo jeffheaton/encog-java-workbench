@@ -25,10 +25,10 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.parse.Parse;
 import org.encog.parse.ParseTemplate;
 import org.encog.parse.recognize.Recognize;
+import org.encog.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.frames.manager.EncogCommonFrame;

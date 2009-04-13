@@ -37,10 +37,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 
-import org.encog.neural.persist.EncogPersistedCollection;
-import org.encog.neural.persist.persistors.generic.Object2XML;
-import org.encog.neural.persist.persistors.generic.XML2Object;
 import org.encog.parse.tags.write.WriteXML;
+import org.encog.persist.EncogPersistedCollection;
+import org.encog.persist.persistors.generic.Object2XML;
+import org.encog.persist.persistors.generic.XML2Object;
 import org.encog.util.Directory;
 import org.encog.util.orm.ORMSession;
 import org.encog.util.orm.SessionManager;
