@@ -27,6 +27,7 @@ package org.encog.workbench;
 import java.awt.Frame;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -37,7 +38,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 
 import org.encog.neural.persist.EncogPersistedCollection;
+import org.encog.neural.persist.persistors.generic.Object2XML;
 import org.encog.neural.persist.persistors.generic.XML2Object;
+import org.encog.parse.tags.write.WriteXML;
 import org.encog.util.Directory;
 import org.encog.util.orm.ORMSession;
 import org.encog.util.orm.SessionManager;
@@ -264,6 +267,13 @@ public class EncogWorkBench {
 		String home = System.getProperty("user.home");
 		File file = new File(home, CONFIG_FILENAME);
 
+		FileOutputStream fos = new FileOutputStream(file);
+		WriteXML out = new WriteXML(fos);
+		out.beginDocument();
+		Object2XML xml = new Object2XML();
+		xml.save(EncogWorkBench.getInstance().getConfig(), out);
+		out.endDocument();
+		fos.close();
 
 	}
 

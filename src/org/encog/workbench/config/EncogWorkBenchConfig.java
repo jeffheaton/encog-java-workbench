@@ -45,7 +45,7 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	}
 
 	public String getName() {
-		return null;
+		return "config";
 	}
 
 	public void setDescription(String theDescription) {

@@ -38,7 +38,6 @@ import org.encog.workbench.frames.PropertyDataFrame;
 import org.encog.workbench.frames.TextEditorFrame;
 import org.encog.workbench.frames.TrainingDataFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
-import org.encog.workbench.frames.visualize.NetworkVisualizeFrame;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.util.ExtensionFilter;
@@ -266,6 +265,8 @@ public class EncogDocumentOperations {
 
 	public void performObjectsCreate() {
 
+		try
+		{
 		SelectItem itemTraining, itemNetwork, itemTemplate, itemSpider, itemOptions, itemText;
 		final List<SelectItem> list = new ArrayList<SelectItem>();
 		list.add(itemNetwork = new SelectItem("Neural Network"));
@@ -309,6 +310,11 @@ public class EncogDocumentOperations {
 			prop.setDescription("Some property data");
 			EncogWorkBench.getInstance().getCurrentFile().add("properties-" + this.optionsCount++,prop);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
+		}
+		}
+		catch(Throwable t)
+		{
+			EncogWorkBench.displayError("Error creating object", t.getMessage());
 		}
 	}
 	public void performObjectsDelete() {

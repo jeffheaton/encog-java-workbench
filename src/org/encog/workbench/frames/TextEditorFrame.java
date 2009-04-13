@@ -6,18 +6,18 @@ import org.encog.neural.data.TextData;
 
 public class TextEditorFrame extends TextFrame {
 
-	private TextData data;
 	
 	public TextEditorFrame(TextData data) {
 		super("Edit Text Data", false);
-		this.data = data;
+		this.setEncogObject(data);
 		this.setText(data.getText());
 	}
 	
 	@Override
 	public void windowClosing(final WindowEvent e) {
+		((TextData)getEncogObject()).setText(this.getText());
 		super.windowClosing(e);
-		this.data.setText(this.getText());
+		
 	}
 	
 

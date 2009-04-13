@@ -21,7 +21,6 @@ public class EncogPopupMenus {
 
 	private JMenuItem popupNetworkProperties;
 	private JMenuItem popupNetworkOpen;
-	private JMenuItem popupNetworkVisualize;
 	private JMenuItem popupNetworkQuery;
 	private JPopupMenu popupData;
 	private JMenuItem popupDataDelete;
@@ -48,8 +47,6 @@ public class EncogPopupMenus {
 		this.popupNetworkOpen = owner.addItem(this.popupNetwork, "Open", 'o');
 		this.popupNetworkProperties = owner.addItem(this.popupNetwork, "Properties",
 				'p');
-		this.popupNetworkVisualize = owner.addItem(this.popupNetwork, "Visualize",
-				'v');
 		this.popupNetworkQuery = owner.addItem(this.popupNetwork, "Query", 'q');
 
 		this.popupData = new JPopupMenu();
@@ -73,8 +70,6 @@ public class EncogPopupMenus {
 			owner.getOperations().performObjectsDelete();
 		} else if (event.getSource() == this.popupNetworkQuery) {
 			owner.getOperations().performNetworkQuery();
-		} else if (event.getSource() == this.popupNetworkVisualize) {
-			owner.getOperations().performNetworkVisualize();
 		} else if (event.getSource() == this.popupNetworkOpen) {
 			owner.getOperations().openItem(selected);
 		} else if (event.getSource() == this.popupNetworkProperties) {
