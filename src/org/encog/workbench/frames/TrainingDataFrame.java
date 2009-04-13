@@ -37,7 +37,6 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 
 import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.TrainingSetTableModel;
 
@@ -56,7 +55,6 @@ public class TrainingDataFrame extends EncogCommonFrame {
 	private JButton addIdealColumn;
 	private JButton addRow;
 	private JButton delRow;
-	private JButton properties;
 
 	public TrainingDataFrame(final BasicNeuralDataSet data) {
 		setEncogObject(data);
@@ -94,11 +92,7 @@ public class TrainingDataFrame extends EncogCommonFrame {
 			} else {
 				this.model.delRow(row);
 			}
-		} else if (action.getSource() == this.properties) {
-			/*final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
-					this, getData());
-			dialog.process();*/
-		}
+		} 
 
 	}
 
@@ -122,13 +116,11 @@ public class TrainingDataFrame extends EncogCommonFrame {
 		this.toolbar.add(this.addIdealColumn = new JButton("Add Ideal Column"));
 		this.toolbar.add(this.addRow = new JButton("Add Row"));
 		this.toolbar.add(this.delRow = new JButton("Delete Row"));
-		this.toolbar.add(this.properties = new JButton("Data Set Properties"));
 		this.addInputColumn.addActionListener(this);
 		this.delColumn.addActionListener(this);
 		this.addIdealColumn.addActionListener(this);
 		this.addRow.addActionListener(this);
 		this.delRow.addActionListener(this);
-		this.properties.addActionListener(this);
 		content.add(this.toolbar, BorderLayout.PAGE_START);
 		this.model = new TrainingSetTableModel(getData());
 		this.table = new JTable(this.model);

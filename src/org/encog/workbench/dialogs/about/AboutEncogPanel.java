@@ -38,6 +38,7 @@ import java.util.jar.Manifest;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.Encog;
 
@@ -96,7 +97,7 @@ public class AboutEncogPanel extends JPanel {
 		g.setFont(EncogFonts.getInstance().getTitleFont());
 		int y = fm.getHeight();
 		g.setFont(EncogFonts.getInstance().getTitleFont());
-		g.drawString("Encog Workbench v1.2", 0, y);
+		g.drawString("Encog Workbench v" + EncogWorkBench.VERSION, 0, y);
 		y += g.getFontMetrics().getHeight();
 
 		g.setFont(EncogFonts.getInstance().getBodyFont());

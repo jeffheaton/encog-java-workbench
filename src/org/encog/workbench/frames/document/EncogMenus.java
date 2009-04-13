@@ -14,7 +14,9 @@ public class EncogMenus {
 	public static final String FILE_NEW = "New";
 	public static final String FILE_CLOSE = "Close";
 	public static final String FILE_OPEN = "Open...";
+	public static final String FILE_SAVE = "Save";
 	public static final String FILE_SAVE_AS = "Save As...";
+	public static final String FILE_REVERT = "Revert";
 	public static final String FILE_QUIT = "Quit...";
 	public static final String FILE_IMPORT = "Import CSV...";
 
@@ -65,7 +67,11 @@ public class EncogMenus {
 				'c'));
 		this.menuFile.addSeparator();
 		this.menuFile.add(owner.addItem(this.menuFile,
+				EncogMenus.FILE_SAVE, 's'));
+		this.menuFile.add(owner.addItem(this.menuFile,
 				EncogMenus.FILE_SAVE_AS, 'a'));
+		this.menuFile.add(owner.addItem(this.menuFile,
+				EncogMenus.FILE_REVERT, 'r'));
 		this.menuFile.addSeparator();
 		this.menuFile.add(owner.addItem(this.menuFile,
 				EncogMenus.FILE_IMPORT, 'i'));
@@ -124,10 +130,19 @@ public class EncogMenus {
 	public void actionPerformed(final ActionEvent event) {
 		if (event.getActionCommand().equals(EncogMenus.FILE_OPEN)) {
 			owner.getOperations().performFileOpen();
-		} else if (event.getActionCommand().equals(
+		} 
+		else if (event.getActionCommand().equals(
+				EncogMenus.FILE_SAVE)) {
+			owner.getOperations().performFileSave();
+		}
+		else if (event.getActionCommand().equals(
 				EncogMenus.FILE_SAVE_AS)) {
 			owner.getOperations().performFileSaveAs();
 		} else if (event.getActionCommand().equals(
+				EncogMenus.FILE_REVERT)) {
+			owner.getOperations().performFileRevert();
+		} 
+		else if (event.getActionCommand().equals(
 				EncogMenus.FILE_IMPORT)) {
 			owner.getOperations().performImport(null);
 		} else if (event.getActionCommand()

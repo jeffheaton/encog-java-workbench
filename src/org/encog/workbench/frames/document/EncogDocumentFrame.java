@@ -52,7 +52,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 			"Encog Files", ".eg");
 	public static final ExtensionFilter CSV_FILTER = new ExtensionFilter(
 			"CSV Files", ".csv");
-	public static final String WINDOW_TITLE = "Encog Workbench 2.0";
+	public static final String WINDOW_TITLE = "Encog Workbench";
 	/**
 	 * 
 	 */
@@ -71,8 +71,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.popupMenus = new EncogPopupMenus(this);
 
 		addWindowListener(this);
-		//EncogWorkBench.getInstance().setCurrentFile(
-				//new EncogPersistedCollection());
+
 		this.encogListModel = new EncogListModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

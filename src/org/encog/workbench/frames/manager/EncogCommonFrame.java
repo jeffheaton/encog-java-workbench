@@ -36,6 +36,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.encog.neural.persist.EncogPersistedObject;
+import org.encog.workbench.EncogWorkBench;
 
 public abstract class EncogCommonFrame extends JFrame implements
 		WindowListener, ActionListener, MouseListener {
@@ -43,8 +44,10 @@ public abstract class EncogCommonFrame extends JFrame implements
 	private Object encogObject;
 	private final EncogFrameManager subwindows;
 	private EncogCommonFrame parent;
+	private boolean closed;
 
 	public EncogCommonFrame() {
+		this.closed = false;
 		this.subwindows = new EncogFrameManager(this);
 		addWindowListener(this);
 	}
@@ -147,6 +150,11 @@ public abstract class EncogCommonFrame extends JFrame implements
 	}
 
 	public void windowClosing(final WindowEvent e) {
+		
+		if(!this.closed)
+		{
+			this.closed = true;
+			
 		if (getParent() != null) {
 			getParent().getSubwindows().remove(this);
 			getParent().redraw();
@@ -154,6 +162,16 @@ public abstract class EncogCommonFrame extends JFrame implements
 
 		for (final EncogCommonFrame frame : getSubwindows().getFrames()) {
 			frame.dispose();
+		}
+		
+		if( this.encogObject instanceof EncogPersistedObject )
+		{
+			if( EncogWorkBench.displayQuery("Save?","Would you like to save your changes to this object?"))
+			{
+			EncogPersistedObject eobj = (EncogPersistedObject)this.encogObject;
+			EncogWorkBench.getInstance().getCurrentFile().add(eobj.getName(), eobj);
+			}
+		}
 		}
 
 	}

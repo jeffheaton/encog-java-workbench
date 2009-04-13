@@ -19,8 +19,10 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.Network;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.persist.DirectoryEntry;
+import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.neural.persist.EncogPersistedObject;
 import org.encog.parse.ParseTemplate;
+import org.encog.util.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.about.AboutEncog;
@@ -58,11 +60,14 @@ public class EncogDocumentOperations {
 	}
 	
 	public void openItem(final Object item) {
-		if (item instanceof NeuralDataSet) {
-			final DirectoryEntry nds = (DirectoryEntry) item;
-			if (owner.getSubwindows().checkBeforeOpen(nds, TrainingDataFrame.class)) {
-				final TrainingDataFrame frame = new TrainingDataFrame(
-						(BasicNeuralDataSet) item);
+		
+		DirectoryEntry entry = (DirectoryEntry)item;
+		
+		if (entry.getType().equals(EncogPersistedCollection.TYPE_TRAINING)) {
+			
+			if (owner.getSubwindows().checkBeforeOpen(entry, TrainingDataFrame.class)) {
+				BasicNeuralDataSet set = (BasicNeuralDataSet) EncogWorkBench.getInstance().getCurrentFile().find(entry);
+				final TrainingDataFrame frame = new TrainingDataFrame(set);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
@@ -75,7 +80,7 @@ public class EncogDocumentOperations {
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
-		} else if( item instanceof TextData ) {
+		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_TEXT)) {
 			DirectoryEntry text = (DirectoryEntry)item;
 			if (owner.getSubwindows().checkBeforeOpen(text, TextData.class)) {
 				TextData text2 = (TextData)EncogWorkBench.getInstance().getCurrentFile().find(text);
@@ -83,7 +88,7 @@ public class EncogDocumentOperations {
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
-		}else if( item instanceof PropertyData  ) {
+		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_PROPERTY)) {
 			DirectoryEntry prop = (DirectoryEntry)item;
 			if (owner.getSubwindows().checkBeforeOpen(prop, PropertyData.class)) {
 				PropertyData prop2 = (PropertyData)EncogWorkBench.getInstance().getCurrentFile().find(prop);
@@ -158,17 +163,16 @@ public class EncogDocumentOperations {
 	}
 
 	public void performFileSave() {
-/*		try {
+		try {
 			if (EncogWorkBench.getInstance().getCurrentFileName() == null) {
 				performFileSaveAs();
 			} else {
-				EncogWorkBench.getInstance().getCurrentFile().save(
-						EncogWorkBench.getInstance().getCurrentFileName());
+				File target = new File(EncogWorkBench.getInstance().getCurrentFileName());
+				Directory.copyFile(EncogWorkBench.getInstance().getTempFile(), target);
 			}
 		} catch (final EncogError e) {
-			JOptionPane.showMessageDialog(owner, e.getMessage(),
-					"Can't Open File", JOptionPane.ERROR_MESSAGE);
-		}*/
+			EncogWorkBench.displayError("Can't Open File", e.getMessage());
+		}
 	}
 
 	public void performFileSaveAs() {
@@ -296,6 +300,7 @@ public class EncogDocumentOperations {
 		{
 			final TextData text = new TextData();
 			text.setDescription("A text file");
+			text.setText("Insert text here.");
 			EncogWorkBench.getInstance().getCurrentFile().add("text-" + this.textCount++,text);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		} else if( result == itemOptions )
@@ -390,6 +395,17 @@ public class EncogDocumentOperations {
 		final EditEncogObjectProperties dialog = new EditEncogObjectProperties
 		(owner, selected);
 		dialog.process();		
+	}
+
+	public void performFileRevert() {
+		if( EncogWorkBench.askQuestion("Revert", "Would you like to revert to the last time you saved?") )
+		{
+			File source = new File(EncogWorkBench.getInstance().getCurrentFileName());
+			Directory.copyFile(source, EncogWorkBench.getInstance().getTempFile() );
+			EncogWorkBench.getInstance().getCurrentFile().buildDirectory();
+			EncogWorkBench.getInstance().getMainWindow().redraw();
+		}
+		
 	}
 
 }

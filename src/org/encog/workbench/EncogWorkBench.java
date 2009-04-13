@@ -38,6 +38,7 @@ import javax.xml.transform.TransformerConfigurationException;
 
 import org.encog.neural.persist.EncogPersistedCollection;
 import org.encog.neural.persist.persistors.generic.XML2Object;
+import org.encog.util.Directory;
 import org.encog.util.orm.ORMSession;
 import org.encog.util.orm.SessionManager;
 import org.encog.workbench.config.EncogWorkBenchConfig;
@@ -56,7 +57,8 @@ import org.xml.sax.SAXException;
 public class EncogWorkBench {
 
 	public final static String CONFIG_FILENAME = "EncogWorkbench.conf";
-	public final static String TEMP_FILENAME = "encoguntitled.eg";
+	public final static String TEMP_FILENAME = "encogtemp.eg";
+	public final static String VERSION = "2.0";
 	
 	/**
 	 * The singleton instance.
@@ -167,14 +169,17 @@ public class EncogWorkBench {
 	}
 
 	public static void load(final String filename) {
+		File tempFile = getInstance().getTempFile();
 		getInstance().setCurrentFileName(filename);
-		getInstance().setCurrentFile(new EncogPersistedCollection(filename));
+		Directory.copyFile(new File(filename), tempFile);
+		getInstance().setCurrentFile(new EncogPersistedCollection(tempFile));
 		getInstance().getMainWindow().redraw();
 	}
 
 	public static void save(final String filename) {
+		File tempFile = getInstance().getTempFile();
 		getInstance().setCurrentFileName(filename);
-		//getInstance().getCurrentFile().save(filename);
+		Directory.copyFile(tempFile, new File(filename));
 		getInstance().getMainWindow().redraw();
 	}
 
@@ -314,5 +319,18 @@ public class EncogWorkBench {
 		}
 		return null;
 	}
+
+	public static boolean displayQuery(String title, String message) {
+		int result = JOptionPane.showConfirmDialog(null, message, title,
+				JOptionPane.YES_NO_OPTION);
+		
+		return result == JOptionPane.YES_OPTION;
+	}
+
+	public File getTempFile() {
+		return tempFile;
+	}
+	
+	
 
 }

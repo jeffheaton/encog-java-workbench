@@ -52,7 +52,7 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 	private final ImageIcon iconTrainingSet;
 	private final ImageIcon iconSpiderTemplate;
 	private final ImageIcon iconParseTemplate;
-	//private final ImageIcon iconProp;
+	private final ImageIcon iconProp;
 	private final ImageIcon iconText;
 	private final ImageIcon iconUnknown;
 
@@ -67,8 +67,8 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 				"/resource/iconParseTemplate.png"));
 		this.iconText = new ImageIcon(this.getClass().getResource(
 			"/resource/iconText.png"));
-		//this.iconProp = new ImageIcon(this.getClass().getResource(
-		//	"/resource/iconOptions.png"));
+		this.iconProp = new ImageIcon(this.getClass().getResource(
+			"/resource/iconSpiderTemplate.png"));
 		this.iconUnknown = new ImageIcon(this.getClass().getResource(
 			"/resource/iconUnknown.png"));
 		this.titleFont = new Font("sansserif", Font.BOLD, 12);
@@ -146,6 +146,14 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 		{
 			return this.iconTrainingSet;
 		}
+		else if( EncogPersistedCollection.TYPE_TEXT.equals(this.getEncogObject().getType()) )
+		{
+			return this.iconText;
+		}
+		else if( EncogPersistedCollection.TYPE_PROPERTY.equals(this.getEncogObject().getType()) )
+		{
+			return this.iconProp;
+		}
 		else
 		{
 			return this.iconUnknown;
@@ -161,6 +169,14 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 		else if( EncogPersistedCollection.TYPE_TRAINING.equals(this.getEncogObject().getType()) )
 		{
 			return "Training Set";
+		}
+		else if( EncogPersistedCollection.TYPE_TEXT.equals(this.getEncogObject().getType()) )
+		{
+			return "Text";
+		}
+		else if( EncogPersistedCollection.TYPE_PROPERTY.equals(this.getEncogObject().getType()) )
+		{
+			return "Property Data";
 		}
 		else
 		{

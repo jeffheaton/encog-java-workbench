@@ -24,13 +24,12 @@ public class PropertyDataFrame extends EncogCommonFrame {
 	private JTable table;
 	private JButton btnAdd;
 	private PropertyDataModel model;
-	private PropertyData data;
 	private JButton btnDel;
 	
 	public PropertyDataFrame(PropertyData data)
 	{
 		super();
-		this.data = data;
+		this.setEncogObject(data);
 		setSize(400,400);
 		setTitle("Property Data");
 		Container content  = this.getContentPane();
@@ -71,7 +70,7 @@ public class PropertyDataFrame extends EncogCommonFrame {
 		}
 		
 		// check for dup
-		if( this.data.isDefined(str))
+		if( ((PropertyData)this.getEncogObject()).isDefined(str))
 		{
 			EncogWorkBench.displayError("Error", "Name already defined.");
 			return false;
