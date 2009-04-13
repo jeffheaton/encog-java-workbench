@@ -68,7 +68,7 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 		this.iconText = new ImageIcon(this.getClass().getResource(
 			"/resource/iconText.png"));
 		this.iconProp = new ImageIcon(this.getClass().getResource(
-			"/resource/iconSpiderTemplate.png"));
+			"/resource/iconProperties.png"));
 		this.iconUnknown = new ImageIcon(this.getClass().getResource(
 			"/resource/iconUnknown.png"));
 		this.titleFont = new Font("sansserif", Font.BOLD, 12);
