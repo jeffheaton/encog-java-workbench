@@ -31,13 +31,13 @@ import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.editor.ObjectEditorFrame;
 import org.encog.workbench.frames.BrowserFrame;
 import org.encog.workbench.frames.Conversation;
-import org.encog.workbench.frames.NetworkFrame;
 import org.encog.workbench.frames.NetworkQueryFrame;
 import org.encog.workbench.frames.ParseTemplateFrame;
 import org.encog.workbench.frames.PropertyDataFrame;
 import org.encog.workbench.frames.TextEditorFrame;
 import org.encog.workbench.frames.TrainingDataFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
+import org.encog.workbench.frames.network.NetworkFrame;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.util.ExtensionFilter;
@@ -70,7 +70,7 @@ public class EncogDocumentOperations {
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
-		} else if (item instanceof Network) {
+		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_BASIC_NET) ) {
 
 			final DirectoryEntry net = (DirectoryEntry) item;
 			if (owner.getSubwindows().checkBeforeOpen(net, TrainingDataFrame.class)) {
