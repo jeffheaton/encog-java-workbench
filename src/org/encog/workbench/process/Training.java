@@ -36,6 +36,10 @@ import org.encog.workbench.dialogs.training.backpropagation.ProgressBackpropagat
 import org.encog.workbench.dialogs.training.genetic.InputGenetic;
 import org.encog.workbench.dialogs.training.genetic.ProgressGenetic;
 import org.encog.workbench.dialogs.training.hopfield.InputHopfield;
+import org.encog.workbench.dialogs.training.manhattan.InputManhattan;
+import org.encog.workbench.dialogs.training.manhattan.ProgressManhattan;
+import org.encog.workbench.dialogs.training.resilient.InputResilient;
+import org.encog.workbench.dialogs.training.resilient.ProgressResilient;
 import org.encog.workbench.dialogs.training.som.InputSOM;
 import org.encog.workbench.dialogs.training.som.ProgressSOM;
 import org.encog.workbench.process.validate.ValidateTraining;
@@ -156,5 +160,52 @@ public class Training {
 			train.setVisible(true);
 		}
 
+	}
+
+	public static void performResilient() {
+		final InputResilient dialog = new InputResilient(
+				EncogWorkBench.getInstance().getMainWindow());
+		if (dialog.process()) {
+			final ValidateTraining validate = new ValidateTraining(dialog
+					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+
+			if (!validate.validateFeedForward()) {
+				return;
+			}
+
+			final BasicNetwork network = dialog.getNetwork();
+			final NeuralDataSet training = dialog.getTrainingSet();
+
+			final ProgressResilient train = new ProgressResilient(
+					EncogWorkBench.getInstance().getMainWindow(), network,
+					training, dialog.getInitialUpdate(), dialog.getMaxStep(),
+					dialog.getMaxError());
+
+			train.setVisible(true);
+		}
+		
+	}
+
+	public static void performManhattan() {
+		final InputManhattan dialog = new InputManhattan(
+				EncogWorkBench.getInstance().getMainWindow());
+		if (dialog.process()) {
+			final ValidateTraining validate = new ValidateTraining(dialog
+					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+
+			if (!validate.validateFeedForward()) {
+				return;
+			}
+
+			final BasicNetwork network = dialog.getNetwork();
+			final NeuralDataSet training = dialog.getTrainingSet();
+
+			final ProgressManhattan train = new ProgressManhattan(
+					EncogWorkBench.getInstance().getMainWindow(), network,
+					training, dialog.getFixedDelta(), dialog.getMaxError());
+
+			train.setVisible(true);
+		}
+		
 	}
 }

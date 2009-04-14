@@ -28,7 +28,9 @@ public class EncogMenus {
 	public static final String OBJECTS_CREATE = "Create Object...";
 	public static final String OBJECTS_DELETE = "Delete Object...";
 
-	public static final String TRAIN_BACKPROPAGATION = "Train Backpropagation...";
+	public static final String TRAIN_RESILIENT_PROPAGATION = "Train Resilient Propagation...";
+	public static final String TRAIN_BACKPROPAGATION = "Train Back Propagation...";
+	public static final String TRAIN_MANHATTAN_PROPAGATION = "Train Manhattan Update Rule Prop...";
 	public static final String TRAIN_SIMULATED_ANNEALING = "Train Simulated Annealing...";
 	public static final String TRAIN_GENETIC = "Train Genetically...";
 	public static final String TRAIN_HOPFIELD = "Train Hopfield Layers...";
@@ -101,7 +103,13 @@ public class EncogMenus {
 		this.menuBar.add(this.menuObjects);
 
 		this.menuTrain = new JMenu("Train");
+		
+		this.menuTrain.add(owner.addItem(this.menuObjects,
+				EncogMenus.TRAIN_RESILIENT_PROPAGATION, 'r'));
+		this.menuTrain.add(owner.addItem(this.menuObjects,
+				EncogMenus.TRAIN_MANHATTAN_PROPAGATION, 'm'));
 		owner.addItem(this.menuTrain, EncogMenus.TRAIN_BACKPROPAGATION, 'b');
+		this.menuTrain.addSeparator();
 		this.menuTrain.add(owner.addItem(this.menuObjects,
 				EncogMenus.TRAIN_SIMULATED_ANNEALING, 'a'));
 		this.menuTrain.add(owner.addItem(this.menuObjects,
@@ -164,6 +172,14 @@ public class EncogMenus {
 			Training.performBackpropagation();
 
 		} else if (event.getActionCommand().equals(
+				EncogMenus.TRAIN_RESILIENT_PROPAGATION)) {
+			Training.performResilient();
+		} else if (event.getActionCommand().equals(
+				EncogMenus.TRAIN_MANHATTAN_PROPAGATION)) {
+			Training.performManhattan();
+		}
+
+		else if (event.getActionCommand().equals(
 				EncogMenus.TRAIN_GENETIC)) {
 			Training.performGenetic();
 

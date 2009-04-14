@@ -36,6 +36,8 @@ import javax.swing.JPanel;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.persist.DirectoryEntry;
+import org.encog.persist.EncogPersistedCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 
@@ -130,14 +132,14 @@ public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
 	 * combo boxes.
 	 */
 	private void findData() {
-		/*for (final DirectoryEntry obj : EncogWorkBench.getInstance()
+		for (final DirectoryEntry obj : EncogWorkBench.getInstance()
 				.getCurrentFile().getDirectory()) {
-			if (obj instanceof BasicNetwork) {
+			if (obj.getType().equals(EncogPersistedCollection.TYPE_BASIC_NET) ) {
 				this.networks.add(obj.getName());
-			} else if (obj instanceof BasicNeuralDataSet) {
+			} else if (obj.getType().equals(EncogPersistedCollection.TYPE_TRAINING) ) {
 				this.trainingSets.add(obj.getName());
 			}
-		}*/
+		}
 	}
 
 	/**

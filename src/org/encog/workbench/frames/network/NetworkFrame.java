@@ -58,6 +58,7 @@ public class NetworkFrame extends EncogListFrame {
 	private JButton editLayer;
 	private JButton properties;
 	private NetworkListModel model;
+	private JScrollPane scroll;
 
 	private JPopupMenu popupNetworkLayer;
 	private JMenuItem popupNetworkLayerDelete;
@@ -136,27 +137,16 @@ public class NetworkFrame extends EncogListFrame {
 		this.properties.addActionListener(this);
 
 		content.add(this.toolbar, BorderLayout.PAGE_START);
-		final JPanel content2 = new JPanel();
-		content2.setLayout(new BorderLayout());
-		content.add(content2, BorderLayout.CENTER);
+		this.scroll = new JScrollPane(new NetworkDiagram());
+		content.add(this.scroll, BorderLayout.CENTER);
 		
 		content.add(this.networkToolbar, BorderLayout.WEST);
 
-		final JPanel topPanel = new JPanel();
-		topPanel.setLayout(new FlowLayout());
-		topPanel.add(new JLabel("==Input=="));
-		final JPanel bottomPanel = new JPanel();
-		bottomPanel.setLayout(new FlowLayout());
-		bottomPanel.add(new JLabel("==Output=="));
-
-		content2.add(topPanel, BorderLayout.NORTH);
-		content2.add(bottomPanel, BorderLayout.SOUTH);
 
 		this.model = new NetworkListModel(getData());
 		this.contents = new JList(this.model);
 		this.contents.addMouseListener(this);
 
-		content2.add(new JScrollPane(this.contents), BorderLayout.CENTER);
 		this.contents.setFixedCellHeight(72);
 
 		setTitle("Edit Neural Network");

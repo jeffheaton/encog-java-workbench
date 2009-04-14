@@ -42,6 +42,7 @@ import org.encog.persist.EncogPersistedCollection;
 import org.encog.persist.persistors.generic.Object2XML;
 import org.encog.persist.persistors.generic.XML2Object;
 import org.encog.util.Directory;
+import org.encog.util.Logging;
 import org.encog.util.orm.ORMSession;
 import org.encog.util.orm.SessionManager;
 import org.encog.workbench.config.EncogWorkBenchConfig;
@@ -248,6 +249,7 @@ public class EncogWorkBench {
 	 *            The first argument specifies an option file to open.
 	 */
 	public static void main(final String args[]) {
+		Logging.stopConsoleLogging();
 		final EncogWorkBench workBench = EncogWorkBench.getInstance();
 		workBench.setMainWindow(new EncogDocumentFrame());
 
@@ -258,6 +260,7 @@ public class EncogWorkBench {
 			loadConfig();
 			workBench.getMainWindow().setVisible(true);
 		} catch (Throwable t) {
+			EncogWorkBench.displayError("Internal error", t.getMessage());
 			t.printStackTrace();
 		}
 	}
