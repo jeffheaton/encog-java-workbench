@@ -95,7 +95,7 @@ public class EncogDocumentOperations {
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
-		} else if( item instanceof ParseTemplate  ) {
+		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_PARSE_TEMPLATE)) {
 			DirectoryEntry data = (DirectoryEntry)item;
 			if (owner.getSubwindows().checkBeforeOpen(data, ParseTemplate.class)) {
 				ParseTemplate data2 = (ParseTemplate)EncogWorkBench.getInstance().getCurrentFile().find(data);

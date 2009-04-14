@@ -154,6 +154,10 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 		{
 			return this.iconProp;
 		}
+		else if( EncogPersistedCollection.TYPE_PARSE_TEMPLATE.equals(this.getEncogObject().getType()) )
+		{
+			return this.iconParseTemplate;
+		}
 		else
 		{
 			return this.iconUnknown;
@@ -177,6 +181,10 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 		else if( EncogPersistedCollection.TYPE_PROPERTY.equals(this.getEncogObject().getType()) )
 		{
 			return "Property Data";
+		}
+		else if( EncogPersistedCollection.TYPE_PARSE_TEMPLATE.equals(this.getEncogObject().getType()) )
+		{
+			return "Parse Template";
 		}
 		else
 		{
