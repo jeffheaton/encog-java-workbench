@@ -63,10 +63,13 @@ public class NetworkFrame extends EncogListFrame {
 	private JMenuItem popupNetworkLayerDelete;
 	private JMenuItem popupNetworkLayerEdit;
 	private JMenuItem popupEditMatrix;
+	
+	private NetworkToolbar networkToolbar;
 
 	public NetworkFrame(final BasicNetwork data) {
 		setEncogObject(data);
 		addWindowListener(this);
+		this.networkToolbar = new NetworkToolbar();
 	}
 
 	public void actionPerformed(final ActionEvent action) {
@@ -136,6 +139,8 @@ public class NetworkFrame extends EncogListFrame {
 		final JPanel content2 = new JPanel();
 		content2.setLayout(new BorderLayout());
 		content.add(content2, BorderLayout.CENTER);
+		
+		content.add(this.networkToolbar, BorderLayout.WEST);
 
 		final JPanel topPanel = new JPanel();
 		topPanel.setLayout(new FlowLayout());

@@ -2,26 +2,21 @@ package org.encog.workbench.frames.document;
 
 import java.awt.Frame;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.xml.transform.TransformerConfigurationException;
 
 import org.encog.EncogError;
-import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.Network;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.parse.ParseTemplate;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.util.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
@@ -42,7 +37,6 @@ import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.NeuralConst;
-import org.xml.sax.SAXException;
 
 public class EncogDocumentOperations {
 
