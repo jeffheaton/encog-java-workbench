@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -64,6 +65,14 @@ public class NetworkFrame extends EncogListFrame {
 	private JMenuItem popupNetworkLayerDelete;
 	private JMenuItem popupNetworkLayerEdit;
 	private JMenuItem popupEditMatrix;
+	
+	private ImageIcon layerBasic;
+	private ImageIcon layerContext;
+	private ImageIcon layerRBF;
+	private ImageIcon synapseDirect;
+	private ImageIcon synapseOneToOne;
+	private ImageIcon synapseWeight;
+	private ImageIcon synapseWeightless;
 	
 	private NetworkToolbar networkToolbar;
 

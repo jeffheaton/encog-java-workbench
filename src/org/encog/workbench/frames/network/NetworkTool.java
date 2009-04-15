@@ -1,5 +1,7 @@
 package org.encog.workbench.frames.network;
 
+import javax.swing.ImageIcon;
+
 public class NetworkTool {
 	
 	enum Type
@@ -15,11 +17,13 @@ public class NetworkTool {
 	private int y;
 	private int width;
 	private int height;
+	private ImageIcon icon;
 	
-	public NetworkTool(String name, Type type, Class classType)
+	public NetworkTool(String name, ImageIcon icon, Type type, Class classType)
 	{
 		this.name = name;
 		this.type = type;
+		this.icon = icon;
 		this.classType = classType;
 	}
 
@@ -70,6 +74,12 @@ public class NetworkTool {
 		else
 			return false;
 	}
+
+	public ImageIcon getIcon() {
+		return icon;
+	}
+	
+	
 	
 	
 }
