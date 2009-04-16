@@ -37,6 +37,7 @@ import javax.swing.ListCellRenderer;
 
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
+import org.encog.workbench.WorkbenchFonts;
 
 public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 	/**
@@ -46,8 +47,6 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 
 	private DirectoryEntry encogObject;
 	private boolean selected;
-	private final Font titleFont;
-	private final Font regularFont;
 	private final ImageIcon iconNeuralNet;
 	private final ImageIcon iconTrainingSet;
 	private final ImageIcon iconSpiderTemplate;
@@ -71,8 +70,6 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 			"/resource/iconProperties.png"));
 		this.iconUnknown = new ImageIcon(this.getClass().getResource(
 			"/resource/iconUnknown.png"));
-		this.titleFont = new Font("sansserif", Font.BOLD, 12);
-		this.regularFont = new Font("serif", 0, 12);
 	}
 
 	/**
@@ -115,20 +112,20 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 		g.setColor(Color.GRAY);
 		g.drawRect(0, 0, width - 1, height - 1);
 
-		final FontMetrics titleMetrics = g.getFontMetrics(this.titleFont);
-		final FontMetrics regularMetrics = g.getFontMetrics(this.regularFont);
+		final FontMetrics titleMetrics = g.getFontMetrics(WorkbenchFonts.getTitle2Font());
+		final FontMetrics regularMetrics = g.getFontMetrics(WorkbenchFonts.getTextFont());
 
 		int y = titleMetrics.getHeight();
 		
 		getIcon().paintIcon(this, g, 4, 4);
 		
-		g.setFont(this.titleFont);
+		g.setFont(WorkbenchFonts.getTitle2Font());
 		g.setColor(Color.BLACK);
 		
 		
 		g.drawString(getObjectName(), 70, y);
 		y += titleMetrics.getHeight();
-		g.setFont(this.regularFont);
+		g.setFont(WorkbenchFonts.getTextFont());
 		g.drawString(getEncogObject().getDescription() + "("
 				+ getEncogObject().getName() + ")", 70, y);
 		y += regularMetrics.getHeight();

@@ -14,6 +14,7 @@ import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
+import org.encog.neural.networks.layers.Layer;
 import org.encog.parse.ParseTemplate;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
@@ -234,24 +235,22 @@ public class EncogDocumentOperations {
 		}
 
 	}
-
-	public void performNetworkVisualize() {
-		/*final BasicNetwork item = (DirectoryEntry) this.owner.getContents()
-				.getSelectedValue();
-
-		if (owner.getSubwindows().checkBeforeOpen(item, NetworkVisualizeFrame.class)) {
-			final NetworkVisualizeFrame frame = new NetworkVisualizeFrame(item);
-			frame.setVisible(true);
-			owner.getSubwindows().add(frame);
-		}*/
-	}
 	
 	private BasicNetwork createXOR()
 	{
+		Layer layer1,layer2,layer3;
 		BasicNetwork network = new BasicNetwork();
-		network.addLayer(new BasicLayer(2));
-		network.addLayer(new BasicLayer(3));
-		network.addLayer(new BasicLayer(1));
+		network.addLayer(layer1 = new BasicLayer(2));
+		network.addLayer(layer2 = new BasicLayer(3));
+		network.addLayer(layer3 = new BasicLayer(1));
+		
+		layer1.setX(10);
+		layer1.setY(10);
+		layer2.setX(10);
+		layer2.setY(110);
+		layer3.setX(10);
+		layer3.setY(210);
+		
 		network.getStructure().finalizeStructure();
 		network.reset();
 		return network;

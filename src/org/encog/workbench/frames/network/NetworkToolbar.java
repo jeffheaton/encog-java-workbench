@@ -18,32 +18,24 @@ import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
 import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
 import org.encog.neural.networks.synapse.WeightedSynapse;
+import org.encog.workbench.WorkbenchFonts;
 import org.encog.workbench.frames.network.NetworkTool.Type;
 
 public class NetworkToolbar extends JPanel implements MouseListener {
 
-	private Font headerFont;
-	private Font textFont;
-	private List<NetworkTool> tools = new ArrayList<NetworkTool>();
 	private NetworkTool selected;
+	private final NetworkFrame parent;
 	public final static int WIDTH = 100;
 	public final Color COLOR_BACKGROUND = new Color(200,200,200);
 	public final Color TOOL_BACKGROUND = new Color(150,150,150);
 	
-	public NetworkToolbar()
+	public NetworkToolbar(NetworkFrame parent)
 	{
 		Dimension d = new Dimension(100,100);
 		this.setPreferredSize(d);
 		this.addMouseListener(this);
-		this.headerFont = new Font("Serif",Font.BOLD,16);
-		this.textFont = new Font("SansSerif",0,10);
-		tools.add(new NetworkTool("Basic",Icons.getLayerBasic(),Type.layer,BasicLayer.class));
-		tools.add(new NetworkTool("Context",Icons.getLayerContext(),Type.layer,ContextLayer.class));
-		tools.add(new NetworkTool("Radial Function",Icons.getLayerRBF(),Type.layer,RadialBasisFunctionLayer.class));
-		tools.add(new NetworkTool("Weighted",Icons.getSynapseWeight(),Type.synapse,WeightedSynapse.class));
-		tools.add(new NetworkTool("Weightless",Icons.getSynapseWeightless(),Type.synapse,WeightedSynapse.class));
-		tools.add(new NetworkTool("Direct",Icons.getSynapseDirect(),Type.synapse,DirectSynapse.class));
-		tools.add(new NetworkTool("One-To-One",Icons.getSynapseWeightless(),Type.synapse,OneToOneSynapse.class));
+		this.parent = parent;
+
 	}
 	
 	public void paint(Graphics g)
@@ -52,18 +44,18 @@ public class NetworkToolbar extends JPanel implements MouseListener {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
 		g.setColor(Color.BLACK);
-		g.setFont(this.headerFont);
+		g.setFont(WorkbenchFonts.getTitle1Font());
 		FontMetrics fm = g.getFontMetrics();
 		int headerHeight = fm.getHeight();
 		int y = headerHeight+4;
 		center(g, y, "Layers");
 		
-		g.setFont(this.textFont);
+		g.setFont(WorkbenchFonts.getTextFont());
 		int textHeight = fm.getHeight();
 		
 		y+=4;
 		
-		for(NetworkTool tool: this.tools)
+		for(NetworkTool tool: this.parent.getTools())
 		{
 			if( tool.getType()==Type.layer)
 			{
@@ -73,13 +65,13 @@ public class NetworkToolbar extends JPanel implements MouseListener {
 		}		
 		y+=textHeight;
 		y+=5;
-		g.setFont(this.headerFont);
+		g.setFont(WorkbenchFonts.getTitle1Font());
 		center(g, y, "Synapses");
 		y+=10;
 
-		g.setFont(this.textFont);
+		g.setFont(WorkbenchFonts.getTextFont());
 		
-		for(NetworkTool tool: this.tools)
+		for(NetworkTool tool: this.parent.getTools())
 		{
 			if( tool.getType()==Type.synapse)
 			{
@@ -131,7 +123,7 @@ public class NetworkToolbar extends JPanel implements MouseListener {
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		for(NetworkTool tool: this.tools)
+		for(NetworkTool tool: this.parent.getTools())
 		{
 			if( tool.contains(e.getX(),e.getY()) )
 			{

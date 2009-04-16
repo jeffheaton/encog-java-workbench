@@ -10,6 +10,9 @@ public class NetworkTool {
 		layer
 	}
 	
+	public static final int HEIGHT = 32;
+	public static final int WIDTH = 64;
+	
 	private final String name;
 	private final Type type;
 	private final Class classType;
@@ -78,6 +81,12 @@ public class NetworkTool {
 	public ImageIcon getIcon() {
 		return icon;
 	}
+
+	public Class getClassType() {
+		return classType;
+	}
+	
+	
 	
 	
 	

@@ -30,6 +30,8 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -43,8 +45,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.layers.BasicLayer;
+import org.encog.neural.networks.layers.ContextLayer;
+import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
+import org.encog.neural.networks.synapse.DirectSynapse;
+import org.encog.neural.networks.synapse.OneToOneSynapse;
+import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogListFrame;
+import org.encog.workbench.frames.network.NetworkTool.Type;
 import org.encog.workbench.models.NetworkListModel;
 
 public class NetworkFrame extends EncogListFrame {
@@ -64,6 +73,9 @@ public class NetworkFrame extends EncogListFrame {
 	private JPopupMenu popupNetworkLayer;
 	private JMenuItem popupNetworkLayerDelete;
 	private JMenuItem popupNetworkLayerEdit;
+	
+	private List<NetworkTool> tools = new ArrayList<NetworkTool>();
+	
 	private JMenuItem popupEditMatrix;
 	
 	private ImageIcon layerBasic;
@@ -79,7 +91,15 @@ public class NetworkFrame extends EncogListFrame {
 	public NetworkFrame(final BasicNetwork data) {
 		setEncogObject(data);
 		addWindowListener(this);
-		this.networkToolbar = new NetworkToolbar();
+		this.networkToolbar = new NetworkToolbar(this);
+		
+		tools.add(new NetworkTool("Basic",Icons.getLayerBasic(),Type.layer,BasicLayer.class));
+		tools.add(new NetworkTool("Context",Icons.getLayerContext(),Type.layer,ContextLayer.class));
+		tools.add(new NetworkTool("Radial Function",Icons.getLayerRBF(),Type.layer,RadialBasisFunctionLayer.class));
+		tools.add(new NetworkTool("Weighted",Icons.getSynapseWeight(),Type.synapse,WeightedSynapse.class));
+		tools.add(new NetworkTool("Weightless",Icons.getSynapseWeightless(),Type.synapse,WeightedSynapse.class));
+		tools.add(new NetworkTool("Direct",Icons.getSynapseDirect(),Type.synapse,DirectSynapse.class));
+		tools.add(new NetworkTool("One-To-One",Icons.getSynapseWeightless(),Type.synapse,OneToOneSynapse.class));
 	}
 
 	public void actionPerformed(final ActionEvent action) {
@@ -146,7 +166,7 @@ public class NetworkFrame extends EncogListFrame {
 		this.properties.addActionListener(this);
 
 		content.add(this.toolbar, BorderLayout.PAGE_START);
-		this.scroll = new JScrollPane(new NetworkDiagram());
+		this.scroll = new JScrollPane(new NetworkDiagram(this));
 		content.add(this.scroll, BorderLayout.CENTER);
 		
 		content.add(this.networkToolbar, BorderLayout.WEST);
@@ -169,4 +189,10 @@ public class NetworkFrame extends EncogListFrame {
 				"Delete", 'd');
 
 	}
+
+	public List<NetworkTool> getTools() {
+		return tools;
+	}
+	
+	
 }
