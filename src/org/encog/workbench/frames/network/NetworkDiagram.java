@@ -40,6 +40,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		this.setPreferredSize(new Dimension(VIRTUAL_HEIGHT,VIRTUAL_WIDTH));
+		getLayers();
 	}
 	
 	private void obtainOffScreen()
@@ -147,8 +148,9 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		}
 		
 		// was something selected
-		for(Layer layer: this.layers )
+		for(int i=layers.size()-1;i>=0;i--)
 		{
+			Layer layer = layers.get(i);
 			if( contains(layer,e.getX(),e.getY()))
 			{
 				selected = layer;
@@ -184,7 +186,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	}
 
 	public void mouseDragged(MouseEvent e) {
-
+		
 		if(this.selected!=null)
 		{
 			this.selected.setX(e.getX()-dragOffsetX);
