@@ -42,7 +42,7 @@ import org.encog.persist.EncogPersistedCollection;
 import org.encog.persist.persistors.generic.Object2XML;
 import org.encog.persist.persistors.generic.XML2Object;
 import org.encog.util.Directory;
-import org.encog.util.Logging;
+import org.encog.util.logging.Logging;
 import org.encog.util.orm.ORMSession;
 import org.encog.util.orm.SessionManager;
 import org.encog.workbench.config.EncogWorkBenchConfig;
