@@ -87,6 +87,7 @@ public class NetworkFrame extends EncogListFrame {
 	private ImageIcon synapseWeightless;
 	
 	private NetworkToolbar networkToolbar;
+	private NetworkDiagram networkDiagram;
 
 	public NetworkFrame(final BasicNetwork data) {
 		setEncogObject(data);
@@ -166,7 +167,7 @@ public class NetworkFrame extends EncogListFrame {
 		this.properties.addActionListener(this);
 
 		content.add(this.toolbar, BorderLayout.PAGE_START);
-		this.scroll = new JScrollPane(new NetworkDiagram(this));
+		this.scroll = new JScrollPane(networkDiagram = new NetworkDiagram(this));
 		content.add(this.scroll, BorderLayout.CENTER);
 		
 		content.add(this.networkToolbar, BorderLayout.WEST);
@@ -193,6 +194,22 @@ public class NetworkFrame extends EncogListFrame {
 	public List<NetworkTool> getTools() {
 		return tools;
 	}
+
+	public NetworkToolbar getNetworkToolbar() {
+		return networkToolbar;
+	}
+
+	public NetworkDiagram getNetworkDiagram() {
+		return networkDiagram;
+	}
+
+	public void clearSelection() {
+		this.networkDiagram.clearSelection();
+		this.networkToolbar.clearSelection();
+		
+	}
+	
+	
 	
 	
 }

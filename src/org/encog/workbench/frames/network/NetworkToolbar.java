@@ -136,6 +136,8 @@ public class NetworkToolbar extends JPanel implements MouseListener {
 					this.selected = null;
 				}
 				this.repaint();	
+				this.parent.getNetworkDiagram().clearSelection();
+
 				
 			}
 		}
@@ -161,5 +163,25 @@ public class NetworkToolbar extends JPanel implements MouseListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public NetworkTool getSelected() {
+		return selected;
+	}
+
+	public void setSelected(NetworkTool selected) {
+		this.selected = selected;
+		repaint();
+	}
+
+	public void clearSelection() {
+		if( this.selected!=null)
+		{
+			this.selected = null;
+			repaint();
+		}
+		
+	}
+	
+	
 	
 }
