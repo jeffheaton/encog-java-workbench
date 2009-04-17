@@ -88,7 +88,10 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			// draw any synapse arrows
 			for(Synapse synapse: layer.getNext() )
 			{
-				drawSynapse(offscreenGraphics,synapse);
+				if( synapse.isSelfConnected() )
+					drawSelfConnectedSynapse(offscreenGraphics,synapse);
+				else
+					drawSynapse(offscreenGraphics,synapse);
 			}
 			
 			// draw the actual layer
@@ -107,26 +110,41 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		
 	}
 	
-	private void drawSynapse(Graphics g, Synapse synapse) {
-		DrawArrow.drawArrow(g,synapse);
-		String type = "Unknown";
+	private void drawSelfConnectedSynapse(Graphics g,
+			Synapse synapse) {
+		DrawArrow.drawSelfArrow(g, synapse);
+		g.drawString(this.getSynapseText(synapse), 
+				synapse.getToLayer().getX()+100, 
+				synapse.getFromLayer().getY()-20);
 		
+	}
+	
+	private String getSynapseText(Synapse synapse)
+	{
 		if( synapse instanceof WeightedSynapse )
 		{
-			type = "Weighted";
+			return "Weighted";
 		}
 		else if( synapse instanceof WeightlessSynapse )
 		{
-			type = "Weightless";
+			return "Weightless";
 		}
 		else if( synapse instanceof OneToOneSynapse )
 		{
-			type = "1:1";
+			return "1:1";
 		}
 		else if( synapse instanceof DirectSynapse )
 		{
-			type = "Direct";
+			return "Direct";
 		}
+		else
+			return "Unknown";
+	}
+
+	private void drawSynapse(Graphics g, Synapse synapse) {
+		DrawArrow.drawArrow(g,synapse);
+		
+		String type = getSynapseText(synapse);
 		
 		int labelX = Math.min(synapse.getFromLayer().getX(), synapse.getToLayer().getX());
 		int labelY = Math.min(synapse.getFromLayer().getY(), synapse.getToLayer().getY());
@@ -302,6 +320,15 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	
 	private void createSynapse(Layer clickedLayer)
 	{
+		// validate any obvious errors
+		if( this.fromLayer.isConnectedTo(clickedLayer))
+		{
+			EncogWorkBench.displayError("Can't Create Synapse", "There is already a synapse between these two layers.\nYou must delete it first.");
+			this.parent.clearSelection();
+			return;
+		}
+		
+		// try to create it
 		try
 		{
 		NetworkTool tool = this.parent.getNetworkToolbar().getSelected();
@@ -327,6 +354,8 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			EncogWorkBench.displayError("Synapse Error", e.getMessage());
 		}
 		
+		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
+		network.getStructure().finalizeStructure();
 		this.parent.clearSelection();
 		repaint();
 	}
@@ -344,8 +373,18 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	
 	private void getLayers()
 	{
-		this.layers.clear();
 		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
+		
+		network.getStructure().finalizeStructure();
+		
+		// first remove any orphans that may have made it into the "real" list
+		for(Layer layer: network.getStructure().getLayers() )
+		{
+			this.orphanLayers.remove(layer);
+		}
+		
+		// now build the layer list
+		this.layers.clear();
 		this.layers.addAll(network.getStructure().getLayers());
 		this.layers.addAll(this.orphanLayers);
 	}

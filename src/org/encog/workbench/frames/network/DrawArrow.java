@@ -11,6 +11,7 @@ import org.encog.workbench.frames.network.NetworkDiagram.Side;
 
 public class DrawArrow {
 	
+	public static final int SELF_CONNECTED_WIDTH = 40;
 	
 	
 	private static Point findSide(Side side,Layer layer)
@@ -51,7 +52,7 @@ public class DrawArrow {
 		}
 		return null;
 	}
-	
+		
 	public static void drawArrow(Graphics g,Synapse synapse)
 	{
 		Point from;
@@ -164,6 +165,16 @@ public class DrawArrow {
 		
 		g.setColor(Color.BLACK);
 		g.drawLine(from.x,from.y,to.x,to.y);	
+		g.fillPolygon(arrowHead);
+	}
+	
+	public static void drawSelfArrow(Graphics g, Synapse synapse)
+	{
+		g.setColor(Color.BLACK);
+		int x = synapse.getFromLayer().getX()+NetworkDiagram.LAYER_WIDTH-(SELF_CONNECTED_WIDTH/2);
+		int y = synapse.getFromLayer().getY()-(SELF_CONNECTED_WIDTH/2);
+		g.drawArc(x, y, SELF_CONNECTED_WIDTH, SELF_CONNECTED_WIDTH,300, 240);
+		Polygon arrowHead = generateArrowHead(Side.Right,x+30,y+37);
 		g.fillPolygon(arrowHead);
 	}
 }
