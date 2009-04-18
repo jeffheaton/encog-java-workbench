@@ -75,11 +75,11 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		getLayers();
 		
 		this.popupNetworkLayer = new JPopupMenu();
-		this.popupNetworkLayerEdit = this.parent.addItem(this.popupNetworkLayer,
+		this.popupNetworkLayerEdit = addItem(this.popupNetworkLayer,
 				"Edit Layer", 'e');
-		this.popupEditMatrix = this.parent.addItem(this.popupNetworkLayer,
+		this.popupEditMatrix = addItem(this.popupNetworkLayer,
 				"Edit Matrix", 'm');
-		this.popupNetworkLayerDelete = this.parent.addItem(this.popupNetworkLayer,
+		this.popupNetworkLayerDelete = addItem(this.popupNetworkLayer,
 				"Delete", 'd');
 	}
 	
@@ -113,6 +113,16 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			
 			// draw the actual layer
 			drawLayer(offscreenGraphics,layer);
+			
+			if(network.isInput(layer))
+			{
+				drawInput(offscreenGraphics,layer);
+			}
+			else if(network.isOutput(layer))
+			{
+				drawOutput(offscreenGraphics,layer);
+			}
+			
 			if( this.selected==layer)
 			{
 				drawSelection(offscreenGraphics,layer);
@@ -459,11 +469,64 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	
 
 	public void actionPerformed(final ActionEvent action) {
+		
 		if (action.getSource() == this.popupNetworkLayerEdit) {
 			//performEditLayer();
 		} else if (action.getSource() == this.popupNetworkLayerDelete) {
-			//performDeleteLayer();
+			performDelete();
 		}  
+	}
+		
+	public JMenuItem addItem(final JPopupMenu m, final String s,
+			final int key) {
+
+		final JMenuItem mi = new JMenuItem(s, key);
+		mi.addActionListener(this);
+		m.add(mi);
+		return mi;
+	}
+	
+	private void drawInput(Graphics g, Layer layer)
+	{
+		String str = ">>>Input>>>";
+		
+		g.setFont(WorkbenchFonts.getTextFont());
+		FontMetrics fm = g.getFontMetrics();
+		
+		int height = fm.getHeight();
+		int width = fm.stringWidth(str);
+		int x = layer.getX();
+		int y = layer.getY()-height;
+		
+		int center = (LAYER_WIDTH/2)-(width/2);
+		g.drawString(str, x+center,y+height-3);
+		g.drawRect(x, y, LAYER_WIDTH, height);
+	}
+	
+	private void drawOutput(Graphics g, Layer layer)
+	{
+		String str = "<<<Output<<<";
+		
+		g.setFont(WorkbenchFonts.getTextFont());
+		FontMetrics fm = g.getFontMetrics();
+		
+		int height = fm.getHeight();
+		int width = fm.stringWidth(str);
+		int x = layer.getX();
+		int y = layer.getY();
+		
+		int center = (LAYER_WIDTH/2)-(width/2);
+		g.drawString(str, x+center,y+height-3+LAYER_HEIGHT);
+		g.drawRect(x, y+LAYER_HEIGHT, LAYER_WIDTH, height);
+	}
+	
+	public void performDelete()
+	{
+		if( EncogWorkBench.askQuestion("Are you sure?", "Do you want to delete this layer?") )
+		{
+			BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
+			//network.deleteLayer(this.selected);
+		}
 	}
 	
 	
