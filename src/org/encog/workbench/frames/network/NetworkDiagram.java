@@ -69,6 +69,9 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	private JMenuItem popupNetworkLayerDelete;
 	private JMenuItem popupNetworkLayerEdit;
 	private JMenuItem popupEditMatrix;
+	private JPopupMenu popupNetworkSynapse;
+	private JMenuItem popupNetworkSynapseDelete;
+	private JMenuItem popupNetworkSynapseMatrix;
 	private Synapse selectedSynapse;
 	
 	public NetworkDiagram(NetworkFrame parent)
@@ -85,7 +88,13 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		this.popupEditMatrix = addItem(this.popupNetworkLayer,
 				"Edit Matrix", 'm');
 		this.popupNetworkLayerDelete = addItem(this.popupNetworkLayer,
-				"Delete", 'd');
+				"Delete Layer", 'd');
+		
+		this.popupNetworkSynapse = new JPopupMenu();
+		this.popupNetworkSynapseDelete = addItem(this.popupNetworkSynapse,
+				"Delete Synapse", 'd');
+		this.popupNetworkSynapseMatrix = addItem(this.popupNetworkSynapse,
+				"Edit Matrix", 'm');
 	}
 	
 	private void obtainOffScreen()
@@ -289,7 +298,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		Layer clickedLayer = findLayer(e);
 		
 		if (MouseUtil.isRightClick(e)) {
-			rightClick(e,clickedLayer);
+			rightClick(e);
 		}
 		else
 		if (e.getClickCount() == 2) {
@@ -299,9 +308,25 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		
 	}
 	
-	private void rightClick(MouseEvent e,Layer clickedLayer)
+	private void rightClick(MouseEvent e)
 	{
-		this.popupNetworkLayer.show(e.getComponent(), e.getX(), e.getY());
+		int x = e.getX(); 
+		int y = e.getY();
+		
+		Layer clickedLayer = this.findLayer(e);
+		
+		if( clickedLayer!=null )
+		{	
+			this.popupNetworkLayer.show(e.getComponent(), x, y);
+		}
+		else
+		{
+			Synapse synapse = this.findSynapse(e);
+			if( synapse!=null )
+			{
+				this.popupNetworkSynapse.show(e.getComponent(), x, y);
+			}
+		}
 	}
 	
 	private void doubleClick(MouseEvent e,Layer clickedLayer)
@@ -539,7 +564,10 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		if (action.getSource() == this.popupNetworkLayerEdit) {
 			//performEditLayer();
 		} else if (action.getSource() == this.popupNetworkLayerDelete) {
-			performDelete();
+			performLayerDelete();
+		}  
+		else if (action.getSource() == this.popupNetworkSynapseDelete) {
+			performSynapseDelete();
 		}  
 	}
 		
@@ -586,7 +614,25 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		g.drawRect(x, y+LAYER_HEIGHT, LAYER_WIDTH, height);
 	}
 	
-	public void performDelete()
+	public void performSynapseDelete()
+	{
+		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
+		
+		if( this.selectedSynapse!=null && 
+				EncogWorkBench.askQuestion("Are you sure?", "Do you want to delete this synapse?") )
+		{
+			this.selectedSynapse.getFromLayer().getNext().remove(this.selectedSynapse);
+			network.getStructure().finalizeStructure();
+			getLayers();
+			
+			// does the output layer need to be adjusted
+			
+			
+			this.repaint();
+		}
+	}
+	
+	public void performLayerDelete()
 	{
 		if( EncogWorkBench.askQuestion("Are you sure?", "Do you want to delete this layer?") )
 		{
