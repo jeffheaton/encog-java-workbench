@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -15,7 +17,9 @@ import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import org.encog.EncogError;
 import org.encog.neural.networks.BasicNetwork;
@@ -30,8 +34,9 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.WorkbenchFonts;
 import org.encog.workbench.frames.network.NetworkTool.Type;
+import org.encog.workbench.util.MouseUtil;
 
-public class NetworkDiagram extends JPanel implements MouseListener, MouseMotionListener {
+public class NetworkDiagram extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
 
 	enum Side
 	{
@@ -56,6 +61,10 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	private Graphics offscreenGraphics;
 	private List<Layer> layers = new ArrayList<Layer>();
 	private List<Layer> orphanLayers = new ArrayList<Layer>();
+	private JPopupMenu popupNetworkLayer;
+	private JMenuItem popupNetworkLayerDelete;
+	private JMenuItem popupNetworkLayerEdit;
+	private JMenuItem popupEditMatrix;
 	
 	public NetworkDiagram(NetworkFrame parent)
 	{
@@ -64,6 +73,14 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		this.addMouseMotionListener(this);
 		this.setPreferredSize(new Dimension(VIRTUAL_HEIGHT,VIRTUAL_WIDTH));
 		getLayers();
+		
+		this.popupNetworkLayer = new JPopupMenu();
+		this.popupNetworkLayerEdit = this.parent.addItem(this.popupNetworkLayer,
+				"Edit Layer", 'e');
+		this.popupEditMatrix = this.parent.addItem(this.popupNetworkLayer,
+				"Edit Matrix", 'm');
+		this.popupNetworkLayerDelete = this.parent.addItem(this.popupNetworkLayer,
+				"Delete", 'd');
 	}
 	
 	private void obtainOffScreen()
@@ -205,9 +222,44 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		
 		//g.fillRect(layer.getX(), layer.getY(), 50,50);
 	}
+	
+	private Layer findLayer(MouseEvent e)
+	{
+		// was a layer something clicked
+		Layer clickedLayer = null;
+		for(int i=layers.size()-1;i>=0;i--)
+		{
+			Layer layer = layers.get(i);
+			if( contains(layer,e.getX(),e.getY()))
+			{
+				clickedLayer = layer;
+			}
+		}
+		return clickedLayer;
+	}
 
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseClicked(MouseEvent e) {
+		
+		Layer clickedLayer = findLayer(e);
+		
+		if (MouseUtil.isRightClick(e)) {
+			rightClick(e,clickedLayer);
+		}
+		else
+		if (e.getClickCount() == 2) {
+
+			doubleClick(e,clickedLayer);
+		}
+		
+	}
+	
+	private void rightClick(MouseEvent e,Layer clickedLayer)
+	{
+		this.popupNetworkLayer.show(e.getComponent(), e.getX(), e.getY());
+	}
+	
+	private void doubleClick(MouseEvent e,Layer clickedLayer)
+	{
 		
 	}
 
@@ -224,17 +276,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	@SuppressWarnings("unchecked")
 	public void mousePressed(MouseEvent e) {
 		
-		
-		// was a layer something clicked
-		Layer clickedLayer = null;
-		for(int i=layers.size()-1;i>=0;i--)
-		{
-			Layer layer = layers.get(i);
-			if( contains(layer,e.getX(),e.getY()))
-			{
-				clickedLayer = layer;
-			}
-		}
+		Layer clickedLayer = findLayer(e);
 		
 		// is a synapse connection about to start or end
 		if( this.parent.getNetworkToolbar().getSelected()!=null)
@@ -416,7 +458,13 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	}
 	
 
-
+	public void actionPerformed(final ActionEvent action) {
+		if (action.getSource() == this.popupNetworkLayerEdit) {
+			//performEditLayer();
+		} else if (action.getSource() == this.popupNetworkLayerDelete) {
+			//performDeleteLayer();
+		}  
+	}
 	
 	
 }

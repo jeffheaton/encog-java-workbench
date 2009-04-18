@@ -53,10 +53,11 @@ import org.encog.neural.networks.synapse.OneToOneSynapse;
 import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogListFrame;
+import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.network.NetworkTool.Type;
 import org.encog.workbench.models.NetworkListModel;
 
-public class NetworkFrame extends EncogListFrame {
+public class NetworkFrame extends EncogCommonFrame {
 
 	/**
 	 * 
@@ -69,14 +70,10 @@ public class NetworkFrame extends EncogListFrame {
 	private JButton properties;
 	private NetworkListModel model;
 	private JScrollPane scroll;
-
-	private JPopupMenu popupNetworkLayer;
-	private JMenuItem popupNetworkLayerDelete;
-	private JMenuItem popupNetworkLayerEdit;
 	
 	private List<NetworkTool> tools = new ArrayList<NetworkTool>();
 	
-	private JMenuItem popupEditMatrix;
+
 	
 	private ImageIcon layerBasic;
 	private ImageIcon layerContext;
@@ -104,15 +101,7 @@ public class NetworkFrame extends EncogListFrame {
 	}
 
 	public void actionPerformed(final ActionEvent action) {
-		if (action.getSource() == this.editLayer
-				|| action.getSource() == this.popupNetworkLayerEdit) {
-			performEditLayer();
-		} else if (action.getSource() == this.deleteLayer
-				|| action.getSource() == this.popupNetworkLayerDelete) {
-			//performDeleteLayer();
-		} else if (action.getSource() == this.addLayer) {
-			performAddLayer();
-		} 
+
 	}
 
 	/**
@@ -122,33 +111,6 @@ public class NetworkFrame extends EncogListFrame {
 		return (BasicNetwork) getEncogObject();
 	}
 
-	@Override
-	protected void openItem(final Object item) {
-
-		if (getSubwindows().getFrames().size() > 0) {
-			EncogWorkBench.displayError("Can't Edit Layer",
-					"Can't edit layers while matrix windows are open.");
-			return;
-		}
-	}
-
-	private void performAddLayer() {
-
-	}
-
-
-
-	private void performEditLayer() {
-		final Object item = this.contents.getSelectedValue();
-		openItem(item);
-	}
-
-	@Override
-	public void rightMouseClicked(final MouseEvent e, final Object item) {
-		if (item != null) {
-			this.popupNetworkLayer.show(e.getComponent(), e.getX(), e.getY());
-		}
-	}
 
 	public void windowOpened(final WindowEvent arg0) {
 		setSize(640, 480);
@@ -172,22 +134,9 @@ public class NetworkFrame extends EncogListFrame {
 		
 		content.add(this.networkToolbar, BorderLayout.WEST);
 
-
-		this.model = new NetworkListModel(getData());
-		this.contents = new JList(this.model);
-		this.contents.addMouseListener(this);
-
-		this.contents.setFixedCellHeight(72);
-
 		setTitle("Edit Neural Network");
 
-		this.popupNetworkLayer = new JPopupMenu();
-		this.popupNetworkLayerEdit = this.addItem(this.popupNetworkLayer,
-				"Edit Layer", 'e');
-		this.popupEditMatrix = this.addItem(this.popupNetworkLayer,
-				"Edit Matrix", 'm');
-		this.popupNetworkLayerDelete = this.addItem(this.popupNetworkLayer,
-				"Delete", 'd');
+
 
 	}
 
@@ -208,8 +157,13 @@ public class NetworkFrame extends EncogListFrame {
 		this.networkToolbar.clearSelection();
 		
 	}
+
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
-	
+
 	
 	
 }
