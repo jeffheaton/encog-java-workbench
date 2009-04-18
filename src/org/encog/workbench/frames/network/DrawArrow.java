@@ -163,14 +163,12 @@ public class DrawArrow {
 	{
 		Polygon arrowHead = generateArrowHead(toSide,to.x,to.y);
 		
-		g.setColor(Color.BLACK);
 		g.drawLine(from.x,from.y,to.x,to.y);	
 		g.fillPolygon(arrowHead);
 	}
 	
 	public static void drawSelfArrow(Graphics g, Synapse synapse)
 	{
-		g.setColor(Color.BLACK);
 		int x = synapse.getFromLayer().getX()+NetworkDiagram.LAYER_WIDTH-(SELF_CONNECTED_WIDTH/2);
 		int y = synapse.getFromLayer().getY()-(SELF_CONNECTED_WIDTH/2);
 		g.drawArc(x, y, SELF_CONNECTED_WIDTH, SELF_CONNECTED_WIDTH,300, 240);

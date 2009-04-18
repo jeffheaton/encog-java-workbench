@@ -69,6 +69,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	private JMenuItem popupNetworkLayerDelete;
 	private JMenuItem popupNetworkLayerEdit;
 	private JMenuItem popupEditMatrix;
+	private Synapse selectedSynapse;
 	
 	public NetworkDiagram(NetworkFrame parent)
 	{
@@ -143,6 +144,12 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	
 	private void drawSelfConnectedSynapse(Graphics g,
 			Synapse synapse) {
+		
+		if( synapse==this.selectedSynapse)
+			g.setColor(Color.CYAN);
+		else
+			g.setColor(Color.BLACK);
+		
 		DrawArrow.drawSelfArrow(g, synapse);
 		g.drawString(this.getSynapseText(synapse), 
 				synapse.getToLayer().getX()+100, 
@@ -173,6 +180,12 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	}
 
 	private void drawSynapse(Graphics g, Synapse synapse) {
+		
+		if( synapse==this.selectedSynapse )
+			g.setColor(Color.CYAN);
+		else
+			g.setColor(Color.BLACK);
+		
 		DrawArrow.drawArrow(g,synapse);
 		
 		String type = getSynapseText(synapse);
@@ -181,7 +194,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		int labelY = Math.min(synapse.getFromLayer().getY(), synapse.getToLayer().getY());
 		int distX = Math.abs(synapse.getFromLayer().getX() - synapse.getToLayer().getX())/2;
 		int distY = Math.abs(synapse.getFromLayer().getY() - synapse.getToLayer().getY())/2;
-		g.setColor(Color.BLACK);
+		
 		g.setFont(WorkbenchFonts.getTextFont());
 		g.drawString(type, labelX+distX, labelY+distY+40);
 		
@@ -251,6 +264,25 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		}
 		return clickedLayer;
 	}
+	
+	private Synapse findSynapse(MouseEvent e)
+	{
+		for(Layer layer: this.layers)
+		{
+			for(Synapse synapse: layer.getNext())
+			{
+				int x1 = Math.min(synapse.getFromLayer().getX(), synapse.getToLayer().getX())-10+(LAYER_WIDTH/2);
+				int y1 = Math.min(synapse.getFromLayer().getY(), synapse.getToLayer().getY())-10;
+				int x2 = Math.max(synapse.getFromLayer().getX(), synapse.getToLayer().getX())+10+(LAYER_WIDTH/2);
+				int y2 = Math.max(synapse.getFromLayer().getY(), synapse.getToLayer().getY())+10;
+				
+				if( (e.getX()>x1 && e.getX()<x2) &&
+					(e.getY()>y1 && e.getY()<y2) )
+					return synapse;
+			}
+		}
+		return null;
+	}
 
 	public void mouseClicked(MouseEvent e) {
 		
@@ -291,7 +323,21 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	public void mousePressed(MouseEvent e) {
 		
 		Layer clickedLayer = findLayer(e);
+		
 		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
+		
+		// was no layer clicked?  Maybe a synapse was.
+		if( clickedLayer==null )
+		{
+			Synapse clickedSynapse = findSynapse(e);
+			if( clickedSynapse!=null)
+			{
+				clearSelection();
+				this.selectedSynapse = clickedSynapse;
+				repaint();
+				return;
+			}
+		}
 		
 		// is a synapse connection about to start or end
 		if( this.parent.getNetworkToolbar().getSelected()!=null)
@@ -302,6 +348,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 				// about to start
 				if( this.fromLayer==null )
 				{
+					clearSelection();
 					this.selected = this.fromLayer = clickedLayer;
 					repaint();
 					return;
@@ -323,13 +370,13 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			if( selected==clickedLayer)
 			{
 				// deselected
-				selected = null;
-				repaint();
+				this.clearSelection();
 				return;
 			}
 			else
 			{
 				// selected
+				clearSelection();
 				selected = clickedLayer;
 				dragOffsetX = e.getX()-clickedLayer.getX();
 				dragOffsetY = e.getY()-clickedLayer.getY();
@@ -348,6 +395,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		else if( this.parent.getNetworkToolbar().getSelected()!=null)
 		{
 			try {
+				clearSelection();
 				Class<? extends Layer> c = this.parent.getNetworkToolbar().getSelected().getClassType();
 				Layer layer = (Layer)c.newInstance();
 				this.parent.getNetworkToolbar().setSelected(null);
@@ -374,10 +422,9 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		}
 		
 		// nothing was selected, deselect if something was previously
-		if( this.selected!=null )
+		if( this.selected!=null || this.selectedSynapse!=null)
 		{
-			this.selected = null;
-			repaint();
+			this.clearSelection();
 		}
 		
 	}
@@ -476,10 +523,11 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	}
 
 	public void clearSelection() {
-		if(this.selected!=null)
+		if(this.selected!=null || this.selectedSynapse!=null)
 		{
 			this.fromLayer = null;
 			this.selected=null;
+			this.selectedSynapse=null;
 			repaint();
 		}
 		
