@@ -15,7 +15,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -60,7 +64,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	private Image offscreen;
 	private Graphics offscreenGraphics;
 	private List<Layer> layers = new ArrayList<Layer>();
-	private List<Layer> orphanLayers = new ArrayList<Layer>();
+	private Set<Layer> orphanLayers = new HashSet<Layer>();
 	private JPopupMenu popupNetworkLayer;
 	private JMenuItem popupNetworkLayerDelete;
 	private JMenuItem popupNetworkLayerEdit;
@@ -118,7 +122,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			{
 				drawInput(offscreenGraphics,layer);
 			}
-			else if(network.isOutput(layer))
+			if(network.isOutput(layer))
 			{
 				drawOutput(offscreenGraphics,layer);
 			}
@@ -287,6 +291,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	public void mousePressed(MouseEvent e) {
 		
 		Layer clickedLayer = findLayer(e);
+		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
 		
 		// is a synapse connection about to start or end
 		if( this.parent.getNetworkToolbar().getSelected()!=null)
@@ -346,7 +351,14 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 				Class<? extends Layer> c = this.parent.getNetworkToolbar().getSelected().getClassType();
 				Layer layer = (Layer)c.newInstance();
 				this.parent.getNetworkToolbar().setSelected(null);
-				this.orphanLayers.add(layer);
+				
+				if( network.getInputLayer()==null )
+				{
+					network.addLayer(layer);
+					network.getStructure().finalizeStructure();
+				}
+				else
+					this.orphanLayers.add(layer);
 				layer.setX(e.getX());
 				layer.setY(e.getY());
 				this.getLayers();
@@ -372,6 +384,8 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	
 	private void createSynapse(Layer clickedLayer)
 	{
+		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
+		
 		// validate any obvious errors
 		if( this.fromLayer.isConnectedTo(clickedLayer))
 		{
@@ -406,7 +420,14 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			EncogWorkBench.displayError("Synapse Error", e.getMessage());
 		}
 		
-		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
+		// should the output layer be changed now?
+		if( this.fromLayer==network.getOutputLayer() )
+		{
+			network.setOutputLayer(clickedLayer);
+		}
+		
+		// recreate the network
+		
 		network.getStructure().finalizeStructure();
 		this.parent.clearSelection();
 		repaint();
@@ -430,10 +451,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		network.getStructure().finalizeStructure();
 		
 		// first remove any orphans that may have made it into the "real" list
-		for(Layer layer: network.getStructure().getLayers() )
-		{
-			this.orphanLayers.remove(layer);
-		}
+		fixOrphans();
 		
 		// now build the layer list
 		this.layers.clear();
@@ -525,8 +543,75 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		if( EncogWorkBench.askQuestion("Are you sure?", "Do you want to delete this layer?") )
 		{
 			BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
-			//network.deleteLayer(this.selected);
+			
+			// add all layers to orphan layers, some will be removed later
+			this.orphanLayers.addAll(network.getStructure().getLayers());
+			
+			// are we removing the input layer?
+			if( this.selected==network.getInputLayer())
+			{
+				if( this.selected!=null && this.selected.getNext().size()>0 )
+				{
+				Synapse nextSynapse = this.selected.getNext().get(0);
+				Layer nextLayer = nextSynapse.getToLayer();
+				network.setInputLayer(nextLayer);
+				}
+				else
+				{
+					network.setInputLayer(null);
+					network.setOutputLayer(null);
+				}
+			}
+			
+			// are we removing the output layer?
+			if( this.selected==network.getOutputLayer())
+			{
+				Collection<Layer> prev = network.getStructure().getPreviousLayers(this.selected);
+				Iterator<Layer> itr = prev.iterator();
+				if( itr.hasNext())
+				{
+					Layer prevLayer = itr.next();
+					network.setOutputLayer(prevLayer);
+				}
+				else
+				{
+					network.setOutputLayer(network.getInputLayer());
+				}
+				
+			}
+			
+			// remove any synapses to this layer
+			for(Synapse synapse: network.getStructure().getSynapses() )
+			{
+				if( synapse.getToLayer()==this.selected)
+				{
+					synapse.getFromLayer().getNext().remove(synapse);
+				}
+			}
+			
+			// rebuild the network
+			network.getStructure().finalizeStructure();
+			
+			// fix the orphan list
+			fixOrphans();
+			this.orphanLayers.remove(this.selected);
+			this.getLayers();
+			
+			// redraw
+			this.clearSelection();
+			repaint();
 		}
+	}
+
+	private void fixOrphans() {
+		
+		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
+		
+		for(Layer layer: network.getStructure().getLayers() )
+		{
+			this.orphanLayers.remove(layer);
+		}
+		
 	}
 	
 	
