@@ -195,18 +195,8 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		else
 			g.setColor(Color.BLACK);
 		
-		DrawArrow.drawArrow(g,synapse);
-		
 		String type = getSynapseText(synapse);
-		
-		int labelX = Math.min(synapse.getFromLayer().getX(), synapse.getToLayer().getX());
-		int labelY = Math.min(synapse.getFromLayer().getY(), synapse.getToLayer().getY());
-		int distX = Math.abs(synapse.getFromLayer().getX() - synapse.getToLayer().getX())/2;
-		int distY = Math.abs(synapse.getFromLayer().getY() - synapse.getToLayer().getY())/2;
-		
-		g.setFont(WorkbenchFonts.getTextFont());
-		g.drawString(type, labelX+distX, labelY+distY+40);
-		
+		DrawArrow.drawArrow(g,synapse,type);		
 	}
 
 	private NetworkTool findTool(Layer layer)
@@ -392,7 +382,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		
 		if(clickedLayer!=null)
 		{
-			if( selected==clickedLayer)
+			if( selected==clickedLayer && !MouseUtil.isRightClick(e))
 			{
 				// deselected
 				this.clearSelection();
@@ -492,11 +482,8 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			EncogWorkBench.displayError("Synapse Error", e.getMessage());
 		}
 		
-		// should the output layer be changed now?
-		if( this.fromLayer==network.getOutputLayer() )
-		{
-			network.setOutputLayer(clickedLayer);
-		}
+		// Attempt to determine the output layer
+		network.inferOutputLayer();
 		
 		// recreate the network
 		
@@ -621,13 +608,21 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		if( this.selectedSynapse!=null && 
 				EncogWorkBench.askQuestion("Are you sure?", "Do you want to delete this synapse?") )
 		{
+			// add all layers to orphan layers, some will be removed later
+			this.orphanLayers.addAll(network.getStructure().getLayers());
+			
+			// perform the delete
 			this.selectedSynapse.getFromLayer().getNext().remove(this.selectedSynapse);
 			network.getStructure().finalizeStructure();
+			
+			// handle any orphans
+			this.fixOrphans();
+			network.inferOutputLayer();
+			
+			// rebuild the network
 			getLayers();
 			
 			// does the output layer need to be adjusted
-			
-			
 			this.repaint();
 		}
 	}
@@ -657,23 +652,6 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 				}
 			}
 			
-			// are we removing the output layer?
-			if( this.selected==network.getOutputLayer())
-			{
-				Collection<Layer> prev = network.getStructure().getPreviousLayers(this.selected);
-				Iterator<Layer> itr = prev.iterator();
-				if( itr.hasNext())
-				{
-					Layer prevLayer = itr.next();
-					network.setOutputLayer(prevLayer);
-				}
-				else
-				{
-					network.setOutputLayer(network.getInputLayer());
-				}
-				
-			}
-			
 			// remove any synapses to this layer
 			for(Synapse synapse: network.getStructure().getSynapses() )
 			{
@@ -683,7 +661,8 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 				}
 			}
 			
-			// rebuild the network
+			// rebuild the network & attempt to determine the output layer
+			network.inferOutputLayer();
 			network.getStructure().finalizeStructure();
 			
 			// fix the orphan list
