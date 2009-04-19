@@ -1,6 +1,7 @@
 package org.encog.workbench.frames.network;
 
 import java.awt.Point;
+import java.awt.Polygon;
 
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.synapse.Synapse;
@@ -10,8 +11,8 @@ public class CalculateArrow {
 	
 	private  Point from;
 	private  Point to;
-	Side fromSide;
-	Side toSide;
+	private Side fromSide;
+	private Side toSide;
 	
 	public CalculateArrow(Synapse synapse, boolean moveBack)
 	{
@@ -73,7 +74,7 @@ public class CalculateArrow {
 	 * @param p
 	 * @return
 	 */
-	private static Point moveArrowBack(Side side,Point p)
+	private Point moveArrowBack(Side side,Point p)
 	{
 		switch(side)
 		{
@@ -89,7 +90,7 @@ public class CalculateArrow {
 		return null;
 	}
 	
-	private static Point findSide(Side side,Layer layer)
+	private Point findSide(Side side,Layer layer)
 	{
 		switch(side)
 		{
@@ -112,7 +113,7 @@ public class CalculateArrow {
 	 * @param synapse
 	 * @return
 	 */
-	public static boolean isBackConnected(Synapse synapseA)
+	public boolean isBackConnected(Synapse synapseA)
 	{
 		for(Synapse synapseB: synapseA.getToLayer().getNext())
 		{
@@ -138,7 +139,28 @@ public class CalculateArrow {
 		return toSide;
 	}
 	
-	
+	public Polygon obtainPologygon()
+	{
+		Polygon result = new Polygon();
+		
+		if( this.fromSide==Side.Left || this.fromSide==Side.Right)
+		{
+			result.addPoint((int)this.from.getX(), (int)from.getY()-10);
+			result.addPoint((int)this.from.getX(), (int)from.getY()+10);
+			result.addPoint((int)this.to.getX(), (int)to.getY()+10);
+			result.addPoint((int)this.to.getX(), (int)to.getY()-10);
+		}
+		else
+		{
+			result.addPoint((int)this.from.getX()-10, (int)from.getY());
+			result.addPoint((int)this.from.getX()+10, (int)from.getY());
+			result.addPoint((int)this.to.getX()+10, (int)to.getY());
+			result.addPoint((int)this.to.getX()-10, (int)to.getY());
+		}
+		
+		
+		return result;
+	}
 	
 	
 }

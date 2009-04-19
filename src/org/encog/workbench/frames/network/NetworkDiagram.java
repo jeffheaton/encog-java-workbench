@@ -270,13 +270,9 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		{
 			for(Synapse synapse: layer.getNext())
 			{
-				int x1 = Math.min(synapse.getFromLayer().getX(), synapse.getToLayer().getX())-10+(LAYER_WIDTH/2);
-				int y1 = Math.min(synapse.getFromLayer().getY(), synapse.getToLayer().getY())-10;
-				int x2 = Math.max(synapse.getFromLayer().getX(), synapse.getToLayer().getX())+10+(LAYER_WIDTH/2);
-				int y2 = Math.max(synapse.getFromLayer().getY(), synapse.getToLayer().getY())+10;
-				
-				if( (e.getX()>x1 && e.getX()<x2) &&
-					(e.getY()>y1 && e.getY()<y2) )
+				CalculateArrow arrow = new CalculateArrow(synapse,false);
+				Polygon p = arrow.obtainPologygon();
+				if( p.contains(e.getX(),e.getY()))
 					return synapse;
 			}
 		}
