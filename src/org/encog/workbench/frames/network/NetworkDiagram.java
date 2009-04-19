@@ -37,6 +37,7 @@ import org.encog.neural.networks.synapse.WeightlessSynapse;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.WorkbenchFonts;
+import org.encog.workbench.dialogs.layers.EditBasicLayer;
 import org.encog.workbench.frames.network.NetworkTool.Type;
 import org.encog.workbench.util.MouseUtil;
 
@@ -545,7 +546,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	public void actionPerformed(final ActionEvent action) {
 		
 		if (action.getSource() == this.popupNetworkLayerEdit) {
-			//performEditLayer();
+			performLayerEdit();
 		} else if (action.getSource() == this.popupNetworkLayerDelete) {
 			performLayerDelete();
 		}  
@@ -554,6 +555,15 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		}  
 	}
 		
+	private void performLayerEdit() {
+		EditBasicLayer dialog = new EditBasicLayer(this.parent);
+		if( dialog.process() )
+		{
+			
+		}
+		
+	}
+
 	public JMenuItem addItem(final JPopupMenu m, final String s,
 			final int key) {
 
