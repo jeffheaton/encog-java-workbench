@@ -34,6 +34,7 @@ import org.encog.workbench.frames.TextEditorFrame;
 import org.encog.workbench.frames.TrainingDataFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.network.NetworkFrame;
+import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.util.ExtensionFilter;
@@ -236,26 +237,6 @@ public class EncogDocumentOperations {
 
 	}
 	
-	private BasicNetwork createXOR()
-	{
-		Layer layer1,layer2,layer3;
-		BasicNetwork network = new BasicNetwork();
-		network.addLayer(layer1 = new BasicLayer(2));
-		network.addLayer(layer2 = new BasicLayer(3));
-		network.addLayer(layer3 = new BasicLayer(1));
-		
-		layer1.setX(10);
-		layer1.setY(10);
-		layer2.setX(10);
-		layer2.setY(110);
-		layer3.setX(10);
-		layer3.setY(210);
-		
-		network.getStructure().finalizeStructure();
-		network.reset();
-		return network;
-	}
-
 	public void performObjectsCreate() {
 
 		try
@@ -275,10 +256,7 @@ public class EncogDocumentOperations {
 		final SelectItem result = dialog.getSelected();
 
 		if (result == itemNetwork) {
-			final BasicNetwork network = createXOR();
-			network.setDescription("A neural network");
-			EncogWorkBench.getInstance().getCurrentFile().add("network-" + this.networkCount++,network);
-			EncogWorkBench.getInstance().getMainWindow().redraw();
+			CreateNeuralNetwork.process("network-" + this.networkCount++);
 		} else if (result == itemTraining) {
 			final BasicNeuralDataSet trainingData = new BasicNeuralDataSet(
 					NeuralConst.XOR_INPUT, NeuralConst.XOR_IDEAL);
