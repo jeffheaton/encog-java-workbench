@@ -5,19 +5,14 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -565,24 +560,23 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	private void performLayerEdit() {
 		EditBasicLayer dialog = new EditBasicLayer(this.parent);
 		dialog.setNeuronCount(this.selected.getNeuronCount());
-		dialog.setThresholds(this.selected.hasThreshold());
+		if( this.selected.hasThreshold() )
+		{
+			// duplicate the thresholds
+			double[] t = new double[this.selected.getNeuronCount()];
+			for(int i=0;i<t.length;i++)
+			{
+				t[i] = this.selected.getThreshold(i);
+			}
+			dialog.setThresholds(t);
+		}
+		else
+			dialog.setThresholds(null);
+		
 		if( dialog.process() )
 		{
 			// handle the thresholds
-			
-			if( !dialog.isThresholds() )
-			{
-				// eliminate thresholds
-				this.selected.setThreshold(null);
-			}
-			else
-			{
-				// create new thresholds, if they were not there already
-				if( !this.selected.hasThreshold() )
-				{
-					this.selected.setThreshold(new double[this.selected.getNeuronCount()]);
-				}
-			}
+			this.selected.setThreshold(dialog.getThresholds());
 			
 			// handle neurons, did the count change?
 			if( dialog.getNeuronCount()!=this.selected.getNeuronCount())
