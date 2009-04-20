@@ -34,6 +34,7 @@ import javax.swing.JTable;
 import org.encog.matrix.Matrix;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.Layer;
+import org.encog.neural.networks.synapse.Synapse;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.MatrixTableModel;
 
@@ -47,11 +48,11 @@ public class MatrixFrame extends EncogCommonFrame {
 	private final JTable table;
 	private final MatrixTableModel model;
 
-	public MatrixFrame(final BasicNetwork data, final Layer layer) {
+	public MatrixFrame(final BasicNetwork data, final Synapse synapse) {
 		setSize(640, 480);
 		setTitle("Weight Matrix for " + data.getName());
-		setEncogObject(layer);
-		this.model = new MatrixTableModel(layer);
+		setEncogObject(synapse);
+		this.model = new MatrixTableModel(synapse);
 		this.table = new JTable(this.model);
 		this.scroll = new JScrollPane(this.table);
 		getContentPane().add(this.scroll);

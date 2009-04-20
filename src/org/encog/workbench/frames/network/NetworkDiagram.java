@@ -34,10 +34,12 @@ import org.encog.neural.networks.synapse.Synapse;
 import org.encog.neural.networks.synapse.SynapseType;
 import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.neural.networks.synapse.WeightlessSynapse;
+import org.encog.neural.prune.Prune;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.WorkbenchFonts;
 import org.encog.workbench.dialogs.layers.EditBasicLayer;
+import org.encog.workbench.frames.MatrixFrame;
 import org.encog.workbench.frames.network.NetworkTool.Type;
 import org.encog.workbench.util.MouseUtil;
 
@@ -69,7 +71,6 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	private JPopupMenu popupNetworkLayer;
 	private JMenuItem popupNetworkLayerDelete;
 	private JMenuItem popupNetworkLayerEdit;
-	private JMenuItem popupEditMatrix;
 	private JPopupMenu popupNetworkSynapse;
 	private JMenuItem popupNetworkSynapseDelete;
 	private JMenuItem popupNetworkSynapseMatrix;
@@ -86,8 +87,6 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		this.popupNetworkLayer = new JPopupMenu();
 		this.popupNetworkLayerEdit = addItem(this.popupNetworkLayer,
 				"Edit Layer", 'e');
-		this.popupEditMatrix = addItem(this.popupNetworkLayer,
-				"Edit Matrix", 'm');
 		this.popupNetworkLayerDelete = addItem(this.popupNetworkLayer,
 				"Delete Layer", 'd');
 		
@@ -552,15 +551,25 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		}  
 		else if (action.getSource() == this.popupNetworkSynapseDelete) {
 			performSynapseDelete();
-		}  
+		}  else if( action.getSource() == this.popupNetworkSynapseMatrix ) {
+			performSynapseMatrix();
+		}
 	}
 		
+	private void performSynapseMatrix() {
+		MatrixFrame frame = new MatrixFrame((BasicNetwork)this.parent.getEncogObject(),this.selectedSynapse);
+		frame.setVisible(true);
+		
+	}
+
 	private void performLayerEdit() {
 		EditBasicLayer dialog = new EditBasicLayer(this.parent);
 		dialog.setNeuronCount(this.selected.getNeuronCount());
 		dialog.setThresholds(this.selected.hasThreshold());
 		if( dialog.process() )
 		{
+			// handle the thresholds
+			
 			if( !dialog.isThresholds() )
 			{
 				// eliminate thresholds
@@ -574,6 +583,16 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 					this.selected.setThreshold(new double[this.selected.getNeuronCount()]);
 				}
 			}
+			
+			// handle neurons, did the count change?
+			if( dialog.getNeuronCount()!=this.selected.getNeuronCount())
+			{
+				BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
+				Prune prune = new Prune(network);
+				prune.changeNeuronCount(this.selected, dialog.getNeuronCount());
+				repaint();
+			}
+			
 		}
 		
 	}

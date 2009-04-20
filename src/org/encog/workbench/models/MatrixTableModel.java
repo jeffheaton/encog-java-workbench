@@ -30,14 +30,15 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import org.encog.matrix.Matrix;
 import org.encog.neural.networks.layers.Layer;
+import org.encog.neural.networks.synapse.Synapse;
 
 public class MatrixTableModel implements TableModel {
 
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();
-	private final Layer layer;
+	private final Synapse synapse;
 
-	public MatrixTableModel(final Layer layer) {
-		this.layer = layer;
+	public MatrixTableModel(final Synapse synapse) {
+		this.synapse = synapse;
 	}
 
 	public void addTableModelListener(final TableModelListener l) {
@@ -49,21 +50,34 @@ public class MatrixTableModel implements TableModel {
 	}
 
 	public int getColumnCount() {
-		return 0;//this.layer.getMatrix().getCols() + 1;
+		return this.synapse.getMatrix().getCols() + 1;
 	}
 
 	public String getColumnName(final int columnIndex) {
-		return "";
+		if( columnIndex==0 )
+		{
+			return "";
+		}
+		else
+		{
+			return "To Neuron: " + columnIndex;
+		}
 
 	}
 
 	public int getRowCount() {
-		return 0;// this.layer.getMatrix().getRows();
+		return this.synapse.getMatrix().getRows();
 	}
 
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
-		
-		return "";
+		if(columnIndex==0)
+		{
+			return "From Neuron: " + (rowIndex+1);
+		}
+		else
+		{
+			return "" + this.synapse.getMatrix().get(rowIndex, columnIndex-1);
+		}
 		
 	}
 
