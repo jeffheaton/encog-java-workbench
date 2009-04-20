@@ -557,9 +557,23 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		
 	private void performLayerEdit() {
 		EditBasicLayer dialog = new EditBasicLayer(this.parent);
+		dialog.setNeuronCount(this.selected.getNeuronCount());
+		dialog.setThresholds(this.selected.hasThreshold());
 		if( dialog.process() )
 		{
-			
+			if( !dialog.isThresholds() )
+			{
+				// eliminate thresholds
+				this.selected.setThreshold(null);
+			}
+			else
+			{
+				// create new thresholds, if they were not there already
+				if( !this.selected.hasThreshold() )
+				{
+					this.selected.setThreshold(new double[this.selected.getNeuronCount()]);
+				}
+			}
 		}
 		
 	}

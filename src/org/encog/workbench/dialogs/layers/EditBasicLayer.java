@@ -21,6 +21,9 @@ public class EditBasicLayer extends EncogCommonDialog {
 	JTextField txtNeuronCount;
 	JCheckBox cbThresholds;
 	
+	private int neuronCount;
+	private boolean thresholds;
+	
 	public EditBasicLayer(Frame owner) {
 		super(owner);
 		
@@ -46,14 +49,33 @@ public class EditBasicLayer extends EncogCommonDialog {
 
 	@Override
 	public void collectFields() throws ValidationException {
-		// TODO Auto-generated method stub
-		
+		this.neuronCount = (int)this.validateFieldNumeric("neuron count", this.txtNeuronCount, 1, 10000);
+		this.thresholds = this.cbThresholds.isSelected();
 	}
 
 	@Override
 	public void setFields() {
-		// TODO Auto-generated method stub
+		this.txtNeuronCount.setText(""+this.neuronCount);
+		this.cbThresholds.setSelected(this.thresholds);
 		
 	}
+
+	public int getNeuronCount() {
+		return neuronCount;
+	}
+
+	public void setNeuronCount(int neuronCount) {
+		this.neuronCount = neuronCount;
+	}
+
+	public boolean isThresholds() {
+		return thresholds;
+	}
+
+	public void setThresholds(boolean thresholds) {
+		this.thresholds = thresholds;
+	}
+	
+	
 
 }
