@@ -1,8 +1,11 @@
 package org.encog.workbench.process;
 
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.pattern.ElmanPattern;
 import org.encog.neural.pattern.HopfieldPattern;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.createnetwork.CreateElmanDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateNeuralNetworkDialog;
 import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
 
@@ -43,8 +46,11 @@ public class CreateNeuralNetwork {
 					break;
 			}
 			
+			if( network!=null )
+			{
 			EncogWorkBench.getInstance().getCurrentFile().add(name,network);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
+			}
 		}
 	}
 
@@ -59,14 +65,30 @@ public class CreateNeuralNetwork {
 	}
 
 	private static BasicNetwork createElman(String name) {
-		return null;
+		CreateElmanDialog dialog = new CreateElmanDialog(EncogWorkBench.getInstance().getMainWindow());
+		if( dialog.process())
+		{
+		ElmanPattern elman = new ElmanPattern();
+		elman.setInputNeurons(dialog.getInputCount());
+		elman.addHiddenLayer(dialog.getHiddenCount());
+		elman.setOutputNeurons(dialog.getOutputCount());
+		return elman.generate();
+		}
+		else
+			return null;
 		
 	}
 
 	private static BasicNetwork createHopfield(String name) {
+		CreateHopfieldDialog dialog = new CreateHopfieldDialog(EncogWorkBench.getInstance().getMainWindow());
+		if( dialog.process())
+		{
 		HopfieldPattern hopfield = new HopfieldPattern();
-		hopfield.setInputNeurons(4);
+		hopfield.setInputNeurons(dialog.getNeuronCount());
 		return hopfield.generate();
+		}
+		else
+			return null;
 		
 	}
 

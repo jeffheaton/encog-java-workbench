@@ -202,7 +202,7 @@ abstract public class EncogCommonDialog extends JDialog implements
 			throw new ValidationException("Must enter a value above " + low
 					+ " for: " + name);
 		}
-		if (d > high) {
+		if( (high>low) && (d > high) ) {
 			throw new ValidationException("Must enter a value below " + low
 					+ " for: " + name);
 		}
