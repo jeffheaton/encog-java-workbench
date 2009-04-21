@@ -39,6 +39,8 @@ import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.NeuralConst;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EncogDocumentOperations {
 
@@ -49,6 +51,9 @@ public class EncogDocumentOperations {
 	private int parseCount = 1;
 	private int optionsCount = 1;
 	private int textCount = 1;
+	
+	@SuppressWarnings("unused")
+	final private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	public EncogDocumentOperations(EncogDocumentFrame owner) {
 		this.owner = owner;
@@ -283,9 +288,10 @@ public class EncogDocumentOperations {
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 		}
-		catch(Throwable t)
+		catch(EncogError t)
 		{
 			EncogWorkBench.displayError("Error creating object", t.getMessage());
+			logger.error("Error creating object",t);
 		}
 	}
 	public void performObjectsDelete() {

@@ -29,7 +29,7 @@ import org.encog.neural.networks.synapse.Synapse;
 import org.encog.neural.networks.synapse.SynapseType;
 import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.neural.networks.synapse.WeightlessSynapse;
-import org.encog.neural.prune.Prune;
+import org.encog.neural.prune.PruneSelective;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.WorkbenchFonts;
@@ -582,7 +582,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			if( dialog.getNeuronCount()!=this.selected.getNeuronCount())
 			{
 				BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
-				Prune prune = new Prune(network);
+				PruneSelective prune = new PruneSelective(network);
 				prune.changeNeuronCount(this.selected, dialog.getNeuronCount());
 				repaint();
 			}
