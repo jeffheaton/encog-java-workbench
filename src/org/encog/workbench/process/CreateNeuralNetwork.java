@@ -1,10 +1,13 @@
 package org.encog.workbench.process;
 
+import org.encog.neural.activation.ActivationTANH;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.ElmanPattern;
+import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.pattern.HopfieldPattern;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createnetwork.CreateElmanDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateFeedforward;
 import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateNeuralNetworkDialog;
 import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
@@ -97,6 +100,28 @@ public class CreateNeuralNetwork {
 	}
 
 	private static BasicNetwork createFeedForward(String name) {
+		CreateFeedforward dialog = new CreateFeedforward(EncogWorkBench.getInstance().getMainWindow());
+		if( dialog.process())
+		{
+			FeedForwardPattern feedforward = new FeedForwardPattern();
+			feedforward.setInputNeurons(dialog.getInputCount().getValue());
+			for(int i=0;i<dialog.getHidden().getModel().size();i++)
+			{
+				String str = (String)dialog.getHidden().getModel().getElementAt(i);
+				int i1 = str.indexOf(':');
+				int i2 = str.indexOf("neur");
+				if( i1!=-1 && i2!=-1 )
+				{
+					str = str.substring(i1+1,i2).trim();
+					int neuronCount = Integer.parseInt(str);
+					feedforward.addHiddenLayer(neuronCount);
+				}
+			}
+			feedforward.setInputNeurons(dialog.getInputCount().getValue());
+			feedforward.setOutputNeurons(dialog.getOutputCount().getValue());
+			feedforward.setActivationFunction(new ActivationTANH());
+			return feedforward.generate();
+		}
 		return null;
 		
 	}

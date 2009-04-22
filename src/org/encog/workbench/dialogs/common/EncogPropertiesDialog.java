@@ -59,6 +59,7 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 	
 	public void addProperty(PropertiesField field) {
 		this.properties.add(field);
+		field.setOwner(this);
 		
 	}
 

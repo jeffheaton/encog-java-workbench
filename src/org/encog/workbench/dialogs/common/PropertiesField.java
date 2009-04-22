@@ -12,6 +12,7 @@ public abstract class PropertiesField {
 	private final boolean required;
 	private JComponent field;
 	private JLabel labelControl;
+	private EncogPropertiesDialog owner;
 	
 	public PropertiesField(String name, String label,boolean required)
 	{
@@ -67,4 +68,15 @@ public abstract class PropertiesField {
 		
 		return y+this.field.getHeight();
 	}
+
+	public EncogPropertiesDialog getOwner() {
+		return owner;
+	}
+
+	public void setOwner(EncogPropertiesDialog owner) {
+		this.owner = owner;
+	}
+	
+	
+	
 }
