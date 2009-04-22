@@ -69,9 +69,9 @@ public class CreateNeuralNetwork {
 		if( dialog.process())
 		{
 		ElmanPattern elman = new ElmanPattern();
-		elman.setInputNeurons(dialog.getInputCount());
-		elman.addHiddenLayer(dialog.getHiddenCount());
-		elman.setOutputNeurons(dialog.getOutputCount());
+		elman.setInputNeurons(dialog.getInputCount().getValue());
+		elman.addHiddenLayer(dialog.getHiddenCount().getValue());
+		elman.setOutputNeurons(dialog.getOutputCount().getValue());
 		return elman.generate();
 		}
 		else
@@ -84,7 +84,7 @@ public class CreateNeuralNetwork {
 		if( dialog.process())
 		{
 		HopfieldPattern hopfield = new HopfieldPattern();
-		hopfield.setInputNeurons(dialog.getNeuronCount());
+		hopfield.setInputNeurons(dialog.getNeuronCount().getValue());
 		return hopfield.generate();
 		}
 		else

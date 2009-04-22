@@ -58,21 +58,7 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 	public void collectFields() throws ValidationException {
 		for(PropertiesField field: this.properties)
 		{
-			switch(field.getType())
-			{
-			case string:
-				String strVal = this.validateFieldString(field.getName(), (JTextField)field.getField(), field.isRequired());
-				field.setValue(strVal);
-				break;
-			case integer:
-				int intValue = (int)this.validateFieldNumeric(field.getName(), (JTextField)field.getField(), field.getMin(), field.getMax());
-				field.setValue(""+intValue);
-				break;
-			case decimal:
-				int decValue = (int)this.validateFieldNumeric(field.getName(), (JTextField)field.getField(), field.getMin(), field.getMax());
-				field.setValue(""+decValue);
-				break;
-			}
+			field.collect();
 		}
 	}
 

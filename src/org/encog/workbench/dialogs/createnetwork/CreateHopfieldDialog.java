@@ -5,31 +5,28 @@ import java.awt.Frame;
 import javax.swing.JTextField;
 
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
+import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.PropertiesField;
 import org.encog.workbench.dialogs.common.PropertyType;
 
 public class CreateHopfieldDialog extends EncogPropertiesDialog {
 
-	private PropertiesField neuronCount;
+	private IntegerField neuronCount;
 	
 	public CreateHopfieldDialog(Frame owner) {
 		super(owner);
 		setTitle("Create Hopfield Network");
 		setSize(400,400);
 		setLocation(200,200);
-		addProperty(this.neuronCount = new PropertiesField(PropertyType.integer,"neurons","Neuron Count",1,-1,true));
+		addProperty(this.neuronCount = new IntegerField("neurons","Neuron Count",true,1,-1));
 		render();
 	}
-	
-	public int getNeuronCount()
-	{
-		return neuronCount.getValueInt();
+
+	public IntegerField getNeuronCount() {
+		return neuronCount;
 	}
 	
-	public void setNeuronCount(int count)
-	{
-		neuronCount.setValueInt(count);
-	}
+	
 
 	
 
