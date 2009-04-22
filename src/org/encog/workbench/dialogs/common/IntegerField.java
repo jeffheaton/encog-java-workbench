@@ -31,7 +31,7 @@ public class IntegerField extends PropertiesField {
 	}
 
 	@Override
-	void collect() throws ValidationException {
+	public void collect() throws ValidationException {
 		
 		int i = 0;
 		

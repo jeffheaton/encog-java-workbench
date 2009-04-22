@@ -19,7 +19,7 @@ public class TextField extends PropertiesField {
 	}
 
 	@Override
-	void collect() throws ValidationException {
+	public void collect() throws ValidationException {
 		this.value = ((JTextField)this.getField()).getText();
 		if( this.value.length()<1 && this.isRequired())
 		{

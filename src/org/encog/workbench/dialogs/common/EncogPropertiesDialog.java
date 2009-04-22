@@ -31,12 +31,7 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 		
 		for(PropertiesField field: this.properties)
 		{
-			JLabel label = new JLabel(field.getLabel());
-			label.setSize(label.getPreferredSize());
-			contents.add(label);
-			label.setLocation(10, y);
-			labelHeight = label.getHeight();
-			y+=labelHeight;
+			JLabel label = field.createLabel();
 			maxLabelWidth = Math.max(maxLabelWidth, label.getWidth());
 		}
 		
@@ -44,13 +39,7 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 		// create the text fields
 		for(PropertiesField field: this.properties)
 		{
-			JTextField tx = new JTextField();
-			field.setField(tx);
-			tx.setSize(tx.getPreferredSize());
-			contents.add(tx);
-			tx.setLocation(maxLabelWidth+30, y);
-			tx.setSize(dialogWidth-maxLabelWidth-50, tx.getHeight());
-			y+=labelHeight;
+			y = field.createField(contents, maxLabelWidth+30, y, dialogWidth-maxLabelWidth-50 );
 		}
 	}
 

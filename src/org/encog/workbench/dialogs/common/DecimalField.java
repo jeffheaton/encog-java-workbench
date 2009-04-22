@@ -32,7 +32,7 @@ public class DecimalField extends PropertiesField {
 	}
 
 	@Override
-	void collect() throws ValidationException {
+	public void collect() throws ValidationException {
 		
 		double d = 0;
 		
