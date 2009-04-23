@@ -5,11 +5,13 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.ElmanPattern;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.pattern.HopfieldPattern;
+import org.encog.neural.pattern.SOMPattern;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createnetwork.CreateElmanDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateFeedforward;
 import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateNeuralNetworkDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
 
 public class CreateNeuralNetwork {
@@ -96,7 +98,16 @@ public class CreateNeuralNetwork {
 	}
 
 	private static BasicNetwork createSOM(String name) {
-		return null;
+		CreateSOMDialog dialog = new CreateSOMDialog(EncogWorkBench.getInstance().getMainWindow());
+		if( dialog.process())
+		{
+		SOMPattern som = new SOMPattern();
+		som.setInputNeurons(dialog.getInputCount().getValue());
+		som.setOutputNeurons(dialog.getOutputCount().getValue());
+		return som.generate();
+		}
+		else
+			return null;
 	}
 
 	private static BasicNetwork createFeedForward(String name) {
