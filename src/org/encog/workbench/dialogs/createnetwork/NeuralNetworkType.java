@@ -4,6 +4,7 @@ public enum NeuralNetworkType {
 	Empty,
 	Feedforward,
 	SOM,
+	RSOM,
 	Hopfield,
 	Elman,
 	Jordan,

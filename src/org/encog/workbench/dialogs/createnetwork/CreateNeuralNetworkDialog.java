@@ -37,10 +37,11 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog {
 		
 		this.model.addElement("Empty Neural Network");
 		this.model.addElement("Feedforward Neural Network");
-		this.model.addElement("Self Organizing Map");
+		this.model.addElement("Self Organizing Map (SOM)");
 		this.model.addElement("Hopfield Neural Network");
 		this.model.addElement("Recurrent - Elman");
 		this.model.addElement("Recurrent - Jordan");
+		this.model.addElement("Recurrent - SOM");
 		this.model.addElement("Feedforward - Radial Basis");
 	}
 
@@ -72,6 +73,9 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog {
 			this.type = NeuralNetworkType.Jordan;
 			break;
 		case 6:
+			this.type = NeuralNetworkType.RSOM;
+			break;
+		case 7:
 			this.type = NeuralNetworkType.RBF;
 			break;
 		}

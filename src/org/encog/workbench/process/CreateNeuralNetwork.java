@@ -6,6 +6,8 @@ import org.encog.neural.pattern.ElmanPattern;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.pattern.HopfieldPattern;
 import org.encog.neural.pattern.JordanPattern;
+import org.encog.neural.pattern.RSOMPattern;
+import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.pattern.SOMPattern;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createnetwork.CreateElmanDialog;
@@ -13,6 +15,8 @@ import org.encog.workbench.dialogs.createnetwork.CreateFeedforward;
 import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateJordanDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateNeuralNetworkDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateRBFDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateRSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
 
@@ -33,6 +37,9 @@ public class CreateNeuralNetwork {
 				break;
 			case SOM:
 				network = createSOM(name);
+				break;
+			case RSOM:
+				network = createRSOM(name);
 				break;
 			case Hopfield:
 				network = createHopfield(name);
@@ -59,8 +66,29 @@ public class CreateNeuralNetwork {
 		}
 	}
 
+	private static BasicNetwork createRSOM(String name) {
+		CreateRSOMDialog dialog = new CreateRSOMDialog(EncogWorkBench
+				.getInstance().getMainWindow());
+		if (dialog.process()) {
+			RSOMPattern rsom = new RSOMPattern();
+			rsom.setInputNeurons(dialog.getInputCount().getValue());
+			rsom.setOutputNeurons(dialog.getOutputCount().getValue());
+			return rsom.generate();
+		} else
+			return null;
+	}
+
 	private static BasicNetwork createRBF(String name) {
-		return null;
+		CreateRBFDialog dialog = new CreateRBFDialog(EncogWorkBench
+				.getInstance().getMainWindow());
+		if (dialog.process()) {
+			RadialBasisPattern rbf = new RadialBasisPattern();
+			rbf.setInputNeurons(dialog.getInputCount().getValue());
+			rbf.addHiddenLayer(dialog.getHiddenCount().getValue());
+			rbf.setOutputNeurons(dialog.getOutputCount().getValue());
+			return rbf.generate();
+		} else
+			return null;
 
 	}
 
