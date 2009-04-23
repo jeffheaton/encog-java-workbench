@@ -24,6 +24,16 @@ import org.jfree.ui.RefineryUtilities;
 import org.jfree.ui.TextAnchor;
 
 public class EquationPanel extends JPanel {
+	
+	
+	public EquationPanel()
+	{
+		JFreeChart chart = createChart(createDataset());
+        ChartPanel panel = new ChartPanel(chart);
+        panel.setMouseWheelEnabled(true);
+        this.add(panel);
+	}
+	
     /**
      * Creates a dataset with sample values from the normal distribution
      * function.
