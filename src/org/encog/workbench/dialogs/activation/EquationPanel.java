@@ -1,10 +1,14 @@
 package org.encog.workbench.dialogs.activation;
 
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JPanel;
 
+import org.encog.neural.activation.ActivationFunction;
+import org.encog.neural.activation.ActivationSIN;
+import org.encog.neural.activation.ActivationSigmoid;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -25,13 +29,23 @@ import org.jfree.ui.TextAnchor;
 
 public class EquationPanel extends JPanel {
 	
+	private ChartPanel panel;
 	
 	public EquationPanel()
 	{
-		JFreeChart chart = createChart(createDataset());
-        ChartPanel panel = new ChartPanel(chart);
+		this.setLayout(new BorderLayout());
+		setupEquation(new ActivationSigmoid(),true);
+	}
+	
+	public void setupEquation(ActivationFunction activation, boolean normal)
+	{
+		if( this.panel!=null )
+			this.remove(panel);
+		JFreeChart chart = createChart(createDataset(activation, normal),activation);
+        this.panel = new ChartPanel(chart);
         panel.setMouseWheelEnabled(true);
-        this.add(panel);
+        this.add(panel,BorderLayout.CENTER);
+        panel.repaint();
 	}
 	
     /**
@@ -40,28 +54,24 @@ public class EquationPanel extends JPanel {
      *
      * @return A dataset.
      */
-    public static XYDataset createDataset() {
+    public static XYDataset createDataset(ActivationFunction activation, boolean normal) {
         XYSeriesCollection dataset = new XYSeriesCollection();
 
-        Function2D n1 = new NormalDistributionFunction2D(0.0, 1.0);
+        if( normal )
+        {
+        Function2D n1 = new ActivationFunction2D(activation);// //new NormalDistributionFunction2D(0.0, 1.0);
         XYSeries s1 = DatasetUtilities.sampleFunction2DToSeries(n1, -5.1, 5.1,
-                121, "N1");
+                121, "Activation Function");
         dataset.addSeries(s1);
-
-        Function2D n2 = new NormalDistributionFunction2D(0.0, Math.sqrt(0.2));
+        }
+        else
+        {
+        Function2D n2 = new DerivativeFunction2D(activation);
         XYSeries s2 = DatasetUtilities.sampleFunction2DToSeries(n2, -5.1, 5.1,
-                121, "N2");
+                121, "Derivative Function");
         dataset.addSeries(s2);
+        }
 
-        Function2D n3 = new NormalDistributionFunction2D(0.0, Math.sqrt(5.0));
-        XYSeries s3 = DatasetUtilities.sampleFunction2DToSeries(n3, -5.1, 5.1,
-                121, "N3");
-        dataset.addSeries(s3);
-
-        Function2D n4 = new NormalDistributionFunction2D(-2.0, Math.sqrt(0.5));
-        XYSeries s4 = DatasetUtilities.sampleFunction2DToSeries(n4, -5.1, 5.1,
-                121, "N4");
-        dataset.addSeries(s4);
         return dataset;
     }
 
@@ -72,11 +82,11 @@ public class EquationPanel extends JPanel {
      *
      * @return The chart.
      */
-    public static JFreeChart createChart(XYDataset dataset) {
+    public static JFreeChart createChart(XYDataset dataset, ActivationFunction activation) {
         JFreeChart chart = ChartFactory.createXYLineChart(
-            "Normal Distribution Demo 2",
-            "X",
-            "Y",
+            activation.getClass().getSimpleName(),
+            "input (x)",
+            "output (y)",
             dataset,
             PlotOrientation.VERTICAL,
             true,
@@ -103,43 +113,6 @@ public class EquationPanel extends JPanel {
         r.setSeriesStroke(3, new BasicStroke(2.0f, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] { 4.0f, 4.0f },
                 0.0f));
-
-        // it would be cool if the following annotations had some kind of
-        // auto-layout facility...but they don't!
-        XYPointerAnnotation a1 = new XYPointerAnnotation(
-                "\u03BC = -2.0, \u03C3\u00B2 = 0.5", -2.0, 0.564,
-                5 * Math.PI / 4);
-        a1.setLabelOffset(4.0);
-        a1.setTextAnchor(TextAnchor.BOTTOM_RIGHT);
-        a1.setBackgroundPaint(Color.yellow);
-       // a1.setOutlineVisible(true);
-        plot.addAnnotation(a1);
-
-        XYPointerAnnotation a2 = new XYPointerAnnotation(
-                "\u03BC = 0.0, \u03C3\u00B2 = 0.2", 0.225, 0.80, 0.0);
-        a2.setLabelOffset(4.0);
-        a2.setTextAnchor(TextAnchor.CENTER_LEFT);
-        a2.setBackgroundPaint(new Color(0, 0, 255, 63));
-       // a2.setOutlineVisible(true);
-
-        plot.addAnnotation(a2);
-
-        XYPointerAnnotation a3 = new XYPointerAnnotation(
-                "\u03BC = 0.0, \u03C3\u00B2 = 1.0", 0.75, 0.3, 7 * Math.PI / 4);
-        a3.setLabelOffset(4.0);
-        a3.setTextAnchor(TextAnchor.HALF_ASCENT_LEFT);
-        a3.setBackgroundPaint(new Color(255, 0, 0, 63));
-       // a3.setOutlineVisible(true);
-        plot.addAnnotation(a3);
-
-        XYPointerAnnotation a4 = new XYPointerAnnotation(
-                "\u03BC = 0.0, \u03C3\u00B2 = 5.0", 3.0, 0.075,
-                3 * Math.PI / 2);
-        a4.setLabelOffset(4.0);
-        a4.setTextAnchor(TextAnchor.BOTTOM_CENTER);
-        a4.setBackgroundPaint(new Color(0, 255, 0, 63));
-       // a4.setOutlineVisible(true);
-        plot.addAnnotation(a4);
 
         return chart;
     }
