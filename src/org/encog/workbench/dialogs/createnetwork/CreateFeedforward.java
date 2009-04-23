@@ -3,17 +3,21 @@ package org.encog.workbench.dialogs.createnetwork;
 import java.awt.Frame;
 
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.activation.ActivationDialog;
 import org.encog.workbench.dialogs.common.BuildingListField;
 import org.encog.workbench.dialogs.common.BuildingListListener;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
+import org.encog.workbench.dialogs.common.PopupField;
+import org.encog.workbench.dialogs.common.PopupListener;
 
 public class CreateFeedforward extends EncogPropertiesDialog implements
-		BuildingListListener {
+		BuildingListListener,PopupListener {
 
 	private IntegerField inputCount;
 	private IntegerField outputCount;
 	private BuildingListField hidden;
+	private PopupField activation;
 
 	public CreateFeedforward(Frame owner) {
 		super(owner);
@@ -26,6 +30,8 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 				"Hidden Layer Counts"));
 		addProperty(this.outputCount = new IntegerField("output neurons",
 				"Output Neuron Count", true, 1, -1));
+		addProperty(this.activation = new PopupField("activation",
+				"Activation Function", true));
 		render();
 	}
 
@@ -87,6 +93,12 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 
 	public BuildingListField getHidden() {
 		return hidden;
+	}
+
+	public void popup(PopupField field) {
+		ActivationDialog dialog = new ActivationDialog(EncogWorkBench.getInstance().getMainWindow());
+		dialog.process();
+		
 	}
 	
 	
