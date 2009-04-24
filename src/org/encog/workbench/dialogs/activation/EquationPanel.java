@@ -12,7 +12,9 @@ import org.encog.neural.activation.ActivationSigmoid;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYPointerAnnotation;
+import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -39,13 +41,19 @@ public class EquationPanel extends JPanel {
 	
 	public void setupEquation(ActivationFunction activation, boolean normal)
 	{
-		if( this.panel!=null )
-			this.remove(panel);
-		JFreeChart chart = createChart(createDataset(activation, normal),activation);
-        this.panel = new ChartPanel(chart);
-        panel.setMouseWheelEnabled(true);
-        this.add(panel,BorderLayout.CENTER);
-        panel.repaint();
+		JFreeChart chart = createChart(createDataset(activation, normal),activation,normal);
+		
+		if( this.panel==null)
+		{
+			this.panel = new ChartPanel(chart);
+        	panel.setMouseWheelEnabled(true);
+        	this.add(panel,BorderLayout.CENTER);
+		}
+		else
+		{
+			this.panel.setChart(chart);
+		}
+        
 	}
 	
     /**
@@ -66,10 +74,13 @@ public class EquationPanel extends JPanel {
         }
         else
         {
+        	if( activation.hasDerivative())
+        	{
         Function2D n2 = new DerivativeFunction2D(activation);
         XYSeries s2 = DatasetUtilities.sampleFunction2DToSeries(n2, -5.1, 5.1,
                 121, "Derivative Function");
         dataset.addSeries(s2);
+        	}
         }
 
         return dataset;
@@ -82,9 +93,29 @@ public class EquationPanel extends JPanel {
      *
      * @return The chart.
      */
-    public static JFreeChart createChart(XYDataset dataset, ActivationFunction activation) {
+    public static JFreeChart createChart(XYDataset dataset, ActivationFunction activation, boolean normal) {
+    	
+    	String title;
+    	
+    	if( normal )
+    	{
+    		title = activation.getClass().getSimpleName();
+    	}
+    	else
+    	{
+    		if( activation.hasDerivative() )
+    		{
+    			title = "Derv of " + activation.getClass().getSimpleName();
+    		}
+    		else
+    		{
+    			title = "NO Derv of " + activation.getClass().getSimpleName();
+    		}
+    	}
+    	
+    	
         JFreeChart chart = ChartFactory.createXYLineChart(
-            activation.getClass().getSimpleName(),
+            title,
             "input (x)",
             "output (y)",
             dataset,
@@ -93,7 +124,12 @@ public class EquationPanel extends JPanel {
             true,
             false
         );
+        
         XYPlot plot = (XYPlot) chart.getPlot();
+        
+        if(normal)
+        {
+        
         plot.setDomainZeroBaselineVisible(true);
         plot.setRangeZeroBaselineVisible(true);
         plot.setDomainPannable(true);
@@ -113,6 +149,8 @@ public class EquationPanel extends JPanel {
         r.setSeriesStroke(3, new BasicStroke(2.0f, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND, 1.0f, new float[] { 4.0f, 4.0f },
                 0.0f));
+    }
+        
 
         return chart;
     }
