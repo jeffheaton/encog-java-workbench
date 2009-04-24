@@ -2,6 +2,7 @@ package org.encog.workbench.dialogs.createnetwork;
 
 import java.awt.Frame;
 
+import org.encog.neural.activation.ActivationFunction;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
 import org.encog.workbench.dialogs.common.BuildingListField;
@@ -17,7 +18,8 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 	private IntegerField inputCount;
 	private IntegerField outputCount;
 	private BuildingListField hidden;
-	private PopupField activation;
+	private PopupField activationField;
+	private ActivationFunction activationFunction;
 
 	public CreateFeedforward(Frame owner) {
 		super(owner);
@@ -30,7 +32,7 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 				"Hidden Layer Counts"));
 		addProperty(this.outputCount = new IntegerField("output neurons",
 				"Output Neuron Count", true, 1, -1));
-		addProperty(this.activation = new PopupField("activation",
+		addProperty(this.activationField = new PopupField("activation",
 				"Activation Function", true));
 		render();
 	}
@@ -95,11 +97,29 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 		return hidden;
 	}
 
-	public void popup(PopupField field) {
+	public String popup(PopupField field) {
 		ActivationDialog dialog = new ActivationDialog(EncogWorkBench.getInstance().getMainWindow());
-		dialog.process();
-		
+		dialog.setActivation(this.activationFunction);
+		if( !dialog.process()  )
+			return null;
+		else
+			return dialog.getActivation().getClass().getSimpleName();
 	}
+
+	public PopupField getActivationField() {
+		return activationField;
+	}
+
+	public ActivationFunction getActivationFunction() {
+		return activationFunction;
+	}
+
+	public void setActivationFunction(ActivationFunction activationFunction) {
+		this.activationFunction = activationFunction;
+		this.activationField.setValue(this.activationFunction.getClass().getSimpleName());
+	}
+	
+	
 	
 	
 

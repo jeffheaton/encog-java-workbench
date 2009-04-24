@@ -13,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import org.encog.neural.activation.ActivationBiPolar;
+import org.encog.neural.activation.ActivationFunction;
 import org.encog.neural.activation.ActivationGaussian;
 import org.encog.neural.activation.ActivationLOG;
 import org.encog.neural.activation.ActivationLinear;
@@ -40,6 +41,7 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 	private JComboBox select = new JComboBox(ACTIVATION_FUNCTION);
 	private EquationPanel equation;
 	private JCheckBox derivative;
+	private ActivationFunction activation;
 
 	public ActivationDialog(Frame owner) {
 		super(owner);
@@ -51,7 +53,7 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 		upper.setLayout(new BorderLayout());
 		contents.add(upper, BorderLayout.NORTH);
 		this.select.addItemListener(this);
-		this.derivative = new JCheckBox("Derivative");
+		this.derivative = new JCheckBox("View Derivative");
 		upper.add(select, BorderLayout.CENTER);
 		upper.add(this.derivative, BorderLayout.EAST);
 		this.derivative.addActionListener(this);
@@ -75,28 +77,28 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 			switch(this.select.getSelectedIndex())
 			{
 				case 0:
-					this.equation.setupEquation(new ActivationBiPolar(), !der);
+					this.equation.setupEquation(this.activation = new ActivationBiPolar(), !der);
 					break;
 				case 1:
-					this.equation.setupEquation(new ActivationGaussian(0,Math.sqrt(1),Math.sqrt(1)), !der);
+					this.equation.setupEquation(this.activation = new ActivationGaussian(0,Math.sqrt(1),Math.sqrt(1)), !der);
 					break;
 				case 2:
-					this.equation.setupEquation(new ActivationLinear(), !der);
+					this.equation.setupEquation(this.activation = new ActivationLinear(), !der);
 					break;
 				case 3:
-					this.equation.setupEquation(new ActivationLOG(), !der);
+					this.equation.setupEquation(this.activation = new ActivationLOG(), !der);
 					break;
 				case 4:
-					this.equation.setupEquation(new ActivationSigmoid(), !der);
+					this.equation.setupEquation(this.activation = new ActivationSigmoid(), !der);
 					break;
 				case 5:
-					this.equation.setupEquation(new ActivationSIN(), !der);
+					this.equation.setupEquation(this.activation = new ActivationSIN(), !der);
 					break;
 				case 6:
-					this.equation.setupEquation(new ActivationSoftMax(), !der);
+					this.equation.setupEquation(this.activation = new ActivationSoftMax(), !der);
 					break;
 				case 7:
-					this.equation.setupEquation(new ActivationTANH(), !der);
+					this.equation.setupEquation(this.activation = new ActivationTANH(), !der);
 					break;
 					
 			}
@@ -118,5 +120,22 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 		changeEquation();
 		}
 	}
+
+	public ActivationFunction getActivation() {
+		return activation;
+	}
+
+	public void setActivation(ActivationFunction activation) {
+		this.activation = activation;
+		for(int i=0;i<ACTIVATION_FUNCTION.length;i++)
+		{
+			if( ACTIVATION_FUNCTION[i].equals(activation.getClass().getSimpleName()))
+			{
+				this.select.setSelectedIndex(i);
+			}
+		}
+		this.changeEquation();
+	}
+	
 
 }

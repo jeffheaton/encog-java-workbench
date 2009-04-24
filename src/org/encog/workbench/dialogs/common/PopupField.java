@@ -15,6 +15,7 @@ public class PopupField extends PropertiesField implements ActionListener {
 
 	private String value;
 	private JButton button;
+	private JLabel label;
 	
 	public PopupField(String name, String label, boolean required) {
 		super(name, label, required);
@@ -32,7 +33,7 @@ public class PopupField extends PropertiesField implements ActionListener {
 		p.setSize(width,label.getHeight());
 		
 		p.setLayout(new BorderLayout());
-		p.add(new JLabel("test"),BorderLayout.CENTER);
+		p.add(this.label = new JLabel("test"),BorderLayout.CENTER);
 		p.add(this.button = new JButton("..."),BorderLayout.EAST);
 		p.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
@@ -53,9 +54,23 @@ public class PopupField extends PropertiesField implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource()==this.button)
 		{
-			((PopupListener)this.getOwner()).popup(this);
+			String str = ((PopupListener)this.getOwner()).popup(this);
+			if( str!=null )
+				this.value = str;
+			this.label.setText(this.value);
 		}
 		
 	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.label.setText(value);
+		this.value = value;
+	}
+	
+	
 
 }

@@ -10,6 +10,7 @@ import org.encog.neural.pattern.RSOMPattern;
 import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.pattern.SOMPattern;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.activation.ActivationDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateElmanDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateFeedforward;
 import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
@@ -147,8 +148,10 @@ public class CreateNeuralNetwork {
 	private static BasicNetwork createFeedForward(String name) {
 		CreateFeedforward dialog = new CreateFeedforward(EncogWorkBench
 				.getInstance().getMainWindow());
+		dialog.setActivationFunction(new ActivationTANH());
 		if (dialog.process()) {
 			FeedForwardPattern feedforward = new FeedForwardPattern();
+			feedforward.setActivationFunction(dialog.getActivationFunction());
 			feedforward.setInputNeurons(dialog.getInputCount().getValue());
 			for (int i = 0; i < dialog.getHidden().getModel().size(); i++) {
 				String str = (String) dialog.getHidden().getModel()
