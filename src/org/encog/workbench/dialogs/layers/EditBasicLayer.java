@@ -21,7 +21,7 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 	 */
 	private static final long serialVersionUID = 8751974232848993273L;
 	
-	public final static String[] COLUMN_HEADS = {"Neuron",""};
+	public final static String[] COLUMN_HEADS = {"Neuron","Threshold"};
 	
 	private IntegerField neuronCount;
 	private PopupField activationField;
@@ -37,7 +37,9 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 				"Neuron Count", true, 1, -1));
 		addProperty(this.activationField = new PopupField("activation",
 				"Activation Function", true));
-		addProperty(this.thresholdTable = new TableField("threshold values", "Threshold Values",true, 4, 100, COLUMN_HEADS));
+		addProperty(this.thresholdTable = new TableField("threshold values", "Threshold Values",true, 100, 4, COLUMN_HEADS));
+		this.thresholdTable.getModel().setEditable(0,false);
+		
 		render();
 	}
 
@@ -66,9 +68,10 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 	public IntegerField getNeuronCount() {
 		return neuronCount;
 	}
-	
-	
-	
-	
 
+	public TableField getThresholdTable() {
+		return thresholdTable;
+	}
+	
+	
 }

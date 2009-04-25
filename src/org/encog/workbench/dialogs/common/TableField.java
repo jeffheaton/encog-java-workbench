@@ -2,24 +2,26 @@ package org.encog.workbench.dialogs.common;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class TableField extends PropertiesField {
 
-	private DefaultTableModel model;
+	private TableFieldModel model;
+	private JTable table;
 	private int height;
 	
 	public TableField(String name, String label, boolean required, int height, int rows, int columns) {
 		super(name, label, required);
-		this.model = new DefaultTableModel(rows,columns);
+		this.model = new TableFieldModel(Double.class,rows,columns);
 		this.height = height;
 	}
 	
-	public TableField(String name, String label, boolean required, int rows, int height, String[] columnNames) {
+	public TableField(String name, String label, boolean required, int height, int rows, String[] columnNames) {
 		super(name, label, required);
-		this.model = new DefaultTableModel(columnNames,rows);
+		this.model = new TableFieldModel(String.class,columnNames, rows);
 		this.height = height;
 	}
 
@@ -31,7 +33,8 @@ public class TableField extends PropertiesField {
 	
 	public int createField(JPanel panel, int x, int y,int width)
 	{
-		this.setField(new JTable(this.model));
+		this.table = new JTable(this.model);
+		this.setField(new JScrollPane(this.table));
 		this.getField().setLocation(x, y);
 		this.getField().setSize(width, this.height);
 
@@ -41,6 +44,15 @@ public class TableField extends PropertiesField {
 		panel.add(this.getField());
 		
 		return y+this.getField().getHeight();
+	}
+
+	public void setValue(int row, int col, String str) {
+		this.model.setValueAt(str,row,col);
+		
+	}
+
+	public TableFieldModel getModel() {
+		return this.model;
 	}
 
 }
