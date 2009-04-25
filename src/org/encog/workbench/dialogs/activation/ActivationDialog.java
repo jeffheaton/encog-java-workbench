@@ -89,41 +89,40 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 
 	public void changeEquation() {
 		boolean der = this.derivative.isSelected();
+		ActivationFunction newActivation = null;
+		
 		switch (this.select.getSelectedIndex()) {
 		case 0:
-			this.equation.setupEquation(
-					this.activation = new ActivationBiPolar(), !der);
+			newActivation = new ActivationBiPolar();
 			break;
 		case 1:
-			this.equation.setupEquation(
-					this.activation = new ActivationGaussian(0, Math.sqrt(1),
-							Math.sqrt(1)), !der);
+			newActivation = new ActivationGaussian(0, 1, 1);
 			break;
 		case 2:
-			this.equation.setupEquation(
-					this.activation = new ActivationLinear(), !der);
+			newActivation = new ActivationLinear();
 			break;
 		case 3:
-			this.equation.setupEquation(this.activation = new ActivationLOG(),
-					!der);
+			newActivation = new ActivationLOG();
 			break;
 		case 4:
-			this.equation.setupEquation(
-					this.activation = new ActivationSigmoid(), !der);
+			newActivation = new ActivationSigmoid();
 			break;
 		case 5:
-			this.equation.setupEquation(this.activation = new ActivationSIN(),
-					!der);
+			newActivation = new ActivationSIN();
 			break;
 		case 6:
-			this.equation.setupEquation(
-					this.activation = new ActivationSoftMax(), !der);
+			newActivation = new ActivationSoftMax();
 			break;
 		case 7:
-			this.equation.setupEquation(this.activation = new ActivationTANH(),
-					!der);
+			newActivation = new ActivationTANH();
 			break;
 
+		}
+		
+		if( this.activation.getClass() != newActivation.getClass() )
+		{
+			this.equation.setupEquation(newActivation,!der);
+			this.activation = newActivation;
 		}
 
 	}
@@ -171,7 +170,7 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 				this.select.setSelectedIndex(i);
 			}
 		}
-		this.changeEquation();
+		this.equation.setupEquation(this.activation,!this.derivative.isSelected());
 	}
 
 }
