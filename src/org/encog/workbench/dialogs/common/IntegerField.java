@@ -20,6 +20,7 @@ public class IntegerField extends PropertiesField {
 
 	public void setValue(int value) {
 		this.value = value;
+		((JTextField)this.getField()).setText(""+value);
 	}
 
 	public int getMin() {

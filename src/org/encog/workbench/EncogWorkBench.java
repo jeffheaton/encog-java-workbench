@@ -298,7 +298,7 @@ public class EncogWorkBench {
 			final Element element = doc.getDocumentElement();
 
 			XML2Object conv = new XML2Object();
-			conv.load(element, EncogWorkBench.getInstance().getConfig());
+			//conv.load(element, EncogWorkBench.getInstance().getConfig());
 			is.close();
 		} catch (Exception e) {
 			displayError("Error Reading Config File", e.getMessage());

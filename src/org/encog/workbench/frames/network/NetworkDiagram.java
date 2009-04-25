@@ -559,33 +559,12 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 
 	private void performLayerEdit() {
 		EditBasicLayer dialog = new EditBasicLayer(this.parent);
-		dialog.setNeuronCount(this.selected.getNeuronCount());
-		if( this.selected.hasThreshold() )
-		{
-			// duplicate the thresholds
-			double[] t = new double[this.selected.getNeuronCount()];
-			for(int i=0;i<t.length;i++)
-			{
-				t[i] = this.selected.getThreshold(i);
-			}
-			dialog.setThresholds(t);
-		}
-		else
-			dialog.setThresholds(null);
+		dialog.setActivationFunction(this.selected.getActivationFunction());
+		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
 		
 		if( dialog.process() )
 		{
-			// handle the thresholds
-			this.selected.setThreshold(dialog.getThresholds());
 			
-			// handle neurons, did the count change?
-			if( dialog.getNeuronCount()!=this.selected.getNeuronCount())
-			{
-				BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
-				PruneSelective prune = new PruneSelective(network);
-				prune.changeNeuronCount(this.selected, dialog.getNeuronCount());
-				repaint();
-			}
 			
 		}
 		

@@ -81,7 +81,7 @@ public class PropertyDataModel  implements TableModel {
 	public void updateProperties()
 	{
 		this.properties = new String[data.size()];
-		Map<String,String> map = this.data.getMap();
+		Map<String,String> map = this.data.getData();
 		int i=0;
 		for(String key: map.keySet() )
 		{
