@@ -77,6 +77,14 @@ public abstract class PropertiesField {
 		this.owner = owner;
 	}
 	
+	public void enable(boolean e)
+	{
+		this.field.setEnabled(e);
+	}
 	
+	public void setVisable(boolean v)
+	{
+		this.field.setVisible(v);
+	}
 	
 }

@@ -1,9 +1,11 @@
 package org.encog.workbench.dialogs.common;
 
 import java.awt.Frame;
+import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -14,7 +16,10 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 	
 	public EncogPropertiesDialog(Frame owner) {
 		super(owner);
-		// TODO Auto-generated constructor stub
+	}
+	
+	public EncogPropertiesDialog(JDialog owner) {
+		super(owner);
 	}
 	
 	public void render()

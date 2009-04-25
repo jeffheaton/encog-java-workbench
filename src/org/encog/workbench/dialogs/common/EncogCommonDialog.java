@@ -27,6 +27,7 @@ package org.encog.workbench.dialogs.common;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -84,12 +85,25 @@ abstract public class EncogCommonDialog extends JDialog implements
 	 */
 	public EncogCommonDialog(final Frame owner) {
 		super(owner, true);
-
-		final Container content = getContentPane();
-		content.setLayout(new BorderLayout());
-
 		this.bodyPanel = new JPanel();
 		this.buttonPanel = new JPanel();
+		init();
+		
+	}
+	
+	public EncogCommonDialog(JDialog owner)
+	{
+		super(owner, true);
+		this.bodyPanel = new JPanel();
+		this.buttonPanel = new JPanel();
+		init();
+	}
+	
+	
+	private void init()
+	{
+		final Container content = getContentPane();
+		content.setLayout(new BorderLayout());
 
 		this.buttonPanel.add(this.ctrlOK = new JButton("OK"));
 		this.buttonPanel.add(this.ctrlCancel = new JButton("Cancel"));

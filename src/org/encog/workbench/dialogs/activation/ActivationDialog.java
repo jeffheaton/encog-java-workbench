@@ -10,6 +10,8 @@ import java.awt.event.ItemListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.encog.neural.activation.ActivationBiPolar;
@@ -43,8 +45,18 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 	private JCheckBox derivative;
 	private ActivationFunction activation;
 
-	public ActivationDialog(Frame owner) {
+	public ActivationDialog(JFrame owner) {
 		super(owner);
+		init();
+	}
+	
+	public ActivationDialog(JDialog owner) {
+		super(owner);
+		init();
+	}
+	
+	private void init()
+	{
 		this.setSize(600,300);
 		JPanel contents = this.getBodyPanel();
 		contents.setLayout(new BorderLayout());
