@@ -45,7 +45,7 @@ public class IntegerField extends PropertiesField {
 			throw new ValidationException("The field " + this.getName() + " requires a valid number.");
 		}
 		
-		if (i < this.min) {
+		if ((this.max>this.min) && i < (this.min)) {
 			throw new ValidationException("Must enter a value above " + this.min
 					+ " for: " + this.getName());
 		}

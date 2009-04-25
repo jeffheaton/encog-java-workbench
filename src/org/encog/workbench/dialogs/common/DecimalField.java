@@ -28,6 +28,7 @@ public class DecimalField extends PropertiesField {
 	}
 
 	public void setValue(double value) {
+		((JTextField)this.getField()).setText(""+value);
 		this.value = value;
 	}
 
@@ -51,7 +52,7 @@ public class DecimalField extends PropertiesField {
 			throw new ValidationException("The field " + this.getName() + " requires a valid number.");
 		}
 		
-		if (d < this.min) {
+		if ((this.max>this.min) && (d < this.min)) {
 			throw new ValidationException("Must enter a value above " + this.min
 					+ " for: " + this.getName());
 		}

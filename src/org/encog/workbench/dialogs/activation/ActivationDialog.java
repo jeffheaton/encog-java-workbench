@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -27,109 +28,134 @@ import org.encog.util.math.rbf.GaussianFunction;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 
-public class ActivationDialog extends EncogCommonDialog implements ItemListener  {
-	
-	public static final String[] ACTIVATION_FUNCTION = {
-			"ActivationBiPolar",
-			"ActivationGaussian",
-			"ActivationLinear",
-			"ActivationLOG",
-			"ActivationSigmoid",
-			"ActivationSIN",
-			"ActivationSoftMax",
-			"ActivationTANH"
-	};
-	
+public class ActivationDialog extends EncogCommonDialog implements ItemListener {
+
+	public static final String[] ACTIVATION_FUNCTION = { "ActivationBiPolar",
+			"ActivationGaussian", "ActivationLinear", "ActivationLOG",
+			"ActivationSigmoid", "ActivationSIN", "ActivationSoftMax",
+			"ActivationTANH" };
+
 	private JComboBox select = new JComboBox(ACTIVATION_FUNCTION);
 	private EquationPanel equation;
 	private JCheckBox derivative;
+	private JButton gaussian;
 	private ActivationFunction activation;
 
 	public ActivationDialog(JFrame owner) {
 		super(owner);
 		init();
 	}
-	
+
 	public ActivationDialog(JDialog owner) {
 		super(owner);
 		init();
 	}
-	
-	private void init()
-	{
-		this.setSize(600,300);
+
+	private void init() {
+		this.setSize(600, 300);
 		JPanel contents = this.getBodyPanel();
 		contents.setLayout(new BorderLayout());
-		contents.add(this.equation = new EquationPanel(),BorderLayout.CENTER);
+		contents.add(this.equation = new EquationPanel(), BorderLayout.CENTER);
 		JPanel upper = new JPanel();
 		upper.setLayout(new BorderLayout());
 		contents.add(upper, BorderLayout.NORTH);
 		this.select.addItemListener(this);
 		this.derivative = new JCheckBox("View Derivative");
 		upper.add(select, BorderLayout.CENTER);
-		upper.add(this.derivative, BorderLayout.EAST);
+
+		this.gaussian = new JButton("Gaussian");
+
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new GridLayout(1, 2));
+		buttons.add(this.derivative);
+		buttons.add(this.gaussian);
+
+		upper.add(buttons, BorderLayout.EAST);
 		this.derivative.addActionListener(this);
+		this.gaussian.addActionListener(this);
 	}
 
 	@Override
 	public void collectFields() throws ValidationException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setFields() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	public void changeEquation()
-	{
+
+	public void changeEquation() {
 		boolean der = this.derivative.isSelected();
-			switch(this.select.getSelectedIndex())
-			{
-				case 0:
-					this.equation.setupEquation(this.activation = new ActivationBiPolar(), !der);
-					break;
-				case 1:
-					this.equation.setupEquation(this.activation = new ActivationGaussian(0,Math.sqrt(1),Math.sqrt(1)), !der);
-					break;
-				case 2:
-					this.equation.setupEquation(this.activation = new ActivationLinear(), !der);
-					break;
-				case 3:
-					this.equation.setupEquation(this.activation = new ActivationLOG(), !der);
-					break;
-				case 4:
-					this.equation.setupEquation(this.activation = new ActivationSigmoid(), !der);
-					break;
-				case 5:
-					this.equation.setupEquation(this.activation = new ActivationSIN(), !der);
-					break;
-				case 6:
-					this.equation.setupEquation(this.activation = new ActivationSoftMax(), !der);
-					break;
-				case 7:
-					this.equation.setupEquation(this.activation = new ActivationTANH(), !der);
-					break;
-					
-			}
-		
+		switch (this.select.getSelectedIndex()) {
+		case 0:
+			this.equation.setupEquation(
+					this.activation = new ActivationBiPolar(), !der);
+			break;
+		case 1:
+			this.equation.setupEquation(
+					this.activation = new ActivationGaussian(0, Math.sqrt(1),
+							Math.sqrt(1)), !der);
+			break;
+		case 2:
+			this.equation.setupEquation(
+					this.activation = new ActivationLinear(), !der);
+			break;
+		case 3:
+			this.equation.setupEquation(this.activation = new ActivationLOG(),
+					!der);
+			break;
+		case 4:
+			this.equation.setupEquation(
+					this.activation = new ActivationSigmoid(), !der);
+			break;
+		case 5:
+			this.equation.setupEquation(this.activation = new ActivationSIN(),
+					!der);
+			break;
+		case 6:
+			this.equation.setupEquation(
+					this.activation = new ActivationSoftMax(), !der);
+			break;
+		case 7:
+			this.equation.setupEquation(this.activation = new ActivationTANH(),
+					!der);
+			break;
+
+		}
 
 	}
 
 	public void itemStateChanged(ItemEvent e) {
-		if( e.getSource()==this.select)
-		{
-		changeEquation();	
+		if (e.getSource() == this.select) {
+			changeEquation();
 		}
 	}
-	
+
 	public void actionPerformed(final ActionEvent e) {
 		super.actionPerformed(e);
-		if( e.getSource()==this.derivative)
-		{
-		changeEquation();
+		if (e.getSource() == this.derivative) {
+			changeEquation();
+		} else if (e.getSource() == this.gaussian) {
+			if (this.activation instanceof ActivationGaussian) {
+				GaussianDialog dialog = new GaussianDialog(this);
+				ActivationGaussian gaussian = (ActivationGaussian) this.activation;
+				dialog.getGaussianCenter().setValue(
+						gaussian.getGausian().getCenter());
+				dialog.getGaussianPeak().setValue(
+						gaussian.getGausian().getPeak());
+				dialog.getGaussianWidth().setValue(
+						gaussian.getGausian().getWidth());
+				if (dialog.process()) {
+					double peak = dialog.getGaussianPeak().getValue();
+					double width = dialog.getGaussianWidth().getValue();
+					double center = dialog.getGaussianCenter().getValue();
+					this.activation = new ActivationGaussian(center,peak,width);
+					this.equation.setupEquation(activation,!this.derivative.isSelected());
+				}
+			}
 		}
 	}
 
@@ -139,15 +165,13 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 
 	public void setActivation(ActivationFunction activation) {
 		this.activation = activation;
-		for(int i=0;i<ACTIVATION_FUNCTION.length;i++)
-		{
-			if( ACTIVATION_FUNCTION[i].equals(activation.getClass().getSimpleName()))
-			{
+		for (int i = 0; i < ACTIVATION_FUNCTION.length; i++) {
+			if (ACTIVATION_FUNCTION[i].equals(activation.getClass()
+					.getSimpleName())) {
 				this.select.setSelectedIndex(i);
 			}
 		}
 		this.changeEquation();
 	}
-	
 
 }
