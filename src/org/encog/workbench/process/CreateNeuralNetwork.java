@@ -166,7 +166,6 @@ public class CreateNeuralNetwork {
 			}
 			feedforward.setInputNeurons(dialog.getInputCount().getValue());
 			feedforward.setOutputNeurons(dialog.getOutputCount().getValue());
-			feedforward.setActivationFunction(new ActivationTANH());
 			return feedforward.generate();
 		}
 		return null;

@@ -59,7 +59,10 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 		if( !dialog.process()  )
 			return null;
 		else
+		{
+			this.activationFunction = dialog.getActivation();
 			return dialog.getActivation().getClass().getSimpleName();
+		}
 	}
 
 	public PopupField getActivationField() {
@@ -86,6 +89,7 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 	public void check(CheckField check) {
 		if( check.getValue() )
 		{
+			generateThresholdValues();
 			this.thresholdTable.setVisable(true);
 		}
 		else
@@ -97,6 +101,15 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 
 	public CheckField getUseThreshold() {
 		return useThreshold;
+	}
+	
+	public void generateThresholdValues()
+	{
+		for(int i=0;i<this.neuronCount.getValue();i++)
+		{
+			this.thresholdTable.setValue(i,0,"#"+(i+1));
+			this.thresholdTable.setValue(i,1,"0");
+		}
 	}
 	
 	

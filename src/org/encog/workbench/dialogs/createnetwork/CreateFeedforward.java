@@ -103,7 +103,10 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 		if( !dialog.process()  )
 			return null;
 		else
+		{
+			this.activationFunction = dialog.getActivation();
 			return dialog.getActivation().getClass().getSimpleName();
+		}
 	}
 
 	public PopupField getActivationField() {

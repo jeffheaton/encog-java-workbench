@@ -562,14 +562,14 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		dialog.setActivationFunction(this.selected.getActivationFunction());
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
 		
-		for(int i=0;i<this.selected.getNeuronCount();i++)
-		{
-			dialog.getThresholdTable().setValue(i,0,"#"+(i+1));
-			dialog.getThresholdTable().setValue(i,1,""+this.selected.getThreshold(i));
-		}
-		
 		if(this.selected.hasThreshold())
 		{
+			for(int i=0;i<this.selected.getNeuronCount();i++)
+			{
+				dialog.getThresholdTable().setValue(i,0,"#"+(i+1));
+				dialog.getThresholdTable().setValue(i,1,""+this.selected.getThreshold(i));
+			}
+			
 			dialog.getUseThreshold().setValue(true);
 			dialog.getThresholdTable().setVisable(true);
 		}
@@ -582,11 +582,43 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		
 		if( dialog.process() )
 		{
+			// were thresholds added or removed
+			if( !dialog.getUseThreshold().getValue())
+			{
+				// removed
+				this.selected.setThreshold(null);
+			}
+			else
+			{
+				// add thresholds if needed
+				if( dialog.getUseThreshold().getValue() && !this.selected.hasThreshold())
+				{
+					this.selected.setThreshold(new double[this.selected.getNeuronCount()]);
+				}
+			}
+			
 			// did the neuron count change?
 			if( dialog.getNeuronCount().getValue()!=this.selected.getNeuronCount())
 			{
 				PruneSelective prune = new PruneSelective((BasicNetwork)this.parent.getEncogObject());
 				prune.changeNeuronCount(this.selected, dialog.getNeuronCount().getValue());
+			}
+			else
+			{
+				// if the neuron count did not change, copy any new threshold values
+				for(int i=0;i<this.selected.getNeuronCount();i++)
+				{
+					double value = 0;
+					try
+					{
+						value = Double.parseDouble(dialog.getThresholdTable().getValue(i,1));
+					}
+					catch(NumberFormatException e)
+					{
+						// just let the value go to zero
+					}
+					this.selected.setThreshold(i, value);
+				}
 			}
 			
 			this.selected.setActivationFunction(dialog.getActivationFunction());

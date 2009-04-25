@@ -55,4 +55,9 @@ public class TableField extends PropertiesField {
 		return this.model;
 	}
 
+	public String getValue(int row, int col) {
+		
+		return ""+this.model.getValueAt(row, col);
+	}
+
 }
