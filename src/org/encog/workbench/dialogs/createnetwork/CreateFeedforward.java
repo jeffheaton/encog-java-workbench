@@ -23,7 +23,7 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 
 	public CreateFeedforward(Frame owner) {
 		super(owner);
-		setTitle("Create Elman Network");
+		setTitle("Create Feedforward Network");
 		setSize(600, 400);
 		setLocation(200, 200);
 		addProperty(this.inputCount = new IntegerField("input neurons",

@@ -124,6 +124,15 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 			this.equation.setupEquation(newActivation,!der);
 			this.activation = newActivation;
 		}
+		
+		if( this.activation instanceof ActivationGaussian )
+		{
+			this.gaussian.setEnabled(true);
+		}
+		else
+		{
+			this.gaussian.setEnabled(false);
+		}
 
 	}
 
