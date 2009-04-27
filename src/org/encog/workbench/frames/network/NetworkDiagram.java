@@ -33,6 +33,7 @@ import org.encog.neural.networks.synapse.SynapseType;
 import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.neural.networks.synapse.WeightlessSynapse;
 import org.encog.neural.prune.PruneSelective;
+import org.encog.util.math.rbf.GaussianFunction;
 import org.encog.util.math.rbf.RadialBasisFunction;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
@@ -848,26 +849,37 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	
 	private void performRadialLayerEdit() {
 		RadialBasisFunctionLayer radialLayer = (RadialBasisFunctionLayer)this.selected;
-		EditRadialLayer dialog = new EditRadialLayer(this.parent, this.selected);
+		EditRadialLayer dialog = new EditRadialLayer(this.parent, radialLayer);
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
 		for(int i=0;i<radialLayer.getRadialBasisFunction().length;i++)
 		{
-			i++;
 			RadialBasisFunction rbf = radialLayer.getRadialBasisFunction()[i];
 			dialog.getRadial().getModel().setValueAt(""+(i+1), i, 0);
-			dialog.getRadial().getModel().setValueAt(""+rbf.getCenter(), i, 0);
-			dialog.getRadial().getModel().setValueAt(""+rbf.getPeak(), i, 0);
-			dialog.getRadial().getModel().setValueAt(""+rbf.getWidth(), i, 0);
+			dialog.getRadial().getModel().setValueAt(""+rbf.getCenter(), i, 1);
+			dialog.getRadial().getModel().setValueAt(""+rbf.getPeak(), i, 2);
+			dialog.getRadial().getModel().setValueAt(""+rbf.getWidth(), i, 3);
 		}
-
 				
 		if( dialog.process() )
 		{			
-			// did the neuron count change?
+			
 			if( dialog.getNeuronCount().getValue()!=this.selected.getNeuronCount())
 			{
+				// did the neuron count change?
 				PruneSelective prune = new PruneSelective((BasicNetwork)this.parent.getEncogObject());
 				prune.changeNeuronCount(this.selected, dialog.getNeuronCount().getValue());
+			}
+			else
+			{
+				// update the RBF's
+				for(int i=0;i<radialLayer.getRadialBasisFunction().length;i++)
+				{
+					double center = Double.parseDouble(dialog.getRadial().getValue(i, 1));
+					double peak = Double.parseDouble(dialog.getRadial().getValue(i, 2));
+					double width = Double.parseDouble(dialog.getRadial().getValue(i, 3));
+					radialLayer.getRadialBasisFunction()[i] = new GaussianFunction(center,peak,width);
+					
+				}
 			}
 		}
 		
