@@ -87,4 +87,9 @@ public abstract class PropertiesField {
 		this.field.setVisible(v);
 	}
 	
+	public void repaint()
+	{
+		this.field.repaint();
+	}
+	
 }

@@ -22,6 +22,8 @@ import javax.swing.JPopupMenu;
 
 import org.encog.EncogError;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.layers.BasicLayer;
+import org.encog.neural.networks.layers.ContextLayer;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
@@ -34,6 +36,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.WorkbenchFonts;
 import org.encog.workbench.dialogs.layers.EditBasicLayer;
+import org.encog.workbench.dialogs.layers.EditContextLayer;
 import org.encog.workbench.frames.MatrixFrame;
 import org.encog.workbench.frames.network.NetworkTool.Type;
 import org.encog.workbench.util.MouseUtil;
@@ -540,7 +543,11 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	public void actionPerformed(final ActionEvent action) {
 		
 		if (action.getSource() == this.popupNetworkLayerEdit) {
-			performLayerEdit();
+			if(this.selected instanceof ContextLayer)
+				performContextLayerEdit();
+			else if(this.selected instanceof BasicLayer)
+			performBasicLayerEdit();
+			
 		} else if (action.getSource() == this.popupNetworkLayerDelete) {
 			performLayerDelete();
 		}  
@@ -554,76 +561,6 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	private void performSynapseMatrix() {
 		MatrixFrame frame = new MatrixFrame((BasicNetwork)this.parent.getEncogObject(),this.selectedSynapse);
 		frame.setVisible(true);
-		
-	}
-
-	private void performLayerEdit() {
-		EditBasicLayer dialog = new EditBasicLayer(this.parent, this.selected);
-		dialog.setActivationFunction(this.selected.getActivationFunction());
-		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
-		
-		if(this.selected.hasThreshold())
-		{
-			for(int i=0;i<this.selected.getNeuronCount();i++)
-			{
-				dialog.getThresholdTable().setValue(i,0,"#"+(i+1));
-				dialog.getThresholdTable().setValue(i,1,""+this.selected.getThreshold(i));
-			}
-			
-			dialog.getUseThreshold().setValue(true);
-			dialog.getThresholdTable().setVisable(true);
-		}
-		else
-		{
-			dialog.getUseThreshold().setValue(false);
-			dialog.getThresholdTable().setVisable(false);
-		}
-		
-		
-		if( dialog.process() )
-		{
-			// were thresholds added or removed
-			if( !dialog.getUseThreshold().getValue())
-			{
-				// removed
-				this.selected.setThreshold(null);
-			}
-			else
-			{
-				// add thresholds if needed
-				if( dialog.getUseThreshold().getValue() && !this.selected.hasThreshold())
-				{
-					this.selected.setThreshold(new double[this.selected.getNeuronCount()]);
-				}
-			}
-			
-			// did the neuron count change?
-			if( dialog.getNeuronCount().getValue()!=this.selected.getNeuronCount())
-			{
-				PruneSelective prune = new PruneSelective((BasicNetwork)this.parent.getEncogObject());
-				prune.changeNeuronCount(this.selected, dialog.getNeuronCount().getValue());
-			}
-			else
-			{
-				// if the neuron count did not change, copy any new threshold values
-				for(int i=0;i<this.selected.getNeuronCount();i++)
-				{
-					double value = 0;
-					try
-					{
-						value = Double.parseDouble(dialog.getThresholdTable().getValue(i,1));
-					}
-					catch(NumberFormatException e)
-					{
-						// just let the value go to zero
-					}
-					this.selected.setThreshold(i, value);
-				}
-			}
-			
-			this.selected.setActivationFunction(dialog.getActivationFunction());
-			
-		}
 		
 	}
 
@@ -752,6 +689,156 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		for(Layer layer: network.getStructure().getLayers() )
 		{
 			this.orphanLayers.remove(layer);
+		}
+		
+	}
+	
+	private void performBasicLayerEdit() {
+		EditBasicLayer dialog = new EditBasicLayer(this.parent, this.selected);
+		dialog.setActivationFunction(this.selected.getActivationFunction());
+		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
+		
+		if(this.selected.hasThreshold())
+		{
+			for(int i=0;i<this.selected.getNeuronCount();i++)
+			{
+				dialog.getThresholdTable().setValue(i,0,"#"+(i+1));
+				dialog.getThresholdTable().setValue(i,1,""+this.selected.getThreshold(i));
+			}
+			
+			dialog.getUseThreshold().setValue(true);
+			dialog.getThresholdTable().setVisable(true);
+		}
+		else
+		{
+			dialog.getUseThreshold().setValue(false);
+			dialog.getThresholdTable().setVisable(false);
+		}
+		
+		
+		if( dialog.process() )
+		{
+			// were thresholds added or removed
+			if( !dialog.getUseThreshold().getValue())
+			{
+				// removed
+				this.selected.setThreshold(null);
+			}
+			else
+			{
+				// add thresholds if needed
+				if( dialog.getUseThreshold().getValue() && !this.selected.hasThreshold())
+				{
+					this.selected.setThreshold(new double[this.selected.getNeuronCount()]);
+				}
+			}
+			
+			// did the neuron count change?
+			if( dialog.getNeuronCount().getValue()!=this.selected.getNeuronCount())
+			{
+				PruneSelective prune = new PruneSelective((BasicNetwork)this.parent.getEncogObject());
+				prune.changeNeuronCount(this.selected, dialog.getNeuronCount().getValue());
+			}
+			else
+			{
+				// if the neuron count did not change, copy any new threshold values
+				for(int i=0;i<this.selected.getNeuronCount();i++)
+				{
+					double value = 0;
+					try
+					{
+						value = Double.parseDouble(dialog.getThresholdTable().getValue(i,1));
+					}
+					catch(NumberFormatException e)
+					{
+						// just let the value go to zero
+					}
+					this.selected.setThreshold(i, value);
+				}
+			}
+			
+			this.selected.setActivationFunction(dialog.getActivationFunction());
+			
+		}
+		
+	}
+	
+	private void performContextLayerEdit() {
+		ContextLayer contextLayer = (ContextLayer)this.selected;
+		EditContextLayer dialog = new EditContextLayer(this.parent, contextLayer);
+		dialog.setActivationFunction(this.selected.getActivationFunction());
+		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
+		
+		
+			for(int i=0;i<this.selected.getNeuronCount();i++)
+			{
+				dialog.getThresholdTable().setValue(i,0,"#"+(i+1));
+				if( contextLayer.hasThreshold())
+					dialog.getThresholdTable().setValue(i,1,""+contextLayer.getThreshold(i));
+				else
+					dialog.getThresholdTable().setValue(i,1,"N/A");
+				dialog.getThresholdTable().setValue(i,2,""+contextLayer.getContext().getData(i));
+			}
+		
+		if(this.selected.hasThreshold())
+		{
+			dialog.getUseThreshold().setValue(true);
+		}
+		else
+		{
+			dialog.getUseThreshold().setValue(false);
+		}
+		
+		dialog.setTableEditable();
+		if( dialog.process() )
+		{
+			// were thresholds added or removed
+			if( !dialog.getUseThreshold().getValue())
+			{
+				// removed
+				this.selected.setThreshold(null);
+			}
+			else
+			{
+				// add thresholds if needed
+				if( dialog.getUseThreshold().getValue() && !this.selected.hasThreshold())
+				{
+					this.selected.setThreshold(new double[this.selected.getNeuronCount()]);
+				}
+			}
+			
+			// did the neuron count change?
+			if( dialog.getNeuronCount().getValue()!=this.selected.getNeuronCount())
+			{
+				PruneSelective prune = new PruneSelective((BasicNetwork)this.parent.getEncogObject());
+				prune.changeNeuronCount(this.selected, dialog.getNeuronCount().getValue());
+			}
+			else
+			{
+				// if the neuron count did not change, copy threshold and context values
+				boolean updateThreshold = dialog.getUseThreshold().getValue();
+				for(int i=0;i<this.selected.getNeuronCount();i++)
+				{
+					double thresholdValue = 0;
+					double contextValue = 0;
+					try
+					{
+						if( updateThreshold )
+						thresholdValue = Double.parseDouble(dialog.getThresholdTable().getValue(i,1));
+						contextValue = Double.parseDouble(dialog.getThresholdTable().getValue(i,2));
+					}
+					catch(NumberFormatException e)
+					{
+						// just let the value go to zero
+					}
+					if( updateThreshold )
+					this.selected.setThreshold(i, thresholdValue);
+					contextLayer.getContext().setData(i, contextValue);
+				}
+			}
+			
+			this.selected.setActivationFunction(dialog.getActivationFunction());
+			
 		}
 		
 	}

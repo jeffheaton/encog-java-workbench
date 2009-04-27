@@ -1,14 +1,10 @@
 package org.encog.workbench.dialogs.layers;
 
 import java.awt.Frame;
-import java.awt.Window;
 
 import org.encog.neural.activation.ActivationFunction;
-import org.encog.neural.networks.layers.Layer;
-import org.encog.workbench.EncogWorkBench;
+import org.encog.neural.networks.layers.ContextLayer;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
-import org.encog.workbench.dialogs.common.BuildingListField;
-import org.encog.workbench.dialogs.common.BuildingListListener;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.CheckListener;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
@@ -17,26 +13,22 @@ import org.encog.workbench.dialogs.common.PopupField;
 import org.encog.workbench.dialogs.common.PopupListener;
 import org.encog.workbench.dialogs.common.TableField;
 
-public class EditBasicLayer extends EncogPropertiesDialog implements
+public class EditContextLayer extends EncogPropertiesDialog implements
 		PopupListener, CheckListener {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8751974232848993273L;
-	
-	public final static String[] COLUMN_HEADS = {"Neuron","Threshold"};
-	
+	public final static String[] COLUMN_HEADS = { "Neuron", "Threshold",
+			"Context" };
+
 	private IntegerField neuronCount;
 	private PopupField activationField;
 	private CheckField useThreshold;
 	private TableField thresholdTable;
-	
+	private ContextLayer contextLayer;
 	private ActivationFunction activationFunction;
 
-	public EditBasicLayer(Frame owner, Layer layer) {
+	public EditContextLayer(Frame owner, ContextLayer layer) {
 		super(owner);
-		setTitle("Edit Basic Layer");
+		setTitle("Edit Context Layer");
 		setSize(600, 400);
 		setLocation(200, 200);
 		addProperty(this.neuronCount = new IntegerField("neuron count",
@@ -45,21 +37,21 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 				"Activation Function", true));
 		addProperty(this.useThreshold = new CheckField("use threshold",
 				"Use Threshold Values"));
-		addProperty(this.thresholdTable = new TableField("threshold values", 
-				"Threshold Values",true, 100, layer.getNeuronCount(), COLUMN_HEADS));
+		addProperty(this.thresholdTable = new TableField("threshold values",
+				"Threshold Values", true, 100, layer.getNeuronCount(),
+				COLUMN_HEADS));
 		this.useThreshold.setListener(this);
-		setTableEditable();
-		
+		this.contextLayer = contextLayer;
 		render();
+		setTableEditable();
 	}
 
 	public String popup(PopupField field) {
 		ActivationDialog dialog = new ActivationDialog(this);
 		dialog.setActivation(this.activationFunction);
-		if( !dialog.process()  )
+		if (!dialog.process())
 			return null;
-		else
-		{
+		else {
 			this.activationFunction = dialog.getActivation();
 			return dialog.getActivation().getClass().getSimpleName();
 		}
@@ -75,7 +67,8 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 
 	public void setActivationFunction(ActivationFunction activationFunction) {
 		this.activationFunction = activationFunction;
-		this.activationField.setValue(this.activationFunction.getClass().getSimpleName());
+		this.activationField.setValue(this.activationFunction.getClass()
+				.getSimpleName());
 	}
 
 	public IntegerField getNeuronCount() {
@@ -87,36 +80,32 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 	}
 
 	public void check(CheckField check) {
-		if( check.getValue() )
-		{
-			generateThresholdValues();
-			this.thresholdTable.setVisable(true);
-		}
-		else
-		{
-			this.thresholdTable.setVisable(false);
-		}
-		
+		generateThresholdValues();
 	}
 
 	public CheckField getUseThreshold() {
 		return useThreshold;
 	}
-	
-	public void generateThresholdValues()
-	{
-		for(int i=0;i<this.neuronCount.getValue();i++)
-		{
-			this.thresholdTable.setValue(i,0,"#"+(i+1));
-			this.thresholdTable.setValue(i,1,"0");
+
+	public void generateThresholdValues() {
+		setTableEditable();
+
+		for (int i = 0; i < this.neuronCount.getValue(); i++) {
+			this.thresholdTable.setValue(i, 0, "#" + (i + 1));
+			if (this.useThreshold.getValue())
+				this.thresholdTable.setValue(i, 1, "0.0");
+			else
+				this.thresholdTable.setValue(i, 1, "N/A");
 		}
+
+		this.thresholdTable.repaint();
 	}
-	
-	private void setTableEditable()
-	{
-		this.thresholdTable.getModel().setEditable(0,false);
-		this.thresholdTable.getModel().setEditable(1,true);
+
+	public void setTableEditable() {
+		this.thresholdTable.getModel().setEditable(0, false);
+		this.thresholdTable.getModel().setEditable(1,
+				this.useThreshold.getValue());
+		this.thresholdTable.getModel().setEditable(2, true);
 	}
-	
-	
+
 }

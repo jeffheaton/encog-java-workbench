@@ -60,4 +60,9 @@ public class TableField extends PropertiesField {
 		return ""+this.model.getValueAt(row, col);
 	}
 
+	public void setEditable(int i, boolean b) {
+		this.model.setEditable(i, b);
+		
+	}
+
 }
