@@ -25,6 +25,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.ContextLayer;
 import org.encog.neural.networks.layers.Layer;
+import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
 import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
 import org.encog.neural.networks.synapse.Synapse;
@@ -32,11 +33,13 @@ import org.encog.neural.networks.synapse.SynapseType;
 import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.neural.networks.synapse.WeightlessSynapse;
 import org.encog.neural.prune.PruneSelective;
+import org.encog.util.math.rbf.RadialBasisFunction;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.WorkbenchFonts;
 import org.encog.workbench.dialogs.layers.EditBasicLayer;
 import org.encog.workbench.dialogs.layers.EditContextLayer;
+import org.encog.workbench.dialogs.layers.EditRadialLayer;
 import org.encog.workbench.frames.MatrixFrame;
 import org.encog.workbench.frames.network.NetworkTool.Type;
 import org.encog.workbench.util.MouseUtil;
@@ -545,8 +548,10 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		if (action.getSource() == this.popupNetworkLayerEdit) {
 			if(this.selected instanceof ContextLayer)
 				performContextLayerEdit();
+			else if(this.selected instanceof RadialBasisFunctionLayer)
+			performRadialLayerEdit();
 			else if(this.selected instanceof BasicLayer)
-			performBasicLayerEdit();
+				performBasicLayerEdit();
 			
 		} else if (action.getSource() == this.popupNetworkLayerDelete) {
 			performLayerDelete();
@@ -837,6 +842,33 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			
 			this.selected.setActivationFunction(dialog.getActivationFunction());
 			
+		}
+		
+	}
+	
+	private void performRadialLayerEdit() {
+		RadialBasisFunctionLayer radialLayer = (RadialBasisFunctionLayer)this.selected;
+		EditRadialLayer dialog = new EditRadialLayer(this.parent, this.selected);
+		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
+		for(int i=0;i<radialLayer.getRadialBasisFunction().length;i++)
+		{
+			i++;
+			RadialBasisFunction rbf = radialLayer.getRadialBasisFunction()[i];
+			dialog.getRadial().getModel().setValueAt(""+(i+1), i, 0);
+			dialog.getRadial().getModel().setValueAt(""+rbf.getCenter(), i, 0);
+			dialog.getRadial().getModel().setValueAt(""+rbf.getPeak(), i, 0);
+			dialog.getRadial().getModel().setValueAt(""+rbf.getWidth(), i, 0);
+		}
+
+				
+		if( dialog.process() )
+		{			
+			// did the neuron count change?
+			if( dialog.getNeuronCount().getValue()!=this.selected.getNeuronCount())
+			{
+				PruneSelective prune = new PruneSelective((BasicNetwork)this.parent.getEncogObject());
+				prune.changeNeuronCount(this.selected, dialog.getNeuronCount().getValue());
+			}
 		}
 		
 	}
