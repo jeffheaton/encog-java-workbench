@@ -49,17 +49,16 @@ public class RBFChartGenerator implements ChartGenerator {
 	        xAxis.setLowerMargin(0.0);
 	        xAxis.setUpperMargin(0.0);
 	        XYLineAndShapeRenderer r = (XYLineAndShapeRenderer) plot.getRenderer();
-	        r.setDrawSeriesLineAsPath(true);
-	        r.setSeriesStroke(0, new BasicStroke(1.5f));
-	        r.setSeriesStroke(1, new BasicStroke(2.0f, BasicStroke.CAP_ROUND,
-	                BasicStroke.JOIN_ROUND, 1.0f, new float[] { 6.0f, 4.0f },
-	                0.0f));
-	        r.setSeriesStroke(2, new BasicStroke(2.0f, BasicStroke.CAP_ROUND,
-	                BasicStroke.JOIN_ROUND, 1.0f, new float[] { 6.0f, 4.0f, 3.0f,
-	                3.0f }, 0.0f));
-	        r.setSeriesStroke(3, new BasicStroke(2.0f, BasicStroke.CAP_ROUND,
-	                BasicStroke.JOIN_ROUND, 1.0f, new float[] { 4.0f, 4.0f },
-	                0.0f));
+	        
+	        for(int i=0;i<this.layer.getRadialBasisFunction().length;i++)
+	        {
+	        	r.setDrawSeriesLineAsPath(true);
+		        r.setSeriesStroke(i, new BasicStroke(1.5f));	
+	        }
+	        
+	        
+	        
+
 
 	        return chart;
 	}
@@ -67,25 +66,17 @@ public class RBFChartGenerator implements ChartGenerator {
 	public XYDataset createDataset() {
         XYSeriesCollection dataset = new XYSeriesCollection();
 
-        Function2D n1 = new NormalDistributionFunction2D(0.0, 1.0);
-        XYSeries s1 = DatasetUtilities.sampleFunction2DToSeries(n1, -5.1, 5.1,
-                121, "N1");
-        dataset.addSeries(s1);
+        for(int i=0;i<this.layer.getRadialBasisFunction().length;i++)
+        {
+        	Function2D n1 = new RadialBasisFunction2D(this.layer.getRadialBasisFunction()[i]);
+            XYSeries s1 = DatasetUtilities.sampleFunction2DToSeries(n1, -5.1, 5.1,
+                    121, "N1");
+            dataset.addSeries(s1);
+        }
+        
+        
 
-        Function2D n2 = new NormalDistributionFunction2D(0.0, Math.sqrt(0.2));
-        XYSeries s2 = DatasetUtilities.sampleFunction2DToSeries(n2, -5.1, 5.1,
-                121, "N2");
-        dataset.addSeries(s2);
 
-        Function2D n3 = new NormalDistributionFunction2D(0.0, Math.sqrt(5.0));
-        XYSeries s3 = DatasetUtilities.sampleFunction2DToSeries(n3, -5.1, 5.1,
-                121, "N3");
-        dataset.addSeries(s3);
-
-        Function2D n4 = new NormalDistributionFunction2D(-2.0, Math.sqrt(0.5));
-        XYSeries s4 = DatasetUtilities.sampleFunction2DToSeries(n4, -5.1, 5.1,
-                121, "N4");
-        dataset.addSeries(s4);
         return dataset;
 	}
 
