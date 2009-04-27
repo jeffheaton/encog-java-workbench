@@ -697,25 +697,18 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		EditBasicLayer dialog = new EditBasicLayer(this.parent, this.selected);
 		dialog.setActivationFunction(this.selected.getActivationFunction());
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
+		dialog.getUseThreshold().setValue(this.selected.hasThreshold());
+		dialog.setTableEditable();
 		
-		if(this.selected.hasThreshold())
+		for(int i=0;i<this.selected.getNeuronCount();i++)
 		{
-			for(int i=0;i<this.selected.getNeuronCount();i++)
-			{
-				dialog.getThresholdTable().setValue(i,0,"#"+(i+1));
+			dialog.getThresholdTable().setValue(i,0,"#"+(i+1));
+			if(this.selected.hasThreshold())
 				dialog.getThresholdTable().setValue(i,1,""+this.selected.getThreshold(i));
-			}
-			
-			dialog.getUseThreshold().setValue(true);
-			dialog.getThresholdTable().setVisable(true);
+			else
+				dialog.getThresholdTable().setValue(i,1,"N/A");
 		}
-		else
-		{
-			dialog.getUseThreshold().setValue(false);
-			dialog.getThresholdTable().setVisable(false);
-		}
-		
-		
+				
 		if( dialog.process() )
 		{
 			// were thresholds added or removed
@@ -742,6 +735,10 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			else
 			{
 				// if the neuron count did not change, copy any new threshold values
+				boolean updateThreshold = dialog.getUseThreshold().getValue();
+				
+				if(updateThreshold)
+				{
 				for(int i=0;i<this.selected.getNeuronCount();i++)
 				{
 					double value = 0;
@@ -754,6 +751,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 						// just let the value go to zero
 					}
 					this.selected.setThreshold(i, value);
+				}
 				}
 			}
 			

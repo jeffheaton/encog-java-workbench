@@ -48,9 +48,8 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 		addProperty(this.thresholdTable = new TableField("threshold values", 
 				"Threshold Values",true, 100, layer.getNeuronCount(), COLUMN_HEADS));
 		this.useThreshold.setListener(this);
-		setTableEditable();
-		
 		render();
+		setTableEditable();
 	}
 
 	public String popup(PopupField field) {
@@ -87,16 +86,8 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 	}
 
 	public void check(CheckField check) {
-		if( check.getValue() )
-		{
-			generateThresholdValues();
-			this.thresholdTable.setVisable(true);
-		}
-		else
-		{
-			this.thresholdTable.setVisable(false);
-		}
-		
+		generateThresholdValues();
+		setTableEditable();
 	}
 
 	public CheckField getUseThreshold() {
@@ -108,11 +99,15 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 		for(int i=0;i<this.neuronCount.getValue();i++)
 		{
 			this.thresholdTable.setValue(i,0,"#"+(i+1));
-			this.thresholdTable.setValue(i,1,"0");
+			if( this.useThreshold.getValue() )
+				this.thresholdTable.setValue(i,1,"0");
+			else
+				this.thresholdTable.setValue(i,1,"N/A");
 		}
+		this.thresholdTable.repaint();
 	}
 	
-	private void setTableEditable()
+	public void setTableEditable()
 	{
 		this.thresholdTable.getModel().setEditable(0,false);
 		this.thresholdTable.getModel().setEditable(1,true);
