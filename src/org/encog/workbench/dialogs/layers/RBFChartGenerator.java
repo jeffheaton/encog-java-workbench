@@ -4,7 +4,11 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 
 import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
+import org.encog.util.math.Convert;
+import org.encog.util.math.rbf.GaussianFunction;
+import org.encog.util.math.rbf.RadialBasisFunction;
 import org.encog.workbench.dialogs.common.ChartGenerator;
+import org.encog.workbench.dialogs.common.TableFieldModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.annotations.XYPointerAnnotation;
@@ -22,11 +26,12 @@ import org.jfree.ui.TextAnchor;
 
 public class RBFChartGenerator implements ChartGenerator {
 
-	private RadialBasisFunctionLayer layer;
+	private EditRadialLayer owner;
+	private XYSeriesCollection dataset;
 	
-	public RBFChartGenerator(RadialBasisFunctionLayer layer)
+	public RBFChartGenerator(EditRadialLayer owner)
 	{
-		this.layer = layer;
+		this.owner = owner;
 	}
 	
 	public JFreeChart createChart(XYDataset dataset) {
@@ -50,10 +55,12 @@ public class RBFChartGenerator implements ChartGenerator {
 	        xAxis.setUpperMargin(0.0);
 	        XYLineAndShapeRenderer r = (XYLineAndShapeRenderer) plot.getRenderer();
 	        
-	        for(int i=0;i<this.layer.getRadialBasisFunction().length;i++)
+	        TableFieldModel mode = this.owner.getRadial().getModel();
+	        
+	        for(int i=0;i<mode.getRowCount();i++)
 	        {
 	        	r.setDrawSeriesLineAsPath(true);
-		        r.setSeriesStroke(i, new BasicStroke(1.5f));	
+		        r.setSeriesStroke(i, new BasicStroke(1.5f));
 	        }
 	        
 	        
@@ -64,11 +71,23 @@ public class RBFChartGenerator implements ChartGenerator {
 	}
 
 	public XYDataset createDataset() {
-        XYSeriesCollection dataset = new XYSeriesCollection();
+		
+		if( this.dataset==null )
+        this.dataset = new XYSeriesCollection();
+        
+        dataset.removeAllSeries();
 
-        for(int i=0;i<this.layer.getRadialBasisFunction().length;i++)
+        TableFieldModel mode = this.owner.getRadial().getModel();
+        
+        for(int i=0;i<mode.getRowCount();i++)
         {
-        	Function2D n1 = new RadialBasisFunction2D(this.layer.getRadialBasisFunction()[i]);
+        	double center = Convert.string2double((String)mode.getValueAt(i, 1));
+        	double peak = Convert.string2double((String)mode.getValueAt(i, 2));
+        	double width = Convert.string2double((String)mode.getValueAt(i, 3));
+        	
+        	RadialBasisFunction rbf = new GaussianFunction(center,peak,width);
+        	
+        	Function2D n1 = new RadialBasisFunction2D(rbf);
             XYSeries s1 = DatasetUtilities.sampleFunction2DToSeries(n1, -5.1, 5.1,
                     121, "N1");
             dataset.addSeries(s1);
