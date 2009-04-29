@@ -13,14 +13,14 @@ public class CalculateArrow {
 	private  Point to;
 	private Side fromSide;
 	private Side toSide;
+	private Synapse synapse;
 	
 	public CalculateArrow(Synapse synapse, boolean moveBack)
 	{
-
-		
 		int xOffset = 0;
 		int yOffset = 0;
 		
+		this.synapse = synapse;
 		
 		if( (synapse.getToLayer().getX()>=synapse.getFromLayer().getX()) && 
 				(synapse.getToLayer().getX()<=(synapse.getFromLayer().getX()+DrawLayer.LAYER_WIDTH*1.5)) ||
@@ -143,7 +143,16 @@ public class CalculateArrow {
 	{
 		Polygon result = new Polygon();
 		
-		if( this.fromSide==Side.Left || this.fromSide==Side.Right)
+		if( this.synapse.isSelfConnected() )
+		{
+			int x = (int)this.synapse.getFromLayer().getX()+DrawLayer.LAYER_WIDTH;
+			int y = (int)this.synapse.getFromLayer().getY();
+			result.addPoint(x-10,y-10);
+			result.addPoint(x+10,y-10);
+			result.addPoint(x+10,y+10);
+			result.addPoint(x-10,y+10);
+		}
+		else if( this.fromSide==Side.Left || this.fromSide==Side.Right)
 		{
 			result.addPoint((int)this.from.getX(), (int)from.getY()-10);
 			result.addPoint((int)this.from.getX(), (int)from.getY()+10);

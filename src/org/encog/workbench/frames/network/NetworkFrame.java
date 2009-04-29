@@ -45,6 +45,7 @@ import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
 import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
 import org.encog.neural.networks.synapse.WeightedSynapse;
+import org.encog.neural.networks.synapse.WeightlessSynapse;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.NetworkQueryFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
@@ -91,9 +92,9 @@ public class NetworkFrame extends EncogCommonFrame {
 		tools.add(new NetworkTool("Context",Icons.getLayerContext(),Type.layer,ContextLayer.class));
 		tools.add(new NetworkTool("RBF",Icons.getLayerRBF(),Type.layer,RadialBasisFunctionLayer.class));
 		tools.add(new NetworkTool("Weighted",Icons.getSynapseWeight(),Type.synapse,WeightedSynapse.class));
-		tools.add(new NetworkTool("Weightless",Icons.getSynapseWeightless(),Type.synapse,WeightedSynapse.class));
+		tools.add(new NetworkTool("Weightless",Icons.getSynapseWeightless(),Type.synapse,WeightlessSynapse.class));
 		tools.add(new NetworkTool("Direct",Icons.getSynapseDirect(),Type.synapse,DirectSynapse.class));
-		tools.add(new NetworkTool("One-To-One",Icons.getSynapseWeightless(),Type.synapse,OneToOneSynapse.class));
+		tools.add(new NetworkTool("One-To-One",Icons.getSynapseOneToOne(),Type.synapse,OneToOneSynapse.class));
 	}
 
 	public void actionPerformed(final ActionEvent action) {
@@ -116,7 +117,28 @@ public class NetworkFrame extends EncogCommonFrame {
 	}
 
 	private void performValidate() {
-		// TODO Auto-generated method stub
+		this.networkDiagram.fixOrphans();
+		
+		if( this.networkDiagram.getOrphanLayers().size()>0)
+		{
+			EncogWorkBench.displayError("Error", "There are unconnected layers. These will be lost" +
+					" if the network is saved.");
+			return;
+		}
+		
+		BasicNetwork network = (BasicNetwork)this.getEncogObject();
+		if( network.getInputLayer()==null)
+		{
+			EncogWorkBench.displayError("Error", "Network has no input layer."); 
+			return;
+		}
+		if( network.getOutputLayer()==null)
+		{
+			EncogWorkBench.displayError("Error", "Network has no output layer."); 
+			return;
+		}
+		
+		EncogWorkBench.displayMessage("Success", "This neural network seems ok.");
 		
 	}
 
@@ -161,6 +183,7 @@ public class NetworkFrame extends EncogCommonFrame {
 		this.buttonRandomize.addActionListener(this);
 		this.buttonQuery.addActionListener(this);
 		this.buttonTrain.addActionListener(this);
+		this.buttonValidate.addActionListener(this);
 
 		content.add(this.toolbar, BorderLayout.PAGE_START);
 		this.scroll = new JScrollPane(networkDiagram = new NetworkDiagram(this));
@@ -208,6 +231,4 @@ public class NetworkFrame extends EncogCommonFrame {
 		}
 		return null;
 	}
-	
-	
 }

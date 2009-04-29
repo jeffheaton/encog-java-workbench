@@ -640,7 +640,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		}
 	}
 
-	private void fixOrphans() {
+	public void fixOrphans() {
 		
 		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
 		
@@ -845,5 +845,11 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	{
 		return this.parent;
 	}
+
+	public Set<Layer> getOrphanLayers() {
+		return orphanLayers;
+	}
+	
+	
 	
 }
