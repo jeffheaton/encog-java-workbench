@@ -56,6 +56,7 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 	private JButton calculateButton;
 
 	public NetworkQueryFrame(final BasicNetwork data) {
+		super(true);
 		setEncogObject(data);
 		addWindowListener(this);
 	}

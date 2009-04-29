@@ -40,13 +40,17 @@ import javax.swing.JToolBar;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.ContextLayer;
+import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
 import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
 import org.encog.neural.networks.synapse.WeightedSynapse;
+import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.frames.NetworkQueryFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.network.NetworkTool.Type;
 import org.encog.workbench.models.NetworkListModel;
+import org.encog.workbench.process.Training;
 
 public class NetworkFrame extends EncogCommonFrame {
 
@@ -55,9 +59,10 @@ public class NetworkFrame extends EncogCommonFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JToolBar toolbar;
-	private JButton addLayer;
-	private JButton deleteLayer;
-	private JButton editLayer;
+	private JButton buttonRandomize;
+	private JButton buttonQuery;
+	private JButton buttonTrain;
+	private JButton buttonValidate;
 	private JButton properties;
 	private NetworkListModel model;
 	private JScrollPane scroll;
@@ -84,7 +89,7 @@ public class NetworkFrame extends EncogCommonFrame {
 		
 		tools.add(new NetworkTool("Basic",Icons.getLayerBasic(),Type.layer,BasicLayer.class));
 		tools.add(new NetworkTool("Context",Icons.getLayerContext(),Type.layer,ContextLayer.class));
-		tools.add(new NetworkTool("Radial Function",Icons.getLayerRBF(),Type.layer,RadialBasisFunctionLayer.class));
+		tools.add(new NetworkTool("RBF",Icons.getLayerRBF(),Type.layer,RadialBasisFunctionLayer.class));
 		tools.add(new NetworkTool("Weighted",Icons.getSynapseWeight(),Type.synapse,WeightedSynapse.class));
 		tools.add(new NetworkTool("Weightless",Icons.getSynapseWeightless(),Type.synapse,WeightedSynapse.class));
 		tools.add(new NetworkTool("Direct",Icons.getSynapseDirect(),Type.synapse,DirectSynapse.class));
@@ -92,7 +97,46 @@ public class NetworkFrame extends EncogCommonFrame {
 	}
 
 	public void actionPerformed(final ActionEvent action) {
+		if( action.getSource()==this.buttonQuery)
+		{
+			performQuery();
+		}
+		else if(action.getSource()==this.buttonRandomize)
+		{
+			performRandomize();
+		}
+		else if( action.getSource()==this.buttonTrain)
+		{
+			performTrain();
+		}
+		else if( action.getSource()==this.buttonValidate)
+		{
+			performValidate();
+		}
+	}
 
+	private void performValidate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void performTrain() {
+		Training.performResilient();
+		
+	}
+
+	private void performRandomize() {
+		if(EncogWorkBench.askQuestion("Are you sure?", "Randomize network weights and lose all training?"))
+		{
+			((BasicNetwork)this.getEncogObject()).reset();
+		}
+		
+	}
+
+	private void performQuery() {
+		NetworkQueryFrame query = new NetworkQueryFrame(((BasicNetwork)this.getEncogObject()));
+		query.setVisible(true);
+		
 	}
 
 	/**
@@ -109,15 +153,14 @@ public class NetworkFrame extends EncogCommonFrame {
 		content.setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);
-		this.toolbar.add(this.deleteLayer = new JButton("Delete Layer"));
-		this.toolbar.add(this.addLayer = new JButton("Add Layer"));
-		this.toolbar.add(this.editLayer = new JButton("Edit Layer"));
-		this.toolbar.add(this.properties = new JButton("Network Properties"));
+		this.toolbar.add(this.buttonRandomize = new JButton("Randomize"));
+		this.toolbar.add(this.buttonQuery = new JButton("Query"));
+		this.toolbar.add(this.buttonTrain = new JButton("Train"));
+		this.toolbar.add(this.buttonValidate = new JButton("Validate"));
 
-		this.addLayer.addActionListener(this);
-		this.editLayer.addActionListener(this);
-		this.deleteLayer.addActionListener(this);
-		this.properties.addActionListener(this);
+		this.buttonRandomize.addActionListener(this);
+		this.buttonQuery.addActionListener(this);
+		this.buttonTrain.addActionListener(this);
 
 		content.add(this.toolbar, BorderLayout.PAGE_START);
 		this.scroll = new JScrollPane(networkDiagram = new NetworkDiagram(this));
@@ -154,7 +197,17 @@ public class NetworkFrame extends EncogCommonFrame {
 		
 	}
 	
-
+	public NetworkTool findTool(Layer layer)
+	{
+		for(NetworkTool tool: this.tools)
+		{
+			if( tool.getClassType() == layer.getClass() )
+			{
+				return tool;
+			}
+		}
+		return null;
+	}
 	
 	
 }

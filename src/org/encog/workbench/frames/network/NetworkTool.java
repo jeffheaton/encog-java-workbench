@@ -2,6 +2,8 @@ package org.encog.workbench.frames.network;
 
 import javax.swing.ImageIcon;
 
+import org.encog.neural.networks.layers.Layer;
+
 public class NetworkTool {
 	
 	enum Type
@@ -85,10 +87,5 @@ public class NetworkTool {
 	public Class getClassType() {
 		return classType;
 	}
-	
-	
-	
-	
-	
 	
 }

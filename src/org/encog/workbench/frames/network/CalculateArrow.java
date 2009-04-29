@@ -23,10 +23,10 @@ public class CalculateArrow {
 		
 		
 		if( (synapse.getToLayer().getX()>=synapse.getFromLayer().getX()) && 
-				(synapse.getToLayer().getX()<=(synapse.getFromLayer().getX()+NetworkDiagram.LAYER_WIDTH*1.5)) ||
+				(synapse.getToLayer().getX()<=(synapse.getFromLayer().getX()+DrawLayer.LAYER_WIDTH*1.5)) ||
 		
 				(synapse.getFromLayer().getX()>=synapse.getToLayer().getX()) && 
-				(synapse.getFromLayer().getX()<=(synapse.getToLayer().getX()+NetworkDiagram.LAYER_WIDTH*1.5))
+				(synapse.getFromLayer().getX()<=(synapse.getToLayer().getX()+DrawLayer.LAYER_WIDTH*1.5))
 		)
 		{
 			if(synapse.getToLayer().getY()>synapse.getFromLayer().getY())
@@ -47,13 +47,13 @@ public class CalculateArrow {
 				fromSide = Side.Right;
 				toSide = Side.Left;
 				if(isBackConnected(synapse))
-					yOffset = (NetworkDiagram.LAYER_HEIGHT/4);
+					yOffset = (DrawLayer.LAYER_HEIGHT/4);
 			}
 			else
 			{
 				fromSide = Side.Left;
 				toSide = Side.Right;
-				yOffset = -(NetworkDiagram.LAYER_HEIGHT/4);
+				yOffset = -(DrawLayer.LAYER_HEIGHT/4);
 			}
 		}
 		
@@ -95,13 +95,13 @@ public class CalculateArrow {
 		switch(side)
 		{
 			case Top:
-				return new Point(layer.getX()+(NetworkDiagram.LAYER_WIDTH/2),layer.getY());
+				return new Point(layer.getX()+(DrawLayer.LAYER_WIDTH/2),layer.getY());
 			case Bottom:
-				return new Point(layer.getX()+(NetworkDiagram.LAYER_WIDTH/2),layer.getY()+NetworkDiagram.LAYER_HEIGHT);
+				return new Point(layer.getX()+(DrawLayer.LAYER_WIDTH/2),layer.getY()+DrawLayer.LAYER_HEIGHT);
 			case Left:
-				return new Point(layer.getX(),layer.getY()+(NetworkDiagram.LAYER_HEIGHT/2));
+				return new Point(layer.getX(),layer.getY()+(DrawLayer.LAYER_HEIGHT/2));
 			case Right:
-				return new Point(layer.getX()+NetworkDiagram.LAYER_WIDTH,layer.getY()+(NetworkDiagram.LAYER_HEIGHT/2));
+				return new Point(layer.getX()+DrawLayer.LAYER_WIDTH,layer.getY()+(DrawLayer.LAYER_HEIGHT/2));
 		}
 		
 		return null;

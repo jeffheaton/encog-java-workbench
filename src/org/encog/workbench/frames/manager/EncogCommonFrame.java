@@ -45,11 +45,18 @@ public abstract class EncogCommonFrame extends JFrame implements
 	private final EncogFrameManager subwindows;
 	private EncogCommonFrame parent;
 	private boolean closed;
+	private boolean closeSilent;
 
-	public EncogCommonFrame() {
+	public EncogCommonFrame(boolean closeSilent) {
 		this.closed = false;
 		this.subwindows = new EncogFrameManager(this);
 		addWindowListener(this);
+		this.closeSilent = closeSilent;
+	}
+	
+	public EncogCommonFrame()
+	{
+		this(false);
 	}
 
 	public JMenuItem addItem(final JMenu m, final String s, final int key) {
@@ -164,7 +171,7 @@ public abstract class EncogCommonFrame extends JFrame implements
 			frame.dispose();
 		}
 		
-		if( this.encogObject instanceof EncogPersistedObject )
+		if( this.encogObject instanceof EncogPersistedObject && !this.closeSilent)
 		{
 			if( EncogWorkBench.displayQuery("Save?","Would you like to save your changes to this object?"))
 			{

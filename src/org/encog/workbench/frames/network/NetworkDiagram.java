@@ -55,9 +55,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		Right
 	}
 	
-	public static final int LAYER_WIDTH = 96;
-	public static final int LAYER_HEIGHT = 64;
-	public static final int SELECTION_WIDTH = 10;
+	
 	public static final int VIRTUAL_WIDTH = 2000;
 	public static final int VIRTUAL_HEIGHT = 2000;
 	public static final int ARROWHEAD_WIDTH = 10;
@@ -128,7 +126,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			}
 			
 			// draw the actual layer
-			drawLayer(offscreenGraphics,layer);
+			DrawLayer.drawLayer(this, offscreenGraphics,layer);
 			
 			if(network.isInput(layer))
 			{
@@ -141,11 +139,11 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			
 			if( this.selected==layer)
 			{
-				drawSelection(offscreenGraphics,layer);
+				DrawLayer.drawSelection(offscreenGraphics,layer);
 			}
 			if( this.fromLayer==layer)
 			{
-				drawFromSelection(offscreenGraphics,layer);
+				DrawLayer.drawFromSelection(offscreenGraphics,layer);
 			}
 		}
 		
@@ -201,55 +199,9 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		DrawArrow.drawArrow(g,synapse,type);		
 	}
 
-	private NetworkTool findTool(Layer layer)
-	{
-		for(NetworkTool tool: this.parent.getTools())
-		{
-			if( tool.getClassType() == layer.getClass() )
-			{
-				return tool;
-			}
-		}
-		return null;
-	}
 	
-	private void drawSelection(Graphics g, Layer layer)
-	{
-		g.setColor(Color.CYAN);
-		g.drawRect(layer.getX(), layer.getY(), LAYER_WIDTH, LAYER_HEIGHT);
-		g.fillRect(layer.getX(), layer.getY(), SELECTION_WIDTH, SELECTION_WIDTH);
-		g.fillRect(layer.getX()+LAYER_WIDTH-SELECTION_WIDTH, layer.getY(), SELECTION_WIDTH, SELECTION_WIDTH);
-		g.fillRect(layer.getX()+LAYER_WIDTH-SELECTION_WIDTH, layer.getY()+LAYER_HEIGHT-SELECTION_WIDTH, SELECTION_WIDTH, SELECTION_WIDTH);
-		g.fillRect(layer.getX(), layer.getY()+LAYER_HEIGHT-SELECTION_WIDTH, SELECTION_WIDTH, SELECTION_WIDTH);
-	}
 	
-	private void drawFromSelection(Graphics g, Layer layer)
-	{
-		g.setColor(Color.RED);
-		g.setFont(WorkbenchFonts.getTextFont());
-		g.drawString("Choose a layer to build a synapse to", layer.getX(), layer.getY());
-	}
-	
-	private void drawLayer(Graphics g, Layer layer)
-	{
-		NetworkTool tool = findTool(layer);
-		g.setColor(Color.WHITE);
-		g.fillRect(layer.getX(), layer.getY(), LAYER_WIDTH, LAYER_HEIGHT);
-		g.setColor(Color.BLACK);
-		tool.getIcon().paintIcon(this, g, layer.getX(), layer.getY());
-		g.drawRect(layer.getX(), layer.getY(), NetworkTool.WIDTH, NetworkTool.HEIGHT);
-		g.drawRect(layer.getX(), layer.getY(), LAYER_WIDTH, LAYER_HEIGHT);
-		g.drawRect(layer.getX()-1, layer.getY()-1, LAYER_WIDTH, LAYER_HEIGHT);
-		g.setFont(WorkbenchFonts.getTitle2Font());
-		FontMetrics fm = g.getFontMetrics();
-		int y = layer.getY()+fm.getHeight()+NetworkTool.HEIGHT;
-		g.drawString(tool.getName() + " Layer", layer.getX()+2, y);
-		y+=fm.getHeight();
-		g.setFont(WorkbenchFonts.getTextFont());
-		g.drawString(layer.getNeuronCount() + " Neuron" + ((layer.getNeuronCount()>1)?"s":""), layer.getX()+2, y);
-		
-		//g.fillRect(layer.getX(), layer.getY(), 50,50);
-	}
+
 	
 	private Layer findLayer(MouseEvent e)
 	{
@@ -492,8 +444,8 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	
 	private boolean contains(Layer layer,int x, int y)
 	{
-		return( x>layer.getX() && (x<layer.getX()+LAYER_WIDTH) &&
-			y>layer.getY() && (y<layer.getY()+LAYER_HEIGHT) );
+		return( x>layer.getX() && (x<layer.getX()+DrawLayer.LAYER_WIDTH) &&
+			y>layer.getY() && (y<layer.getY()+DrawLayer.LAYER_HEIGHT) );
 	}
 
 	public void mouseReleased(MouseEvent arg0) {
@@ -591,9 +543,9 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		int x = layer.getX();
 		int y = layer.getY()-height;
 		
-		int center = (LAYER_WIDTH/2)-(width/2);
+		int center = (DrawLayer.LAYER_WIDTH/2)-(width/2);
 		g.drawString(str, x+center,y+height-3);
-		g.drawRect(x, y, LAYER_WIDTH, height);
+		g.drawRect(x, y, DrawLayer.LAYER_WIDTH, height);
 	}
 	
 	private void drawOutput(Graphics g, Layer layer)
@@ -608,9 +560,9 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		int x = layer.getX();
 		int y = layer.getY();
 		
-		int center = (LAYER_WIDTH/2)-(width/2);
-		g.drawString(str, x+center,y+height-3+LAYER_HEIGHT);
-		g.drawRect(x, y+LAYER_HEIGHT, LAYER_WIDTH, height);
+		int center = (DrawLayer.LAYER_WIDTH/2)-(width/2);
+		g.drawString(str, x+center,y+height-3+DrawLayer.LAYER_HEIGHT);
+		g.drawRect(x, y+DrawLayer.LAYER_HEIGHT, DrawLayer.LAYER_WIDTH, height);
 	}
 	
 	public void performSynapseDelete()
@@ -762,6 +714,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			}
 			
 			this.selected.setActivationFunction(dialog.getActivationFunction());
+			repaint();
 			
 		}
 		
@@ -842,6 +795,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			}
 			
 			this.selected.setActivationFunction(dialog.getActivationFunction());
+			repaint();
 			
 		}
 		
@@ -860,6 +814,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			dialog.getRadial().getModel().setValueAt(""+rbf.getWidth(), i, 3);
 		}
 				
+		dialog.getChart().refresh();
 		if( dialog.process() )
 		{			
 			
@@ -881,9 +836,14 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 					
 				}
 			}
+			repaint();
 		}
 		
 	}
 	
+	public NetworkFrame getNetworkFrame()
+	{
+		return this.parent;
+	}
 	
 }

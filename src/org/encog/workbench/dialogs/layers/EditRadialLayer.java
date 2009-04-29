@@ -53,6 +53,11 @@ public class EditRadialLayer extends EncogPropertiesDialog implements ChartListe
 		chart.refresh();
 	}
 
+
+	public ChartField getChart() {
+		return this.chart;
+	}
+
 	
 	
 	

@@ -83,7 +83,7 @@ public class DrawArrow {
 	
 	public static void drawSelfArrow(Graphics g, Synapse synapse)
 	{
-		int x = synapse.getFromLayer().getX()+NetworkDiagram.LAYER_WIDTH-(SELF_CONNECTED_WIDTH/2);
+		int x = synapse.getFromLayer().getX()+DrawLayer.LAYER_WIDTH-(SELF_CONNECTED_WIDTH/2);
 		int y = synapse.getFromLayer().getY()-(SELF_CONNECTED_WIDTH/2);
 		g.drawArc(x, y, SELF_CONNECTED_WIDTH, SELF_CONNECTED_WIDTH,300, 240);
 		Polygon arrowHead = generateArrowHead(Side.Right,x+30,y+37);
