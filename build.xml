@@ -31,6 +31,7 @@
 	<!-- set global properties for this build -->
 	<property name="path.src" location="${basedir}/src" />
 	<property name="path.build" location="${basedir}/build" />
+	<property name="path.build.util" location="${basedir}/util" />
 	<property name="path.dist" location="${basedir}/dist" />
 	<property name="path.stage.win" location="${basedir}/stagewin" />
 	<property name="path.stage.src" location="${basedir}/stagesrc" />
@@ -46,6 +47,12 @@
 			<arg value="checkout" />
 			<arg value="http://encog-java.googlecode.com/svn/trunk/encog-workbench" />
 			<arg value="${basedir}" />
+		</exec>
+		
+		<exec executable="svn">			
+			<arg value="checkout" />
+			<arg value="http://encog-java.googlecode.com/svn/trunk/encog-build" />
+			<arg value="${path.build.util}" />
 		</exec>
 	</target>
 
@@ -110,11 +117,26 @@
 		
 		<tstamp/>
 
-		<!-- Create Windows distributable -->
-
+		<!-- Create Windows distributable -->		
 		<copy todir="${path.stage.win}/jar">
 			<fileset dir="${path.jar}" />
 		</copy>
+		<copy todir="${path.stage.win}" file="${basedir}/copyright.txt" />
+		
+		<java classname="org.encog.workbench.util.JavaClassPathUtil">
+			<classpath refid="classpath" />
+			<arg value="${path.stage.win}"/>
+		</java>
+		
+		<java classname="org.encog.workbench.util.JavaLaunchUtil">
+			<classpath refid="classpath" />
+			<arg value="${path.stage.win}"/>
+			<arg value="${path.build.util}"/>
+		</java>
+		
+		<exec executable="launch4jc" dir="${path.build.util}">			
+			<arg value="launch.xml" />
+		</exec>
 
 		<zip destfile="${path.dist}/encog-workbench-win-${build.version}-${DSTAMP}-${TSTAMP}.zip">
 			<fileset dir="${path.stage.win}" />
@@ -124,6 +146,7 @@
 		<copy todir="${path.stage.src}" file="${basedir}/build.xml" />
 		<copy todir="${path.stage.src}" file="${basedir}/.classpath" />
 		<copy todir="${path.stage.src}" file="${basedir}/.project" />
+		<copy todir="${path.stage.src}" file="${basedir}/copyright.txt" />
 
 		<copy todir="${path.stage.src}/src">
 			<fileset dir="${path.src}" />
@@ -138,13 +161,16 @@
 		</zip>
 		
 		<!-- Create Universal distributable -->
-		<copy todir="${path.stage.univ}" file="${basedir}/workbench.bat" />
-		<copy todir="${path.stage.univ}" file="${basedir}/workbench.sh" />
-
 		<copy todir="${path.stage.univ}/jar">
 			<fileset dir="${path.jar}" />
 		</copy>
-
+		<copy todir="${path.stage.univ}" file="${basedir}/copyright.txt" />
+		
+		<java classname="org.encog.workbench.util.JavaClassPathUtil">
+			<classpath refid="classpath" />
+			<arg value="${path.stage.univ}"/>
+		</java>
+		
 		<zip destfile="${path.dist}/encog-workbench-univ-${build.version}-${DSTAMP}-${TSTAMP}.zip">
 			<fileset dir="${path.stage.univ}" />
 		</zip>
@@ -166,6 +192,7 @@
 		<delete dir="${path.stage.univ}" />
 		<delete dir="${path.jar}" />
 		<delete dir="${path.build}" />
+		<delete dir="${path.build.util}" />
 		<delete dir="${path.dist}" />
 		<delete dir="${basedir}/samples" />
 	</target>
