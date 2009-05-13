@@ -6,7 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import org.encog.Encog;
 
 public class JavaLaunchUtil {
 
@@ -72,11 +75,15 @@ public class JavaLaunchUtil {
 		out.println("<maxVersion></maxVersion>");
 		out.println("<jdkPreference>preferJre</jdkPreference>");
 		out.println("</jre>");
-		out.println("<txtFileVersion>1.0</txtFileVersion>");
+		String version = Encog.VERSION + ".0";
+		int year = Calendar.getInstance().get(Calendar.YEAR);
+		out.println("<versionInfo>");
+		out.println("<fileVersion>"+version+"</fileVersion>");
+		out.println("<txtFileVersion>"+version+"</txtFileVersion>");
 		out.println("<fileDescription>Encog Workbench</fileDescription>");
-		out.println("<copyright>Copyright 2008 by Heaton Research, Inc.</copyright>");
-		out.println("<productVersion>1.0.0.0</productVersion>");
-		out.println("<txtProductVersion>1.0</txtProductVersion>");
+		out.println("<copyright>Copyright "+year+" by Heaton Research, Inc.</copyright>");
+		out.println("<productVersion>"+version+"</productVersion>");
+		out.println("<txtProductVersion>"+version+"</txtProductVersion>");
 		out.println("<productName>Encog Workbench</productName>");
 		out.println("<companyName>Heaton Research, Inc.</companyName>\n");
 		out.println("<internalName>Encog Workbench</internalName>");
