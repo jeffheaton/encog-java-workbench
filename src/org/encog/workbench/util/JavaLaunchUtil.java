@@ -40,48 +40,48 @@ public class JavaLaunchUtil {
 	{
 		File pathEXE = new File(stageDir,"EncogWorkbench.exe");
 		File pathICO = new File(utilDir,"");
-		scanJARs(new File(stageDir,"jar"));
+		scanJARs(new File(utilDir,"jar"));
 		PrintWriter out = new PrintWriter(new BufferedWriter(
 				new FileWriter(new File(stageDir,"launch.xml"))));
 		
-		out.println("<launch4jConfig>\n");
-		out.println("<dontWrapJar>true</dontWrapJar>\n");
-		out.println("<headerType>gui</headerType>\n");
-		out.println("<jar>"+this.mainJar+"</jar>\n");
-		out.println("<outfile>"+pathEXE+"</outfile>\n");
-		out.println("<errTitle></errTitle>\n");
-		out.println("<cmdLine></cmdLine>\n");
-		out.println("<chdir></chdir>\n");
-		out.println("<priority>normal</priority>\n");
-		out.println("<downloadUrl>http://java.com/download</downloadUrl>\n");
-		out.println("<supportUrl></supportUrl>\n");
-		out.println("<customProcName>false</customProcName>\n");
-		out.println("<stayAlive>false</stayAlive>\n");
-		out.println("<manifest></manifest>\n");
-		out.println("<icon>"+pathICO+"</icon>\n");
-		out.println("<classPath>\n");
-		out.println("<mainClass>org.encog.workbench.EncogWorkBench</mainClass>\n");
+		out.println("<launch4jConfig>");
+		out.println("<dontWrapJar>true</dontWrapJar>");
+		out.println("<headerType>gui</headerType>");
+		out.println("<jar>"+this.mainJar+"</jar>");
+		out.println("<outfile>"+pathEXE+"</outfile>");
+		out.println("<errTitle></errTitle>");
+		out.println("<cmdLine></cmdLine>");
+		out.println("<chdir></chdir>");
+		out.println("<priority>normal</priority>");
+		out.println("<downloadUrl>http://java.com/download</downloadUrl>");
+		out.println("<supportUrl></supportUrl>");
+		out.println("<customProcName>false</customProcName>");
+		out.println("<stayAlive>false</stayAlive>");
+		out.println("<manifest></manifest>");
+		out.println("<icon>"+pathICO+"</icon>");
+		out.println("<classPath>");
+		out.println("<mainClass>org.encog.workbench.EncogWorkBench</mainClass>");
 		for(String cp: this.classpath)
 		{
-			out.println("<cp>"+cp+"</cp>\n");
+			out.println("<cp>"+cp+"</cp>");
 		}
-		out.println("</classPath>\n");
-		out.println("<jre>\n");
-		out.println("<path></path>\n");
-		out.println("<minVersion>1.5.0</minVersion>\n");
-		out.println("<maxVersion></maxVersion>\n");
-		out.println("<jdkPreference>preferJre</jdkPreference>\n");
-		out.println("</jre>\n");
-		out.println("<txtFileVersion>1.0</txtFileVersion>\n");
-		out.println("<fileDescription>Encog Workbench</fileDescription>\n");
-		out.println("<copyright>Copyright 2008 by Heaton Research, Inc.</copyright>\n");
-		out.println("<productVersion>1.0.0.0</productVersion>\n");
-		out.println("<txtProductVersion>1.0</txtProductVersion>\n");
-		out.println("<productName>Encog Workbench</productName>\n");
+		out.println("</classPath>");
+		out.println("<jre>");
+		out.println("<path></path>");
+		out.println("<minVersion>1.5.0</minVersion>");
+		out.println("<maxVersion></maxVersion>");
+		out.println("<jdkPreference>preferJre</jdkPreference>");
+		out.println("</jre>");
+		out.println("<txtFileVersion>1.0</txtFileVersion>");
+		out.println("<fileDescription>Encog Workbench</fileDescription>");
+		out.println("<copyright>Copyright 2008 by Heaton Research, Inc.</copyright>");
+		out.println("<productVersion>1.0.0.0</productVersion>");
+		out.println("<txtProductVersion>1.0</txtProductVersion>");
+		out.println("<productName>Encog Workbench</productName>");
 		out.println("<companyName>Heaton Research, Inc.</companyName>\n");
-		out.println("<internalName>Encog Workbench</internalName>\n");
-		out.println("<originalFilename>EncogWorkbench.exe</originalFilename>\n");
-		out.println("</versionInfo>\n");
+		out.println("<internalName>Encog Workbench</internalName>");
+		out.println("<originalFilename>EncogWorkbench.exe</originalFilename>");
+		out.println("</versionInfo>");
 		out.println("</launch4jConfig>\n");
 		out.close();
 	}
