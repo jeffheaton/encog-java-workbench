@@ -39,10 +39,10 @@ public class JavaLaunchUtil {
 	public void writeLaunchConfig(File stageDir, File utilDir) throws IOException
 	{
 		File pathEXE = new File(stageDir,"EncogWorkbench.exe");
-		File pathICO = new File(utilDir,"");
-		scanJARs(new File(utilDir,"jar"));
+		File pathICO = new File(utilDir,"Encog.ico");
+		scanJARs(new File(stageDir,"jar"));
 		PrintWriter out = new PrintWriter(new BufferedWriter(
-				new FileWriter(new File(stageDir,"launch.xml"))));
+				new FileWriter(new File(utilDir,"launch.xml"))));
 		
 		out.println("<launch4jConfig>");
 		out.println("<dontWrapJar>true</dontWrapJar>");
