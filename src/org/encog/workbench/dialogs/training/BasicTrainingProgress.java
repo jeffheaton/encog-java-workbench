@@ -190,6 +190,8 @@ public abstract class BasicTrainingProgress extends JDialog implements
 	 * was taken.
 	 */
 	private int performanceLastIteration;
+	
+	private String status;
 
 	/**
 	 * Should the dialog box exit?  Are we waiting for training to shut
@@ -231,7 +233,7 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		this.shouldExit = false;
 		this.bodyFont = EncogFonts.getInstance().getBodyFont();
 		this.headFont = EncogFonts.getInstance().getHeadFont();
-
+		this.status = "Ready to Start";
 	}
 
 	/**
@@ -294,19 +296,19 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		g.drawString("Current Error:", 10, y);
 		y += fm.getHeight();
 		g.drawString("Error Improvement:", 10, y);
+		
 
 		y = fm.getHeight();
 		g.drawString("Elapsed Time:", 400, y);
+		y += fm.getHeight();
+		g.drawString("Performance:", 400, y);
 
 		y = fm.getHeight();
 		g.setFont(this.bodyFont);
 		String str = this.nf.format(this.iteration);
-		if (this.performanceCount == -1) {
-			str += "  (calculating performance)";
-		} else {
-			final double d = this.performanceCount / 60.0;
-			str += "  (" + this.nfShort.format(d) + "/sec)";
-		}
+		
+		str+=" ("+this.status+")";
+		
 		g.drawString(str, 150, y);
 		y += fm.getHeight();
 		g.drawString("" + 100.0 * this.currentError + "%", 150, y);
@@ -320,6 +322,17 @@ public abstract class BasicTrainingProgress extends JDialog implements
 			seconds = (now.getTime() - this.started.getTime()) / 1000;
 		}
 		g.drawString(TimeSpanFormatter.formatTime(seconds), 500, y);
+		
+		y += fm.getHeight();
+		
+		if (this.performanceCount == -1) {
+			str = "  (calculating performance)";
+		} else {
+			final double d = this.performanceCount / 60.0;
+			str = "  (" + this.nfShort.format(d) + "/sec)";
+		}
+		
+		g.drawString(str, 500, y);
 
 	}
 
@@ -336,6 +349,7 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		this.buttonStart.setEnabled(false);
 		this.buttonStop.setEnabled(true);
 		this.cancel = false;
+		this.status = "Started";
 		this.thread = new Thread(this);
 		this.thread.start();
 	}
@@ -344,6 +358,7 @@ public abstract class BasicTrainingProgress extends JDialog implements
 	 * Request that the training stop.
 	 */
 	private void performStop() {
+		this.status = "Canceled";
 		this.cancel = true;
 	}
 
@@ -372,6 +387,7 @@ public abstract class BasicTrainingProgress extends JDialog implements
 			this.currentError = this.train.getError();
 
 			if (this.currentError < this.maxError) {
+				this.status = "Done";
 				this.cancel = true;
 			}
 
