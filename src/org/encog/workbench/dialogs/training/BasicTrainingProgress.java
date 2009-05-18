@@ -44,6 +44,7 @@ import javax.swing.WindowConstants;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.TimeSpanFormatter;
 
@@ -240,6 +241,10 @@ public abstract class BasicTrainingProgress extends JDialog implements
 	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource() == this.buttonClose) {
 			if (this.thread == null) {
+				if( EncogWorkBench.askQuestion("Training", "Save the training to this network?") )
+				{
+					EncogWorkBench.getInstance().getCurrentFile().add(this.network.getName(), this.network);
+				}
 				dispose();
 			} else {
 				this.shouldExit = true;

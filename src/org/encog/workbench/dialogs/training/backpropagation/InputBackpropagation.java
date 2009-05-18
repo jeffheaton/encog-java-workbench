@@ -63,6 +63,9 @@ public class InputBackpropagation extends BasicTrainingInput {
 		addProperty(this.learningRate = new DoubleField("learning rate","Learning Rate",true,-1,-1));
 		addProperty(this.momentum = new DoubleField("momentum","Momentum",true,-1,-1));
 		render();
+		this.learningRate.setValue(0.7);
+		this.momentum.setValue(0.0);
+		this.getMaxError().setValue(0.01);
 	}
 
 

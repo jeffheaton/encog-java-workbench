@@ -64,6 +64,7 @@ public class InputResilient extends BasicTrainingInput {
 		render();	
 		this.maxStep.setValue(ResilientPropagation.DEFAULT_MAX_STEP);
 		this.initialUpdate.setValue(ResilientPropagation.DEFAULT_INITIAL_UPDATE);
+		this.getMaxError().setValue(0.01);
 	}
 
 	public DoubleField getMaxStep() {
@@ -73,6 +74,8 @@ public class InputResilient extends BasicTrainingInput {
 	public DoubleField getInitialUpdate() {
 		return initialUpdate;
 	}
+	
+	
 	
 	
 

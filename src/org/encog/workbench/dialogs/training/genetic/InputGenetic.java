@@ -63,7 +63,7 @@ public class InputGenetic extends BasicTrainingInput {
 		addProperty(this.mutationPercent = new DoubleField("mutation percent","Mutation Percent",true,0,1));
 		addProperty(this.percentToMate = new DoubleField("percent to mate","Percent to Mate",true,0,1));
 		render();
-		
+		this.getMaxError().setValue(0.01);
 		this.populationSize.setValue(5000);
 		this.mutationPercent.setValue(0.1);
 		this.percentToMate.setValue(0.25);
