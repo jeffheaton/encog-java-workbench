@@ -31,6 +31,9 @@ import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.encog.workbench.dialogs.common.ComboBoxField;
+import org.encog.workbench.dialogs.common.DoubleField;
+import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
@@ -44,37 +47,10 @@ public class InputAnneal extends BasicTrainingInput {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	/**
-	 * Text field to hold the starting temperature.
-	 */
-	public JTextField txtStartTemp;
+	private DoubleField startTemp;
+	private DoubleField endTemp;
+	private IntegerField cycles;
 	
-	/**
-	 * Text field to hold the ending temperature.
-	 */
-	public JTextField txtEndTemp;
-	
-	/**
-	 * Text field to hold the number of cycles.
-	 */
-	public JTextField txtCycles;
-	
-	/**
-	 * The starting temperature. 
-	 */
-	private double startTemp;
-	
-	/**
-	 * The ending temperature.
-	 */
-	private double endTemp;
-
-	
-	/**
-	 * The number of cycles.
-	 */
-	private int cycles;
-
 	/**
 	 * Construct the dialog box.
 	 * @param owner The owner of the dialog box.
@@ -83,72 +59,28 @@ public class InputAnneal extends BasicTrainingInput {
 		super(owner);
 		setTitle("Train Simulated Annealing");
 
-		this.setSize(300, 240);
-		this.setLocation(200, 100);
-
-		this.txtStartTemp = new JTextField();
-		this.txtEndTemp = new JTextField();
-		this.txtCycles = new JTextField();
-
-		final Container content = getBodyPanel();
-
-		content.setLayout(new GridLayout(6, 1, 10, 10));
-
-		content.add(new JLabel("Starting Temperature"));
-		content.add(this.txtStartTemp);
-
-		content.add(new JLabel("Ending Temperature"));
-		content.add(this.txtEndTemp);
-
-		content.add(new JLabel("Cycles"));
-		content.add(this.txtCycles);
-
-		this.txtStartTemp.setText("1");
-		this.txtEndTemp.setText("20");
-		this.txtCycles.setText("10");
-
+		addProperty(this.startTemp = new DoubleField("starting temperature","Starting Temperature",true,-1,-1));
+		addProperty(this.endTemp = new DoubleField("ending temperature","Ending Temperature",true,-1,-1));
+		addProperty(this.cycles = new IntegerField("cycles","Ending Temperature",true,0,-1));
+		render();
+		
+		this.startTemp.setValue(1);
+		this.endTemp.setValue(20);
+		this.cycles.setValue(10);
 	}
 
-	/**
-	 * Collect data from the fields.
-	 */
-	@Override
-	public void collectFields() throws ValidationException {
-		super.collectFields();
-		this.startTemp = this.validateFieldNumeric("starting temperature",
-				this.txtStartTemp);
-		this.endTemp = this.validateFieldNumeric("ending temperature",
-				this.txtEndTemp);
-		this.cycles = (int) this.validateFieldNumeric("cycles", this.txtCycles);
+	public DoubleField getStartTemp() {
+		return startTemp;
 	}
 
-	/**
-	 * @return The cycles.
-	 */
-	public int getCycles() {
-		return this.cycles;
+	public DoubleField getEndTemp() {
+		return endTemp;
 	}
 
-	/**
-	 * @return The ending temp.
-	 */
-	public double getEndTemp() {
-		return this.endTemp;
+	public IntegerField getCycles() {
+		return cycles;
 	}
 
-	/**
-	 * @return The starting temperature.
-	 */
-	public double getStartTemp() {
-		return this.startTemp;
-	}
-
-	/**
-	 * Not used, the fields do not need starting values.
-	 */
-	@Override
-	public void setFields() {
-
-	}
+	
 
 }

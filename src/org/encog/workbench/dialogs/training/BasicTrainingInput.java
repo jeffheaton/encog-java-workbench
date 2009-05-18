@@ -30,7 +30,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.encog.workbench.dialogs.common.ComboBoxField;
+import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.NetworkAndTrainingDialog;
+import org.encog.workbench.dialogs.common.PropertiesField;
 import org.encog.workbench.dialogs.common.ValidationException;
 
 /**
@@ -48,37 +51,19 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 	/**
 	 * Text field that holds the maximum training error.
 	 */
-	private JTextField txtmaximumError;
-	
-	/**
-	 * The maximum allowed error.
-	 */
-	private double maxError;
+	private DoubleField maxError;
 
 	public BasicTrainingInput(final Frame owner) {
 		super(owner);
+		addProperty(this.maxError = new DoubleField("training set","Training Set",true,0,1));
 
-		final JPanel content = getBodyPanel();
-
-		content.add(new JLabel("Maximum Error"));
-		content.add(this.txtmaximumError = new JTextField());
-
-		this.txtmaximumError.setText("0.01");
 	}
 
-	/**
-	 * Collect the data from the fields.
-	 */
-	public void collectFields() throws ValidationException {
-		super.collectFields();
-		this.maxError = this.validateFieldNumeric("maximum error",
-				this.txtmaximumError);
-	}
 
 	/**
 	 * @return the maxError
 	 */
-	public double getMaxError() {
+	public DoubleField getMaxError() {
 		return this.maxError;
 	}
 

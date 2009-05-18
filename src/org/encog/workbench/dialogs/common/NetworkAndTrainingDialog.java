@@ -48,32 +48,15 @@ import org.encog.workbench.EncogWorkBench;
  * common dialog box.
  * @author jheaton
  */
-public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
+public abstract class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 
+	private ComboBoxField comboTraining;
+	private ComboBoxField comboNetwork;
+	
 	/**
 	 * The serial id.
 	 */
 	private static final long serialVersionUID = 3506669325409959724L;
-
-	/**
-	 * The network combo box.
-	 */
-	private final JComboBox cboneuralNetworkName;
-	
-	/**
-	 * The training set combo box.
-	 */
-	private final JComboBox cbotrainingDataName;
-	
-	/**
-	 * The network that was chosen.
-	 */
-	private BasicNetwork network;
-	
-	/**
-	 * The training set that was chosen.
-	 */
-	private NeuralDataSet trainingSet;
 
 	/**
 	 * All available training sets to display in the combo box.
@@ -90,42 +73,17 @@ public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
 	 * @param owner The owner of the dialog box.
 	 */
 	public NetworkAndTrainingDialog(final Frame owner) {
+		
 		super(owner);
-
 		findData();
-
-		this.cbotrainingDataName = new JComboBox();
-		this.cboneuralNetworkName = new JComboBox();
-
-		this.cbotrainingDataName.setModel(new DefaultComboBoxModel(
-				this.trainingSets.toArray()));
-		this.cboneuralNetworkName.setModel(new DefaultComboBoxModel(
-				this.networks.toArray()));
-
-		final JPanel content = getBodyPanel();
-
-		content.add(new JLabel("Training Set"));
-		content.add(this.cbotrainingDataName);
-
-		content.add(new JLabel("Network Name"));
-		content.add(this.cboneuralNetworkName);
-
+		setTitle("Network and Training Set");
+		setSize(400,400);
+		setLocation(200,200);
+		addProperty(this.comboTraining = new ComboBoxField("training set","Training Set",true,this.trainingSets));
+		addProperty(this.comboNetwork = new ComboBoxField("network","Neural Network",true,this.networks));
 	}
 
-	/**
-	 * Collect the network and training set fields.
-	 */
-	public void collectFields() throws ValidationException {
-		final String networkName = validateFieldString("network",
-				this.cboneuralNetworkName, true);
-		final String trainingSetName = validateFieldString("training set",
-				this.cbotrainingDataName, true);
 
-		this.network = (BasicNetwork) EncogWorkBench.getInstance()
-				.getCurrentFile().find(networkName);
-		this.trainingSet = (NeuralDataSet) EncogWorkBench.getInstance()
-				.getCurrentFile().find(trainingSetName);
-	}
 
 	/**
 	 * Obtain the data needed to fill in the network and training set
@@ -146,14 +104,16 @@ public abstract class NetworkAndTrainingDialog extends EncogCommonDialog {
 	 * @return The network that the user chose.
 	 */
 	public BasicNetwork getNetwork() {
-		return this.network;
+		String networkName = (String)this.comboNetwork.getSelectedValue();
+		return (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(networkName);
 	}
 
 	/**
 	 * @return The training set that the user chose.
 	 */
 	public NeuralDataSet getTrainingSet() {
-		return this.trainingSet;
+		String trainingName = (String)this.comboTraining.getSelectedValue();
+		return (NeuralDataSet)EncogWorkBench.getInstance().getCurrentFile().find(trainingName);
 	}
 
 }

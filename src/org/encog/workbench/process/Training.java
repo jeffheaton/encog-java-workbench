@@ -61,8 +61,10 @@ public class Training {
 
 			final ProgressAnneal train = new ProgressAnneal(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
-					.getMaxError(), dialog.getStartTemp(), dialog.getEndTemp(),
-					dialog.getCycles());
+					.getMaxError().getValue(), 
+					dialog.getStartTemp().getValue(), 
+					dialog.getEndTemp().getValue(),
+					dialog.getCycles().getValue());
 
 			train.setVisible(true);
 		}
@@ -85,7 +87,7 @@ public class Training {
 			final ProgressBackpropagation train = new ProgressBackpropagation(
 					EncogWorkBench.getInstance().getMainWindow(), network,
 					training, dialog.getLearningRate(), dialog.getMomentum(),
-					dialog.getMaxError());
+					dialog.getMaxError().getValue());
 
 			train.setVisible(true);
 		}
@@ -107,7 +109,7 @@ public class Training {
 
 			final ProgressGenetic train = new ProgressGenetic(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
-					.getMaxError(), dialog.getPopulationSize(), dialog
+					.getMaxError().getValue(), dialog.getPopulationSize(), dialog
 					.getMutationPercent(), dialog.getPercentToMate());
 
 			train.setVisible(true);
@@ -154,7 +156,7 @@ public class Training {
 
 			final ProgressSOM train = new ProgressSOM(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
-					.getMaxError(),  dialog
+					.getMaxError().getValue(),  dialog
 					.getLearningRate());
 
 			train.setVisible(true);
@@ -179,7 +181,7 @@ public class Training {
 			final ProgressResilient train = new ProgressResilient(
 					EncogWorkBench.getInstance().getMainWindow(), network,
 					training, dialog.getInitialUpdate(), dialog.getMaxStep(),
-					dialog.getMaxError());
+					dialog.getMaxError().getValue());
 
 			train.setVisible(true);
 		}
@@ -202,7 +204,7 @@ public class Training {
 
 			final ProgressManhattan train = new ProgressManhattan(
 					EncogWorkBench.getInstance().getMainWindow(), network,
-					training, dialog.getFixedDelta(), dialog.getMaxError());
+					training, dialog.getFixedDelta(), dialog.getMaxError().getValue());
 
 			train.setVisible(true);
 		}
