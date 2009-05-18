@@ -9,6 +9,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.encog.EncogError;
+import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
@@ -21,6 +22,7 @@ import org.encog.persist.EncogPersistedCollection;
 import org.encog.util.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
+import org.encog.workbench.dialogs.EvaluateDialog;
 import org.encog.workbench.dialogs.about.AboutEncog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
@@ -387,6 +389,18 @@ public class EncogDocumentOperations {
 			Directory.copyFile(source, EncogWorkBench.getInstance().getTempFile() );
 			EncogWorkBench.getInstance().getCurrentFile().buildDirectory();
 			EncogWorkBench.getInstance().getMainWindow().redraw();
+		}
+		
+	}
+
+	public void performEvaluate() {
+		EvaluateDialog dialog = new EvaluateDialog(EncogWorkBench.getInstance().getMainWindow());
+		if( dialog.process() )
+		{
+			BasicNetwork network = dialog.getNetwork();
+			NeuralDataSet training = dialog.getTrainingSet();
+			double error = network.calculateError(training);
+			EncogWorkBench.displayMessage("Error For this Network", ""+error);
 		}
 		
 	}

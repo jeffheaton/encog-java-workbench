@@ -55,8 +55,7 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 
 	public BasicTrainingInput(final Frame owner) {
 		super(owner);
-		addProperty(this.maxError = new DoubleField("training set","Training Set",true,0,1));
-
+		addProperty(this.maxError = new DoubleField("max error","Maximum Error",true,0,1));
 	}
 
 
