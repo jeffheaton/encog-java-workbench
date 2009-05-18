@@ -45,28 +45,8 @@ public class InputHopfield extends BasicTrainingInput {
 	public InputHopfield(final Frame owner) {
 		super(owner);
 		setTitle("Train Hopfield Layers");
-
-		this.setSize(300, 240);
-		this.setLocation(200, 100);
-
-		final Container content = getBodyPanel();
-
-		content.setLayout(new GridLayout(3, 2, 10, 10));
+		render();
 
 	}
 
-	/**
-	 * Collect the data.
-	 */
-	@Override
-	public void collectFields() throws ValidationException {
-		super.collectFields();
-	}
-
-	/**
-	 * Not used.
-	 */
-	@Override
-	public void setFields() {
-	}
 }

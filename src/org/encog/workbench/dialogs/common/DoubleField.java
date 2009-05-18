@@ -18,7 +18,7 @@ public class DoubleField extends PropertiesField {
 		return value;
 	}
 
-	public void setValue(int value) {
+	public void setValue(double value) {
 		this.value = value;
 		((JTextField)this.getField()).setText(""+value);
 	}

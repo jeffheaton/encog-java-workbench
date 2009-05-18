@@ -32,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
@@ -48,14 +49,9 @@ public class InputResilient extends BasicTrainingInput {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public JTextField txtMaxStep;
+	private final DoubleField maxStep;
+	private final DoubleField initialUpdate;
 	
-	public JTextField txtInitialUpdate;
-	
-	private double initialUpdate;
-
-	private double maxStep;
-
 	/**
 	 * Construct the dialog box.
 	 * @param owner
@@ -63,52 +59,19 @@ public class InputResilient extends BasicTrainingInput {
 	public InputResilient(final Frame owner) {
 		super(owner);
 		setTitle("Train Resilient Propagation");
-
-		this.setSize(300, 240);
-		this.setLocation(200, 100);
-
-		this.txtInitialUpdate = new JTextField();
-		this.txtMaxStep = new JTextField();
-
-		final Container content = getBodyPanel();
-
-		content.setLayout(new GridLayout(6, 1, 10, 10));
-
-		content.add(new JLabel("Initial Update"));
-		content.add(this.txtInitialUpdate);
-
-		content.add(new JLabel("Max Step"));
-		content.add(this.txtMaxStep);
-
-		this.txtInitialUpdate.setText(""+ResilientPropagation.DEFAULT_INITIAL_UPDATE);
-		this.txtMaxStep.setText(""+ResilientPropagation.DEFAULT_MAX_STEP);
-
+		addProperty(this.maxStep = new DoubleField("max step","Max Step",true,0,-1));
+		addProperty(this.initialUpdate = new DoubleField("initial update","Initial Update",true,0,-1));
+		render();	
+		this.maxStep.setValue(ResilientPropagation.DEFAULT_MAX_STEP);
+		this.initialUpdate.setValue(ResilientPropagation.DEFAULT_INITIAL_UPDATE);
 	}
 
-	/**
-	 * Collect the data from all fields.
-	 */
-	@Override
-	public void collectFields() throws ValidationException {
-		super.collectFields();
-		this.initialUpdate = this.validateFieldNumeric("initial update",
-				this.txtInitialUpdate);
-		this.maxStep = this.validateFieldNumeric("max step", this.txtMaxStep);
-	}
-
-	/**
-	 * Not used.
-	 */
-	@Override
-	public void setFields() {
-	}
-
-	public double getInitialUpdate() {
-		return initialUpdate;
-	}
-
-	public double getMaxStep() {
+	public DoubleField getMaxStep() {
 		return maxStep;
+	}
+
+	public DoubleField getInitialUpdate() {
+		return initialUpdate;
 	}
 	
 	

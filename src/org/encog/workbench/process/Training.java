@@ -86,7 +86,8 @@ public class Training {
 
 			final ProgressBackpropagation train = new ProgressBackpropagation(
 					EncogWorkBench.getInstance().getMainWindow(), network,
-					training, dialog.getLearningRate(), dialog.getMomentum(),
+					training, dialog.getLearningRate().getValue(), 
+					dialog.getMomentum().getValue(),
 					dialog.getMaxError().getValue());
 
 			train.setVisible(true);
@@ -109,8 +110,10 @@ public class Training {
 
 			final ProgressGenetic train = new ProgressGenetic(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
-					.getMaxError().getValue(), dialog.getPopulationSize(), dialog
-					.getMutationPercent(), dialog.getPercentToMate());
+					.getMaxError().getValue(), 
+					dialog.getPopulationSize().getValue(), 
+					dialog.getMutationPercent().getValue(), 
+					dialog.getPercentToMate().getValue());
 
 			train.setVisible(true);
 		}
@@ -157,7 +160,7 @@ public class Training {
 			final ProgressSOM train = new ProgressSOM(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
 					.getMaxError().getValue(),  dialog
-					.getLearningRate());
+					.getLearningRate().getValue());
 
 			train.setVisible(true);
 		}
@@ -180,7 +183,9 @@ public class Training {
 
 			final ProgressResilient train = new ProgressResilient(
 					EncogWorkBench.getInstance().getMainWindow(), network,
-					training, dialog.getInitialUpdate(), dialog.getMaxStep(),
+					training, 
+					dialog.getInitialUpdate().getValue(), 
+					dialog.getMaxStep().getValue(),
 					dialog.getMaxError().getValue());
 
 			train.setVisible(true);
@@ -204,7 +209,7 @@ public class Training {
 
 			final ProgressManhattan train = new ProgressManhattan(
 					EncogWorkBench.getInstance().getMainWindow(), network,
-					training, dialog.getFixedDelta(), dialog.getMaxError().getValue());
+					training, dialog.getFixedDelta().getValue(), dialog.getMaxError().getValue());
 
 			train.setVisible(true);
 		}

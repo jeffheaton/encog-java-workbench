@@ -31,6 +31,8 @@ import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.encog.workbench.dialogs.common.DoubleField;
+import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
@@ -43,36 +45,11 @@ public class InputGenetic extends BasicTrainingInput {
 	 * The serial id.
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * Text field to hold the population size.
-	 */
-	private final JTextField txtPopulationSize;
-	
-	/**
-	 * Text field to hold the mutation percent.
-	 */
-	private final JTextField txtMutationPercent;
-	
-	/**
-	 * Text field to hold the percent to mate.
-	 */
-	private final JTextField txtPercentToMate;
-	
-	/**
-	 * The population size.
-	 */
-	private int populationSize;
-	
-	/**
-	 * The mutation percent. 
-	 */
-	private double mutationPercent;
 
-	/**
-	 * The percent to mate. 
-	 */
-	private double percentToMate;
+	private final IntegerField populationSize;
+	private final DoubleField mutationPercent;
+	private final DoubleField percentToMate;
+	
 
 	/**
 	 * Construct the dialog.
@@ -81,72 +58,33 @@ public class InputGenetic extends BasicTrainingInput {
 	public InputGenetic(final Frame owner) {
 		super(owner);
 		setTitle("Train Simulated Annealing");
-
-		this.setSize(300, 240);
-		this.setLocation(200, 100);
-
-		this.txtPopulationSize = new JTextField();
-		this.txtMutationPercent = new JTextField();
-		this.txtPercentToMate = new JTextField();
-
-		final Container content = getBodyPanel();
-
-		content.setLayout(new GridLayout(6, 1, 10, 10));
-
-		content.add(new JLabel("Population Size"));
-		content.add(this.txtPopulationSize);
-
-		content.add(new JLabel("Mutation Percent"));
-		content.add(this.txtMutationPercent);
-
-		content.add(new JLabel("Percent to Mate"));
-		content.add(this.txtPercentToMate);
-
-		this.txtPopulationSize.setText("5000");
-		this.txtMutationPercent.setText("0.1");
-		this.txtPercentToMate.setText("0.25");
-
+		
+		addProperty(this.populationSize = new IntegerField("population size","Learning Rate",true,1,-1));
+		addProperty(this.mutationPercent = new DoubleField("mutation percent","Mutation Percent",true,0,1));
+		addProperty(this.percentToMate = new DoubleField("percent to mate","Percent to Mate",true,0,1));
+		render();
+		
+		this.populationSize.setValue(5000);
+		this.mutationPercent.setValue(0.1);
+		this.percentToMate.setValue(0.25);
 	}
 
-	/**
-	 * Collect data from the fields.
-	 */
-	@Override
-	public void collectFields() throws ValidationException {
-		super.collectFields();
-		this.populationSize = (int) this.validateFieldNumeric(
-				"population size", this.txtPopulationSize);
-		this.percentToMate = this.validateFieldNumeric("percent to mate",
-				this.txtPercentToMate);
-		this.mutationPercent = this.validateFieldNumeric("mutation percent",
-				this.txtMutationPercent);
+
+	public IntegerField getPopulationSize() {
+		return populationSize;
 	}
 
-	/**
-	 * @return The mutation percent.
-	 */
-	public double getMutationPercent() {
-		return this.mutationPercent;
+
+	public DoubleField getMutationPercent() {
+		return mutationPercent;
 	}
 
-	/**
-	 * @return The percent to mate.
-	 */
-	public double getPercentToMate() {
-		return this.percentToMate;
-	}
 
-	/**
-	 * @return The population size.
-	 */
-	public int getPopulationSize() {
-		return this.populationSize;
+	public DoubleField getPercentToMate() {
+		return percentToMate;
 	}
+	
+	
 
-	/**
-	 * Not used.
-	 */
-	@Override
-	public void setFields() {
-	}
+
 }

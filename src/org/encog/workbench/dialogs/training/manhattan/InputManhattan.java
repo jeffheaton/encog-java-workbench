@@ -24,14 +24,8 @@
  */
 package org.encog.workbench.dialogs.training.manhattan;
 
-import java.awt.Container;
 import java.awt.Frame;
-import java.awt.GridLayout;
-
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
-import org.encog.workbench.dialogs.common.ValidationException;
+import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
 /**
@@ -47,16 +41,8 @@ public class InputManhattan extends BasicTrainingInput {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Text field for the learning rate.
-	 */
-	public JTextField txtFixedDelta;
+	private DoubleField fixedDelta;
 	
-	
-	/**
-	 * The learning rate.
-	 */
-	private double fixedDelta;
 
 	/**
 	 * Construct the dialog box.
@@ -65,44 +51,18 @@ public class InputManhattan extends BasicTrainingInput {
 	public InputManhattan(final Frame owner) {
 		super(owner);
 		setTitle("Train Manhattan Update Rule");
-
-		this.setSize(300, 240);
-		this.setLocation(200, 100);
-
-		this.txtFixedDelta = new JTextField();
-
-		final Container content = getBodyPanel();
-
-		content.setLayout(new GridLayout(6, 1, 10, 10));
-
-		content.add(new JLabel("Update Delta"));
-		content.add(this.txtFixedDelta);
-
-		this.txtFixedDelta.setText("0.000001");
+		
+		addProperty(this.fixedDelta = new DoubleField("fixed delta","Fixed Delta",true,0,-1));
+		render();
+		this.fixedDelta.setValue(0.000001);
 
 	}
 
-	/**
-	 * Collect the data from all fields.
-	 */
-	@Override
-	public void collectFields() throws ValidationException {
-		super.collectFields();
-		this.fixedDelta = this.validateFieldNumeric("fixed delta",
-				this.txtFixedDelta);		
-	}
 
-	/**
-	 * Not used.
-	 */
-	@Override
-	public void setFields() {
-	}
-
-	public double getFixedDelta() {
+	public DoubleField getFixedDelta() {
 		return fixedDelta;
 	}
-	
+
 	
 
 }

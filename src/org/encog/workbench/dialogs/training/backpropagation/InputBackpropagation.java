@@ -31,6 +31,7 @@ import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
@@ -47,25 +48,9 @@ public class InputBackpropagation extends BasicTrainingInput {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Text field for the learning rate.
-	 */
-	public JTextField txtlearningRate;
-	
-	/**
-	 * Text field for the momentum.
-	 */
-	public JTextField txtmomentum;
-	
-	/**
-	 * The learning rate.
-	 */
-	private double learningRate;
+	private DoubleField learningRate;
+	private DoubleField momentum;
 
-	/**
-	 * The momentum.
-	 */
-	private double momentum;
 
 	/**
 	 * Construct the dialog box.
@@ -75,57 +60,21 @@ public class InputBackpropagation extends BasicTrainingInput {
 		super(owner);
 		setTitle("Train Backpropagation");
 
-		this.setSize(300, 240);
-		this.setLocation(200, 100);
-
-		this.txtmomentum = new JTextField();
-		this.txtlearningRate = new JTextField();
-
-		final Container content = getBodyPanel();
-
-		content.setLayout(new GridLayout(6, 1, 10, 10));
-
-		content.add(new JLabel("Momentum"));
-		content.add(this.txtmomentum);
-
-		content.add(new JLabel("Learning Rate"));
-		content.add(this.txtlearningRate);
-
-		this.txtlearningRate.setText("0.7");
-		this.txtmomentum.setText("0.7");
-
+		addProperty(this.learningRate = new DoubleField("learning rate","Learning Rate",true,-1,-1));
+		addProperty(this.momentum = new DoubleField("momentum","Momentum",true,-1,-1));
+		render();
 	}
 
-	/**
-	 * Collect the data from all fields.
-	 */
-	@Override
-	public void collectFields() throws ValidationException {
-		super.collectFields();
-		this.learningRate = this.validateFieldNumeric("learning rate",
-				this.txtlearningRate);
-		this.momentum = this.validateFieldNumeric("momentum", this.txtmomentum);
+
+	public DoubleField getLearningRate() {
+		return learningRate;
 	}
 
-	/**
-	 * @return the learningRate
-	 */
-	public double getLearningRate() {
-		return this.learningRate;
+
+	public DoubleField getMomentum() {
+		return momentum;
 	}
 
-	/**
-	 * @return the momentum
-	 */
-	public double getMomentum() {
-		return this.momentum;
-	}
-
-	/**
-	 * Not used.
-	 */
-	@Override
-	public void setFields() {
-	}
+	
 
 }

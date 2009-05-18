@@ -33,6 +33,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
@@ -48,16 +49,8 @@ public class InputSOM extends BasicTrainingInput {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * The text field for the learning rate.
-	 */
-	private final JTextField txtlearningRate;
-	
-	/**
-	 * The learning rate.
-	 */
-	private double learningRate;
-	
+
+	private DoubleField learningRate;
 	
 
 	/**
@@ -67,45 +60,18 @@ public class InputSOM extends BasicTrainingInput {
 	public InputSOM(final Frame owner) {
 		super(owner);
 		setTitle("Train SOM Layers");
-
-		this.setSize(300, 240);
-		this.setLocation(200, 100);
-
-		this.txtlearningRate = new JTextField();
-
-		final Container content = getBodyPanel();
-		content.setLayout(new GridLayout(6, 1, 10, 10));
-
-		content.add(new JLabel("Learning Rate"));
-		content.add(this.txtlearningRate);
-		this.txtlearningRate.setText("0.7");
+		addProperty(this.learningRate = new DoubleField("learning rate","Learning Rate",true,0,-1));
+		render();
+		this.learningRate.setValue(0.7);
 
 	}
 
-	/**
-	 * Collect data from the fields.
-	 */
-	@Override
-	public void collectFields() throws ValidationException {
-		super.collectFields();
-		this.learningRate = this.validateFieldNumeric("learning rate",
-				this.txtlearningRate);
-		
 
+	public DoubleField getLearningRate() {
+		return learningRate;
 	}
+	
+	
 
-	/**
-	 * @return The learning rate.
-	 */
-	public double getLearningRate() {
-		return this.learningRate;
-	}
-
-	/**
-	 * Not used.
-	 */
-	@Override
-	public void setFields() {
-	}
 
 }
