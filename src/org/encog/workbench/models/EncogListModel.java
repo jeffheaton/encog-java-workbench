@@ -39,7 +39,8 @@ public class EncogListModel extends CommonListModel {
 		if (i >= EncogWorkBench.getInstance().getCurrentFile().getDirectory().size()) {
 			return null;
 		} 
-		return EncogWorkBench.getInstance().getCurrentFile().getDirectory().get(i);
+		Object[] l = EncogWorkBench.getInstance().getCurrentFile().getDirectory().toArray(); 
+		return l[i];
 		
 	}
 
