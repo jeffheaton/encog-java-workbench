@@ -30,7 +30,6 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.competitive.CompetitiveTraining;
-import org.encog.neural.networks.training.competitive.CompetitiveTraining.LearningMethod;
 import org.encog.neural.networks.training.competitive.neighborhood.NeighborhoodSingle;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
@@ -94,7 +93,7 @@ public class ProgressSOM extends BasicTrainingProgress {
 	@Override
 	public void startup() {
 		final Train train = new CompetitiveTraining(getNetwork(),
-				getTrainingData(), 0.7);
+				0.7, getTrainingData(), new NeighborhoodSingle() );
 
 		setTrain(train);
 	}
