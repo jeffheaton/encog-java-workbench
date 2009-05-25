@@ -101,6 +101,7 @@ public class CreateNeuralNetwork {
 			jordan.setInputNeurons(dialog.getInputCount().getValue());
 			jordan.addHiddenLayer(dialog.getHiddenCount().getValue());
 			jordan.setOutputNeurons(dialog.getOutputCount().getValue());
+			jordan.setActivationFunction(new ActivationTANH());
 			return jordan.generate();
 		} else
 			return null;
@@ -115,6 +116,7 @@ public class CreateNeuralNetwork {
 			elman.setInputNeurons(dialog.getInputCount().getValue());
 			elman.addHiddenLayer(dialog.getHiddenCount().getValue());
 			elman.setOutputNeurons(dialog.getOutputCount().getValue());
+			elman.setActivationFunction(new ActivationTANH());
 			return elman.generate();
 		} else
 			return null;
