@@ -92,8 +92,11 @@ public class ProgressSOM extends BasicTrainingProgress {
 	 */
 	@Override
 	public void startup() {
-		final Train train = new CompetitiveTraining(getNetwork(),
-				0.7, getTrainingData(), new NeighborhoodSingle() );
+		CompetitiveTraining train = new CompetitiveTraining(
+				getNetwork(),
+				0.7,
+				getTrainingData(),
+				new NeighborhoodSingle());
 
 		setTrain(train);
 	}
