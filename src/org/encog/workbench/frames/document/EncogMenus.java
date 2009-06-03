@@ -38,6 +38,7 @@ public class EncogMenus {
 
 	public static final String TOOLS_CODE = "Generate Code...";
 	public static final String TOOLS_EVALUATE = "Evaluate Network...";
+	public static final String TOOLS_BENCHMARK = "Benchmark Encog...";
 	public static final String TOOLS_CHAT = "Chat with Encog NLP...";
 	public static final String TOOLS_BROWSE = "Browse Web Data...";
 	
@@ -125,6 +126,7 @@ public class EncogMenus {
 
 		this.menuTools = new JMenu("Tools");
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_CODE, 'g');
+		owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 'k');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_EVALUATE, 'e');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_CHAT, 'c');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_BROWSE, 'b');
@@ -215,6 +217,9 @@ public class EncogMenus {
 		} else if (event.getActionCommand().equals(
 				EncogMenus.TOOLS_CHAT)) {
 			owner.getOperations().performChat();
+		} else if (event.getActionCommand().equals(
+				EncogMenus.TOOLS_BENCHMARK)) {
+			owner.getOperations().performBenchmark();
 		} else if (event.getActionCommand().equals(
 				EncogMenus.TOOLS_BROWSE)) {
 			owner.getOperations().performBrowse();

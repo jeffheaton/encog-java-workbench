@@ -21,6 +21,7 @@ import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.util.Directory;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EvaluateDialog;
 import org.encog.workbench.dialogs.about.AboutEncog;
@@ -401,6 +402,14 @@ public class EncogDocumentOperations {
 			NeuralDataSet training = dialog.getTrainingSet();
 			double error = network.calculateError(training);
 			EncogWorkBench.displayMessage("Error For this Network", ""+error);
+		}
+		
+	}
+
+	public void performBenchmark() {
+		if( EncogWorkBench.askQuestion("Benchmark", "Would you like to benchmark Encog on this machine?\nThis process will take several minutes to complete.") ) {
+			BenchmarkDialog dialog = new BenchmarkDialog();
+			dialog.setVisible(true);
 		}
 		
 	}
