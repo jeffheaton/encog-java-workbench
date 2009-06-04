@@ -849,6 +849,12 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	public Set<Layer> getOrphanLayers() {
 		return orphanLayers;
 	}
+
+	public void close() {
+		this.offscreen = null;
+		this.offscreenGraphics.dispose();
+		this.offscreenGraphics = null;
+	}
 	
 	
 	

@@ -231,4 +231,13 @@ public class NetworkFrame extends EncogCommonFrame {
 		}
 		return null;
 	}
+	
+	public void windowClosing(final WindowEvent e) {
+		super.windowClosing(e);
+		if( this.networkDiagram!=null)
+		{
+		this.networkDiagram.close();
+		this.networkDiagram = null;
+		}
+	}
 }
