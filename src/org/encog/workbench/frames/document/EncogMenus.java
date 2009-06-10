@@ -215,9 +215,6 @@ public class EncogMenus {
 				EncogMenus.HELP_ABOUT)) {
 			owner.getOperations().performHelpAbout();
 		} else if (event.getActionCommand().equals(
-				EncogMenus.TOOLS_CHAT)) {
-			owner.getOperations().performChat();
-		} else if (event.getActionCommand().equals(
 				EncogMenus.TOOLS_BENCHMARK)) {
 			owner.getOperations().performBenchmark();
 		} else if (event.getActionCommand().equals(

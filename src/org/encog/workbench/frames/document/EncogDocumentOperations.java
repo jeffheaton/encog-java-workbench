@@ -29,7 +29,6 @@ import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.editor.ObjectEditorFrame;
 import org.encog.workbench.frames.BrowserFrame;
-import org.encog.workbench.frames.Conversation;
 import org.encog.workbench.frames.NetworkQueryFrame;
 import org.encog.workbench.frames.ParseTemplateFrame;
 import org.encog.workbench.frames.PropertyDataFrame;
@@ -319,24 +318,6 @@ public class EncogDocumentOperations {
 	public void performBrowse() {
 		BrowserFrame browse = new BrowserFrame();
 		browse.setVisible(true);
-	}
-
-	public void performChat() {
-		
-		String str = EncogWorkBench.getInstance().getConfig().getDatabaseConnectionString();
-		
-		if( str==null || str.length()==0)
-		{
-			EncogWorkBench.displayError("Can't Start Conversation", "Encog NLP requires a database connection that\n points to a valid Encog database. Please configure such a database under the 'Config' menu.");
-			return;
-		}
-		
-		String you = System.getProperty("user.name");
-		if(you==null)
-			you = "You";
-		Conversation conv = new Conversation("Conversation",you,"Encog");
-		conv.setVisible(true);
-		
 	}
 
 	public void performHelpAbout() {

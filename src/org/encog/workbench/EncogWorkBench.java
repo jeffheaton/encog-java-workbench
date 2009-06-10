@@ -43,8 +43,6 @@ import org.encog.persist.persistors.generic.Object2XML;
 import org.encog.persist.persistors.generic.XML2Object;
 import org.encog.util.Directory;
 import org.encog.util.logging.Logging;
-import org.encog.util.orm.ORMSession;
-import org.encog.util.orm.SessionManager;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.w3c.dom.Document;
@@ -84,7 +82,6 @@ public class EncogWorkBench {
 	 */
 	private EncogWorkBenchConfig config;
 
-	private SessionManager sessionManager;
 	
 	private File tempFile;
 
@@ -313,25 +310,6 @@ public class EncogWorkBench {
 		return this.config;
 	}
 
-	public ORMSession openDatabaseSession() {
-		try {
-			if (this.sessionManager == null) {
-				this.sessionManager = new SessionManager(this.config
-						.getDatabaseDriver(), this.config
-						.getDatabaseConnectionString(), this.config
-						.getDatabaseUserID(),
-						this.config.getDatabasePassword(), this.config
-								.getDatabaseDialect());
-			}
-			
-			return this.sessionManager.openSession();
-			
-		} catch (Exception e) {
-			this.sessionManager = null;
-			displayError("Can't connect to database", e.getMessage());
-		}
-		return null;
-	}
 
 	public static boolean displayQuery(String title, String message) {
 		int result = JOptionPane.showConfirmDialog(null, message, title,
