@@ -42,9 +42,10 @@ public class DrawLayer {
 		g.drawRect(layer.getX()-1, layer.getY()-1, LAYER_WIDTH, LAYER_HEIGHT);
 		g.setFont(WorkbenchFonts.getTitle2Font());
 		FontMetrics fm = g.getFontMetrics();
-		int y = layer.getY()+fm.getHeight()+NetworkTool.HEIGHT;
+		//int y = layer.getY()+fm.getHeight()+NetworkTool.HEIGHT;
+		int y = layer.getY()+NetworkTool.HEIGHT+fm.getAscent();
 		g.drawString(tool.getName() + " Layer", layer.getX()+2, y);
-		y+=fm.getHeight();
+		y+=fm.getAscent();
 		g.setFont(WorkbenchFonts.getTextFont());
 		
 		String act = "";
