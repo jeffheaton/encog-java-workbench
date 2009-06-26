@@ -1,9 +1,9 @@
 /*
- * Encog Workbench v1.x
+ * Encog Workbench v2.x
  * http://www.heatonresearch.com/encog/
  * http://code.google.com/p/encog-java/
  * 
- * Copyright 2008, Heaton Research Inc., and individual contributors.
+ * Copyright 2008-2009, Heaton Research Inc., and individual contributors.
  * See the copyright.txt in the distribution for a full listing of 
  * individual contributors.
  *
