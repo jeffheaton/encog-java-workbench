@@ -64,7 +64,6 @@ public class EncogMenus {
 	public static final String TOOLS_CODE = "Generate Code...";
 	public static final String TOOLS_EVALUATE = "Evaluate Network...";
 	public static final String TOOLS_BENCHMARK = "Benchmark Encog...";
-	public static final String TOOLS_CHAT = "Chat with Encog NLP...";
 	public static final String TOOLS_BROWSE = "Browse Web Data...";
 	
 	public static final String HELP_ABOUT = "About Encog Workbench...";
@@ -153,7 +152,6 @@ public class EncogMenus {
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_CODE, 'g');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 'k');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_EVALUATE, 'e');
-		owner.addItem(this.menuTools, EncogMenus.TOOLS_CHAT, 'c');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_BROWSE, 'b');
 		this.menuBar.add(this.menuTools);
 		
