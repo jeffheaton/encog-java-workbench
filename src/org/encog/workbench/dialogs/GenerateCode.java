@@ -27,6 +27,8 @@ package org.encog.workbench.dialogs;
 
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -34,132 +36,88 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.networks.BasicNetwork;
+import org.encog.persist.DirectoryEntry;
+import org.encog.persist.EncogPersistedCollection;
+import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.common.ComboBoxField;
+import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.NetworkAndTrainingDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.process.generate.Generate.GenerateLanguage;
 import org.encog.workbench.process.generate.Generate.TrainingMethod;
 
-public class GenerateCode extends NetworkAndTrainingDialog {
+public class GenerateCode extends EncogPropertiesDialog {
+
+	private ComboBoxField comboNetwork;
+	
+	public enum GenerateLanguage
+	{
+		Java,
+		CSharp,
+		VisualBasic
+	};
+	
+	/**
+	 * The serial id.
+	 */
+	private static final long serialVersionUID = 3506669325409959724L;
 
 	/**
-	 * 
+	 * All available training sets to display in the combo box.
 	 */
-	private static final long serialVersionUID = 1L;
-	private final JComboBox cbLanguage;
-	private final JComboBox cbTraining;
+	private final List<String> trainingSets = new ArrayList<String>();
+	
+	/**
+	 * All available networks to display in the combo box.
+	 */
+	private final List<String> networks = new ArrayList<String>();
 
-	private final JComboBox cbCopyTraining;
-	private GenerateLanguage language;
-	private TrainingMethod trainingMethod;
-
-	private boolean copyTraining;
-
-	/** Creates new form UsersInput */
+	/**
+	 * Construct the dialog box.
+	 * @param owner The owner of the dialog box.
+	 */
 	public GenerateCode(final Frame owner) {
+		
 		super(owner);
-
-		setTitle("Generate Code");
-		this.setSize(300, 240);
-		this.setLocation(200, 100);
-
-		this.cbCopyTraining = new JComboBox();
-		this.cbLanguage = new JComboBox();
-		this.cbTraining = new JComboBox();
-
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-		final String[] languages = { "Java", "C#", "VB.Net" };
-		this.cbLanguage.setModel(new DefaultComboBoxModel(languages));
-		final String[] training = { "Backpropagation", "Genetic Algorithm",
-				"Simulated Annealing", "Hopfield", "Self Organizing",
-				"Do Not Train/Already Trained" };
-		this.cbTraining.setModel(new DefaultComboBoxModel(training));
-		final String[] save = { "Yes", "No" };
-		this.cbCopyTraining.setModel(new DefaultComboBoxModel(save));
-
-		final JPanel jp = getBodyPanel();
-		jp.setLayout(new GridLayout(6, 1, 10, 10));
-
-		jp.add(new JLabel("Language"));
-		jp.add(this.cbLanguage);
-
-		jp.add(new JLabel("Training Method"));
-		jp.add(this.cbTraining);
-
-		jp.add(new JLabel("Copy Training Set to Code"));
-		jp.add(this.cbCopyTraining);
-
+		findData();
+		setTitle("Network and Training Set");
+		setSize(400,400);
+		setLocation(200,200);
+		addProperty(this.comboNetwork = new ComboBoxField("network","Neural Network",true,this.networks));
+		render();
 	}
 
-	@Override
-	public void collectFields() throws ValidationException {
-		super.collectFields();
-		switch (this.cbLanguage.getSelectedIndex()) {
-		case 0:
-			this.language = GenerateLanguage.Java;
-			break;
-		case 1:
-			this.language = GenerateLanguage.CS;
-			break;
-		case 2:
-			this.language = GenerateLanguage.VB;
-			break;
-		}
 
-		switch (this.cbTraining.getSelectedIndex()) {
-		case 0:
-			this.trainingMethod = TrainingMethod.Backpropagation;
-			break;
-		case 1:
-			this.trainingMethod = TrainingMethod.Genetic;
-			break;
-		case 2:
-			this.trainingMethod = TrainingMethod.Anneal;
-			break;
-		case 3:
-			this.trainingMethod = TrainingMethod.TrainHopfield;
-			break;
-		case 4:
-			this.trainingMethod = TrainingMethod.TrainSOM;
-			break;
-		case 5:
-			this.trainingMethod = TrainingMethod.NoTraining;
-			break;
-		}
 
-		if (this.cbCopyTraining.getSelectedIndex() == 0) {
-			this.copyTraining = true;
-		} else {
-			this.copyTraining = false;
+	/**
+	 * Obtain the data needed to fill in the network and training set
+	 * combo boxes.
+	 */
+	private void findData() {
+		for (final DirectoryEntry obj : EncogWorkBench.getInstance()
+				.getCurrentFile().getDirectory()) {
+			if (obj.getType().equals(EncogPersistedCollection.TYPE_BASIC_NET) ) {
+				this.networks.add(obj.getName());
+			} else if (obj.getType().equals(EncogPersistedCollection.TYPE_TRAINING) ) {
+				this.trainingSets.add(obj.getName());
+			}
 		}
-
 	}
 
 	/**
-	 * @return the language
+	 * @return The network that the user chose.
 	 */
+	public BasicNetwork getNetwork() {
+		String networkName = (String)this.comboNetwork.getSelectedValue();
+		return (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(networkName);
+	}
+
+
 	public GenerateLanguage getLanguage() {
-		return this.language;
+		return null;
 	}
 
-	/**
-	 * @return the trainingMethod
-	 */
-	public TrainingMethod getTrainingMethod() {
-		return this.trainingMethod;
-	}
-
-	/**
-	 * @return the copyTraining
-	 */
-	public boolean isCopyTraining() {
-		return this.copyTraining;
-	}
-
-	@Override
-	public void setFields() {
-		// TODO Auto-generated method stub
-
-	}
 
 }

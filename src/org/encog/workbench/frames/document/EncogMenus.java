@@ -246,6 +246,9 @@ public class EncogMenus {
 		} else if (event.getActionCommand().equals(
 				EncogMenus.TOOLS_EVALUATE)) {
 			owner.getOperations().performEvaluate();
-		}  
+		}  else if (event.getActionCommand().equals(
+				EncogMenus.TOOLS_CODE)) {
+			owner.getOperations().performGenerateCode();
+		}
 	}
 }

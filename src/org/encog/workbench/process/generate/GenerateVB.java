@@ -62,9 +62,7 @@ public class GenerateVB implements Generate {
 		return result.toString();
 	}
 
-	public String generate(final BasicNetwork network,
-			final NeuralDataSet training, final boolean copy,
-			final TrainingMethod trainMethod) {
+	public String generate(final BasicNetwork network) {
 
 		this.network = network;
 		this.training = (BasicNeuralDataSet) training;

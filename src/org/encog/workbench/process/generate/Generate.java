@@ -38,6 +38,5 @@ public interface Generate {
 		Backpropagation, Genetic, Anneal, TrainSOM, TrainHopfield, NoTraining
 	}
 
-	public String generate(BasicNetwork network, NeuralDataSet training,
-			boolean copy, TrainingMethod trainMethod);
+	public String generate(BasicNetwork network);
 }

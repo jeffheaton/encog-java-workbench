@@ -37,9 +37,6 @@ public class CodeGeneration {
 		final GenerateCode dialog = new GenerateCode(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
-			if (!validate(dialog)) {
-				return;
-			}
 
 			final TextFrame text = new TextFrame("Generated code", true);
 
@@ -49,48 +46,21 @@ public class CodeGeneration {
 			case Java:
 				gen = new GenerateJava();
 				break;
-			case CS:
+			case CSharp:
 				gen = new GenerateCSharp();
 				break;
-			case VB:
+			case VisualBasic:
 				gen = new GenerateVB();
 				break;
 			}
 
 			if (gen != null) {
-				final String source = gen.generate(dialog.getNetwork(), dialog
-						.getTrainingSet(), dialog.isCopyTraining(), dialog
-						.getTrainingMethod());
+				final String source = gen.generate(dialog.getNetwork());
 				text.setText(source);
 				text.setVisible(true);
 			}
 		}
 	}
 
-	private boolean validate(final GenerateCode dialog) {
-		final ValidateTraining validate = new ValidateTraining(dialog
-				.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
-		switch (dialog.getTrainingMethod()) {
-		case Anneal:
-		case Genetic:
-		case Backpropagation:
-			if (!validate.validateFeedForward()) {
-				return false;
-			}
-			break;
-		case TrainHopfield:
-			if (!validate.validateHopfield()) {
-				return false;
-			}
-			break;
-		case TrainSOM:
-			if (!validate.validateSOM()) {
-				return false;
-			}
-			break;
-		default:
-			break;
-		}
-		return true;
-	}
+
 }
