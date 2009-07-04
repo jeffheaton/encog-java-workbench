@@ -46,10 +46,10 @@ public class CodeGeneration {
 			case Java:
 				gen = new GenerateJava();
 				break;
-			case CSharp:
+			case CS:
 				gen = new GenerateCSharp();
 				break;
-			case VisualBasic:
+			case VB:
 				gen = new GenerateVB();
 				break;
 			}

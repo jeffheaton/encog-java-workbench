@@ -51,13 +51,7 @@ import org.encog.workbench.process.generate.Generate.TrainingMethod;
 public class GenerateCode extends EncogPropertiesDialog {
 
 	private ComboBoxField comboNetwork;
-	
-	public enum GenerateLanguage
-	{
-		Java,
-		CSharp,
-		VisualBasic
-	};
+	private ComboBoxField comboLanguage;
 	
 	/**
 	 * The serial id.
@@ -73,6 +67,11 @@ public class GenerateCode extends EncogPropertiesDialog {
 	 * All available networks to display in the combo box.
 	 */
 	private final List<String> networks = new ArrayList<String>();
+	
+	/**
+	 * All available languages to display in the combo box.
+	 */
+	private final List<String> languages = new ArrayList<String>();
 
 	/**
 	 * Construct the dialog box.
@@ -82,10 +81,11 @@ public class GenerateCode extends EncogPropertiesDialog {
 		
 		super(owner);
 		findData();
-		setTitle("Network and Training Set");
+		setTitle("Generate Code");
 		setSize(400,400);
 		setLocation(200,200);
 		addProperty(this.comboNetwork = new ComboBoxField("network","Neural Network",true,this.networks));
+		addProperty(this.comboLanguage = new ComboBoxField("language","Generation Language",true,this.languages));
 		render();
 	}
 
@@ -104,6 +104,11 @@ public class GenerateCode extends EncogPropertiesDialog {
 				this.trainingSets.add(obj.getName());
 			}
 		}
+		
+		this.languages.clear();
+		this.languages.add("Java");
+		this.languages.add("C#");
+		this.languages.add("Visual Basic");
 	}
 
 	/**
@@ -116,7 +121,14 @@ public class GenerateCode extends EncogPropertiesDialog {
 
 
 	public GenerateLanguage getLanguage() {
-		return null;
+		if( this.comboLanguage.getSelectedIndex()==0 )
+			return GenerateLanguage.Java;
+		else if( this.comboLanguage.getSelectedIndex()==1 )
+			return GenerateLanguage.Java;
+		else if( this.comboLanguage.getSelectedIndex()==2 )
+			return GenerateLanguage.Java;
+		else
+			return null;
 	}
 
 

@@ -25,14 +25,22 @@
 
 package org.encog.workbench.process.generate;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.encog.neural.activation.ActivationFunction;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.layers.BasicLayer;
+import org.encog.neural.networks.layers.ContextLayer;
+import org.encog.neural.networks.layers.Layer;
+import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
+import org.encog.neural.networks.synapse.Synapse;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
 
@@ -41,9 +49,9 @@ public class GenerateJava implements Generate {
 	private StringBuilder source;
 	private BasicNetwork network;
 	private BasicNeuralDataSet training;
-	private boolean copy;
-	private TrainingMethod trainMethod;
 	private final Set<String> imports = new TreeSet<String>();
+	private int currentLayerNumber;
+	private Map<Layer,Integer> layerMap = new HashMap<Layer,Integer>();
 
 	@SuppressWarnings("unchecked")
 	private void addClass(final Class c) {
@@ -71,8 +79,7 @@ public class GenerateJava implements Generate {
 
 		this.network = network;
 		this.training = (BasicNeuralDataSet) training;
-		this.copy = copy;
-		this.trainMethod = trainMethod;
+		this.currentLayerNumber = 1;
 
 		this.source = new StringBuilder();
 
@@ -81,22 +88,7 @@ public class GenerateJava implements Generate {
 		this.source.append("\n");
 		this.source.append("public class EncogGeneratedClass {\n");
 		this.source.append("\n");
-		generateConst();
-		this.source.append("\n");
 
-		if (this.copy) {
-			generateNetwork();
-			this.source.append("\n");
-			generateTrainingData();
-			this.source.append("\n");
-		}
-
-		if (this.trainMethod != TrainingMethod.NoTraining) {
-			generateTraining();
-		}
-		this.source.append("\n");
-		generateQuery();
-		this.source.append("\n");
 		generateMain();
 		this.source.append("}\n");
 
@@ -105,64 +97,7 @@ public class GenerateJava implements Generate {
 		return importStr + this.source.toString();
 	}
 
-	private void generateConst() {
-/*		this.source
-				.append("  // fill these in with your training parameters\n");
-		switch (this.trainMethod) {
-		case Backpropagation:
-			this.source
-					.append("  public static final double LEARNING_RATE = 0.7;\n");
-			this.source
-					.append("  public static final double MOMENTUM = 0.7;\n");
-			this.source
-					.append("  public static final int MAX_ITERATION = 5000;\n");
-			this.source
-					.append("  public static final double MAX_ERROR = 0.01;\n");
-			break;
 
-		case Genetic:
-			this.source
-					.append("  public static final int MAX_ITERATION = 1000;\n");
-			this.source
-					.append("  public static final int POPULATION_SIZE = 5000;\n");
-			this.source
-					.append("  public static final double MUTATION_PERCENT = 0.1;\n");
-			this.source
-					.append("  public static final double MATE_PERCENT = 0.25;\n");
-			this.source
-					.append("  public static final double MAX_ERROR = 0.01;\n");
-			break;
-
-		case Anneal:
-			this.source
-					.append("  public static final int MAX_ITERATION = 1000;\n");
-			this.source
-					.append("  public static final double MAX_ERROR = 0.01;\n");
-			this.source
-					.append("  public static final double HIGH_TEMP = 10;\n");
-			this.source.append("  public static final double LOW_TEMP = 2;\n");
-			this.source.append("  public static final int CYCLES = 100;\n");
-			break;
-
-		case TrainHopfield:
-			break;
-
-		case TrainSOM:
-			addClass(TrainSelfOrganizingMap.class);
-			this.source
-					.append("  public static final double LEARNING_RATE = 0.7;\n");
-			this.source
-					.append("  public static final TrainSelfOrganizingMap.LearningMethod LEARNING_METHOD = TrainSelfOrganizingMap.LearningMethod.SUBTRACTIVE;\n");
-			this.source
-					.append("  public static final int MAX_ITERATION = 5000;\n");
-			this.source
-					.append("  public static final double MAX_ERROR = 0.01;\n");
-			break;
-			
-		case NoTraining:
-			break;
-		}*/
-	}
 
 	private String generateImports() {
 		final StringBuilder results = new StringBuilder();
@@ -173,42 +108,69 @@ public class GenerateJava implements Generate {
 		}
 		return results.toString();
 	}
+	
+	public void generateLayer(Layer layer)
+	{
+		this.source.append("Layer layer");
+		this.source.append(currentLayerNumber);
+		this.source.append(" = ");
+		
+		if( layer instanceof ContextLayer )
+		{
+			
+		}
+		else if( layer instanceof RadialBasisFunctionLayer )
+		{
+			
+		}
+		else if( layer instanceof BasicLayer )
+		{
+			this.source.append("new BasicLayer( new ");
+			this.source.append(layer.getActivationFunction().getClass().getSimpleName());
+			this.source.append("()");
+			this.source.append(",");
+			this.source.append(layer.hasThreshold()?"true":"false");
+			this.source.append(",");
+			this.source.append(layer.getNeuronCount());
+			this.source.append(");");
+		}
+		
+		this.source.append("\nnetwork.addLayer(");
+		this.source.append("layer");
+		this.source.append(currentLayerNumber);
+		this.source.append(");\n");
+		
+		this.layerMap.put(layer, currentLayerNumber);
+		
+		currentLayerNumber++;
+		
+		if( layer.getNext().size()==1 )
+		{
+			generateLayer( layer.getNext().get(0).getToLayer() );
+		}
+		else
+		{
+			// next layers
+			for(Synapse nextSynapse: layer.getNext() )
+			{
+				generateLayer( nextSynapse.getToLayer());
+			}	
+		}
+
+	}
 
 	public void generateMain() {
 		this.source
 				.append("  public static void main(final String args[]) {\n");
 		this.source.append("\n");
 
-		if (this.copy) {
-			addClass(NeuralDataSet.class);
-			this.source
-					.append("    final NeuralDataSet trainingSet = getTraining();\n");
-			this.source.append("    BasicNetwork network = getNetwork();\n");
-		} else {
-			addClass(EncogPersistedCollection.class);
-			addClass(NeuralDataSet.class);
-			this.source
-					.append("      EncogPersistedCollection encog = new EncogPersistedCollection();\n");
-			this.source.append("      encog.load(\"");
-			this.source.append(fixPath(EncogWorkBench.getInstance()
-					.getCurrentFileName()));
-			this.source.append("\");\n");
-			this.source.append("\n");
-			this.source
-					.append("      final NeuralDataSet trainingSet = (NeuralDataSet) encog.find(\"");
-			this.source.append(this.training.getName());
-			this.source.append("\");\n");
-			this.source
-					.append("      BasicNetwork network = (BasicNetwork) encog.find(\"");
-			this.source.append(this.network.getName());
-			this.source.append("\");\n");
-		}
+		this.source.append("  BasicNetwork network = new BasicNetwork();\n");
 
-		if (this.trainMethod != TrainingMethod.NoTraining) {
-			this.source
-					.append("    network = trainNetwork(network,trainingSet);\n");
-		}
-		this.source.append("    queryNetwork(network,trainingSet);\n");
+		generateLayer(this.network.getInputLayer());
+		
+		this.source.append("  network.getStructure().finalizeStructure();\n");
+		this.source.append("  network.reset();\n");
+		
 		this.source.append("  }\n");
 
 	}
@@ -256,170 +218,6 @@ public class GenerateJava implements Generate {
 		this.source.append("}\n");*/
 	}
 
-	public void generateQuery() {
-		addClass(NeuralData.class);
-		addClass(NeuralDataPair.class);
-		this.source
-				.append("  public static void queryNetwork(BasicNetwork network,NeuralDataSet trainingSet) {\n");
-		this.source.append("    // test the neural network\n");
-		this.source
-				.append("    System.out.println(\"Neural Network Query:\");\n");
 
-		this.source.append("    for(NeuralDataPair pair: trainingSet ) {\n");
-		this.source
-				.append("      final NeuralData output = network.compute(pair.getInput());\n");
-		this.source.append("\n");
-		this.source.append("      System.out.print(\"Input: \");\n");
-		this.source
-				.append("      for(int i=0;i<pair.getInput().size();i++) {\n");
-		this.source.append("        if( i!=0 )\n");
-		this.source.append("          System.out.print(\",\");\n");
-		this.source
-				.append("        System.out.print(pair.getInput().getData(i));\n");
-		this.source.append("      }\n");
-		this.source.append("      System.out.print(\", Output: \");\n");
-		this.source.append("      for(int i=0;i<output.size();i++) {\n");
-		this.source.append("        if( i!=0 )\n");
-		this.source.append("          System.out.print(\",\");\n");
-		this.source.append("        System.out.print(output.getData(i));\n");
-		this.source.append("      }\n");
-		this.source.append("\n");
-		if (this.training.getIdealSize() != 0) {
-			this.source.append("      System.out.print(\", Expected: \");\n");
-			this.source
-					.append("      for(int i=0;i<pair.getIdeal().size();i++) {\n");
-			this.source.append("        if( i!=0 )\n");
-			this.source.append("          System.out.print(\",\");\n");
-			this.source
-					.append("        System.out.print(pair.getIdeal().getData(i));\n");
-			this.source.append("      }\n");
-			this.source.append("    System.out.println(\"\");\n");
-		}
-		this.source.append("  }\n");
-		this.source.append("  }\n");
-	}
 
-	public void generateTraining() {
-/*
-		addClass(Train.class);
-		this.source
-				.append("  public static BasicNetwork trainNetwork(BasicNetwork network,NeuralDataSet trainingSet) {\n");
-
-		switch (this.trainMethod) {
-		case Backpropagation:
-			addClass(Backpropagation.class);
-			this.source
-					.append("    final Train train = new Backpropagation(\n");
-			this.source.append("      network,\n");
-			this.source.append("      trainingSet,\n");
-			this.source.append("      LEARNING_RATE,\n");
-			this.source.append("      MOMENTUM);\n");
-			break;
-
-		case Genetic:
-			addClass(TrainingSetNeuralGeneticAlgorithm.class);
-			this.source
-					.append("    final Train train = new TrainingSetNeuralGeneticAlgorithm(\n");
-			this.source.append("      network,\n");
-			this.source.append("      true,\n");
-			this.source.append("      trainingSet,\n");
-			this.source.append("      POPULATION_SIZE,\n");
-			this.source.append("      MUTATION_PERCENT,\n");
-			this.source.append("      MATE_PERCENT);\n");
-			break;
-		case Anneal:
-			addClass(NeuralSimulatedAnnealing.class);
-			this.source
-					.append("    final Train train = new NeuralSimulatedAnnealing(\n");
-			this.source.append("      network, \n");
-			this.source.append("      trainingSet, \n");
-			this.source.append("      HIGH_TEMP, \n");
-			this.source.append("      LOW_TEMP, \n");
-			this.source.append("      CYCLES);\n");
-			break;
-		case TrainHopfield:
-			addClass(TrainHopfield.class);
-			this.source
-					.append("    TrainHopfield train = new TrainHopfield(\n");
-			this.source.append("      trainingSet,\n");
-			this.source.append("      network);\n");
-			this.source.append("\n");
-			this.source.append("    train.iteration();");
-			break;
-		case TrainSOM:
-			this.source
-					.append("    final TrainSelfOrganizingMap train = new TrainSelfOrganizingMap(\n");
-			this.source.append("      network, \n");
-			this.source.append("      trainingSet,\n");
-			this.source.append("      LEARNING_METHOD,\n");
-			this.source.append("      LEARNING_RATE);\n");
-			break;
-			
-		case NoTraining:
-			break;
-
-		}
-
-		if (this.trainMethod != TrainingMethod.TrainHopfield) {
-			this.source.append("\n");
-			this.source.append("    int epoch = 1;\n");
-			this.source.append("\n");
-			this.source.append("    do {\n");
-			this.source.append("      train.iteration();\n");
-			this.source
-					.append("      System.out.println(\"Iteration #\" + epoch + \" Error:\" + train.getError());\n");
-			this.source.append("      epoch++;\n");
-			this.source
-					.append("    } while ((epoch < MAX_ITERATION) && (train.getError() > MAX_ERROR));\n");
-			this.source.append("\n");
-		}
-
-		this.source.append("    return (BasicNetwork)train.getNetwork();\n");
-		this.source.append("  }\n");
-*/
-	}
-
-	private void generateTrainingData() {
-		addClass(NeuralDataSet.class);
-		addClass(BasicNeuralDataSet.class);
-		this.source.append("private static NeuralDataSet getTraining() {\n");
-		this.source.append("  final double[][] INPUT = {\n");
-
-		for (final NeuralDataPair pair : this.training) {
-			this.source.append("    { ");
-			for (int i = 0; i < pair.getInput().size(); i++) {
-				if (i != 0) {
-					this.source.append(',');
-				}
-				this.source.append(pair.getInput().getData(i));
-			}
-			this.source.append(" },\n");
-		}
-
-		this.source.append("  };\n");
-		this.source.append("\n");
-
-		if (this.training.getIdealSize() > 0) {
-			this.source.append("  final double[][] IDEAL = {\n");
-
-			for (final NeuralDataPair pair : this.training) {
-				this.source.append("    { ");
-				for (int i = 0; i < pair.getIdeal().size(); i++) {
-					if (i != 0) {
-						this.source.append(',');
-					}
-					this.source.append(pair.getIdeal().getData(i));
-				}
-				this.source.append(" },\n");
-			}
-
-			this.source.append("  };\n");
-			this.source
-					.append("  return new BasicNeuralDataSet(INPUT, IDEAL);\n");
-		} else {
-			this.source
-					.append("  return new BasicNeuralDataSet(INPUT, null);\n");
-		}
-		this.source.append("}\n");
-	}
 }

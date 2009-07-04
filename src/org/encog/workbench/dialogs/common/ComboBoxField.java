@@ -66,4 +66,8 @@ public class ComboBoxField extends PropertiesField {
 		return ((JComboBox)this.getField()).getSelectedItem();
 	}
 
+	public int getSelectedIndex() {
+		return ((JComboBox)this.getField()).getSelectedIndex();
+	}
+
 }
