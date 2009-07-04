@@ -30,10 +30,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.encog.neural.activation.ActivationFunction;
-import org.encog.neural.data.NeuralData;
-import org.encog.neural.data.NeuralDataPair;
-import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
@@ -41,8 +37,6 @@ import org.encog.neural.networks.layers.ContextLayer;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
 import org.encog.neural.networks.synapse.Synapse;
-import org.encog.persist.EncogPersistedCollection;
-import org.encog.workbench.EncogWorkBench;
 
 public class GenerateJava implements Generate {
 
@@ -90,19 +84,6 @@ public class GenerateJava implements Generate {
 		this.imports.add(obj.getClass().getName());
 	}
 
-	private String fixPath(final String path) {
-		final StringBuilder result = new StringBuilder();
-		for (int i = 0; i < path.length(); i++) {
-			final char ch = path.charAt(i);
-			if (ch == '\\') {
-				result.append("\\\\");
-			} else {
-				result.append(ch);
-			}
-		}
-		return result.toString();
-	}
-
 	public String generate(final BasicNetwork network) {
 
 		this.network = network;
@@ -111,7 +92,7 @@ public class GenerateJava implements Generate {
 
 		this.source = new StringBuilder();
 
-		addClass(BasicNetwork.class);
+		addClass(this.network.getClass());
 
 		this.source.append("\n");
 		this.source.append("public class EncogGeneratedClass {\n");
@@ -143,11 +124,11 @@ public class GenerateJava implements Generate {
 		this.source.append(nameLayer(currentLayer));
 		this.source.append(" = ");
 		
-		this.addObject(currentLayer.getClass());
+		this.addObject(currentLayer);
 		
 		if( currentLayer instanceof ContextLayer )
 		{
-			this.addObject(currentLayer.getActivationFunction().getClass());
+			this.addObject(currentLayer.getActivationFunction());
 			this.source.append("new ContextLayer( new ");
 			this.source.append(currentLayer.getActivationFunction().getClass().getSimpleName());
 			this.source.append("()");
@@ -165,7 +146,7 @@ public class GenerateJava implements Generate {
 		}
 		else if( currentLayer instanceof BasicLayer )
 		{
-			this.addObject(currentLayer.getActivationFunction().getClass());
+			this.addObject(currentLayer.getActivationFunction());
 			this.source.append("new BasicLayer( new ");
 			this.source.append(currentLayer.getActivationFunction().getClass().getSimpleName());
 			this.source.append("()");
@@ -224,50 +205,4 @@ public class GenerateJava implements Generate {
 		this.source.append("  }\n");
 
 	}
-
-	private void generateNetwork() {
-/*		addClass(BasicNetwork.class);
-		this.source.append("private static BasicNetwork getNetwork() {\n");
-		this.source.append("  BasicNetwork network = new BasicNetwork();\n");
-
-		for (final Layer layer : this.network.getLayers()) {
-			this.source.append("  network.addLayer(new ");
-			this.source.append(layer.getClass().getSimpleName());
-			this.source.append('(');
-			this.source.append(layer.getNeuronCount());
-			addObject(layer);
-
-			if (layer instanceof FeedforwardLayer) {
-				final FeedforwardLayer fflayer = (FeedforwardLayer) layer;
-				if (!(fflayer.getActivationFunction() instanceof ActivationSigmoid)) {
-					addObject(fflayer.getActivationFunction());
-					this.source.append(", new ");
-					this.source.append(fflayer.getActivationFunction()
-							.getClass().getSimpleName());
-					this.source.append("()");
-				}
-			} else if (layer instanceof SOMLayer) {
-				final SOMLayer somlayer = (SOMLayer) layer;
-				addClass(NormalizeInput.class);
-
-				this.source.append(", ");
-				if (somlayer.getNormalizationType() == NormalizeInput.NormalizationType.Z_AXIS) {
-					this.source
-							.append("NormalizeInput.NormalizationType.Z_AXIS");
-				} else if (somlayer.getNormalizationType() == NormalizeInput.NormalizationType.MULTIPLICATIVE) {
-					this.source
-							.append("NormalizeInput.NormalizationType.MULTIPLICATIVE");
-				}
-			}
-
-			this.source.append("));\n");
-		}
-
-		this.source.append("  network.reset();\n");
-		this.source.append("  return network;\n");
-		this.source.append("}\n");*/
-	}
-
-
-
 }
