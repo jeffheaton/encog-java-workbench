@@ -50,12 +50,40 @@ public class GenerateJava implements Generate {
 	private BasicNetwork network;
 	private BasicNeuralDataSet training;
 	private final Set<String> imports = new TreeSet<String>();
-	private int currentLayerNumber;
-	private Map<Layer,Integer> layerMap = new HashMap<Layer,Integer>();
+	private int hiddenLayerNumber;
+	private Map<Layer,String> layerMap = new HashMap<Layer,String>();
 
 	@SuppressWarnings("unchecked")
 	private void addClass(final Class c) {
 		this.imports.add(c.getName());
+	}
+	
+	private String nameLayer(Layer layer)
+	{
+		if( this.layerMap.containsKey(layer) )
+		{
+			return this.layerMap.get(layer);
+		}
+		
+		StringBuilder result = new StringBuilder();
+		
+		if( layer==this.network.getInputLayer() )
+		{
+			result.append("inputLayer");
+		}
+		else if( layer==this.network.getOutputLayer() )
+		{
+			result.append("outputLayer");
+		}
+		else
+		{
+			result.append("hiddenLayer");
+			result.append(hiddenLayerNumber++);
+		}
+		
+		this.layerMap.put(layer, result.toString());
+		return result.toString();
+		
 	}
 
 	private void addObject(final Object obj) {
@@ -79,7 +107,7 @@ public class GenerateJava implements Generate {
 
 		this.network = network;
 		this.training = (BasicNeuralDataSet) training;
-		this.currentLayerNumber = 1;
+		this.hiddenLayerNumber = 1;
 
 		this.source = new StringBuilder();
 
@@ -109,52 +137,74 @@ public class GenerateJava implements Generate {
 		return results.toString();
 	}
 	
-	public void generateLayer(Layer layer)
-	{
-		this.source.append("Layer layer");
-		this.source.append(currentLayerNumber);
+	public void generateLayer(Layer previousLayer, Layer currentLayer)
+	{		
+		this.source.append("Layer ");
+		this.source.append(nameLayer(currentLayer));
 		this.source.append(" = ");
 		
-		if( layer instanceof ContextLayer )
+		this.addObject(currentLayer.getClass());
+		
+		if( currentLayer instanceof ContextLayer )
 		{
-			
-		}
-		else if( layer instanceof RadialBasisFunctionLayer )
-		{
-			
-		}
-		else if( layer instanceof BasicLayer )
-		{
-			this.source.append("new BasicLayer( new ");
-			this.source.append(layer.getActivationFunction().getClass().getSimpleName());
+			this.addObject(currentLayer.getActivationFunction().getClass());
+			this.source.append("new ContextLayer( new ");
+			this.source.append(currentLayer.getActivationFunction().getClass().getSimpleName());
 			this.source.append("()");
 			this.source.append(",");
-			this.source.append(layer.hasThreshold()?"true":"false");
+			this.source.append(currentLayer.hasThreshold()?"true":"false");
 			this.source.append(",");
-			this.source.append(layer.getNeuronCount());
+			this.source.append(currentLayer.getNeuronCount());
+			this.source.append(");");
+		}
+		else if( currentLayer instanceof RadialBasisFunctionLayer )
+		{
+			this.source.append("new RadialBasisFunctionLayer(");
+			this.source.append(currentLayer.getNeuronCount());
+			this.source.append(");");
+		}
+		else if( currentLayer instanceof BasicLayer )
+		{
+			this.addObject(currentLayer.getActivationFunction().getClass());
+			this.source.append("new BasicLayer( new ");
+			this.source.append(currentLayer.getActivationFunction().getClass().getSimpleName());
+			this.source.append("()");
+			this.source.append(",");
+			this.source.append(currentLayer.hasThreshold()?"true":"false");
+			this.source.append(",");
+			this.source.append(currentLayer.getNeuronCount());
 			this.source.append(");");
 		}
 		
-		this.source.append("\nnetwork.addLayer(");
-		this.source.append("layer");
-		this.source.append(currentLayerNumber);
-		this.source.append(");\n");
-		
-		this.layerMap.put(layer, currentLayerNumber);
-		
-		currentLayerNumber++;
-		
-		if( layer.getNext().size()==1 )
-		{
-			generateLayer( layer.getNext().get(0).getToLayer() );
+		if( previousLayer==null) {
+			this.source.append("\nnetwork.addLayer(");
+			this.source.append(nameLayer(currentLayer));
+			this.source.append(");\n");
 		}
 		else
 		{
-			// next layers
-			for(Synapse nextSynapse: layer.getNext() )
+			this.source.append("\nlayer");
+			this.source.append(nameLayer(previousLayer));
+			this.source.append(".addNext(");
+			this.source.append(nameLayer(currentLayer));
+			this.source.append(");\n");
+		}
+		
+		// next layers
+		for(Synapse nextSynapse: currentLayer.getNext() )
+		{
+			Layer nextLayer = nextSynapse.getToLayer();
+			if( this.layerMap.containsKey(nextLayer))
 			{
-				generateLayer( nextSynapse.getToLayer());
-			}	
+				this.source.append(nameLayer(currentLayer));
+				this.source.append(".addNext(");
+				this.source.append(nameLayer(nextLayer));
+				this.source.append(");\n");
+			}
+			else
+			{
+				generateLayer( currentLayer, nextSynapse.getToLayer());
+			}
 		}
 
 	}
@@ -166,7 +216,7 @@ public class GenerateJava implements Generate {
 
 		this.source.append("  BasicNetwork network = new BasicNetwork();\n");
 
-		generateLayer(this.network.getInputLayer());
+		generateLayer(null, this.network.getInputLayer());
 		
 		this.source.append("  network.getStructure().finalizeStructure();\n");
 		this.source.append("  network.reset();\n");
