@@ -64,6 +64,11 @@ public abstract class BasicGenerate implements Generate {
 		this.imports.add(c.getName());
 	}
 	
+	public void addPackage(String name)
+	{
+		this.imports.add(name);
+	}
+	
 	public String nameLayer(Layer layer)
 	{
 		if( this.layerMap.containsKey(layer) )

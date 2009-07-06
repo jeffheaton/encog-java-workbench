@@ -124,9 +124,9 @@ public class GenerateCode extends EncogPropertiesDialog {
 		if( this.comboLanguage.getSelectedIndex()==0 )
 			return GenerateLanguage.Java;
 		else if( this.comboLanguage.getSelectedIndex()==1 )
-			return GenerateLanguage.Java;
+			return GenerateLanguage.CS;
 		else if( this.comboLanguage.getSelectedIndex()==2 )
-			return GenerateLanguage.Java;
+			return GenerateLanguage.VB;
 		else
 			return null;
 	}
