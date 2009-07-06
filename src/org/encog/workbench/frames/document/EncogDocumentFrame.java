@@ -136,18 +136,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 	public void windowClosing(final WindowEvent e)
 	{
 		super.windowClosing(e);
-		try
-		{
-			EncogWorkBench.saveConfig();
-		}
-		catch(IOException ex)
-		{
-			EncogWorkBench.displayError("Error Saving Config", ex.getMessage());
-		} catch (TransformerConfigurationException ex) {
-
-		} catch (SAXException ex) {
-
-		}
+		EncogWorkBench.saveConfig();
 	}
 
 	/**

@@ -116,9 +116,9 @@ public class EncogMenus {
 				'c'));
 		this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_PASTE,
 				'v'));
-		this.menuEdit.addSeparator();
-		this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_CONFIG,
-		'f'));
+		//this.menuEdit.addSeparator();
+		//this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_CONFIG,
+		//'f'));
 		this.menuBar.add(this.menuEdit);
 		
 		this.menuObjects = new JMenu("Objects");

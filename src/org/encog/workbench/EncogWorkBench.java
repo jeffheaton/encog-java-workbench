@@ -263,9 +263,8 @@ public class EncogWorkBench {
 		}
 	}
 
-	public static void saveConfig() throws TransformerConfigurationException,
-			IOException, SAXException {
-		String home = System.getProperty("user.home");
+	public static void saveConfig() {
+		/* String home = System.getProperty("user.home");
 		File file = new File(home, CONFIG_FILENAME);
 
 		FileOutputStream fos = new FileOutputStream(file);
@@ -274,13 +273,12 @@ public class EncogWorkBench {
 		Object2XML xml = new Object2XML();
 		xml.save(EncogWorkBench.getInstance().getConfig(), out);
 		out.endDocument();
-		fos.close();
+		fos.close(); */
 
 	}
 
-	public static void loadConfig() throws ParserConfigurationException,
-			SAXException {
-		String home = System.getProperty("user.home");
+	public static void loadConfig() {
+		/*String home = System.getProperty("user.home");
 		File file = new File(home, CONFIG_FILENAME);
 
 		try {
@@ -300,7 +298,7 @@ public class EncogWorkBench {
 			is.close();
 		} catch (Exception e) {
 			displayError("Error Reading Config File", e.getMessage());
-		}
+		}*/
 	}
 
 	public static String displayInput(String prompt) {
