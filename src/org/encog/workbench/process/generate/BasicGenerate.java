@@ -7,6 +7,7 @@ import java.util.TreeSet;
 
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.layers.ContextLayer;
 import org.encog.neural.networks.layers.Layer;
 
 public abstract class BasicGenerate implements Generate {
@@ -16,6 +17,8 @@ public abstract class BasicGenerate implements Generate {
 	private BasicNetwork network;
 	private final Set<String> imports = new TreeSet<String>();
 	private int hiddenLayerNumber = 1;
+	private int contextLayerNumber = 1;
+	private int indent = 0;
 	private final Map<Layer,String> layerMap = new HashMap<Layer,String>();
 
 	public Set<String> getImports() {
@@ -28,6 +31,10 @@ public abstract class BasicGenerate implements Generate {
 	
 	public void addLine(final String line)
 	{
+		// handle the indent
+		for(int i=0;i<this.indent;i++)
+			source.append(' ');
+		// add the line
 		source.append(line);
 		addNewLine();
 	}
@@ -76,8 +83,16 @@ public abstract class BasicGenerate implements Generate {
 		}
 		else
 		{
-			result.append("hiddenLayer");
-			result.append(hiddenLayerNumber++);
+			if( layer instanceof ContextLayer )
+			{
+				result.append("contextLayer");
+				result.append(this.contextLayerNumber++);
+			}
+			else
+			{
+				result.append("hiddenLayer");
+				result.append(hiddenLayerNumber++);
+			}
 		}
 		
 		this.layerMap.put(layer, result.toString());
@@ -98,6 +113,16 @@ public abstract class BasicGenerate implements Generate {
 	}
 	
 	
+	public void forwardIndent()
+	{
+		this.indent+=2;
+	}
 	
+	public void backwardIndent()
+	{
+		this.indent-=2;
+		if( this.indent<0 )
+			this.indent = 0;
+	}
 	
 }
