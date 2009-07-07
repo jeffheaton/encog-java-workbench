@@ -27,28 +27,12 @@ package org.encog.workbench;
 
 import java.awt.Frame;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import javax.swing.JOptionPane;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-
-import org.encog.parse.tags.write.WriteXML;
 import org.encog.persist.EncogPersistedCollection;
-import org.encog.persist.persistors.generic.Object2XML;
-import org.encog.persist.persistors.generic.XML2Object;
 import org.encog.util.Directory;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 /**
  * Main class for the Encog Workbench. The main method in this class starts up
@@ -61,7 +45,7 @@ public class EncogWorkBench {
 
 	public final static String CONFIG_FILENAME = "EncogWorkbench.conf";
 	public final static String TEMP_FILENAME = "encogtemp.eg";
-	public final static String VERSION = "2.0";
+	public final static String VERSION = "2.1";
 	
 	/**
 	 * The singleton instance.
