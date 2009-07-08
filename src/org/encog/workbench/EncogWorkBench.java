@@ -28,6 +28,8 @@ package org.encog.workbench;
 import java.awt.Frame;
 import java.io.File;
 import javax.swing.JOptionPane;
+
+import org.encog.EncogError;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.util.Directory;
 import org.encog.util.logging.Logging;
@@ -82,8 +84,26 @@ public class EncogWorkBench {
 		this.tempFile = new File(
 				System.getProperty("java.io.tmpdir"),
 				EncogWorkBench.TEMP_FILENAME);
-		this.currentFile = new EncogPersistedCollection(this.tempFile);
-		this.currentFile.create();
+		
+		try
+		{
+			this.currentFile = new EncogPersistedCollection(this.tempFile);
+			this.currentFile.create();
+		}
+		catch(EncogError e)
+		{
+			// delete and try again.  If it still fails, warn and continue.
+			this.tempFile.delete();
+			try
+			{
+				this.currentFile = new EncogPersistedCollection(this.tempFile);
+				this.currentFile.create();
+			}
+			catch(EncogError e2)
+			{
+				EncogWorkBench.displayError("Error", "Can't create tempfile:\n" + this.tempFile + "\n" + e2.getMessage());
+			}
+		}
 	}
 
 	/**
