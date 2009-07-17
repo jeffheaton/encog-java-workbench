@@ -58,7 +58,6 @@ public class EncogMenus {
 	public static final String TRAIN_MANHATTAN_PROPAGATION = "Train Manhattan Update Rule Prop...";
 	public static final String TRAIN_SIMULATED_ANNEALING = "Train Simulated Annealing...";
 	public static final String TRAIN_GENETIC = "Train Genetically...";
-	public static final String TRAIN_HOPFIELD = "Train Hopfield Layers...";
 	public static final String TRAIN_SOM = "Train SOM Layers...";
 
 	public static final String TOOLS_CODE = "Generate Code...";
@@ -142,8 +141,6 @@ public class EncogMenus {
 				EncogMenus.TRAIN_GENETIC, 'g'));
 		this.menuTrain.addSeparator();
 		this.menuTrain.add(owner.addItem(this.menuObjects,
-				EncogMenus.TRAIN_HOPFIELD, 'h'));
-		this.menuTrain.add(owner.addItem(this.menuObjects,
 				EncogMenus.TRAIN_SOM, 's'));
 
 		this.menuBar.add(this.menuTrain);
@@ -210,10 +207,6 @@ public class EncogMenus {
 				EncogMenus.TRAIN_GENETIC)) {
 			Training.performGenetic();
 
-		} else if (event.getActionCommand().equals(
-				EncogMenus.TRAIN_HOPFIELD)) {
-			Training.performHopfield();
-
 		} else if (event.getActionCommand()
 				.equals(EncogMenus.TRAIN_SOM)) {
 			Training.performSOM();
@@ -222,7 +215,6 @@ public class EncogMenus {
 				EncogMenus.TRAIN_SIMULATED_ANNEALING)) {
 			Training.performAnneal();
 		}
-
 		if (event.getActionCommand().equals(EncogMenus.EDIT_CUT)) {
 			owner.getOperations().performEditCut();
 		} else if (event.getActionCommand()

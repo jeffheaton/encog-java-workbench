@@ -28,7 +28,6 @@ package org.encog.workbench.process;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.training.hopfield.TrainHopfield;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.anneal.InputAnneal;
 import org.encog.workbench.dialogs.training.anneal.ProgressAnneal;
@@ -118,29 +117,6 @@ public class Training {
 
 			train.setVisible(true);
 		}
-	}
-
-	public static void performHopfield() {
-		final InputHopfield dialog = new InputHopfield(EncogWorkBench
-				.getInstance().getMainWindow());
-
-		if (dialog.process()) {
-			final BasicNetwork network = dialog.getNetwork();
-			final NeuralDataSet training = dialog.getTrainingSet();
-
-			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
-
-			if (!validate.validateHopfield()) {
-				return;
-			}
-
-			final TrainHopfield train = new TrainHopfield(training, network);
-			train.iteration();
-			EncogWorkBench
-					.displayMessage("Train Hopfield", "Training Complete");
-		}
-
 	}
 
 	public static void performSOM() {
