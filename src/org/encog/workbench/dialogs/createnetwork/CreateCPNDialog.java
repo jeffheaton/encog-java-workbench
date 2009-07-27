@@ -38,7 +38,8 @@ public class CreateCPNDialog extends EncogPropertiesDialog {
 	private static final long serialVersionUID = 1916684369370397010L;
 	
 	private IntegerField inputCount;
-	private IntegerField outputCount;
+	private IntegerField instarCount;
+	private IntegerField outstarCount;
 	
 	public CreateCPNDialog(Frame owner) {
 		super(owner);
@@ -46,7 +47,8 @@ public class CreateCPNDialog extends EncogPropertiesDialog {
 		setSize(400,400);
 		setLocation(200,200);
 		addProperty(this.inputCount = new IntegerField("input neurons","Input Neuron Count",true,1,-1));
-		addProperty(this.outputCount = new IntegerField("input neurons","Output Neuron Count",true,1,-1));
+		addProperty(this.instarCount = new IntegerField("instar neurons","Instar Neuron Count",true,1,-1));
+		addProperty(this.outstarCount = new IntegerField("outstar neurons","Outstar Neuron Count",true,1,-1));
 		render();
 	}
 
@@ -54,8 +56,16 @@ public class CreateCPNDialog extends EncogPropertiesDialog {
 		return inputCount;
 	}
 
-	public IntegerField getOutputCount() {
-		return outputCount;
-	}	
+	public IntegerField getInstarCount() {
+		return instarCount;
+	}
+
+	public IntegerField getOutstarCount() {
+		return outstarCount;
+	}
+	
+	
+
+
 
 }

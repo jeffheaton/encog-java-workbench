@@ -36,23 +36,25 @@ import org.encog.workbench.dialogs.common.PropertyType;
 
 public class CreateBAMDialog extends EncogPropertiesDialog {
 
-	private IntegerField neuronCount;
+	private IntegerField layerACount;
+	private IntegerField layerBCount;
 	
 	public CreateBAMDialog(Frame owner) {
 		super(owner);
 		setTitle("Create BAM Network");
 		setSize(400,400);
 		setLocation(200,200);
-		addProperty(this.neuronCount = new IntegerField("neurons","Neuron Count",true,1,-1));
+		addProperty(this.layerACount = new IntegerField("neurons-a","Layer A Neuron Count",true,1,-1));
+		addProperty(this.layerBCount = new IntegerField("neurons-b","Layer B Neuron Count",true,1,-1));
 		render();
 	}
 
-	public IntegerField getNeuronCount() {
-		return neuronCount;
+	public IntegerField getLayerACount() {
+		return layerACount;
 	}
-	
-	
 
-	
+	public IntegerField getLayerBCount() {
+		return layerBCount;
+	}
 
 }

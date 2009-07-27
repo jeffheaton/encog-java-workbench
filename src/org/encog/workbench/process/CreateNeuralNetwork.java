@@ -27,6 +27,10 @@ package org.encog.workbench.process;
 
 import org.encog.neural.activation.ActivationTANH;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.pattern.ADALINEPattern;
+import org.encog.neural.pattern.BAMPattern;
+import org.encog.neural.pattern.BoltzmannPattern;
+import org.encog.neural.pattern.CPNPattern;
 import org.encog.neural.pattern.ElmanPattern;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.pattern.HopfieldPattern;
@@ -225,9 +229,10 @@ public class CreateNeuralNetwork {
 		CreateADALINEDialog dialog = new CreateADALINEDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
-			HopfieldPattern hopfield = new HopfieldPattern();
-			hopfield.setInputNeurons(dialog.getNeuronCount().getValue());
-			return hopfield.generate();
+			ADALINEPattern adaline = new ADALINEPattern();
+			adaline.setInputNeurons(dialog.getNeuronCount().getValue());
+			adaline.setOutputNeurons(dialog.getElementCount().getValue());
+			return adaline.generate();
 		} else
 			return null;
 	}
@@ -236,9 +241,10 @@ public class CreateNeuralNetwork {
 		CreateBAMDialog dialog = new CreateBAMDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
-			HopfieldPattern hopfield = new HopfieldPattern();
-			hopfield.setInputNeurons(dialog.getNeuronCount().getValue());
-			return hopfield.generate();
+			BAMPattern bam = new BAMPattern();
+			bam.setInputNeurons(dialog.getLayerACount().getValue());
+			bam.setOutputNeurons(dialog.getLayerBCount().getValue());
+			return bam.generate();
 		} else
 			return null;
 	}
@@ -247,9 +253,9 @@ public class CreateNeuralNetwork {
 		CreateBlotzmannDialog dialog = new CreateBlotzmannDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
-			HopfieldPattern hopfield = new HopfieldPattern();
-			hopfield.setInputNeurons(dialog.getNeuronCount().getValue());
-			return hopfield.generate();
+			BoltzmannPattern boltz = new BoltzmannPattern();
+			boltz.setInputNeurons(dialog.getNeuronCount().getValue());
+			return boltz.generate();
 		} else
 			return null;
 	}
@@ -258,9 +264,11 @@ public class CreateNeuralNetwork {
 		CreateCPNDialog dialog = new CreateCPNDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
-			HopfieldPattern hopfield = new HopfieldPattern();
-			hopfield.setInputNeurons(dialog.getInputCount().getValue());
-			return hopfield.generate();
+			CPNPattern cpn = new CPNPattern();
+			cpn.setInputNeurons(dialog.getInputCount().getValue());
+			cpn.setInstarCount(dialog.getInstarCount().getValue());
+			cpn.setOutstarCount(dialog.getOutstarCount().getValue());
+			return cpn.generate();
 		} else
 			return null;
 	}
