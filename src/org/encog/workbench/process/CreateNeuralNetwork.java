@@ -36,6 +36,10 @@ import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.pattern.SOMPattern;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateADALINEDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateBAMDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateBlotzmannDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateCPNDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateElmanDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateFeedforward;
 import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
@@ -78,6 +82,18 @@ public class CreateNeuralNetwork {
 				break;
 			case RBF:
 				network = createRBF(name);
+				break;
+			case BAM:
+				network = createBAM(name);
+				break;
+			case CPN:
+				network = createCPN(name);
+				break;
+			case Boltzmann:
+				network = createBoltzmann(name);
+				break;
+			case ADALINE:
+				network = createADALINE(name);
 				break;
 			default:
 				network = createEmpty(name);
@@ -204,4 +220,49 @@ public class CreateNeuralNetwork {
 		network.setName(name);
 		return network;
 	}
+	
+	private static BasicNetwork createADALINE(String name) {
+		CreateADALINEDialog dialog = new CreateADALINEDialog(EncogWorkBench
+				.getInstance().getMainWindow());
+		if (dialog.process()) {
+			HopfieldPattern hopfield = new HopfieldPattern();
+			hopfield.setInputNeurons(dialog.getNeuronCount().getValue());
+			return hopfield.generate();
+		} else
+			return null;
+	}
+	
+	private static BasicNetwork createBAM(String name) {
+		CreateBAMDialog dialog = new CreateBAMDialog(EncogWorkBench
+				.getInstance().getMainWindow());
+		if (dialog.process()) {
+			HopfieldPattern hopfield = new HopfieldPattern();
+			hopfield.setInputNeurons(dialog.getNeuronCount().getValue());
+			return hopfield.generate();
+		} else
+			return null;
+	}
+	
+	private static BasicNetwork createBoltzmann(String name) {
+		CreateBlotzmannDialog dialog = new CreateBlotzmannDialog(EncogWorkBench
+				.getInstance().getMainWindow());
+		if (dialog.process()) {
+			HopfieldPattern hopfield = new HopfieldPattern();
+			hopfield.setInputNeurons(dialog.getNeuronCount().getValue());
+			return hopfield.generate();
+		} else
+			return null;
+	}
+	
+	private static BasicNetwork createCPN(String name) {
+		CreateCPNDialog dialog = new CreateCPNDialog(EncogWorkBench
+				.getInstance().getMainWindow());
+		if (dialog.process()) {
+			HopfieldPattern hopfield = new HopfieldPattern();
+			hopfield.setInputNeurons(dialog.getInputCount().getValue());
+			return hopfield.generate();
+		} else
+			return null;
+	}
+	
 }

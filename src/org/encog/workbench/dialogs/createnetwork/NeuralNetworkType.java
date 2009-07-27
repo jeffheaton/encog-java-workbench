@@ -27,11 +27,16 @@ package org.encog.workbench.dialogs.createnetwork;
 
 public enum NeuralNetworkType {
 	Empty,
+	ADALINE,
+	BAM,
+	Boltzmann,
+	CPN,
 	Feedforward,
+	RBF,
 	SOM,
 	RSOM,
 	Hopfield,
 	Elman,
-	Jordan,
-	RBF
+	Jordan
+	
 }
