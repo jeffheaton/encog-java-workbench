@@ -66,6 +66,7 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 
 		this.model.addElement("Empty Neural Network");
 		this.model.addElement("ADALINE Neural Network");
+		this.model.addElement("Adaptive Resonance Theory 1 (ART1)");
 		this.model.addElement("Bidirectional Associate Memory (BAM)");
 		this.model.addElement("Boltzmann Machine");
 		this.model.addElement("Counterpropagation Neural Network (CPN)");
@@ -101,24 +102,24 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			break;
 		case 2:
 			this.type = NeuralNetworkType.BAM;
-			break;
+			break;			
 		case 3:
-			this.type = NeuralNetworkType.Boltzmann;
+			this.type = NeuralNetworkType.ART1;
 			break;
 		case 4:
-			this.type = NeuralNetworkType.CPN;
+			this.type = NeuralNetworkType.Boltzmann;
 			break;
 		case 5:
-			this.type = NeuralNetworkType.Feedforward;
+			this.type = NeuralNetworkType.CPN;
 			break;
 		case 6:
-			this.type = NeuralNetworkType.RBF;
+			this.type = NeuralNetworkType.Feedforward;
 			break;
 		case 7:
-			this.type = NeuralNetworkType.SOM;
+			this.type = NeuralNetworkType.RBF;
 			break;
 		case 8:
-			this.type = NeuralNetworkType.RSOM;
+			this.type = NeuralNetworkType.SOM;
 			break;
 		case 9:
 			this.type = NeuralNetworkType.Hopfield;
@@ -129,6 +130,9 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 		case 11:
 			this.type = NeuralNetworkType.Jordan;
 			break;
+		case 12:
+			this.type = NeuralNetworkType.RSOM;
+			break;			
 		}
 	}
 
@@ -141,25 +145,25 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 		case ADALINE:
 			this.list.setSelectedIndex(1);
 			break;
-		case BAM:
+		case ART1:
 			this.list.setSelectedIndex(2);
-			break;
-		case Boltzmann:
+			break;			
+		case BAM:
 			this.list.setSelectedIndex(3);
 			break;
-		case CPN:
+		case Boltzmann:
 			this.list.setSelectedIndex(4);
 			break;
-		case Feedforward:
+		case CPN:
 			this.list.setSelectedIndex(5);
 			break;
-		case RBF:
+		case Feedforward:
 			this.list.setSelectedIndex(6);
 			break;
-		case SOM:
+		case RBF:
 			this.list.setSelectedIndex(7);
 			break;
-		case RSOM:
+		case SOM:
 			this.list.setSelectedIndex(8);
 			break;
 		case Hopfield:
@@ -170,6 +174,9 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			break;
 		case Jordan:
 			this.list.setSelectedIndex(11);
+			break;
+		case RSOM:
+			this.list.setSelectedIndex(12);
 			break;
 
 		}

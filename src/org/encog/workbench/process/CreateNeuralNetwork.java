@@ -28,6 +28,7 @@ package org.encog.workbench.process;
 import org.encog.neural.activation.ActivationTANH;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.ADALINEPattern;
+import org.encog.neural.pattern.ART1Pattern;
 import org.encog.neural.pattern.BAMPattern;
 import org.encog.neural.pattern.BoltzmannPattern;
 import org.encog.neural.pattern.CPNPattern;
@@ -99,6 +100,9 @@ public class CreateNeuralNetwork {
 			case ADALINE:
 				network = createADALINE(name);
 				break;
+			case ART1:
+				network = createART1(name);
+				break;				
 			default:
 				network = createEmpty(name);
 				break;
@@ -177,7 +181,6 @@ public class CreateNeuralNetwork {
 			return hopfield.generate();
 		} else
 			return null;
-
 	}
 
 	private static BasicNetwork createSOM(String name) {
@@ -269,6 +272,18 @@ public class CreateNeuralNetwork {
 			cpn.setInstarCount(dialog.getInstarCount().getValue());
 			cpn.setOutstarCount(dialog.getOutstarCount().getValue());
 			return cpn.generate();
+		} else
+			return null;
+	}
+	
+	private static BasicNetwork createART1(String name) {
+		CreateHopfieldDialog dialog = new CreateHopfieldDialog(EncogWorkBench
+				.getInstance().getMainWindow());
+		if (dialog.process()) {
+			ART1Pattern art1 = new ART1Pattern();
+			art1.setInputNeurons(dialog.getNeuronCount().getValue());
+			art1.setOutputNeurons(dialog.getNeuronCount().getValue());
+			return art1.generate();
 		} else
 			return null;
 	}

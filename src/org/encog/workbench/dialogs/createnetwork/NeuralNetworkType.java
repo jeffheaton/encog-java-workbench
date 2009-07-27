@@ -28,6 +28,7 @@ package org.encog.workbench.dialogs.createnetwork;
 public enum NeuralNetworkType {
 	Empty,
 	ADALINE,
+	ART1,
 	BAM,
 	Boltzmann,
 	CPN,
