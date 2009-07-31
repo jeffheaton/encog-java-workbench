@@ -101,10 +101,10 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			this.type = NeuralNetworkType.ADALINE;
 			break;
 		case 2:
-			this.type = NeuralNetworkType.BAM;
+			this.type = NeuralNetworkType.ART1;
 			break;			
 		case 3:
-			this.type = NeuralNetworkType.ART1;
+			this.type = NeuralNetworkType.BAM;
 			break;
 		case 4:
 			this.type = NeuralNetworkType.Boltzmann;

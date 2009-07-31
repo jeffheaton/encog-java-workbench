@@ -42,6 +42,7 @@ import org.encog.neural.pattern.SOMPattern;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateADALINEDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateART1;
 import org.encog.workbench.dialogs.createnetwork.CreateBAMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateBlotzmannDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateCPNDialog;
@@ -277,12 +278,12 @@ public class CreateNeuralNetwork {
 	}
 	
 	private static BasicNetwork createART1(String name) {
-		CreateHopfieldDialog dialog = new CreateHopfieldDialog(EncogWorkBench
+		CreateART1 dialog = new CreateART1(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
 			ART1Pattern art1 = new ART1Pattern();
-			art1.setInputNeurons(dialog.getNeuronCount().getValue());
-			art1.setOutputNeurons(dialog.getNeuronCount().getValue());
+			art1.setInputNeurons(dialog.getF1().getValue());
+			art1.setOutputNeurons(dialog.getF2().getValue());
 			return art1.generate();
 		} else
 			return null;
