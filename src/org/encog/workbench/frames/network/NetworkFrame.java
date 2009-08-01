@@ -35,19 +35,29 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
+import org.encog.Encog;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.ContextLayer;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
+import org.encog.neural.networks.logic.ART1Logic;
+import org.encog.neural.networks.logic.BAMLogic;
+import org.encog.neural.networks.logic.BoltzmannLogic;
+import org.encog.neural.networks.logic.FeedforwardLogic;
+import org.encog.neural.networks.logic.HopfieldLogic;
+import org.encog.neural.networks.logic.NeuralLogic;
+import org.encog.neural.networks.logic.SimpleRecurrentLogic;
 import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
 import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.neural.networks.synapse.WeightlessSynapse;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.frames.NetworkQueryFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.network.NetworkTool.Type;
@@ -65,7 +75,8 @@ public class NetworkFrame extends EncogCommonFrame {
 	private JButton buttonQuery;
 	private JButton buttonTrain;
 	private JButton buttonValidate;
-	private JButton properties;
+	private JButton buttonProperties;
+	private JComboBox comboLogic;
 	private NetworkListModel model;
 	private JScrollPane scroll;
 	
@@ -83,6 +94,8 @@ public class NetworkFrame extends EncogCommonFrame {
 	
 	private NetworkToolbar networkToolbar;
 	private NetworkDiagram networkDiagram;
+	
+	public static final String[] LOGIC = { "Feed Forward", "Simple Recurrent",  "Adaptive Resonance Theory", "Bidirectional", "Boltzmann", "Hopfield"};
 
 	public NetworkFrame(final BasicNetwork data) {
 		setEncogObject(data);
@@ -114,6 +127,14 @@ public class NetworkFrame extends EncogCommonFrame {
 		else if( action.getSource()==this.buttonValidate)
 		{
 			performValidate();
+		}
+		else if( action.getSource()==this.buttonProperties)
+		{
+			performProperties();
+		}
+		else if( action.getSource()==this.comboLogic )
+		{
+			collectLogic();
 		}
 	}
 
@@ -176,15 +197,20 @@ public class NetworkFrame extends EncogCommonFrame {
 		content.setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);
+		this.toolbar.add(this.comboLogic = new JComboBox(LOGIC));
 		this.toolbar.add(this.buttonRandomize = new JButton("Randomize"));
 		this.toolbar.add(this.buttonQuery = new JButton("Query"));
 		this.toolbar.add(this.buttonTrain = new JButton("Train"));
 		this.toolbar.add(this.buttonValidate = new JButton("Validate"));
+		this.toolbar.add(this.buttonProperties = new JButton("Network Properties"));
+
 
 		this.buttonRandomize.addActionListener(this);
 		this.buttonQuery.addActionListener(this);
 		this.buttonTrain.addActionListener(this);
 		this.buttonValidate.addActionListener(this);
+		this.buttonProperties.addActionListener(this);
+		this.comboLogic.addActionListener(this);
 
 		content.add(this.toolbar, BorderLayout.PAGE_START);
 		this.scroll = new JScrollPane(networkDiagram = new NetworkDiagram(this));
@@ -193,7 +219,7 @@ public class NetworkFrame extends EncogCommonFrame {
 		content.add(this.networkToolbar, BorderLayout.WEST);
 
 		setTitle("Edit Neural Network");
-
+		setLogic();
 
 
 	}
@@ -239,6 +265,60 @@ public class NetworkFrame extends EncogCommonFrame {
 		{
 		this.networkDiagram.close();
 		this.networkDiagram = null;
+		}
+	}
+	
+	public void performProperties()
+	{
+		MapDataFrame frame = new MapDataFrame(((BasicNetwork)this.getEncogObject()).getProperties(),
+				"Network Properties");
+		frame.setVisible(true);
+	}
+	
+	private void setLogic()
+	{
+		NeuralLogic logic = ((BasicNetwork)this.getEncogObject()).getLogic();
+		if( logic instanceof ART1Logic )
+			this.comboLogic.setSelectedIndex(2);
+		else if( logic instanceof BAMLogic )
+			this.comboLogic.setSelectedIndex(3);
+		else if( logic instanceof BoltzmannLogic )
+			this.comboLogic.setSelectedIndex(4);
+		else if( logic instanceof FeedforwardLogic )
+			this.comboLogic.setSelectedIndex(0);
+		else if( logic instanceof HopfieldLogic )
+			this.comboLogic.setSelectedIndex(5);
+		else 
+			this.comboLogic.setSelectedIndex(1);
+	}
+	
+	private void collectLogic()
+	{
+		NeuralLogic newLogic;
+		
+		switch(this.comboLogic.getSelectedIndex())
+		{
+		case 0:newLogic = new FeedforwardLogic();break;
+		case 2:newLogic = new ART1Logic();break;
+		case 3:newLogic = new BAMLogic();break;
+		case 4:newLogic = new BoltzmannLogic();break;
+		case 5:newLogic = new HopfieldLogic();break;
+		default:newLogic = new SimpleRecurrentLogic();break;
+		}
+		
+		BasicNetwork network = (BasicNetwork)this.getEncogObject();
+		if(! network.getLogic().getClass().getSimpleName().equals(newLogic.getClass().getSimpleName()))
+		{
+			try
+			{
+				newLogic.init(network);
+			}
+			catch(Exception e)
+			{
+				EncogWorkBench.displayError("Error", "Can't switch to new neural logic because:\n" + e.getMessage());
+				setLogic();
+			}
+			network.setLogic(newLogic);
 		}
 	}
 }
