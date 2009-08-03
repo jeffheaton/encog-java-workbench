@@ -41,6 +41,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.encog.neural.activation.ActivationBiPolar;
+import org.encog.neural.activation.ActivationCompetitive;
 import org.encog.neural.activation.ActivationFunction;
 import org.encog.neural.activation.ActivationGaussian;
 import org.encog.neural.activation.ActivationLOG;
@@ -55,7 +56,7 @@ import org.encog.workbench.dialogs.common.ValidationException;
 
 public class ActivationDialog extends EncogCommonDialog implements ItemListener {
 
-	public static final String[] ACTIVATION_FUNCTION = { "ActivationBiPolar",
+	public static final String[] ACTIVATION_FUNCTION = { "ActivationBiPolar", "ActivationCompetitive",
 			"ActivationGaussian", "ActivationLinear", "ActivationLOG",
 			"ActivationSigmoid", "ActivationSIN", "ActivationSoftMax",
 			"ActivationTANH" };
@@ -121,24 +122,27 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 			newActivation = new ActivationBiPolar();
 			break;
 		case 1:
-			newActivation = new ActivationGaussian(0, 1, 1);
+			newActivation = new ActivationCompetitive();
 			break;
 		case 2:
-			newActivation = new ActivationLinear();
+			newActivation = new ActivationGaussian(0, 1, 1);
 			break;
 		case 3:
-			newActivation = new ActivationLOG();
+			newActivation = new ActivationLinear();
 			break;
 		case 4:
-			newActivation = new ActivationSigmoid();
+			newActivation = new ActivationLOG();
 			break;
 		case 5:
-			newActivation = new ActivationSIN();
+			newActivation = new ActivationSigmoid();
 			break;
 		case 6:
-			newActivation = new ActivationSoftMax();
+			newActivation = new ActivationSIN();
 			break;
 		case 7:
+			newActivation = new ActivationSoftMax();
+			break;
+		case 8:
 			newActivation = new ActivationTANH();
 			break;
 

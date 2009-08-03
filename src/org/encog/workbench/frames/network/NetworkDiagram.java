@@ -153,13 +153,10 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			// draw the actual layer
 			DrawLayer.drawLayer(this, offscreenGraphics,layer);
 			
-			if(network.isInput(layer))
+			String label = network.getLogic().getLayerName(layer);
+			if(label!=null)
 			{
-				drawInput(offscreenGraphics,layer);
-			}
-			if(network.isOutput(layer))
-			{
-				drawOutput(offscreenGraphics,layer);
+				drawLabel(offscreenGraphics,layer, label);
 			}
 			
 			if( this.selected==layer)
@@ -556,10 +553,8 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		return mi;
 	}
 	
-	private void drawInput(Graphics g, Layer layer)
+	private void drawLabel(Graphics g, Layer layer, String str)
 	{
-		String str = ">>>Input>>>";
-		
 		g.setFont(WorkbenchFonts.getTextFont());
 		FontMetrics fm = g.getFontMetrics();
 		
@@ -571,23 +566,6 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		int center = (DrawLayer.LAYER_WIDTH/2)-(width/2);
 		g.drawString(str, x+center,y+height-3);
 		g.drawRect(x, y, DrawLayer.LAYER_WIDTH, height);
-	}
-	
-	private void drawOutput(Graphics g, Layer layer)
-	{
-		String str = "<<<Output<<<";
-		
-		g.setFont(WorkbenchFonts.getTextFont());
-		FontMetrics fm = g.getFontMetrics();
-		
-		int height = fm.getHeight();
-		int width = fm.stringWidth(str);
-		int x = layer.getX();
-		int y = layer.getY();
-		
-		int center = (DrawLayer.LAYER_WIDTH/2)-(width/2);
-		g.drawString(str, x+center,y+height-3+DrawLayer.LAYER_HEIGHT);
-		g.drawRect(x, y+DrawLayer.LAYER_HEIGHT, DrawLayer.LAYER_WIDTH, height);
 	}
 	
 	public void performSynapseDelete()
