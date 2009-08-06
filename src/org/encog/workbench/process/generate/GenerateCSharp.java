@@ -200,7 +200,8 @@ public class GenerateCSharp extends BasicGenerate {
 
 		this.addLine("BasicNetwork network = new BasicNetwork();");
 
-		generateLayer(null,this.getNetwork().getInputLayer(),null);
+		Layer input = this.getNetwork().getLayer(BasicNetwork.TAG_INPUT);
+		generateLayer(null,input,null);
 		
 		this.addLine("network.Structure.FinalizeStructure();");
 		this.addLine("network.Reset();");

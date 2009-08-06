@@ -37,6 +37,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -68,6 +69,7 @@ import org.encog.workbench.dialogs.layers.EditContextLayer;
 import org.encog.workbench.dialogs.layers.EditRadialLayer;
 import org.encog.workbench.frames.MatrixFrame;
 import org.encog.workbench.frames.network.NetworkTool.Type;
+import org.encog.workbench.util.CollectionFormatter;
 import org.encog.workbench.util.MouseUtil;
 
 public class NetworkDiagram extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
@@ -153,7 +155,9 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			// draw the actual layer
 			DrawLayer.drawLayer(this, offscreenGraphics,layer);
 			
-			String label = network.getLogic().getLayerName(layer);
+			Collection<String> tags = network.getTags(layer);
+			String label = CollectionFormatter.formatCollection(tags);
+			
 			if(label!=null)
 			{
 				drawLabel(offscreenGraphics,layer, label);
@@ -387,7 +391,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 				Layer layer = (Layer)c.newInstance();
 				this.parent.getNetworkToolbar().setSelected(null);
 				
-				if( network.getInputLayer()==null )
+				if( network.getLayer(BasicNetwork.TAG_INPUT)==null )
 				{
 					network.addLayer(layer);
 					network.getStructure().finalizeStructure();
@@ -453,9 +457,6 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		{
 			EncogWorkBench.displayError("Synapse Error", e.getMessage());
 		}
-		
-		// Attempt to determine the output layer
-		network.inferOutputLayer();
 		
 		// recreate the network
 		
@@ -584,7 +585,6 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			
 			// handle any orphans
 			this.fixOrphans();
-			network.inferOutputLayer();
 			
 			// rebuild the network
 			getLayers();
@@ -604,18 +604,18 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			this.orphanLayers.addAll(network.getStructure().getLayers());
 			
 			// are we removing the input layer?
-			if( this.selected==network.getInputLayer())
+			if( this.selected==network.getLayer(BasicNetwork.TAG_INPUT))
 			{
 				if( this.selected!=null && this.selected.getNext().size()>0 )
 				{
 				Synapse nextSynapse = this.selected.getNext().get(0);
 				Layer nextLayer = nextSynapse.getToLayer();
-				network.setInputLayer(nextLayer);
+				network.tagLayer(BasicNetwork.TAG_INPUT,nextLayer);
 				}
 				else
 				{
-					network.setInputLayer(null);
-					network.setOutputLayer(null);
+					network.getLayerTags().remove(BasicNetwork.TAG_INPUT);
+					network.getLayerTags().remove(BasicNetwork.TAG_OUTPUT);
 				}
 			}
 			
@@ -629,7 +629,6 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			}
 			
 			// rebuild the network & attempt to determine the output layer
-			network.inferOutputLayer();
 			network.getStructure().finalizeStructure();
 			
 			// fix the orphan list

@@ -40,6 +40,7 @@ import javax.swing.JTable;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.layers.Layer;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.NetworkQueryModel;
@@ -96,9 +97,13 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 	}
 
 	public void windowOpened(final WindowEvent e) {
+		
+		Layer input = getData().getLayer(BasicNetwork.TAG_INPUT);
+		Layer output = getData().getLayer(BasicNetwork.TAG_OUTPUT);
+		
 		//
-		this.inputCount = getData().getInputLayer().getNeuronCount();
-		this.outputCount = getData().getOutputLayer().getNeuronCount();
+		this.inputCount = input.getNeuronCount();
+		this.outputCount = output.getNeuronCount();
 
 		// create the graphic objects
 		setTitle("Query Network: " + getData().getName());

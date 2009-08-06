@@ -148,18 +148,6 @@ public class NetworkFrame extends EncogCommonFrame {
 			return;
 		}
 		
-		BasicNetwork network = (BasicNetwork)this.getEncogObject();
-		if( network.getInputLayer()==null)
-		{
-			EncogWorkBench.displayError("Error", "Network has no input layer."); 
-			return;
-		}
-		if( network.getOutputLayer()==null)
-		{
-			EncogWorkBench.displayError("Error", "Network has no output layer."); 
-			return;
-		}
-		
 		EncogWorkBench.displayMessage("Success", "This neural network seems ok.");
 		
 	}

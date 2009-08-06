@@ -78,11 +78,14 @@ public abstract class BasicGenerate implements Generate {
 		
 		StringBuilder result = new StringBuilder();
 		
-		if( layer==this.network.getInputLayer() )
+		Layer inputLayer = this.getNetwork().getLayer(BasicNetwork.TAG_INPUT);
+		Layer outputLayer = this.getNetwork().getLayer(BasicNetwork.TAG_OUTPUT);
+		
+		if( layer==inputLayer )
 		{
 			result.append("inputLayer");
 		}
-		else if( layer==this.network.getOutputLayer() )
+		else if( layer==outputLayer )
 		{
 			result.append("outputLayer");
 		}

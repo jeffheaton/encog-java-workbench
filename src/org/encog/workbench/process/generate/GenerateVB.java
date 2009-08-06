@@ -189,7 +189,8 @@ public class GenerateVB extends BasicGenerate {
 
 		this.addLine("Dim network as BasicNetwork = new BasicNetwork()");
 
-		generateLayer(null,this.getNetwork().getInputLayer(),null);
+		Layer inputLayer = this.getNetwork().getLayer(BasicNetwork.TAG_INPUT);
+		generateLayer(null,inputLayer,null);
 		
 		this.addLine("network.Structure.FinalizeStructure()");
 		this.addLine("network.Reset()");

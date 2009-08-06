@@ -197,8 +197,9 @@ public class GenerateJava extends BasicGenerate {
 		this.forwardIndent();
 
 		this.addLine("BasicNetwork network = new BasicNetwork();");
-
-		generateLayer(null,this.getNetwork().getInputLayer(),null);
+		
+		Layer inputLayer = this.getNetwork().getLayer(BasicNetwork.TAG_INPUT);
+		generateLayer(null,inputLayer,null);
 		
 		this.addLine("network.getStructure().finalizeStructure();");
 		this.addLine("network.reset();");
