@@ -39,7 +39,6 @@ import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
-import org.encog.Encog;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.ContextLayer;
@@ -127,7 +126,7 @@ public class NetworkFrame extends EncogCommonFrame {
 		} else if (action.getSource() == this.buttonTrain) {
 			performTrain();
 		} else if (action.getSource() == this.buttonValidate) {
-			performValidate(true,true);
+			performValidate(true, true);
 		} else if (action.getSource() == this.buttonProperties) {
 			performProperties();
 		} else if (action.getSource() == this.comboLogic) {
@@ -135,28 +134,29 @@ public class NetworkFrame extends EncogCommonFrame {
 		}
 	}
 
-	public void performValidate(boolean reportSuccess,boolean reportError) {
+	public boolean performValidate(boolean reportSuccess, boolean reportError) {
 
 		try {
 			if (this.networkDiagram != null) {
 				this.networkDiagram.fixOrphans();
 
 				if (this.networkDiagram.getOrphanLayers().size() > 0) {
-					if( reportError )
-					{
-						EncogWorkBench.displayError("Warning, Network Validation Error",
-							"There are unconnected layers. These will be lost"
-									+ " if the network is saved.");
+					if (reportError) {
+						EncogWorkBench.displayError(
+								"Warning, Network Validation Error",
+								"There are unconnected layers. These will be lost"
+										+ " if the network is saved.");
 					}
-					return;
+					return false;
 				}
 			}
 
 			BasicNetwork network = (BasicNetwork) this.getEncogObject();
 			Exception e = ValidateNetwork.finalizeStructure(network);
-			if (e != null && reportError ) {
-				EncogWorkBench.displayError("Warning, Network Validation Error", e.getMessage());
-				return;
+			if (e != null && reportError) {
+				EncogWorkBench.displayError(
+						"Warning, Network Validation Error", e.getMessage());
+				return false;
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Unexpected Internal Error", t
@@ -167,26 +167,113 @@ public class NetworkFrame extends EncogCommonFrame {
 		if (reportSuccess)
 			EncogWorkBench.displayMessage("Success",
 					"This neural network seems ok.");
+		return true;
 
 	}
 
 	private void performTrain() {
-		Training.performResilient();
 
+		if (performValidate(false, true)) {
+			if (performValidate(false, true)) {
+				NeuralLogic logic = ((BasicNetwork) this.getEncogObject())
+						.getLogic();
+
+				if (logic instanceof ART1Logic) {
+					EncogWorkBench
+							.displayMessage(
+									"Training",
+									"Sorry, but the workbench currently cannot be used to train this network type.\n"
+											+ "You will need to create a program with the Encog Core to train it.");
+				} else if (logic instanceof BAMLogic) {
+					EncogWorkBench
+							.displayMessage(
+									"Training",
+									"Sorry, but the workbench currently cannot be used to train this network type.\n"
+											+ "You will need to create a program with the Encog Core to train it.");
+				} else if (logic instanceof BoltzmannLogic) {
+					EncogWorkBench
+							.displayMessage(
+									"Training",
+									"Sorry, but the workbench currently cannot be used to train this network type.\n"
+											+ "You will need to create a program with the Encog Core to train it.");
+				} else if (logic instanceof FeedforwardLogic) {
+					Training.performResilient();
+
+				} else if (logic instanceof HopfieldLogic) {
+					EncogWorkBench
+							.displayMessage(
+									"Training",
+									"Sorry, but the workbench currently cannot be used to train this network type.\n"
+											+ "You will need to create a program with the Encog Core to train it.");
+				} else if (logic instanceof SimpleRecurrentLogic) {
+					Training.performResilient();
+				} else {
+					EncogWorkBench
+							.displayMessage(
+									"Training",
+									"Sorry, but the workbench currently cannot be used to train this network type.\n"
+											+ "You will need to create a program with the Encog Core to train it.");
+				}
+			}
+		}
 	}
 
 	private void performRandomize() {
-		if (EncogWorkBench.askQuestion("Are you sure?",
-				"Randomize network weights and lose all training?")) {
-			((BasicNetwork) this.getEncogObject()).reset();
+		if (performValidate(false, true)) {
+			if (EncogWorkBench.askQuestion("Are you sure?",
+					"Randomize network weights and lose all training?")) {
+				((BasicNetwork) this.getEncogObject()).reset();
+			}
 		}
 
 	}
 
 	private void performQuery() {
-		NetworkQueryFrame query = new NetworkQueryFrame(((BasicNetwork) this
-				.getEncogObject()));
-		query.setVisible(true);
+		if (performValidate(false, true)) {
+
+			NeuralLogic logic = ((BasicNetwork) this.getEncogObject())
+					.getLogic();
+
+			if (logic instanceof ART1Logic) {
+				EncogWorkBench
+						.displayMessage(
+								"Training",
+								"Sorry, but the workbench currently cannot be used to query this network type.\n"
+										+ "You will need to create a program with the Encog Core to query it.");
+			} else if (logic instanceof BAMLogic) {
+				EncogWorkBench
+						.displayMessage(
+								"Training",
+								"Sorry, but the workbench currently cannot be used to query this network type.\n"
+										+ "You will need to create a program with the Encog Core to query it.");
+			} else if (logic instanceof BoltzmannLogic) {
+				EncogWorkBench
+						.displayMessage(
+								"Training",
+								"Sorry, but the workbench currently cannot be used to query this network type.\n"
+										+ "You will need to create a program with the Encog Core to query it.");
+			} else if (logic instanceof FeedforwardLogic) {
+				NetworkQueryFrame query = new NetworkQueryFrame(
+						((BasicNetwork) this.getEncogObject()));
+				query.setVisible(true);
+			} else if (logic instanceof HopfieldLogic) {
+				EncogWorkBench
+						.displayMessage(
+								"Training",
+								"Sorry, but the workbench currently cannot be used to query this network type.\n"
+										+ "You will need to create a program with the Encog Core to query it.");
+			} else if (logic instanceof SimpleRecurrentLogic) {
+				NetworkQueryFrame query = new NetworkQueryFrame(
+						((BasicNetwork) this.getEncogObject()));
+				query.setVisible(true);
+			} else {
+				EncogWorkBench
+						.displayMessage(
+								"Training",
+								"Sorry, but the workbench currently cannot be used to query this network type.\n"
+										+ "You will need to create a program with the Encog Core to query it.");
+			}
+		}
 
 	}
 
