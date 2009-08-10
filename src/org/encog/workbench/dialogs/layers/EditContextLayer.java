@@ -38,13 +38,12 @@ import org.encog.workbench.dialogs.common.PopupField;
 import org.encog.workbench.dialogs.common.PopupListener;
 import org.encog.workbench.dialogs.common.TableField;
 
-public class EditContextLayer extends EncogPropertiesDialog implements
+public class EditContextLayer extends EditLayerDialog implements
 		PopupListener, CheckListener {
 
 	public final static String[] COLUMN_HEADS = { "Neuron", "Threshold",
 			"Context" };
 
-	private IntegerField neuronCount;
 	private PopupField activationField;
 	private CheckField useThreshold;
 	private TableField thresholdTable;
@@ -56,8 +55,7 @@ public class EditContextLayer extends EncogPropertiesDialog implements
 		setTitle("Edit Context Layer");
 		setSize(600, 400);
 		setLocation(200, 200);
-		addProperty(this.neuronCount = new IntegerField("neuron count",
-				"Neuron Count", true, 1, -1));
+
 		addProperty(this.activationField = new PopupField("activation",
 				"Activation Function", true));
 		addProperty(this.useThreshold = new CheckField("use threshold",
@@ -96,10 +94,6 @@ public class EditContextLayer extends EncogPropertiesDialog implements
 				.getSimpleName());
 	}
 
-	public IntegerField getNeuronCount() {
-		return neuronCount;
-	}
-
 	public TableField getThresholdTable() {
 		return thresholdTable;
 	}
@@ -115,7 +109,7 @@ public class EditContextLayer extends EncogPropertiesDialog implements
 	public void generateThresholdValues() {
 		setTableEditable();
 
-		for (int i = 0; i < this.neuronCount.getValue(); i++) {
+		for (int i = 0; i < this.getNeuronCount().getValue(); i++) {
 			this.thresholdTable.setValue(i, 0, "#" + (i + 1));
 			if (this.useThreshold.getValue())
 				this.thresholdTable.setValue(i, 1, "0.0");

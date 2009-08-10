@@ -26,7 +26,7 @@ public class CollectionFormatter {
 		StringBuilder result = new StringBuilder();
 		for(Object obj: collection)
 		{
-			if( result.length()==0)
+			if( result.length()!=0)
 				result.append(',');
 			result.append(obj.toString());
 		}

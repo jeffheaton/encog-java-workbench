@@ -64,11 +64,13 @@ import org.encog.util.math.rbf.RadialBasisFunction;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.WorkbenchFonts;
+import org.encog.workbench.dialogs.common.BuildingListField;
 import org.encog.workbench.dialogs.layers.EditBasicLayer;
 import org.encog.workbench.dialogs.layers.EditContextLayer;
 import org.encog.workbench.dialogs.layers.EditRadialLayer;
 import org.encog.workbench.frames.MatrixFrame;
 import org.encog.workbench.frames.network.NetworkTool.Type;
+import org.encog.workbench.process.validate.ValidateNetwork;
 import org.encog.workbench.util.CollectionFormatter;
 import org.encog.workbench.util.MouseUtil;
 
@@ -389,12 +391,18 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 				clearSelection();
 				Class<? extends Layer> c = this.parent.getNetworkToolbar().getSelected().getClassType();
 				Layer layer = (Layer)c.newInstance();
+				
+				if( layer instanceof RadialBasisFunctionLayer )
+				{
+					((RadialBasisFunctionLayer)layer).randomizeGaussianCentersAndWidths(-1, 1);
+				}
+				
 				this.parent.getNetworkToolbar().setSelected(null);
 				
 				if( network.getLayer(BasicNetwork.TAG_INPUT)==null )
 				{
 					network.addLayer(layer);
-					network.getStructure().finalizeStructure();
+					parent.performValidate(false,true);
 				}
 				else
 					this.orphanLayers.add(layer);
@@ -460,7 +468,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		
 		// recreate the network
 		
-		network.getStructure().finalizeStructure();
+		parent.performValidate(false,false);
 		this.parent.clearSelection();
 		repaint();
 	}
@@ -480,7 +488,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	{
 		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
 		
-		network.getStructure().finalizeStructure();
+		parent.performValidate(false,false);
 		
 		// first remove any orphans that may have made it into the "real" list
 		fixOrphans();
@@ -581,7 +589,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			
 			// perform the delete
 			this.selectedSynapse.getFromLayer().getNext().remove(this.selectedSynapse);
-			network.getStructure().finalizeStructure();
+			parent.performValidate(false,false);
 			
 			// handle any orphans
 			this.fixOrphans();
@@ -629,7 +637,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			}
 			
 			// rebuild the network & attempt to determine the output layer
-			network.getStructure().finalizeStructure();
+			parent.performValidate(false,true);
 			
 			// fix the orphan list
 			fixOrphans();
@@ -668,6 +676,8 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			else
 				dialog.getThresholdTable().setValue(i,1,"N/A");
 		}
+		
+		populateTags(dialog.getTags());
 				
 		if( dialog.process() )
 		{
@@ -716,12 +726,53 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			}
 			
 			this.selected.setActivationFunction(dialog.getActivationFunction());
+			
+			collectTags(this.selected,dialog.getTags());
+			
 			repaint();
 			
 		}
 		
 	}
 	
+	private void populateTags(BuildingListField tags)
+	{
+		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
+		
+		for(String tag: network.getLayerTags().keySet())
+		{
+			Layer value = network.getLayer(tag);
+			if( value==this.selected )
+			{
+				tags.getModel().addElement(tag);
+			}
+		}
+	}
+	
+	private void collectTags(Layer layer, BuildingListField tags) {
+		BasicNetwork network = (BasicNetwork)this.parent.getEncogObject();
+		
+		// clear the tags for this layer
+		Object[] allTags = network.getLayerTags().keySet().toArray();
+		
+		for(int i=0;i<allTags.length;i++)
+		{
+			String tag = allTags[i].toString();
+			Layer l = network.getLayer(tag);
+			if( l==layer)
+				network.getLayerTags().remove(tag);
+		}
+		
+		// add the tags
+		Object[] objs = tags.getModel().toArray();
+		for( Object obj : objs)
+		{
+			String tag = obj.toString();
+			network.tagLayer(tag, layer);
+		}
+		
+	}
+
 	private void performContextLayerEdit() {
 		ContextLayer contextLayer = (ContextLayer)this.selected;
 		EditContextLayer dialog = new EditContextLayer(this.parent, contextLayer);
@@ -749,6 +800,8 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		}
 		
 		dialog.setTableEditable();
+		populateTags(dialog.getTags());
+		
 		if( dialog.process() )
 		{
 			// were thresholds added or removed
@@ -797,6 +850,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 			}
 			
 			this.selected.setActivationFunction(dialog.getActivationFunction());
+			collectTags(this.selected,dialog.getTags());
 			repaint();
 			
 		}
@@ -817,6 +871,8 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		}
 				
 		dialog.getChart().refresh();
+		populateTags(dialog.getTags());
+		
 		if( dialog.process() )
 		{			
 			
@@ -838,6 +894,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 					
 				}
 			}
+			collectTags(this.selected,dialog.getTags());
 			repaint();
 		}
 		
@@ -857,6 +914,8 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		this.offscreenGraphics.dispose();
 		this.offscreenGraphics = null;
 	}
+	
+	
 	
 	
 	

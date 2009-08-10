@@ -47,6 +47,9 @@ public class CalculateArrow {
 		
 		this.synapse = synapse;
 		
+		// first determine the direction of the arrow
+		
+		// is it north-south
 		if( (synapse.getToLayer().getX()>=synapse.getFromLayer().getX()) && 
 				(synapse.getToLayer().getX()<=(synapse.getFromLayer().getX()+DrawLayer.LAYER_WIDTH*1.5)) ||
 		
@@ -58,13 +61,18 @@ public class CalculateArrow {
 			{
 				fromSide = Side.Bottom;
 				toSide = Side.Top;
+				if(isBackConnected(synapse))
+					xOffset = -(DrawLayer.LAYER_WIDTH/4);
 			}
 			else
 			{
 				fromSide = Side.Top;
 				toSide = Side.Bottom;
+				if(isBackConnected(synapse))
+					xOffset = (DrawLayer.LAYER_WIDTH/4);
 			}
 		}
+		// is it east-west?
 		else
 		{
 			if(synapse.getToLayer().getX()>synapse.getFromLayer().getX())
@@ -78,7 +86,8 @@ public class CalculateArrow {
 			{
 				fromSide = Side.Left;
 				toSide = Side.Right;
-				yOffset = -(DrawLayer.LAYER_HEIGHT/4);
+				if(isBackConnected(synapse))
+					yOffset = -(DrawLayer.LAYER_HEIGHT/4);
 			}
 		}
 		

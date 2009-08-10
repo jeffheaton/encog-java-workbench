@@ -42,7 +42,7 @@ import org.encog.workbench.dialogs.common.PopupField;
 import org.encog.workbench.dialogs.common.PopupListener;
 import org.encog.workbench.dialogs.common.TableField;
 
-public class EditBasicLayer extends EncogPropertiesDialog implements
+public class EditBasicLayer extends EditLayerDialog implements
 		PopupListener, CheckListener {
 
 	/**
@@ -52,7 +52,6 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 	
 	public final static String[] COLUMN_HEADS = {"Neuron","Threshold"};
 	
-	private IntegerField neuronCount;
 	private PopupField activationField;
 	private CheckField useThreshold;
 	private TableField thresholdTable;
@@ -64,14 +63,13 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 		setTitle("Edit Basic Layer");
 		setSize(600, 400);
 		setLocation(200, 200);
-		addProperty(this.neuronCount = new IntegerField("neuron count",
-				"Neuron Count", true, 1, -1));
 		addProperty(this.activationField = new PopupField("activation",
 				"Activation Function", true));
 		addProperty(this.useThreshold = new CheckField("use threshold",
 				"Use Threshold Values"));
 		addProperty(this.thresholdTable = new TableField("threshold values", 
 				"Threshold Values",true, 100, layer.getNeuronCount(), COLUMN_HEADS));
+
 		this.useThreshold.setListener(this);
 		render();
 		setTableEditable();
@@ -102,10 +100,6 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 		this.activationField.setValue(this.activationFunction.getClass().getSimpleName());
 	}
 
-	public IntegerField getNeuronCount() {
-		return neuronCount;
-	}
-
 	public TableField getThresholdTable() {
 		return thresholdTable;
 	}
@@ -121,7 +115,7 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 	
 	public void generateThresholdValues()
 	{
-		for(int i=0;i<this.neuronCount.getValue();i++)
+		for(int i=0;i<this.getNeuronCount().getValue();i++)
 		{
 			this.thresholdTable.setValue(i,0,"#"+(i+1));
 			if( this.useThreshold.getValue() )
@@ -137,6 +131,5 @@ public class EditBasicLayer extends EncogPropertiesDialog implements
 		this.thresholdTable.getModel().setEditable(0,false);
 		this.thresholdTable.getModel().setEditable(1,true);
 	}
-	
 	
 }

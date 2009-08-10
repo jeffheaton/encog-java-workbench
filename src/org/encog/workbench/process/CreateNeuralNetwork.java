@@ -246,8 +246,8 @@ public class CreateNeuralNetwork {
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
 			BAMPattern bam = new BAMPattern();
-			bam.setInputNeurons(dialog.getLayerACount().getValue());
-			bam.setOutputNeurons(dialog.getLayerBCount().getValue());
+			bam.setF1Neurons(dialog.getLayerACount().getValue());
+			bam.setF2Neurons(dialog.getLayerBCount().getValue());
 			return bam.generate();
 		} else
 			return null;
