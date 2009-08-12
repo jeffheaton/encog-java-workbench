@@ -129,7 +129,7 @@ public class CalculateArrow {
 		switch(side)
 		{
 			case Top:
-				return new Point(layer.getX()+(DrawLayer.LAYER_WIDTH/2),layer.getY());
+				return new Point(layer.getX()+(DrawLayer.LAYER_WIDTH/2),layer.getY()-NetworkDiagram.LABEL_HEIGHT);
 			case Bottom:
 				return new Point(layer.getX()+(DrawLayer.LAYER_WIDTH/2),layer.getY()+DrawLayer.LAYER_HEIGHT);
 			case Left:

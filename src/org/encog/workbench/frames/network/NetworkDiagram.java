@@ -88,6 +88,7 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 	public static final int VIRTUAL_WIDTH = 2000;
 	public static final int VIRTUAL_HEIGHT = 2000;
 	public static final int ARROWHEAD_WIDTH = 10;
+	public static final int LABEL_HEIGHT = 16;
 	private final NetworkFrame parent;
 	private Layer selected;
 	private Layer fromLayer;
@@ -570,11 +571,11 @@ public class NetworkDiagram extends JPanel implements MouseListener, MouseMotion
 		int height = fm.getHeight();
 		int width = fm.stringWidth(str);
 		int x = layer.getX();
-		int y = layer.getY()-height;
+		int y = layer.getY()-NetworkDiagram.LABEL_HEIGHT;
 		
 		int center = (DrawLayer.LAYER_WIDTH/2)-(width/2);
 		g.drawString(str, x+center,y+height-3);
-		g.drawRect(x, y, DrawLayer.LAYER_WIDTH, height);
+		g.drawRect(x, y, DrawLayer.LAYER_WIDTH, NetworkDiagram.LABEL_HEIGHT);
 	}
 	
 	public void performSynapseDelete()
