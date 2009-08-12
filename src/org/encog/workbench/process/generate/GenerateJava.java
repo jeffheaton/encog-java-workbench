@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Map.Entry;
 
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
@@ -190,6 +191,24 @@ public class GenerateJava extends BasicGenerate {
 		}
 
 	}
+	
+	private void generateTags()
+	{
+		for(Entry<String,Layer> entry : this.getNetwork().getLayerTags().entrySet() )
+		{
+			String key = entry.getKey();
+			Layer value = entry.getValue();
+			String layerName = nameLayer(value);
+			StringBuilder line = new StringBuilder();
+			line.append("network.tagLayer(\"");
+			line.append(key);
+			line.append("\",");
+			line.append(layerName);			
+			line.append(");");	
+			
+			addLine(line.toString());
+		}
+	}
 
 	public void generateMain() {
 		this.addLine("public static void main(final String args[]) {");
@@ -198,8 +217,14 @@ public class GenerateJava extends BasicGenerate {
 
 		this.addLine("BasicNetwork network = new BasicNetwork();");
 		
-		Layer inputLayer = this.getNetwork().getLayer(BasicNetwork.TAG_INPUT);
-		generateLayer(null,inputLayer,null);
+		for( Layer layer: this.getNetwork().getLayerTags().values() )
+		{
+			if( !this.knownLayer(layer) ) {
+				generateLayer(layer,layer,null);
+			}
+		}
+		
+		generateTags();
 		
 		this.addLine("network.getStructure().finalizeStructure();");
 		this.addLine("network.reset();");

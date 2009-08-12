@@ -9,6 +9,8 @@ import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.ContextLayer;
 import org.encog.neural.networks.layers.Layer;
+import org.encog.neural.pattern.BAMPattern;
+import org.encog.neural.pattern.CPNPattern;
 
 public abstract class BasicGenerate implements Generate {
 	
@@ -69,6 +71,11 @@ public abstract class BasicGenerate implements Generate {
 		this.imports.add(name);
 	}
 	
+	public boolean knownLayer(Layer layer)
+	{
+		return this.layerMap.containsKey(layer);
+	}
+	
 	public String nameLayer(Layer layer)
 	{
 		if( this.layerMap.containsKey(layer) )
@@ -80,6 +87,11 @@ public abstract class BasicGenerate implements Generate {
 		
 		Layer inputLayer = this.getNetwork().getLayer(BasicNetwork.TAG_INPUT);
 		Layer outputLayer = this.getNetwork().getLayer(BasicNetwork.TAG_OUTPUT);
+		Layer instarLayer = this.getNetwork().getLayer(CPNPattern.TAG_INSTAR);
+		Layer outstarLayer = this.getNetwork().getLayer(CPNPattern.TAG_OUTSTAR);
+		Layer f1Layer = this.getNetwork().getLayer(BAMPattern.TAG_F1);
+		Layer f2Layer = this.getNetwork().getLayer(BAMPattern.TAG_F2);
+		
 		
 		if( layer==inputLayer )
 		{
@@ -88,6 +100,22 @@ public abstract class BasicGenerate implements Generate {
 		else if( layer==outputLayer )
 		{
 			result.append("outputLayer");
+		}
+		else if( layer==instarLayer )
+		{
+			result.append("instarLayer");
+		}
+		else if( layer==outstarLayer )
+		{
+			result.append("outstarLayer");
+		}
+		else if( layer==f1Layer )
+		{
+			result.append("f1Layer");
+		}
+		else if( layer==f2Layer )
+		{
+			result.append("f2Layer");
 		}
 		else
 		{

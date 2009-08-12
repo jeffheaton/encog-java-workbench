@@ -25,6 +25,8 @@
 
 package org.encog.workbench.process.generate;
 
+import java.util.Map.Entry;
+
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.ContextLayer;
@@ -191,6 +193,24 @@ public class GenerateCSharp extends BasicGenerate {
 		}
 
 	}
+	
+	private void generateTags()
+	{
+		for(Entry<String,Layer> entry : this.getNetwork().getLayerTags().entrySet() )
+		{
+			String key = entry.getKey();
+			Layer value = entry.getValue();
+			String layerName = nameLayer(value);
+			StringBuilder line = new StringBuilder();
+			line.append("network.TagLayer(\"");
+			line.append(key);
+			line.append("\",");
+			line.append(layerName);			
+			line.append(");");	
+			
+			addLine(line.toString());
+		}
+	}
 
 	public void generateMain() {
 		this.addLine("public static void Main()");
@@ -200,8 +220,14 @@ public class GenerateCSharp extends BasicGenerate {
 
 		this.addLine("BasicNetwork network = new BasicNetwork();");
 
-		Layer input = this.getNetwork().getLayer(BasicNetwork.TAG_INPUT);
-		generateLayer(null,input,null);
+		for( Layer layer: this.getNetwork().getLayerTags().values() )
+		{
+			if( !this.knownLayer(layer) ) {
+				generateLayer(layer,layer,null);
+			}
+		}
+				
+		generateTags();
 		
 		this.addLine("network.Structure.FinalizeStructure();");
 		this.addLine("network.Reset();");
