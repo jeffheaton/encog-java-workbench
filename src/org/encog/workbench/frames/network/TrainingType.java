@@ -6,5 +6,8 @@ public enum TrainingType {
 	PropagationManhattan,
 	Genetic,
 	Annealing,
-	SOM
+	SOM,
+	ADALINE,
+	Instar,
+	Outstar
 }

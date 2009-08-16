@@ -55,7 +55,7 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 	private JScrollPane scroll2 = new JScrollPane(text);
 	private TrainingType type;
 
-	public ChooseTrainingMethodDialog(Frame owner,BasicNetwork network) {
+	public ChooseTrainingMethodDialog(Frame owner, BasicNetwork network) {
 		super(owner);
 		setTitle("Create a Training Method");
 
@@ -73,7 +73,9 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 		this.model.addElement("Genetic Algorithm");
 		this.model.addElement("Simulated Annealing");
 		this.model.addElement("Self Organizing Map Training(SOM)");
-
+		this.model.addElement("ADALINE");
+		this.model.addElement("Instar");
+		this.model.addElement("Outstar");
 
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -105,6 +107,15 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 		case 5:
 			this.type = TrainingType.SOM;
 			break;
+		case 6:
+			this.type = TrainingType.ADALINE;
+			break;
+		case 7:
+			this.type = TrainingType.Instar;
+			break;
+		case 8:
+			this.type = TrainingType.Outstar;
+			break;
 		}
 	}
 
@@ -128,6 +139,16 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 			break;
 		case SOM:
 			this.list.setSelectedIndex(5);
+			break;
+		case ADALINE:
+			this.list.setSelectedIndex(6);
+			break;
+		case Instar:
+			this.list.setSelectedIndex(7);
+			break;
+		case Outstar:
+			this.list.setSelectedIndex(8);
+			break;
 		}
 	}
 
@@ -148,21 +169,35 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 		case 1:
 			this.text
 					.setText("Backpropagation is one of the oldest training techniques for feedforward and simple recurrent neural networks.  It is a supervised learning method, and is an implementation of the Delta rule. The term is an abbreviation for \"backwards propagation of errors\". Backpropagation requires that the activation function used by the layers is differentiable.  For most training situations where backpropagation could be applied, resilient propagation is a better solution.");
-			break;	
+			break;
 		case 2:
 			this.text
 					.setText("The Manhattan update rule works similarly to Backpropagation, except a single update delta is provided.  It is a supervised learning method.  This update value must be chosen correctly for the neural network to properly train.  The Manhattan update rule can be used with feedforward and simple recurrent neural networks.  For most cases where the Manhattan update rule could be applied, Resilient propagation is a better choice.");
-			break;	
+			break;
 		case 3:
-			this.text.setText("A genetic algorithm trains a neural network with a process that emulates biological mutation and natural selection.  This is implemented as a supervised training method.  Many neural networks are created that will simulate different organisms.  These neural networks will compete to see which has the lowest error rate.  Those neural networks that have the lowest error rates will have elements of their weight matrix combined to produce offspring.  Some offspring will have random mutations introduced.  This cycle continues and hopefully produces lower error rates from the top neural networks with each iteration.");
+			this.text
+					.setText("A genetic algorithm trains a neural network with a process that emulates biological mutation and natural selection.  This is implemented as a supervised training method.  Many neural networks are created that will simulate different organisms.  These neural networks will compete to see which has the lowest error rate.  Those neural networks that have the lowest error rates will have elements of their weight matrix combined to produce offspring.  Some offspring will have random mutations introduced.  This cycle continues and hopefully produces lower error rates from the top neural networks with each iteration.");
 			break;
 		case 4:
-			this.text.setText("Simulated annealing is a process where the weights are randomized according to a temperature.  As this temperature decreases, the weights are kept if they improve the error rate of the neural network.  This training technique is implemented as supervised training.  This process simulates the metallurgical process of annealing where metals are slowly cooled to produce a more stable molecular structure.");
+			this.text
+					.setText("Simulated annealing is a process where the weights are randomized according to a temperature.  As this temperature decreases, the weights are kept if they improve the error rate of the neural network.  This training technique is implemented as supervised training.  This process simulates the metallurgical process of annealing where metals are slowly cooled to produce a more stable molecular structure.");
 			break;
 		case 5:
-			this.text.setText("Self Organizing Maps(SOM) are trained in such a way that similar input patterns will cause a single neuron to become the winner.  The winner is the neuron with the highest activation.  This is an unsupervised training technique.  The input data will be grouped into categories defined by the number of output neurons.");
+			this.text
+					.setText("Self Organizing Maps(SOM) are trained in such a way that similar input patterns will cause a single neuron to become the winner.  The winner is the neuron with the highest activation.  This is an unsupervised training technique.  The input data will be grouped into categories defined by the number of output neurons.");
 			break;
-			
+		case 6:
+			this.text
+					.setText("An Adaptive Linear Neural (ADALINE) network is trained with a very simple method based on the delta rule.  This is a supervised training technique that allows each Adaline element to recognize a single input pattern.)");
+			break;
+		case 7:
+			this.text
+					.setText("Instar training is generally used to train a counterpropagation neural network (CPN). Instar training is unsupervised, and teaches the Instar layer of the neural network to categorize the input into a number of categories expressed by the number of neurons in the instar layer. Instar training should be done before outstar, though they are accomplished in two discrete steps.");
+			break;
+		case 8:
+			this.text
+					.setText("Outstar training is generally used to train a counterpropagation neural network (CPN).  Outstar training is supervised, and teaches the Outstar layer of the neural network to produce output that is close to the expected output.  Outstar training should be done after instar, though they are accomplished in two discrete steps.");
+			break;
 
 		}
 

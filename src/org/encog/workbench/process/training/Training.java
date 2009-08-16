@@ -193,6 +193,21 @@ public class Training {
 		}
 
 	}
+	
+	public void performADALINE()
+	{
+		
+	}
+	
+	public void performInstar()
+	{
+		
+	}
+	
+	public void performOutstar()
+	{
+		
+	}
 
 	public void perform(Frame owner, BasicNetwork network) {
 		ChooseTrainingMethodDialog dialog = new ChooseTrainingMethodDialog(
@@ -217,6 +232,10 @@ public class Training {
 			case SOM:
 				performSOM();
 				break;
+			case ADALINE:
+				performADALINE();
+				break;
+				
 			}
 		}
 	}
