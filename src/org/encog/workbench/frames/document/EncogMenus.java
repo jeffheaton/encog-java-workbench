@@ -53,13 +53,6 @@ public class EncogMenus {
 	public static final String OBJECTS_CREATE = "Create Object...";
 	public static final String OBJECTS_DELETE = "Delete Object...";
 
-	public static final String TRAIN_RESILIENT_PROPAGATION = "Train Resilient Propagation...";
-	public static final String TRAIN_BACKPROPAGATION = "Train Back Propagation...";
-	public static final String TRAIN_MANHATTAN_PROPAGATION = "Train Manhattan Update Rule Prop...";
-	public static final String TRAIN_SIMULATED_ANNEALING = "Train Simulated Annealing...";
-	public static final String TRAIN_GENETIC = "Train Genetically...";
-	public static final String TRAIN_SOM = "Train SOM Layers...";
-
 	public static final String TOOLS_CODE = "Generate Code...";
 	public static final String TOOLS_EVALUATE = "Evaluate Network...";
 	public static final String TOOLS_BENCHMARK = "Benchmark Encog...";
@@ -71,7 +64,6 @@ public class EncogMenus {
 	private JMenu menuFile;
 	private JMenu menuEdit;
 	private JMenu menuObjects;
-	private JMenu menuTrain;
 	private JMenu menuHelp;
 	private JMenu menuTools;
 	
@@ -127,24 +119,6 @@ public class EncogMenus {
 				EncogMenus.OBJECTS_DELETE, 'd'));
 		this.menuBar.add(this.menuObjects);
 
-		this.menuTrain = new JMenu("Train");
-		
-		this.menuTrain.add(owner.addItem(this.menuObjects,
-				EncogMenus.TRAIN_RESILIENT_PROPAGATION, 'r'));
-		this.menuTrain.add(owner.addItem(this.menuObjects,
-				EncogMenus.TRAIN_MANHATTAN_PROPAGATION, 'm'));
-		owner.addItem(this.menuTrain, EncogMenus.TRAIN_BACKPROPAGATION, 'b');
-		this.menuTrain.addSeparator();
-		this.menuTrain.add(owner.addItem(this.menuObjects,
-				EncogMenus.TRAIN_SIMULATED_ANNEALING, 'a'));
-		this.menuTrain.add(owner.addItem(this.menuObjects,
-				EncogMenus.TRAIN_GENETIC, 'g'));
-		this.menuTrain.addSeparator();
-		this.menuTrain.add(owner.addItem(this.menuObjects,
-				EncogMenus.TRAIN_SOM, 's'));
-
-		this.menuBar.add(this.menuTrain);
-
 		this.menuTools = new JMenu("Tools");
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_CODE, 'g');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 'k');
@@ -191,31 +165,7 @@ public class EncogMenus {
 			owner.getOperations().performFileClose();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW)) {
 			owner.getOperations().performFileClose();
-		} else if (event.getActionCommand().equals(
-				EncogMenus.TRAIN_BACKPROPAGATION)) {
-			Training.performBackpropagation();
-
-		} else if (event.getActionCommand().equals(
-				EncogMenus.TRAIN_RESILIENT_PROPAGATION)) {
-			Training.performResilient();
-		} else if (event.getActionCommand().equals(
-				EncogMenus.TRAIN_MANHATTAN_PROPAGATION)) {
-			Training.performManhattan();
-		}
-
-		else if (event.getActionCommand().equals(
-				EncogMenus.TRAIN_GENETIC)) {
-			Training.performGenetic();
-
-		} else if (event.getActionCommand()
-				.equals(EncogMenus.TRAIN_SOM)) {
-			Training.performSOM();
-
-		} else if (event.getActionCommand().equals(
-				EncogMenus.TRAIN_SIMULATED_ANNEALING)) {
-			Training.performAnneal();
-		}
-		if (event.getActionCommand().equals(EncogMenus.EDIT_CUT)) {
+		} else if (event.getActionCommand().equals(EncogMenus.EDIT_CUT)) {
 			owner.getOperations().performEditCut();
 		} else if (event.getActionCommand()
 				.equals(EncogMenus.EDIT_COPY)) {
