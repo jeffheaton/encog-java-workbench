@@ -37,7 +37,7 @@ import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
-import org.encog.workbench.process.Training;
+import org.encog.workbench.process.training.Training;
 
 public class EncogPopupMenus {
 

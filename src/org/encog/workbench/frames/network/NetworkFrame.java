@@ -61,7 +61,7 @@ import org.encog.workbench.frames.NetworkQueryFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.network.NetworkTool.Type;
 import org.encog.workbench.models.NetworkListModel;
-import org.encog.workbench.process.Training;
+import org.encog.workbench.process.training.Training;
 import org.encog.workbench.process.validate.ValidateNetwork;
 
 public class NetworkFrame extends EncogCommonFrame {
@@ -172,50 +172,8 @@ public class NetworkFrame extends EncogCommonFrame {
 	}
 
 	private void performTrain() {
-
-		if (performValidate(false, true)) {
-			if (performValidate(false, true)) {
-				NeuralLogic logic = ((BasicNetwork) this.getEncogObject())
-						.getLogic();
-
-				if (logic instanceof ART1Logic) {
-					EncogWorkBench
-							.displayMessage(
-									"Training",
-									"Sorry, but the workbench currently cannot be used to train this network type.\n"
-											+ "You will need to create a program with the Encog Core to train it.");
-				} else if (logic instanceof BAMLogic) {
-					EncogWorkBench
-							.displayMessage(
-									"Training",
-									"Sorry, but the workbench currently cannot be used to train this network type.\n"
-											+ "You will need to create a program with the Encog Core to train it.");
-				} else if (logic instanceof BoltzmannLogic) {
-					EncogWorkBench
-							.displayMessage(
-									"Training",
-									"Sorry, but the workbench currently cannot be used to train this network type.\n"
-											+ "You will need to create a program with the Encog Core to train it.");
-				} else if (logic instanceof FeedforwardLogic) {
-					Training.performResilient();
-
-				} else if (logic instanceof HopfieldLogic) {
-					EncogWorkBench
-							.displayMessage(
-									"Training",
-									"Sorry, but the workbench currently cannot be used to train this network type.\n"
-											+ "You will need to create a program with the Encog Core to train it.");
-				} else if (logic instanceof SimpleRecurrentLogic) {
-					Training.performResilient();
-				} else {
-					EncogWorkBench
-							.displayMessage(
-									"Training",
-									"Sorry, but the workbench currently cannot be used to train this network type.\n"
-											+ "You will need to create a program with the Encog Core to train it.");
-				}
-			}
-		}
+		Training training = new Training();
+		training.perform(EncogWorkBench.getInstance().getMainWindow(),(BasicNetwork)this.getEncogObject());
 	}
 
 	private void performRandomize() {

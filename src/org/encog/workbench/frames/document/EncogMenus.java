@@ -33,7 +33,7 @@ import javax.swing.JMenuItem;
 
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
-import org.encog.workbench.process.Training;
+import org.encog.workbench.process.training.Training;
 
 public class EncogMenus {
 	public static final String FILE_NEW = "New";

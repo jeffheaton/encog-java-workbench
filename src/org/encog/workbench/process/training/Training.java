@@ -23,12 +23,15 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.encog.workbench.process;
+package org.encog.workbench.process.training;
+
+import java.awt.Frame;
 
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.training.ChooseTrainingMethodDialog;
 import org.encog.workbench.dialogs.training.anneal.InputAnneal;
 import org.encog.workbench.dialogs.training.anneal.ProgressAnneal;
 import org.encog.workbench.dialogs.training.backpropagation.InputBackpropagation;
@@ -61,10 +64,9 @@ public class Training {
 
 			final ProgressAnneal train = new ProgressAnneal(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
-					.getMaxError().getValue(), 
-					dialog.getStartTemp().getValue(), 
-					dialog.getEndTemp().getValue(),
-					dialog.getCycles().getValue());
+					.getMaxError().getValue(),
+					dialog.getStartTemp().getValue(), dialog.getEndTemp()
+							.getValue(), dialog.getCycles().getValue());
 
 			train.setVisible(true);
 		}
@@ -86,9 +88,9 @@ public class Training {
 
 			final ProgressBackpropagation train = new ProgressBackpropagation(
 					EncogWorkBench.getInstance().getMainWindow(), network,
-					training, dialog.getLearningRate().getValue(), 
-					dialog.getMomentum().getValue(),
-					dialog.getMaxError().getValue());
+					training, dialog.getLearningRate().getValue(), dialog
+							.getMomentum().getValue(), dialog.getMaxError()
+							.getValue());
 
 			train.setVisible(true);
 		}
@@ -110,10 +112,9 @@ public class Training {
 
 			final ProgressGenetic train = new ProgressGenetic(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
-					.getMaxError().getValue(), 
-					dialog.getPopulationSize().getValue(), 
-					dialog.getMutationPercent().getValue(), 
-					dialog.getPercentToMate().getValue());
+					.getMaxError().getValue(), dialog.getPopulationSize()
+					.getValue(), dialog.getMutationPercent().getValue(), dialog
+					.getPercentToMate().getValue());
 
 			train.setVisible(true);
 		}
@@ -136,8 +137,8 @@ public class Training {
 
 			final ProgressSOM train = new ProgressSOM(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
-					.getMaxError().getValue(),  dialog
-					.getLearningRate().getValue());
+					.getMaxError().getValue(), dialog.getLearningRate()
+					.getValue());
 
 			train.setVisible(true);
 		}
@@ -145,8 +146,8 @@ public class Training {
 	}
 
 	public static void performResilient() {
-		final InputResilient dialog = new InputResilient(
-				EncogWorkBench.getInstance().getMainWindow());
+		final InputResilient dialog = new InputResilient(EncogWorkBench
+				.getInstance().getMainWindow());
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
@@ -160,19 +161,18 @@ public class Training {
 
 			final ProgressResilient train = new ProgressResilient(
 					EncogWorkBench.getInstance().getMainWindow(), network,
-					training, 
-					dialog.getInitialUpdate().getValue(), 
-					dialog.getMaxStep().getValue(),
-					dialog.getMaxError().getValue());
+					training, dialog.getInitialUpdate().getValue(), dialog
+							.getMaxStep().getValue(), dialog.getMaxError()
+							.getValue());
 
 			train.setVisible(true);
 		}
-		
+
 	}
 
 	public static void performManhattan() {
-		final InputManhattan dialog = new InputManhattan(
-				EncogWorkBench.getInstance().getMainWindow());
+		final InputManhattan dialog = new InputManhattan(EncogWorkBench
+				.getInstance().getMainWindow());
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
@@ -186,10 +186,38 @@ public class Training {
 
 			final ProgressManhattan train = new ProgressManhattan(
 					EncogWorkBench.getInstance().getMainWindow(), network,
-					training, dialog.getFixedDelta().getValue(), dialog.getMaxError().getValue());
+					training, dialog.getFixedDelta().getValue(), dialog
+							.getMaxError().getValue());
 
 			train.setVisible(true);
 		}
-		
+
+	}
+
+	public void perform(Frame owner, BasicNetwork network) {
+		ChooseTrainingMethodDialog dialog = new ChooseTrainingMethodDialog(
+				owner, network);
+		if (dialog.process()) {
+			switch (dialog.getType()) {
+			case PropagationResilient:
+				performResilient();
+				break;
+			case PropagationBack:
+				performBackpropagation();
+				break;
+			case PropagationManhattan:
+				performManhattan();
+				break;
+			case Genetic:
+				performGenetic();
+				break;
+			case Annealing:
+				performAnneal();
+				break;
+			case SOM:
+				performSOM();
+				break;
+			}
+		}
 	}
 }
