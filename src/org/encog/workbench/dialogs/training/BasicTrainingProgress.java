@@ -420,8 +420,7 @@ public abstract class BasicTrainingProgress extends JDialog implements
 				dispose();
 			}
 		} catch (Throwable t) {
-			EncogWorkBench.displayError("Error",
-					"An error occured while training:\n" + t.toString());
+			EncogWorkBench.displayError("Error",t);
 			shutdown();
 			stopped();
 			dispose();

@@ -42,8 +42,16 @@ public class ComboBoxField extends PropertiesField {
 
 	@Override
 	public void collect() throws ValidationException {
-		// TODO Auto-generated method stub
 		
+		JComboBox combo = ((JComboBox)this.getField());
+		String str = (String)combo.getSelectedItem();
+		if( str==null )
+			str = "";
+		
+		if( combo.getSelectedIndex()==-1  || str.length()==0 )
+		{
+			throw new ValidationException("The field " + this.getName() + " is required.");
+		}		
 	}
 	
 	public int createField(JPanel panel, int x, int y,int width)

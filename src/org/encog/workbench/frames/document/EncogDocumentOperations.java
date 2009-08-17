@@ -198,7 +198,7 @@ public class EncogDocumentOperations {
 				Directory.copyFile(EncogWorkBench.getInstance().getTempFile(), target);
 			}
 		} catch (final EncogError e) {
-			EncogWorkBench.displayError("Can't Open File", e.getMessage());
+			EncogWorkBench.displayError("Can't Open File", e);
 		}
 	}
 
@@ -317,7 +317,7 @@ public class EncogDocumentOperations {
 		}
 		catch(EncogError t)
 		{
-			EncogWorkBench.displayError("Error creating object", t.getMessage());
+			EncogWorkBench.displayError("Error creating object", t);
 			logger.error("Error creating object",t);
 		}
 	}
@@ -401,13 +401,22 @@ public class EncogDocumentOperations {
 	}
 
 	public void performEvaluate() {
+		try
+		{
 		EvaluateDialog dialog = new EvaluateDialog(EncogWorkBench.getInstance().getMainWindow());
 		if( dialog.process() )
 		{
 			BasicNetwork network = dialog.getNetwork();
 			NeuralDataSet training = dialog.getTrainingSet();
+			
+			
 			double error = network.calculateError(training);
 			EncogWorkBench.displayMessage("Error For this Network", ""+error);
+		}
+		}
+		catch(Throwable t)
+		{
+			EncogWorkBench.displayError("Error Evaluating Network", t);
 		}
 		
 	}

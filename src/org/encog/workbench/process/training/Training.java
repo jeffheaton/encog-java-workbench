@@ -340,7 +340,7 @@ public class Training {
 		}
 		catch(Throwable t)
 		{
-			EncogWorkBench.displayError("Error While Training", t.getMessage());
+			EncogWorkBench.displayError("Error While Training", t);
 		}
 	}
 }

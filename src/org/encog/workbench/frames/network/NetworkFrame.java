@@ -187,6 +187,8 @@ public class NetworkFrame extends EncogCommonFrame {
 	}
 
 	private void performQuery() {
+		try
+		{
 		if (performValidate(false, true)) {
 
 			NeuralLogic logic = ((BasicNetwork) this.getEncogObject())
@@ -231,6 +233,11 @@ public class NetworkFrame extends EncogCommonFrame {
 								"Sorry, but the workbench currently cannot be used to query this network type.\n"
 										+ "You will need to create a program with the Encog Core to query it.");
 			}
+		}
+		}
+		catch(Throwable t)
+		{
+			EncogWorkBench.displayError("Error", t);
 		}
 
 	}
@@ -366,9 +373,7 @@ public class NetworkFrame extends EncogCommonFrame {
 			try {
 				newLogic.init(network);
 			} catch (Exception e) {
-				EncogWorkBench.displayError("Error",
-						"Can't switch to new neural logic because:\n"
-								+ e.getMessage());
+				EncogWorkBench.displayError("Error",e);
 				setLogic();
 			}
 			network.setLogic(newLogic);

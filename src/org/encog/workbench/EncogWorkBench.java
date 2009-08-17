@@ -320,6 +320,11 @@ public class EncogWorkBench {
 		
 		return result == JOptionPane.YES_OPTION;
 	}
+	
+	public static void displayError(String title, Throwable t)
+	{
+		displayError(title,"An error occured while performing this operation:\n" + t.toString());
+	}
 
 	public File getTempFile() {
 		return tempFile;
