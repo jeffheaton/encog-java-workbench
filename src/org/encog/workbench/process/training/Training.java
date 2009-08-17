@@ -30,6 +30,7 @@ import java.awt.Frame;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.logic.SOMLogic;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.ChooseTrainingMethodDialog;
 import org.encog.workbench.dialogs.training.adaline.InputAdaline;
@@ -64,9 +65,9 @@ public class Training {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
-			if (!validate.validateFeedForward()) {
+			if (!validate.validateIsSupervised() ) {
 				return;
-			}
+			}		
 
 			final ProgressAnneal train = new ProgressAnneal(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
@@ -85,7 +86,7 @@ public class Training {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
-			if (!validate.validateFeedForward()) {
+			if (!validate.validateIsSupervised()) {
 				return;
 			}
 
@@ -112,7 +113,7 @@ public class Training {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
-			if (!validate.validateFeedForward()) {
+			if (!validate.validateIsSupervised()) {
 				return;
 			}
 
@@ -137,7 +138,11 @@ public class Training {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
-			if (!validate.validateSOM()) {
+			if (!validate.validateIsUnsupervised()) {
+				return;
+			}
+			
+			if( !validate.validateLogicType(SOMLogic.class)) {
 				return;
 			}
 
@@ -158,7 +163,7 @@ public class Training {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
-			if (!validate.validateFeedForward()) {
+			if (!validate.validateIsSupervised()) {
 				return;
 			}
 
@@ -183,7 +188,7 @@ public class Training {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
-			if (!validate.validateFeedForward()) {
+			if (!validate.validateIsSupervised()) {
 				return;
 			}
 
@@ -208,7 +213,7 @@ public class Training {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
-			if (!validate.validateFeedForward()) {
+			if (!validate.validateIsSupervised()) {
 				return;
 			}
 
@@ -232,10 +237,6 @@ public class Training {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
-			if (!validate.validateFeedForward()) {
-				return;
-			}
-
 			final BasicNetwork network = dialog.getNetwork();
 			final NeuralDataSet training = dialog.getTrainingSet();
 
@@ -256,7 +257,7 @@ public class Training {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
-			if (!validate.validateFeedForward()) {
+			if (!validate.validateIsSupervised() ) {
 				return;
 			}
 

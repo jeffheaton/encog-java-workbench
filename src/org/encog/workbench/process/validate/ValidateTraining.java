@@ -54,46 +54,19 @@ public class ValidateTraining {
 						+ layerType.getSimpleName());
 		return false;
 	}
-
-	public boolean validateFeedForward() {
-		if (!validateIsSupervised()) {
-			return false;
+	
+	public boolean validateLogicType(final Class logicType) {
+		if (this.network.getLogic().getClass().getName().equals(logicType.getName())) {
+			return true;
 		}
 
-/*		if (!validateContainsLayer(FeedforwardLayer.class)) {
-			return false;
-		}*/
-
-		if (!validateInputSize()) {
-			return false;
-		}
-
-		if (!validateOutputSize()) {
-			return false;
-		}
-
-		return true;
+		EncogWorkBench.displayError("Training Error",
+				"This sort of training requires neural logic type of:\n"
+						+ logicType.getSimpleName());
+		return false;
 	}
 
-	public boolean validateHopfield() {
-		if (!validateIsUnsupervised()) {
-			return false;
-		}
 
-/*		if (!validateContainsLayer(HopfieldLayer.class)) {
-			return false;
-		}*/
-
-		if (!validateIsSupervised()) {
-			return false;
-		}
-
-		if (!validateInputSize()) {
-			return false;
-		}
-
-		return true;
-	}
 
 	public boolean validateInputSize() {
 		Layer layer = this.network.getLayer(BasicNetwork.TAG_INPUT);
@@ -154,20 +127,5 @@ public class ValidateTraining {
 		return true;
 	}
 
-	public boolean validateSOM() {
 
-		if (!validateIsSupervised()) {
-			return false;
-		}
-
-/*		if (!validateContainsLayer(SOMLayer.class)) {
-			return false;
-		}*/
-
-		if (!validateInputSize()) {
-			return false;
-		}
-
-		return true;
-	}
 }
