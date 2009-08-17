@@ -51,11 +51,11 @@ import org.encog.workbench.util.TimeSpanFormatter;
 
 /**
  * Common dialog box that displays the training progress for most of the
- * training methods.  A chart is shown that displays the decline of the 
- * error.  Additionally, the user can start, stop or abort the training
- * process.
+ * training methods. A chart is shown that displays the decline of the error.
+ * Additionally, the user can start, stop or abort the training process.
+ * 
  * @author jheaton
- *
+ * 
  */
 public abstract class BasicTrainingProgress extends JDialog implements
 		Runnable, ActionListener {
@@ -64,42 +64,42 @@ public abstract class BasicTrainingProgress extends JDialog implements
 	 * The start button.
 	 */
 	private final JButton buttonStart;
-	
+
 	/**
 	 * The stop button.
 	 */
 	private final JButton buttonStop;
-	
+
 	/**
 	 * The close button.
 	 */
 	private final JButton buttonClose;
-	
+
 	/**
 	 * The body of the dialog box is stored in this panel.
 	 */
 	private final JPanel panelBody;
-	
+
 	/**
 	 * The buttons are hold in this panel.
 	 */
 	private final JPanel panelButtons;
-	
+
 	/**
 	 * The background thread that processes training.
 	 */
 	private Thread thread;
-	
+
 	/**
 	 * Has training been canceled.
 	 */
 	private boolean cancel;
-	
+
 	/**
 	 * Panel used to display the current status of the training.
 	 */
 	protected TrainingStatusPanel statusPanel;
-	
+
 	/**
 	 * Panel that holds the chart.
 	 */
@@ -109,100 +109,101 @@ public abstract class BasicTrainingProgress extends JDialog implements
 	 * The training method being used.
 	 */
 	private Train train;
-	
+
 	/**
 	 * The network being trained.
 	 */
 	private BasicNetwork network;
-	
+
 	/**
 	 * The training data.
 	 */
 	private NeuralDataSet trainingData;
-	
+
 	/**
 	 * The max allowed error.
 	 */
 	private double maxError;
-	
+
 	/**
 	 * What iteration are we on.
 	 */
 	private int iteration;
-	
+
 	/**
 	 * The font to use for headings.
 	 */
 	private Font headFont;
-	
+
 	/**
 	 * The font for body text.
 	 */
 	private Font bodyFont;
-	
-	/** 
+
+	/**
 	 * The current error.
 	 */
 	private double currentError;
-	
+
 	/**
 	 * The last error.
 	 */
 	private double lastError;
-	
+
 	/**
 	 * The error improvement.
 	 */
 	private double errorImprovement;
-	
+
 	/**
 	 * When was training started.
 	 */
 	private Date started;
-	
+
 	/**
 	 * When was the last update.
 	 */
 	private long lastUpdate;
-	
+
 	/**
 	 * Number formatter.
 	 */
 	private final NumberFormat nf = NumberFormat.getInstance();
-	
+
 	/**
 	 * Shorter number formatter.
 	 */
 	private final NumberFormat nfShort = NumberFormat.getInstance();
-	
-	/** 
+
+	/**
 	 * The current performance count, how many iterations per minute.
 	 */
 	private int performanceCount;
-	
-	
+
 	/**
 	 * What time did we last take a performance sample.
 	 */
 	private Date performanceLast;
-	
+
 	/**
-	 * What was the iteration number, the last time a performance sample
-	 * was taken.
+	 * What was the iteration number, the last time a performance sample was
+	 * taken.
 	 */
 	private int performanceLastIteration;
-	
+
 	private String status;
 
 	/**
-	 * Should the dialog box exit?  Are we waiting for training to shut
-	 * down first.
+	 * Should the dialog box exit? Are we waiting for training to shut down
+	 * first.
 	 */
 	private boolean shouldExit;
 
 	/**
 	 * Construct the dialog box.
-	 * @param owner The owner of the dialog box.
+	 * 
+	 * @param owner
+	 *            The owner of the dialog box.
 	 */
 	public BasicTrainingProgress(final Frame owner) {
 		super(owner);
@@ -239,14 +240,17 @@ public abstract class BasicTrainingProgress extends JDialog implements
 
 	/**
 	 * Track button presses.
-	 * @param e Event info.
+	 * 
+	 * @param e
+	 *            Event info.
 	 */
 	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource() == this.buttonClose) {
 			if (this.thread == null) {
-				if( EncogWorkBench.askQuestion("Training", "Save the training to this network?") )
-				{
-					EncogWorkBench.getInstance().getCurrentFile().add(this.network.getName(), this.network);
+				if (EncogWorkBench.askQuestion("Training",
+						"Save the training to this network?")) {
+					EncogWorkBench.getInstance().getCurrentFile().add(
+							this.network.getName(), this.network);
 				}
 				dispose();
 			} else {
@@ -297,7 +301,6 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		g.drawString("Current Error:", 10, y);
 		y += fm.getHeight();
 		g.drawString("Error Improvement:", 10, y);
-		
 
 		y = fm.getHeight();
 		g.drawString("Elapsed Time:", 400, y);
@@ -307,9 +310,9 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		y = fm.getHeight();
 		g.setFont(this.bodyFont);
 		String str = this.nf.format(this.iteration);
-		
-		str+=" ("+this.status+")";
-		
+
+		str += " (" + this.status + ")";
+
 		g.drawString(str, 150, y);
 		y += fm.getHeight();
 		g.drawString("" + 100.0 * this.currentError + "%", 150, y);
@@ -323,16 +326,16 @@ public abstract class BasicTrainingProgress extends JDialog implements
 			seconds = (now.getTime() - this.started.getTime()) / 1000;
 		}
 		g.drawString(TimeSpanFormatter.formatTime(seconds), 500, y);
-		
+
 		y += fm.getHeight();
-		
+
 		if (this.performanceCount == -1) {
 			str = "  (calculating performance)";
 		} else {
 			final double d = this.performanceCount / 60.0;
 			str = "  (" + this.nfShort.format(d) + "/sec)";
 		}
-		
+
 		g.drawString(str, 500, y);
 
 	}
@@ -374,43 +377,53 @@ public abstract class BasicTrainingProgress extends JDialog implements
 	}
 
 	/**
-	 * Process the background thread. Cycle through training iterations.
-	 * If the cancel flag is set, then exit.
+	 * Process the background thread. Cycle through training iterations. If the
+	 * cancel flag is set, then exit.
 	 */
 	public void run() {
-		startup();
-		while (!this.cancel) {
-			this.iteration++;
-			this.lastError = this.train.getError();
 
-			iteration();
+		try {
 
-			this.currentError = this.train.getError();
+			startup();
+			while (!this.cancel) {
+				this.iteration++;
+				this.lastError = this.train.getError();
 
-			if (this.currentError < this.maxError) {
-				this.status = "Done";
-				this.cancel = true;
+				iteration();
+
+				this.currentError = this.train.getError();
+
+				if (this.currentError < this.maxError) {
+					this.status = "Done";
+					this.cancel = true;
+				}
+
+				this.errorImprovement = (this.lastError - this.currentError)
+						/ this.lastError;
+				if (System.currentTimeMillis() - this.lastUpdate > 1000
+						|| this.cancel) {
+					redraw();
+				}
+
+				final Date now = new Date();
+				if (now.getTime() - this.performanceLast.getTime() > 60000) {
+					this.performanceLast = now;
+					this.performanceCount = this.iteration
+							- this.performanceLastIteration;
+					this.performanceLastIteration = this.iteration;
+				}
 			}
+			shutdown();
+			stopped();
 
-			this.errorImprovement = (this.lastError - this.currentError)
-					/ this.lastError;
-			if (System.currentTimeMillis() - this.lastUpdate > 1000
-					|| this.cancel) {
-				redraw();
+			if (this.shouldExit) {
+				dispose();
 			}
-
-			final Date now = new Date();
-			if (now.getTime() - this.performanceLast.getTime() > 60000) {
-				this.performanceLast = now;
-				this.performanceCount = this.iteration
-						- this.performanceLastIteration;
-				this.performanceLastIteration = this.iteration;
-			}
-		}
-		shutdown();
-		stopped();
-
-		if (this.shouldExit) {
+		} catch (Throwable t) {
+			EncogWorkBench.displayError("Error",
+					"An error occured while training:\n" + t.toString());
+			shutdown();
+			stopped();
 			dispose();
 		}
 	}
@@ -458,7 +471,7 @@ public abstract class BasicTrainingProgress extends JDialog implements
 	public abstract void startup();
 
 	/**
-	 * Called when training has stopped.  
+	 * Called when training has stopped.
 	 */
 	private void stopped() {
 		this.thread = null;

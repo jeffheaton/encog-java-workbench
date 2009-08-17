@@ -28,6 +28,7 @@ package org.encog.workbench.process.validate;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.Layer;
+import org.encog.neural.networks.logic.FeedforwardLogic;
 import org.encog.workbench.EncogWorkBench;
 
 public class ValidateTraining {
@@ -52,6 +53,16 @@ public class ValidateTraining {
 		EncogWorkBench.displayError("Training Error",
 				"This sort of training requires that at least one layer be of type:\n"
 						+ layerType.getSimpleName());
+		return false;
+	}
+	
+	public boolean validateFeedforwardOrSRN()
+	{
+		if( this.network.getLogic() instanceof FeedforwardLogic )
+			return true;
+		
+		EncogWorkBench.displayError("Training Error",
+				"This sort of training requires either feed forward or simple recurrent logic.\n");		
 		return false;
 	}
 	

@@ -68,6 +68,10 @@ public class Training {
 			if (!validate.validateIsSupervised() ) {
 				return;
 			}		
+			
+			if( !validate.validateFeedforwardOrSRN() ) {
+				return;
+			}
 
 			final ProgressAnneal train = new ProgressAnneal(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
@@ -87,6 +91,10 @@ public class Training {
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
 			if (!validate.validateIsSupervised()) {
+				return;
+			}
+			
+			if( !validate.validateFeedforwardOrSRN() ) {
 				return;
 			}
 
@@ -114,6 +122,10 @@ public class Training {
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
 			if (!validate.validateIsSupervised()) {
+				return;
+			}
+			
+			if( !validate.validateFeedforwardOrSRN() ) {
 				return;
 			}
 
@@ -166,6 +178,10 @@ public class Training {
 			if (!validate.validateIsSupervised()) {
 				return;
 			}
+			
+			if( !validate.validateFeedforwardOrSRN() ) {
+				return;
+			}
 
 			final BasicNetwork network = dialog.getNetwork();
 			final NeuralDataSet training = dialog.getTrainingSet();
@@ -189,6 +205,10 @@ public class Training {
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
 
 			if (!validate.validateIsSupervised()) {
+				return;
+			}
+			
+			if( !validate.validateFeedforwardOrSRN() ) {
 				return;
 			}
 
@@ -216,6 +236,10 @@ public class Training {
 			if (!validate.validateIsSupervised()) {
 				return;
 			}
+			
+			if( !validate.validateFeedforwardOrSRN() ) {
+				return;
+			}
 
 			final BasicNetwork network = dialog.getNetwork();
 			final NeuralDataSet training = dialog.getTrainingSet();
@@ -236,6 +260,10 @@ public class Training {
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog
 					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+			
+			if( !validate.validateFeedforwardOrSRN() ) {
+				return;
+			}
 
 			final BasicNetwork network = dialog.getNetwork();
 			final NeuralDataSet training = dialog.getTrainingSet();
@@ -260,6 +288,10 @@ public class Training {
 			if (!validate.validateIsSupervised() ) {
 				return;
 			}
+			
+			if( !validate.validateFeedforwardOrSRN() ) {
+				return;
+			}
 
 			final BasicNetwork network = dialog.getNetwork();
 			final NeuralDataSet training = dialog.getTrainingSet();
@@ -276,31 +308,39 @@ public class Training {
 	public void perform(Frame owner, BasicNetwork network) {
 		ChooseTrainingMethodDialog dialog = new ChooseTrainingMethodDialog(
 				owner, network);
-		if (dialog.process()) {
-			switch (dialog.getType()) {
-			case PropagationResilient:
-				performResilient();
-				break;
-			case PropagationBack:
-				performBackpropagation();
-				break;
-			case PropagationManhattan:
-				performManhattan();
-				break;
-			case Genetic:
-				performGenetic();
-				break;
-			case Annealing:
-				performAnneal();
-				break;
-			case SOM:
-				performSOM();
-				break;
-			case ADALINE:
-				performADALINE();
-				break;
-				
+		
+		try
+		{
+			if (dialog.process()) {
+				switch (dialog.getType()) {
+				case PropagationResilient:
+					performResilient();
+					break;
+				case PropagationBack:
+					performBackpropagation();
+					break;
+				case PropagationManhattan:
+					performManhattan();
+					break;
+				case Genetic:
+					performGenetic();
+					break;
+				case Annealing:
+					performAnneal();
+					break;
+				case SOM:
+					performSOM();
+					break;
+				case ADALINE:
+					performADALINE();
+					break;
+					
+				}
 			}
+		}
+		catch(Throwable t)
+		{
+			EncogWorkBench.displayError("Error While Training", t.getMessage());
 		}
 	}
 }

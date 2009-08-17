@@ -31,7 +31,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogPersistedObject;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.process.training.Training;
 
@@ -53,6 +55,7 @@ public class EncogMenus {
 	public static final String OBJECTS_CREATE = "Create Object...";
 	public static final String OBJECTS_DELETE = "Delete Object...";
 
+	public static final String TOOLS_TRAIN = "Train...";
 	public static final String TOOLS_CODE = "Generate Code...";
 	public static final String TOOLS_EVALUATE = "Evaluate Network...";
 	public static final String TOOLS_BENCHMARK = "Benchmark Encog...";
@@ -121,6 +124,7 @@ public class EncogMenus {
 
 		this.menuTools = new JMenu("Tools");
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_CODE, 'g');
+		owner.addItem(this.menuTools, EncogMenus.TOOLS_TRAIN, 't');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 'k');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_EVALUATE, 'e');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_BROWSE, 'b');
@@ -191,6 +195,10 @@ public class EncogMenus {
 		}  else if (event.getActionCommand().equals(
 				EncogMenus.TOOLS_CODE)) {
 			owner.getOperations().performGenerateCode();
+		} else if( event.getActionCommand().equals(EncogMenus.TOOLS_TRAIN) )
+		{
+			Training training = new Training();
+			training.perform(EncogWorkBench.getInstance().getMainWindow(),null);
 		}
 	}
 }
