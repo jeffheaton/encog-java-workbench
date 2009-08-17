@@ -32,6 +32,8 @@ import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.ChooseTrainingMethodDialog;
+import org.encog.workbench.dialogs.training.adaline.InputAdaline;
+import org.encog.workbench.dialogs.training.adaline.ProgressAdaline;
 import org.encog.workbench.dialogs.training.anneal.InputAnneal;
 import org.encog.workbench.dialogs.training.anneal.ProgressAnneal;
 import org.encog.workbench.dialogs.training.backpropagation.InputBackpropagation;
@@ -39,8 +41,12 @@ import org.encog.workbench.dialogs.training.backpropagation.ProgressBackpropagat
 import org.encog.workbench.dialogs.training.genetic.InputGenetic;
 import org.encog.workbench.dialogs.training.genetic.ProgressGenetic;
 import org.encog.workbench.dialogs.training.hopfield.InputHopfield;
+import org.encog.workbench.dialogs.training.instar.InputInstar;
+import org.encog.workbench.dialogs.training.instar.ProgressInstar;
 import org.encog.workbench.dialogs.training.manhattan.InputManhattan;
 import org.encog.workbench.dialogs.training.manhattan.ProgressManhattan;
+import org.encog.workbench.dialogs.training.outstar.InputOutstar;
+import org.encog.workbench.dialogs.training.outstar.ProgressOutstar;
 import org.encog.workbench.dialogs.training.resilient.InputResilient;
 import org.encog.workbench.dialogs.training.resilient.ProgressResilient;
 import org.encog.workbench.dialogs.training.som.InputSOM;
@@ -196,17 +202,74 @@ public class Training {
 	
 	public void performADALINE()
 	{
-		
+		final InputAdaline dialog = new InputAdaline(
+				EncogWorkBench.getInstance().getMainWindow());
+		if (dialog.process()) {
+			final ValidateTraining validate = new ValidateTraining(dialog
+					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+
+			if (!validate.validateFeedForward()) {
+				return;
+			}
+
+			final BasicNetwork network = dialog.getNetwork();
+			final NeuralDataSet training = dialog.getTrainingSet();
+
+			final ProgressAdaline train = new ProgressAdaline(
+					EncogWorkBench.getInstance().getMainWindow(), network,
+					training, dialog.getLearningRate().getValue(), dialog.getMaxError()
+							.getValue());
+
+			train.setVisible(true);
+		}
 	}
 	
 	public void performInstar()
 	{
-		
+		final InputInstar dialog = new InputInstar(
+				EncogWorkBench.getInstance().getMainWindow());
+		if (dialog.process()) {
+			final ValidateTraining validate = new ValidateTraining(dialog
+					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+
+			if (!validate.validateFeedForward()) {
+				return;
+			}
+
+			final BasicNetwork network = dialog.getNetwork();
+			final NeuralDataSet training = dialog.getTrainingSet();
+
+			final ProgressInstar train = new ProgressInstar(
+					EncogWorkBench.getInstance().getMainWindow(), network,
+					training, dialog.getLearningRate().getValue(), dialog.getMaxError()
+							.getValue());
+
+			train.setVisible(true);
+		}
 	}
 	
 	public void performOutstar()
 	{
-		
+		final InputOutstar dialog = new InputOutstar(
+				EncogWorkBench.getInstance().getMainWindow());
+		if (dialog.process()) {
+			final ValidateTraining validate = new ValidateTraining(dialog
+					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+
+			if (!validate.validateFeedForward()) {
+				return;
+			}
+
+			final BasicNetwork network = dialog.getNetwork();
+			final NeuralDataSet training = dialog.getTrainingSet();
+
+			final ProgressOutstar train = new ProgressOutstar(
+					EncogWorkBench.getInstance().getMainWindow(), network,
+					training, dialog.getLearningRate().getValue(), dialog.getMaxError()
+							.getValue());
+
+			train.setVisible(true);
+		}
 	}
 
 	public void perform(Frame owner, BasicNetwork network) {
