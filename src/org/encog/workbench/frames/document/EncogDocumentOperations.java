@@ -41,7 +41,6 @@ import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.Layer;
-import org.encog.parse.ParseTemplate;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.util.Directory;
@@ -55,7 +54,6 @@ import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.editor.ObjectEditorFrame;
 import org.encog.workbench.frames.BrowserFrame;
 import org.encog.workbench.frames.NetworkQueryFrame;
-import org.encog.workbench.frames.ParseTemplateFrame;
 import org.encog.workbench.frames.PropertyDataFrame;
 import org.encog.workbench.frames.TextEditorFrame;
 import org.encog.workbench.frames.TrainingDataFrame;
@@ -123,15 +121,7 @@ public class EncogDocumentOperations {
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
-		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_PARSE_TEMPLATE)) {
-			DirectoryEntry data = (DirectoryEntry)item;
-			if (owner.getSubwindows().checkBeforeOpen(data, ParseTemplate.class)) {
-				ParseTemplate data2 = (ParseTemplate)EncogWorkBench.getInstance().getCurrentFile().find(data);
-				final ParseTemplateFrame frame = new ParseTemplateFrame(data2);
-				frame.setVisible(true);
-				owner.getSubwindows().add(frame);
-			}
-		}
+		} 
 	}
 
 	public void performEditCopy() {
@@ -273,10 +263,9 @@ public class EncogDocumentOperations {
 
 		try
 		{
-		SelectItem itemTraining, itemNetwork, itemTemplate, itemSpider, itemOptions, itemText;
+		SelectItem itemTraining, itemNetwork, itemOptions, itemText;
 		final List<SelectItem> list = new ArrayList<SelectItem>();
 		list.add(itemNetwork = new SelectItem("Neural Network"));
-		list.add(itemTemplate = new SelectItem("Parser Template"));
 		list.add(itemOptions = new SelectItem("Property Data"));
 		list.add(itemText = new SelectItem("Text"));
 		list.add(itemTraining = new SelectItem("Training Data"));
@@ -295,12 +284,7 @@ public class EncogDocumentOperations {
 			trainingData.setDescription("Training data");
 			EncogWorkBench.getInstance().getCurrentFile().add("data-" + this.trainingCount++,trainingData);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
-		}  else if( result == itemTemplate ) {
-			final ParseTemplate template = new ParseTemplate();
-			template.setDescription("A parse template");
-			EncogWorkBench.getInstance().getCurrentFile().add("parse-" + this.parseCount++,template);
-			EncogWorkBench.getInstance().getMainWindow().redraw();
-		} else if(result == itemText)
+		}  else if(result == itemText)
 		{
 			final TextData text = new TextData();
 			text.setDescription("A text file");
