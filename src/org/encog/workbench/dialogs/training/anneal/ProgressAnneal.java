@@ -31,6 +31,7 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
+import org.encog.neural.networks.training.anneal.NeuralTrainingSetSimulatedAnnealing;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
 /**
@@ -105,7 +106,7 @@ public class ProgressAnneal extends BasicTrainingProgress {
 	 */
 	@Override
 	public void startup() {
-		final Train train = new NeuralSimulatedAnnealing(getNetwork(),
+		final Train train = new NeuralTrainingSetSimulatedAnnealing(getNetwork(),
 				getTrainingData(), this.startTemp, this.endTemp, this.cycles);
 
 		setTrain(train);
