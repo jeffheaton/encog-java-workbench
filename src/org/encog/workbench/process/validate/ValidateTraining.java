@@ -29,6 +29,7 @@ import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.logic.FeedforwardLogic;
+import org.encog.neural.networks.logic.SimpleRecurrentLogic;
 import org.encog.workbench.EncogWorkBench;
 
 public class ValidateTraining {
@@ -58,7 +59,8 @@ public class ValidateTraining {
 	
 	public boolean validateFeedforwardOrSRN()
 	{
-		if( this.network.getLogic() instanceof FeedforwardLogic )
+		if( this.network.getLogic().getClass() == FeedforwardLogic.class ||
+			this.network.getLogic().getClass() == SimpleRecurrentLogic.class )
 			return true;
 		
 		EncogWorkBench.displayError("Training Error",

@@ -23,7 +23,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.encog.workbench.frames;
+package org.encog.workbench.frames.query;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
