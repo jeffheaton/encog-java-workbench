@@ -199,13 +199,23 @@ public class TrainingSetTableModel implements TableModel {
 		this.listeners.remove(l);
 	}
 
-	public void setValueAt(final Object value, int rowIndex,
+	public void setValueAt(final Object rawValue, int rowIndex,
 			final int columnIndex) {
+		Double value = null;
+		if (rawValue instanceof Double) {
+			value = (Double) rawValue;
+		} else {
+			value = Double.parseDouble(rawValue.toString());
+		}
+
 		for (final NeuralDataPair pair : this.data) {
 			if (rowIndex == 0) {
 				if (columnIndex >= pair.getInput().size()) {
 					pair.getIdeal().setData(
 							columnIndex - pair.getInput().size(),
+							((Double) value).doubleValue());
+				} else {
+					pair.getInput().setData(columnIndex,
 							((Double) value).doubleValue());
 				}
 				pair.getInput().setData(columnIndex,
@@ -213,7 +223,6 @@ public class TrainingSetTableModel implements TableModel {
 			}
 			rowIndex--;
 		}
-
 	}
 
 }

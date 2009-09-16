@@ -41,6 +41,7 @@ import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.TrainingSetTableModel;
 import org.encog.workbench.process.ImportExport;
+import org.encog.workbench.util.ExcelAdapter;
 
 public class TrainingDataFrame extends EncogCommonFrame {
 
@@ -135,6 +136,7 @@ public class TrainingDataFrame extends EncogCommonFrame {
 		content.add(new JScrollPane(this.table), BorderLayout.CENTER);
 		//
 		setTitle("Edit Training Data");
+		new ExcelAdapter( this.table );
 	}
 
 }
