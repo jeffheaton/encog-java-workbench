@@ -36,6 +36,7 @@ import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.process.training.Training;
+import org.encog.workbench.process.validate.ValidationChart;
 
 public class EncogMenus {
 	public static final String FILE_NEW = "New";
@@ -60,43 +61,44 @@ public class EncogMenus {
 	public static final String TOOLS_EVALUATE = "Evaluate Network...";
 	public static final String TOOLS_BENCHMARK = "Benchmark Encog...";
 	public static final String TOOLS_BROWSE = "Browse Web Data...";
-	
+	public static final String TOOLS_VALIDATION_CHART = "Validation Chart...";
+
 	public static final String HELP_ABOUT = "About Encog Workbench...";
-	
+
 	private JMenuBar menuBar;
 	private JMenu menuFile;
 	private JMenu menuEdit;
 	private JMenu menuObjects;
 	private JMenu menuHelp;
 	private JMenu menuTools;
-	
+
 	private EncogDocumentFrame owner;
-	
+
 	public EncogMenus(EncogDocumentFrame owner) {
 		this.owner = owner;
 	}
-	
+
 	void initMenuBar() {
 		// menu bar
 		this.menuBar = new JMenuBar();
 		this.menuFile = new JMenu("File");
-		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_NEW,
-				'n'));
+		this.menuFile.add(owner
+				.addItem(this.menuFile, EncogMenus.FILE_NEW, 'n'));
 		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_OPEN,
 				'o'));
 		this.menuFile.addSeparator();
 		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_CLOSE,
 				'c'));
 		this.menuFile.addSeparator();
-		this.menuFile.add(owner.addItem(this.menuFile,
-				EncogMenus.FILE_SAVE, 's'));
-		this.menuFile.add(owner.addItem(this.menuFile,
-				EncogMenus.FILE_SAVE_AS, 'a'));
-		this.menuFile.add(owner.addItem(this.menuFile,
-				EncogMenus.FILE_REVERT, 'r'));
+		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_SAVE,
+				's'));
+		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_SAVE_AS,
+				'a'));
+		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_REVERT,
+				'r'));
 		this.menuFile.addSeparator();
-		this.menuFile.add(owner.addItem(this.menuFile,
-				EncogMenus.FILE_IMPORT, 'i'));
+		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_IMPORT,
+				'i'));
 		this.menuFile.addSeparator();
 		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_QUIT,
 				'q'));
@@ -104,17 +106,18 @@ public class EncogMenus {
 		this.menuBar.add(this.menuFile);
 
 		this.menuEdit = new JMenu("Edit");
-		this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_CUT,
-				'x'));
+		this.menuEdit.add(owner
+				.addItem(this.menuEdit, EncogMenus.EDIT_CUT, 'x'));
 		this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_COPY,
 				'c'));
 		this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_PASTE,
 				'v'));
-		//this.menuEdit.addSeparator();
-		//this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_CONFIG,
-		//'f'));
+		// this.menuEdit.addSeparator();
+		// this.menuEdit.add(owner.addItem(this.menuEdit,
+		// EncogMenus.EDIT_CONFIG,
+		// 'f'));
 		this.menuBar.add(this.menuEdit);
-		
+
 		this.menuObjects = new JMenu("Objects");
 		this.menuObjects.add(owner.addItem(this.menuObjects,
 				EncogMenus.OBJECTS_CREATE, 'c'));
@@ -128,10 +131,12 @@ public class EncogMenus {
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 'k');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_EVALUATE, 'e');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_BROWSE, 'b');
+		owner.addItem(this.menuTools, EncogMenus.TOOLS_VALIDATION_CHART, 'v');
 		this.menuBar.add(this.menuTools);
-		
+
 		this.menuHelp = new JMenu("Help");
-		this.menuHelp.add(owner.addItem(this.menuHelp, EncogMenus.HELP_ABOUT, 'a'));
+		this.menuHelp.add(owner.addItem(this.menuHelp, EncogMenus.HELP_ABOUT,
+				'a'));
 		this.menuBar.add(this.menuHelp);
 
 		owner.setJMenuBar(this.menuBar);
@@ -140,65 +145,50 @@ public class EncogMenus {
 	public void actionPerformed(final ActionEvent event) {
 		if (event.getActionCommand().equals(EncogMenus.FILE_OPEN)) {
 			owner.getOperations().performFileOpen();
-		} 
-		else if (event.getActionCommand().equals(
-				EncogMenus.FILE_SAVE)) {
+		} else if (event.getActionCommand().equals(EncogMenus.FILE_SAVE)) {
 			owner.getOperations().performFileSave();
-		}
-		else if (event.getActionCommand().equals(
-				EncogMenus.FILE_SAVE_AS)) {
+		} else if (event.getActionCommand().equals(EncogMenus.FILE_SAVE_AS)) {
 			owner.getOperations().performFileSaveAs();
-		} else if (event.getActionCommand().equals(
-				EncogMenus.FILE_REVERT)) {
+		} else if (event.getActionCommand().equals(EncogMenus.FILE_REVERT)) {
 			owner.getOperations().performFileRevert();
-		} 
-		else if (event.getActionCommand().equals(
-				EncogMenus.FILE_IMPORT)) {
+		} else if (event.getActionCommand().equals(EncogMenus.FILE_IMPORT)) {
 			owner.getOperations().performImport(null);
-		} else if (event.getActionCommand()
-				.equals(EncogMenus.FILE_QUIT)) {
+		} else if (event.getActionCommand().equals(EncogMenus.FILE_QUIT)) {
 			System.exit(0);
-		} else if (event.getActionCommand().equals(
-				EncogMenus.OBJECTS_CREATE)) {
+		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_CREATE)) {
 			owner.getOperations().performObjectsCreate();
-		} else if (event.getActionCommand().equals(
-				EncogMenus.OBJECTS_DELETE)) {
+		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_DELETE)) {
 			owner.getOperations().performObjectsDelete();
-		} else if (event.getActionCommand().equals(
-				EncogMenus.FILE_CLOSE)) {
+		} else if (event.getActionCommand().equals(EncogMenus.FILE_CLOSE)) {
 			owner.getOperations().performFileClose();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW)) {
 			owner.getOperations().performFileClose();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_CUT)) {
 			owner.getOperations().performEditCut();
-		} else if (event.getActionCommand()
-				.equals(EncogMenus.EDIT_COPY)) {
+		} else if (event.getActionCommand().equals(EncogMenus.EDIT_COPY)) {
 			owner.getOperations().performEditCopy();
-		} else if (event.getActionCommand().equals(
-				EncogMenus.EDIT_PASTE)) {
+		} else if (event.getActionCommand().equals(EncogMenus.EDIT_PASTE)) {
 			owner.getOperations().performEditPaste();
-		} else if (event.getActionCommand().equals(
-				EncogMenus.EDIT_CONFIG)) {
+		} else if (event.getActionCommand().equals(EncogMenus.EDIT_CONFIG)) {
 			owner.getOperations().performEditConfig();
-		} else if (event.getActionCommand().equals(
-				EncogMenus.HELP_ABOUT)) {
+		} else if (event.getActionCommand().equals(EncogMenus.HELP_ABOUT)) {
 			owner.getOperations().performHelpAbout();
-		} else if (event.getActionCommand().equals(
-				EncogMenus.TOOLS_BENCHMARK)) {
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BENCHMARK)) {
 			owner.getOperations().performBenchmark();
-		} else if (event.getActionCommand().equals(
-				EncogMenus.TOOLS_BROWSE)) {
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BROWSE)) {
 			owner.getOperations().performBrowse();
-		} else if (event.getActionCommand().equals(
-				EncogMenus.TOOLS_EVALUATE)) {
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EVALUATE)) {
 			owner.getOperations().performEvaluate();
-		}  else if (event.getActionCommand().equals(
-				EncogMenus.TOOLS_CODE)) {
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_CODE)) {
 			owner.getOperations().performGenerateCode();
-		} else if( event.getActionCommand().equals(EncogMenus.TOOLS_TRAIN) )
-		{
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_TRAIN)) {
 			Training training = new Training();
-			training.perform(EncogWorkBench.getInstance().getMainWindow(),null);
+			training
+					.perform(EncogWorkBench.getInstance().getMainWindow(), null);
+		} else if (event.getActionCommand().equals(
+				EncogMenus.TOOLS_VALIDATION_CHART)) {
+			ValidationChart check = new ValidationChart();
+			check.perform(EncogWorkBench.getInstance().getMainWindow());
 		}
 	}
 }
