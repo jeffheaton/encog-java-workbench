@@ -218,8 +218,6 @@ public class TrainingSetTableModel implements TableModel {
 					pair.getInput().setData(columnIndex,
 							((Double) value).doubleValue());
 				}
-				pair.getInput().setData(columnIndex,
-						((Double) value).doubleValue());
 			}
 			rowIndex--;
 		}
