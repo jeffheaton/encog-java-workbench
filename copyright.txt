@@ -24,3 +24,9 @@ The following people have contributed to this project:
 
 Jeff Heaton (jeffheaton@yahoo.com, http://www.jeffheaton.com)
 Initial versions of all areas of Encog.
+
+Seema Singh (seemasingh8614@yahoo.com)
+Bug fixing for 2.0, initial version of benchmark utility.
+
+Snuk the Great (http://snukthegreat.blogspot.com, http://www.impressiveinteractive.com)
+Excel Paste and Validation Graph in Workbench
