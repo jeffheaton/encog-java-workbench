@@ -33,7 +33,7 @@ public class TextEditorFrame extends TextFrame {
 
 	
 	public TextEditorFrame(TextData data) {
-		super("Edit Text Data", false);
+		super("Edit Text Data", false, true);
 		this.setEncogObject(data);
 		this.setText(data.getText());
 	}

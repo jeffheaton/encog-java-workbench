@@ -38,7 +38,7 @@ public class CodeGeneration {
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
 
-			final TextFrame text = new TextFrame("Generated code", true);
+			final TextFrame text = new TextFrame("Generated code", true, false);
 
 			Generate gen = null;
 

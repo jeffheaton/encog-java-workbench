@@ -45,13 +45,17 @@ public class TextFrame extends EncogCommonFrame {
 	private final JTextArea text;
 	private final JScrollPane scroll;
 
-	public TextFrame(final String title, boolean readOnly) {
+	public TextFrame(final String title, boolean readOnly, boolean wrap) {
 		super();
 		setTitle(title);
 		this.setSize(640, 480);
 		this.text = new JTextArea();
 		this.text.setFont(EncogFonts.getInstance().getCodeFont());
 		this.text.setEditable(!readOnly);
+		if( wrap ) {
+			this.text.setLineWrap(true);
+			this.text.setWrapStyleWord(true);
+		}
 		this.scroll = new JScrollPane(this.text);
 		getContentPane().add(this.scroll);
 	}
