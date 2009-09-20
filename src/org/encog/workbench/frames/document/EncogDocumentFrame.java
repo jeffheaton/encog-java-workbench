@@ -36,6 +36,7 @@ import javax.swing.JScrollPane;
 import javax.xml.transform.TransformerConfigurationException;
 
 import org.encog.persist.EncogPersistedCollection;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogListFrame;
 import org.encog.workbench.frames.render.EncogItemRenderer;
@@ -48,6 +49,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 	private EncogDocumentOperations operations;
 	private EncogMenus menus;
 	private EncogPopupMenus popupMenus;
+	private boolean closed = false;
 
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files", ".eg");
@@ -58,15 +60,12 @@ public class EncogDocumentFrame extends EncogListFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = -4161616483326975155L;
-	
-
-
 
 	private final EncogListModel encogListModel;
 
 	public EncogDocumentFrame() {
 		this.setSize(640, 480);
-		
+
 		this.operations = new EncogDocumentOperations(this);
 		this.menus = new EncogMenus(this);
 		this.popupMenus = new EncogPopupMenus(this);
@@ -86,10 +85,6 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.popupMenus.actionPerformed(event);
 	}
 
-	
-
-	
-
 	private void initContents() {
 		// setup the contents list
 		this.contents = new JList(this.encogListModel);
@@ -102,10 +97,6 @@ public class EncogDocumentFrame extends EncogListFrame {
 		getContentPane().add(scrollPane);
 		redraw();
 	}
-
-
-
-	
 
 	public void redraw() {
 
@@ -125,16 +116,22 @@ public class EncogDocumentFrame extends EncogListFrame {
 		this.popupMenus.rightMouseClicked(e, item);
 	}
 
-	public void windowClosed(final WindowEvent e) {		
+	public void windowClosed(final WindowEvent e) {
 		System.exit(0);
 
 	}
 
 	public void windowOpened(final WindowEvent e) {
 	}
-	
-	public void windowClosing(final WindowEvent e)
-	{
+
+	public void windowClosing(final WindowEvent e) {
+		if (!this.closed) {
+			if (EncogWorkBench.displayQuery("Save?",
+					"Would you like to save your changes?")) {
+				this.operations.performFileSave();
+			}
+			this.closed = true;
+		}
 		super.windowClosing(e);
 		EncogWorkBench.saveConfig();
 	}
@@ -170,8 +167,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 	@Override
 	protected void openItem(Object item) {
 		this.operations.openItem(item);
-		
+
 	}
-	
-	
+
 }
