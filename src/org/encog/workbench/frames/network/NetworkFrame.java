@@ -323,7 +323,7 @@ public class NetworkFrame extends EncogCommonFrame {
 		{
 			if( (System.currentTimeMillis()-this.lastPopup)>1000 )
 			{
-			if( !EncogWorkBench.askQuestion("Unconnected Layers", "There are unconnected layers that will be lost if you close this network.  Do you wish to continue?"))
+			if( !EncogWorkBench.askQuestion("Unconnected Layers", "There are unconnected layers that will be lost if you close this network.\nDo you wish to continue?"))
 			{
 				// this is a total hack, but for some reason this event fires twice?
 				this.lastPopup = System.currentTimeMillis();

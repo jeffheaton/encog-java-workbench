@@ -579,7 +579,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 	public void fixOrphans() {
 
 		BasicNetwork network = (BasicNetwork) this.parent.getEncogObject();
-
+		network.getStructure().finalizeStructure();
 		for (Layer layer : network.getStructure().getLayers()) {
 			this.orphanLayers.remove(layer);
 		}
