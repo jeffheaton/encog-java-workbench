@@ -36,6 +36,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
@@ -89,6 +90,7 @@ public class NetworkFrame extends EncogCommonFrame {
 	private ImageIcon synapseOneToOne;
 	private ImageIcon synapseWeight;
 	private ImageIcon synapseWeightless;
+	private long lastPopup;
 
 	private NetworkToolbar networkToolbar;
 	private NetworkDiagram networkDiagram;
@@ -116,6 +118,8 @@ public class NetworkFrame extends EncogCommonFrame {
 				Type.synapse, DirectSynapse.class));
 		tools.add(new NetworkTool("One-To-One", Icons.getSynapseOneToOne(),
 				Type.synapse, OneToOneSynapse.class));
+
+		this.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
 	}
 
 	public void actionPerformed(final ActionEvent action) {
@@ -170,7 +174,8 @@ public class NetworkFrame extends EncogCommonFrame {
 		return true;
 
 	}
-
+	
+	
 	private void performTrain() {
 		Training training = new Training();
 		training.perform(EncogWorkBench.getInstance().getMainWindow(),(BasicNetwork)this.getEncogObject());
@@ -314,11 +319,29 @@ public class NetworkFrame extends EncogCommonFrame {
 	}
 
 	public void windowClosing(final WindowEvent e) {
+		if( !performValidate(false, false) )
+		{
+			if( (System.currentTimeMillis()-this.lastPopup)>1000 )
+			{
+			if( !EncogWorkBench.askQuestion("Unconnected Layers", "There are unconnected layers that will be lost if you close this network.  Do you wish to continue?"))
+			{
+				// this is a total hack, but for some reason this event fires twice?
+				this.lastPopup = System.currentTimeMillis();
+				return;
+			}
+			}
+			else
+			{
+				return;
+			}
+		}
+		
 		super.windowClosing(e);
 		if (this.networkDiagram != null) {
 			this.networkDiagram.close();
 			this.networkDiagram = null;
 		}
+		dispose();
 	}
 
 	public void performProperties() {
