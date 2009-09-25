@@ -28,6 +28,8 @@
 	<description>
         Build the Workbench JAR file for Encog.
     </description>
+	<!-- load the properties file -->
+	<property file="encog.properties"/>
 	<!-- set global properties for this build -->
 	<property name="path.src" location="${basedir}/src" />
 	<property name="path.build" location="${basedir}/build" />
@@ -54,6 +56,9 @@
 			<arg value="http://encog-java.googlecode.com/svn/trunk/encog-build" />
 			<arg value="${path.build.util}" />
 		</exec>
+		
+		<!-- load the properties file -->
+		<property file="encog.properties"/>
 	</target>
 
 	<target name="init">
@@ -73,33 +78,14 @@
 	<target name="dist" depends="compile" description="generate the distribution">
 
 		<!-- Create the distribution directory -->
-		<mkdir dir="${path.dist}" />
-		
-		<!-- Get the program version -->
-		<exec executable="svn">			
-			<arg value="export" />
-			<arg value="http://encog-java.googlecode.com/svn/trunk/encog-core/src/org/encog/Encog.java" />
-		</exec>
-
-		<loadfile srcfile="${basedir}/Encog.java" property="build.version">
-			<filterchain>
-				<linecontainsregexp>
-					<regexp pattern='^.*String VERSION = ".*";.*$' />
-				</linecontainsregexp>
-				<tokenfilter>
-					<replaceregex replace='\1' pattern='^.*String VERSION = "(.*)";.*$' />
-				</tokenfilter>
-				<striplinebreaks />
-			</filterchain>
-		</loadfile>
-		
+		<mkdir dir="${path.dist}" />		
 
 		<manifest file="MANIFEST.MF">
 			<attribute name="Built-By" value="${user.name}" />
-			<attribute name="Implementation-Version" value="${version.num}-b${build.version}" />
+			<attribute name="Implementation-Version" value="${version.num}-b${encog.version}" />
 		</manifest>
 
-		<property name="jarfile" location="${path.jar}/encog-workbench-${build.version}.jar" />
+		<property name="jarfile" location="${path.jar}/encog-workbench-${encog.version}.jar" />
 		
 		<copy todir="${path.build}/resource">
 			<fileset dir="${path.src}/resource" />
@@ -112,25 +98,29 @@
 	<target name="cc-build" depends="clean-all,checkout,compile,dist">
 	
 		<mkdir dir="${path.stage.win}" />
+		<property name="path.stage.win.sub" value="${path.stage.win}/encog-workbench-win-${encog.version}"/>
 		<mkdir dir="${path.stage.src}" />
+		<property name="path.stage.src.sub" value="${path.stage.src}/encog-workbench-src-core-${encog.version}"/>
 		<mkdir dir="${path.stage.univ}" />
+		<property name="path.stage.univ.sub" value="${path.stage.univ}/encog-workbench-univ-${encog.version}"/>
+
 		
 		<tstamp/>
 
 		<!-- Create Windows distributable -->		
-		<copy todir="${path.stage.win}/jar">
+		<copy todir="${path.stage.win.sub}/jar">
 			<fileset dir="${path.jar}" />
 		</copy>
-		<copy todir="${path.stage.win}" file="${basedir}/copyright.txt" />
+		<copy todir="${path.stage.win.sub}" file="${basedir}/copyright.txt" />
 		
 		<java classname="org.encog.workbench.util.JavaClassPathUtil">
 			<classpath refid="classpath" />
-			<arg value="${path.stage.win}"/>
+			<arg value="${path.stage.win.sub}"/>
 		</java>
 		
 		<java classname="org.encog.workbench.util.JavaLaunchUtil">
 			<classpath refid="classpath" />
-			<arg value="${path.stage.win}"/>
+			<arg value="${path.stage.win.sub}"/>
 			<arg value="${path.build.util}"/>
 		</java>
 		
@@ -138,40 +128,41 @@
 			<arg value="launch.xml" />
 		</exec>
 
-		<zip destfile="${path.dist}/encog-workbench-win-${build.version}-${DSTAMP}-${TSTAMP}.zip">
+		<zip destfile="${path.dist}/encog-workbench-win-${encog.version}-${DSTAMP}-${TSTAMP}.zip">
 			<fileset dir="${path.stage.win}" />
 		</zip>
 		
 		<!-- Create Source distributable -->
-		<copy todir="${path.stage.src}" file="${basedir}/build.xml" />
-		<copy todir="${path.stage.src}" file="${basedir}/.classpath" />
-		<copy todir="${path.stage.src}" file="${basedir}/.project" />
-		<copy todir="${path.stage.src}" file="${basedir}/copyright.txt" />
+		<copy todir="${path.stage.src.sub}" file="${basedir}/build.xml" />
+		<copy todir="${path.stage.src.sub}" file="${basedir}/encog.properties" />
+		<copy todir="${path.stage.src.sub}" file="${basedir}/.classpath" />
+		<copy todir="${path.stage.src.sub}" file="${basedir}/.project" />
+		<copy todir="${path.stage.src.sub}" file="${basedir}/copyright.txt" />
 
-		<copy todir="${path.stage.src}/src">
+		<copy todir="${path.stage.src.sub}/src">
 			<fileset dir="${path.src}" />
 		</copy>
 		
-		<copy todir="${path.stage.src}/jar">
+		<copy todir="${path.stage.src.sub}/jar">
 			<fileset dir="${path.jar}" />
 		</copy>
 
-		<zip destfile="${path.dist}/encog-workbench-src-${build.version}-${DSTAMP}-${TSTAMP}.zip">
+		<zip destfile="${path.dist}/encog-workbench-src-${encog.version}-${DSTAMP}-${TSTAMP}.zip">
 			<fileset dir="${path.stage.src}" />
 		</zip>
 		
 		<!-- Create Universal distributable -->
-		<copy todir="${path.stage.univ}/jar">
+		<copy todir="${path.stage.univ.sub}/jar">
 			<fileset dir="${path.jar}" />
 		</copy>
-		<copy todir="${path.stage.univ}" file="${basedir}/copyright.txt" />
+		<copy todir="${path.stage.univ.sub}" file="${basedir}/copyright.txt" />
 		
 		<java classname="org.encog.workbench.util.JavaClassPathUtil">
 			<classpath refid="classpath" />
-			<arg value="${path.stage.univ}"/>
+			<arg value="${path.stage.univ.sub}"/>
 		</java>
 		
-		<zip destfile="${path.dist}/encog-workbench-univ-${build.version}-${DSTAMP}-${TSTAMP}.zip">
+		<zip destfile="${path.dist}/encog-workbench-univ-${encog.version}-${DSTAMP}-${TSTAMP}.zip">
 			<fileset dir="${path.stage.univ}" />
 		</zip>
 
