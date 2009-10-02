@@ -96,6 +96,17 @@ public class MatrixTableModel implements TableModel {
 
 	public void setValueAt(final Object value, final int rowIndex,
 			final int columnIndex) {
+		double v = 0;
+		
+		try
+		{
+			v = Double.parseDouble(value.toString());
+		}
+		catch(NumberFormatException e)
+		{
+			// just ignore and let v remain 0
+		}
+		this.synapse.getMatrix().set(rowIndex,columnIndex-1,v);
 		
 	}
 }
