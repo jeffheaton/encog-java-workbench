@@ -36,6 +36,8 @@ import org.encog.matrix.Matrix;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.synapse.Synapse;
+import org.encog.persist.EncogPersistedObject;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.MatrixTableModel;
 
@@ -71,6 +73,13 @@ public class MatrixFrame extends EncogCommonFrame {
 
 	public void windowOpened(final WindowEvent e) {
 		// TODO Auto-generated method stub
+
+	}
+	
+public void windowClosing(final WindowEvent e) {
+		
+		// just let this window close, no need to ask anything
+	// we can't roll back anyway
 
 	}
 

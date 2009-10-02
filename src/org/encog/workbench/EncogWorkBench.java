@@ -90,7 +90,7 @@ public class EncogWorkBench {
 			this.currentFile = new EncogPersistedCollection(this.tempFile);
 			this.currentFile.create();
 		}
-		catch(EncogError e)
+		catch(Throwable e)
 		{
 			// delete and try again.  If it still fails, warn and continue.
 			this.tempFile.delete();
