@@ -9,6 +9,7 @@ import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.ContextLayer;
 import org.encog.neural.networks.layers.Layer;
+import org.encog.neural.networks.synapse.Synapse;
 import org.encog.neural.pattern.BAMPattern;
 import org.encog.neural.pattern.CPNPattern;
 
@@ -20,8 +21,10 @@ public abstract class BasicGenerate implements Generate {
 	private final Set<String> imports = new TreeSet<String>();
 	private int hiddenLayerNumber = 1;
 	private int contextLayerNumber = 1;
+	private int synapseNumber = 1;
 	private int indent = 0;
 	private final Map<Layer,String> layerMap = new HashMap<Layer,String>();
+	private final Map<Synapse,String> synapseMap = new HashMap<Synapse,String>();
 
 	public Set<String> getImports() {
 		return imports;
@@ -74,6 +77,19 @@ public abstract class BasicGenerate implements Generate {
 	public boolean knownLayer(Layer layer)
 	{
 		return this.layerMap.containsKey(layer);
+	}
+	
+	public String nameSynapse(Synapse synapse)
+	{
+		if( this.synapseMap.containsKey(synapse))
+		{
+			return this.synapseMap.get(synapse);
+		}
+		
+		String result = "synapse" + this.synapseNumber;
+		this.synapseMap.put(synapse,result);
+		synapseNumber++;
+		return result;
 	}
 	
 	public String nameLayer(Layer layer)

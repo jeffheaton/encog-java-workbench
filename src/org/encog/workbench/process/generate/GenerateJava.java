@@ -93,103 +93,65 @@ public class GenerateJava extends BasicGenerate {
 	 * @param currentLayer
 	 * @param synapse
 	 */
-	public void generateLayer(Layer previousLayer, Layer currentLayer, Synapse synapse)
-	{		
-		this.addNewLine();
-		
+	public void generateLayer(Layer layer)
+	{				
 		addClass(Layer.class);
 		this.appendToLine("Layer ");
-		this.appendToLine(nameLayer(currentLayer));
+		this.appendToLine(nameLayer(layer));
 		this.appendToLine(" = ");
 		
-		this.addObject(currentLayer);
+		this.addObject(layer);
 		
-		if( currentLayer instanceof ContextLayer )
+		if( layer instanceof ContextLayer )
 		{
-			this.addObject(currentLayer.getActivationFunction());
+			this.addObject(layer.getActivationFunction());
 			this.appendToLine("new ContextLayer( new ");
-			this.appendToLine(currentLayer.getActivationFunction().getClass().getSimpleName());
+			this.appendToLine(layer.getActivationFunction().getClass().getSimpleName());
 			this.appendToLine("()");
 			this.appendToLine(",");
-			this.appendToLine(currentLayer.hasThreshold()?"true":"false");
+			this.appendToLine(layer.hasThreshold()?"true":"false");
 			this.appendToLine(",");
-			this.appendToLine(""+currentLayer.getNeuronCount());
+			this.appendToLine(""+layer.getNeuronCount());
 			this.appendToLine(");");
 		}
-		else if( currentLayer instanceof RadialBasisFunctionLayer )
+		else if( layer instanceof RadialBasisFunctionLayer )
 		{
 			this.appendToLine("new RadialBasisFunctionLayer(");
-			this.appendToLine(""+currentLayer.getNeuronCount());
+			this.appendToLine(""+layer.getNeuronCount());
 			this.appendToLine(");");
 		}
-		else if( currentLayer instanceof BasicLayer )
+		else if( layer instanceof BasicLayer )
 		{
-			this.addObject(currentLayer.getActivationFunction());
+			this.addObject(layer.getActivationFunction());
 			this.appendToLine("new BasicLayer( new ");
-			this.appendToLine(currentLayer.getActivationFunction().getClass().getSimpleName());
+			this.appendToLine(layer.getActivationFunction().getClass().getSimpleName());
 			this.appendToLine("()");
 			this.appendToLine(",");
-			this.appendToLine(currentLayer.hasThreshold()?"true":"false");
+			this.appendToLine(layer.hasThreshold()?"true":"false");
 			this.appendToLine(",");
-			this.appendToLine(""+currentLayer.getNeuronCount());
+			this.appendToLine(""+layer.getNeuronCount());
 			this.appendToLine(");");
 		}
 		
 		this.addLine();
+	}
+	
+	public void generateSynapse(Synapse synapse)
+	{
+		StringBuilder line = new StringBuilder();
+		this.addObject(Synapse.class);
+		line.append("Synapse ");
+		line.append( this.nameSynapse(synapse));
+		line.append(" = new ");
+		this.addClass(synapse.getClass());
+		line.append(synapse.getClass().getSimpleName());
+		line.append("(");
+		line.append( nameLayer(synapse.getFromLayer()));
+		line.append(",");
+		line.append( nameLayer(synapse.getToLayer()));
+		line.append(");");
 		
-		if( previousLayer==null) {
-			this.appendToLine("network.addLayer(");
-			this.appendToLine(nameLayer(currentLayer));
-			this.appendToLine(");");
-		}
-		else
-		{
-			this.appendToLine(nameLayer(previousLayer));
-			this.appendToLine(".addNext(");
-			this.appendToLine(nameLayer(currentLayer));
-			
-			if( synapse!=null )
-			{
-				if( synapse instanceof DirectSynapse )
-				{
-					this.addClass(SynapseType.class);
-					this.appendToLine(",SynapseType.Direct");
-				}
-				else if( synapse instanceof OneToOneSynapse )
-				{
-					this.addClass(SynapseType.class);
-					this.appendToLine(",SynapseType.OneToOne");
-				}
-				else if( synapse instanceof WeightlessSynapse )
-				{
-					this.addClass(SynapseType.class);
-					this.appendToLine(",SynapseType.Weightless");
-				}
-			}
-
-			this.appendToLine(");");
-		}
-		
-		this.addLine();
-		
-		// next layers
-		for(Synapse nextSynapse: currentLayer.getNext() )
-		{
-			Layer nextLayer = nextSynapse.getToLayer();
-			if( this.getLayerMap().containsKey(nextLayer))
-			{
-				this.appendToLine(nameLayer(currentLayer));
-				this.appendToLine(".addNext(");
-				this.appendToLine(nameLayer(nextLayer));
-				this.appendToLine(");\n");
-				this.addLine();
-			}
-			else
-			{
-				generateLayer( currentLayer, nextSynapse.getToLayer(),nextSynapse);
-			}
-		}
-
+		this.addLine(line.toString());
 	}
 	
 	private void generateTags()
@@ -204,8 +166,20 @@ public class GenerateJava extends BasicGenerate {
 			line.append(key);
 			line.append("\",");
 			line.append(layerName);			
-			line.append(");");	
-			
+			line.append(");");				
+			addLine(line.toString());
+		}
+	}
+	
+	public void addSynapsesToLayer(Layer layer)
+	{	
+		for(Synapse synapse:layer.getNext())
+		{
+			StringBuilder line = new StringBuilder();
+			line.append(this.nameLayer(layer));
+			line.append(".addSynapse(");
+			line.append(this.nameSynapse(synapse));
+			line.append(");");
 			addLine(line.toString());
 		}
 	}
@@ -216,15 +190,29 @@ public class GenerateJava extends BasicGenerate {
 		this.forwardIndent();
 
 		this.addLine("BasicNetwork network = new BasicNetwork();");
+		this.addLine();
 		
-		for( Layer layer: this.getNetwork().getLayerTags().values() )
+		for( Layer layer: this.getNetwork().getStructure().getLayers() )
 		{
-			if( !this.knownLayer(layer) ) {
-				generateLayer(layer,layer,null);
-			}
+			generateLayer(layer);
 		}
+		this.addNewLine();
+		
+		for( Synapse synapse: this.getNetwork().getStructure().getSynapses() )
+		{
+			generateSynapse(synapse);
+		}
+		this.addNewLine();
+		
+		for( Layer layer: this.getNetwork().getStructure().getLayers() )
+		{
+			addSynapsesToLayer(layer);
+		}
+		this.addNewLine();
 		
 		generateTags();
+		
+		this.addNewLine();
 		
 		this.addLine("network.getStructure().finalizeStructure();");
 		this.addLine("network.reset();");
