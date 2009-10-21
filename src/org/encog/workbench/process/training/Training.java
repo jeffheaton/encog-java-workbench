@@ -311,6 +311,9 @@ public class Training {
 		
 		try
 		{
+			if(!EncogWorkBench.getInstance().getMainWindow().getSubwindows().checkTrainingOrNetworkOpen())
+				return;
+			
 			if (dialog.process()) {
 				switch (dialog.getType()) {
 				case PropagationResilient:

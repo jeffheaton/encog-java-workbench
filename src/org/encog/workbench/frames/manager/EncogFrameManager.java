@@ -28,6 +28,8 @@ package org.encog.workbench.frames.manager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
@@ -88,6 +90,48 @@ public class EncogFrameManager {
 
 	public void remove(final EncogCommonFrame frame) {
 		this.frames.remove(frame);
+	}
+	
+	public boolean isTrainingOrNetworkOpen()
+	{
+		for (final EncogCommonFrame frame : this.frames) {
+			EncogPersistedObject obj = (EncogPersistedObject)frame.getEncogObject();
+			if( obj instanceof BasicNetwork || obj instanceof NeuralDataSet )
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public void closeTrainingOrNetwork()
+	{
+		Object[] list = this.frames.toArray();
+		for(int i=0;i<list.length;i++) {
+			EncogCommonFrame frame = (EncogCommonFrame)list[i];
+			
+			if( frame.getEncogObject() instanceof BasicNetwork 
+					|| frame.getEncogObject() instanceof NeuralDataSet )
+			{				
+				frame.windowClosing(null);
+				frame.dispose();
+			}
+		}
+	}
+	
+	public boolean checkTrainingOrNetworkOpen()
+	{
+		if( isTrainingOrNetworkOpen() )
+		{
+			if( !EncogWorkBench.askQuestion("Windows Open", "There are training and/or network windows open.\nBefore training can begin, these must be closed.  Do you wish to close them now?"))
+			{
+				return false;
+			}
+			closeTrainingOrNetwork();
+		}
+		
+		return true;
 	}
 
 }
