@@ -53,20 +53,19 @@ public class EncogFrameManager {
 			return true;
 		}
 
-		if (c.getName().equals(existing.getClass().getName())) {
-			existing.toFront();
-			return false;
-		}
+		existing.toFront();
+		return false;
 
-		EncogWorkBench.displayMessage("Already Viewing that Object",
+		/*EncogWorkBench.displayMessage("Already Viewing that Object",
 				"You must close the window \n\"" + existing.getTitle()
 						+ "\"\n before this window can be opened.");
-		return false;
+		return false;*/
 	}
 
 	public EncogCommonFrame find(final DirectoryEntry object) {
 		for (final EncogCommonFrame frame : this.frames) {
-			if (frame.getEncogObject() == object) {
+			EncogPersistedObject obj = (EncogPersistedObject)frame.getEncogObject();
+			if (obj.getName().equals(object.getName())) {
 				return frame;
 			}
 		}
