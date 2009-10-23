@@ -113,7 +113,19 @@ public class AboutEncogPanel extends JPanel {
 		g.setFont(EncogFonts.getInstance().getBodyFont());
 		g.drawString(System.getProperty("java.version"), 150, y);
 		y += g.getFontMetrics().getHeight();
-
+		
+		g.setFont(EncogFonts.getInstance().getHeadFont());
+		g.drawString("Java 64/32-Bit:", 10, y);
+		g.setFont(EncogFonts.getInstance().getBodyFont());
+		g.drawString(System.getProperty("sun.arch.data.model"), 150, y);
+		y += g.getFontMetrics().getHeight();
+		
+		g.setFont(EncogFonts.getInstance().getHeadFont());
+		g.drawString("Processor Count:", 10, y);
+		g.setFont(EncogFonts.getInstance().getBodyFont());
+		g.drawString(""+Runtime.getRuntime().availableProcessors(), 150, y);
+		y += g.getFontMetrics().getHeight();
+		
 		g.setFont(EncogFonts.getInstance().getHeadFont());
 		g.drawString("OS Name/Version:", 10, y);
 		g.setFont(EncogFonts.getInstance().getBodyFont());
