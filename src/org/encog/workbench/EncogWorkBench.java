@@ -31,7 +31,7 @@ import javax.swing.JOptionPane;
 
 import org.encog.EncogError;
 import org.encog.persist.EncogPersistedCollection;
-import org.encog.util.Directory;
+import org.encog.util.file.Directory;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.frames.document.EncogDocumentFrame;

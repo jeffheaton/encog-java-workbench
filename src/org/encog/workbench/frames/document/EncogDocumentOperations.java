@@ -43,7 +43,7 @@ import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
-import org.encog.util.Directory;
+import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
@@ -122,6 +122,10 @@ public class EncogDocumentOperations {
 				owner.getSubwindows().add(frame);
 			}
 		} 
+		else
+		{
+			EncogWorkBench.displayError("Error", "Unknown object type.\nDo not know how to open.");
+		}
 	}
 
 	public void performEditCopy() {
