@@ -46,11 +46,28 @@ public class JavaClassPathUtil {
 				if (builder.length() > 0) {
 					builder.append(sep);
 				}
+				
+				if( sep==':' )
+					str = adjustDirSymbol(str,'/');
+				else
+					str = adjustDirSymbol(str,'\\');
 				builder.append(str);
 			}
 		}
 
 		return builder.toString();
+	}
+	
+	private static String adjustDirSymbol(String str, char replace) {
+		StringBuilder result = new StringBuilder();
+		for(int i = 0; i<str.length(); i++)
+		{
+			char ch = str.charAt(i);
+			if( ch==File.pathSeparatorChar )
+				ch = replace;
+			result.append(replace);
+		}
+		return result.toString();
 	}
 
 	public static void main(final String args[]) {
