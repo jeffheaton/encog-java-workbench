@@ -45,6 +45,8 @@ import javax.swing.WindowConstants;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
+import org.encog.neural.networks.training.propagation.TrainingContinuation;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.TimeSpanFormatter;
@@ -237,6 +239,29 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		this.headFont = EncogFonts.getInstance().getHeadFont();
 		this.status = "Ready to Start";
 	}
+	
+	private void performClose()
+	{
+		if (EncogWorkBench.askQuestion("Training",
+			"Save the training to this network?")) {
+			
+			EncogWorkBench.getInstance().getCurrentFile().add(
+					this.network.getName(), this.network);
+			
+			if( this.train instanceof ResilientPropagation )
+			{
+				ResilientPropagation rprop = (ResilientPropagation)this.train;
+				TrainingContinuation cont = rprop.pause();
+				cont.setDescription("Training state from last RPROP.");
+				EncogWorkBench.getInstance().getCurrentFile().add(
+						this.network.getName()+"-rprop", cont);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+			}
+			
+		}
+		
+		dispose();
+	}
 
 	/**
 	 * Track button presses.
@@ -247,12 +272,7 @@ public abstract class BasicTrainingProgress extends JDialog implements
 	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource() == this.buttonClose) {
 			if (this.thread == null) {
-				if (EncogWorkBench.askQuestion("Training",
-						"Save the training to this network?")) {
-					EncogWorkBench.getInstance().getCurrentFile().add(
-							this.network.getName(), this.network);
-				}
-				dispose();
+				performClose();
 			} else {
 				this.shouldExit = true;
 				this.cancel = true;
@@ -347,6 +367,17 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		
 		if(!EncogWorkBench.getInstance().getMainWindow().getSubwindows().checkTrainingOrNetworkOpen())
 			return;
+		
+		if( this.train instanceof ResilientPropagation )
+		{
+			ResilientPropagation rprop = (ResilientPropagation)this.train;
+			TrainingContinuation state = 	
+				(TrainingContinuation)EncogWorkBench.getInstance().getCurrentFile().find(
+					this.network.getName()+"-rprop");
+			if( state!=null ) {
+				rprop.resume(state);
+			}
+		}
 		
 		this.started = new Date();
 		this.performanceLast = this.started;
