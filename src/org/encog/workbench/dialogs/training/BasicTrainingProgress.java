@@ -375,8 +375,11 @@ public abstract class BasicTrainingProgress extends JDialog implements
 				(TrainingContinuation)EncogWorkBench.getInstance().getCurrentFile().find(
 					this.network.getName()+"-rprop");
 			if( state!=null ) {
-				rprop.resume(state);
+				if( rprop.isValidResume(state) )
+					rprop.resume(state);
 			}
+			EncogWorkBench.getInstance().getCurrentFile().delete(
+					this.network.getName()+"-rprop");
 		}
 		
 		this.started = new Date();
