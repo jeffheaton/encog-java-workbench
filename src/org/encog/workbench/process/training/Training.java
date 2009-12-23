@@ -50,6 +50,8 @@ import org.encog.workbench.dialogs.training.outstar.InputOutstar;
 import org.encog.workbench.dialogs.training.outstar.ProgressOutstar;
 import org.encog.workbench.dialogs.training.resilient.InputResilient;
 import org.encog.workbench.dialogs.training.resilient.ProgressResilient;
+import org.encog.workbench.dialogs.training.scg.InputSCG;
+import org.encog.workbench.dialogs.training.scg.ProgressSCG;
 import org.encog.workbench.dialogs.training.som.InputSOM;
 import org.encog.workbench.dialogs.training.som.ProgressSOM;
 import org.encog.workbench.process.validate.ValidateTraining;
@@ -337,6 +339,9 @@ public class Training {
 				case ADALINE:
 					performADALINE();
 					break;
+				case SCG:
+					performSCG();
+					break;
 					
 				}
 			}
@@ -345,5 +350,32 @@ public class Training {
 		{
 			EncogWorkBench.displayError("Error While Training", t);
 		}
+	}
+	
+	public static void performSCG() {
+		final InputSCG dialog = new InputSCG(EncogWorkBench
+				.getInstance().getMainWindow());
+		if (dialog.process()) {
+			final ValidateTraining validate = new ValidateTraining(dialog
+					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+
+			if (!validate.validateIsSupervised()) {
+				return;
+			}
+			
+			if( !validate.validateFeedforwardOrSRN() ) {
+				return;
+			}
+
+			final BasicNetwork network = dialog.getNetwork();
+			final NeuralDataSet training = dialog.getTrainingSet();
+
+			final ProgressSCG train = new ProgressSCG(
+					EncogWorkBench.getInstance().getMainWindow(), network,
+					training, dialog.getMaxError().getValue());
+
+			train.setVisible(true);
+		}
+
 	}
 }
