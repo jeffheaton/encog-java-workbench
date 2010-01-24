@@ -457,7 +457,7 @@ public abstract class BasicTrainingProgress extends JDialog implements
 				dispose();
 			}
 		} catch (Throwable t) {
-			EncogWorkBench.displayError("Error",t);
+			EncogWorkBench.displayError("Error",t, this.network, this.trainingData);
 			shutdown();
 			stopped();
 			dispose();
