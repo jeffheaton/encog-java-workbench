@@ -30,10 +30,13 @@ import java.io.File;
 import javax.swing.JOptionPane;
 
 import org.encog.EncogError;
+import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.util.file.Directory;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
+import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 /**
@@ -319,6 +322,14 @@ public class EncogWorkBench {
 				JOptionPane.YES_NO_OPTION);
 		
 		return result == JOptionPane.YES_OPTION;
+	}
+	
+	public static void displayError(String title, Throwable t, BasicNetwork network, NeuralDataSet set)
+	{
+		if( t instanceof EncogError )
+			displayError(title,t);
+		else
+			ErrorDialog.handleError(t,network,set);
 	}
 	
 	public static void displayError(String title, Throwable t)

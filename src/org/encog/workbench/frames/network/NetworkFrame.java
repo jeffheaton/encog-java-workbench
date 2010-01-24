@@ -242,7 +242,7 @@ public class NetworkFrame extends EncogCommonFrame {
 		}
 		catch(Throwable t)
 		{
-			EncogWorkBench.displayError("Error", t);
+			EncogWorkBench.displayError("Error", t, ((BasicNetwork) this.getEncogObject()), null);
 		}
 
 	}
@@ -396,7 +396,7 @@ public class NetworkFrame extends EncogCommonFrame {
 			try {
 				newLogic.init(network);
 			} catch (Exception e) {
-				EncogWorkBench.displayError("Error",e);
+				EncogWorkBench.displayError("Error",e, network, null);
 				setLogic();
 			}
 			network.setLogic(newLogic);
