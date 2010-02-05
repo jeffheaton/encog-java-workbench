@@ -1,11 +1,11 @@
 /*
- * Encog Workbench v2.x
+ * Encog(tm) Workbench v2.3
  * http://www.heatonresearch.com/encog/
  * http://code.google.com/p/encog-java/
  * 
- * Copyright 2008-2009, Heaton Research Inc., and individual contributors.
- * See the copyright.txt in the distribution for a full listing of 
- * individual contributors.
+ * Copyright 2008-2010 by Heaton Research Inc.
+ * 
+ * Released under the LGPL.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -21,7 +21,13 @@
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * 
+ * Encog and Heaton Research are Trademarks of Heaton Research, Inc.
+ * For information on Heaton Research trademarks, visit:
+ * 
+ * http://www.heatonresearch.com/copyright.html
  */
+
 package org.encog.workbench.dialogs;
 
 import java.awt.Container;
