@@ -55,7 +55,7 @@ public class EncogWorkBench {
 
 	public final static String CONFIG_FILENAME = "EncogWorkbench.conf";
 	public final static String TEMP_FILENAME = "encogtemp.eg";
-	public final static String VERSION = "2.3";
+	public final static String VERSION = "2.4";
 	
 	/**
 	 * The singleton instance.
