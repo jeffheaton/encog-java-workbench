@@ -30,7 +30,7 @@
 
 package org.encog.workbench.dialogs.layers;
 
-import org.encog.util.math.rbf.RadialBasisFunction;
+import org.encog.mathutil.rbf.RadialBasisFunction;
 import org.jfree.data.function.Function2D;
 
 public class RadialBasisFunction2D implements Function2D {

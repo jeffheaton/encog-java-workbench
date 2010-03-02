@@ -32,13 +32,13 @@ package org.encog.workbench.dialogs.training.genetic;
 
 import java.awt.Frame;
 
+import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.neural.networks.training.genetic.NeuralGeneticAlgorithm;
-import org.encog.util.randomize.RangeRandomizer;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
 /**

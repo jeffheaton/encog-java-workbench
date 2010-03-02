@@ -52,6 +52,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import org.encog.EncogError;
+import org.encog.mathutil.rbf.GaussianFunction;
+import org.encog.mathutil.rbf.RadialBasisFunction;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.ContextLayer;
@@ -64,8 +66,6 @@ import org.encog.neural.networks.synapse.SynapseType;
 import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.neural.networks.synapse.WeightlessSynapse;
 import org.encog.neural.prune.PruneSelective;
-import org.encog.util.math.rbf.GaussianFunction;
-import org.encog.util.math.rbf.RadialBasisFunction;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.WorkbenchFonts;

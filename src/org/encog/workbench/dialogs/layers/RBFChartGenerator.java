@@ -33,10 +33,10 @@ package org.encog.workbench.dialogs.layers;
 import java.awt.BasicStroke;
 import java.awt.Color;
 
+import org.encog.mathutil.Convert;
+import org.encog.mathutil.rbf.GaussianFunction;
+import org.encog.mathutil.rbf.RadialBasisFunction;
 import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
-import org.encog.util.math.Convert;
-import org.encog.util.math.rbf.GaussianFunction;
-import org.encog.util.math.rbf.RadialBasisFunction;
 import org.encog.workbench.dialogs.common.ChartGenerator;
 import org.encog.workbench.dialogs.common.TableFieldModel;
 import org.jfree.chart.ChartFactory;

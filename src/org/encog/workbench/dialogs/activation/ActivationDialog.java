@@ -55,7 +55,6 @@ import org.encog.neural.activation.ActivationSIN;
 import org.encog.neural.activation.ActivationSigmoid;
 import org.encog.neural.activation.ActivationSoftMax;
 import org.encog.neural.activation.ActivationTANH;
-import org.encog.util.math.rbf.GaussianFunction;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 

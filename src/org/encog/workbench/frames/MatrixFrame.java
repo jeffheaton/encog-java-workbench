@@ -37,12 +37,8 @@ import java.awt.event.WindowEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import org.encog.matrix.Matrix;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.synapse.Synapse;
-import org.encog.persist.EncogPersistedObject;
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.MatrixTableModel;
 

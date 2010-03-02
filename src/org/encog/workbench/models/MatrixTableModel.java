@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
-import org.encog.matrix.Matrix;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.synapse.Synapse;
 
