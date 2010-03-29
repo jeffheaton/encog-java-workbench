@@ -6,6 +6,9 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import org.encog.neural.networks.training.genetic.NeuralGenome;
+import org.encog.neural.networks.training.neat.NEATGenome;
+import org.encog.solve.genetic.genome.Genome;
 import org.encog.solve.genetic.population.Population;
 import org.encog.util.Format;
 import org.encog.workbench.WorkbenchFonts;
@@ -60,6 +63,21 @@ public class PopulationInfo extends JPanel {
 		if( population.getInnovations()!=null )
 			innovationsSize = population.getInnovations().getInnovations().size();
 		
+		String type = "Unknown";
+		
+		if( population.getGenomes().size()>0 )
+		{
+			Genome genome = population.getGenomes().get(0);
+			if( genome instanceof NEATGenome )
+			{
+				type = "Neat";
+			}
+			else if( genome instanceof NeuralGenome )
+			{
+				type = "NON-NEAT Neural Network";
+			}
+		}
+		
 		y = fm.getHeight();
 		g.setFont(WorkbenchFonts.getTextFont());
 		g.drawString(Format.formatInteger(population.getPopulationSize()), 200, y);
@@ -74,7 +92,7 @@ public class PopulationInfo extends JPanel {
 		g.drawString(Format.formatInteger(innovationsSize), 200, y);
 		g.drawString(Format.formatPercent(population.getYoungScoreBonus()), 450, y);
 		y+=fm.getHeight();
-		g.drawString("Unknown", 200, y);
+		g.drawString(type, 200, y);
 		g.drawString(Format.formatPercent(population.getSurvivalRate()), 450, y);
 		y+=fm.getHeight();
 		g.drawString(Format.formatDouble(bestScore,2), 200, y);
