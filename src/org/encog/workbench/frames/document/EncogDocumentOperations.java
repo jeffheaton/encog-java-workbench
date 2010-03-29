@@ -46,13 +46,17 @@ import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.Layer;
+import org.encog.neural.networks.training.neat.NEATGenome;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
+import org.encog.solve.genetic.population.BasicPopulation;
+import org.encog.solve.genetic.population.Population;
 import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EvaluateDialog;
+import org.encog.workbench.dialogs.PopulationDialog;
 import org.encog.workbench.dialogs.about.AboutEncog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
@@ -63,6 +67,7 @@ import org.encog.workbench.frames.TextEditorFrame;
 import org.encog.workbench.frames.TrainingDataFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.network.NetworkFrame;
+import org.encog.workbench.frames.population.PopulationFrame;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.ImportExport;
@@ -78,7 +83,7 @@ public class EncogDocumentOperations {
 	
 	private int trainingCount = 1;
 	private int networkCount = 1;
-	private int parseCount = 1;
+	private int populationCount = 1;
 	private int optionsCount = 1;
 	private int textCount = 1;
 	
@@ -123,6 +128,14 @@ public class EncogDocumentOperations {
 			if (owner.getSubwindows().checkBeforeOpen(prop, PropertyData.class)) {
 				PropertyData prop2 = (PropertyData)EncogWorkBench.getInstance().getCurrentFile().find(prop);
 				final PropertyDataFrame frame = new PropertyDataFrame(prop2);
+				frame.setVisible(true);
+				owner.getSubwindows().add(frame);
+			}
+		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_POPULATION)) {
+			DirectoryEntry prop = (DirectoryEntry)item;
+			if (owner.getSubwindows().checkBeforeOpen(prop, BasicPopulation.class)) {
+				BasicPopulation pop2 = (BasicPopulation)EncogWorkBench.getInstance().getCurrentFile().find(prop);
+				final PopulationFrame frame = new PopulationFrame(pop2);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
@@ -272,8 +285,9 @@ public class EncogDocumentOperations {
 
 		try
 		{
-		SelectItem itemTraining, itemNetwork, itemOptions, itemText;
+		SelectItem itemTraining, itemNetwork, itemOptions, itemText, itemPopulation;
 		final List<SelectItem> list = new ArrayList<SelectItem>();
+		list.add(itemPopulation = new SelectItem("NEAT Population"));
 		list.add(itemNetwork = new SelectItem("Neural Network"));
 		list.add(itemOptions = new SelectItem("Property Data"));
 		list.add(itemText = new SelectItem("Text"));
@@ -306,6 +320,8 @@ public class EncogDocumentOperations {
 			prop.setDescription("Some property data");
 			EncogWorkBench.getInstance().getCurrentFile().add("properties-" + this.optionsCount++,prop);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
+		} else if( result==itemPopulation) {
+			performCreatePopulation();
 		}
 		}
 		catch(EncogError t)
@@ -314,6 +330,28 @@ public class EncogDocumentOperations {
 			logger.error("Error creating object",t);
 		}
 	}
+	private void performCreatePopulation() {
+		PopulationDialog dialog = new PopulationDialog(owner);
+		
+		if( dialog.process() )
+		{
+			int populationSize = dialog.getPopulationSize().getValue();
+			BasicPopulation pop = new BasicPopulation(populationSize);
+			
+			for (int i = 0; i < populationSize; i++) {
+				pop.add(
+						new NEATGenome(null, pop.assignGenomeID(),
+								dialog.getPopulationSize().getValue(), 
+								dialog.getOutputNeurons().getValue()));
+			}
+
+			
+			pop.setDescription("Population");
+			EncogWorkBench.getInstance().getCurrentFile().add("population-" + this.populationCount++,pop);
+		}
+		
+	}
+
 	public void performObjectsDelete() {
 		final Object object = owner.getContents().getSelectedValue();
 		if (object != null) {

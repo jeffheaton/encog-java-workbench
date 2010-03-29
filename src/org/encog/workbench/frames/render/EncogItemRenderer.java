@@ -59,6 +59,7 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 	private final ImageIcon iconText;
 	private final ImageIcon iconUnknown;
 	private final ImageIcon iconTrainingCont;
+	private final ImageIcon iconPopulation;
 
 	public EncogItemRenderer() {
 		this.iconNeuralNet = new ImageIcon(this.getClass().getResource(
@@ -73,6 +74,8 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 			"/resource/iconUnknown.png"));
 		this.iconTrainingCont = new ImageIcon(this.getClass().getResource(
 			"/resource/iconTrainingCont.png"));
+		this.iconPopulation = new ImageIcon(this.getClass().getResource(
+			"/resource/iconPopulation.png"));
 	}
 
 	/**
@@ -158,6 +161,10 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 		{
 			return this.iconTrainingCont;
 		}
+		else if( EncogPersistedCollection.TYPE_POPULATION.equals(this.getEncogObject().getType()) )
+		{
+			return this.iconPopulation;
+		}
 		else
 		{
 			return this.iconUnknown;
@@ -185,6 +192,10 @@ public class EncogItemRenderer extends JPanel implements ListCellRenderer {
 		else if( EncogPersistedCollection.TYPE_TRAINING_CONTINUATION.equals(this.getEncogObject().getType()) )
 		{
 			return "Training Continuation";
+		}
+		else if( EncogPersistedCollection.TYPE_POPULATION.equals(this.getEncogObject().getType()) )
+		{
+			return "Population";
 		}
 		else
 		{

@@ -41,6 +41,8 @@ public class Icons {
 	private static ImageIcon synapseOneToOne;
 	private static ImageIcon synapseWeight;
 	private static ImageIcon synapseWeightless;
+	private static ImageIcon synapseNEAT;
+	private static ImageIcon synapsePartial;
 	
 	public static void loadIcons()
 	{
@@ -53,6 +55,8 @@ public class Icons {
 			Icons.synapseOneToOne = new ImageIcon(Icons.class.getResource("/resource/synapseOneToOne.png"));
 			Icons.synapseWeight = new ImageIcon(Icons.class.getResource("/resource/synapseWeight.png"));
 			Icons.synapseWeightless = new ImageIcon(Icons.class.getResource("/resource/synapseWeightless.png"));
+			Icons.synapseNEAT = new ImageIcon(Icons.class.getResource("/resource/synapseNEAT.png"));
+			Icons.synapsePartial = new ImageIcon(Icons.class.getResource("/resource/synapsePartial.png"));
 		}
 	}
 
@@ -88,6 +92,16 @@ public class Icons {
 	public static ImageIcon getSynapseWeightless() {
 		loadIcons();
 		return synapseWeightless;
+	}
+
+	public static ImageIcon getSynapseNEAT() {
+		loadIcons();
+		return synapseNEAT;
+	}
+
+	public static ImageIcon getSynapsePartial() {
+		loadIcons();
+		return synapsePartial;
 	}
 	
 	

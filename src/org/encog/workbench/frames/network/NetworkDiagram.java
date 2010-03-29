@@ -61,10 +61,12 @@ import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
 import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
+import org.encog.neural.networks.synapse.PartialSynapse;
 import org.encog.neural.networks.synapse.Synapse;
 import org.encog.neural.networks.synapse.SynapseType;
 import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.neural.networks.synapse.WeightlessSynapse;
+import org.encog.neural.networks.synapse.neat.NEATSynapse;
 import org.encog.neural.prune.PruneSelective;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
@@ -195,7 +197,11 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 			return "1:1";
 		} else if (synapse instanceof DirectSynapse) {
 			return "Direct";
-		} else
+		} else if (synapse instanceof NEATSynapse) {
+			return "NEAT";
+		}else if (synapse instanceof PartialSynapse) {
+			return "Partial";
+		}else
 			return "Unknown";
 	}
 
@@ -404,6 +410,10 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 					this.fromLayer.addNext(clickedLayer, SynapseType.Direct);
 				} else if (tool.getClassType() == OneToOneSynapse.class) {
 					this.fromLayer.addNext(clickedLayer, SynapseType.OneToOne);
+				} else if (tool.getClassType() == NEATSynapse.class) {
+					this.fromLayer.addNext(clickedLayer, SynapseType.NEAT);
+				}else if (tool.getClassType() == PartialSynapse.class) {
+					this.fromLayer.addNext(clickedLayer, SynapseType.Partial);
 				}
 			} catch (EncogError e) {
 				EncogWorkBench.displayError("Synapse Error", e.getMessage());
