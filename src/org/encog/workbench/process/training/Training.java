@@ -53,6 +53,8 @@ import org.encog.workbench.dialogs.training.lma.InputLMA;
 import org.encog.workbench.dialogs.training.lma.ProgressLMA;
 import org.encog.workbench.dialogs.training.manhattan.InputManhattan;
 import org.encog.workbench.dialogs.training.manhattan.ProgressManhattan;
+import org.encog.workbench.dialogs.training.neat.InputNEAT;
+import org.encog.workbench.dialogs.training.neat.ProgressNEAT;
 import org.encog.workbench.dialogs.training.outstar.InputOutstar;
 import org.encog.workbench.dialogs.training.outstar.ProgressOutstar;
 import org.encog.workbench.dialogs.training.resilient.InputResilient;
@@ -356,6 +358,9 @@ public class Training {
 				case SCG:
 					performSCG();
 					break;
+				case NEAT:
+					performNEAT();
+					break;
 					
 				}
 			}
@@ -415,6 +420,28 @@ public class Training {
 					EncogWorkBench.getInstance().getMainWindow(), network,
 					training, dialog.getMaxError().getValue(),
 					dialog.getUseBayesian().getValue());
+
+			train.setVisible(true);
+		}
+
+	}
+	
+	public static void performNEAT() {
+		final InputNEAT dialog = new InputNEAT(EncogWorkBench
+				.getInstance().getMainWindow());
+		if (dialog.process()) {
+			final ValidateTraining validate = new ValidateTraining(null, 
+					(BasicNeuralDataSet) dialog.getTrainingSet());
+
+			if (!validate.validateIsSupervised()) {
+				return;
+			}
+
+			final NeuralDataSet training = dialog.getTrainingSet();
+
+			final ProgressNEAT train = new ProgressNEAT(
+					EncogWorkBench.getInstance().getMainWindow(),
+					training, dialog.getMaxError().getValue());
 
 			train.setVisible(true);
 		}
