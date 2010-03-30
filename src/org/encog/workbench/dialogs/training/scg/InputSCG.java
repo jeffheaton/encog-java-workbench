@@ -44,7 +44,7 @@ public class InputSCG  extends BasicTrainingInput {
 	 */
 	public InputSCG(final Frame owner) {
 		super(owner);
-		setTitle("Train Levenberg-Marquardt(SCG)");
+		setTitle("Scaled Conjugate Gradient (SCG)");
 		render();	
 		this.getMaxError().setValue(0.01);
 	}

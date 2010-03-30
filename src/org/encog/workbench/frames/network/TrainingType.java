@@ -35,10 +35,12 @@ public enum TrainingType {
 	PropagationBack,
 	PropagationResilient,
 	PropagationManhattan,
+	LevenbergMarquardt,
 	Genetic,
 	Annealing,
 	SOM,
 	ADALINE,
 	Instar,
-	Outstar
+	Outstar,
+	NEAT
 }

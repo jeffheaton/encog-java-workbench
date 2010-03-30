@@ -73,16 +73,18 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 		content.add(this.scroll1);
 		content.add(this.scroll2);
 
-		this.model.addElement("Propagation - Levenberg-Marquardt (SCG)");
+		this.model.addElement("Propagation - Scaled Conjugate Gradient (SCG)");
 		this.model.addElement("Propagation - Resilient");
 		this.model.addElement("Propagation - Backpropagation");
 		this.model.addElement("Propagation - Manhattan");
+		this.model.addElement("Levenberg-Marquardt");
 		this.model.addElement("Genetic Algorithm");
 		this.model.addElement("Simulated Annealing");
 		this.model.addElement("Self Organizing Map Training(SOM)");
 		this.model.addElement("ADALINE");
 		this.model.addElement("Instar");
 		this.model.addElement("Outstar");
+		this.model.addElement("NeuroEvolution of Augmenting Topologies (NEAT)");
 
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -109,22 +111,28 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 			this.type = TrainingType.PropagationManhattan;
 			break;
 		case 4:
+			this.type = TrainingType.LevenbergMarquardt;
+			break;	
+		case 5:
 			this.type = TrainingType.Genetic;
 			break;
-		case 5:
+		case 6:
 			this.type = TrainingType.Annealing;
 			break;
-		case 6:
+		case 7:
 			this.type = TrainingType.SOM;
 			break;
-		case 7:
+		case 8:
 			this.type = TrainingType.ADALINE;
 			break;
-		case 8:
+		case 9:
 			this.type = TrainingType.Instar;
 			break;
-		case 9:
+		case 10:
 			this.type = TrainingType.Outstar;
+			break;
+		case 11:
+			this.type = TrainingType.NEAT;
 			break;
 		}
 	}
@@ -144,23 +152,29 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 		case PropagationManhattan:
 			this.list.setSelectedIndex(3);
 			break;
-		case Genetic:
+		case LevenbergMarquardt:
 			this.list.setSelectedIndex(4);
 			break;
-		case Annealing:
+		case Genetic:
 			this.list.setSelectedIndex(5);
 			break;
-		case SOM:
+		case Annealing:
 			this.list.setSelectedIndex(6);
 			break;
-		case ADALINE:
+		case SOM:
 			this.list.setSelectedIndex(7);
 			break;
-		case Instar:
+		case ADALINE:
 			this.list.setSelectedIndex(8);
 			break;
-		case Outstar:
+		case Instar:
 			this.list.setSelectedIndex(9);
+			break;
+		case Outstar:
+			this.list.setSelectedIndex(10);
+			break;
+		case NEAT:
+			this.list.setSelectedIndex(11);
 			break;
 		}
 	}
@@ -176,7 +190,7 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 	public void valueChanged(ListSelectionEvent e) {
 		switch (list.getSelectedIndex()) {
 		case 0:
-			this.text.setText("Scaled Conjugate Gradient (Levenberg-Marquardt) is one of the fastest training algorithms available for Encog.  It is a supervised learning method. Training is accomplished by use of the Levenberg-Marquardt function minimization technique. It is generally the best choice for Encog supervised training.");
+			this.text.setText("Scaled Conjugate Gradient (SCG) is an effective training algorithms available for Encog.  It is a supervised learning method. Training is accomplished by use of the Scaled Conjugate Gradient function minimization technique.");
 			break;
 		case 1:
 			this.text
@@ -192,28 +206,39 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 			break;
 		case 4:
 			this.text
-					.setText("A genetic algorithm trains a neural network with a process that emulates biological mutation and natural selection.  This is implemented as a supervised training method.  Many neural networks are created that will simulate different organisms.  These neural networks will compete to see which has the lowest error rate.  Those neural networks that have the lowest error rates will have elements of their weight matrix combined to produce offspring.  Some offspring will have random mutations introduced.  This cycle continues and hopefully produces lower error rates from the top neural networks with each iteration.");
+					.setText("The Levenberg Marquardt training algorithm is one of the fastest training algorithms available for Encog.  It is based on the LevenbergMarquardt method for minimizing a function.  This training algorithm can only be used for neural networks that contain a single output neuron.  This is a supervised training method.");
 			break;
 		case 5:
 			this.text
-					.setText("Simulated annealing is a process where the weights are randomized according to a temperature.  As this temperature decreases, the weights are kept if they improve the error rate of the neural network.  This training technique is implemented as supervised training.  This process simulates the metallurgical process of annealing where metals are slowly cooled to produce a more stable molecular structure.");
+					.setText("A genetic algorithm trains a neural network with a process that emulates biological mutation and natural selection.  This is implemented as a supervised training method.  Many neural networks are created that will simulate different organisms.  These neural networks will compete to see which has the lowest error rate.  Those neural networks that have the lowest error rates will have elements of their weight matrix combined to produce offspring.  Some offspring will have random mutations introduced.  This cycle continues and hopefully produces lower error rates from the top neural networks with each iteration.");
 			break;
 		case 6:
 			this.text
-					.setText("Self Organizing Maps(SOM) are trained in such a way that similar input patterns will cause a single neuron to become the winner.  The winner is the neuron with the highest activation.  This is an unsupervised training technique.  The input data will be grouped into categories defined by the number of output neurons.");
+					.setText("Simulated annealing is a process where the weights are randomized according to a temperature.  As this temperature decreases, the weights are kept if they improve the error rate of the neural network.  This training technique is implemented as supervised training.  This process simulates the metallurgical process of annealing where metals are slowly cooled to produce a more stable molecular structure.");
 			break;
 		case 7:
 			this.text
-					.setText("An Adaptive Linear Neural (ADALINE) network is trained with a very simple method based on the delta rule.  This is a supervised training technique that allows each Adaline element to recognize a single input pattern.)");
+					.setText("Self Organizing Maps(SOM) are trained in such a way that similar input patterns will cause a single neuron to become the winner.  The winner is the neuron with the highest activation.  This is an unsupervised training technique.  The input data will be grouped into categories defined by the number of output neurons.");
 			break;
 		case 8:
 			this.text
-					.setText("Instar training is generally used to train a counterpropagation neural network (CPN). Instar training is unsupervised, and teaches the Instar layer of the neural network to categorize the input into a number of categories expressed by the number of neurons in the instar layer. Instar training should be done before outstar, though they are accomplished in two discrete steps.");
+					.setText("An Adaptive Linear Neural (ADALINE) network is trained with a very simple method based on the delta rule.  This is a supervised training technique that allows each Adaline element to recognize a single input pattern.)");
 			break;
 		case 9:
 			this.text
+					.setText("Instar training is generally used to train a counterpropagation neural network (CPN). Instar training is unsupervised, and teaches the Instar layer of the neural network to categorize the input into a number of categories expressed by the number of neurons in the instar layer. Instar training should be done before outstar, though they are accomplished in two discrete steps.");
+			break;
+		case 10:
+			this.text
 					.setText("Outstar training is generally used to train a counterpropagation neural network (CPN).  Outstar training is supervised, and teaches the Outstar layer of the neural network to produce output that is close to the expected output.  Outstar training should be done after instar, though they are accomplished in two discrete steps.");
 			break;
+			
+		case 11:
+			this.text
+					.setText("NeuroEvolution of Augmenting Topologies (NEAT) is a genetic algorithm for the generation of evolving artificial neural networks.  It is used to train a NEAT population of NEAT neural networks.  This training method does not work for regular feedforward neural networks.");
+			break;
+			
+			
 
 		}
 

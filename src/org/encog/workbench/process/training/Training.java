@@ -49,6 +49,8 @@ import org.encog.workbench.dialogs.training.genetic.ProgressGenetic;
 import org.encog.workbench.dialogs.training.hopfield.InputHopfield;
 import org.encog.workbench.dialogs.training.instar.InputInstar;
 import org.encog.workbench.dialogs.training.instar.ProgressInstar;
+import org.encog.workbench.dialogs.training.lma.InputLMA;
+import org.encog.workbench.dialogs.training.lma.ProgressLMA;
 import org.encog.workbench.dialogs.training.manhattan.InputManhattan;
 import org.encog.workbench.dialogs.training.manhattan.ProgressManhattan;
 import org.encog.workbench.dialogs.training.outstar.InputOutstar;
@@ -336,6 +338,9 @@ public class Training {
 				case PropagationManhattan:
 					performManhattan();
 					break;
+				case LevenbergMarquardt:
+					performLMA();
+					break;
 				case Genetic:
 					performGenetic();
 					break;
@@ -382,6 +387,34 @@ public class Training {
 			final ProgressSCG train = new ProgressSCG(
 					EncogWorkBench.getInstance().getMainWindow(), network,
 					training, dialog.getMaxError().getValue());
+
+			train.setVisible(true);
+		}
+
+	}
+	
+	public static void performLMA() {
+		final InputLMA dialog = new InputLMA(EncogWorkBench
+				.getInstance().getMainWindow());
+		if (dialog.process()) {
+			final ValidateTraining validate = new ValidateTraining(dialog
+					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+
+			if (!validate.validateIsSupervised()) {
+				return;
+			}
+			
+			if( !validate.validateFeedforwardOrSRN() ) {
+				return;
+			}
+
+			final BasicNetwork network = dialog.getNetwork();
+			final NeuralDataSet training = dialog.getTrainingSet();
+
+			final ProgressLMA train = new ProgressLMA(
+					EncogWorkBench.getInstance().getMainWindow(), network,
+					training, dialog.getMaxError().getValue(),
+					dialog.getUseBayesian().getValue());
 
 			train.setVisible(true);
 		}
