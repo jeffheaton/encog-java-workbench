@@ -30,11 +30,14 @@
 
 package org.encog.workbench.process.validate;
 
+import org.encog.mathutil.rbf.RadialBasisFunction;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.logic.FeedforwardLogic;
 import org.encog.neural.networks.logic.SimpleRecurrentLogic;
+import org.encog.neural.networks.synapse.Synapse;
+import org.encog.neural.networks.synapse.neat.NEATSynapse;
 import org.encog.workbench.EncogWorkBench;
 
 public class ValidateTraining {
@@ -64,12 +67,20 @@ public class ValidateTraining {
 	
 	public boolean validateFeedforwardOrSRN()
 	{
-		if( this.network.getLogic().getClass() == FeedforwardLogic.class ||
-			this.network.getLogic().getClass() == SimpleRecurrentLogic.class )
-			return true;
+		if( this.network.getLogic().getClass() != FeedforwardLogic.class &&
+			this.network.getLogic().getClass() != SimpleRecurrentLogic.class ) {
+			EncogWorkBench.displayError("Training Error",
+			"This sort of training requires either feed forward or simple recurrent logic.\n");	
+			return false;
+		}
 		
-		EncogWorkBench.displayError("Training Error",
-				"This sort of training requires either feed forward or simple recurrent logic.\n");		
+		for( Synapse synapse: this.network.getStructure().getSynapses() ) {
+			if( synapse instanceof NEATSynapse ) {
+				EncogWorkBench.displayError("Training Error",
+				"This sort of training will not work with a NEAT synapse.\n");	
+			}
+		}
+			
 		return false;
 	}
 	
