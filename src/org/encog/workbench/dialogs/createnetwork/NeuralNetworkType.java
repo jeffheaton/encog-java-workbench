@@ -43,6 +43,7 @@ public enum NeuralNetworkType {
 	RSOM,
 	Hopfield,
 	Elman,
-	Jordan
+	Jordan,
+	NEAT
 	
 }

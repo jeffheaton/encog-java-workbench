@@ -30,6 +30,7 @@
 
 package org.encog.workbench.process;
 
+import org.encog.neural.activation.ActivationSigmoid;
 import org.encog.neural.activation.ActivationTANH;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.ADALINEPattern;
@@ -41,6 +42,7 @@ import org.encog.neural.pattern.ElmanPattern;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.pattern.HopfieldPattern;
 import org.encog.neural.pattern.JordanPattern;
+import org.encog.neural.pattern.NEATPattern;
 import org.encog.neural.pattern.RSOMPattern;
 import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.pattern.SOMPattern;
@@ -55,6 +57,7 @@ import org.encog.workbench.dialogs.createnetwork.CreateElmanDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateFeedforward;
 import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateJordanDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateNEATDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateNeuralNetworkDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateRBFDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateRSOMDialog;
@@ -108,7 +111,10 @@ public class CreateNeuralNetwork {
 				break;
 			case ART1:
 				network = createART1(name);
-				break;				
+				break;		
+			case NEAT:
+				network = createNEAT(name);
+				break;
 			default:
 				network = createEmpty(name);
 				break;
@@ -292,6 +298,23 @@ public class CreateNeuralNetwork {
 			return art1.generate();
 		} else
 			return null;
+	}
+	
+	private static BasicNetwork createNEAT(String name) {
+		CreateNEATDialog dialog = new CreateNEATDialog(EncogWorkBench
+				.getInstance().getMainWindow());
+		dialog.setOutputActivationFunction(new ActivationSigmoid());
+		dialog.setNeatActivationFunction(new ActivationSigmoid());
+		if (dialog.process()) {
+			NEATPattern feedforward = new NEATPattern();
+			feedforward.setActivationFunction(dialog.getOutputActivationFunction());
+			feedforward.setInputNeurons(dialog.getInputCount().getValue());
+			feedforward.setInputNeurons(dialog.getInputCount().getValue());
+			feedforward.setOutputNeurons(dialog.getOutputCount().getValue());
+			return feedforward.generate();
+		}
+		return null;
+
 	}
 	
 }

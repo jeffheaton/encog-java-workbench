@@ -10,10 +10,14 @@ import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.neural.networks.training.neat.NEATTraining;
 import org.encog.neural.networks.training.propagation.scg.ScaledConjugateGradient;
+import org.encog.solve.genetic.population.Population;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
 public class ProgressNEAT extends BasicTrainingProgress {
 
+	private Population population;
+	
+	
 	/**
 	 * Construct the dialog box.
 	 * @param owner The owner.
@@ -22,14 +26,18 @@ public class ProgressNEAT extends BasicTrainingProgress {
 	 * @param learningRate The max step value.
 	 * @param maxError The maximum error.
 	 */
-	public ProgressNEAT(final Frame owner,final NeuralDataSet trainingData,
+	public ProgressNEAT(
+			final Frame owner,
+			final NeuralDataSet trainingData,
+			final Population population,
+			final BasicNetwork model,
 			final double maxError) {
 		super(owner);
 		setTitle("NeuroEvolution of Augmenting Topologies (NEAT)");
-		setNetwork(null);
+		setNetwork(model);
 		setTrainingData(trainingData);
 		setMaxError(maxError);
-
+		this.population = population;
 	}
 
 	/**
@@ -61,7 +69,8 @@ public class ProgressNEAT extends BasicTrainingProgress {
 		step.setCenter(0.5);
 		
 		final NEATTraining train = new NEATTraining(
-				score, 2, 1, 1000);
+				score, this.getNetwork(),this.population);
+		
 		train.setOutputActivationFunction(step);
 
 		setTrain(train);

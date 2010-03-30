@@ -83,6 +83,7 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 		this.model.addElement("Recurrent - Elman");
 		this.model.addElement("Recurrent - Jordan");
 		this.model.addElement("Recurrent - SOM");
+		this.model.addElement("NeuroEvolution of Augmenting Topologies (NEAT)");
 
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -138,7 +139,10 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			break;
 		case 12:
 			this.type = NeuralNetworkType.RSOM;
-			break;			
+			break;
+		case 13:
+			this.type = NeuralNetworkType.NEAT;
+			break;
 		}
 	}
 
@@ -183,6 +187,9 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			break;
 		case RSOM:
 			this.list.setSelectedIndex(12);
+			break;
+		case NEAT:
+			this.list.setSelectedIndex(13);
 			break;
 
 		}
@@ -262,7 +269,10 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			this.text
 					.setText("Simple Recurrent Network (SRN) Self Organizing Map - A recurrent self organizing map that has an input and output layer, just as a regular SOM.  However, the RSOM has a context layer as well.  This context layer echo's the previous iteration's output back to the input layer of the neural network.  RSOM's are trained with a competitive learning algorithm, just as a non-recurrent SOM.  RSOM's can be used to classify temporal data, or to predict.");
 			break;
-
+			
+		case 13:
+			this.text.setText("NeuroEvolution of Augmenting Topologies (NEAT) is a neural network that starts with only an input and ouput layer.  The hidden neurons are evolved as the network trains.");
+			break;			
 		}
 
 		this.text.setSelectionStart(0);

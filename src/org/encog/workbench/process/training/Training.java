@@ -441,7 +441,10 @@ public class Training {
 
 			final ProgressNEAT train = new ProgressNEAT(
 					EncogWorkBench.getInstance().getMainWindow(),
-					training, dialog.getMaxError().getValue());
+					training,
+					dialog.getPopulation(),
+					dialog.getNetwork(),
+					dialog.getMaxError().getValue());
 
 			train.setVisible(true);
 		}

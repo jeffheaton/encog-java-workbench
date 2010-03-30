@@ -15,8 +15,11 @@ import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 
 public class InputNEAT extends EncogPropertiesDialog {
+	
 	private ComboBoxField comboTraining;
+	private ComboBoxField comboPopulation;
 	private ComboBoxField comboNetwork;
+	
 	/**
 	 * Text field that holds the maximum training error.
 	 */
@@ -29,6 +32,11 @@ public class InputNEAT extends EncogPropertiesDialog {
 	
 	/**
 	 * All available networks to display in the combo box.
+	 */
+	private final List<String> networks = new ArrayList<String>();
+	
+	/**
+	 * All available populations to display in the combo box.
 	 */
 	private final List<String> populations = new ArrayList<String>();
 
@@ -44,7 +52,8 @@ public class InputNEAT extends EncogPropertiesDialog {
 		setSize(400,400);
 		setLocation(200,200);
 		addProperty(this.comboTraining = new ComboBoxField("training set","Training Set",true,this.trainingSets));
-		addProperty(this.comboNetwork = new ComboBoxField("population","Population",true,this.populations));
+		addProperty(this.comboPopulation = new ComboBoxField("population","Population",true,this.populations));
+		addProperty(this.comboNetwork = new ComboBoxField("network","Base Network",true,this.networks));
 		addProperty(this.maxError = new DoubleField("max error","Maximum Error",true,0,1));
 		render();
 	}
@@ -62,6 +71,8 @@ public class InputNEAT extends EncogPropertiesDialog {
 				this.populations.add(obj.getName());
 			} else if (obj.getType().equals(EncogPersistedCollection.TYPE_TRAINING) ) {
 				this.trainingSets.add(obj.getName());
+			} else if (obj.getType().equals(EncogPersistedCollection.TYPE_BASIC_NET) ) {
+				this.networks.add(obj.getName());
 			}
 		}
 	}
@@ -70,7 +81,7 @@ public class InputNEAT extends EncogPropertiesDialog {
 	 * @return The network that the user chose.
 	 */
 	public Population getPopulation() {
-		String networkName = (String)this.comboNetwork.getSelectedValue();
+		String networkName = (String)this.comboPopulation.getSelectedValue();
 		return (Population)EncogWorkBench.getInstance().getCurrentFile().find(networkName);
 	}
 
@@ -80,6 +91,14 @@ public class InputNEAT extends EncogPropertiesDialog {
 	public NeuralDataSet getTrainingSet() {
 		String trainingName = (String)this.comboTraining.getSelectedValue();
 		return (NeuralDataSet)EncogWorkBench.getInstance().getCurrentFile().find(trainingName);
+	}
+	
+	/**
+	 * @return The training set that the user chose.
+	 */
+	public BasicNetwork getNetwork() {
+		String name = (String)this.comboNetwork.getSelectedValue();
+		return (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(name);
 	}
 
 
