@@ -2,6 +2,7 @@ package org.encog.workbench.dialogs.training.neat;
 
 import java.awt.Frame;
 
+import org.encog.neural.activation.ActivationFunction;
 import org.encog.neural.activation.ActivationStep;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
@@ -70,8 +71,12 @@ public class ProgressNEAT extends BasicTrainingProgress {
 		
 		final NEATTraining train = new NEATTraining(
 				score, this.getNetwork(),this.population);
+
+		ActivationFunction neatActivation = this.getNetwork().getLayer(BasicNetwork.TAG_INPUT).getActivationFunction();
+		ActivationFunction outputActivation = this.getNetwork().getLayer(BasicNetwork.TAG_OUTPUT).getActivationFunction();
 		
-		train.setOutputActivationFunction(step);
+		train.setNeatActivationFunction(neatActivation);
+		train.setOutputActivationFunction(outputActivation);
 
 		setTrain(train);
 	}

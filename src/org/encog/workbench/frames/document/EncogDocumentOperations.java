@@ -341,7 +341,7 @@ public class EncogDocumentOperations {
 			for (int i = 0; i < populationSize; i++) {
 				pop.add(
 						new NEATGenome(null, pop.assignGenomeID(),
-								dialog.getPopulationSize().getValue(), 
+								dialog.getInputNeurons().getValue(), 
 								dialog.getOutputNeurons().getValue()));
 			}
 
