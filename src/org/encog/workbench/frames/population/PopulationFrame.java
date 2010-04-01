@@ -17,7 +17,9 @@ import org.encog.solve.genetic.population.BasicPopulation;
 import org.encog.solve.genetic.population.Population;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.GeneralPopulationModel;
+import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.MatrixTableModel;
+import org.encog.workbench.models.SpeciesModel;
 
 public class PopulationFrame  extends EncogCommonFrame {
 
@@ -29,6 +31,14 @@ public class PopulationFrame  extends EncogCommonFrame {
 	private final JScrollPane populationScroll;
 	private final JTable populationTable;
 	private final GeneralPopulationModel populationModel;
+	
+	private final JScrollPane speciesScroll;
+	private final JTable speciesTable;
+	private final SpeciesModel speciesModel;
+	
+	private final JScrollPane innovationScroll;
+	private final JTable innovationTable;
+	private final InnovationModel innovationModel;
 	
 	JTable tableGeneralPopulation;
 	
@@ -56,9 +66,17 @@ public class PopulationFrame  extends EncogCommonFrame {
 		this.populationTable = new JTable(this.populationModel);
 		this.populationScroll = new JScrollPane(this.populationTable);
 		
+		this.speciesModel = new SpeciesModel(pop);
+		this.speciesTable = new JTable(this.speciesModel);
+		this.speciesScroll = new JScrollPane(this.speciesTable);
+		
+		this.innovationModel = new InnovationModel(pop);
+		this.innovationTable = new JTable(this.innovationModel);
+		this.innovationScroll = new JScrollPane(this.innovationTable);		
+		
 		this.tabViews.addTab("General Population", this.populationScroll);
-		this.tabViews.addTab("Species", null);
-		this.tabViews.addTab("Innovation", null);
+		this.tabViews.addTab("Species", this.speciesScroll);
+		this.tabViews.addTab("Innovation", this.innovationScroll);
 	}
 
 	public void windowOpened(WindowEvent e) {
