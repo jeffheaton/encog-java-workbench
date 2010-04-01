@@ -62,10 +62,10 @@ public class CreateNEATDialog extends EncogPropertiesDialog implements
 				"Input Neuron Count", true, 1, -1));
 		addProperty(this.outputCount = new IntegerField("output neurons",
 				"Output Neuron Count", true, 1, -1));
-		addProperty(this.outputActivationField = new PopupField("activation",
-				"Activation Function", true));
-		addProperty(this.neatActivationField = new PopupField("activation",
-				"Activation Function", true));
+		addProperty(this.outputActivationField = new PopupField("output activation",
+				"Output Activation Function", true));
+		addProperty(this.neatActivationField = new PopupField("NEAT activation",
+				"NEAT Activation Function", true));
 		render();
 	}
 

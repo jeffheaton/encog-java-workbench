@@ -80,13 +80,7 @@ import org.slf4j.LoggerFactory;
 public class EncogDocumentOperations {
 
 	private EncogDocumentFrame owner;
-	
-	private int trainingCount = 1;
-	private int networkCount = 1;
-	private int populationCount = 1;
-	private int optionsCount = 1;
-	private int textCount = 1;
-	
+		
 	@SuppressWarnings("unused")
 	final private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -281,6 +275,20 @@ public class EncogDocumentOperations {
 
 	}
 	
+	private String generateNextID(String base)
+	{
+		int index = 1;
+		String result = "";
+		
+		do {
+			result = base + index;
+			index++;
+		} while( EncogWorkBench.getInstance().getCurrentFile().exists(result) );
+		
+		
+		return result;
+	}
+	
 	public void performObjectsCreate() {
 
 		try
@@ -300,25 +308,25 @@ public class EncogDocumentOperations {
 		final SelectItem result = dialog.getSelected();
 
 		if (result == itemNetwork) {
-			CreateNeuralNetwork.process("network-" + this.networkCount++);
+			CreateNeuralNetwork.process( generateNextID("network-") );
 		} else if (result == itemTraining) {
 			final BasicNeuralDataSet trainingData = new BasicNeuralDataSet(
 					NeuralConst.XOR_INPUT, NeuralConst.XOR_IDEAL);
 			trainingData.setDescription("Training data");
-			EncogWorkBench.getInstance().getCurrentFile().add("data-" + this.trainingCount++,trainingData);
+			EncogWorkBench.getInstance().getCurrentFile().add(generateNextID("data-") ,trainingData);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}  else if(result == itemText)
 		{
 			final TextData text = new TextData();
 			text.setDescription("A text file");
 			text.setText("Insert text here.");
-			EncogWorkBench.getInstance().getCurrentFile().add("text-" + this.textCount++,text);
+			EncogWorkBench.getInstance().getCurrentFile().add(generateNextID("text-") ,text);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		} else if( result == itemOptions )
 		{
 			final PropertyData prop = new PropertyData();
 			prop.setDescription("Some property data");
-			EncogWorkBench.getInstance().getCurrentFile().add("properties-" + this.optionsCount++,prop);
+			EncogWorkBench.getInstance().getCurrentFile().add(generateNextID("properties-") ,prop);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		} else if( result==itemPopulation) {
 			performCreatePopulation();
@@ -347,7 +355,7 @@ public class EncogDocumentOperations {
 
 			
 			pop.setDescription("Population");
-			EncogWorkBench.getInstance().getCurrentFile().add("population-" + this.populationCount++,pop);
+			EncogWorkBench.getInstance().getCurrentFile().add(generateNextID("population-"),pop);
 		}
 		
 	}

@@ -6,6 +6,7 @@ import org.encog.neural.activation.ActivationFunction;
 import org.encog.neural.activation.ActivationStep;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.synapse.neat.NEATSynapse;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.TrainingSetScore;
@@ -72,8 +73,8 @@ public class ProgressNEAT extends BasicTrainingProgress {
 		final NEATTraining train = new NEATTraining(
 				score, this.getNetwork(),this.population);
 
-		ActivationFunction neatActivation = this.getNetwork().getLayer(BasicNetwork.TAG_INPUT).getActivationFunction();
 		ActivationFunction outputActivation = this.getNetwork().getLayer(BasicNetwork.TAG_OUTPUT).getActivationFunction();
+		ActivationFunction neatActivation = ((NEATSynapse)this.getNetwork().getLayer(BasicNetwork.TAG_INPUT).getNext().get(0)).getActivationFunction();
 		
 		train.setNeatActivationFunction(neatActivation);
 		train.setOutputActivationFunction(outputActivation);

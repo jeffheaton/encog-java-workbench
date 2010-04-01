@@ -308,6 +308,7 @@ public class CreateNeuralNetwork {
 		if (dialog.process()) {
 			NEATPattern feedforward = new NEATPattern();
 			feedforward.setActivationFunction(dialog.getOutputActivationFunction());
+			feedforward.setNEATActivationFunction(dialog.getNeatActivationFunction());
 			feedforward.setInputNeurons(dialog.getInputCount().getValue());
 			feedforward.setInputNeurons(dialog.getInputCount().getValue());
 			feedforward.setOutputNeurons(dialog.getOutputCount().getValue());

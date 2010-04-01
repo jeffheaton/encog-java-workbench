@@ -54,6 +54,7 @@ import org.encog.neural.activation.ActivationLinear;
 import org.encog.neural.activation.ActivationSIN;
 import org.encog.neural.activation.ActivationSigmoid;
 import org.encog.neural.activation.ActivationSoftMax;
+import org.encog.neural.activation.ActivationStep;
 import org.encog.neural.activation.ActivationTANH;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
@@ -63,7 +64,7 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 	public static final String[] ACTIVATION_FUNCTION = { "ActivationBiPolar", "ActivationCompetitive",
 			"ActivationGaussian", "ActivationLinear", "ActivationLOG",
 			"ActivationSigmoid", "ActivationSIN", "ActivationSoftMax",
-			"ActivationTANH" };
+			"ActivationStep", "ActivationTANH" };
 
 	private JComboBox select = new JComboBox(ACTIVATION_FUNCTION);
 	private EquationPanel equation;
@@ -93,7 +94,7 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 		this.derivative = new JCheckBox("View Derivative");
 		upper.add(select, BorderLayout.CENTER);
 
-		this.gaussian = new JButton("Gaussian");
+		this.gaussian = new JButton("Params");
 
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new GridLayout(1, 2));
@@ -147,6 +148,9 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 			newActivation = new ActivationSoftMax();
 			break;
 		case 8:
+			newActivation = new ActivationStep();
+			break;						
+		case 9:
 			newActivation = new ActivationTANH();
 			break;
 
@@ -159,7 +163,8 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 		
 		this.equation.setupEquation(newActivation,!der);
 		
-		if( this.activation instanceof ActivationGaussian )
+		if( this.activation instanceof ActivationGaussian ||
+			this.activation instanceof ActivationStep )
 		{
 			this.gaussian.setEnabled(true);
 		}
@@ -195,6 +200,26 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 					double width = dialog.getGaussianWidth().getValue();
 					double center = dialog.getGaussianCenter().getValue();
 					this.activation = new ActivationGaussian(center,peak,width);
+					this.equation.setupEquation(activation,!this.derivative.isSelected());
+				}
+			}
+			else if (this.activation instanceof ActivationStep) {
+				StepDialog dialog = new StepDialog(this);
+				ActivationStep step = (ActivationStep) this.activation;
+				dialog.getCenter().setValue(
+						step.getCenter());
+				dialog.getLow().setValue(
+						step.getLow());
+				dialog.getHigh().setValue(
+						step.getHigh());
+				if (dialog.process()) {
+					double low = dialog.getLow().getValue();
+					double high = dialog.getHigh().getValue();
+					double center = dialog.getCenter().getValue();
+					this.activation = new ActivationStep();
+					((ActivationStep)this.activation).setCenter( center );
+					((ActivationStep)this.activation).setLow(low );
+					((ActivationStep)this.activation).setHigh( high);
 					this.equation.setupEquation(activation,!this.derivative.isSelected());
 				}
 			}
