@@ -42,11 +42,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
+import org.encog.EncogError;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.NetworkQueryModel;
 
@@ -70,6 +72,7 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 
 	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource() == this.calculateButton) {
+			try {
 			final BasicNeuralData input = new BasicNeuralData(this.inputCount);
 			for (int i = 0; i < this.inputCount; i++) {
 				double value = 0;
@@ -87,6 +90,15 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 
 			for (int i = 0; i < this.outputCount; i++) {
 				this.outputTable.setValueAt(output.getData(i), i, 1);
+			}
+		}
+			catch(EncogError ex)
+			{
+				EncogWorkBench.displayError("Query Error", ex.getMessage());
+			}
+			catch(Throwable t)
+			{
+				ErrorDialog.handleError(t, (BasicNetwork)this.getEncogObject(), null);
 			}
 		}
 

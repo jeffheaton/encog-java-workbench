@@ -74,6 +74,7 @@ import org.encog.workbench.WorkbenchFonts;
 import org.encog.workbench.dialogs.common.BuildingListField;
 import org.encog.workbench.dialogs.layers.EditBasicLayer;
 import org.encog.workbench.dialogs.layers.EditContextLayer;
+import org.encog.workbench.dialogs.layers.EditNEATSynapse;
 import org.encog.workbench.dialogs.layers.EditRadialLayer;
 import org.encog.workbench.frames.MatrixFrame;
 import org.encog.workbench.frames.network.NetworkTool.Type;
@@ -107,6 +108,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 	private JPopupMenu popupNetworkSynapse;
 	private JMenuItem popupNetworkSynapseDelete;
 	private JMenuItem popupNetworkSynapseMatrix;
+	private JMenuItem popupNetworkSynapseNEAT;
 	private Synapse selectedSynapse;
 
 	public NetworkDiagram(NetworkFrame parent) {
@@ -127,6 +129,8 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 				"Delete Synapse", 'd');
 		this.popupNetworkSynapseMatrix = addItem(this.popupNetworkSynapse,
 				"Edit Matrix", 'm');
+		this.popupNetworkSynapseNEAT = addItem(this.popupNetworkSynapse,
+				"Edit NEAT Synapse", 'n');
 	}
 
 	private void obtainOffScreen() {
@@ -264,6 +268,8 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 		} else {
 			Synapse synapse = this.findSynapse(e);
 			if (synapse != null) {
+				this.popupNetworkSynapseNEAT.setEnabled(synapse instanceof NEATSynapse);
+				this.popupNetworkSynapseMatrix.setEnabled(!(synapse instanceof NEATSynapse));
 				this.popupNetworkSynapse.show(e.getComponent(), x, y);
 			}
 		}
@@ -493,9 +499,26 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 			performSynapseDelete();
 		} else if (action.getSource() == this.popupNetworkSynapseMatrix) {
 			performSynapseMatrix();
+		} else if (action.getSource() == this.popupNetworkSynapseNEAT) {
+			performSynapseNEAT();
 		}
 	}
 
+	private void performSynapseNEAT() {
+		NEATSynapse neatSynapse = (NEATSynapse)this.selectedSynapse;
+		EditNEATSynapse dialog = new EditNEATSynapse(this.parent);
+		
+		dialog.setActivationFunction(neatSynapse.getActivationFunction());
+		dialog.getSnapshot().setValue(neatSynapse.isSnapshot());
+		
+		if( dialog.process() )
+		{
+			neatSynapse.setActivationFunction(dialog.getActivationFunction());
+			neatSynapse.setSnapshot(dialog.getSnapshot().getValue());
+		}
+
+	}
+	
 	private void performSynapseMatrix() {
 		MatrixFrame frame = new MatrixFrame((BasicNetwork) this.parent
 				.getEncogObject(), this.selectedSynapse);

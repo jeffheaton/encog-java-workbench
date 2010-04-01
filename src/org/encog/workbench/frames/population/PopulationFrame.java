@@ -9,12 +9,15 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
 import org.encog.solve.genetic.population.BasicPopulation;
 import org.encog.solve.genetic.population.Population;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
+import org.encog.workbench.models.GeneralPopulationModel;
+import org.encog.workbench.models.MatrixTableModel;
 
 public class PopulationFrame  extends EncogCommonFrame {
 
@@ -22,6 +25,10 @@ public class PopulationFrame  extends EncogCommonFrame {
 	private JButton btnEdit;
 	private JButton btnExtract;
 	private JTabbedPane tabViews;
+	
+	private final JScrollPane populationScroll;
+	private final JTable populationTable;
+	private final GeneralPopulationModel populationModel;
 	
 	JTable tableGeneralPopulation;
 	
@@ -44,7 +51,12 @@ public class PopulationFrame  extends EncogCommonFrame {
 		about.add(new PopulationInfo((Population)getEncogObject()));
 		mainPanel.add(about,BorderLayout.NORTH);
 		mainPanel.add(tabViews = new JTabbedPane(),BorderLayout.CENTER);
-		this.tabViews.addTab("General Population", null);
+		
+		this.populationModel = new GeneralPopulationModel(pop);
+		this.populationTable = new JTable(this.populationModel);
+		this.populationScroll = new JScrollPane(this.populationTable);
+		
+		this.tabViews.addTab("General Population", this.populationScroll);
 		this.tabViews.addTab("Species", null);
 		this.tabViews.addTab("Innovation", null);
 	}

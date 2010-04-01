@@ -251,7 +251,8 @@ public abstract class BasicTrainingProgress extends JDialog implements
 			"Save the training to this network?")) {
 			
 			EncogWorkBench.getInstance().getCurrentFile().add(
-					this.network.getName(), this.network);
+					this.network.getName(), this.train.getNetwork());
+			saveNetwork();
 			
 			if( this.train instanceof ResilientPropagation )
 			{
@@ -519,6 +520,11 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		this.buttonStart.setEnabled(true);
 		this.buttonStop.setEnabled(false);
 		this.cancel = true;
+	}
+	
+	public void saveNetwork()
+	{
+		
 	}
 
 }

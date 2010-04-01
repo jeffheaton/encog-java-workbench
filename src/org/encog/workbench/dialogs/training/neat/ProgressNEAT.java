@@ -13,6 +13,7 @@ import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.neural.networks.training.neat.NEATTraining;
 import org.encog.neural.networks.training.propagation.scg.ScaledConjugateGradient;
 import org.encog.solve.genetic.population.Population;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
 public class ProgressNEAT extends BasicTrainingProgress {
@@ -80,6 +81,13 @@ public class ProgressNEAT extends BasicTrainingProgress {
 		train.setOutputActivationFunction(outputActivation);
 
 		setTrain(train);
+	}
+	
+	@Override
+	public void saveNetwork()
+	{
+		EncogWorkBench.getInstance().getCurrentFile().add(
+				this.population.getName(), this.population);	
 	}
 
 }
