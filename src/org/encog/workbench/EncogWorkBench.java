@@ -37,7 +37,9 @@ import javax.swing.JOptionPane;
 import org.encog.EncogError;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.persist.EncogMemoryCollection;
 import org.encog.persist.EncogPersistedCollection;
+import org.encog.persist.location.FilePersistence;
 import org.encog.util.file.Directory;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
@@ -54,7 +56,6 @@ import org.encog.workbench.frames.document.EncogDocumentFrame;
 public class EncogWorkBench {
 
 	public final static String CONFIG_FILENAME = "EncogWorkbench.conf";
-	public final static String TEMP_FILENAME = "encogtemp.eg";
 	public final static String VERSION = "2.4";
 	
 	/**
@@ -70,15 +71,13 @@ public class EncogWorkBench {
 	/**
 	 * The current file being edited.
 	 */
-	private EncogPersistedCollection currentFile;
+	private EncogMemoryCollection currentFile;
 
 	/**
 	 * Config info for the workbench.
 	 */
 	private EncogWorkBenchConfig config;
 
-	
-	private File tempFile;
 
 	/**
 	 * The current filename being edited.
@@ -87,31 +86,7 @@ public class EncogWorkBench {
 
 	public EncogWorkBench() {
 		this.config = new EncogWorkBenchConfig();
-		
-		// create a temp file to hold new objects
-		this.tempFile = new File(
-				System.getProperty("java.io.tmpdir"),
-				EncogWorkBench.TEMP_FILENAME);
-		
-		try
-		{
-			this.currentFile = new EncogPersistedCollection(this.tempFile);
-			this.currentFile.create();
-		}
-		catch(Throwable e)
-		{
-			// delete and try again.  If it still fails, warn and continue.
-			this.tempFile.delete();
-			try
-			{
-				this.currentFile = new EncogPersistedCollection(this.tempFile);
-				this.currentFile.create();
-			}
-			catch(EncogError e2)
-			{
-				EncogWorkBench.displayError("Error", "Can't create tempfile:\n" + this.tempFile + "\n" + e2.getMessage());
-			}
-		}
+		this.currentFile = new EncogMemoryCollection();
 	}
 
 	/**
@@ -183,17 +158,14 @@ public class EncogWorkBench {
 	}
 
 	public static void load(final String filename) {
-		File tempFile = getInstance().getTempFile();
+		getInstance().getCurrentFile().load(new FilePersistence(new File(filename)));
 		getInstance().setCurrentFileName(filename);
-		Directory.copyFile(new File(filename), tempFile);
-		getInstance().setCurrentFile(new EncogPersistedCollection(tempFile));
 		getInstance().getMainWindow().redraw();
 	}
 
 	public static void save(final String filename) {
-		File tempFile = getInstance().getTempFile();
+		getInstance().getCurrentFile().save(new FilePersistence(new File(filename)));
 		getInstance().setCurrentFileName(filename);
-		Directory.copyFile(tempFile, new File(filename));
 		getInstance().getMainWindow().redraw();
 	}
 
@@ -201,7 +173,7 @@ public class EncogWorkBench {
 	 * Close the current file.
 	 */
 	public void close() {
-		this.currentFile.clear();
+		this.currentFile.getContents().clear();
 		this.currentFileName = null;
 		this.mainWindow.redraw();
 	}
@@ -209,7 +181,7 @@ public class EncogWorkBench {
 	/**
 	 * @return the currentFile
 	 */
-	public EncogPersistedCollection getCurrentFile() {
+	public EncogMemoryCollection getCurrentFile() {
 		return this.currentFile;
 	}
 
@@ -225,14 +197,6 @@ public class EncogWorkBench {
 	 */
 	public EncogDocumentFrame getMainWindow() {
 		return this.mainWindow;
-	}
-
-	/**
-	 * @param currentFile
-	 *            the currentFile to set
-	 */
-	public void setCurrentFile(final EncogPersistedCollection currentFile) {
-		this.currentFile = currentFile;
 	}
 
 	/**
@@ -342,10 +306,8 @@ public class EncogWorkBench {
 		displayError(title,"An error occured while performing this operation:\n" + t.toString());
 	}
 
-	public File getTempFile() {
-		return tempFile;
+	public static void save() {
+		save(getInstance().getCurrentFileName());		
 	}
-	
-	
 
 }

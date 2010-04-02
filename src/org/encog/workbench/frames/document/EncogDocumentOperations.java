@@ -200,8 +200,7 @@ public class EncogDocumentOperations {
 			if (EncogWorkBench.getInstance().getCurrentFileName() == null) {
 				performFileSaveAs();
 			} else {
-				File target = new File(EncogWorkBench.getInstance().getCurrentFileName());
-				Directory.copyFile(EncogWorkBench.getInstance().getTempFile(), target);
+				EncogWorkBench.save();
 			}
 		} catch (final EncogError e) {
 			EncogWorkBench.displayError("Can't Open File", e);
@@ -431,8 +430,7 @@ public class EncogDocumentOperations {
 	public void performFileRevert() {
 		if( EncogWorkBench.askQuestion("Revert", "Would you like to revert to the last time you saved?") )
 		{
-			File source = new File(EncogWorkBench.getInstance().getCurrentFileName());
-			Directory.copyFile(source, EncogWorkBench.getInstance().getTempFile() );
+			EncogWorkBench.load(EncogWorkBench.getInstance().getCurrentFileName());
 			EncogWorkBench.getInstance().getCurrentFile().buildDirectory();
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}

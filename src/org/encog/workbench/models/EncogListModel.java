@@ -35,6 +35,10 @@ import javax.swing.event.ListDataListener;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
 
+/**
+ * Provides the items that are in a document.
+ *
+ */
 public class EncogListModel extends CommonListModel {
 
 	public void addListDataListener(final ListDataListener listener) {
