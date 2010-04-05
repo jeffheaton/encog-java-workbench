@@ -295,8 +295,10 @@ public class EncogWorkBench {
 	
 	public static void displayError(String title, Throwable t, BasicNetwork network, NeuralDataSet set)
 	{
-		if( t instanceof EncogError )
+		if( t instanceof EncogError ) {
 			displayError(title,t);
+			t.printStackTrace();
+		}
 		else
 			ErrorDialog.handleError(t,network,set);
 	}

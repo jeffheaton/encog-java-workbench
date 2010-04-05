@@ -189,9 +189,8 @@ public class EncogDocumentOperations {
 			if (result == JFileChooser.APPROVE_OPTION) {
 				EncogWorkBench.load(fc.getSelectedFile().getAbsolutePath());
 			}
-		} catch (final EncogError e) {
-			JOptionPane.showMessageDialog(owner, e.getMessage(),
-					"Can't Open File", JOptionPane.ERROR_MESSAGE);
+		} catch (final Throwable e) {
+			EncogWorkBench.displayError("Can't Open File", e);
 		}
 	}
 
@@ -202,8 +201,8 @@ public class EncogDocumentOperations {
 			} else {
 				EncogWorkBench.save();
 			}
-		} catch (final EncogError e) {
-			EncogWorkBench.displayError("Can't Open File", e);
+		} catch (final Throwable e) {
+			EncogWorkBench.displayError("Can't Save File", e);
 		}
 	}
 
@@ -245,9 +244,8 @@ public class EncogDocumentOperations {
 
 				EncogWorkBench.save(file.getAbsolutePath());
 			}
-		} catch (final EncogError e) {
-			JOptionPane.showMessageDialog(owner, e.getMessage(),
-					"Can't Save File", JOptionPane.ERROR_MESSAGE);
+		} catch (final Throwable e) {
+			EncogWorkBench.displayError("Can't Save File", e);
 		}
 
 	}
