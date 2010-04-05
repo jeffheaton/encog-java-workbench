@@ -156,5 +156,36 @@ public class ValidateTraining {
 		return true;
 	}
 
+	public boolean validateNEAT() {
+		
+		boolean problem = false;
+		
+		if( this.network.getStructure().getLayers().size()!=2 )
+			problem = true;
+
+		else
+		{
+			Layer input = this.network.getLayer(BasicNetwork.TAG_INPUT);
+			if( input==null )
+				problem = true;
+			else
+			{
+				Synapse synapse = input.getNext().get(0);
+				if( !(synapse instanceof NEATSynapse) ) {
+					problem = true;
+				}
+			}
+		}
+		
+		
+		if( problem )
+		{
+			EncogWorkBench.displayError(
+					"Training Error", 
+					"Only works with a NEAT network, which is a 2-layer network with a NEAT synapse.");
+		}
+		return false;
+	}
+
 
 }

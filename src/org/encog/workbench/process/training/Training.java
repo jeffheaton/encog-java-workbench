@@ -429,11 +429,16 @@ public class Training {
 	public static void performNEAT() {
 		final InputNEAT dialog = new InputNEAT(EncogWorkBench
 				.getInstance().getMainWindow());
+		dialog.getMaxError().setValue(0.01);
 		if (dialog.process()) {
-			final ValidateTraining validate = new ValidateTraining(null, 
+			final ValidateTraining validate = new ValidateTraining(dialog.getNetwork(), 
 					(BasicNeuralDataSet) dialog.getTrainingSet());
 
 			if (!validate.validateIsSupervised()) {
+				return;
+			}
+			
+			if( (!validate.validateNEAT())) {
 				return;
 			}
 
