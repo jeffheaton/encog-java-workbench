@@ -42,6 +42,11 @@ public class SpeciesModel implements TableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Species species = this.population.getSpecies().get(rowIndex);
 		
+		String leader = "none";
+		
+		if( species.getLeader()!=null )
+			leader = Format.formatInteger((int)species.getLeader().getGenomeID());
+		
 		switch(columnIndex)
 		{
 			case 0:
@@ -53,7 +58,7 @@ public class SpeciesModel implements TableModel {
 			case 3:
 				return Format.formatInteger(species.getGensNoImprovement());
 			case 4:
-				return Format.formatInteger((int)species.getLeader().getGenomeID());
+				return leader;
 			case 5:
 				return Format.formatInteger(species.getMembers().size());
 			default:
