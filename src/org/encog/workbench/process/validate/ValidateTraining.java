@@ -183,8 +183,9 @@ public class ValidateTraining {
 			EncogWorkBench.displayError(
 					"Training Error", 
 					"Only works with a NEAT network, which is a 2-layer network with a NEAT synapse.");
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 
