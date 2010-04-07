@@ -38,13 +38,12 @@ import org.encog.EncogError;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogMemoryCollection;
-import org.encog.persist.EncogPersistedCollection;
 import org.encog.persist.location.FilePersistence;
-import org.encog.util.file.Directory;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.encog.cloud.EncogCloud;
 
 /**
  * Main class for the Encog Workbench. The main method in this class starts up
@@ -53,7 +52,7 @@ import org.encog.workbench.frames.document.EncogDocumentFrame;
  * @author jheaton
  * 
  */
-public class EncogWorkBench {
+public class EncogWorkBench implements Runnable {
 
 	public final static String CONFIG_FILENAME = "EncogWorkbench.conf";
 	public final static String VERSION = "2.4";
@@ -77,6 +76,8 @@ public class EncogWorkBench {
 	 * Config info for the workbench.
 	 */
 	private EncogWorkBenchConfig config;
+	
+	private EncogCloud cloud;
 
 
 	/**
@@ -215,29 +216,6 @@ public class EncogWorkBench {
 		this.mainWindow = mainWindow;
 	}
 
-	/**
-	 * The main entry point into the program. To support opening documents by
-	 * double clicking their file, the first parameter specifies a file to open.
-	 * 
-	 * @param args
-	 *            The first argument specifies an option file to open.
-	 */
-	public static void main(final String args[]) {
-		Logging.stopConsoleLogging();
-		final EncogWorkBench workBench = EncogWorkBench.getInstance();
-		workBench.setMainWindow(new EncogDocumentFrame());
-
-		if (args.length > 0) {
-			EncogWorkBench.load(args[0]);
-		}
-		try {
-			loadConfig();
-			workBench.getMainWindow().setVisible(true);
-		} catch (Throwable t) {
-			EncogWorkBench.displayError("Internal error", t.getMessage());
-			t.printStackTrace();
-		}
-	}
 
 	public static void saveConfig() {
 		/* String home = System.getProperty("user.home");
@@ -311,5 +289,81 @@ public class EncogWorkBench {
 	public static void save() {
 		save(getInstance().getCurrentFileName());		
 	}
+
+	public EncogCloud getCloud() {
+		return cloud;
+	}
+	
+	public void run()
+	{
+		for(;;)
+		{
+			try {
+				Thread.sleep(300000);
+			} catch (InterruptedException e) {
+				return;
+			}
+			background();
+		}
+	}
+	
+	private void background()
+	{
+		synchronized(this)
+		{
+			if( cloud!=null )
+			{
+				if( !cloud.isConnected() )
+				{
+					this.cloud = null;
+					EncogWorkBench.displayError("", "Encog Cloud connection lost.");
+					return;
+				}
+				else
+					System.out.println("Connected.");
+			}
+		}
+	}
+
+	public void setCloud(EncogCloud cloud) {
+		synchronized(this)
+		{
+			this.cloud = cloud;
+		}
+	}
+	
+	public void init()
+	{
+		Thread thread = new Thread(this);
+		thread.setDaemon(true);
+		thread.start();
+	}
+	
+
+	/**
+	 * The main entry point into the program. To support opening documents by
+	 * double clicking their file, the first parameter specifies a file to open.
+	 * 
+	 * @param args
+	 *            The first argument specifies an option file to open.
+	 */
+	public static void main(final String args[]) {
+		Logging.stopConsoleLogging();
+		final EncogWorkBench workBench = EncogWorkBench.getInstance();
+		workBench.setMainWindow(new EncogDocumentFrame());
+
+		workBench.init();
+		
+		if (args.length > 0) {
+			EncogWorkBench.load(args[0]);
+		}
+		try {			
+			workBench.getMainWindow().setVisible(true);
+		} catch (Throwable t) {
+			EncogWorkBench.displayError("Internal error", t.getMessage());
+			t.printStackTrace();
+		}
+	}
+
 
 }

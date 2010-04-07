@@ -61,6 +61,7 @@ public class EncogMenus {
 	public static final String OBJECTS_CREATE = "Create Object...";
 	public static final String OBJECTS_DELETE = "Delete Object...";
 
+	public static final String TOOLS_CLOUD = "Connect to an Encog Cloud...";
 	public static final String TOOLS_TRAIN = "Train...";
 	public static final String TOOLS_CODE = "Generate Code...";
 	public static final String TOOLS_EVALUATE = "Evaluate Network...";
@@ -131,6 +132,7 @@ public class EncogMenus {
 		this.menuBar.add(this.menuObjects);
 
 		this.menuTools = new JMenu("Tools");
+		owner.addItem(this.menuTools, EncogMenus.TOOLS_CLOUD, 'c');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_CODE, 'g');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_TRAIN, 't');
 		owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 'k');
@@ -159,6 +161,15 @@ public class EncogMenus {
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_IMPORT)) {
 			owner.getOperations().performImport(null);
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_QUIT)) {
+			try
+			{
+			if( EncogWorkBench.getInstance().getCloud()!=null )
+				EncogWorkBench.getInstance().getCloud().logout();
+			}
+			catch(Throwable t)
+			{
+				
+			}
 			System.exit(0);
 		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_CREATE)) {
 			owner.getOperations().performObjectsCreate();
@@ -180,6 +191,8 @@ public class EncogMenus {
 			owner.getOperations().performHelpAbout();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BENCHMARK)) {
 			owner.getOperations().performBenchmark();
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_CLOUD)) {
+			owner.getOperations().performCloudLogin();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BROWSE)) {
 			owner.getOperations().performBrowse();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EVALUATE)) {

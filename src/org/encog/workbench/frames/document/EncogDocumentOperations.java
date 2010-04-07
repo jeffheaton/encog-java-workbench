@@ -71,6 +71,7 @@ import org.encog.workbench.frames.population.PopulationFrame;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.ImportExport;
+import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.NeuralConst;
@@ -461,6 +462,11 @@ public class EncogDocumentOperations {
 			BenchmarkDialog dialog = new BenchmarkDialog();
 			dialog.setVisible(true);
 		}
+		
+	}
+
+	public void performCloudLogin() {
+		CloudProcess.Login();
 		
 	}
 
