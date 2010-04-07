@@ -60,6 +60,8 @@ import org.encog.workbench.dialogs.PopulationDialog;
 import org.encog.workbench.dialogs.about.AboutEncog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
+import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
+import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.editor.ObjectEditorFrame;
 import org.encog.workbench.frames.BrowserFrame;
 import org.encog.workbench.frames.PropertyDataFrame;
@@ -70,6 +72,7 @@ import org.encog.workbench.frames.network.NetworkFrame;
 import org.encog.workbench.frames.population.PopulationFrame;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.process.CreateNeuralNetwork;
+import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.generate.CodeGeneration;
@@ -273,7 +276,7 @@ public class EncogDocumentOperations {
 
 	}
 	
-	private String generateNextID(String base)
+	public static String generateNextID(String base)
 	{
 		int index = 1;
 		String result = "";
@@ -308,11 +311,7 @@ public class EncogDocumentOperations {
 		if (result == itemNetwork) {
 			CreateNeuralNetwork.process( generateNextID("network-") );
 		} else if (result == itemTraining) {
-			final BasicNeuralDataSet trainingData = new BasicNeuralDataSet(
-					NeuralConst.XOR_INPUT, NeuralConst.XOR_IDEAL);
-			trainingData.setDescription("Training data");
-			EncogWorkBench.getInstance().getCurrentFile().add(generateNextID("data-") ,trainingData);
-			EncogWorkBench.getInstance().getMainWindow().redraw();
+			performCreateTrainingData();
 		}  else if(result == itemText)
 		{
 			final TextData text = new TextData();
@@ -463,6 +462,45 @@ public class EncogDocumentOperations {
 			dialog.setVisible(true);
 		}
 		
+	}
+	
+	public void performCreateTrainingData()
+	{
+		CreateTrainingDataDialog dialog = new CreateTrainingDataDialog(
+				EncogWorkBench.getInstance().getMainWindow());
+		
+		dialog.setType(TrainingDataType.Empty);
+		
+		if( dialog.process() )
+		{
+			switch(dialog.getType())
+			{
+				case Empty:
+					CreateTrainingData.createEmpty();
+					break;
+				case ImportCSV:
+					CreateTrainingData.createImportCSV();
+					break;
+				case ImportEG:
+					CreateTrainingData.createImportEG();
+					break;
+				case MarketWindow:
+					CreateTrainingData.createMarketWindow();
+					break;
+				case PredictWindow:
+					CreateTrainingData.createPredictWindow();
+					break;
+				case Random:
+					CreateTrainingData.createRandom();
+					break;
+				case XORTemp:
+					CreateTrainingData.createXORTemp();
+					break;
+				case XOR:
+					CreateTrainingData.createXOR();
+					break;
+			}		
+		}
 	}
 
 	public void performCloudLogin() {
