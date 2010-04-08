@@ -21,6 +21,7 @@ import org.encog.workbench.dialogs.trainingdata.CreateMarketTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.RandomTrainingDataDialog;
 import org.encog.workbench.frames.document.EncogDocumentOperations;
 import org.encog.workbench.util.NeuralConst;
+import org.encog.workbench.util.TemporalXOR;
 
 public class CreateTrainingData {
 
@@ -160,6 +161,27 @@ public class CreateTrainingData {
 
 	public static void createXORTemp() {
 
+		String str = EncogWorkBench.displayInput("How many training elements in the XOR temporal data set?");
+		
+		if( str!=null )
+		{	
+			int count = 0;
+			
+			try
+			{
+				count = Integer.parseInt(str);
+			}
+			catch(NumberFormatException e)
+			{
+				EncogWorkBench.displayError("Error", "Must enter a valid number.");
+			}
+			TemporalXOR temp = new TemporalXOR();
+			BasicNeuralDataSet trainingData = (BasicNeuralDataSet)temp.generate(count);
+			trainingData.setDescription("Random Training data");
+			EncogWorkBench.getInstance().getCurrentFile().add(
+					EncogDocumentOperations.generateNextID("data-"), trainingData);
+			EncogWorkBench.getInstance().getMainWindow().redraw();
+		}
 	}
 
 	public static void createXOR() {
@@ -171,4 +193,5 @@ public class CreateTrainingData {
 		EncogWorkBench.getInstance().getMainWindow().redraw();
 
 	}
+	
 }

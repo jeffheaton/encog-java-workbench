@@ -59,9 +59,8 @@ public abstract class EncogCommonFrame extends JFrame implements
 		addWindowListener(this);
 		this.closeSilent = closeSilent;
 	}
-	
-	public EncogCommonFrame()
-	{
+
+	public EncogCommonFrame() {
 		this(false);
 	}
 
@@ -73,8 +72,7 @@ public abstract class EncogCommonFrame extends JFrame implements
 		return mi;
 	}
 
-	public JMenuItem addItem(final JPopupMenu m, final String s,
-			final int key) {
+	public JMenuItem addItem(final JPopupMenu m, final String s, final int key) {
 
 		final JMenuItem mi = new JMenuItem(s, key);
 		mi.addActionListener(this);
@@ -163,28 +161,19 @@ public abstract class EncogCommonFrame extends JFrame implements
 	}
 
 	public void windowClosing(final WindowEvent e) {
-		
-		if(!this.closed)
-		{
-			this.closed = true;
-			
-		if (getParent() != null) {
-			getParent().getSubwindows().remove(this);
-			getParent().redraw();
-		}
 
-		for (final EncogCommonFrame frame : getSubwindows().getFrames()) {
-			frame.dispose();
-		}
-		
-		if( this.encogObject instanceof EncogPersistedObject && !this.closeSilent)
-		{
-			if( EncogWorkBench.displayQuery("Save?","Would you like to save your changes to this object?"))
-			{
-			EncogPersistedObject eobj = (EncogPersistedObject)this.encogObject;
-			EncogWorkBench.getInstance().getCurrentFile().add(eobj.getName(), eobj);
+		if (!this.closed) {
+			this.closed = true;
+
+			if (getParent() != null) {
+				getParent().getSubwindows().remove(this);
+				getParent().redraw();
 			}
-		}
+
+			for (final EncogCommonFrame frame : getSubwindows().getFrames()) {
+				frame.dispose();
+			}
+
 		}
 
 	}

@@ -121,6 +121,8 @@ public abstract class BasicTrainingProgress extends JDialog implements
 	 * The network being trained.
 	 */
 	private BasicNetwork network;
+	
+	private BasicNetwork oldNetwork;
 
 	/**
 	 * The training data.
@@ -262,8 +264,12 @@ public abstract class BasicTrainingProgress extends JDialog implements
 				EncogWorkBench.getInstance().getCurrentFile().add(
 						this.network.getName()+"-rprop", cont);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
-			}
-			
+			}			
+		}
+		else
+		{
+			EncogWorkBench.getInstance().getCurrentFile().add(
+					this.network.getName(), this.oldNetwork);
 		}
 		
 		dispose();
@@ -374,20 +380,6 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		if(!EncogWorkBench.getInstance().getMainWindow().getSubwindows().checkTrainingOrNetworkOpen())
 			return;
 		
-		if( this.train instanceof ResilientPropagation )
-		{
-			ResilientPropagation rprop = (ResilientPropagation)this.train;
-			TrainingContinuation state = 	
-				(TrainingContinuation)EncogWorkBench.getInstance().getCurrentFile().find(
-					this.network.getName()+"-rprop");
-			if( state!=null ) {
-				if( rprop.isValidResume(state) )
-					rprop.resume(state);
-			}
-			EncogWorkBench.getInstance().getCurrentFile().delete(
-					this.network.getName()+"-rprop");
-		}
-		
 		this.started = new Date();
 		this.performanceLast = this.started;
 		this.performanceCount = -1;
@@ -429,6 +421,24 @@ public abstract class BasicTrainingProgress extends JDialog implements
 
 			startup();
 			
+			this.oldNetwork = (BasicNetwork)network.clone();
+						
+			// see if we need to continue training.
+			if( this.train instanceof ResilientPropagation )
+			{
+				ResilientPropagation rprop = (ResilientPropagation)this.train;
+				TrainingContinuation state = 	
+					(TrainingContinuation)EncogWorkBench.getInstance().getCurrentFile().find(
+						this.network.getName()+"-rprop");
+				if( state!=null ) {
+					if( rprop.isValidResume(state) )
+						rprop.resume(state);
+				}
+				EncogWorkBench.getInstance().getCurrentFile().delete(
+						this.network.getName()+"-rprop");
+			}
+
+			// connect to the cloud, if needed
 			if(EncogWorkBench.getInstance().getCloud()!=null )
 			{
 				train.setCloud(EncogWorkBench.getInstance().getCloud());
