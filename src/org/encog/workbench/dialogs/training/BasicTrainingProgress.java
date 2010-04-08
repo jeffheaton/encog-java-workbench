@@ -428,6 +428,12 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		try {
 
 			startup();
+			
+			if(EncogWorkBench.getInstance().getCloud()!=null )
+			{
+				train.setCloud(EncogWorkBench.getInstance().getCloud());
+			}
+			
 			while (!this.cancel) {
 				this.iteration++;
 				this.lastError = this.train.getError();
@@ -456,6 +462,7 @@ public abstract class BasicTrainingProgress extends JDialog implements
 					this.performanceLastIteration = this.iteration;
 				}
 			}
+			this.train.finishTraining();
 			shutdown();
 			stopped();
 

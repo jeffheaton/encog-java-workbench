@@ -78,10 +78,11 @@ public class ValidateTraining {
 			if( synapse instanceof NEATSynapse ) {
 				EncogWorkBench.displayError("Training Error",
 				"This sort of training will not work with a NEAT synapse.\n");	
+				return false;
 			}
 		}
 			
-		return false;
+		return true;
 	}
 	
 	public boolean validateLogicType(final Class logicType) {
