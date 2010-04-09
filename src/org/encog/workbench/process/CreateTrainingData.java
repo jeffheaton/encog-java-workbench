@@ -113,7 +113,7 @@ public class CreateTrainingData {
 					new TickerSymbol(ticker), MarketDataType.ADJUSTED_CLOSE, true, true);
 			market.addDescription(desc);
 			
-			if( end.getTimeInMillis()>begin.getTimeInMillis() )
+			if( end.getTimeInMillis()<begin.getTimeInMillis() )
 			{
 				EncogWorkBench.displayError("Dates", "Ending date should not be before begin date.");
 				return;
