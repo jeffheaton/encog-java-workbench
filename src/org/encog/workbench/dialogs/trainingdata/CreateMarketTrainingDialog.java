@@ -29,7 +29,7 @@ public class CreateMarketTrainingDialog  extends EncogPropertiesDialog {
 		int year = gc.get(Calendar.YEAR);
 		
 		setTitle("Market Training Data");
-		setSize(400,200);
+		setSize(500,200);
 		addProperty(this.ticker = new TextField("ticker","Ticker Symbol",true));
 		addProperty(this.fromMonth = new IntegerField("begin month","Beginning Month(1-12)",true, 1, 12));
 		addProperty(this.fromDay = new IntegerField("begin day","Beginning Day(1-12)",true, 1, 31));

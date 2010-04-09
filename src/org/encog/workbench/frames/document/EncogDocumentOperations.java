@@ -481,9 +481,6 @@ public class EncogDocumentOperations {
 				case ImportCSV:
 					CreateTrainingData.createImportCSV();
 					break;
-				case ImportEG:
-					CreateTrainingData.createImportEG();
-					break;
 				case MarketWindow:
 					CreateTrainingData.createMarketWindow();
 					break;

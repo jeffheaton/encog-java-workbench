@@ -3,6 +3,8 @@ package org.encog.workbench.process;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import javax.swing.JFileChooser;
+
 import org.encog.neural.data.market.TickerSymbol;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.NeuralDataPair;
@@ -12,13 +14,21 @@ import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.data.market.MarketDataDescription;
 import org.encog.neural.data.market.MarketDataType;
 import org.encog.neural.data.market.MarketNeuralDataSet;
+import org.encog.neural.data.market.loader.LoaderError;
 import org.encog.neural.data.market.loader.MarketLoader;
 import org.encog.neural.data.market.loader.YahooFinanceLoader;
+import org.encog.neural.data.temporal.TemporalDataDescription;
+import org.encog.neural.data.temporal.TemporalNeuralDataSet;
+import org.encog.neural.data.temporal.TemporalPoint;
+import org.encog.neural.data.temporal.TemporalDataDescription.Type;
 import org.encog.util.benchmark.RandomTrainingFactory;
+import org.encog.util.csv.ReadCSV;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.trainingdata.CreateEmptyTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateMarketTrainingDialog;
+import org.encog.workbench.dialogs.trainingdata.CreateTemporalDataDialog;
 import org.encog.workbench.dialogs.trainingdata.RandomTrainingDataDialog;
+import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.frames.document.EncogDocumentOperations;
 import org.encog.workbench.util.NeuralConst;
 import org.encog.workbench.util.TemporalXOR;
@@ -59,11 +69,7 @@ public class CreateTrainingData {
 	}
 
 	public static void createImportCSV() {
-
-	}
-
-	public static void createImportEG() {
-
+		ImportExport.performImport(null);
 	}
 
 	public static void createMarketWindow() {
@@ -98,12 +104,20 @@ public class CreateTrainingData {
 			Calendar begin = new GregorianCalendar(fromYear, fromMonth-1, fromDay);
 			Calendar end = new GregorianCalendar(toYear, toMonth-1, toDay);
 			
+			try
+			{
 			final MarketLoader loader = new YahooFinanceLoader();
 			final MarketNeuralDataSet market = new MarketNeuralDataSet(loader,
 					inputWindow, outputWindow);
 			final MarketDataDescription desc = new MarketDataDescription(
 					new TickerSymbol(ticker), MarketDataType.ADJUSTED_CLOSE, true, true);
 			market.addDescription(desc);
+			
+			if( end.getTimeInMillis()>begin.getTimeInMillis() )
+			{
+				EncogWorkBench.displayError("Dates", "Ending date should not be before begin date.");
+				return;
+			}
 
 			market.load(begin.getTime(), end.getTime());
 			market.generate();
@@ -124,6 +138,11 @@ public class CreateTrainingData {
 					EncogDocumentOperations.generateNextID("data-"),
 					training);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
+			}
+			catch(LoaderError e)
+			{
+				EncogWorkBench.displayError("Ticker Symbol", "Invalid ticker symbol.");
+			}
 			
 			
 		}
@@ -131,7 +150,47 @@ public class CreateTrainingData {
 	}
 
 	public static void createPredictWindow() {
-
+		final JFileChooser fc = new JFileChooser();
+		fc.addChoosableFileFilter(EncogDocumentFrame.CSV_FILTER);
+		final int result = fc.showOpenDialog(EncogWorkBench.getInstance().getMainWindow());
+		if (result == JFileChooser.APPROVE_OPTION) {
+			CreateTemporalDataDialog dialog = new CreateTemporalDataDialog(EncogWorkBench.getInstance().getMainWindow());
+			
+			if( dialog.process() )
+			{
+				ReadCSV read = new ReadCSV(fc.getSelectedFile().toString(),false,',');
+				int inputWindow = dialog.getInputWindow().getValue();
+				int predictWindow = dialog.getOutputWindow().getValue();
+				TemporalNeuralDataSet temp = new TemporalNeuralDataSet(inputWindow,predictWindow);
+				temp.addDescription(new TemporalDataDescription(Type.PERCENT_CHANGE,true,true));
+				int index = 0;
+				while( read.next() )
+				{
+					double value = read.getDouble(0);
+					TemporalPoint point = temp.createPoint(index++);
+					point.setData(0, value);
+				}
+				
+				temp.generate();
+				
+				BasicNeuralDataSet training = new BasicNeuralDataSet();
+				
+				for(NeuralDataPair data: temp)
+				{
+					training.add(data);
+				}
+				
+				
+				training.setDescription("Temporal data for: " + fc.getSelectedFile().toString());
+				
+				
+				
+				EncogWorkBench.getInstance().getCurrentFile().add(
+						EncogDocumentOperations.generateNextID("data-"),
+						training);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+			}
+		}
 	}
 
 	public static void createRandom() {
