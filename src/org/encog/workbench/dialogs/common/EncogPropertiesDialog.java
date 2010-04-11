@@ -33,16 +33,24 @@ package org.encog.workbench.dialogs.common;
 import java.awt.Frame;
 import java.awt.Window;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 public class EncogPropertiesDialog extends EncogCommonDialog {
 
-	List<PropertiesField> properties = new ArrayList<PropertiesField>();
+	private List<PropertiesField> nonTabbedproperties = new ArrayList<PropertiesField>();
+	private List<PropertiesField> allProperties = new ArrayList<PropertiesField>();
+	private List<String> tabs = new ArrayList<String>();
+	private Map<String,List<PropertiesField>> tabMaps = new HashMap<String,List<PropertiesField>>();
+	private List<PropertiesField> currentTab; 
+	private JTabbedPane tabPane;
 	
 	public EncogPropertiesDialog(Frame owner) {
 		super(owner);
@@ -54,17 +62,44 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 	
 	public void render()
 	{
+		if( this.tabs.size()==0 )
+			renderNonTab();
+		else
+			renderTab();
+	}
+	
+	public void renderTab()
+	{
+		this.tabPane = new JTabbedPane();
+		this.getContentPane().add(this.tabPane);
+		
+		for(String tabName: this.tabs )
+		{
+			JPanel tab = new JPanel();
+			this.tabPane.addTab(tabName, tab);
+			List<PropertiesField> tabProperties = this.tabMaps.get(tabName);
+			renderProperties(tab,tabProperties);
+		}
+	}
+	
+	public void renderNonTab()
+	{
+		JPanel contents = this.getBodyPanel();
+		renderProperties(contents, this.nonTabbedproperties);
+	}
+	
+	public void renderProperties(JPanel target, List<PropertiesField> properties)
+	{
 		int y = 0;
 		int maxLabelWidth = 0;
 		int dialogWidth = getWidth();
 		int labelHeight=0;
 		
-		JPanel contents = this.getBodyPanel();
-		contents.setLayout(null);
+		target.setLayout(null);
 		
 		// create the labels
 		
-		for(PropertiesField field: this.properties)
+		for(PropertiesField field: properties)
 		{
 			JLabel label = field.createLabel();
 			maxLabelWidth = Math.max(maxLabelWidth, label.getWidth());
@@ -72,15 +107,22 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 		
 		y=0;
 		// create the text fields
-		for(PropertiesField field: this.properties)
+		for(PropertiesField field: properties)
 		{
-			y = field.createField(contents, maxLabelWidth+30, y, dialogWidth-maxLabelWidth-50 );
+			y = field.createField(target, maxLabelWidth+30, y, dialogWidth-maxLabelWidth-50 );
 		}
+	}
+	
+	public void beginTab(String tabName)
+	{
+		this.currentTab = new ArrayList<PropertiesField>();
+		this.tabMaps.put(tabName,this.currentTab);
+		this.tabs.add(tabName);
 	}
 
 	@Override
 	public void collectFields() throws ValidationException {
-		for(PropertiesField field: this.properties)
+		for(PropertiesField field: this.allProperties)
 		{
 			field.collect();
 		}
@@ -93,9 +135,16 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 	}
 	
 	public void addProperty(PropertiesField field) {
-		this.properties.add(field);
-		field.setOwner(this);
+		if( this.currentTab==null ) {
+			this.nonTabbedproperties.add(field);
+			field.setOwner(this);
+		}
+		else {
+			this.currentTab.add(field);
+			field.setOwner(this);
+		}
 		
+		this.allProperties.add(field);
 	}
 
 }

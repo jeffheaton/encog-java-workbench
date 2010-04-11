@@ -58,6 +58,7 @@ import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EvaluateDialog;
 import org.encog.workbench.dialogs.PopulationDialog;
 import org.encog.workbench.dialogs.about.AboutEncog;
+import org.encog.workbench.dialogs.config.EncogConfigDialog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
@@ -413,9 +414,13 @@ public class EncogDocumentOperations {
 	}
 
 	public void performEditConfig() {
-		ObjectEditorFrame config = new ObjectEditorFrame(EncogWorkBench.getInstance().getConfig());
-		config.setVisible(true);
-
+		//ObjectEditorFrame config = new ObjectEditorFrame(EncogWorkBench.getInstance().getConfig());
+		//config.setVisible(true);
+		EncogConfigDialog dialog = new EncogConfigDialog(EncogWorkBench.getInstance().getMainWindow());
+		if( dialog.process() )
+		{
+			
+		}
 	}
 
 	public void performObjectsProperties() {
