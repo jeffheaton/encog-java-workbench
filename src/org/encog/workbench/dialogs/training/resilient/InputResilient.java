@@ -38,6 +38,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
@@ -70,7 +71,7 @@ public class InputResilient extends BasicTrainingInput {
 		render();	
 		this.maxStep.setValue(ResilientPropagation.DEFAULT_MAX_STEP);
 		this.initialUpdate.setValue(ResilientPropagation.DEFAULT_INITIAL_UPDATE);
-		this.getMaxError().setValue(0.01);
+		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	}
 
 	public DoubleField getMaxStep() {

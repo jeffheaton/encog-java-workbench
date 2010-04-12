@@ -33,6 +33,7 @@ package org.encog.workbench.config;
 import org.encog.EncogError;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.persist.Persistor;
+import org.encog.workbench.util.SimpleEncrypt;
 
 public class EncogWorkBenchConfig implements EncogPersistedObject {
 
@@ -76,11 +77,11 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	}
 
 	public String getEncogCloudPassword() {
-		return encogCloudPassword;
+		return SimpleEncrypt.decode(encogCloudPassword);
 	}
 
 	public void setEncogCloudPassword(String encogCloudPassword) {
-		this.encogCloudPassword = encogCloudPassword;
+		this.encogCloudPassword = SimpleEncrypt.encode(encogCloudPassword);
 	}
 
 	public String getEncogCloudUserID() {

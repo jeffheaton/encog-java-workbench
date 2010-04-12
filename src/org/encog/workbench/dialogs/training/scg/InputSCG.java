@@ -33,6 +33,7 @@ package org.encog.workbench.dialogs.training.scg;
 import java.awt.Frame;
 
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
@@ -46,7 +47,7 @@ public class InputSCG  extends BasicTrainingInput {
 		super(owner);
 		setTitle("Scaled Conjugate Gradient (SCG)");
 		render();	
-		this.getMaxError().setValue(0.01);
+		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	}
 	
 }

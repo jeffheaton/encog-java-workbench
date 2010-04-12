@@ -429,7 +429,7 @@ public class Training {
 	public static void performNEAT() {
 		final InputNEAT dialog = new InputNEAT(EncogWorkBench
 				.getInstance().getMainWindow());
-		dialog.getMaxError().setValue(0.01);
+		dialog.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog.getNetwork(), 
 					(BasicNeuralDataSet) dialog.getTrainingSet());

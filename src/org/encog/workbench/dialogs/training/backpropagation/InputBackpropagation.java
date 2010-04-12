@@ -37,6 +37,7 @@ import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
@@ -71,7 +72,7 @@ public class InputBackpropagation extends BasicTrainingInput {
 		render();
 		this.learningRate.setValue(0.7);
 		this.momentum.setValue(0.0);
-		this.getMaxError().setValue(0.01);
+		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	}
 
 

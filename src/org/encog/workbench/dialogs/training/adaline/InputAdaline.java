@@ -32,6 +32,7 @@ package org.encog.workbench.dialogs.training.adaline;
 
 import java.awt.Frame;
 
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
@@ -65,7 +66,7 @@ public class InputAdaline extends BasicTrainingInput {
 		render();
 		this.learningRate.setValue(0.7);
 
-		this.getMaxError().setValue(0.01);
+		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	}
 
 

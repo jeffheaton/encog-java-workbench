@@ -39,6 +39,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
@@ -69,7 +70,7 @@ public class InputSOM extends BasicTrainingInput {
 		addProperty(this.learningRate = new DoubleField("learning rate","Learning Rate",true,0,-1));
 		render();
 		this.learningRate.setValue(0.7);
-		this.getMaxError().setValue(0.01);
+		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 
 	}
 

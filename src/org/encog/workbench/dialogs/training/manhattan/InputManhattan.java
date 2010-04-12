@@ -31,6 +31,8 @@
 package org.encog.workbench.dialogs.training.manhattan;
 
 import java.awt.Frame;
+
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
@@ -61,7 +63,7 @@ public class InputManhattan extends BasicTrainingInput {
 		addProperty(this.fixedDelta = new DoubleField("fixed delta","Fixed Delta",true,0,-1));
 		render();
 		this.fixedDelta.setValue(0.000001);
-		this.getMaxError().setValue(0.01);
+		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 
 	}
 

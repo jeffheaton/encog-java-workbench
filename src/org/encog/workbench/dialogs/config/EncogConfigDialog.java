@@ -25,7 +25,7 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		servers.add("cloud.encog.com");
 		servers.add("devcloud.encog.com");
 		setTitle("Encog Configuration");
-		setSize(400,400);
+		setSize(500,300);
 		beginTab("Training");
 		addProperty(this.defaultError = new DoubleField("default error","Default Error Percent",true,0,1));
 		beginTab("Encog Cloud");
