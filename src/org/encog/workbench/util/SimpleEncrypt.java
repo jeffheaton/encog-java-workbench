@@ -16,6 +16,9 @@ public class SimpleEncrypt {
 	
 	public static String encode(String str)
 	{
+		if( str==null )
+			return null;
+		
 		StringBuilder result = new StringBuilder();
 		
 		for(int i=0;i<str.length();i++)
@@ -33,6 +36,9 @@ public class SimpleEncrypt {
 	
 	public static String decode(String str)
 	{
+		if( str==null )
+			return null;
+		
 		StringBuilder result = new StringBuilder();
 		
 		for(int i=0;i<str.length();i+=2)
