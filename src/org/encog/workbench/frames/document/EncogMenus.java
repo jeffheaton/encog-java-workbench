@@ -160,16 +160,7 @@ public class EncogMenus {
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_IMPORT)) {
 			owner.getOperations().performImport(null);
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_QUIT)) {
-			try
-			{
-			if( EncogWorkBench.getInstance().getCloud()!=null )
-				EncogWorkBench.getInstance().getCloud().logout();
-			}
-			catch(Throwable t)
-			{
-				
-			}
-			System.exit(0);
+			owner.getOperations().performQuit();
 		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_CREATE)) {
 			owner.getOperations().performObjectsCreate();
 		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_DELETE)) {

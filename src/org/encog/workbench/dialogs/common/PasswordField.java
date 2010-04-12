@@ -18,6 +18,7 @@ public class PasswordField extends PropertiesField {
 
 	public void setValue(String value) {
 		this.value = value;
+		((JTextField)this.getField()).setText(value);
 	}
 
 	@Override

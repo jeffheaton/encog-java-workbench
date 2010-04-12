@@ -3,13 +3,19 @@ package org.encog.workbench.process.cloud;
 import org.encog.cloud.EncogCloud;
 import org.encog.cloud.EncogCloudError;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.cloud.LoginCloudDialog;
 
 public class CloudProcess {
 	public static void Login() {
 		if (EncogWorkBench.getInstance().getCloud() == null) {
+			
 			LoginCloudDialog dialog = new LoginCloudDialog(EncogWorkBench
 					.getInstance().getMainWindow());
+			EncogWorkBenchConfig config = EncogWorkBench.getInstance().getConfig();
+			dialog.getNetwork().setValue(config.getEncogCloudNetwork());
+			dialog.getUserID().setValue(config.getEncogCloudUserID());
+			dialog.getPassword().setValue(config.getEncogCloudPassword());
 			if (dialog.process()) {
 				String uid = dialog.getUserID().getValue();
 				String pwd = dialog.getPassword().getValue();

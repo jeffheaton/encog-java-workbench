@@ -4,6 +4,7 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
@@ -12,9 +13,11 @@ import org.encog.workbench.dialogs.common.TextField;
 
 public class EncogConfigDialog extends EncogPropertiesDialog {
 
-	private ComboBoxField network;
+	private TextField network;
 	private TextField userID;
 	private PasswordField password;
+	private DoubleField defaultError;
+	private CheckField autoConnect;
 	
 	public EncogConfigDialog(Frame owner) {
 		super(owner);
@@ -22,17 +25,18 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		servers.add("cloud.encog.com");
 		servers.add("devcloud.encog.com");
 		setTitle("Encog Configuration");
-		setSize(400,200);
+		setSize(400,400);
 		beginTab("Training");
-		addProperty(new DoubleField("default error","Default Error Percent",true,0,100));
+		addProperty(this.defaultError = new DoubleField("default error","Default Error Percent",true,0,1));
 		beginTab("Encog Cloud");
-		addProperty(this.network = new ComboBoxField("network","Network",true, servers));
+		addProperty(this.network = new TextField("network","Network",true));
 		addProperty(this.userID = new TextField("user id","User ID",true));
 		addProperty(this.password = new PasswordField("password","Password",true));
+		addProperty(this.autoConnect = new CheckField("autoconnect","Auto Connect to Encog Cloud"));
 		render();
 	}
 
-	public ComboBoxField getNetwork() {
+	public TextField getNetwork() {
 		return network;
 	}
 
@@ -43,5 +47,15 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 	public PasswordField getPassword() {
 		return password;
 	}
+
+	public DoubleField getDefaultError() {
+		return defaultError;
+	}
+
+	public CheckField getAutoConnect() {
+		return autoConnect;
+	}
+	
+	
 	
 }

@@ -32,18 +32,31 @@ package org.encog.workbench;
 
 import java.awt.Frame;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.swing.JOptionPane;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.encog.EncogError;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.parse.tags.read.ReadXML;
+import org.encog.parse.tags.write.WriteXML;
 import org.encog.persist.EncogMemoryCollection;
 import org.encog.persist.location.FilePersistence;
+import org.encog.persist.persistors.generic.Object2XML;
+import org.encog.persist.persistors.generic.XML2Object;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.cloud.EncogCloud;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * Main class for the Encog Workbench. The main method in this class starts up
@@ -54,9 +67,9 @@ import org.encog.cloud.EncogCloud;
  */
 public class EncogWorkBench implements Runnable {
 
-	public final static String CONFIG_FILENAME = "EncogWorkbench.conf";
+	public final static String CONFIG_FILENAME = ".EncogWorkbench.conf";
 	public final static String VERSION = "2.4";
-	
+
 	/**
 	 * The singleton instance.
 	 */
@@ -76,9 +89,8 @@ public class EncogWorkBench implements Runnable {
 	 * Config info for the workbench.
 	 */
 	private EncogWorkBenchConfig config;
-	
-	private EncogCloud cloud;
 
+	private EncogCloud cloud;
 
 	/**
 	 * The current filename being edited.
@@ -159,13 +171,15 @@ public class EncogWorkBench implements Runnable {
 	}
 
 	public static void load(final String filename) {
-		getInstance().getCurrentFile().load(new FilePersistence(new File(filename)));
+		getInstance().getCurrentFile().load(
+				new FilePersistence(new File(filename)));
 		getInstance().setCurrentFileName(filename);
 		getInstance().getMainWindow().redraw();
 	}
 
 	public static void save(final String filename) {
-		getInstance().getCurrentFile().save(new FilePersistence(new File(filename)));
+		getInstance().getCurrentFile().save(
+				new FilePersistence(new File(filename)));
 		getInstance().setCurrentFileName(filename);
 		getInstance().getMainWindow().redraw();
 	}
@@ -216,43 +230,39 @@ public class EncogWorkBench implements Runnable {
 		this.mainWindow = mainWindow;
 	}
 
-
 	public static void saveConfig() {
-		/* String home = System.getProperty("user.home");
-		File file = new File(home, CONFIG_FILENAME);
+		try {
+			String home = System.getProperty("user.home");
+			File file = new File(home, CONFIG_FILENAME);
 
-		FileOutputStream fos = new FileOutputStream(file);
-		WriteXML out = new WriteXML(fos);
-		out.beginDocument();
-		Object2XML xml = new Object2XML();
-		xml.save(EncogWorkBench.getInstance().getConfig(), out);
-		out.endDocument();
-		fos.close(); */
+			FileOutputStream fos = new FileOutputStream(file);
+			WriteXML out = new WriteXML(fos);
+			out.beginDocument();
+			Object2XML xml = new Object2XML();
+			xml.save(EncogWorkBench.getInstance().getConfig(), out);
+			out.endDocument();
+			fos.close();
+		} catch (IOException e) {
+			throw new WorkBenchError(e);
+		}
 
 	}
 
 	public static void loadConfig() {
-		/*String home = System.getProperty("user.home");
+		String home = System.getProperty("user.home");
 		File file = new File(home, CONFIG_FILENAME);
 
 		try {
 			InputStream is = new FileInputStream(file);
-			final DocumentBuilderFactory dbf = DocumentBuilderFactory
-					.newInstance();
 
-			DocumentBuilder db = null;
-			db = dbf.newDocumentBuilder();
-
-			Document doc = null;
-			doc = db.parse(is);
-			final Element element = doc.getDocumentElement();
-
+			ReadXML readXML = new ReadXML(is);
+			readXML.readToTag();
 			XML2Object conv = new XML2Object();
-			//conv.load(element, EncogWorkBench.getInstance().getConfig());
+			conv.load(readXML, EncogWorkBench.getInstance().getConfig());
 			is.close();
 		} catch (Exception e) {
-			displayError("Error Reading Config File", e.getMessage());
-		}*/
+			// ignore error reading config file, it probably exists already and just needs t obe created.
+		}
 	}
 
 	public static String displayInput(String prompt) {
@@ -263,41 +273,38 @@ public class EncogWorkBench implements Runnable {
 		return this.config;
 	}
 
-
 	public static boolean displayQuery(String title, String message) {
 		int result = JOptionPane.showConfirmDialog(null, message, title,
 				JOptionPane.YES_NO_OPTION);
-		
+
 		return result == JOptionPane.YES_OPTION;
 	}
-	
-	public static void displayError(String title, Throwable t, BasicNetwork network, NeuralDataSet set)
-	{
-		if( t instanceof EncogError ) {
-			displayError(title,t);
+
+	public static void displayError(String title, Throwable t,
+			BasicNetwork network, NeuralDataSet set) {
+		if (t instanceof EncogError) {
+			displayError(title, t);
 			t.printStackTrace();
-		}
-		else
-			ErrorDialog.handleError(t,network,set);
+		} else
+			ErrorDialog.handleError(t, network, set);
 	}
-	
-	public static void displayError(String title, Throwable t)
-	{
-		displayError(title,"An error occured while performing this operation:\n" + t.toString());
+
+	public static void displayError(String title, Throwable t) {
+		displayError(title,
+				"An error occured while performing this operation:\n"
+						+ t.toString());
 	}
 
 	public static void save() {
-		save(getInstance().getCurrentFileName());		
+		save(getInstance().getCurrentFileName());
 	}
 
 	public EncogCloud getCloud() {
 		return cloud;
 	}
-	
-	public void run()
-	{
-		for(;;)
-		{
+
+	public void run() {
+		for (;;) {
 			try {
 				Thread.sleep(300000);
 			} catch (InterruptedException e) {
@@ -306,39 +313,34 @@ public class EncogWorkBench implements Runnable {
 			background();
 		}
 	}
-	
-	private void background()
-	{
-		synchronized(this)
-		{
-			if( cloud!=null )
-			{
-				if( !cloud.isConnected() )
-				{
+
+	private void background() {
+		synchronized (this) {
+			if (cloud != null) {
+				if (!cloud.isConnected()) {
 					this.cloud = null;
-					EncogWorkBench.displayError("", "Encog Cloud connection lost.");
+					EncogWorkBench.displayError("",
+							"Encog Cloud connection lost.");
 					return;
-				}
-				else
+				} else
 					System.out.println("Connected.");
 			}
 		}
 	}
 
 	public void setCloud(EncogCloud cloud) {
-		synchronized(this)
-		{
+		synchronized (this) {
 			this.cloud = cloud;
 		}
 	}
-	
-	public void init()
-	{
+
+	public void init() {
+		EncogWorkBench.loadConfig();
+		
 		Thread thread = new Thread(this);
 		thread.setDaemon(true);
 		thread.start();
 	}
-	
 
 	/**
 	 * The main entry point into the program. To support opening documents by
@@ -353,17 +355,16 @@ public class EncogWorkBench implements Runnable {
 		workBench.setMainWindow(new EncogDocumentFrame());
 
 		workBench.init();
-		
+
 		if (args.length > 0) {
 			EncogWorkBench.load(args[0]);
 		}
-		try {			
+		try {
 			workBench.getMainWindow().setVisible(true);
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Internal error", t.getMessage());
 			t.printStackTrace();
 		}
 	}
-
 
 }

@@ -53,6 +53,7 @@ import org.encog.solve.genetic.population.BasicPopulation;
 import org.encog.solve.genetic.population.Population;
 import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EvaluateDialog;
@@ -85,63 +86,73 @@ import org.slf4j.LoggerFactory;
 public class EncogDocumentOperations {
 
 	private EncogDocumentFrame owner;
-		
+
 	@SuppressWarnings("unused")
 	final private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	public EncogDocumentOperations(EncogDocumentFrame owner) {
 		this.owner = owner;
 	}
-	
+
 	public void openItem(final Object item) {
-		
-		DirectoryEntry entry = (DirectoryEntry)item;
-		
+
+		DirectoryEntry entry = (DirectoryEntry) item;
+
 		if (entry.getType().equals(EncogPersistedCollection.TYPE_TRAINING)) {
-			
-			if (owner.getSubwindows().checkBeforeOpen(entry, TrainingDataFrame.class)) {
-				BasicNeuralDataSet set = (BasicNeuralDataSet) EncogWorkBench.getInstance().getCurrentFile().find(entry);
+
+			if (owner.getSubwindows().checkBeforeOpen(entry,
+					TrainingDataFrame.class)) {
+				BasicNeuralDataSet set = (BasicNeuralDataSet) EncogWorkBench
+						.getInstance().getCurrentFile().find(entry);
 				final TrainingDataFrame frame = new TrainingDataFrame(set);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
-		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_BASIC_NET) ) {
+		} else if (entry.getType().equals(
+				EncogPersistedCollection.TYPE_BASIC_NET)) {
 
 			final DirectoryEntry net = (DirectoryEntry) item;
-			if (owner.getSubwindows().checkBeforeOpen(net, TrainingDataFrame.class)) {
-				BasicNetwork net2 = (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(net);
+			if (owner.getSubwindows().checkBeforeOpen(net,
+					TrainingDataFrame.class)) {
+				BasicNetwork net2 = (BasicNetwork) EncogWorkBench.getInstance()
+						.getCurrentFile().find(net);
 				final NetworkFrame frame = new NetworkFrame(net2);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
 		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_TEXT)) {
-			DirectoryEntry text = (DirectoryEntry)item;
+			DirectoryEntry text = (DirectoryEntry) item;
 			if (owner.getSubwindows().checkBeforeOpen(text, TextData.class)) {
-				TextData text2 = (TextData)EncogWorkBench.getInstance().getCurrentFile().find(text);
+				TextData text2 = (TextData) EncogWorkBench.getInstance()
+						.getCurrentFile().find(text);
 				final TextEditorFrame frame = new TextEditorFrame(text2);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
-		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_PROPERTY)) {
-			DirectoryEntry prop = (DirectoryEntry)item;
+		} else if (entry.getType().equals(
+				EncogPersistedCollection.TYPE_PROPERTY)) {
+			DirectoryEntry prop = (DirectoryEntry) item;
 			if (owner.getSubwindows().checkBeforeOpen(prop, PropertyData.class)) {
-				PropertyData prop2 = (PropertyData)EncogWorkBench.getInstance().getCurrentFile().find(prop);
+				PropertyData prop2 = (PropertyData) EncogWorkBench
+						.getInstance().getCurrentFile().find(prop);
 				final PropertyDataFrame frame = new PropertyDataFrame(prop2);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
-		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_POPULATION)) {
-			DirectoryEntry prop = (DirectoryEntry)item;
-			if (owner.getSubwindows().checkBeforeOpen(prop, BasicPopulation.class)) {
-				BasicPopulation pop2 = (BasicPopulation)EncogWorkBench.getInstance().getCurrentFile().find(prop);
+		} else if (entry.getType().equals(
+				EncogPersistedCollection.TYPE_POPULATION)) {
+			DirectoryEntry prop = (DirectoryEntry) item;
+			if (owner.getSubwindows().checkBeforeOpen(prop,
+					BasicPopulation.class)) {
+				BasicPopulation pop2 = (BasicPopulation) EncogWorkBench
+						.getInstance().getCurrentFile().find(prop);
 				final PopulationFrame frame = new PopulationFrame(pop2);
 				frame.setVisible(true);
 				owner.getSubwindows().add(frame);
 			}
-		} 
-		else
-		{
-			EncogWorkBench.displayError("Error", "Unknown object type.\nDo not know how to open.");
+		} else {
+			EncogWorkBench.displayError("Error",
+					"Unknown object type.\nDo not know how to open.");
 		}
 	}
 
@@ -266,96 +277,93 @@ public class EncogDocumentOperations {
 	}
 
 	public void performNetworkQuery() {
-		final DirectoryEntry item = (DirectoryEntry) owner.getContents().getSelectedValue();
+		final DirectoryEntry item = (DirectoryEntry) owner.getContents()
+				.getSelectedValue();
 
-		if (owner.getSubwindows().checkBeforeOpen(item, NetworkQueryFrame.class)) {
-			BasicNetwork net = (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(item);
+		if (owner.getSubwindows()
+				.checkBeforeOpen(item, NetworkQueryFrame.class)) {
+			BasicNetwork net = (BasicNetwork) EncogWorkBench.getInstance()
+					.getCurrentFile().find(item);
 			final NetworkQueryFrame frame = new NetworkQueryFrame(net);
 			frame.setVisible(true);
 			owner.getSubwindows().add(frame);
 		}
 
 	}
-	
-	public static String generateNextID(String base)
-	{
+
+	public static String generateNextID(String base) {
 		int index = 1;
 		String result = "";
-		
+
 		do {
 			result = base + index;
 			index++;
-		} while( EncogWorkBench.getInstance().getCurrentFile().exists(result) );
-		
-		
+		} while (EncogWorkBench.getInstance().getCurrentFile().exists(result));
+
 		return result;
 	}
-	
+
 	public void performObjectsCreate() {
 
-		try
-		{
-		SelectItem itemTraining, itemNetwork, itemOptions, itemText, itemPopulation;
-		final List<SelectItem> list = new ArrayList<SelectItem>();
-		list.add(itemPopulation = new SelectItem("NEAT Population"));
-		list.add(itemNetwork = new SelectItem("Neural Network"));
-		list.add(itemOptions = new SelectItem("Property Data"));
-		list.add(itemText = new SelectItem("Text"));
-		list.add(itemTraining = new SelectItem("Training Data"));
-				
-		final SelectDialog dialog = new SelectDialog(owner, list);
-		if(! dialog.process() )
-			return;
-		
-		final SelectItem result = dialog.getSelected();
+		try {
+			SelectItem itemTraining, itemNetwork, itemOptions, itemText, itemPopulation;
+			final List<SelectItem> list = new ArrayList<SelectItem>();
+			list.add(itemPopulation = new SelectItem("NEAT Population"));
+			list.add(itemNetwork = new SelectItem("Neural Network"));
+			list.add(itemOptions = new SelectItem("Property Data"));
+			list.add(itemText = new SelectItem("Text"));
+			list.add(itemTraining = new SelectItem("Training Data"));
 
-		if (result == itemNetwork) {
-			CreateNeuralNetwork.process( generateNextID("network-") );
-		} else if (result == itemTraining) {
-			performCreateTrainingData();
-		}  else if(result == itemText)
-		{
-			final TextData text = new TextData();
-			text.setDescription("A text file");
-			text.setText("Insert text here.");
-			EncogWorkBench.getInstance().getCurrentFile().add(generateNextID("text-") ,text);
-			EncogWorkBench.getInstance().getMainWindow().redraw();
-		} else if( result == itemOptions )
-		{
-			final PropertyData prop = new PropertyData();
-			prop.setDescription("Some property data");
-			EncogWorkBench.getInstance().getCurrentFile().add(generateNextID("properties-") ,prop);
-			EncogWorkBench.getInstance().getMainWindow().redraw();
-		} else if( result==itemPopulation) {
-			performCreatePopulation();
-		}
-		}
-		catch(EncogError t)
-		{
+			final SelectDialog dialog = new SelectDialog(owner, list);
+			if (!dialog.process())
+				return;
+
+			final SelectItem result = dialog.getSelected();
+
+			if (result == itemNetwork) {
+				CreateNeuralNetwork.process(generateNextID("network-"));
+			} else if (result == itemTraining) {
+				performCreateTrainingData();
+			} else if (result == itemText) {
+				final TextData text = new TextData();
+				text.setDescription("A text file");
+				text.setText("Insert text here.");
+				EncogWorkBench.getInstance().getCurrentFile().add(
+						generateNextID("text-"), text);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+			} else if (result == itemOptions) {
+				final PropertyData prop = new PropertyData();
+				prop.setDescription("Some property data");
+				EncogWorkBench.getInstance().getCurrentFile().add(
+						generateNextID("properties-"), prop);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+			} else if (result == itemPopulation) {
+				performCreatePopulation();
+			}
+		} catch (EncogError t) {
 			EncogWorkBench.displayError("Error creating object", t);
-			logger.error("Error creating object",t);
+			logger.error("Error creating object", t);
 		}
 	}
+
 	private void performCreatePopulation() {
 		PopulationDialog dialog = new PopulationDialog(owner);
-		
-		if( dialog.process() )
-		{
+
+		if (dialog.process()) {
 			int populationSize = dialog.getPopulationSize().getValue();
 			BasicPopulation pop = new BasicPopulation(populationSize);
-			
+
 			for (int i = 0; i < populationSize; i++) {
-				pop.add(
-						new NEATGenome(null, pop.assignGenomeID(),
-								dialog.getInputNeurons().getValue(), 
-								dialog.getOutputNeurons().getValue()));
+				pop.add(new NEATGenome(null, pop.assignGenomeID(), dialog
+						.getInputNeurons().getValue(), dialog
+						.getOutputNeurons().getValue()));
 			}
 
-			
 			pop.setDescription("Population");
-			EncogWorkBench.getInstance().getCurrentFile().add(generateNextID("population-"),pop);
+			EncogWorkBench.getInstance().getCurrentFile().add(
+					generateNextID("population-"), pop);
 		}
-		
+
 	}
 
 	public void performObjectsDelete() {
@@ -370,13 +378,13 @@ public class EncogDocumentOperations {
 			if (JOptionPane.showConfirmDialog(owner,
 					"Are you sure you want to delete this object?", "Warning",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				EncogWorkBench.getInstance().getCurrentFile().delete((DirectoryEntry)object);
+				EncogWorkBench.getInstance().getCurrentFile().delete(
+						(DirectoryEntry) object);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
 		}
 	}
 
-	
 	public void performBrowse() {
 		BrowserFrame browse = new BrowserFrame();
 		browse.setVisible(true);
@@ -384,9 +392,9 @@ public class EncogDocumentOperations {
 
 	public void performHelpAbout() {
 		AboutEncog dialog = new AboutEncog();
-		dialog.process();		
+		dialog.process();
 	}
-	
+
 	boolean checkSave() {
 		final String currentFileName = EncogWorkBench.getInstance()
 				.getCurrentFileName();
@@ -414,100 +422,127 @@ public class EncogDocumentOperations {
 	}
 
 	public void performEditConfig() {
-		//ObjectEditorFrame config = new ObjectEditorFrame(EncogWorkBench.getInstance().getConfig());
-		//config.setVisible(true);
-		EncogConfigDialog dialog = new EncogConfigDialog(EncogWorkBench.getInstance().getMainWindow());
-		if( dialog.process() )
-		{
-			
+		// ObjectEditorFrame config = new
+		// ObjectEditorFrame(EncogWorkBench.getInstance().getConfig());
+		// config.setVisible(true);
+
+		EncogConfigDialog dialog = new EncogConfigDialog(EncogWorkBench
+				.getInstance().getMainWindow());
+
+		EncogWorkBenchConfig config = EncogWorkBench.getInstance().getConfig();
+
+		dialog.getUserID().setValue(config.getEncogCloudUserID());
+		dialog.getPassword().setValue(config.getEncogCloudPassword());
+		dialog.getDefaultError().setValue(config.getDefaultError());
+		dialog.getNetwork().setValue(config.getEncogCloudNetwork());
+		dialog.getAutoConnect().setValue(config.isAutoConnect());
+
+		if (dialog.process()) {
+			config.setEncogCloudUserID(dialog.getUserID().getValue());
+			config.setEncogCloudPassword(dialog.getPassword().getValue());
+			config.setDefaultError(dialog.getDefaultError().getValue());
+			config.setAutoConnect(dialog.getAutoConnect().getValue());
+			config.setEncogCloudNetwork(dialog.getNetwork().getValue());
+			EncogWorkBench.saveConfig();
 		}
 	}
 
 	public void performObjectsProperties() {
-		final DirectoryEntry selected = (DirectoryEntry)owner.getContents().getSelectedValue();
-		final EditEncogObjectProperties dialog = new EditEncogObjectProperties
-		(owner, selected);
-		dialog.process();		
+		final DirectoryEntry selected = (DirectoryEntry) owner.getContents()
+				.getSelectedValue();
+		final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
+				owner, selected);
+		dialog.process();
 	}
 
 	public void performFileRevert() {
-		if( EncogWorkBench.askQuestion("Revert", "Would you like to revert to the last time you saved?") )
-		{
-			EncogWorkBench.load(EncogWorkBench.getInstance().getCurrentFileName());
+		if (EncogWorkBench.askQuestion("Revert",
+				"Would you like to revert to the last time you saved?")) {
+			EncogWorkBench.load(EncogWorkBench.getInstance()
+					.getCurrentFileName());
 			EncogWorkBench.getInstance().getCurrentFile().buildDirectory();
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
-		
+
 	}
 
 	public void performEvaluate() {
-		try
-		{
-		EvaluateDialog dialog = new EvaluateDialog(EncogWorkBench.getInstance().getMainWindow());
-		if( dialog.process() )
-		{
-			BasicNetwork network = dialog.getNetwork();
-			NeuralDataSet training = dialog.getTrainingSet();
-			
-			
-			double error = network.calculateError(training);
-			EncogWorkBench.displayMessage("Error For this Network", ""+error);
-		}
-		}
-		catch(Throwable t)
-		{
+		try {
+			EvaluateDialog dialog = new EvaluateDialog(EncogWorkBench
+					.getInstance().getMainWindow());
+			if (dialog.process()) {
+				BasicNetwork network = dialog.getNetwork();
+				NeuralDataSet training = dialog.getTrainingSet();
+
+				double error = network.calculateError(training);
+				EncogWorkBench.displayMessage("Error For this Network", ""
+						+ error);
+			}
+		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error Evaluating Network", t);
 		}
-		
+
 	}
 
 	public void performBenchmark() {
-		if( EncogWorkBench.askQuestion("Benchmark", "Would you like to benchmark Encog on this machine?\nThis process will take several minutes to complete.") ) {
+		if (EncogWorkBench
+				.askQuestion(
+						"Benchmark",
+						"Would you like to benchmark Encog on this machine?\nThis process will take several minutes to complete.")) {
 			BenchmarkDialog dialog = new BenchmarkDialog();
 			dialog.setVisible(true);
 		}
-		
+
 	}
-	
-	public void performCreateTrainingData()
-	{
+
+	public void performCreateTrainingData() {
 		CreateTrainingDataDialog dialog = new CreateTrainingDataDialog(
 				EncogWorkBench.getInstance().getMainWindow());
-		
+
 		dialog.setType(TrainingDataType.Empty);
-		
-		if( dialog.process() )
-		{
-			switch(dialog.getType())
-			{
-				case Empty:
-					CreateTrainingData.createEmpty();
-					break;
-				case ImportCSV:
-					CreateTrainingData.createImportCSV();
-					break;
-				case MarketWindow:
-					CreateTrainingData.createMarketWindow();
-					break;
-				case PredictWindow:
-					CreateTrainingData.createPredictWindow();
-					break;
-				case Random:
-					CreateTrainingData.createRandom();
-					break;
-				case XORTemp:
-					CreateTrainingData.createXORTemp();
-					break;
-				case XOR:
-					CreateTrainingData.createXOR();
-					break;
-			}		
+
+		if (dialog.process()) {
+			switch (dialog.getType()) {
+			case Empty:
+				CreateTrainingData.createEmpty();
+				break;
+			case ImportCSV:
+				CreateTrainingData.createImportCSV();
+				break;
+			case MarketWindow:
+				CreateTrainingData.createMarketWindow();
+				break;
+			case PredictWindow:
+				CreateTrainingData.createPredictWindow();
+				break;
+			case Random:
+				CreateTrainingData.createRandom();
+				break;
+			case XORTemp:
+				CreateTrainingData.createXORTemp();
+				break;
+			case XOR:
+				CreateTrainingData.createXOR();
+				break;
+			}
 		}
 	}
 
 	public void performCloudLogin() {
 		CloudProcess.Login();
-		
+
+	}
+
+	public void performQuit() {
+		try {
+			EncogWorkBench.saveConfig();
+			if (EncogWorkBench.getInstance().getCloud() != null)
+				EncogWorkBench.getInstance().getCloud().logout();
+		} catch (Throwable t) {
+
+		}
+		System.exit(0);
+
 	}
 
 }

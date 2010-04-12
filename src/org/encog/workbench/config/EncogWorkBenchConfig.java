@@ -35,65 +35,75 @@ import org.encog.persist.EncogPersistedObject;
 import org.encog.persist.Persistor;
 
 public class EncogWorkBenchConfig implements EncogPersistedObject {
-	
-	private String databaseConnectionString = "";
-	private String databaseDriver = "";
-	private String databaseUserID = "";
-	private String databasePassword = "";
-	private String databaseDialect = "";
-	public String getDatabaseConnectionString() {
-		return databaseConnectionString;
-	}
-	public void setDatabaseConnectionString(String databaseConnectionString) {
-		this.databaseConnectionString = databaseConnectionString;
-	}
-	public String getDatabaseDriver() {
-		return databaseDriver;
-	}
-	public void setDatabaseDriver(String databaseDriver) {
-		this.databaseDriver = databaseDriver;
-	}
-	public String getDatabaseUserID() {
-		return databaseUserID;
-	}
-	public void setDatabaseUserID(String databaseUserID) {
-		this.databaseUserID = databaseUserID;
-	}
-	public String getDatabasePassword() {
-		return databasePassword;
-	}
-	public void setDatabasePassword(String databasePassword) {
-		this.databasePassword = databasePassword;
-	}
 
+	private String name = "workbenchConfig";
+	private String description = "workbenchDescription";
+	
+	private String encogCloudNetwork = "http://cloud.encog.com";
+	private String encogCloudPassword;
+	private String encogCloudUserID;
+	private boolean autoConnect = false;
+	private double defaultError = 0.01;
+	
 	public Persistor createPersistor() {
 		return null;
 	}
 
 	public String getDescription() {
-		return null;
+		return description;
 	}
 
 	public String getName() {
-		return "config";
+		// TODO Auto-generated method stub
+		return name;
 	}
 
 	public void setDescription(String theDescription) {
+		this.description = theDescription;
+		
 	}
-	
-	public void setName(String theName) {
+
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getDatabaseDialect() {
-		return databaseDialect;
+
+	public String getEncogCloudNetwork() {
+		return encogCloudNetwork;
 	}
-	public void setDatabaseDialect(String databaseDialect) {
-		this.databaseDialect = databaseDialect;
+
+	public void setEncogCloudNetwork(String encogCloudNetwork) {
+		this.encogCloudNetwork = encogCloudNetwork;
 	}
-	
-	public Object clone()
-	{
-		throw new EncogError("Clone not supported");
+
+	public String getEncogCloudPassword() {
+		return encogCloudPassword;
 	}
-	
-	
+
+	public void setEncogCloudPassword(String encogCloudPassword) {
+		this.encogCloudPassword = encogCloudPassword;
+	}
+
+	public String getEncogCloudUserID() {
+		return encogCloudUserID;
+	}
+
+	public void setEncogCloudUserID(String encogCloudUserID) {
+		this.encogCloudUserID = encogCloudUserID;
+	}
+
+	public double getDefaultError() {
+		return defaultError;
+	}
+
+	public void setDefaultError(double defaultError) {
+		this.defaultError = defaultError;
+	}
+
+	public boolean isAutoConnect() {
+		return autoConnect;
+	}
+
+	public void setAutoConnect(boolean autoConnect) {
+		this.autoConnect = autoConnect;
+	}
 }
