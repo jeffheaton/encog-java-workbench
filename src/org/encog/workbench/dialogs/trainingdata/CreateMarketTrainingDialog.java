@@ -1,9 +1,12 @@
 package org.encog.workbench.dialogs.trainingdata;
 
 import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
+import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
@@ -20,6 +23,7 @@ public class CreateMarketTrainingDialog  extends EncogPropertiesDialog {
 	private final IntegerField toYear;
 	private final IntegerField inputWindow;
 	private final IntegerField outputWindow;
+	private final ComboBoxField normalizationType;
 
 	
 	public CreateMarketTrainingDialog(Frame owner) {
@@ -29,7 +33,7 @@ public class CreateMarketTrainingDialog  extends EncogPropertiesDialog {
 		int year = gc.get(Calendar.YEAR);
 		
 		setTitle("Market Training Data");
-		setSize(500,200);
+		setSize(500,400);
 		addProperty(this.ticker = new TextField("ticker","Ticker Symbol",true));
 		addProperty(this.fromMonth = new IntegerField("begin month","Beginning Month(1-12)",true, 1, 12));
 		addProperty(this.fromDay = new IntegerField("begin day","Beginning Day(1-12)",true, 1, 31));
@@ -42,6 +46,11 @@ public class CreateMarketTrainingDialog  extends EncogPropertiesDialog {
 		addProperty(this.inputWindow = new IntegerField("input window","Input Window",true,0,1000));
 		addProperty(this.outputWindow = new IntegerField("output window","Output Window",true, 0, 1000));
 
+		List<String> list = new ArrayList<String>();
+		list.add("Raw");
+		list.add("Percent Change");
+		list.add("Delta Change");
+		addProperty(this.normalizationType = new ComboBoxField("normalization type", "Normalization Type",true,list) );
 		
 		render();
 	}
@@ -89,6 +98,11 @@ public class CreateMarketTrainingDialog  extends EncogPropertiesDialog {
 
 	public IntegerField getOutputWindow() {
 		return outputWindow;
+	}
+
+
+	public ComboBoxField getNormalizationType() {
+		return normalizationType;
 	}
 
 	

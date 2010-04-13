@@ -3,6 +3,7 @@ package org.encog.workbench.process;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
 import org.encog.neural.data.market.TickerSymbol;
@@ -87,6 +88,8 @@ public class CreateTrainingData {
 		dialog.getInputWindow().setValue(7);
 		dialog.getOutputWindow().setValue(1);
 		
+		((JComboBox)dialog.getNormalizationType().getField()).setSelectedIndex(1);
+		
 		if( dialog.process() )
 		{
 			String ticker = dialog.getTicker().getValue();
@@ -104,13 +107,32 @@ public class CreateTrainingData {
 			Calendar begin = new GregorianCalendar(fromYear, fromMonth-1, fromDay);
 			Calendar end = new GregorianCalendar(toYear, toMonth-1, toDay);
 			
+			Type type;
+			
+			switch(((JComboBox)dialog.getNormalizationType().getField()).getSelectedIndex())
+			{
+				case 0:
+					type = Type.RAW;
+					break;
+				case 1:
+					type = Type.PERCENT_CHANGE;
+					break;
+				case 2:
+					type = Type.DELTA_CHANGE;
+					break;
+				default:
+					type = Type.RAW;
+					break;
+			}
+			
 			try
 			{
 			final MarketLoader loader = new YahooFinanceLoader();
 			final MarketNeuralDataSet market = new MarketNeuralDataSet(loader,
 					inputWindow, outputWindow);
 			final MarketDataDescription desc = new MarketDataDescription(
-					new TickerSymbol(ticker), MarketDataType.ADJUSTED_CLOSE, true, true);
+					new TickerSymbol(ticker), MarketDataType.ADJUSTED_CLOSE, 
+					type, true, true);
 			market.addDescription(desc);
 			
 			if( end.getTimeInMillis()<begin.getTimeInMillis() )
@@ -155,6 +177,7 @@ public class CreateTrainingData {
 		final int result = fc.showOpenDialog(EncogWorkBench.getInstance().getMainWindow());
 		if (result == JFileChooser.APPROVE_OPTION) {
 			CreateTemporalDataDialog dialog = new CreateTemporalDataDialog(EncogWorkBench.getInstance().getMainWindow());
+			((JComboBox)dialog.getNormalizationType().getField()).setSelectedIndex(1);
 			
 			if( dialog.process() )
 			{
@@ -162,7 +185,26 @@ public class CreateTrainingData {
 				int inputWindow = dialog.getInputWindow().getValue();
 				int predictWindow = dialog.getOutputWindow().getValue();
 				TemporalNeuralDataSet temp = new TemporalNeuralDataSet(inputWindow,predictWindow);
-				temp.addDescription(new TemporalDataDescription(Type.PERCENT_CHANGE,true,true));
+				
+				Type type;
+				
+				switch(((JComboBox)dialog.getNormalizationType().getField()).getSelectedIndex())
+				{
+					case 0:
+						type = Type.RAW;
+						break;
+					case 1:
+						type = Type.PERCENT_CHANGE;
+						break;
+					case 2:
+						type = Type.DELTA_CHANGE;
+						break;
+					default:
+						type = Type.RAW;
+						break;
+				}
+				
+				temp.addDescription(new TemporalDataDescription(type,true,true));
 				int index = 0;
 				while( read.next() )
 				{

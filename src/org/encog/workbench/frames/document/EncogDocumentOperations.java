@@ -60,6 +60,8 @@ import org.encog.workbench.dialogs.EvaluateDialog;
 import org.encog.workbench.dialogs.PopulationDialog;
 import org.encog.workbench.dialogs.about.AboutEncog;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
+import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
+import org.encog.workbench.dialogs.createobject.ObjectType;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
@@ -306,40 +308,41 @@ public class EncogDocumentOperations {
 	public void performObjectsCreate() {
 
 		try {
-			SelectItem itemTraining, itemNetwork, itemOptions, itemText, itemPopulation;
-			final List<SelectItem> list = new ArrayList<SelectItem>();
-			list.add(itemPopulation = new SelectItem("NEAT Population"));
-			list.add(itemNetwork = new SelectItem("Neural Network"));
-			list.add(itemOptions = new SelectItem("Property Data"));
-			list.add(itemText = new SelectItem("Text"));
-			list.add(itemTraining = new SelectItem("Training Data"));
-
-			final SelectDialog dialog = new SelectDialog(owner, list);
-			if (!dialog.process())
+			CreateObjectDialog dialog = new CreateObjectDialog(EncogWorkBench.getInstance().getMainWindow());
+			
+			dialog.setType(ObjectType.NeuralNetwork);
+			
+			if( !dialog.process() )
 				return;
-
-			final SelectItem result = dialog.getSelected();
-
-			if (result == itemNetwork) {
+			
+			switch(dialog.getType())
+			{
+			case NeuralNetwork:
 				CreateNeuralNetwork.process(generateNextID("network-"));
-			} else if (result == itemTraining) {
-				performCreateTrainingData();
-			} else if (result == itemText) {
+				break;
+			case NEATPopulation:
+				performCreatePopulation();
+				break;
+			case PropertyData:
+				final PropertyData prop = new PropertyData();
+				prop.setDescription("Some property data");
+				EncogWorkBench.getInstance().getCurrentFile().add(
+						generateNextID("properties-"), prop);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+				break;
+			case Text:
 				final TextData text = new TextData();
 				text.setDescription("A text file");
 				text.setText("Insert text here.");
 				EncogWorkBench.getInstance().getCurrentFile().add(
 						generateNextID("text-"), text);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
-			} else if (result == itemOptions) {
-				final PropertyData prop = new PropertyData();
-				prop.setDescription("Some property data");
-				EncogWorkBench.getInstance().getCurrentFile().add(
-						generateNextID("properties-"), prop);
-				EncogWorkBench.getInstance().getMainWindow().redraw();
-			} else if (result == itemPopulation) {
-				performCreatePopulation();
+				break;
+			case TrainingData:
+				performCreateTrainingData();
+				break;
 			}
+			
 		} catch (EncogError t) {
 			EncogWorkBench.displayError("Error creating object", t);
 			logger.error("Error creating object", t);
