@@ -54,6 +54,7 @@ import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.cloud.EncogCloud;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -336,6 +337,11 @@ public class EncogWorkBench implements Runnable {
 
 	public void init() {
 		EncogWorkBench.loadConfig();
+		
+		if( EncogWorkBench.getInstance().getConfig().isAutoConnect())
+		{
+			CloudProcess.performAutoConnect();
+		}
 		
 		Thread thread = new Thread(this);
 		thread.setDaemon(true);

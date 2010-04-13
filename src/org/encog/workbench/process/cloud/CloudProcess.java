@@ -9,10 +9,11 @@ import org.encog.workbench.dialogs.cloud.LoginCloudDialog;
 public class CloudProcess {
 	public static void Login() {
 		if (EncogWorkBench.getInstance().getCloud() == null) {
-			
+
 			LoginCloudDialog dialog = new LoginCloudDialog(EncogWorkBench
 					.getInstance().getMainWindow());
-			EncogWorkBenchConfig config = EncogWorkBench.getInstance().getConfig();
+			EncogWorkBenchConfig config = EncogWorkBench.getInstance()
+					.getConfig();
 			dialog.getNetwork().setValue(config.getEncogCloudNetwork());
 			dialog.getUserID().setValue(config.getEncogCloudUserID());
 			dialog.getPassword().setValue(config.getEncogCloudPassword());
@@ -37,6 +38,7 @@ public class CloudProcess {
 							"You are already connected to the cloud.\nWould you like to logout?")) {
 				try {
 					EncogWorkBench.getInstance().getCloud().logout();
+					EncogWorkBench.getInstance().setCloud(null);
 					EncogWorkBench.displayMessage("Encog Cloud",
 							"You have been logged out.");
 				} catch (Throwable t) {
@@ -45,5 +47,19 @@ public class CloudProcess {
 			}
 		}
 
+	}
+
+	public static void performAutoConnect() {
+		try {
+			String uid = EncogWorkBench.getInstance().getConfig()
+					.getEncogCloudUserID();
+			String pwd = EncogWorkBench.getInstance().getConfig()
+					.getEncogCloudPassword();
+			EncogCloud cloud = new EncogCloud();
+			cloud.connect(uid, pwd);
+			EncogWorkBench.getInstance().setCloud(cloud);
+		} catch (EncogCloudError error) {
+			EncogWorkBench.displayError("Can't Connect", error.getMessage());
+		}
 	}
 }
