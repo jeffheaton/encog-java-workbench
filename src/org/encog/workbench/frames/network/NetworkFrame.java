@@ -45,6 +45,13 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
+import org.encog.mathutil.randomize.ConsistentRandomizer;
+import org.encog.mathutil.randomize.ConstRandomizer;
+import org.encog.mathutil.randomize.Distort;
+import org.encog.mathutil.randomize.GaussianRandomizer;
+import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
+import org.encog.mathutil.randomize.Randomizer;
+import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.ContextLayer;
@@ -64,6 +71,7 @@ import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.neural.networks.synapse.WeightlessSynapse;
 import org.encog.neural.networks.synapse.neat.NEATSynapse;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.RandomizeNetworkDialog;
 import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.network.NetworkTool.Type;
@@ -195,11 +203,90 @@ public class NetworkFrame extends EncogCommonFrame {
 	private void performRandomize() {
 		if (performValidate(false, true)) {
 			if (EncogWorkBench.askQuestion("Are you sure?",
-					"Randomize network weights and lose all training?")) {
-				((BasicNetwork) this.getEncogObject()).reset();
+					"Randomize network weights and lose all training?")) {				
+				
+				RandomizeNetworkDialog dialog = new RandomizeNetworkDialog(this);
+				
+				dialog.getHigh().setValue(1);
+				dialog.getConstHigh().setValue(1);				
+				dialog.getLow().setValue(-1);
+				dialog.getConstLow().setValue(-1);
+				dialog.getSeedValue().setValue(1000);
+				dialog.getConstantValue().setValue(0);
+				dialog.getPerturbPercent().setValue(0.01);
+				
+				if( dialog.process() )
+				{
+					switch( dialog.getCurrentTab() )
+					{
+						case 0:
+							optionRandomize(dialog);
+							break;
+					
+						case 1:
+							optionPerturb(dialog);
+							break;
+							
+						case 2:
+							optionConsistent(dialog);
+							break;
+							
+						case 3:
+							optionConstant(dialog);
+							break;
+					}
+				}
 			}
 		}
 
+	}
+	
+	private void optionConstant(RandomizeNetworkDialog dialog) {
+		double value = dialog.getConstantValue().getValue();
+		ConstRandomizer r = new ConstRandomizer(value);
+		r.randomize((BasicNetwork)getEncogObject());
+	}
+
+	private void optionConsistent(RandomizeNetworkDialog dialog) {
+		int seed = dialog.getSeedValue().getValue();
+		double min = dialog.getConstLow().getValue();
+		double max = dialog.getConstHigh().getValue();
+		ConsistentRandomizer c = new ConsistentRandomizer(min,max,seed);
+		c.randomize((BasicNetwork)getEncogObject());		
+	}
+
+	private void optionPerturb(RandomizeNetworkDialog dialog) {
+		double percent = dialog.getPerturbPercent().getValue();
+		
+		Distort distort = new Distort(percent);
+		distort.randomize((BasicNetwork)getEncogObject());		
+	}
+
+	private void optionRandomize(RandomizeNetworkDialog dialog)
+	{
+		Randomizer r = null;
+		
+		switch( dialog.getType().getSelectedIndex() )
+		{
+			case 0: // Random
+				r = new RangeRandomizer(
+						dialog.getLow().getValue(),
+						dialog.getHigh().getValue());
+				break;
+			case 1: // Gaussian
+				r = new GaussianRandomizer(
+						dialog.getLow().getValue(),
+						dialog.getHigh().getValue());
+				break;
+			case 2: // Nguyen-Widrow
+				r = new NguyenWidrowRandomizer(
+						dialog.getLow().getValue(),
+						dialog.getHigh().getValue());
+				break;
+		}
+		
+		if( r!=null )
+			r.randomize((BasicNetwork)this.getEncogObject());
 	}
 
 	private void performQuery() {

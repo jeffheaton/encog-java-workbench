@@ -31,7 +31,6 @@
 package org.encog.workbench.dialogs.common;
 
 import java.awt.Frame;
-import java.awt.Window;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +40,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 
 public class EncogPropertiesDialog extends EncogCommonDialog {
 
@@ -51,6 +49,7 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 	private Map<String,List<PropertiesField>> tabMaps = new HashMap<String,List<PropertiesField>>();
 	private List<PropertiesField> currentTab; 
 	private JTabbedPane tabPane;
+	private boolean collectCurrentTabOnly = false;
 	
 	public EncogPropertiesDialog(Frame owner) {
 		super(owner);
@@ -122,7 +121,21 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 
 	@Override
 	public void collectFields() throws ValidationException {
-		for(PropertiesField field: this.allProperties)
+		
+		List<PropertiesField> list;
+		
+		if( this.collectCurrentTabOnly )
+		{
+			int index = this.tabPane.getSelectedIndex();
+			String name = this.tabPane.getTitleAt(index);
+			list = this.tabMaps.get(name);
+		}
+		else
+		{
+			list = this.allProperties;
+		}
+		
+		for(PropertiesField field: list)
 		{
 			field.collect();
 		}
@@ -146,5 +159,28 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 		
 		this.allProperties.add(field);
 	}
+
+	public boolean isCollectCurrentTabOnly() {
+		return collectCurrentTabOnly;
+	}
+
+	public void setCollectCurrentTabOnly(boolean collectCurrentTabOnly) {
+		this.collectCurrentTabOnly = collectCurrentTabOnly;
+	}
+	
+	public int getCurrentTab()
+	{
+		if( this.tabPane == null )
+		{
+			return -1;
+		}
+		else
+		{
+			return this.tabPane.getSelectedIndex();
+		}
+	}
+
+
+	
 
 }

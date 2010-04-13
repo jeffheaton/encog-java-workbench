@@ -269,5 +269,5 @@ abstract public class EncogCommonDialog extends JDialog implements
 		}
 		return result;
 	}
-
+	
 }
