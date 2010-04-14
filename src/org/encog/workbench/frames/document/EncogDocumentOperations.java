@@ -209,6 +209,7 @@ public class EncogDocumentOperations {
 			}
 		} catch (final Throwable e) {
 			EncogWorkBench.displayError("Can't Open File", e);
+			e.printStackTrace();
 		}
 	}
 
@@ -279,8 +280,7 @@ public class EncogDocumentOperations {
 	}
 
 	public void performNetworkQuery() {
-		final DirectoryEntry item = (DirectoryEntry) owner.getContents()
-				.getSelectedValue();
+		final DirectoryEntry item = (DirectoryEntry) owner.getSelectedValue();
 
 		if (owner.getSubwindows()
 				.checkBeforeOpen(item, NetworkQueryFrame.class)) {
@@ -370,7 +370,7 @@ public class EncogDocumentOperations {
 	}
 
 	public void performObjectsDelete() {
-		final Object object = owner.getContents().getSelectedValue();
+		final Object object = owner.getSelectedValue();
 		if (object != null) {
 			if (owner.getSubwindows().find((DirectoryEntry) object) != null) {
 				EncogWorkBench.displayError("Can't Delete Object",
@@ -451,8 +451,7 @@ public class EncogDocumentOperations {
 	}
 
 	public void performObjectsProperties() {
-		final DirectoryEntry selected = (DirectoryEntry) owner.getContents()
-				.getSelectedValue();
+		final DirectoryEntry selected = (DirectoryEntry) owner.getSelectedValue();
 		final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
 				owner, selected);
 		dialog.process();

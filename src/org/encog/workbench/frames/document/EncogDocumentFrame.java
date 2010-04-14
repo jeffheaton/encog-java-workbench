@@ -40,21 +40,25 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.xml.transform.TransformerConfigurationException;
 
+import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogListFrame;
+import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.render.EncogItemRenderer;
-import org.encog.workbench.models.EncogListModel;
 import org.encog.workbench.util.ExtensionFilter;
+import org.encog.workbench.util.treetable.JTreeTable;
+import org.encog.workbench.util.treetable.TreeTableModel;
 import org.xml.sax.SAXException;
 
-public class EncogDocumentFrame extends EncogListFrame {
+public class EncogDocumentFrame extends EncogCommonFrame {
 
 	private EncogDocumentOperations operations;
 	private EncogMenus menus;
 	private EncogPopupMenus popupMenus;
 	private boolean closed = false;
+	private JTreeTable table;
 
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files", ".eg");
@@ -66,7 +70,7 @@ public class EncogDocumentFrame extends EncogListFrame {
 	 */
 	private static final long serialVersionUID = -4161616483326975155L;
 
-	private final EncogListModel encogListModel;
+	private final EncogCollectionModel collectionModel;
 
 	public EncogDocumentFrame() {
 		this.setSize(640, 480);
@@ -77,27 +81,32 @@ public class EncogDocumentFrame extends EncogListFrame {
 
 		addWindowListener(this);
 
-		this.encogListModel = new EncogListModel();
+		this.collectionModel = createModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.menus.initMenuBar();
 		initContents();
 		this.popupMenus.initPopup();
+		this.collectionModel.invalidate(EncogWorkBench.getInstance().getCurrentFile());
+		this.table.updateUI();			
 	}
 
 	public void actionPerformed(final ActionEvent event) {
 		this.menus.actionPerformed(event);
 		this.popupMenus.actionPerformed(event);
 	}
+	
+    private EncogCollectionModel createModel() {
+    	EncogObjectDirectory root = new EncogObjectDirectory("Encog");
+	return new EncogCollectionModel(root);
+    }
 
 	private void initContents() {
 		// setup the contents list
-		this.contents = new JList(this.encogListModel);
-		this.contents.setCellRenderer(new EncogItemRenderer());
-		this.contents.setFixedCellHeight(72);
-		this.contents.addMouseListener(this);
+		this.table = new JTreeTable(this.collectionModel);
+		this.table.addMouseListener(this);
 
-		final JScrollPane scrollPane = new JScrollPane(this.contents);
+		final JScrollPane scrollPane = new JScrollPane(this.table);
 
 		getContentPane().add(scrollPane);
 		redraw();
@@ -113,8 +122,9 @@ public class EncogDocumentFrame extends EncogListFrame {
 					+ EncogWorkBench.getInstance().getCurrentFileName());
 		}
 
-		// redraw the list
-		this.encogListModel.invalidate();
+		this.collectionModel.invalidate(
+			EncogWorkBench.getInstance().getCurrentFile());
+		this.table.updateUI();
 	}
 
 	public void rightMouseClicked(final MouseEvent e, final Object item) {
@@ -162,17 +172,27 @@ public class EncogDocumentFrame extends EncogListFrame {
 		return popupMenus;
 	}
 
-	/**
-	 * @return the contents
-	 */
-	public JList getContents() {
-		return contents;
-	}
-
-	@Override
 	protected void openItem(Object item) {
 		this.operations.openItem(item);
 
+	}
+	
+	public DirectoryEntry getSelectedValue()
+	{
+		Object obj = null;
+		return null;
+	}
+
+
+	public void mouseClicked(MouseEvent e) {
+		Object obj = this.table.getTree().getSelectionPath().getLastPathComponent();
+		
+		if( obj instanceof EncogCollectionEntry )
+		{
+			DirectoryEntry entry = ((EncogCollectionEntry)obj).getEntry();
+			openItem(entry);
+		}
+		
 	}
 
 }

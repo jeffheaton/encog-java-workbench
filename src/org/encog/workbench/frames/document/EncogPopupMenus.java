@@ -94,7 +94,7 @@ public class EncogPopupMenus {
 
 
 	public void actionPerformed(final ActionEvent event) {
-		DirectoryEntry selected = (DirectoryEntry) this.owner.getContents().getSelectedValue();
+		DirectoryEntry selected = (DirectoryEntry) this.owner.getSelectedValue();
 
 		if (event.getSource() == this.popupNetworkDelete) {
 			owner.getOperations().performObjectsDelete();
