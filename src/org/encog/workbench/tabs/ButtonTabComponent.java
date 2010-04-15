@@ -3,6 +3,9 @@ package org.encog.workbench.tabs;
 import javax.swing.*;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
+
+import org.encog.workbench.frames.document.EncogDocumentFrame;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -12,23 +15,22 @@ import java.awt.event.*;
  * a JButton to close the tab it belongs to 
  */ 
 public class ButtonTabComponent extends JPanel {
-    private final JTabbedPane pane;
+    private final EncogDocumentFrame owner;
+    private final EncogCommonTab tab;
 
-    public ButtonTabComponent(final JTabbedPane pane) {
+    public ButtonTabComponent(final EncogDocumentFrame owner, final EncogCommonTab tab) {
         //unset default FlowLayout' gaps
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        if (pane == null) {
-            throw new NullPointerException("TabbedPane is null");
-        }
-        this.pane = pane;
+        this.owner = owner;
+
         setOpaque(false);
         
         //make JLabel read titles from JTabbedPane
         JLabel label = new JLabel() {
             public String getText() {
-                int i = pane.indexOfTabComponent(ButtonTabComponent.this);
+                int i = owner.getDocumentTabs().indexOfTabComponent(ButtonTabComponent.this);
                 if (i != -1) {
-                    return pane.getTitleAt(i);
+                    return owner.getDocumentTabs().getTitleAt(i);
                 }
                 return null;
             }
@@ -42,6 +44,8 @@ public class ButtonTabComponent extends JPanel {
         add(button);
         //add more space to the top of the component
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
+        
+        this.tab = tab;
     }
 
     private class TabButton extends JButton implements ActionListener {
@@ -66,9 +70,10 @@ public class ButtonTabComponent extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            int i = pane.indexOfTabComponent(ButtonTabComponent.this);
+            int i = owner.getDocumentTabs().indexOfTabComponent(ButtonTabComponent.this);
             if (i != -1) {
-                pane.remove(i);
+            	owner.closeTab(tab);
+            	owner.getDocumentTabs().remove(i);
             }
         }
 

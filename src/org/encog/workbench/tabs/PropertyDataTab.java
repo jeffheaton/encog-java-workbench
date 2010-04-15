@@ -28,7 +28,7 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.frames;
+package org.encog.workbench.tabs;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -47,10 +47,9 @@ import javax.swing.JTable;
 import org.encog.neural.data.PropertyData;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.PropertyDataModel;
-import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.EncogWorkBench;
 
-public class PropertyDataFrame extends EncogCommonTab implements ActionListener {
+public class PropertyDataTab extends EncogCommonTab implements ActionListener {
 
 	private JPanel panelButtons;
 	private JScrollPane scroll;
@@ -59,9 +58,9 @@ public class PropertyDataFrame extends EncogCommonTab implements ActionListener 
 	private PropertyDataModel model;
 	private JButton btnDel;
 	
-	public PropertyDataFrame(JTabbedPane owner, PropertyData data)
+	public PropertyDataTab(JTabbedPane owner, PropertyData data)
 	{
-		super(owner, data);
+		super(data);
 		
 		setLayout(new BorderLayout());
 		this.panelButtons = new JPanel();

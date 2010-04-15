@@ -68,8 +68,6 @@ import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.editor.ObjectEditorFrame;
 import org.encog.workbench.frames.BrowserFrame;
-import org.encog.workbench.frames.PropertyDataFrame;
-import org.encog.workbench.frames.TextEditorFrame;
 import org.encog.workbench.frames.TrainingDataFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.network.NetworkFrame;
@@ -80,6 +78,8 @@ import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.generate.CodeGeneration;
+import org.encog.workbench.tabs.PropertyDataTab;
+import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.NeuralConst;
 import org.slf4j.Logger;
@@ -127,9 +127,8 @@ public class EncogDocumentOperations {
 			if (owner.getSubwindows().checkBeforeOpen(text, TextData.class)) {
 				TextData text2 = (TextData) EncogWorkBench.getInstance()
 						.getCurrentFile().find(text);
-				final TextEditorFrame frame = new TextEditorFrame(text2);
-				frame.setVisible(true);
-				owner.getSubwindows().add(frame);
+				final TextDataTab tab = new TextDataTab(text2);
+				this.owner.openTab(tab);
 			}
 		} else if (entry.getType().equals(
 				EncogPersistedCollection.TYPE_PROPERTY)) {
@@ -137,8 +136,8 @@ public class EncogDocumentOperations {
 			if (owner.getSubwindows().checkBeforeOpen(prop, PropertyData.class)) {
 				PropertyData prop2 = (PropertyData) EncogWorkBench
 						.getInstance().getCurrentFile().find(prop);
-				final PropertyDataFrame frame = new PropertyDataFrame(owner.getDocumentTabs(), prop2);
-				owner.openTab(frame);
+				final PropertyDataTab tab = new PropertyDataTab(owner.getDocumentTabs(), prop2);
+				owner.openTab(tab);
 			}
 		} else if (entry.getType().equals(
 				EncogPersistedCollection.TYPE_POPULATION)) {

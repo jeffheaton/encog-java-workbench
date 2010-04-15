@@ -50,7 +50,6 @@ import org.encog.persist.EncogPersistedCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogListFrame;
-import org.encog.workbench.frames.PropertyDataFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.render.EncogItemRenderer;
 import org.encog.workbench.tabs.ButtonTabComponent;
@@ -241,12 +240,16 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		
         this.documentTabs.add(tab.getEncogObject().getName(), tab);
         documentTabs.setTabComponentAt(i,
-                new ButtonTabComponent(documentTabs));		
+                new ButtonTabComponent(this,tab));		
 		
 	}
 	
 	public JTabbedPane getDocumentTabs() {
 		return this.documentTabs;
+	}
+
+	public void closeTab(EncogCommonTab tab) {
+		tab.close();
 	}
 
 }
