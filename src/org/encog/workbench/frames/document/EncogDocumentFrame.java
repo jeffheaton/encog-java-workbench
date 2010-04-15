@@ -38,6 +38,8 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 import javax.xml.transform.TransformerConfigurationException;
 
 import org.encog.persist.DirectoryEntry;
@@ -59,7 +61,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private EncogMenus menus;
 	private EncogPopupMenus popupMenus;
 	private boolean closed = false;
-	private JTreeTable table;
+	private JTree table;
 
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files", ".eg");
@@ -88,23 +90,24 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		this.menus.initMenuBar();
 		initContents();
 		this.popupMenus.initPopup();
-		this.collectionModel.invalidate(EncogWorkBench.getInstance().getCurrentFile());
-		this.table.updateUI();			
+		this.collectionModel.invalidate(EncogWorkBench.getInstance()
+				.getCurrentFile());
+		this.table.updateUI();
 	}
 
 	public void actionPerformed(final ActionEvent event) {
 		this.menus.actionPerformed(event);
 		this.popupMenus.actionPerformed(event);
 	}
-	
-    private EncogCollectionModel createModel() {
-    	EncogObjectDirectory root = new EncogObjectDirectory("Encog");
-	return new EncogCollectionModel(root);
-    }
+
+	private EncogCollectionModel createModel() {
+		EncogObjectDirectory root = new EncogObjectDirectory("Encog");
+		return new EncogCollectionModel(root);
+	}
 
 	private void initContents() {
 		// setup the contents list
-		this.table = new JTreeTable(this.collectionModel);
+		this.table = new JTree(this.collectionModel);
 		this.table.addMouseListener(this);
 
 		final JScrollPane scrollPane = new JScrollPane(this.table);
@@ -123,8 +126,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 					+ EncogWorkBench.getInstance().getCurrentFileName());
 		}
 
-		this.collectionModel.invalidate(
-			EncogWorkBench.getInstance().getCurrentFile());
+		this.collectionModel.invalidate(EncogWorkBench.getInstance()
+				.getCurrentFile());
 		this.table.updateUI();
 	}
 
@@ -177,33 +180,43 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		this.operations.openItem(item);
 
 	}
-	
-	public DirectoryEntry getSelectedValue()
-	{
-		Object obj = null;
-		return null;
+
+	public DirectoryEntry getSelectedValue() {
+		TreePath path = this.table.getSelectionPath();
+		DirectoryEntry result = null;
+
+		if (path != null) {
+			Object obj = path.getLastPathComponent();
+			if( obj instanceof EncogCollectionEntry)
+			{
+				result = ((EncogCollectionEntry) obj).getEntry();
+			}
+		}
+
+		return result;
 	}
 
-
 	public void mouseClicked(MouseEvent e) {
-		
-		Object obj = this.table.getTree().getSelectionPath().getLastPathComponent();
-		
-		if( obj instanceof EncogCollectionEntry )
-		{
-			DirectoryEntry item = ((EncogCollectionEntry)obj).getEntry();
-			
-			if (MouseUtil.isRightClick(e)) {
-				rightMouseClicked(e, item);
-			}
+		TreePath path = this.table.getSelectionPath();
 
-			if (e.getClickCount() == 2) {
+		if (path != null) {
+			Object obj = path.getLastPathComponent();
 
-				openItem(item);
+			if (obj instanceof EncogCollectionEntry) {
+				DirectoryEntry item = ((EncogCollectionEntry) obj).getEntry();
+
+				if (MouseUtil.isRightClick(e)) {
+					rightMouseClicked(e, item);
+				}
+
+				if (e.getClickCount() == 2) {
+
+					openItem(item);
+				}
+
 			}
-			
 		}
-		
+
 	}
 
 }
