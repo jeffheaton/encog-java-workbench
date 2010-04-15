@@ -36,8 +36,11 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 import javax.xml.transform.TransformerConfigurationException;
@@ -47,8 +50,11 @@ import org.encog.persist.EncogPersistedCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogListFrame;
+import org.encog.workbench.frames.PropertyDataFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.render.EncogItemRenderer;
+import org.encog.workbench.tabs.ButtonTabComponent;
+import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.MouseUtil;
 import org.encog.workbench.util.treetable.JTreeTable;
@@ -62,6 +68,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private EncogPopupMenus popupMenus;
 	private boolean closed = false;
 	private JTree table;
+	private JSplitPane split;
+	private JTabbedPane documentTabs;
 
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files", ".eg");
@@ -112,7 +120,15 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 		final JScrollPane scrollPane = new JScrollPane(this.table);
 
-		getContentPane().add(scrollPane);
+		this.documentTabs = new JTabbedPane();
+		this.documentTabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+		
+		this.split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+                scrollPane, this.documentTabs);
+		
+
+		
+		getContentPane().add(this.split);
 		redraw();
 	}
 
@@ -217,6 +233,20 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			}
 		}
 
+	}
+
+	public void openTab(EncogCommonTab tab) {
+	
+		int i = this.documentTabs.getTabCount();
+		
+        this.documentTabs.add(tab.getEncogObject().getName(), tab);
+        documentTabs.setTabComponentAt(i,
+                new ButtonTabComponent(documentTabs));		
+		
+	}
+	
+	public JTabbedPane getDocumentTabs() {
+		return this.documentTabs;
 	}
 
 }

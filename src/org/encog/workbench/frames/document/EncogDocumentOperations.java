@@ -137,9 +137,8 @@ public class EncogDocumentOperations {
 			if (owner.getSubwindows().checkBeforeOpen(prop, PropertyData.class)) {
 				PropertyData prop2 = (PropertyData) EncogWorkBench
 						.getInstance().getCurrentFile().find(prop);
-				final PropertyDataFrame frame = new PropertyDataFrame(prop2);
-				frame.setVisible(true);
-				owner.getSubwindows().add(frame);
+				final PropertyDataFrame frame = new PropertyDataFrame(owner.getDocumentTabs(), prop2);
+				owner.openTab(frame);
 			}
 		} else if (entry.getType().equals(
 				EncogPersistedCollection.TYPE_POPULATION)) {

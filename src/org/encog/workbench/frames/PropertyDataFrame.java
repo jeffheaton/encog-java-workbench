@@ -34,20 +34,23 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
 import org.encog.neural.data.PropertyData;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.PropertyDataModel;
+import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.EncogWorkBench;
 
-public class PropertyDataFrame extends EncogCommonFrame {
+public class PropertyDataFrame extends EncogCommonTab implements ActionListener {
 
 	private JPanel panelButtons;
 	private JScrollPane scroll;
@@ -56,21 +59,18 @@ public class PropertyDataFrame extends EncogCommonFrame {
 	private PropertyDataModel model;
 	private JButton btnDel;
 	
-	public PropertyDataFrame(PropertyData data)
+	public PropertyDataFrame(JTabbedPane owner, PropertyData data)
 	{
-		super();
-		this.setEncogObject(data);
-		setSize(400,400);
-		setTitle("Property Data");
-		Container content  = this.getContentPane();
-		content.setLayout(new BorderLayout());
+		super(owner, data);
+		
+		setLayout(new BorderLayout());
 		this.panelButtons = new JPanel();
 		this.panelButtons.setLayout(new FlowLayout(FlowLayout.LEFT));
-		content.add(this.panelButtons,BorderLayout.NORTH);
+		add(this.panelButtons,BorderLayout.NORTH);
 		this.model = new PropertyDataModel(data);
 		this.table = new JTable(this.model);
 		this.scroll = new JScrollPane(this.table);
-		content.add(this.scroll,BorderLayout.CENTER);
+		add(this.scroll,BorderLayout.CENTER);
 		this.btnAdd = new JButton("Add Row");
 		this.btnDel = new JButton("Delete Row");
 		this.panelButtons.add(this.btnAdd);
