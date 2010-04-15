@@ -48,6 +48,7 @@ import org.encog.workbench.frames.EncogListFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.render.EncogItemRenderer;
 import org.encog.workbench.util.ExtensionFilter;
+import org.encog.workbench.util.MouseUtil;
 import org.encog.workbench.util.treetable.JTreeTable;
 import org.encog.workbench.util.treetable.TreeTableModel;
 import org.xml.sax.SAXException;
@@ -185,12 +186,22 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 
 	public void mouseClicked(MouseEvent e) {
+		
 		Object obj = this.table.getTree().getSelectionPath().getLastPathComponent();
 		
 		if( obj instanceof EncogCollectionEntry )
 		{
-			DirectoryEntry entry = ((EncogCollectionEntry)obj).getEntry();
-			openItem(entry);
+			DirectoryEntry item = ((EncogCollectionEntry)obj).getEntry();
+			
+			if (MouseUtil.isRightClick(e)) {
+				rightMouseClicked(e, item);
+			}
+
+			if (e.getClickCount() == 2) {
+
+				openItem(item);
+			}
+			
 		}
 		
 	}
