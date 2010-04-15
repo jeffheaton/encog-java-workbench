@@ -49,7 +49,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
-import org.encog.workbench.frames.network.TrainingType;
+import org.encog.workbench.tabs.network.TrainingType;
 
 public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 		ListSelectionListener {

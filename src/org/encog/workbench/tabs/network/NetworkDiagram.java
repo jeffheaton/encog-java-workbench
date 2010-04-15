@@ -28,7 +28,7 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.frames.network;
+package org.encog.workbench.tabs.network;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -77,8 +77,8 @@ import org.encog.workbench.dialogs.layers.EditContextLayer;
 import org.encog.workbench.dialogs.layers.EditNEATSynapse;
 import org.encog.workbench.dialogs.layers.EditRadialLayer;
 import org.encog.workbench.frames.MatrixFrame;
-import org.encog.workbench.frames.network.NetworkTool.Type;
 import org.encog.workbench.process.validate.ValidateNetwork;
+import org.encog.workbench.tabs.network.NetworkTool.Type;
 import org.encog.workbench.util.CollectionFormatter;
 import org.encog.workbench.util.MouseUtil;
 

@@ -28,7 +28,7 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.frames.network;
+package org.encog.workbench.tabs.network;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -38,7 +38,7 @@ import java.awt.Polygon;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.synapse.Synapse;
 import org.encog.workbench.WorkbenchFonts;
-import org.encog.workbench.frames.network.NetworkDiagram.Side;
+import org.encog.workbench.tabs.network.NetworkDiagram.Side;
 
 public class DrawArrow {
 	

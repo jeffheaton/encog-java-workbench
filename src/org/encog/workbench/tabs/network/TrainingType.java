@@ -28,7 +28,7 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.frames.network;
+package org.encog.workbench.tabs.network;
 
 public enum TrainingType {
 	SCG,

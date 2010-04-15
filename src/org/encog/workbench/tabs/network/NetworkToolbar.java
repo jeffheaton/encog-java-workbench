@@ -28,7 +28,7 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.frames.network;
+package org.encog.workbench.tabs.network;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -49,7 +49,7 @@ import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
 import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.workbench.WorkbenchFonts;
-import org.encog.workbench.frames.network.NetworkTool.Type;
+import org.encog.workbench.tabs.network.NetworkTool.Type;
 
 public class NetworkToolbar extends JPanel implements MouseListener {
 

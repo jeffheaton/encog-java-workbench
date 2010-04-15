@@ -28,7 +28,7 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.frames.network;
+package org.encog.workbench.tabs.network;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -74,11 +74,11 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.RandomizeNetworkDialog;
 import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
-import org.encog.workbench.frames.network.NetworkTool.Type;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.models.NetworkListModel;
 import org.encog.workbench.process.training.Training;
 import org.encog.workbench.process.validate.ValidateNetwork;
+import org.encog.workbench.tabs.network.NetworkTool.Type;
 
 public class NetworkFrame extends EncogCommonFrame {
 
