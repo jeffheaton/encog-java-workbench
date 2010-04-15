@@ -62,7 +62,7 @@ public class DrawLayer {
 	
 	public static void drawLayer(NetworkDiagram diagram, Graphics g, Layer layer)
 	{
-		NetworkTool tool = diagram.getNetworkFrame().findTool( layer);
+		NetworkTool tool = diagram.getNetworkTab().findTool( layer);
 		g.setColor(Color.WHITE);
 		g.fillRect(layer.getX(), layer.getY(), LAYER_WIDTH, LAYER_HEIGHT);
 		g.setColor(Color.BLACK);

@@ -93,7 +93,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 	public static final int VIRTUAL_HEIGHT = 2000;
 	public static final int ARROWHEAD_WIDTH = 10;
 	public static final int LABEL_HEIGHT = 16;
-	private final NetworkFrame parent;
+	private final NetworkTab parent;
 	private Layer selected;
 	private Layer fromLayer;
 	private int dragOffsetX;
@@ -111,7 +111,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 	private JMenuItem popupNetworkSynapseNEAT;
 	private Synapse selectedSynapse;
 
-	public NetworkDiagram(NetworkFrame parent) {
+	public NetworkDiagram(NetworkTab parent) {
 		this.parent = parent;
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
@@ -506,7 +506,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 
 	private void performSynapseNEAT() {
 		NEATSynapse neatSynapse = (NEATSynapse)this.selectedSynapse;
-		EditNEATSynapse dialog = new EditNEATSynapse(this.parent);
+		EditNEATSynapse dialog = new EditNEATSynapse(EncogWorkBench.getInstance().getMainWindow());
 		
 		dialog.setActivationFunction(neatSynapse.getActivationFunction());
 		dialog.getSnapshot().setValue(neatSynapse.isSnapshot());
@@ -625,7 +625,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 	}
 
 	private void performBasicLayerEdit() {
-		EditBasicLayer dialog = new EditBasicLayer(this.parent, this.selected);
+		EditBasicLayer dialog = new EditBasicLayer(EncogWorkBench.getInstance().getMainWindow(), this.selected);
 		dialog.setActivationFunction(this.selected.getActivationFunction());
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
 		dialog.getUseThreshold().setValue(this.selected.hasThreshold());
@@ -727,7 +727,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 
 	private void performContextLayerEdit() {
 		ContextLayer contextLayer = (ContextLayer) this.selected;
-		EditContextLayer dialog = new EditContextLayer(this.parent,
+		EditContextLayer dialog = new EditContextLayer(EncogWorkBench.getInstance().getMainWindow(),
 				contextLayer);
 		dialog.setActivationFunction(this.selected.getActivationFunction());
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
@@ -805,7 +805,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 
 	private void performRadialLayerEdit() {
 		RadialBasisFunctionLayer radialLayer = (RadialBasisFunctionLayer) this.selected;
-		EditRadialLayer dialog = new EditRadialLayer(this.parent, radialLayer);
+		EditRadialLayer dialog = new EditRadialLayer(EncogWorkBench.getInstance().getMainWindow(), radialLayer);
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
 		for (int i = 0; i < radialLayer.getRadialBasisFunction().length; i++) {
 			RadialBasisFunction rbf = radialLayer.getRadialBasisFunction()[i];
@@ -848,7 +848,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 
 	}
 
-	public NetworkFrame getNetworkFrame() {
+	public NetworkTab getNetworkTab() {
 		return this.parent;
 	}
 

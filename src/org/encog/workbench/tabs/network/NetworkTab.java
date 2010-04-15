@@ -33,6 +33,7 @@ package org.encog.workbench.tabs.network;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -78,9 +79,10 @@ import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.models.NetworkListModel;
 import org.encog.workbench.process.training.Training;
 import org.encog.workbench.process.validate.ValidateNetwork;
+import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.network.NetworkTool.Type;
 
-public class NetworkFrame extends EncogCommonFrame {
+public class NetworkTab extends EncogCommonTab implements ActionListener {
 
 	/**
 	 * 
@@ -114,9 +116,9 @@ public class NetworkFrame extends EncogCommonFrame {
 			"Adaptive Resonance Theory", "Bidirectional", "Boltzmann",
 			"Hopfield" };
 
-	public NetworkFrame(final BasicNetwork data) {
-		setEncogObject(data);
-		addWindowListener(this);
+	public NetworkTab(final BasicNetwork data) {
+		super(data);
+
 		this.networkToolbar = new NetworkToolbar(this);
 
 		tools.add(new NetworkTool("Basic", Icons.getLayerBasic(), Type.layer,
@@ -137,8 +139,33 @@ public class NetworkFrame extends EncogCommonFrame {
 				Type.synapse, NEATSynapse.class));
 		tools.add(new NetworkTool("Partial", Icons.getSynapsePartial(),
 				Type.synapse, PartialSynapse.class));
+		
+		setLayout(new BorderLayout());
+		this.toolbar = new JToolBar();
+		this.toolbar.setFloatable(false);
+		this.toolbar.add(this.comboLogic = new JComboBox(LOGIC));
+		this.toolbar.add(this.buttonRandomize = new JButton("Randomize"));
+		this.toolbar.add(this.buttonQuery = new JButton("Query"));
+		this.toolbar.add(this.buttonTrain = new JButton("Train"));
+		this.toolbar.add(this.buttonValidate = new JButton("Validate"));
+		this.toolbar.add(this.buttonProperties = new JButton(
+				"Network Properties"));
 
-		this.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
+		this.buttonRandomize.addActionListener(this);
+		this.buttonQuery.addActionListener(this);
+		this.buttonTrain.addActionListener(this);
+		this.buttonValidate.addActionListener(this);
+		this.buttonProperties.addActionListener(this);
+		this.comboLogic.addActionListener(this);
+
+		add(this.toolbar, BorderLayout.PAGE_START);
+		this.scroll = new JScrollPane(networkDiagram = new NetworkDiagram(this));
+		add(this.scroll, BorderLayout.CENTER);
+
+		add(this.networkToolbar, BorderLayout.WEST);
+
+		setLogic();
+
 	}
 
 	public void actionPerformed(final ActionEvent action) {
@@ -205,7 +232,8 @@ public class NetworkFrame extends EncogCommonFrame {
 			if (EncogWorkBench.askQuestion("Are you sure?",
 					"Randomize network weights and lose all training?")) {				
 				
-				RandomizeNetworkDialog dialog = new RandomizeNetworkDialog(this);
+				RandomizeNetworkDialog dialog = 
+					new RandomizeNetworkDialog(EncogWorkBench.getInstance().getMainWindow());
 				
 				dialog.getHigh().setValue(1);
 				dialog.getConstHigh().setValue(1);				
@@ -352,38 +380,6 @@ public class NetworkFrame extends EncogCommonFrame {
 		return (BasicNetwork) getEncogObject();
 	}
 
-	public void windowOpened(final WindowEvent arg0) {
-		setSize(640, 480);
-		final Container content = getContentPane();
-		content.setLayout(new BorderLayout());
-		this.toolbar = new JToolBar();
-		this.toolbar.setFloatable(false);
-		this.toolbar.add(this.comboLogic = new JComboBox(LOGIC));
-		this.toolbar.add(this.buttonRandomize = new JButton("Randomize"));
-		this.toolbar.add(this.buttonQuery = new JButton("Query"));
-		this.toolbar.add(this.buttonTrain = new JButton("Train"));
-		this.toolbar.add(this.buttonValidate = new JButton("Validate"));
-		this.toolbar.add(this.buttonProperties = new JButton(
-				"Network Properties"));
-
-		this.buttonRandomize.addActionListener(this);
-		this.buttonQuery.addActionListener(this);
-		this.buttonTrain.addActionListener(this);
-		this.buttonValidate.addActionListener(this);
-		this.buttonProperties.addActionListener(this);
-		this.comboLogic.addActionListener(this);
-
-		content.add(this.toolbar, BorderLayout.PAGE_START);
-		this.scroll = new JScrollPane(networkDiagram = new NetworkDiagram(this));
-		content.add(this.scroll, BorderLayout.CENTER);
-
-		content.add(this.networkToolbar, BorderLayout.WEST);
-
-		setTitle("Edit Neural Network");
-		setLogic();
-
-	}
-
 	public List<NetworkTool> getTools() {
 		return tools;
 	}
@@ -416,7 +412,7 @@ public class NetworkFrame extends EncogCommonFrame {
 		return null;
 	}
 
-	public void windowClosing(final WindowEvent e) {
+	public void close() {
 		if( !performValidate(false, false) )
 		{
 			if( (System.currentTimeMillis()-this.lastPopup)>1000 )
@@ -434,12 +430,10 @@ public class NetworkFrame extends EncogCommonFrame {
 			}
 		}
 		
-		super.windowClosing(e);
 		if (this.networkDiagram != null) {
 			this.networkDiagram.close();
 			this.networkDiagram = null;
 		}
-		dispose();
 	}
 
 	public void performProperties() {

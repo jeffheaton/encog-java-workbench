@@ -79,7 +79,7 @@ import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.tabs.PropertyDataTab;
 import org.encog.workbench.tabs.TextDataTab;
-import org.encog.workbench.tabs.network.NetworkFrame;
+import org.encog.workbench.tabs.network.NetworkTab;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.NeuralConst;
 import org.slf4j.Logger;
@@ -118,9 +118,8 @@ public class EncogDocumentOperations {
 					TrainingDataFrame.class)) {
 				BasicNetwork net2 = (BasicNetwork) EncogWorkBench.getInstance()
 						.getCurrentFile().find(net);
-				final NetworkFrame frame = new NetworkFrame(net2);
-				frame.setVisible(true);
-				owner.getSubwindows().add(frame);
+				final NetworkTab tab = new NetworkTab(net2);
+				this.owner.openTab(tab);
 			}
 		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_TEXT)) {
 			DirectoryEntry text = (DirectoryEntry) item;

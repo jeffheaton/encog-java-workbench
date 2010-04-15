@@ -54,12 +54,12 @@ import org.encog.workbench.tabs.network.NetworkTool.Type;
 public class NetworkToolbar extends JPanel implements MouseListener {
 
 	private NetworkTool selected;
-	private final NetworkFrame parent;
+	private final NetworkTab parent;
 	public final static int WIDTH = 100;
 	public final Color COLOR_BACKGROUND = new Color(200,200,200);
 	public final Color TOOL_BACKGROUND = new Color(150,150,150);
 	
-	public NetworkToolbar(NetworkFrame parent)
+	public NetworkToolbar(NetworkTab parent)
 	{
 		Dimension d = new Dimension(100,100);
 		this.setPreferredSize(d);
