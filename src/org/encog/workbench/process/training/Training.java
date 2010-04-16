@@ -227,7 +227,7 @@ public class Training {
 							.getMaxStep().getValue(), dialog.getMaxError()
 							.getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "RPROP");
+			EncogWorkBench.getInstance().getMainWindow().openModalTab(train, "RPROP");
 		}
 
 	}

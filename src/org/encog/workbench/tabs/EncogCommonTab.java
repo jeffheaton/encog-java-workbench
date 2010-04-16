@@ -29,6 +29,7 @@ public class EncogCommonTab extends JPanel {
 	
 	private final EncogPersistedObject encogObject;
 	private EncogDocumentFrame owner;
+	private boolean modal;
 	
 	public EncogCommonTab(final EncogPersistedObject encogObject)
 	{
@@ -53,6 +54,15 @@ public class EncogCommonTab extends JPanel {
 	public void setParent(EncogDocumentFrame owner) {
 		this.owner = owner;		
 	}
+
+	public boolean isModal() {
+		return modal;
+	}
+
+	public void setModal(boolean modal) {
+		this.modal = modal;
+	}
+	
 	
 	
 }

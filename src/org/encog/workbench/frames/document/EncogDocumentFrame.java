@@ -244,7 +244,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
         this.documentTabs.add(tab.getEncogObject().getName(), tab);
         documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
         this.tabManager.add(tab);
-		
+        this.documentTabs.setSelectedComponent(tab);	
 	}
 	
 	public void openTab(EncogCommonTab tab, String title) {
@@ -254,6 +254,21 @@ public class EncogDocumentFrame extends EncogCommonFrame {
         this.documentTabs.add(title, tab);
         documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
         this.tabManager.add(tab);
+        this.documentTabs.setSelectedComponent(tab);
+		
+	}
+	
+	public void openModalTab(EncogCommonTab tab, String title) {
+		
+		int i = this.documentTabs.getTabCount();
+		
+        this.documentTabs.add(title, tab);
+        documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
+        this.tabManager.add(tab);
+        tab.setModal(true);
+        this.documentTabs.setSelectedComponent(tab);
+        this.documentTabs.setEnabled(false);
+        this.table.setEnabled(false);
 		
 	}
 	
@@ -265,6 +280,12 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		tab.close();
 		this.tabManager.remove(tab);
 		getDocumentTabs().remove(tab);
+		
+		if( tab.isModal() )
+		{
+	        this.documentTabs.setEnabled(true);
+	        this.table.setEnabled(true);
+		}
 		
 	}
 	
