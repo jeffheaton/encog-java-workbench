@@ -34,7 +34,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 
-import org.encog.workbench.frames.manager.EncogCommonFrame;
+import org.encog.workbench.frames.EncogCommonFrame;
 
 public class ThermalGraphicQuery extends EncogCommonFrame {
 

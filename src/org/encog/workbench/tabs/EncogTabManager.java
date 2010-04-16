@@ -28,7 +28,7 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.frames.manager;
+package org.encog.workbench.tabs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,42 +38,37 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.frames.EncogCommonFrame;
 
-public class EncogFrameManager {
-	private final List<EncogCommonFrame> frames = new ArrayList<EncogCommonFrame>();
+public class EncogTabManager {
+	private final List<EncogCommonTab> tabs = new ArrayList<EncogCommonTab>();
 	private final EncogCommonFrame owner;
 
-	public EncogFrameManager(final EncogCommonFrame owner) {
+	public EncogTabManager(final EncogCommonFrame owner) {
 		this.owner = owner;
 	}
 
-	public void add(final EncogCommonFrame frame) {
-		this.frames.add(frame);
-		frame.setParent(getOwner());
+	public void add(final EncogCommonTab tab) {
+		this.tabs.add(tab);
+		tab.setParent(getOwner());
 	}
 
 	@SuppressWarnings("unchecked")
 	public boolean checkBeforeOpen(final DirectoryEntry object,
 			final Class c) {
-		final EncogCommonFrame existing = find(object);
+		final EncogCommonTab existing = find(object);
 		if (existing == null) {
 			return true;
 		}
 
-		existing.toFront();
 		return false;
-
-		/*EncogWorkBench.displayMessage("Already Viewing that Object",
-				"You must close the window \n\"" + existing.getTitle()
-						+ "\"\n before this window can be opened.");
-		return false;*/
 	}
 
-	public EncogCommonFrame find(final DirectoryEntry object) {
-		for (final EncogCommonFrame frame : this.frames) {
-			EncogPersistedObject obj = (EncogPersistedObject)frame.getEncogObject();
+	public EncogCommonTab find(final DirectoryEntry object) {
+		for (final EncogCommonTab tab : this.tabs) {
+			EncogPersistedObject obj = (EncogPersistedObject)tab.getEncogObject();
 			if (obj.getName().equals(object.getName())) {
-				return frame;
+				return tab;
 			}
 		}
 		return null;
@@ -82,8 +77,8 @@ public class EncogFrameManager {
 	/**
 	 * @return the frames
 	 */
-	public List<EncogCommonFrame> getFrames() {
-		return this.frames;
+	public List<EncogCommonTab> getTabs() {
+		return this.tabs;
 	}
 
 	/**
@@ -93,14 +88,14 @@ public class EncogFrameManager {
 		return this.owner;
 	}
 
-	public void remove(final EncogCommonFrame frame) {
-		this.frames.remove(frame);
+	public void remove(final EncogCommonTab frame) {
+		this.tabs.remove(frame);
 	}
 	
 	public boolean isTrainingOrNetworkOpen()
 	{
-		for (final EncogCommonFrame frame : this.frames) {
-			EncogPersistedObject obj = (EncogPersistedObject)frame.getEncogObject();
+		for (final EncogCommonTab tab : this.tabs) {
+			EncogPersistedObject obj = (EncogPersistedObject)tab.getEncogObject();
 			if( obj instanceof BasicNetwork || obj instanceof NeuralDataSet )
 			{
 				return true;
@@ -112,7 +107,7 @@ public class EncogFrameManager {
 	
 	public void closeTrainingOrNetwork()
 	{
-		Object[] list = this.frames.toArray();
+		Object[] list = this.tabs.toArray();
 		for(int i=0;i<list.length;i++) {
 			EncogCommonFrame frame = (EncogCommonFrame)list[i];
 			

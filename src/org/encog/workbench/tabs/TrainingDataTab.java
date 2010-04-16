@@ -44,7 +44,7 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 
 import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.workbench.frames.manager.EncogCommonFrame;
+import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.models.TrainingSetTableModel;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.util.ExcelAdapter;

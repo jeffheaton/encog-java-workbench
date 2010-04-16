@@ -15,7 +15,7 @@ import javax.swing.JTable;
 
 import org.encog.solve.genetic.population.BasicPopulation;
 import org.encog.solve.genetic.population.Population;
-import org.encog.workbench.frames.manager.EncogCommonFrame;
+import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.models.GeneralPopulationModel;
 import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.MatrixTableModel;

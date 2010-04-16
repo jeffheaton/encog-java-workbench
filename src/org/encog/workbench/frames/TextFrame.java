@@ -38,7 +38,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.util.EncogFonts;
 
 public class TextFrame extends EncogCommonFrame {

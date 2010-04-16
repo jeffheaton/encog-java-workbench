@@ -58,7 +58,7 @@ import javax.swing.tree.TreePath;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
-import org.encog.workbench.frames.manager.EncogCommonFrame;
+import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.util.MouseUtil;
 
 public class ObjectEditorFrame extends EncogCommonFrame implements

@@ -44,7 +44,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import org.encog.neural.data.PropertyData;
-import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.models.MapDataModel;
 import org.encog.workbench.models.PropertyDataModel;
 import org.encog.workbench.EncogWorkBench;

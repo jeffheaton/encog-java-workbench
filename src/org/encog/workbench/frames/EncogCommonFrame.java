@@ -28,7 +28,7 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.frames.manager;
+package org.encog.workbench.frames;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -43,19 +43,20 @@ import javax.swing.JPopupMenu;
 
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.tabs.EncogTabManager;
 
 public abstract class EncogCommonFrame extends JFrame implements
 		WindowListener, ActionListener, MouseListener {
 
 	private Object encogObject;
-	private final EncogFrameManager subwindows;
+	private final EncogTabManager subwindows;
 	private EncogCommonFrame parent;
 	private boolean closed;
 	private boolean closeSilent;
 
 	public EncogCommonFrame(boolean closeSilent) {
 		this.closed = false;
-		this.subwindows = new EncogFrameManager(this);
+		this.subwindows = new EncogTabManager(this);
 		addWindowListener(this);
 		this.closeSilent = closeSilent;
 	}
@@ -105,7 +106,7 @@ public abstract class EncogCommonFrame extends JFrame implements
 	/**
 	 * @return the subwindows
 	 */
-	public EncogFrameManager getSubwindows() {
+	public EncogTabManager getSubwindows() {
 		return this.subwindows;
 	}
 
@@ -166,14 +167,8 @@ public abstract class EncogCommonFrame extends JFrame implements
 			this.closed = true;
 
 			if (getParent() != null) {
-				getParent().getSubwindows().remove(this);
 				getParent().redraw();
 			}
-
-			for (final EncogCommonFrame frame : getSubwindows().getFrames()) {
-				frame.dispose();
-			}
-
 		}
 
 	}

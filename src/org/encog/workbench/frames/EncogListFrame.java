@@ -35,7 +35,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.JList;
 import javax.swing.ListModel;
 
-import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.util.MouseUtil;
 
 public abstract class EncogListFrame extends EncogCommonFrame {

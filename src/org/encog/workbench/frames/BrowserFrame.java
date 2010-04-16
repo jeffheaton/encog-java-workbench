@@ -56,7 +56,6 @@ import org.encog.bot.browse.Browser;
 import org.encog.bot.browse.WebPage;
 import org.encog.bot.browse.range.DocumentRange;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.frames.manager.EncogCommonFrame;
 
 public class BrowserFrame extends EncogCommonFrame implements TreeSelectionListener {
 

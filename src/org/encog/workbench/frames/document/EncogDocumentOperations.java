@@ -59,7 +59,7 @@ import org.encog.workbench.dialogs.createobject.ObjectType;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.BrowserFrame;
-import org.encog.workbench.frames.manager.EncogCommonFrame;
+import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
@@ -273,7 +273,6 @@ public class EncogDocumentOperations {
 					.getCurrentFile().find(item);
 			final NetworkQueryFrame frame = new NetworkQueryFrame(net);
 			frame.setVisible(true);
-			owner.getSubwindows().add(frame);
 		}
 
 	}

@@ -49,7 +49,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.error.ErrorDialog;
-import org.encog.workbench.frames.manager.EncogCommonFrame;
+import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.models.NetworkQueryModel;
 
 public class NetworkQueryFrame extends EncogCommonFrame {

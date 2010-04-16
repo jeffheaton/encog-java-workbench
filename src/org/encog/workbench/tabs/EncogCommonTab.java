@@ -22,10 +22,12 @@ import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import org.encog.persist.EncogPersistedObject;
+import org.encog.workbench.frames.EncogCommonFrame;
 
 public class EncogCommonTab extends JPanel {
 	
 	private final EncogPersistedObject encogObject;
+	private EncogCommonFrame owner;
 	
 	public EncogCommonTab(final EncogPersistedObject encogObject)
 	{
@@ -39,6 +41,11 @@ public class EncogCommonTab extends JPanel {
 
 	public void close()
 	{
+		
+	}
+
+	public void setParent(EncogCommonFrame owner) {
+		this.owner = owner;
 		
 	}
 	
