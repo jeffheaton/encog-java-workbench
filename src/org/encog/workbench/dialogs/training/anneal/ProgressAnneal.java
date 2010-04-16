@@ -80,7 +80,6 @@ public class ProgressAnneal extends BasicTrainingProgress {
 			final NeuralDataSet trainingData, final double maxError,
 			final double startTemp, final double endTemp, final int cycles) {
 		super(owner);
-		setTitle("Simulated Annealing Training");
 		setNetwork(network);
 		setTrainingData(trainingData);
 		this.cycles = cycles;

@@ -53,7 +53,7 @@ public class ProgressSCG extends BasicTrainingProgress {
 			final BasicNetwork network, final NeuralDataSet trainingData,
 			final double maxError) {
 		super(owner);
-		setTitle("Scaled Conjugate Gradient (SCG)");
+
 		setNetwork(network);
 		setTrainingData(trainingData);
 		setMaxError(maxError);

@@ -68,7 +68,7 @@ public class ProgressResilient extends BasicTrainingProgress {
 			final double initialUpdate, final double maxStep,
 			final double maxError) {
 		super(owner);
-		setTitle("Resilient Propagation Training");
+
 		setNetwork(network);
 		setTrainingData(trainingData);
 		this.initialUpdate = initialUpdate;

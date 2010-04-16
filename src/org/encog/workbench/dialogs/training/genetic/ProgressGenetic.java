@@ -82,7 +82,7 @@ public class ProgressGenetic extends BasicTrainingProgress {
 			final int populationSize, final double mutationPercent,
 			final double percentToMate) {
 		super(owner);
-		setTitle("Genetic Algorithm Training");
+		
 		setNetwork(network);
 		setTrainingData(trainingData);
 		this.populationSize = populationSize;
