@@ -1,4 +1,4 @@
-package org.encog.workbench.frames.population;
+package org.encog.workbench.tabs.population;
 
 import java.awt.Dimension;
 import java.awt.FontMetrics;

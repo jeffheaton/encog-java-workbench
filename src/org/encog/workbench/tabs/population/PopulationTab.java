@@ -1,4 +1,4 @@
-package org.encog.workbench.frames.population;
+package org.encog.workbench.tabs.population;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -20,8 +20,9 @@ import org.encog.workbench.models.GeneralPopulationModel;
 import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.MatrixTableModel;
 import org.encog.workbench.models.SpeciesModel;
+import org.encog.workbench.tabs.EncogCommonTab;
 
-public class PopulationFrame  extends EncogCommonFrame {
+public class PopulationTab  extends EncogCommonTab {
 
 	private JButton btnTrain;
 	private JButton btnEdit;
@@ -42,20 +43,17 @@ public class PopulationFrame  extends EncogCommonFrame {
 	
 	JTable tableGeneralPopulation;
 	
-	public PopulationFrame(BasicPopulation pop) {
-		this.setEncogObject(pop);
-		this.setTitle("Editing Population: " + pop.getName());
-		setSize(640,480);
+	public PopulationTab(BasicPopulation pop) {
+		super(pop);
 		
-		Container content = this.getContentPane();
-		content.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		JPanel buttonPanel = new JPanel();
-		content.add(buttonPanel, BorderLayout.NORTH);
+		add(buttonPanel, BorderLayout.NORTH);
 		buttonPanel.add(btnTrain = new JButton("Train"));
 		buttonPanel.add(btnEdit = new JButton("Edit Population"));
 		buttonPanel.add(btnExtract = new JButton("Extract Top Genomes"));
 		JPanel mainPanel = new JPanel();
-		content.add(mainPanel,BorderLayout.CENTER);
+		add(mainPanel,BorderLayout.CENTER);
 		mainPanel.setLayout(new BorderLayout());
 		JPanel about = new JPanel();
 		about.add(new PopulationInfo((Population)getEncogObject()));
@@ -79,19 +77,5 @@ public class PopulationFrame  extends EncogCommonFrame {
 		this.tabViews.addTab("Innovation", this.innovationScroll);
 	}
 
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

@@ -32,8 +32,6 @@ package org.encog.workbench.frames.document;
 
 import java.awt.Frame;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -44,14 +42,10 @@ import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.training.neat.NEATGenome;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.solve.genetic.population.BasicPopulation;
-import org.encog.solve.genetic.population.Population;
-import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.BenchmarkDialog;
@@ -62,14 +56,10 @@ import org.encog.workbench.dialogs.about.AboutEncog;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
 import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
-import org.encog.workbench.dialogs.select.SelectDialog;
-import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
-import org.encog.workbench.editor.ObjectEditorFrame;
 import org.encog.workbench.frames.BrowserFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
-import org.encog.workbench.frames.population.PopulationFrame;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
@@ -80,8 +70,8 @@ import org.encog.workbench.tabs.PropertyDataTab;
 import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.TrainingDataTab;
 import org.encog.workbench.tabs.network.NetworkTab;
+import org.encog.workbench.tabs.population.PopulationTab;
 import org.encog.workbench.util.ExtensionFilter;
-import org.encog.workbench.util.NeuralConst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,9 +134,8 @@ public class EncogDocumentOperations {
 					BasicPopulation.class)) {
 				BasicPopulation pop2 = (BasicPopulation) EncogWorkBench
 						.getInstance().getCurrentFile().find(prop);
-				final PopulationFrame frame = new PopulationFrame(pop2);
-				frame.setVisible(true);
-				owner.getSubwindows().add(frame);
+				final PopulationTab tab = new PopulationTab(pop2);
+				owner.openTab(tab);
 			}
 		} else {
 			EncogWorkBench.displayError("Error",
@@ -361,6 +350,7 @@ public class EncogDocumentOperations {
 			pop.setDescription("Population");
 			EncogWorkBench.getInstance().getCurrentFile().add(
 					generateNextID("population-"), pop);
+			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 
 	}

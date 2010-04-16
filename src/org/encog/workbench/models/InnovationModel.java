@@ -35,6 +35,8 @@ public class InnovationModel implements TableModel {
 	}
 
 	public int getRowCount() {
+		if( this.population.getInnovations()==null)
+			return 0;
 		return this.population.getInnovations().getInnovations().size();
 	}
 
