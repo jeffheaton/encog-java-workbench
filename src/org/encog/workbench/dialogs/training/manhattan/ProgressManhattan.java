@@ -67,6 +67,7 @@ public class ProgressManhattan extends BasicTrainingProgress {
 			final BasicNetwork network, final NeuralDataSet trainingData,
 			final double fixedDelta, final double maxError) {
 		super(owner);
+		setTitle("Manhattan Update Rule Training");
 		setNetwork(network);
 		setTrainingData(trainingData);
 		this.fixedDelta = fixedDelta;

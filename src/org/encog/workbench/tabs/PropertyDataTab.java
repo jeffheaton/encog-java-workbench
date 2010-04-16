@@ -49,7 +49,7 @@ import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.models.PropertyDataModel;
 import org.encog.workbench.EncogWorkBench;
 
-public class PropertyDataTab extends EncogObjectTab implements ActionListener {
+public class PropertyDataTab extends EncogCommonTab implements ActionListener {
 
 	private JPanel panelButtons;
 	private JScrollPane scroll;

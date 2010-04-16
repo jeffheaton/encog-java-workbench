@@ -98,7 +98,7 @@ public class Training {
 					dialog.getStartTemp().getValue(), dialog.getEndTemp()
 							.getValue(), dialog.getCycles().getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "Annealing");
+			train.setVisible(true);
 		}
 	}
 
@@ -130,7 +130,7 @@ public class Training {
 							.getMomentum().getValue(), dialog.getMaxError()
 							.getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "Backprop");
+			train.setVisible(true);
 		}
 	}
 
@@ -162,7 +162,7 @@ public class Training {
 					.getValue(), dialog.getMutationPercent().getValue(), dialog
 					.getPercentToMate().getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "Genetic");
+			train.setVisible(true);
 		}
 	}
 
@@ -194,7 +194,7 @@ public class Training {
 					.getMaxError().getValue(), dialog.getLearningRate()
 					.getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "SOM");
+			train.setVisible(true);
 		}
 
 	}
@@ -227,7 +227,7 @@ public class Training {
 							.getMaxStep().getValue(), dialog.getMaxError()
 							.getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "RPROP");
+			train.setVisible(true);
 		}
 
 	}
@@ -259,7 +259,7 @@ public class Training {
 					training, dialog.getFixedDelta().getValue(), dialog
 							.getMaxError().getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "Manhattan");
+			train.setVisible(true);
 		}
 
 	}
@@ -292,7 +292,7 @@ public class Training {
 					training, dialog.getLearningRate().getValue(), dialog.getMaxError()
 							.getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "ADALINE");
+			train.setVisible(true);
 		}
 	}
 	
@@ -316,7 +316,7 @@ public class Training {
 					training, dialog.getLearningRate().getValue(), dialog.getMaxError()
 							.getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "Instar");
+			train.setVisible(true);
 		}
 	}
 	
@@ -344,7 +344,7 @@ public class Training {
 					training, dialog.getLearningRate().getValue(), dialog.getMaxError()
 							.getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "Outstar");
+			train.setVisible(true);
 		}
 	}
 
@@ -425,7 +425,7 @@ public class Training {
 					EncogWorkBench.getInstance().getMainWindow(), network,
 					training, dialog.getMaxError().getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "SCG");
+			train.setVisible(true);
 		}
 
 	}
@@ -457,7 +457,7 @@ public class Training {
 					training, dialog.getMaxError().getValue(),
 					dialog.getUseBayesian().getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "LMA");
+			train.setVisible(true);
 		}
 
 	}
@@ -491,7 +491,7 @@ public class Training {
 					dialog.getNetwork(),
 					dialog.getMaxError().getValue());
 
-			EncogWorkBench.getInstance().getMainWindow().openTab(train, "NEAT");
+			train.setVisible(true);
 		}
 
 	}

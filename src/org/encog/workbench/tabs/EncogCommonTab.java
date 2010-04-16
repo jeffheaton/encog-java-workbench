@@ -26,10 +26,17 @@ import org.encog.workbench.frames.EncogCommonFrame;
 
 public class EncogCommonTab extends JPanel {
 	
+	private final EncogPersistedObject encogObject;
 	private EncogCommonFrame owner;
 	
-	public EncogCommonTab()
+	public EncogCommonTab(final EncogPersistedObject encogObject)
 	{
+		this.encogObject = encogObject;
+
+	}
+
+	public EncogPersistedObject getEncogObject() {
+		return encogObject;
 	}
 
 	public void close()
@@ -39,11 +46,7 @@ public class EncogCommonTab extends JPanel {
 
 	public void setParent(EncogCommonFrame owner) {
 		this.owner = owner;
-	}
-	
-	public EncogCommonFrame getParent()
-	{
-		return owner;
+		
 	}
 	
 	

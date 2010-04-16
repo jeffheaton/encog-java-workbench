@@ -36,7 +36,7 @@ public class ProgressNEAT extends BasicTrainingProgress {
 			final BasicNetwork model,
 			final double maxError) {
 		super(owner);
-
+		setTitle("NeuroEvolution of Augmenting Topologies (NEAT)");
 		setNetwork(model);
 		setTrainingData(trainingData);
 		setMaxError(maxError);

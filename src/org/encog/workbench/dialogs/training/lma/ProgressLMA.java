@@ -25,7 +25,7 @@ public class ProgressLMA  extends BasicTrainingProgress {
 			final BasicNetwork network, final NeuralDataSet trainingData,
 			final double maxError, final boolean useBayesian) {
 		super(owner);
-
+		setTitle("Levenberg Marquardt Training");
 		setNetwork(network);
 		setTrainingData(trainingData);
 		setMaxError(maxError);

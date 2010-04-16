@@ -12,7 +12,7 @@ import org.encog.neural.data.TextData;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.util.EncogFonts;
 
-public class TextDataTab extends EncogObjectTab {
+public class TextDataTab extends EncogCommonTab {
 
 	private final JTextArea text;
 	private final JScrollPane scroll;

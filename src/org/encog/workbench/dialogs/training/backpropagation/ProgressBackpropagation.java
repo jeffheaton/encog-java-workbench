@@ -72,7 +72,7 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 			final double learningRate, final double momentum,
 			final double maxError) {
 		super(owner);
-	
+		setTitle("Backpropagation Training");
 		setNetwork(network);
 		setTrainingData(trainingData);
 		this.learningRate = learningRate;

@@ -67,7 +67,7 @@ public class ProgressInstar extends BasicTrainingProgress {
 			final BasicNetwork network, final NeuralDataSet trainingData,
 			final double learningRate, final double maxError) {
 		super(owner);
-
+		setTitle("Backpropagation Training");
 		setNetwork(network);
 		setTrainingData(trainingData);
 		this.learningRate = learningRate;

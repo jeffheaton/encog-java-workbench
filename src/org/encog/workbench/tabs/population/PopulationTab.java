@@ -21,9 +21,8 @@ import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.MatrixTableModel;
 import org.encog.workbench.models.SpeciesModel;
 import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.EncogObjectTab;
 
-public class PopulationTab  extends EncogObjectTab {
+public class PopulationTab  extends EncogCommonTab {
 
 	private JButton btnTrain;
 	private JButton btnEdit;
