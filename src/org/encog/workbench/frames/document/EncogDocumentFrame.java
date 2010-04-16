@@ -247,6 +247,16 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		
 	}
 	
+	public void openTab(EncogCommonTab tab, String title) {
+		
+		int i = this.documentTabs.getTabCount();
+		
+        this.documentTabs.add(title, tab);
+        documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
+        this.tabManager.add(tab);
+		
+	}
+	
 	public JTabbedPane getDocumentTabs() {
 		return this.documentTabs;
 	}
@@ -254,6 +264,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public void closeTab(EncogCommonTab tab) {
 		tab.close();
 		this.tabManager.remove(tab);
+		getDocumentTabs().remove(tab);
+		
 	}
 	
 	public EncogTabManager getTabManager()

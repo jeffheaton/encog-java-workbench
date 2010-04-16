@@ -70,11 +70,7 @@ public class ButtonTabComponent extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            int i = owner.getDocumentTabs().indexOfTabComponent(ButtonTabComponent.this);
-            if (i != -1) {
-            	owner.closeTab(tab);
-            	owner.getDocumentTabs().remove(i);
-            }
+        	owner.closeTab(tab);
         }
 
         //we don't want to update UI for this button

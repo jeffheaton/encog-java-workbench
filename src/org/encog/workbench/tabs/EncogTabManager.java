@@ -51,7 +51,7 @@ public class EncogTabManager {
 
 	public void add(final EncogCommonTab tab) {
 		this.tabs.add(tab);
-		tab.setParent(getOwner());
+		tab.setParent(this.owner);
 	}
 
 	

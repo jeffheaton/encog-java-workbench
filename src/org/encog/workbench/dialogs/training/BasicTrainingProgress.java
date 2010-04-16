@@ -53,6 +53,7 @@ import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.TimeSpanFormatter;
 
@@ -64,7 +65,7 @@ import org.encog.workbench.util.TimeSpanFormatter;
  * @author jheaton
  * 
  */
-public abstract class BasicTrainingProgress extends JDialog implements
+public abstract class BasicTrainingProgress extends EncogCommonTab implements
 		Runnable, ActionListener {
 
 	/**
@@ -215,9 +216,8 @@ public abstract class BasicTrainingProgress extends JDialog implements
 	 *            The owner of the dialog box.
 	 */
 	public BasicTrainingProgress(final Frame owner) {
-		super(owner);
-		this.setSize(640, 400);
-		final Container content = getContentPane();
+		super(null);
+
 		this.buttonStart = new JButton("Start");
 		this.buttonStop = new JButton("Stop");
 		this.buttonClose = new JButton("Close");
@@ -226,21 +226,21 @@ public abstract class BasicTrainingProgress extends JDialog implements
 		this.buttonStop.addActionListener(this);
 		this.buttonClose.addActionListener(this);
 
-		content.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 		this.panelBody = new JPanel();
 		this.panelButtons = new JPanel();
 		this.panelButtons.add(this.buttonStart);
 		this.panelButtons.add(this.buttonStop);
 		this.panelButtons.add(this.buttonClose);
-		content.add(this.panelBody, BorderLayout.CENTER);
-		content.add(this.panelButtons, BorderLayout.SOUTH);
+		add(this.panelBody, BorderLayout.CENTER);
+		add(this.panelButtons, BorderLayout.SOUTH);
 		this.panelBody.setLayout(new BorderLayout());
 		this.panelBody.add(this.statusPanel = new TrainingStatusPanel(this),
 				BorderLayout.NORTH);
 		this.panelBody.add(this.chartPanel = new ChartPane(),
 				BorderLayout.SOUTH);
 		this.buttonStop.setEnabled(false);
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
 		this.shouldExit = false;
 		this.bodyFont = EncogFonts.getInstance().getBodyFont();
 		this.headFont = EncogFonts.getInstance().getHeadFont();

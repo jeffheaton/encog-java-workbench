@@ -68,7 +68,7 @@ public class ProgressSOM extends BasicTrainingProgress {
 			final NeuralDataSet trainingData, final double learningRate,
 			final double maxError) {
 		super(owner);
-		setTitle("SOM Training");
+		
 		setNetwork(network);
 		setTrainingData(trainingData);
 		this.learningRate = learningRate;
