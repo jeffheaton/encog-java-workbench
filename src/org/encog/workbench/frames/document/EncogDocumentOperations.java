@@ -68,7 +68,6 @@ import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.editor.ObjectEditorFrame;
 import org.encog.workbench.frames.BrowserFrame;
-import org.encog.workbench.frames.TrainingDataFrame;
 import org.encog.workbench.frames.manager.EncogCommonFrame;
 import org.encog.workbench.frames.population.PopulationFrame;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
@@ -79,6 +78,7 @@ import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.tabs.PropertyDataTab;
 import org.encog.workbench.tabs.TextDataTab;
+import org.encog.workbench.tabs.TrainingDataTab;
 import org.encog.workbench.tabs.network.NetworkTab;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.NeuralConst;
@@ -103,19 +103,18 @@ public class EncogDocumentOperations {
 		if (entry.getType().equals(EncogPersistedCollection.TYPE_TRAINING)) {
 
 			if (owner.getSubwindows().checkBeforeOpen(entry,
-					TrainingDataFrame.class)) {
+					TrainingDataTab.class)) {
 				BasicNeuralDataSet set = (BasicNeuralDataSet) EncogWorkBench
 						.getInstance().getCurrentFile().find(entry);
-				final TrainingDataFrame frame = new TrainingDataFrame(set);
-				frame.setVisible(true);
-				owner.getSubwindows().add(frame);
+				final TrainingDataTab tab = new TrainingDataTab(set);
+				this.owner.openTab(tab);
 			}
 		} else if (entry.getType().equals(
 				EncogPersistedCollection.TYPE_BASIC_NET)) {
 
 			final DirectoryEntry net = (DirectoryEntry) item;
 			if (owner.getSubwindows().checkBeforeOpen(net,
-					TrainingDataFrame.class)) {
+					BasicNetwork.class)) {
 				BasicNetwork net2 = (BasicNetwork) EncogWorkBench.getInstance()
 						.getCurrentFile().find(net);
 				final NetworkTab tab = new NetworkTab(net2);

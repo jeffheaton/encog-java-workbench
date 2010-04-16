@@ -28,11 +28,12 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.frames;
+package org.encog.workbench.tabs;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 
@@ -48,7 +49,7 @@ import org.encog.workbench.models.TrainingSetTableModel;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.util.ExcelAdapter;
 
-public class TrainingDataFrame extends EncogCommonFrame {
+public class TrainingDataTab extends EncogCommonTab implements ActionListener {
 
 	/**
 	 * 
@@ -65,9 +66,31 @@ public class TrainingDataFrame extends EncogCommonFrame {
 	private JButton delRow;
 	private JButton export;
 
-	public TrainingDataFrame(final BasicNeuralDataSet data) {
-		setEncogObject(data);
-		addWindowListener(this);
+	public TrainingDataTab(final BasicNeuralDataSet data) {
+		super(data);
+		
+		setSize(640, 480);
+		setLayout(new BorderLayout());
+		this.toolbar = new JToolBar();
+		this.toolbar.setFloatable(false);
+		this.toolbar.add(this.addInputColumn = new JButton("Add Input Column"));
+		this.toolbar.add(this.delColumn = new JButton("Delete Column"));
+		this.toolbar.add(this.addIdealColumn = new JButton("Add Ideal Column"));
+		this.toolbar.add(this.addRow = new JButton("Add Row"));
+		this.toolbar.add(this.delRow = new JButton("Delete Row"));
+		this.toolbar.add(this.export = new JButton("Export"));
+		this.addInputColumn.addActionListener(this);
+		this.delColumn.addActionListener(this);
+		this.addIdealColumn.addActionListener(this);
+		this.addRow.addActionListener(this);
+		this.delRow.addActionListener(this);
+		this.export.addActionListener(this);
+		add(this.toolbar, BorderLayout.PAGE_START);
+		this.model = new TrainingSetTableModel(getData());
+		this.table = new JTable(this.model);
+		add(new JScrollPane(this.table), BorderLayout.CENTER);
+		//
+		new ExcelAdapter( this.table );
 	}
 
 	public void actionPerformed(final ActionEvent action) {
@@ -112,36 +135,5 @@ public class TrainingDataFrame extends EncogCommonFrame {
 		return (BasicNeuralDataSet) getEncogObject();
 	}
 
-	public void mouseClicked(final MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void windowOpened(final WindowEvent e) {
-		setSize(640, 480);
-		final Container content = getContentPane();
-		content.setLayout(new BorderLayout());
-		this.toolbar = new JToolBar();
-		this.toolbar.setFloatable(false);
-		this.toolbar.add(this.addInputColumn = new JButton("Add Input Column"));
-		this.toolbar.add(this.delColumn = new JButton("Delete Column"));
-		this.toolbar.add(this.addIdealColumn = new JButton("Add Ideal Column"));
-		this.toolbar.add(this.addRow = new JButton("Add Row"));
-		this.toolbar.add(this.delRow = new JButton("Delete Row"));
-		this.toolbar.add(this.export = new JButton("Export"));
-		this.addInputColumn.addActionListener(this);
-		this.delColumn.addActionListener(this);
-		this.addIdealColumn.addActionListener(this);
-		this.addRow.addActionListener(this);
-		this.delRow.addActionListener(this);
-		this.export.addActionListener(this);
-		content.add(this.toolbar, BorderLayout.PAGE_START);
-		this.model = new TrainingSetTableModel(getData());
-		this.table = new JTable(this.model);
-		content.add(new JScrollPane(this.table), BorderLayout.CENTER);
-		//
-		setTitle("Edit Training Data");
-		new ExcelAdapter( this.table );
-	}
 
 }
