@@ -87,6 +87,10 @@ public class Training {
 			if( !validate.validateFeedforwardOrSRN() ) {
 				return;
 			}
+			
+			if( !validate.validateInputAndOuputSizes() ) {
+				return;
+			}
 
 			final ProgressAnneal train = new ProgressAnneal(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
@@ -113,6 +117,10 @@ public class Training {
 				return;
 			}
 
+			if( !validate.validateInputAndOuputSizes() ) {
+				return;
+			}
+			
 			this.network = dialog.getNetwork();
 			this.training = dialog.getTrainingSet();
 
@@ -141,6 +149,10 @@ public class Training {
 			}
 			
 			if( !validate.validateFeedforwardOrSRN() ) {
+				return;
+			}
+			
+			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
 
@@ -172,6 +184,10 @@ public class Training {
 			if( !validate.validateLogicType(SOMLogic.class)) {
 				return;
 			}
+			
+			if( !validate.validateInputSize() ) {
+				return;
+			}
 
 			final ProgressSOM train = new ProgressSOM(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
@@ -195,6 +211,10 @@ public class Training {
 			}
 			
 			if( !validate.validateFeedforwardOrSRN() ) {
+				return;
+			}
+			
+			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
 
@@ -226,6 +246,10 @@ public class Training {
 			if( !validate.validateFeedforwardOrSRN() ) {
 				return;
 			}
+			
+			if( !validate.validateInputAndOuputSizes() ) {
+				return;
+			}
 
 			this.network = dialog.getNetwork();
 			this.training = dialog.getTrainingSet();
@@ -253,6 +277,10 @@ public class Training {
 			}
 			
 			if( !validate.validateFeedforwardOrSRN() ) {
+				return;
+			}
+			
+			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
 
@@ -385,6 +413,10 @@ public class Training {
 			if( !validate.validateFeedforwardOrSRN() ) {
 				return;
 			}
+			
+			if( !validate.validateInputAndOuputSizes() ) {
+				return;
+			}
 
 			final BasicNetwork network = dialog.getNetwork();
 			final NeuralDataSet training = dialog.getTrainingSet();
@@ -410,6 +442,10 @@ public class Training {
 			}
 			
 			if( !validate.validateFeedforwardOrSRN() ) {
+				return;
+			}
+			
+			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
 
@@ -439,6 +475,10 @@ public class Training {
 			}
 			
 			if( (!validate.validateNEAT())) {
+				return;
+			}
+			
+			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
 

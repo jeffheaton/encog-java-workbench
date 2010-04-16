@@ -157,6 +157,18 @@ public class ValidateTraining {
 		return true;
 	}
 
+	public boolean validateInputAndOuputSizes()
+	{
+		if(!validateOutputSize() )
+			return false;
+		
+		if(!validateInputSize() )
+			return false;
+		
+		return true;
+		
+	}
+
 	public boolean validateNEAT() {
 		
 		boolean problem = false;
