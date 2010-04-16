@@ -24,27 +24,18 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.frames.EncogCommonFrame;
 
-public class EncogCommonTab extends JPanel {
+public class EncogObjectTab extends EncogCommonTab {
 	
-	private EncogCommonFrame owner;
+	private final EncogPersistedObject encogObject;
 	
-	public EncogCommonTab()
+	public EncogObjectTab(final EncogPersistedObject encogObject)
 	{
+		this.encogObject = encogObject;
+
 	}
 
-	public void close()
-	{
-		
+	public EncogPersistedObject getEncogObject() {
+		return encogObject;
 	}
-
-	public void setParent(EncogCommonFrame owner) {
-		this.owner = owner;
-	}
-	
-	public EncogCommonFrame getParent()
-	{
-		return owner;
-	}
-	
 	
 }

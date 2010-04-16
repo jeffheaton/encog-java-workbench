@@ -42,14 +42,14 @@ import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 public class EncogTabManager {
-	private final List<EncogCommonTab> tabs = new ArrayList<EncogCommonTab>();
+	private final List<EncogObjectTab> tabs = new ArrayList<EncogObjectTab>();
 	private final EncogDocumentFrame owner;
 
 	public EncogTabManager(final EncogDocumentFrame owner) {
 		this.owner = owner;
 	}
 
-	public void add(final EncogCommonTab tab) {
+	public void add(final EncogObjectTab tab) {
 		this.tabs.add(tab);
 		tab.setParent(getOwner());
 	}
@@ -67,7 +67,7 @@ public class EncogTabManager {
 	}
 
 	public EncogCommonTab find(final DirectoryEntry object) {
-		for (final EncogCommonTab tab : this.tabs) {
+		for (final EncogObjectTab tab : this.tabs) {
 			EncogPersistedObject obj = (EncogPersistedObject)tab.getEncogObject();
 			if (obj.getName().equals(object.getName())) {
 				return tab;
@@ -79,7 +79,7 @@ public class EncogTabManager {
 	/**
 	 * @return the frames
 	 */
-	public List<EncogCommonTab> getTabs() {
+	public List<EncogObjectTab> getTabs() {
 		return this.tabs;
 	}
 
@@ -96,7 +96,7 @@ public class EncogTabManager {
 	
 	public boolean isTrainingOrNetworkOpen()
 	{
-		for (final EncogCommonTab tab : this.tabs) {
+		for (final EncogObjectTab tab : this.tabs) {
 			EncogPersistedObject obj = (EncogPersistedObject)tab.getEncogObject();
 			if( obj instanceof BasicNetwork || obj instanceof NeuralDataSet )
 			{

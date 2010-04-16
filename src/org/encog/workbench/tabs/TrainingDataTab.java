@@ -49,7 +49,7 @@ import org.encog.workbench.models.TrainingSetTableModel;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.util.ExcelAdapter;
 
-public class TrainingDataTab extends EncogCommonTab implements ActionListener {
+public class TrainingDataTab extends EncogObjectTab implements ActionListener {
 
 	/**
 	 * 

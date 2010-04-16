@@ -80,9 +80,10 @@ import org.encog.workbench.models.NetworkListModel;
 import org.encog.workbench.process.training.Training;
 import org.encog.workbench.process.validate.ValidateNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.EncogObjectTab;
 import org.encog.workbench.tabs.network.NetworkTool.Type;
 
-public class NetworkTab extends EncogCommonTab implements ActionListener {
+public class NetworkTab extends EncogObjectTab implements ActionListener {
 
 	/**
 	 * 

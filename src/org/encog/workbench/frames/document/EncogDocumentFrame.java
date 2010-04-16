@@ -54,6 +54,7 @@ import org.encog.workbench.frames.EncogListFrame;
 import org.encog.workbench.frames.render.EncogItemRenderer;
 import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.EncogObjectTab;
 import org.encog.workbench.tabs.EncogTabManager;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.MouseUtil;
@@ -237,7 +238,15 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	}
 
-	public void openTab(EncogCommonTab tab) {
+	public void openTab(EncogCommonTab tab, String title) {
+		
+		int i = this.documentTabs.getTabCount();
+		
+        this.documentTabs.add(title, tab);
+        documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));			
+	}
+	
+	public void openTab(EncogObjectTab tab) {
 	
 		int i = this.documentTabs.getTabCount();
 		
