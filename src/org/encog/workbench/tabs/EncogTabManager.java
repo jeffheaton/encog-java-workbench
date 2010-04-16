@@ -39,12 +39,13 @@ import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogCommonFrame;
+import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 public class EncogTabManager {
 	private final List<EncogCommonTab> tabs = new ArrayList<EncogCommonTab>();
-	private final EncogCommonFrame owner;
+	private final EncogDocumentFrame owner;
 
-	public EncogTabManager(final EncogCommonFrame owner) {
+	public EncogTabManager(final EncogDocumentFrame owner) {
 		this.owner = owner;
 	}
 
@@ -53,14 +54,15 @@ public class EncogTabManager {
 		tab.setParent(getOwner());
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public boolean checkBeforeOpen(final DirectoryEntry object,
-			final Class c) {
+			final Class<?> c) {
 		final EncogCommonTab existing = find(object);
 		if (existing == null) {
 			return true;
 		}
-
+		
+		this.owner.getDocumentTabs().setSelectedComponent(existing);
 		return false;
 	}
 

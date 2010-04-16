@@ -49,14 +49,12 @@ public abstract class EncogCommonFrame extends JFrame implements
 		WindowListener, ActionListener, MouseListener {
 
 	private Object encogObject;
-	private final EncogTabManager subwindows;
 	private EncogCommonFrame parent;
 	private boolean closed;
 	private boolean closeSilent;
 
 	public EncogCommonFrame(boolean closeSilent) {
 		this.closed = false;
-		this.subwindows = new EncogTabManager(this);
 		addWindowListener(this);
 		this.closeSilent = closeSilent;
 	}
@@ -103,12 +101,6 @@ public abstract class EncogCommonFrame extends JFrame implements
 		return this.parent;
 	}
 
-	/**
-	 * @return the subwindows
-	 */
-	public EncogTabManager getSubwindows() {
-		return this.subwindows;
-	}
 
 	public void mouseEntered(final MouseEvent arg0) {
 		// TODO Auto-generated method stub

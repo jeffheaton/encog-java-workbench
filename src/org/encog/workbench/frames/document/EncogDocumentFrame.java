@@ -54,6 +54,7 @@ import org.encog.workbench.frames.EncogListFrame;
 import org.encog.workbench.frames.render.EncogItemRenderer;
 import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.EncogTabManager;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.MouseUtil;
 import org.encog.workbench.util.treetable.JTreeTable;
@@ -69,6 +70,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private JTree table;
 	private JSplitPane split;
 	private JTabbedPane documentTabs;
+	private EncogTabManager tabManager;
 
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files", ".eg");
@@ -100,6 +102,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		this.collectionModel.invalidate(EncogWorkBench.getInstance()
 				.getCurrentFile());
 		this.table.updateUI();
+		this.tabManager = new EncogTabManager(this);
 	}
 
 	public void actionPerformed(final ActionEvent event) {
@@ -240,7 +243,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		
         this.documentTabs.add(tab.getEncogObject().getName(), tab);
         documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
-        this.getSubwindows().add(tab);
+        this.tabManager.add(tab);
 		
 	}
 	
@@ -250,7 +253,12 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	public void closeTab(EncogCommonTab tab) {
 		tab.close();
-		this.getSubwindows().remove(tab);
+		this.tabManager.remove(tab);
+	}
+	
+	public EncogTabManager getTabManager()
+	{
+		return this.tabManager;
 	}
 
 }

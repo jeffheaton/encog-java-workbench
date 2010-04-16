@@ -377,7 +377,7 @@ public abstract class BasicTrainingProgress extends JDialog implements
 	 */
 	private void performStart() {
 		
-		if(!EncogWorkBench.getInstance().getMainWindow().getSubwindows().checkTrainingOrNetworkOpen())
+		if(!EncogWorkBench.getInstance().getMainWindow().getTabManager().checkTrainingOrNetworkOpen())
 			return;
 		
 		this.started = new Date();

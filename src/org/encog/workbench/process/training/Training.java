@@ -326,7 +326,7 @@ public class Training {
 		
 		try
 		{
-			if(!EncogWorkBench.getInstance().getMainWindow().getSubwindows().checkTrainingOrNetworkOpen())
+			if(!EncogWorkBench.getInstance().getMainWindow().getTabManager().checkTrainingOrNetworkOpen())
 				return;
 			
 			if (dialog.process()) {

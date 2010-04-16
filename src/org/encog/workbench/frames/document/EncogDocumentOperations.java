@@ -92,7 +92,7 @@ public class EncogDocumentOperations {
 
 		if (entry.getType().equals(EncogPersistedCollection.TYPE_TRAINING)) {
 
-			if (owner.getSubwindows().checkBeforeOpen(entry,
+			if (owner.getTabManager().checkBeforeOpen(entry,
 					TrainingDataTab.class)) {
 				BasicNeuralDataSet set = (BasicNeuralDataSet) EncogWorkBench
 						.getInstance().getCurrentFile().find(entry);
@@ -103,7 +103,7 @@ public class EncogDocumentOperations {
 				EncogPersistedCollection.TYPE_BASIC_NET)) {
 
 			final DirectoryEntry net = (DirectoryEntry) item;
-			if (owner.getSubwindows().checkBeforeOpen(net,
+			if (owner.getTabManager().checkBeforeOpen(net,
 					BasicNetwork.class)) {
 				BasicNetwork net2 = (BasicNetwork) EncogWorkBench.getInstance()
 						.getCurrentFile().find(net);
@@ -112,7 +112,7 @@ public class EncogDocumentOperations {
 			}
 		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_TEXT)) {
 			DirectoryEntry text = (DirectoryEntry) item;
-			if (owner.getSubwindows().checkBeforeOpen(text, TextData.class)) {
+			if (owner.getTabManager().checkBeforeOpen(text, TextData.class)) {
 				TextData text2 = (TextData) EncogWorkBench.getInstance()
 						.getCurrentFile().find(text);
 				final TextDataTab tab = new TextDataTab(text2);
@@ -121,7 +121,7 @@ public class EncogDocumentOperations {
 		} else if (entry.getType().equals(
 				EncogPersistedCollection.TYPE_PROPERTY)) {
 			DirectoryEntry prop = (DirectoryEntry) item;
-			if (owner.getSubwindows().checkBeforeOpen(prop, PropertyData.class)) {
+			if (owner.getTabManager().checkBeforeOpen(prop, PropertyData.class)) {
 				PropertyData prop2 = (PropertyData) EncogWorkBench
 						.getInstance().getCurrentFile().find(prop);
 				final PropertyDataTab tab = new PropertyDataTab(owner.getDocumentTabs(), prop2);
@@ -130,7 +130,7 @@ public class EncogDocumentOperations {
 		} else if (entry.getType().equals(
 				EncogPersistedCollection.TYPE_POPULATION)) {
 			DirectoryEntry prop = (DirectoryEntry) item;
-			if (owner.getSubwindows().checkBeforeOpen(prop,
+			if (owner.getTabManager().checkBeforeOpen(prop,
 					BasicPopulation.class)) {
 				BasicPopulation pop2 = (BasicPopulation) EncogWorkBench
 						.getInstance().getCurrentFile().find(prop);
@@ -267,7 +267,7 @@ public class EncogDocumentOperations {
 	public void performNetworkQuery() {
 		final DirectoryEntry item = (DirectoryEntry) owner.getSelectedValue();
 
-		if (owner.getSubwindows()
+		if (owner.getTabManager()
 				.checkBeforeOpen(item, NetworkQueryFrame.class)) {
 			BasicNetwork net = (BasicNetwork) EncogWorkBench.getInstance()
 					.getCurrentFile().find(item);
@@ -357,7 +357,7 @@ public class EncogDocumentOperations {
 	public void performObjectsDelete() {
 		final Object object = owner.getSelectedValue();
 		if (object != null) {
-			if (owner.getSubwindows().find((DirectoryEntry) object) != null) {
+			if (owner.getTabManager().find((DirectoryEntry) object) != null) {
 				EncogWorkBench.displayError("Can't Delete Object",
 						"This object can not be deleted while it is open.");
 				return;
