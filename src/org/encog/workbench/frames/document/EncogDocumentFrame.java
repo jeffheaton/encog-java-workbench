@@ -73,6 +73,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private JTabbedPane documentTabs;
 	private EncogTabManager tabManager;
 	private AboutTab aboutTab;
+	private boolean modalTabOpen;
 
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files", ".eg");
@@ -247,7 +248,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
         this.documentTabs.add(tab.getEncogObject().getName(), tab);
         documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
         this.tabManager.add(tab);
-        this.documentTabs.setSelectedComponent(tab);	
+        this.documentTabs.setSelectedComponent(tab);
+        this.menus.updateMenus();
 	}
 	
 	public void openTab(EncogCommonTab tab, String title) {
@@ -258,7 +260,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
         documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
         this.tabManager.add(tab);
         this.documentTabs.setSelectedComponent(tab);
-		
+        this.menus.updateMenus();
 	}
 	
 	public void openModalTab(EncogCommonTab tab, String title) {
@@ -275,6 +277,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
         this.documentTabs.setSelectedComponent(tab);
         this.documentTabs.setEnabled(false);
         this.table.setEnabled(false);
+        this.modalTabOpen = true;
+        this.menus.updateMenus();
 		
 	}
 	
@@ -291,7 +295,9 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		{
 	        this.documentTabs.setEnabled(true);
 	        this.table.setEnabled(true);
+	        this.modalTabOpen = false;
 		}
+		
 		
 	}
 	
@@ -303,6 +309,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public void displayAboutTab()
 	{
 		this.openTab(this.aboutTab, "About");
+	}
+
+	public boolean isModalTabOpen() {
+		return this.modalTabOpen;
 	}
 
 }

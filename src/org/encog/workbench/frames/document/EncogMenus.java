@@ -36,10 +36,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.process.training.Training;
 import org.encog.workbench.tabs.ValidationChart;
 
@@ -77,6 +74,33 @@ public class EncogMenus {
 	private JMenu menuObjects;
 	private JMenu menuHelp;
 	private JMenu menuTools;
+	
+	private JMenuItem menuFileNew;
+	private JMenuItem menuFileClose;
+	private JMenuItem menuFileOpen;
+	private JMenuItem menuFileSave;
+	private JMenuItem menuFileSaveAs;
+	private JMenuItem menuFileRevert;
+	private JMenuItem menuFileQuit;
+	private JMenuItem menuFileImport;
+
+	private JMenuItem menuEditCut;
+	private JMenuItem menuEditCopy;
+	private JMenuItem menuEditPaste;
+	private JMenuItem menuEditConfig;
+
+	private JMenuItem menuObjectsCreate;
+	private JMenuItem menuObjectsDelete;
+
+	private JMenuItem menuToolsCloud;
+	private JMenuItem menuToolsTrain;
+	private JMenuItem menuToolsGenerate;
+	private JMenuItem menuToolsEvaluate;
+	private JMenuItem menuToolsBenchmark;
+	private JMenuItem menuToolsBrowse;
+	private JMenuItem menuToolsValidation;
+
+	private JMenuItem menuHelpAbout;
 
 	private EncogDocumentFrame owner;
 
@@ -88,64 +112,96 @@ public class EncogMenus {
 		// menu bar
 		this.menuBar = new JMenuBar();
 		this.menuFile = new JMenu("File");
-		this.menuFile.add(owner
+		this.menuFileNew = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_NEW, 'n'));
-		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_OPEN,
+		this.menuFileOpen = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_OPEN,
 				'o'));
 		this.menuFile.addSeparator();
-		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_CLOSE,
+		this.menuFileClose = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_CLOSE,
 				'c'));
 		this.menuFile.addSeparator();
-		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_SAVE,
+		this.menuFileSave = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_SAVE,
 				's'));
-		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_SAVE_AS,
+		this.menuFileSaveAs = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_SAVE_AS,
 				'a'));
-		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_REVERT,
+		this.menuFileRevert = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_REVERT,
 				'r'));
 		this.menuFile.addSeparator();
-		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_IMPORT,
+		this.menuFileImport = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_IMPORT,
 				'i'));
 		this.menuFile.addSeparator();
-		this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_QUIT,
+		this.menuFileQuit = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_QUIT,
 				'q'));
 		this.menuFile.addActionListener(this.owner);
 		this.menuBar.add(this.menuFile);
 
 		this.menuEdit = new JMenu("Edit");
-		this.menuEdit.add(owner
+		this.menuEditCut = this.menuEdit.add(owner
 				.addItem(this.menuEdit, EncogMenus.EDIT_CUT, 'x'));
-		this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_COPY,
+		this.menuEditCopy = this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_COPY,
 				'c'));
-		this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_PASTE,
+		this.menuEditPaste = this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_PASTE,
 				'v'));
 		this.menuEdit.addSeparator();
-		this.menuEdit.add(owner.addItem(this.menuEdit,
+		this.menuEditConfig = this.menuEdit.add(owner.addItem(this.menuEdit,
 				EncogMenus.EDIT_CONFIG, 'f'));
 		this.menuBar.add(this.menuEdit);
 
 		this.menuObjects = new JMenu("Objects");
-		this.menuObjects.add(owner.addItem(this.menuObjects,
+		this.menuObjectsCreate = this.menuObjects.add(owner.addItem(this.menuObjects,
 				EncogMenus.OBJECTS_CREATE, 'c'));
-		this.menuObjects.add(owner.addItem(this.menuObjects,
+		this.menuObjectsDelete = this.menuObjects.add(owner.addItem(this.menuObjects,
 				EncogMenus.OBJECTS_DELETE, 'd'));
 		this.menuBar.add(this.menuObjects);
 
 		this.menuTools = new JMenu("Tools");
-		owner.addItem(this.menuTools, EncogMenus.TOOLS_CLOUD, 'c');
-		owner.addItem(this.menuTools, EncogMenus.TOOLS_CODE, 'g');
-		owner.addItem(this.menuTools, EncogMenus.TOOLS_TRAIN, 't');
-		owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 'k');
-		owner.addItem(this.menuTools, EncogMenus.TOOLS_EVALUATE, 'e');
-		owner.addItem(this.menuTools, EncogMenus.TOOLS_BROWSE, 'b');
-		owner.addItem(this.menuTools, EncogMenus.TOOLS_VALIDATION_CHART, 'v');
+		this.menuToolsCloud = owner.addItem(this.menuTools, EncogMenus.TOOLS_CLOUD, 'c');
+		this.menuToolsGenerate = owner.addItem(this.menuTools, EncogMenus.TOOLS_CODE, 'g');
+		this.menuToolsTrain = owner.addItem(this.menuTools, EncogMenus.TOOLS_TRAIN, 't');
+		this.menuToolsBenchmark = owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 'k');
+		this.menuToolsEvaluate = owner.addItem(this.menuTools, EncogMenus.TOOLS_EVALUATE, 'e');
+		this.menuToolsBrowse = owner.addItem(this.menuTools, EncogMenus.TOOLS_BROWSE, 'b');
+		this.menuToolsValidation = owner.addItem(this.menuTools, EncogMenus.TOOLS_VALIDATION_CHART, 'v');
 		this.menuBar.add(this.menuTools);
 
 		this.menuHelp = new JMenu("Help");
-		this.menuHelp.add(owner.addItem(this.menuHelp, EncogMenus.HELP_ABOUT,
+		this.menuHelpAbout = this.menuHelp.add(owner.addItem(this.menuHelp, EncogMenus.HELP_ABOUT,
 				'a'));
 		this.menuBar.add(this.menuHelp);
 
 		owner.setJMenuBar(this.menuBar);
+	}
+	
+	public void updateMenus()
+	{
+		boolean modal = this.owner.isModalTabOpen();
+		
+		this.menuFileNew.setEnabled(!modal);
+		this.menuFileClose.setEnabled(!modal);
+		this.menuFileOpen.setEnabled(!modal);
+		this.menuFileSave.setEnabled(!modal);
+		this.menuFileSaveAs.setEnabled(!modal);
+		this.menuFileRevert.setEnabled(!modal);
+		this.menuFileQuit.setEnabled(true);
+		this.menuFileImport.setEnabled(!modal);
+
+		this.menuEditCut.setEnabled(!modal);
+		this.menuEditCopy.setEnabled(!modal);
+		this.menuEditPaste.setEnabled(!modal);
+		this.menuEditConfig.setEnabled(!modal);
+
+		this.menuObjectsCreate.setEnabled(!modal);
+		this.menuObjectsDelete.setEnabled(!modal);
+
+		this.menuToolsCloud.setEnabled(!modal);
+		this.menuToolsTrain.setEnabled(!modal);
+		this.menuToolsGenerate.setEnabled(!modal);
+		this.menuToolsEvaluate.setEnabled(!modal);
+		this.menuToolsBenchmark.setEnabled(!modal);
+		this.menuToolsBrowse.setEnabled(!modal);
+		this.menuToolsValidation.setEnabled(!modal);
+
+		this.menuHelpAbout.setEnabled(!modal);
 	}
 
 	public void actionPerformed(final ActionEvent event) {
