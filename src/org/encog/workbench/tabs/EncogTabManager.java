@@ -136,4 +136,8 @@ public class EncogTabManager {
 		return true;
 	}
 
+	public boolean alreadyOpen(EncogCommonTab tab) {
+		return this.tabs.contains(tab);
+	}
+
 }

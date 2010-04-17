@@ -379,8 +379,9 @@ public class EncogDocumentOperations {
 	}
 
 	public void performHelpAbout() {
-		AboutEncog dialog = new AboutEncog();
-		dialog.process();
+		//AboutEncog dialog = new AboutEncog();
+		//dialog.process();
+		EncogWorkBench.getInstance().getMainWindow().displayAboutTab();
 	}
 
 	boolean checkSave() {

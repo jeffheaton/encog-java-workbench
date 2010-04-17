@@ -52,6 +52,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.EncogListFrame;
 import org.encog.workbench.frames.render.EncogItemRenderer;
+import org.encog.workbench.tabs.AboutTab;
 import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.EncogTabManager;
@@ -71,6 +72,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private JSplitPane split;
 	private JTabbedPane documentTabs;
 	private EncogTabManager tabManager;
+	private AboutTab aboutTab;
 
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files", ".eg");
@@ -96,6 +98,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		this.collectionModel = createModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		this.aboutTab = new AboutTab();
+		
 		this.menus.initMenuBar();
 		initContents();
 		this.popupMenus.initPopup();
@@ -127,8 +131,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		
 		this.split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 scrollPane, this.documentTabs);
-		
-
+		this.split.setDividerLocation(150);
 		
 		getContentPane().add(this.split);
 		redraw();
@@ -260,6 +263,9 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	
 	public void openModalTab(EncogCommonTab tab, String title) {
 		
+		if( this.tabManager.alreadyOpen(tab) )
+			return;
+		
 		int i = this.documentTabs.getTabCount();
 		
         this.documentTabs.add(title, tab);
@@ -292,6 +298,11 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public EncogTabManager getTabManager()
 	{
 		return this.tabManager;
+	}
+	
+	public void displayAboutTab()
+	{
+		this.openTab(this.aboutTab, "About");
 	}
 
 }
