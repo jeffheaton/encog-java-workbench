@@ -52,7 +52,6 @@ import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EvaluateDialog;
 import org.encog.workbench.dialogs.PopulationDialog;
-import org.encog.workbench.dialogs.about.AboutEncog;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
 import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
