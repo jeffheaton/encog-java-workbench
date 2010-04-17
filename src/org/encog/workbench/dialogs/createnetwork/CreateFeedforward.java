@@ -57,11 +57,11 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 		setSize(600, 400);
 		setLocation(200, 200);
 		addProperty(this.inputCount = new IntegerField("input neurons",
-				"Input Neuron Count", true, 1, -1));
+				"Input Neuron Count", true, 1, 100000));
 		addProperty(this.hidden = new BuildingListField("hidden neurons",
 				"Hidden Layer Counts"));
 		addProperty(this.outputCount = new IntegerField("output neurons",
-				"Output Neuron Count", true, 1, -1));
+				"Output Neuron Count", true, 1, 100000));
 		addProperty(this.activationField = new PopupField("activation",
 				"Activation Function", true));
 		render();

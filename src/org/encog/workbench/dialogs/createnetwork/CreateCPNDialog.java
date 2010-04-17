@@ -51,9 +51,9 @@ public class CreateCPNDialog extends EncogPropertiesDialog {
 		setTitle("Create CPN Network");
 		setSize(400,400);
 		setLocation(200,200);
-		addProperty(this.inputCount = new IntegerField("input neurons","Input Neuron Count",true,1,-1));
-		addProperty(this.instarCount = new IntegerField("instar neurons","Instar Neuron Count",true,1,-1));
-		addProperty(this.outstarCount = new IntegerField("outstar neurons","Outstar Neuron Count",true,1,-1));
+		addProperty(this.inputCount = new IntegerField("input neurons","Input Neuron Count",true,1,100000));
+		addProperty(this.instarCount = new IntegerField("instar neurons","Instar Neuron Count",true,1,100000));
+		addProperty(this.outstarCount = new IntegerField("outstar neurons","Outstar Neuron Count",true,1,100000));
 		render();
 	}
 

@@ -49,8 +49,8 @@ public class CreateART1 extends EncogPropertiesDialog {
 		setTitle("Create ART1 Network");
 		setSize(400,400);
 		setLocation(200,200);
-		addProperty(this.f1 = new IntegerField("f1 neuron count","Layer F1 Neuron Count",true,1,-1));
-		addProperty(this.f2 = new IntegerField("f2 neuron count","Layer F2 Neuron Count",true,1,-1));
+		addProperty(this.f1 = new IntegerField("f1 neuron count","Layer F1 Neuron Count",true,1,100000));
+		addProperty(this.f2 = new IntegerField("f2 neuron count","Layer F2 Neuron Count",true,1,100000));
 		render();
 	}
 

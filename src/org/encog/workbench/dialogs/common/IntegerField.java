@@ -76,7 +76,7 @@ public class IntegerField extends PropertiesField {
 		}
 		
 		if ((this.max>this.min) && i < (this.min)) {
-			throw new ValidationException("Must enter a value above " + this.min
+			throw new ValidationException("Must enter a value at or above " + this.min
 					+ " for: " + this.getName());
 		}
 		if( (this.max>this.min) && (i > this.max) ) {

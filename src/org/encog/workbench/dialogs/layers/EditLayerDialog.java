@@ -45,7 +45,7 @@ public class EditLayerDialog extends EncogPropertiesDialog implements BuildingLi
 	public EditLayerDialog(Frame owner) {
 		super(owner);
 		addProperty(this.neuronCount = new IntegerField("neuron count",
-				"Neuron Count", true, 1, -1));
+				"Neuron Count", true, 1, 100000));
 		addProperty(this.tags = new BuildingListField("tags",
 		"Tags"));
 	}

@@ -48,7 +48,7 @@ public class CreateBlotzmannDialog extends EncogPropertiesDialog {
 		setTitle("Create Boltzmann Machine");
 		setSize(400,400);
 		setLocation(200,200);
-		addProperty(this.neuronCount = new IntegerField("neurons","Neuron Count",true,1,-1));
+		addProperty(this.neuronCount = new IntegerField("neurons","Neuron Count",true,1,100000));
 		render();
 	}
 

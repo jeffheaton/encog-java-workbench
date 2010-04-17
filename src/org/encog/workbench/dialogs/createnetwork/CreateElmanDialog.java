@@ -48,9 +48,9 @@ public class CreateElmanDialog extends EncogPropertiesDialog {
 		setTitle("Create Elman Network");
 		setSize(400,400);
 		setLocation(200,200);
-		addProperty(this.inputCount = new IntegerField("input neurons","Input Neuron Count",true,1,-1));
-		addProperty(this.hiddenCount = new IntegerField("input neurons","Hidden Neuron Count",true,1,-1));
-		addProperty(this.outputCount = new IntegerField("input neurons","Output Neuron Count",true,1,-1));
+		addProperty(this.inputCount = new IntegerField("input neurons","Input Neuron Count",true,1,100000));
+		addProperty(this.hiddenCount = new IntegerField("input neurons","Hidden Neuron Count",true,1,100000));
+		addProperty(this.outputCount = new IntegerField("input neurons","Output Neuron Count",true,1,100000));
 		render();
 	}
 

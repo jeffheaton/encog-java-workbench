@@ -49,8 +49,8 @@ public class CreateBAMDialog extends EncogPropertiesDialog {
 		setTitle("Create BAM Network");
 		setSize(400,400);
 		setLocation(200,200);
-		addProperty(this.layerACount = new IntegerField("neurons-f1","F1 Neuron Count",true,1,-1));
-		addProperty(this.layerBCount = new IntegerField("neurons-f2","F2 Neuron Count",true,1,-1));
+		addProperty(this.layerACount = new IntegerField("neurons-f1","F1 Neuron Count",true,1,100000));
+		addProperty(this.layerBCount = new IntegerField("neurons-f2","F2 Neuron Count",true,1,100000));
 		render();
 	}
 

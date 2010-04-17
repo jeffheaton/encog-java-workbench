@@ -49,7 +49,7 @@ public class CreateADALINEDialog extends EncogPropertiesDialog {
 		setTitle("Create ADALINE Network");
 		setSize(400,400);
 		setLocation(200,200);
-		addProperty(this.neuronCount = new IntegerField("neurons","Neuron Count",true,1,-1));
+		addProperty(this.neuronCount = new IntegerField("neurons","Neuron Count",true,1,100000));
 		addProperty(this.elementCount = new IntegerField("elements","ADALINE Output Elements",true,1,-1));
 		render();
 	}
