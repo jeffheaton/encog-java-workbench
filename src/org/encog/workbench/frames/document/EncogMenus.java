@@ -41,7 +41,7 @@ import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.process.training.Training;
-import org.encog.workbench.process.validate.ValidationChart;
+import org.encog.workbench.tabs.ValidationChart;
 
 public class EncogMenus {
 	public static final String FILE_NEW = "New";

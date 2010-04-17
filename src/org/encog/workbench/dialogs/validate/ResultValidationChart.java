@@ -30,6 +30,7 @@
 
 package org.encog.workbench.dialogs.validate;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Frame;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.NeuralOutputHolder;
+import org.encog.workbench.tabs.EncogCommonTab;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
@@ -56,17 +58,16 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-public class ResultValidationChart extends JDialog {
+public class ResultValidationChart extends EncogCommonTab {
 	private static final long serialVersionUID = -2859655432840760344L;
 	private JTabbedPane tabs = new JTabbedPane();
 	private ArrayList<JFreeChart> charts = new ArrayList<JFreeChart>();
 	private ArrayList<ChartPanel> chartPanels = new ArrayList<ChartPanel>();
 
-	public ResultValidationChart(final Frame owner) {
-		super(owner);
-		setTitle("Validation Chart");
-		this.setSize(640, 400);
-		this.add(tabs);
+	public ResultValidationChart() {
+		super(null);
+		setLayout(new BorderLayout());
+		this.add(tabs,BorderLayout.CENTER);
 	}
 
 	public void setData(NeuralDataSet validationData, BasicNetwork network) {

@@ -56,8 +56,9 @@ import org.encog.bot.browse.Browser;
 import org.encog.bot.browse.WebPage;
 import org.encog.bot.browse.range.DocumentRange;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.tabs.EncogCommonTab;
 
-public class BrowserFrame extends EncogCommonFrame implements TreeSelectionListener {
+public class BrowserFrame extends EncogCommonTab implements TreeSelectionListener, ActionListener {
 
 	private JPanel contentsPanel;
 	private JScrollPane dataPanel;
@@ -74,18 +75,14 @@ public class BrowserFrame extends EncogCommonFrame implements TreeSelectionListe
 	private JTextArea dataText;
 	
 	public BrowserFrame()
-	{
-		//
-		setTitle("Browse Web Data");
-		setSize(640,480);
-		Container content = this.getContentPane();
-		
-		content.setLayout(new GridLayout(2,1));
+	{		
+		super(null);
+		setLayout(new GridLayout(2,1));
 		
 		
 		//
 		this.contentsPanel = new JPanel();
-		content.add(this.contentsPanel);
+		add(this.contentsPanel);
 		
 		
 		this.contentsPanel.setLayout(new BorderLayout());
@@ -109,7 +106,7 @@ public class BrowserFrame extends EncogCommonFrame implements TreeSelectionListe
 		this.dataText = new JTextArea();
 		this.dataPanel = new JScrollPane(this.dataText);
 		this.dataText.setEditable(false);
-		content.add(this.dataPanel);
+		add(this.dataPanel);
 		
 		this.tree.addTreeSelectionListener(this);
 		

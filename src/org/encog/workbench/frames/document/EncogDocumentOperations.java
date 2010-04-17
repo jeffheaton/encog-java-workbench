@@ -77,6 +77,7 @@ import org.slf4j.LoggerFactory;
 public class EncogDocumentOperations {
 
 	private EncogDocumentFrame owner;
+	private int browser = 0;
 
 	@SuppressWarnings("unused")
 	final private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -374,7 +375,7 @@ public class EncogDocumentOperations {
 
 	public void performBrowse() {
 		BrowserFrame browse = new BrowserFrame();
-		browse.setVisible(true);
+		this.owner.openTab(browse, "Browser" + (browser++));
 	}
 
 	public void performHelpAbout() {

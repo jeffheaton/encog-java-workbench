@@ -28,7 +28,7 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.process.validate;
+package org.encog.workbench.tabs;
 
 import java.awt.Frame;
 
@@ -50,9 +50,9 @@ public class ValidationChart {
 			network = dialog.getNetwork();
 			training = dialog.getValidationSet();
 
-			ResultValidationChart chart = new ResultValidationChart(owner);
+			ResultValidationChart chart = new ResultValidationChart();
 			chart.setData(training, network);
-			chart.setVisible(true);
+			EncogWorkBench.getInstance().getMainWindow().openModalTab(chart, "Validation");
 		}
 	}
 }
