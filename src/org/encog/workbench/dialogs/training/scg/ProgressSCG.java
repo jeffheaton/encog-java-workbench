@@ -37,6 +37,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.networks.training.propagation.scg.ScaledConjugateGradient;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
 public class ProgressSCG extends BasicTrainingProgress {
@@ -82,8 +83,10 @@ public class ProgressSCG extends BasicTrainingProgress {
 	 */
 	@Override
 	public void startup() {
-		final Train train = new ScaledConjugateGradient(getNetwork(),
+		final ScaledConjugateGradient train = new ScaledConjugateGradient(getNetwork(),
 				getTrainingData() );
+		
+		train.setNumThreads(EncogWorkBench.getInstance().getConfig().getThreadCount());
 
 		setTrain(train);
 	}

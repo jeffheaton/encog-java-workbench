@@ -8,6 +8,7 @@ import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
+import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.PasswordField;
 import org.encog.workbench.dialogs.common.TextField;
 
@@ -18,6 +19,7 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 	private PasswordField password;
 	private DoubleField defaultError;
 	private CheckField autoConnect;
+	private IntegerField threadCount;
 	
 	public EncogConfigDialog(Frame owner) {
 		super(owner);
@@ -28,6 +30,7 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		setSize(500,300);
 		beginTab("Training");
 		addProperty(this.defaultError = new DoubleField("default error","Default Error Percent",true,0,1));
+		addProperty(this.threadCount = new IntegerField("thread count","Thread Count (0=auto)",true,0,10000));
 		beginTab("Encog Cloud");
 		addProperty(this.network = new TextField("network","Network",true));
 		addProperty(this.userID = new TextField("user id","User ID",true));
@@ -54,6 +57,10 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 
 	public CheckField getAutoConnect() {
 		return autoConnect;
+	}
+
+	public IntegerField getThreadCount() {
+		return threadCount;
 	}
 	
 	

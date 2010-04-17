@@ -425,6 +425,7 @@ public class EncogDocumentOperations {
 		dialog.getDefaultError().setValue(config.getDefaultError());
 		dialog.getNetwork().setValue(config.getEncogCloudNetwork());
 		dialog.getAutoConnect().setValue(config.isAutoConnect());
+		dialog.getThreadCount().setValue(config.getThreadCount());
 
 		if (dialog.process()) {
 			config.setEncogCloudUserID(dialog.getUserID().getValue());
@@ -432,6 +433,7 @@ public class EncogDocumentOperations {
 			config.setDefaultError(dialog.getDefaultError().getValue());
 			config.setAutoConnect(dialog.getAutoConnect().getValue());
 			config.setEncogCloudNetwork(dialog.getNetwork().getValue());
+			config.setThreadCount(dialog.getThreadCount().getValue());
 			EncogWorkBench.saveConfig();
 		}
 	}

@@ -37,6 +37,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
 /**
@@ -99,9 +100,11 @@ public class ProgressResilient extends BasicTrainingProgress {
 	 */
 	@Override
 	public void startup() {
-		final Train train = new ResilientPropagation(getNetwork(),
+		final ResilientPropagation train = new ResilientPropagation(getNetwork(),
 				getTrainingData(), ResilientPropagation.DEFAULT_ZERO_TOLERANCE,
 				this.initialUpdate, this.maxStep );
+		
+		train.setNumThreads(EncogWorkBench.getInstance().getConfig().getThreadCount());
 
 		setTrain(train);
 	}

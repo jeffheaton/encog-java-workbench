@@ -36,7 +36,10 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
+
+import sun.security.krb5.Config;
 
 /**
  * Dialog box to display the progress of backpropagation training.
@@ -103,8 +106,9 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 	 */
 	@Override
 	public void startup() {
-		final Train train = new Backpropagation(getNetwork(),
+		final Backpropagation train = new Backpropagation(getNetwork(),
 				getTrainingData(), this.learningRate, this.momentum);
+		train.setNumThreads(EncogWorkBench.getInstance().getConfig().getThreadCount());
 
 		setTrain(train);
 	}

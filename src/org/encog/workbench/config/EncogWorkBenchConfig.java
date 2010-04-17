@@ -45,6 +45,7 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	private String encogCloudUserID;
 	private boolean autoConnect = false;
 	private double defaultError = 0.01;
+	private int threadCount = 0;
 	
 	public Persistor createPersistor() {
 		return null;
@@ -107,4 +108,14 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	public void setAutoConnect(boolean autoConnect) {
 		this.autoConnect = autoConnect;
 	}
+
+	public int getThreadCount() {
+		return threadCount;
+	}
+
+	public void setThreadCount(int threadCount) {
+		this.threadCount = threadCount;
+	}
+	
+	
 }
