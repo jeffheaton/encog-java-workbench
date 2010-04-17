@@ -89,6 +89,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	public EncogDocumentFrame() {
 		this.setSize(640, 480);
+		
+		EncogWorkBench.getInstance().setMainWindow(this);
 
 		this.operations = new EncogDocumentOperations(this);
 		this.menus = new EncogMenus(this);
@@ -103,11 +105,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		
 		this.menus.initMenuBar();
 		initContents();
-		this.popupMenus.initPopup();
-		this.collectionModel.invalidate(EncogWorkBench.getInstance()
-				.getCurrentFile());
-		this.table.updateUI();
-		this.tabManager = new EncogTabManager(this);
+
 	}
 
 	public void actionPerformed(final ActionEvent event) {
@@ -135,6 +133,15 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		this.split.setDividerLocation(150);
 		
 		getContentPane().add(this.split);
+		
+		
+		this.popupMenus.initPopup();
+		this.collectionModel.invalidate(EncogWorkBench.getInstance()
+				.getCurrentFile());
+		this.table.updateUI();
+		this.tabManager = new EncogTabManager(this);
+		
+		this.menus.updateMenus();
 		redraw();
 	}
 
@@ -313,6 +320,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	public boolean isModalTabOpen() {
 		return this.modalTabOpen;
+	}
+
+	public JTree getTree() {
+		return this.table;
 	}
 
 }

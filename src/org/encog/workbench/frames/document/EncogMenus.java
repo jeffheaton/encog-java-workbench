@@ -35,9 +35,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JTabbedPane;
+import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.process.training.Training;
+import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.ValidationChart;
 
 public class EncogMenus {
@@ -175,6 +180,17 @@ public class EncogMenus {
 	public void updateMenus()
 	{
 		boolean modal = this.owner.isModalTabOpen();
+		boolean supportsClipboard = false;
+		
+		JTabbedPane tabs = EncogWorkBench.getInstance().getMainWindow().getDocumentTabs();
+
+		
+		EncogCommonTab currentTab = (EncogCommonTab)tabs.getSelectedComponent();
+		
+		if( currentTab instanceof TextDataTab )
+		{
+			supportsClipboard = true;
+		}
 		
 		this.menuFileNew.setEnabled(!modal);
 		this.menuFileClose.setEnabled(!modal);
@@ -185,9 +201,9 @@ public class EncogMenus {
 		this.menuFileQuit.setEnabled(true);
 		this.menuFileImport.setEnabled(!modal);
 
-		this.menuEditCut.setEnabled(!modal);
-		this.menuEditCopy.setEnabled(!modal);
-		this.menuEditPaste.setEnabled(!modal);
+		this.menuEditCut.setEnabled(!modal && supportsClipboard);
+		this.menuEditCopy.setEnabled(!modal && supportsClipboard);
+		this.menuEditPaste.setEnabled(!modal && supportsClipboard);
 		this.menuEditConfig.setEnabled(!modal);
 
 		this.menuObjectsCreate.setEnabled(!modal);

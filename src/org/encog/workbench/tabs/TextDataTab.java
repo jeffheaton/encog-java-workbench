@@ -47,4 +47,10 @@ public class TextDataTab extends EncogCommonTab {
 		((TextData)getEncogObject()).setText(this.getText());
 	}
 
+
+
+	public boolean isTextSelected() {
+		return this.text.getSelectionEnd()>this.text.getSelectionStart();
+	}
+
 }
