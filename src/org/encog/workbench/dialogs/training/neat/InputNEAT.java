@@ -82,13 +82,13 @@ public class InputNEAT extends EncogPropertiesDialog {
 		addProperty(this.crossoverRate=new DoubleField("crossover rate","Crossover Rate",true,0,1));
 		addProperty(this.maxActivationPerturbation=new DoubleField("max act pert","Max Activation Perturb",true,0,1));
 		addProperty(this.maxNumberOfSpecies=new IntegerField("max num species","Max Num Species(0=none)",true,0,1));
-		addProperty(this.maxPermittedNeurons=new DoubleField("max neurons","Max Neurons",true,0,1));
+		addProperty(this.maxPermittedNeurons=new DoubleField("max neurons","Max Neurons",true,0,100000));
 		addProperty(this.maxWeightPerturbation=new DoubleField("max weight pert","Max Weight Perturb",true,0,1));
 		addProperty(this.mutationRate=new DoubleField("mutation rate","Mutation Rate",true,0,1));
-		addProperty(this.numAddLinkAttempts=new IntegerField("link add attempts","Num Link Attempts",true,0,1));
-		addProperty(this.numGensAllowedNoImprovement=new IntegerField("max gens no improve","Max Generations w/No Improvement",true,0,1));
-		addProperty(this.numTrysToFindLoopedLink=new IntegerField("tries for looped link","Tries for Linked Loop",true,0,1));
-		addProperty(this.numTrysToFindOldLink=new IntegerField("tries find old link","Tries to Find Old Link",true,0,1));
+		addProperty(this.numAddLinkAttempts=new IntegerField("link add attempts","Num Link Attempts",true,0,1000));
+		addProperty(this.numGensAllowedNoImprovement=new IntegerField("max gens no improve","Max Generations w/No Improvement",true,0,100000));
+		addProperty(this.numTrysToFindLoopedLink=new IntegerField("tries for looped link","Tries for Linked Loop",true,0,1000));
+		addProperty(this.numTrysToFindOldLink=new IntegerField("tries find old link","Tries to Find Old Link",true,0,1000));
 		addProperty(this.probabilityWeightReplaced=new DoubleField("prob weight replaced","Chance Weight Replaced",true,0,1));
 		
 		
@@ -142,6 +142,144 @@ public class InputNEAT extends EncogPropertiesDialog {
 
 	public DoubleField getMaxError() {
 		return maxError;
+	}
+
+
+
+	public ComboBoxField getComboTraining() {
+		return comboTraining;
+	}
+
+
+
+	public ComboBoxField getComboPopulation() {
+		return comboPopulation;
+	}
+
+
+
+	public ComboBoxField getComboNetwork() {
+		return comboNetwork;
+	}
+
+
+
+	public DoubleField getActivationMutationRate() {
+		return activationMutationRate;
+	}
+
+
+
+	public DoubleField getChanceAddLink() {
+		return chanceAddLink;
+	}
+
+
+
+	public DoubleField getChanceAddNode() {
+		return chanceAddNode;
+	}
+
+
+
+	public DoubleField getChanceAddRecurrentLink() {
+		return chanceAddRecurrentLink;
+	}
+
+
+
+	public DoubleField getCompatibilityThreshold() {
+		return compatibilityThreshold;
+	}
+
+
+
+	public DoubleField getCrossoverRate() {
+		return crossoverRate;
+	}
+
+
+
+	public DoubleField getMaxActivationPerturbation() {
+		return maxActivationPerturbation;
+	}
+
+
+
+	public IntegerField getMaxNumberOfSpecies() {
+		return maxNumberOfSpecies;
+	}
+
+
+
+	public DoubleField getMaxPermittedNeurons() {
+		return maxPermittedNeurons;
+	}
+
+
+
+	public DoubleField getMaxWeightPerturbation() {
+		return maxWeightPerturbation;
+	}
+
+
+
+	public DoubleField getMutationRate() {
+		return mutationRate;
+	}
+
+
+
+	public IntegerField getNumAddLinkAttempts() {
+		return numAddLinkAttempts;
+	}
+
+
+
+	public IntegerField getNumGensAllowedNoImprovement() {
+		return numGensAllowedNoImprovement;
+	}
+
+
+
+	public IntegerField getNumTrysToFindLoopedLink() {
+		return numTrysToFindLoopedLink;
+	}
+
+
+
+	public IntegerField getNumTrysToFindOldLink() {
+		return numTrysToFindOldLink;
+	}
+
+
+
+	public DoubleField getProbabilityWeightReplaced() {
+		return probabilityWeightReplaced;
+	}
+
+
+
+	public List<String> getTrainingSets() {
+		return trainingSets;
+	}
+
+
+
+	public List<String> getNetworks() {
+		return networks;
+	}
+
+
+
+	public List<String> getPopulations() {
+		return populations;
+	}
+
+
+
+	public void setMaxError(DoubleField maxError) {
+		this.maxError = maxError;
 	}
 	
 	

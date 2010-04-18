@@ -122,7 +122,7 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 	 * The network being trained.
 	 */
 	private BasicNetwork network;
-	
+
 	private BasicNetwork oldNetwork;
 
 	/**
@@ -246,32 +246,30 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 		this.headFont = EncogFonts.getInstance().getHeadFont();
 		this.status = "Ready to Start";
 	}
-	
-	private void performClose()
-	{
-		if (EncogWorkBench.askQuestion("Training",
-			"Save the training to this network?")) {
-			
-			EncogWorkBench.getInstance().getCurrentFile().add(
-					this.network.getName(), this.train.getNetwork());
-			saveNetwork();
-			
-			if( this.train instanceof ResilientPropagation )
-			{
-				ResilientPropagation rprop = (ResilientPropagation)this.train;
-				TrainingContinuation cont = rprop.pause();
-				cont.setDescription("Training state from last RPROP.");
+
+	private void performClose() {
+		if (this.oldNetwork != null) {
+
+			if (EncogWorkBench.askQuestion("Training",
+					"Save the training to this network?")) {
+
 				EncogWorkBench.getInstance().getCurrentFile().add(
-						this.network.getName()+"-rprop", cont);
-				EncogWorkBench.getInstance().getMainWindow().redraw();
-			}			
+						this.network.getName(), this.train.getNetwork());
+				saveNetwork();
+
+				if (this.train instanceof ResilientPropagation) {
+					ResilientPropagation rprop = (ResilientPropagation) this.train;
+					TrainingContinuation cont = rprop.pause();
+					cont.setDescription("Training state from last RPROP.");
+					EncogWorkBench.getInstance().getCurrentFile().add(
+							this.network.getName() + "-rprop", cont);
+					EncogWorkBench.getInstance().getMainWindow().redraw();
+				}
+			} else {
+				EncogWorkBench.getInstance().getCurrentFile().add(
+						this.network.getName(), this.oldNetwork);
+			}
 		}
-		else
-		{
-			EncogWorkBench.getInstance().getCurrentFile().add(
-					this.network.getName(), this.oldNetwork);
-		}
-		
 		dispose();
 	}
 
@@ -376,10 +374,11 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 	 * Start the training.
 	 */
 	private void performStart() {
-		
-		if(!EncogWorkBench.getInstance().getMainWindow().getTabManager().checkTrainingOrNetworkOpen())
+
+		if (!EncogWorkBench.getInstance().getMainWindow().getTabManager()
+				.checkTrainingOrNetworkOpen())
 			return;
-		
+
 		this.started = new Date();
 		this.performanceLast = this.started;
 		this.performanceCount = -1;
@@ -420,30 +419,28 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 		try {
 
 			startup();
-			
-			this.oldNetwork = (BasicNetwork)network.clone();
-						
+
+			this.oldNetwork = (BasicNetwork) network.clone();
+
 			// see if we need to continue training.
-			if( this.train instanceof ResilientPropagation )
-			{
-				ResilientPropagation rprop = (ResilientPropagation)this.train;
-				TrainingContinuation state = 	
-					(TrainingContinuation)EncogWorkBench.getInstance().getCurrentFile().find(
-						this.network.getName()+"-rprop");
-				if( state!=null ) {
-					if( rprop.isValidResume(state) )
+			if (this.train instanceof ResilientPropagation) {
+				ResilientPropagation rprop = (ResilientPropagation) this.train;
+				TrainingContinuation state = (TrainingContinuation) EncogWorkBench
+						.getInstance().getCurrentFile().find(
+								this.network.getName() + "-rprop");
+				if (state != null) {
+					if (rprop.isValidResume(state))
 						rprop.resume(state);
 				}
 				EncogWorkBench.getInstance().getCurrentFile().delete(
-						this.network.getName()+"-rprop");
+						this.network.getName() + "-rprop");
 			}
 
 			// connect to the cloud, if needed
-			if(EncogWorkBench.getInstance().getCloud()!=null )
-			{
+			if (EncogWorkBench.getInstance().getCloud() != null) {
 				train.setCloud(EncogWorkBench.getInstance().getCloud());
 			}
-			
+
 			while (!this.cancel) {
 				this.iteration++;
 				this.lastError = this.train.getError();
@@ -480,7 +477,8 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 				dispose();
 			}
 		} catch (Throwable t) {
-			EncogWorkBench.displayError("Error",t, this.network, this.trainingData);
+			EncogWorkBench.displayError("Error", t, this.network,
+					this.trainingData);
 			shutdown();
 			stopped();
 			dispose();
@@ -538,10 +536,9 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 		this.buttonStop.setEnabled(false);
 		this.cancel = true;
 	}
-	
-	public void saveNetwork()
-	{
-		
+
+	public void saveNetwork() {
+
 	}
 
 }

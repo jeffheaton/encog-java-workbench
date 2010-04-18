@@ -37,6 +37,8 @@ import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.logic.SOMLogic;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.common.DoubleField;
+import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.training.ChooseTrainingMethodDialog;
 import org.encog.workbench.dialogs.training.adaline.InputAdaline;
 import org.encog.workbench.dialogs.training.adaline.ProgressAdaline;
@@ -466,6 +468,24 @@ public class Training {
 		final InputNEAT dialog = new InputNEAT(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
+		
+		dialog.getActivationMutationRate().setValue(0.1);
+		dialog.getChanceAddLink().setValue(0.07);
+		dialog.getChanceAddNode().setValue(0.04);
+		dialog.getChanceAddRecurrentLink().setValue(0.05);
+		dialog.getCompatibilityThreshold().setValue(0.26);
+		dialog.getCrossoverRate().setValue(0.7);
+		dialog.getMaxActivationPerturbation().setValue(0.1);
+		dialog.getMaxNumberOfSpecies().setValue(0);
+		dialog.getMaxPermittedNeurons().setValue(100);
+		dialog.getMaxWeightPerturbation().setValue(0.5);
+		dialog.getMutationRate().setValue(0.2);
+		dialog.getNumAddLinkAttempts().setValue(5);
+		dialog.getNumGensAllowedNoImprovement().setValue(15);
+		dialog.getNumTrysToFindLoopedLink().setValue(5);
+		dialog.getNumTrysToFindOldLink().setValue(5);
+		dialog.getProbabilityWeightReplaced().setValue(0.1);
+		
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog.getNetwork(), 
 					(BasicNeuralDataSet) dialog.getTrainingSet());
@@ -490,6 +510,23 @@ public class Training {
 					dialog.getPopulation(),
 					dialog.getNetwork(),
 					dialog.getMaxError().getValue());
+			
+			train.setParamActivationMutationRate(dialog.getActivationMutationRate().getValue());
+			train.setParamChanceAddLink(dialog.getChanceAddLink().getValue());
+			train.setParamChanceAddNode(dialog.getChanceAddNode().getValue());
+			train.setParamChanceAddRecurrentLink(dialog.getChanceAddRecurrentLink().getValue());
+			train.setParamCompatibilityThreshold(dialog.getCompatibilityThreshold().getValue());
+			train.setParamCrossoverRate(dialog.getCrossoverRate().getValue());
+			train.setParamMaxActivationPerturbation(dialog.getMaxActivationPerturbation().getValue());
+			train.setParamMaxNumberOfSpecies(dialog.getMaxNumberOfSpecies().getValue());
+			train.setParamMaxPermittedNeurons(dialog.getMaxPermittedNeurons().getValue());
+			train.setParamMaxWeightPerturbation(dialog.getMaxWeightPerturbation().getValue());
+			train.setParamMutationRate(dialog.getMutationRate().getValue());
+			train.setParamNumAddLinkAttempts(dialog.getNumAddLinkAttempts().getValue());
+			train.setParamNumGensAllowedNoImprovement(dialog.getNumGensAllowedNoImprovement().getValue());
+			train.setParamNumTrysToFindLoopedLink(dialog.getNumTrysToFindLoopedLink().getValue());
+			train.setParamNumTrysToFindOldLink(dialog.getNumTrysToFindOldLink().getValue());
+			train.setParamProbabilityWeightReplaced(dialog.getProbabilityWeightReplaced().getValue());
 
 			EncogWorkBench.getInstance().getMainWindow().openTab(train, "NEAT");
 		}
