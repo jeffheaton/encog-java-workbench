@@ -29,22 +29,22 @@ public class PopulationInfo extends JPanel {
 		g.setFont(WorkbenchFonts.getTitle2Font());
 		FontMetrics fm = g.getFontMetrics();
 		int y = fm.getHeight();
-		g.drawString("Maximum Population Count:", 10, y);
+		g.drawString("Maximum Population Count:", 20, y);
 		g.drawString("Old Age Threshold:", 300, y);
 		y+=fm.getHeight();
-		g.drawString("Current Population Count:", 10, y);
+		g.drawString("Current Population Count:", 20, y);
 		g.drawString("Old Age Penalty:", 300, y);
 		y+=fm.getHeight();
-		g.drawString("Species Count:", 10, y);
+		g.drawString("Species Count:", 20, y);
 		g.drawString("Youth Age Threshold:", 300, y);
 		y+=fm.getHeight();
-		g.drawString("Innovation Count:", 10, y);
+		g.drawString("Innovation Count:", 20, y);
 		g.drawString("Youth Bonus:", 300, y);
 		y+=fm.getHeight();
-		g.drawString("Population Type:", 10, y);
+		g.drawString("Population Type:", 20, y);
 		g.drawString("Survival Rate:", 300, y);
 		y+=fm.getHeight();
-		g.drawString("Best Genome Score:", 10, y);
+		g.drawString("Best Genome Score:", 20, y);
 		
 		int populationSize = 0;
 		int speciesSize = 0;

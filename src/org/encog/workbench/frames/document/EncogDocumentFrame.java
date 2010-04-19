@@ -88,7 +88,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private final EncogCollectionModel collectionModel;
 
 	public EncogDocumentFrame() {
-		this.setSize(640, 480);
+		this.setSize(750, 480);
 		
 		EncogWorkBench.getInstance().setMainWindow(this);
 
