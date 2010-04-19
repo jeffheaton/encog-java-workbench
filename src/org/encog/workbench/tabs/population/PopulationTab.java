@@ -14,9 +14,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
+import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.training.CalculateScore;
+import org.encog.neural.networks.training.TrainingSetScore;
+import org.encog.neural.networks.training.neat.NEATTraining;
+import org.encog.solve.genetic.genome.Genome;
 import org.encog.solve.genetic.population.BasicPopulation;
 import org.encog.solve.genetic.population.Population;
+import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.ExtractGenomes;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.models.GeneralPopulationModel;
 import org.encog.workbench.models.InnovationModel;
@@ -43,6 +50,7 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 	private final JScrollPane innovationScroll;
 	private final JTable innovationTable;
 	private final InnovationModel innovationModel;
+	private BasicPopulation population;
 	
 	JTable tableGeneralPopulation;
 	
@@ -81,6 +89,8 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 		this.tabViews.addTab("General Population", this.populationScroll);
 		this.tabViews.addTab("Species", this.speciesScroll);
 		this.tabViews.addTab("Innovation", this.innovationScroll);
+		
+		this.population = pop;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -96,7 +106,32 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 	}
 
 	private void performExtract() {
-		// TODO Auto-generated method stub
+		ExtractGenomes dialog = new ExtractGenomes(
+				EncogWorkBench.getInstance().getMainWindow(),
+				this.population.getPopulationSize());
+		
+		if( dialog.process())
+		{
+			String prefix = dialog.getPrefix().getValue();
+			int count = dialog.getGenomesToExtract().getValue();
+			
+			CalculateScore score = new TrainingSetScore(dialog.getTrainingSet());
+			
+			final NEATTraining train = new NEATTraining(
+					score, dialog.getNetwork(),this.population);
+			
+			for(int i=0;i<count;i++)
+			{
+				Genome genome = this.population.getGenomes().get(i);
+				genome.decode();
+				BasicNetwork network = (BasicNetwork)genome.getOrganism();
+				network.setDescription("Top genetic neural network, score=" + Format.formatDouble(genome.getScore(),5) );
+				String name = prefix + i;
+				EncogWorkBench.getInstance().getCurrentFile().add(name,network);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+			}
+			
+		}
 		
 	}
 
