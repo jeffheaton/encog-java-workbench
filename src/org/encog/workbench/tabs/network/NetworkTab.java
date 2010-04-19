@@ -67,7 +67,6 @@ import org.encog.neural.networks.logic.NeuralLogic;
 import org.encog.neural.networks.logic.SimpleRecurrentLogic;
 import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
-import org.encog.neural.networks.synapse.PartialSynapse;
 import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.neural.networks.synapse.WeightlessSynapse;
 import org.encog.neural.networks.synapse.neat.NEATSynapse;
@@ -137,8 +136,6 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 				Type.synapse, OneToOneSynapse.class));
 		tools.add(new NetworkTool("NEAT", Icons.getSynapseNEAT(),
 				Type.synapse, NEATSynapse.class));
-		tools.add(new NetworkTool("Partial", Icons.getSynapsePartial(),
-				Type.synapse, PartialSynapse.class));
 		
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
