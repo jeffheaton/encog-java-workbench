@@ -238,7 +238,7 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 		this.panelBody.add(this.statusPanel = new TrainingStatusPanel(this),
 				BorderLayout.NORTH);
 		this.panelBody.add(this.chartPanel = new ChartPane(),
-				BorderLayout.SOUTH);
+				BorderLayout.CENTER);
 		this.buttonStop.setEnabled(false);
 
 		this.shouldExit = false;

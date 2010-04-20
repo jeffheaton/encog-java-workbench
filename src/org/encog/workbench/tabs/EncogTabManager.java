@@ -68,6 +68,10 @@ public class EncogTabManager {
 
 	public EncogCommonTab find(final DirectoryEntry object) {
 		for (final EncogCommonTab tab : this.tabs) {
+			
+			if( tab.getEncogObject()==null )
+				continue;
+			
 			EncogPersistedObject obj = (EncogPersistedObject)tab.getEncogObject();
 			if (obj.getName().equals(object.getName())) {
 				return tab;

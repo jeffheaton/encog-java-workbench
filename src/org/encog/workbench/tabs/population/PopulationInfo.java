@@ -1,5 +1,6 @@
 package org.encog.workbench.tabs.population;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -25,6 +26,9 @@ public class PopulationInfo extends JPanel {
 	
 	public void paint(Graphics g)
 	{
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(0, 0, getWidth()-1, getHeight()-1);
+		g.setColor(Color.black);
 		g.drawRect(0, 0, getWidth()-1, getHeight()-1);
 		g.setFont(WorkbenchFonts.getTitle2Font());
 		FontMetrics fm = g.getFontMetrics();
@@ -95,13 +99,7 @@ public class PopulationInfo extends JPanel {
 		g.drawString(type, 200, y);
 		g.drawString(Format.formatPercent(population.getSurvivalRate()), 450, y);
 		y+=fm.getHeight();
-		g.drawString(Format.formatDouble(bestScore,2), 200, y);
-		
-		
-		
-		
-		
-		
+		g.drawString(Format.formatDouble(bestScore,2), 200, y);		
 	}
 	
 	public Dimension getPreferredSize()

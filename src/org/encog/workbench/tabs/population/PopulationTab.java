@@ -23,7 +23,10 @@ import org.encog.solve.genetic.population.BasicPopulation;
 import org.encog.solve.genetic.population.Population;
 import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.EditPopulationDialog;
 import org.encog.workbench.dialogs.ExtractGenomes;
+import org.encog.workbench.dialogs.common.DoubleField;
+import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.models.GeneralPopulationModel;
 import org.encog.workbench.models.InnovationModel;
@@ -53,6 +56,7 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 	private BasicPopulation population;
 	
 	JTable tableGeneralPopulation;
+	private final PopulationInfo pi;
 	
 	public PopulationTab(BasicPopulation pop) {
 		super(pop);
@@ -70,7 +74,8 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 		add(mainPanel,BorderLayout.CENTER);
 		mainPanel.setLayout(new BorderLayout());
 		JPanel about = new JPanel();
-		about.add(new PopulationInfo((Population)getEncogObject()));
+		about.setLayout(new BorderLayout());
+		about.add(this.pi = new PopulationInfo((Population)getEncogObject()), BorderLayout.CENTER);
 		mainPanel.add(about,BorderLayout.NORTH);
 		mainPanel.add(tabViews = new JTabbedPane(),BorderLayout.CENTER);
 		
@@ -136,8 +141,25 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 	}
 
 	private void performEdit() {
-		// TODO Auto-generated method stub
+		EditPopulationDialog dialog = new EditPopulationDialog(EncogWorkBench.getInstance().getMainWindow());
 		
+		dialog.getOldAgePenalty().setValue(this.population.getOldAgePenalty());
+		dialog.getOldAgeThreshold().setValue(this.population.getOldAgeThreshold());
+		dialog.getPopulationSize().setValue(this.population.getPopulationSize());
+		dialog.getSurvivalRate().setValue(this.population.getSurvivalRate());
+		dialog.getYoungBonusAgeThreshold().setValue(this.population.getYoungBonusAgeThreshold());
+		dialog.getYoungScoreBonus().setValue(this.population.getYoungScoreBonus());
+		
+		if( dialog.process() )
+		{
+			this.population.setOldAgePenalty(dialog.getOldAgePenalty().getValue());
+			this.population.setOldAgeThreshold(dialog.getOldAgeThreshold().getValue());
+			this.population.setPopulationSize(dialog.getPopulationSize().getValue());
+			this.population.setSurvivalRate(dialog.getSurvivalRate().getValue());
+			this.population.setYoungBonusAgeThreshhold(dialog.getYoungBonusAgeThreshold().getValue());
+			this.population.setYoungScoreBonus(dialog.getYoungScoreBonus().getValue());
+			this.pi.repaint();
+		}
 	}
 
 	private void performTrain() {
