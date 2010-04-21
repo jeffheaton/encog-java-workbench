@@ -28,7 +28,7 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.models;
+package org.encog.workbench.dialogs.synapse;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -39,7 +39,7 @@ import javax.swing.JTable;
 
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.synapse.Synapse;
-import org.encog.workbench.models.MatrixTableModel;
+import org.encog.workbench.dialogs.synapse.MatrixTableModel;
 
 public class MatrixFrame extends EncogCommonFrame {
 
