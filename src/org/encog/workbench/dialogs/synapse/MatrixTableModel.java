@@ -83,7 +83,7 @@ public class MatrixTableModel implements TableModel {
 		}
 		else
 		{
-			return "" + this.matrix.get(rowIndex, columnIndex-1);
+			return new Double(this.matrix.get(rowIndex, columnIndex-1));
 		}
 		
 	}
