@@ -36,6 +36,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import org.encog.mathutil.matrices.Matrix;
 import org.encog.neural.networks.synapse.Synapse;
@@ -45,17 +46,17 @@ import org.encog.workbench.dialogs.common.ValidationException;
 
 public class MatrixTableField extends PropertiesField {
 
-	private MatrixTableModel model;
+	private final MatrixTableModel model;
+	private final int height;
+	private final Synapse synapse;
+	private final Matrix matrix;
 	private JTable table;
-	private int height;
-	private Synapse synapse;
-	private Matrix tempMatrix;
 	
 	public MatrixTableField(String name, String label, Synapse synapse) {
 		super(name, label, true);
 		this.synapse = synapse;
-		this.tempMatrix = synapse.getMatrix().clone();
-		this.model = new MatrixTableModel(tempMatrix);
+		this.matrix = synapse.getMatrix().clone();
+		this.model = new MatrixTableModel(matrix);
 		this.height = 300;
 	}
 
@@ -71,6 +72,11 @@ public class MatrixTableField extends PropertiesField {
 		this.table = new JTable(this.model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
+		for(int i=0;i<this.model.getColumnCount();i++) {
+			TableColumn col = table.getColumnModel().getColumn(i); 
+			col.setPreferredWidth(125);
+		}
+
 		this.setField(new JScrollPane(this.table));
 		this.getField().setLocation(x, y);
 		this.getField().setSize(width, this.height);
@@ -84,13 +90,43 @@ public class MatrixTableField extends PropertiesField {
 	}
 
 	public void setValue(int row, int col, String str) {
-		this.model.setValueAt(str,row,col);
-		
+		this.model.setValueAt(str,row,col);		
 	}
 
-	public String getValue(int row, int col) {
-		
+	public String getValue(int row, int col) {		
 		return ""+this.model.getValueAt(row, col);
 	}
+
+
+	public JTable getTable() {
+		return table;
+	}
+
+
+	public void setTable(JTable table) {
+		this.table = table;
+	}
+
+
+	public MatrixTableModel getModel() {
+		return model;
+	}
+
+
+	public int getHeight() {
+		return height;
+	}
+
+
+	public Synapse getSynapse() {
+		return synapse;
+	}
+
+
+	public Matrix getMatrix() {
+		return matrix;
+	}
+	
+	
 
 }

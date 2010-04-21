@@ -59,6 +59,7 @@ import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.ContextLayer;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
+import org.encog.neural.networks.synapse.BasicSynapse;
 import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
 import org.encog.neural.networks.synapse.Synapse;
@@ -106,8 +107,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 	private JMenuItem popupNetworkLayerEdit;
 	private JPopupMenu popupNetworkSynapse;
 	private JMenuItem popupNetworkSynapseDelete;
-	private JMenuItem popupNetworkSynapseMatrix;
-	private JMenuItem popupNetworkSynapseNEAT;
+	private JMenuItem popupNetworkSynapseEdit;
 	private Synapse selectedSynapse;
 
 	public NetworkDiagram(NetworkTab parent) {
@@ -126,10 +126,8 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 		this.popupNetworkSynapse = new JPopupMenu();
 		this.popupNetworkSynapseDelete = addItem(this.popupNetworkSynapse,
 				"Delete Synapse", 'd');
-		this.popupNetworkSynapseMatrix = addItem(this.popupNetworkSynapse,
-				"Edit Matrix", 'm');
-		this.popupNetworkSynapseNEAT = addItem(this.popupNetworkSynapse,
-				"Edit NEAT Synapse", 'n');
+		this.popupNetworkSynapseEdit = addItem(this.popupNetworkSynapse,
+				"Edit", 'm');
 	}
 
 	private void obtainOffScreen() {
@@ -265,8 +263,6 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 		} else {
 			Synapse synapse = this.findSynapse(e);
 			if (synapse != null) {
-				this.popupNetworkSynapseNEAT.setEnabled(synapse instanceof NEATSynapse);
-				this.popupNetworkSynapseMatrix.setEnabled(!(synapse instanceof NEATSynapse));
 				this.popupNetworkSynapse.show(e.getComponent(), x, y);
 			}
 		}
@@ -492,35 +488,36 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 			performLayerDelete();
 		} else if (action.getSource() == this.popupNetworkSynapseDelete) {
 			performSynapseDelete();
-		} else if (action.getSource() == this.popupNetworkSynapseMatrix) {
-			performSynapseMatrix();
-		} else if (action.getSource() == this.popupNetworkSynapseNEAT) {
-			performSynapseNEAT();
+		} else if (action.getSource() == this.popupNetworkSynapseEdit) {
+			performEditSynapse();
 		}
 	}
 
-	private void performSynapseNEAT() {
-		NEATSynapse neatSynapse = (NEATSynapse)this.selectedSynapse;
-		EditNEATSynapse dialog = new EditNEATSynapse(EncogWorkBench.getInstance().getMainWindow());
-		
-		dialog.setActivationFunction(neatSynapse.getActivationFunction());
-		dialog.getSnapshot().setValue(neatSynapse.isSnapshot());
-		
-		if( dialog.process() )
-		{
-			neatSynapse.setActivationFunction(dialog.getActivationFunction());
-			neatSynapse.setSnapshot(dialog.getSnapshot().getValue());
-		}
 
-	}
 	
-	private void performSynapseMatrix() {
-		EditSynapseDialog dialog = new EditSynapseDialog(
-				EncogWorkBench.getInstance().getMainWindow(),
-				this.selectedSynapse);
-		if( dialog.process() )
-		{
+	private void performEditSynapse() {
+		if( this.selectedSynapse instanceof NEATSynapse ) {
+			NEATSynapse neatSynapse = (NEATSynapse)this.selectedSynapse;
+			EditNEATSynapse dialog = new EditNEATSynapse(EncogWorkBench.getInstance().getMainWindow());
 			
+			dialog.setActivationFunction(neatSynapse.getActivationFunction());
+			dialog.getSnapshot().setValue(neatSynapse.isSnapshot());
+			
+			if( dialog.process() )
+			{
+				neatSynapse.setActivationFunction(dialog.getActivationFunction());
+				neatSynapse.setSnapshot(dialog.getSnapshot().getValue());
+			}
+		}
+		else
+		{
+			EditSynapseDialog dialog = new EditSynapseDialog(
+					EncogWorkBench.getInstance().getMainWindow(),
+					this.selectedSynapse);
+			if( dialog.process() )
+			{
+				((BasicSynapse)this.selectedSynapse).getMatrix().set(dialog.getMatrixTable().getMatrix());
+			}
 		}
 
 	}

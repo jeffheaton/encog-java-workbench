@@ -8,9 +8,8 @@ import org.encog.workbench.dialogs.common.TableField;
 
 public class EditSynapseDialog extends EncogPropertiesDialog {
 
-	private TableField weightMatrix;
-	private Synapse synapse;
-	private MatrixTableField matrixTable;
+	private final Synapse synapse;
+	private final MatrixTableField matrixTable;
 	
 	public EditSynapseDialog(Frame owner, Synapse synapse) {
 		super(owner);
@@ -22,5 +21,15 @@ public class EditSynapseDialog extends EncogPropertiesDialog {
 		addProperty(matrixTable = new MatrixTableField("weight matrix","Weight Matrix",synapse));
 		render();
 	}
+
+	public Synapse getSynapse() {
+		return synapse;
+	}
+
+	public MatrixTableField getMatrixTable() {
+		return matrixTable;
+	}
+	
+	
 	
 }
