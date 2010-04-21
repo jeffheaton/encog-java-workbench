@@ -16,8 +16,8 @@ public class EditSynapseDialog extends EncogPropertiesDialog {
 		super(owner);
 
 		setTitle("Edit Synapse");
-		setSize(400,200);
-		setLocation(200,200);
+		setSize(600,500);
+		setLocation(20,20);
 		this.synapse = synapse;
 		addProperty(matrixTable = new MatrixTableField("weight matrix","Weight Matrix",synapse));
 		render();

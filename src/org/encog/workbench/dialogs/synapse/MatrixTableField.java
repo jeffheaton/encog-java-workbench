@@ -49,12 +49,14 @@ public class MatrixTableField extends PropertiesField {
 	private JTable table;
 	private int height;
 	private Synapse synapse;
+	private Matrix tempMatrix;
 	
 	public MatrixTableField(String name, String label, Synapse synapse) {
 		super(name, label, true);
 		this.synapse = synapse;
-		this.model = new MatrixTableModel(synapse);
-		this.height = 150;
+		this.tempMatrix = synapse.getMatrix().clone();
+		this.model = new MatrixTableModel(tempMatrix);
+		this.height = 300;
 	}
 
 

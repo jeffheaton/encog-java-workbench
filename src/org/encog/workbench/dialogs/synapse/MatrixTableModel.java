@@ -34,16 +34,18 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
+
+import org.encog.mathutil.matrices.Matrix;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.synapse.Synapse;
 
 public class MatrixTableModel implements TableModel {
 
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();
-	private final Synapse synapse;
+	private final Matrix matrix;
 
-	public MatrixTableModel(final Synapse synapse) {
-		this.synapse = synapse;
+	public MatrixTableModel(final Matrix synapse) {
+		this.matrix = synapse;
 	}
 
 	public void addTableModelListener(final TableModelListener l) {
@@ -55,7 +57,7 @@ public class MatrixTableModel implements TableModel {
 	}
 
 	public int getColumnCount() {
-		return this.synapse.getMatrix().getCols() + 1;
+		return this.matrix.getCols() + 1;
 	}
 
 	public String getColumnName(final int columnIndex) {
@@ -71,7 +73,7 @@ public class MatrixTableModel implements TableModel {
 	}
 
 	public int getRowCount() {
-		return this.synapse.getMatrix().getRows();
+		return this.matrix.getRows();
 	}
 
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
@@ -81,7 +83,7 @@ public class MatrixTableModel implements TableModel {
 		}
 		else
 		{
-			return "" + this.synapse.getMatrix().get(rowIndex, columnIndex-1);
+			return "" + this.matrix.get(rowIndex, columnIndex-1);
 		}
 		
 	}
@@ -110,7 +112,7 @@ public class MatrixTableModel implements TableModel {
 		{
 			// just ignore and let v remain 0
 		}
-		this.synapse.getMatrix().set(rowIndex,columnIndex-1,v);
+		this.matrix.set(rowIndex,columnIndex-1,v);
 		
 	}
 }
