@@ -47,6 +47,7 @@ import javax.swing.table.TableColumn;
 
 import org.encog.mathutil.matrices.Matrix;
 import org.encog.mathutil.randomize.RangeRandomizer;
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.synapse.Synapse;
 import org.encog.workbench.dialogs.common.PropertiesField;
 import org.encog.workbench.dialogs.common.TableFieldModel;
@@ -58,6 +59,7 @@ public class MatrixTableField extends PropertiesField implements MouseListener,
 
 	private final MatrixTableModel model;
 	private final int height;
+	private final BasicNetwork network;
 	private final Synapse synapse;
 	private final Matrix matrix;
 	private JTable table;
@@ -65,13 +67,19 @@ public class MatrixTableField extends PropertiesField implements MouseListener,
 	private JPopupMenu popupMatrix;
 	private JMenuItem popupMatrixEnable;
 	private JMenuItem popupMatrixDisable;
+	private boolean shouldLimit;
+	private double limitValue;
 
-	public MatrixTableField(String name, String label, Synapse synapse) {
+	public MatrixTableField(String name, String label, BasicNetwork network, Synapse synapse) {
 		super(name, label, true);
+		this.network = network;
 		this.synapse = synapse;
 		this.matrix = synapse.getMatrix().clone();
-		this.model = new MatrixTableModel(matrix);
+		this.model = new MatrixTableModel(this, network,matrix);
 		this.height = 300;
+		this.shouldLimit = network.getStructure().isConnectionLimited();
+		if( this.shouldLimit )
+			limitValue = network.getStructure().getConnectionLimit();
 
 		this.popupMatrix = new JPopupMenu();
 		this.popupMatrixEnable = addItem(this.popupMatrix, "Enable Connection",
@@ -99,7 +107,7 @@ public class MatrixTableField extends PropertiesField implements MouseListener,
 		this.table = new JTable(this.model);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.addMouseListener(this);
-		table.setDefaultRenderer(Object.class, new MatrixCellRender());
+		table.setDefaultRenderer(Object.class, new MatrixCellRender(this));
 
 		for (int i = 0; i < this.model.getColumnCount(); i++) {
 			TableColumn col = table.getColumnModel().getColumn(i);
@@ -198,10 +206,33 @@ public class MatrixTableField extends PropertiesField implements MouseListener,
 
 		if (e.getSource() == this.popupMatrixDisable) {
 			this.table.setValueAt(0.0, row, col);
+			if( !this.shouldLimit ) {
+				this.shouldLimit = true;
+				this.limitValue = Double.parseDouble(BasicNetwork.DEFAULT_CONNECTION_LIMIT);
+			}
 		} else if (e.getSource() == this.popupMatrixEnable) {
 			this.table.setValueAt(RangeRandomizer.randomize(-1, 1), row, col);
 		}
 
 	}
+
+	public boolean isShouldLimit() {
+		return shouldLimit;
+	}
+
+	public void setShouldLimit(boolean shouldLimit) {
+		this.shouldLimit = shouldLimit;
+	}
+
+	public double getLimitValue() {
+		return limitValue;
+	}
+
+	public void setLimitValue(double limitValue) {
+		this.limitValue = limitValue;
+	}
+	
+	
+	
 
 }

@@ -2,6 +2,7 @@ package org.encog.workbench.dialogs.synapse;
 
 import java.awt.Frame;
 
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.synapse.Synapse;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.TableField;
@@ -11,14 +12,14 @@ public class EditSynapseDialog extends EncogPropertiesDialog {
 	private final Synapse synapse;
 	private final MatrixTableField matrixTable;
 	
-	public EditSynapseDialog(Frame owner, Synapse synapse) {
+	public EditSynapseDialog(Frame owner, BasicNetwork network, Synapse synapse) {
 		super(owner);
 
 		setTitle("Edit Synapse");
 		setSize(600,500);
 		setLocation(20,20);
 		this.synapse = synapse;
-		addProperty(matrixTable = new MatrixTableField("weight matrix","Weight Matrix",synapse));
+		addProperty(matrixTable = new MatrixTableField("weight matrix","Weight Matrix",network,synapse));
 		render();
 	}
 

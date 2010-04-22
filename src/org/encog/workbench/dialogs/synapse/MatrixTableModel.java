@@ -36,6 +36,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.encog.mathutil.matrices.Matrix;
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.synapse.Synapse;
 
@@ -43,9 +44,13 @@ public class MatrixTableModel implements TableModel {
 
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();
 	private final Matrix matrix;
+	private final BasicNetwork network;
+	private final MatrixTableField field;
 
-	public MatrixTableModel(final Matrix synapse) {
+	public MatrixTableModel(final MatrixTableField field, final BasicNetwork network, final Matrix synapse) {
 		this.matrix = synapse;
+		this.network = network;
+		this.field = field;
 	}
 
 	public void addTableModelListener(final TableModelListener l) {
@@ -92,6 +97,7 @@ public class MatrixTableModel implements TableModel {
 		if (columnIndex == 0) {
 			return false;
 		}
+		
 		return true;
 
 	}

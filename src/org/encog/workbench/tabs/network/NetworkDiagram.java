@@ -496,6 +496,9 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 
 	
 	private void performEditSynapse() {
+		
+		BasicNetwork network = (BasicNetwork) this.parent.getEncogObject();
+		
 		if( this.selectedSynapse instanceof NEATSynapse ) {
 			NEATSynapse neatSynapse = (NEATSynapse)this.selectedSynapse;
 			EditNEATSynapse dialog = new EditNEATSynapse(EncogWorkBench.getInstance().getMainWindow());
@@ -511,14 +514,19 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 		}
 		else
 		{
+			
 			EditSynapseDialog dialog = new EditSynapseDialog(
 					EncogWorkBench.getInstance().getMainWindow(),
-					this.selectedSynapse);
+					network,this.selectedSynapse);
 			if( dialog.process() )
 			{
 				((BasicSynapse)this.selectedSynapse).getMatrix().set(dialog.getMatrixTable().getMatrix());
+				if( dialog.getMatrixTable().isShouldLimit() )
+					network.setProperty(BasicNetwork.TAG_LIMIT, dialog.getMatrixTable().getLimitValue());
 			}
 		}
+		
+		network.getStructure().finalizeStructure();
 
 	}
 
