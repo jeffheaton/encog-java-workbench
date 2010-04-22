@@ -4,11 +4,6 @@ import java.util.Date;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-/**
- * BookmarkDirectory represents a directory containing other
- * BookmarkDirectory's as well as BookmarkEntry's. It adds a name
- * and created property to DefaultMutableTreeNode.
- */
 public class EncogObjectDirectory extends DefaultMutableTreeNode {
 /** Dates created. */
 private Date created;

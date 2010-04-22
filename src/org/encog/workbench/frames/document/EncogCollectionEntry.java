@@ -7,11 +7,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.encog.persist.DirectoryEntry;
 
-/**
- * BookmarkEntry represents a bookmark. It contains a URL, a user definable
- * string, and two dates, one giving the date the URL was last visited and the
- * other giving the date the bookmark was created.
- */
 public class EncogCollectionEntry extends DefaultMutableTreeNode {
 
 	private DirectoryEntry entry;

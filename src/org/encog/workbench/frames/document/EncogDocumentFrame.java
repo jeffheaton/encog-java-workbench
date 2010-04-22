@@ -58,8 +58,6 @@ import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.EncogTabManager;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.MouseUtil;
-import org.encog.workbench.util.treetable.JTreeTable;
-import org.encog.workbench.util.treetable.TreeTableModel;
 import org.xml.sax.SAXException;
 
 public class EncogDocumentFrame extends EncogCommonFrame {
