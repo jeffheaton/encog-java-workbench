@@ -284,17 +284,17 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void closeTab(EncogCommonTab tab) {
-		tab.close();
-		this.tabManager.remove(tab);
-		getDocumentTabs().remove(tab);
+		if( tab.close() ) {
+			this.tabManager.remove(tab);
+			getDocumentTabs().remove(tab);
 		
-		if( tab.isModal() )
-		{
-	        this.documentTabs.setEnabled(true);
-	        this.tree.setEnabled(true);
-	        this.modalTabOpen = false;
+			if( tab.isModal() ) {
+				this.documentTabs.setEnabled(true);
+				this.tree.setEnabled(true);
+				this.modalTabOpen = false;
+			}
+			this.menus.updateMenus();
 		}
-		
 		
 	}
 	

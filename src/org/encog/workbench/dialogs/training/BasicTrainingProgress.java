@@ -270,7 +270,6 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 						this.network.getName(), this.oldNetwork);
 			}
 		}
-		dispose();
 	}
 
 	/**
@@ -281,17 +280,24 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 	 */
 	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource() == this.buttonClose) {
-			if (this.thread == null) {
-				performClose();
-			} else {
-				this.shouldExit = true;
-				this.cancel = true;
-			}
+			dispose();
 		} else if (e.getSource() == this.buttonStart) {
 			performStart();
 		} else if (e.getSource() == this.buttonStop) {
 			performStop();
 		}
+	}
+	
+	public boolean close()
+	{
+		if (this.thread == null) {
+			performClose();
+			return true;
+		} else {
+			this.shouldExit = true;
+			this.cancel = true;
+			return false;
+		}		
 	}
 
 	/**

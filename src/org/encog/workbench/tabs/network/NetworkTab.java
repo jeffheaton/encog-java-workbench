@@ -409,7 +409,7 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 		return null;
 	}
 
-	public void close() {
+	public boolean close() {
 		if( !performValidate(false, false) )
 		{
 			if( (System.currentTimeMillis()-this.lastPopup)>1000 )
@@ -418,12 +418,12 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 			{
 				// this is a total hack, but for some reason this event fires twice?
 				this.lastPopup = System.currentTimeMillis();
-				return;
+				return false;
 			}
 			}
 			else
 			{
-				return;
+				return true;
 			}
 		}
 		
@@ -431,6 +431,8 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 			this.networkDiagram.close();
 			this.networkDiagram = null;
 		}
+		
+		return true;
 	}
 
 	public void performProperties() {

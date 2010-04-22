@@ -41,9 +41,9 @@ public class EncogCommonTab extends JPanel {
 		return encogObject;
 	}
 
-	public void close()
+	public boolean close()
 	{
-		
+		return true;
 	}
 	
 	public void dispose()

@@ -42,9 +42,10 @@ public class TextDataTab extends EncogCommonTab {
 		return this.text.getText();
 	}
 	
-	public void close()
+	public boolean close()
 	{
 		((TextData)getEncogObject()).setText(this.getText());
+		return true;
 	}
 
 
