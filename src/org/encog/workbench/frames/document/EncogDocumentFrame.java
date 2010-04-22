@@ -33,32 +33,23 @@ package org.encog.workbench.frames.document;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
-import javax.xml.transform.TransformerConfigurationException;
 
 import org.encog.persist.DirectoryEntry;
-import org.encog.persist.EncogPersistedCollection;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogCommonFrame;
-import org.encog.workbench.frames.EncogListFrame;
-import org.encog.workbench.frames.render.EncogItemRenderer;
 import org.encog.workbench.tabs.AboutTab;
 import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.EncogTabManager;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.MouseUtil;
-import org.xml.sax.SAXException;
 
 public class EncogDocumentFrame extends EncogCommonFrame {
 
@@ -66,7 +57,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private EncogMenus menus;
 	private EncogPopupMenus popupMenus;
 	private boolean closed = false;
-	private JTree table;
+	private JTree tree;
 	private JSplitPane split;
 	private JTabbedPane documentTabs;
 	private EncogTabManager tabManager;
@@ -118,10 +109,11 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	private void initContents() {
 		// setup the contents list
-		this.table = new JTree(this.collectionModel);
-		this.table.addMouseListener(this);
+		this.tree = new JTree(this.collectionModel);
+		//this.tree.setRootVisible(false);
+		this.tree.addMouseListener(this);
 
-		final JScrollPane scrollPane = new JScrollPane(this.table);
+		final JScrollPane scrollPane = new JScrollPane(this.tree);
 
 		this.documentTabs = new JTabbedPane();
 		this.documentTabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
@@ -136,7 +128,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		this.popupMenus.initPopup();
 		this.collectionModel.invalidate(EncogWorkBench.getInstance()
 				.getCurrentFile());
-		this.table.updateUI();
+		this.tree.updateUI();
 		this.tabManager = new EncogTabManager(this);
 		
 		this.menus.updateMenus();
@@ -155,7 +147,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 		this.collectionModel.invalidate(EncogWorkBench.getInstance()
 				.getCurrentFile());
-		this.table.updateUI();
+		this.tree.updateUI();
 	}
 
 	public void rightMouseClicked(final MouseEvent e, final Object item) {
@@ -209,7 +201,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public DirectoryEntry getSelectedValue() {
-		TreePath path = this.table.getSelectionPath();
+		TreePath path = this.tree.getSelectionPath();
 		DirectoryEntry result = null;
 
 		if (path != null) {
@@ -224,7 +216,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		TreePath path = this.table.getSelectionPath();
+		TreePath path = this.tree.getSelectionPath();
 
 		if (path != null) {
 			Object obj = path.getLastPathComponent();
@@ -281,7 +273,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
         tab.setModal(true);
         this.documentTabs.setSelectedComponent(tab);
         this.documentTabs.setEnabled(false);
-        this.table.setEnabled(false);
+        this.tree.setEnabled(false);
         this.modalTabOpen = true;
         this.menus.updateMenus();
 		
@@ -299,7 +291,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		if( tab.isModal() )
 		{
 	        this.documentTabs.setEnabled(true);
-	        this.table.setEnabled(true);
+	        this.tree.setEnabled(true);
 	        this.modalTabOpen = false;
 		}
 		
@@ -321,7 +313,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public JTree getTree() {
-		return this.table;
+		return this.tree;
 	}
 
 }
