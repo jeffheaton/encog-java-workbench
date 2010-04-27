@@ -20,9 +20,10 @@ public class CloudProcess {
 			if (dialog.process()) {
 				String uid = dialog.getUserID().getValue();
 				String pwd = dialog.getPassword().getValue();
+				String server = dialog.getNetwork().getValue();
 
 				try {
-					EncogCloud cloud = new EncogCloud();
+					EncogCloud cloud = new EncogCloud(server);
 					cloud.connect(uid, pwd);
 					EncogWorkBench.getInstance().setCloud(cloud);
 					EncogWorkBench.displayMessage("Login",
@@ -55,7 +56,10 @@ public class CloudProcess {
 					.getEncogCloudUserID();
 			String pwd = EncogWorkBench.getInstance().getConfig()
 					.getEncogCloudPassword();
-			EncogCloud cloud = new EncogCloud();
+			String server = EncogWorkBench.getInstance().getConfig()
+					.getEncogCloudPassword();
+			
+			EncogCloud cloud = new EncogCloud(server);
 			cloud.connect(uid, pwd);
 			EncogWorkBench.getInstance().setCloud(cloud);
 		} catch (EncogCloudError error) {
