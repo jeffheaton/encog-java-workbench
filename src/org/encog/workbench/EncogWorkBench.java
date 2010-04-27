@@ -190,7 +190,7 @@ public class EncogWorkBench implements Runnable {
 	 * Close the current file.
 	 */
 	public void close() {
-		this.currentFile.getContents().clear();
+		this.currentFile.clear();
 		this.currentFileName = null;
 		this.mainWindow.redraw();
 	}
