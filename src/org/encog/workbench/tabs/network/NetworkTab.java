@@ -296,6 +296,7 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 	private void optionRandomize(RandomizeNetworkDialog dialog)
 	{
 		Randomizer r = null;
+		double length;
 		
 		switch( dialog.getType().getSelectedIndex() )
 		{
@@ -305,9 +306,10 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 						dialog.getHigh().getValue());
 				break;
 			case 1: // Gaussian
+				length = Math.abs(dialog.getHigh().getValue()-dialog.getLow().getValue());
 				r = new GaussianRandomizer(
-						dialog.getLow().getValue(),
-						dialog.getHigh().getValue());
+						0,
+						length/2);
 				break;
 			case 2: // Nguyen-Widrow
 				r = new NguyenWidrowRandomizer(
