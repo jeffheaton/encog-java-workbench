@@ -80,6 +80,7 @@ import org.encog.workbench.process.training.Training;
 import org.encog.workbench.process.validate.ValidateNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.network.NetworkTool.Type;
+import org.encog.workbench.tabs.weights.AnalyzeWeightsTab;
 
 public class NetworkTab extends EncogCommonTab implements ActionListener {
 
@@ -93,6 +94,7 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 	private JButton buttonTrain;
 	private JButton buttonValidate;
 	private JButton buttonProperties;
+	private JButton buttonAnalyze;
 	private JComboBox comboLogic;
 	private NetworkListModel model;
 	private JScrollPane scroll;
@@ -147,6 +149,7 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 		this.toolbar.add(this.buttonValidate = new JButton("Validate"));
 		this.toolbar.add(this.buttonProperties = new JButton(
 				"Network Properties"));
+		this.toolbar.add(this.buttonAnalyze = new JButton("Analyze"));
 
 		this.buttonRandomize.addActionListener(this);
 		this.buttonQuery.addActionListener(this);
@@ -154,6 +157,7 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 		this.buttonValidate.addActionListener(this);
 		this.buttonProperties.addActionListener(this);
 		this.comboLogic.addActionListener(this);
+		this.buttonAnalyze.addActionListener(this);
 
 		add(this.toolbar, BorderLayout.PAGE_START);
 		this.scroll = new JScrollPane(networkDiagram = new NetworkDiagram(this));
@@ -178,6 +182,8 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 			performProperties();
 		} else if (action.getSource() == this.comboLogic) {
 			collectLogic();
+		}  else if (action.getSource() == this.buttonAnalyze ) {
+			analyzeWeights();
 		}
 	}
 
@@ -492,5 +498,11 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 			}
 			network.setLogic(newLogic);
 		}
+	}
+	
+	public void analyzeWeights()
+	{
+		AnalyzeWeightsTab tab = new AnalyzeWeightsTab(this.getEncogObject());
+		EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Analyze Weights");
 	}
 }
