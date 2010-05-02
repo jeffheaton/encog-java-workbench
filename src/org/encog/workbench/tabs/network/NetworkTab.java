@@ -49,6 +49,7 @@ import javax.swing.JToolBar;
 import org.encog.mathutil.randomize.ConsistentRandomizer;
 import org.encog.mathutil.randomize.ConstRandomizer;
 import org.encog.mathutil.randomize.Distort;
+import org.encog.mathutil.randomize.FanInRandomizer;
 import org.encog.mathutil.randomize.GaussianRandomizer;
 import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
 import org.encog.mathutil.randomize.Randomizer;
@@ -257,12 +258,14 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 						case 1:
 							optionPerturb(dialog);
 							break;
-							
 						case 2:
+							optionGaussian(dialog);
+							break;	
+						case 3:
 							optionConsistent(dialog);
 							break;
 							
-						case 3:
+						case 4:
 							optionConstant(dialog);
 							break;
 					}
@@ -292,11 +295,18 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 		Distort distort = new Distort(percent);
 		distort.randomize((BasicNetwork)getEncogObject());		
 	}
+	
+	private void optionGaussian(RandomizeNetworkDialog dialog) {
+		double mean = dialog.getMean().getValue();
+		double dev = dialog.getDeviation().getValue();
+		
+		GaussianRandomizer g = new GaussianRandomizer(mean,dev);
+		g.randomize((BasicNetwork)getEncogObject());		
+	}
 
 	private void optionRandomize(RandomizeNetworkDialog dialog)
 	{
 		Randomizer r = null;
-		double length;
 		
 		switch( dialog.getType().getSelectedIndex() )
 		{
@@ -305,16 +315,15 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 						dialog.getLow().getValue(),
 						dialog.getHigh().getValue());
 				break;
-			case 1: // Gaussian
-				length = Math.abs(dialog.getHigh().getValue()-dialog.getLow().getValue());
-				r = new GaussianRandomizer(
-						0,
-						length/2);
-				break;
-			case 2: // Nguyen-Widrow
+			case 1: // Nguyen-Widrow
 				r = new NguyenWidrowRandomizer(
 						dialog.getLow().getValue(),
 						dialog.getHigh().getValue());
+				break;
+			case 2: // Fan in
+				r = new FanInRandomizer(
+						dialog.getLow().getValue(),
+						dialog.getHigh().getValue(),false);
 				break;
 		}
 		

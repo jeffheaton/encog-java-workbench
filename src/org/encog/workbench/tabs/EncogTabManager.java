@@ -115,13 +115,12 @@ public class EncogTabManager {
 	{
 		Object[] list = this.tabs.toArray();
 		for(int i=0;i<list.length;i++) {
-			EncogCommonFrame frame = (EncogCommonFrame)list[i];
+			EncogCommonTab tab = (EncogCommonTab)list[i];
 			
-			if( frame.getEncogObject() instanceof BasicNetwork 
-					|| frame.getEncogObject() instanceof NeuralDataSet )
+			if( tab.getEncogObject() instanceof BasicNetwork 
+					|| tab.getEncogObject() instanceof NeuralDataSet )
 			{				
-				frame.windowClosing(null);
-				frame.dispose();
+				tab.dispose();
 			}
 		}
 	}

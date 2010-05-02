@@ -17,6 +17,8 @@ import org.encog.workbench.process.generate.Generate.GenerateLanguage;
 public class RandomizeNetworkDialog extends EncogPropertiesDialog  {
 	private final DoubleField high;
 	private final DoubleField low;
+	private final DoubleField mean;
+	private final DoubleField deviation;
 	private final ComboBoxField type;
 	private final DoubleField perturbPercent;
 	private final IntegerField seedValue;
@@ -44,8 +46,8 @@ public class RandomizeNetworkDialog extends EncogPropertiesDialog  {
 		
 		List<String> types = new ArrayList<String>();
 		types.add("Random");
-		types.add("Gaussian");
 		types.add("Nguyen-Widrow");
+		types.add("Fan-In");
 		
 		this.setCollectCurrentTabOnly(true);
 				
@@ -55,6 +57,9 @@ public class RandomizeNetworkDialog extends EncogPropertiesDialog  {
 		addProperty(this.type = new ComboBoxField("type","Low Range",true,types));
 		this.beginTab("Perturb");
 		addProperty(this.perturbPercent = new DoubleField("perturb percent","Perturb Percent",true,0,-1));
+		this.beginTab("Gaussian");
+		addProperty(this.mean = new DoubleField("mean","Mean",true,0,-1));
+		addProperty(this.deviation = new DoubleField("standard deviation","Standard Deviation",true,0,-1));
 		this.beginTab("Consistent");
 		addProperty(this.seedValue = new IntegerField("seed value","Seed Value",true,0,-1));
 		addProperty(this.constHigh = new DoubleField("high","High Range",true,0,-1));
@@ -104,6 +109,17 @@ public class RandomizeNetworkDialog extends EncogPropertiesDialog  {
 		return constLow;
 	}
 
+
+	public DoubleField getMean() {
+		return mean;
+	}
+
+
+	public DoubleField getDeviation() {
+		return deviation;
+	}
+
+	
 
 	
 
