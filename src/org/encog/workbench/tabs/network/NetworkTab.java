@@ -68,6 +68,7 @@ import org.encog.neural.networks.logic.NeuralLogic;
 import org.encog.neural.networks.logic.SimpleRecurrentLogic;
 import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
+import org.encog.neural.networks.synapse.Synapse;
 import org.encog.neural.networks.synapse.WeightedSynapse;
 import org.encog.neural.networks.synapse.WeightlessSynapse;
 import org.encog.neural.networks.synapse.neat.NEATSynapse;
@@ -80,6 +81,7 @@ import org.encog.workbench.models.NetworkListModel;
 import org.encog.workbench.process.training.Training;
 import org.encog.workbench.process.validate.ValidateNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.NEATTab;
 import org.encog.workbench.tabs.network.NetworkTool.Type;
 import org.encog.workbench.tabs.weights.AnalyzeWeightsTab;
 
@@ -513,7 +515,24 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 	
 	public void analyzeWeights()
 	{
-		AnalyzeWeightsTab tab = new AnalyzeWeightsTab(this.getEncogObject());
-		EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Analyze Weights");
+		NEATSynapse neat = null;
+		BasicNetwork network = (BasicNetwork) this.getEncogObject();
+		
+		for(Synapse synapse: network.getStructure().getSynapses())
+		{
+			if( synapse instanceof NEATSynapse )
+				neat = (NEATSynapse)synapse;
+		}
+		
+		if( neat==null )
+		{		
+			AnalyzeWeightsTab tab = new AnalyzeWeightsTab(this.getEncogObject());
+			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Analyze Weights");
+		}
+		else
+		{
+			NEATTab tab = new NEATTab(network ,neat);
+			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "NEAT Network");
+		}		
 	}
 }
