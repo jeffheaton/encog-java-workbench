@@ -124,6 +124,7 @@ public class ErrorDialog extends EncogCommonDialog {
 	
 	public static void handleError(Throwable t, BasicNetwork network, NeuralDataSet training)
 	{
+		t.printStackTrace();
 		ErrorDialog dialog = new ErrorDialog(EncogWorkBench.getInstance().getMainWindow(),t,network,training);
 		dialog.process();
 	}
