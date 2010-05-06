@@ -34,6 +34,8 @@ import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -201,16 +203,18 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	}
 
-	public DirectoryEntry getSelectedValue() {
-		TreePath path = this.tree.getSelectionPath();
-		DirectoryEntry result = null;
-
-		if (path != null) {
-			Object obj = path.getLastPathComponent();
-			if( obj instanceof EncogCollectionEntry)
-			{
-				result = ((EncogCollectionEntry) obj).getEntry();
-			}
+	public List<DirectoryEntry> getSelectedValue() {
+		
+		List<DirectoryEntry> result = new ArrayList<DirectoryEntry>();
+		TreePath[] path = this.tree.getSelectionPaths();
+		
+		if( path==null || path.length==0 )
+			return null;
+				
+		for(int i=0;i<path.length;i++)
+		{
+			Object obj = path[i].getLastPathComponent();
+			result.add(((EncogCollectionEntry) obj).getEntry());
 		}
 
 		return result;

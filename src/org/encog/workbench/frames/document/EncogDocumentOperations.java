@@ -31,6 +31,7 @@
 package org.encog.workbench.frames.document;
 
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -270,8 +271,7 @@ public class EncogDocumentOperations {
 		ImportExport.performImport(obj);
 	}
 
-	public void performNetworkQuery() {
-		final DirectoryEntry item = (DirectoryEntry) owner.getSelectedValue();
+	public void performNetworkQuery(DirectoryEntry item) {
 
 		if (owner.getTabManager()
 				.checkBeforeOpen(item, NetworkQueryFrame.class)) {
@@ -360,23 +360,16 @@ public class EncogDocumentOperations {
 
 	}
 
-	public void performObjectsDelete() {
-		final Object object = owner.getSelectedValue();
-		if (object != null) {
-			if (owner.getTabManager().find((DirectoryEntry) object) != null) {
-				EncogWorkBench.displayError("Can't Delete Object",
-						"This object can not be deleted while it is open.");
-				return;
-			}
+	public void performObjectsDelete(DirectoryEntry selected) {
 
-			if (JOptionPane.showConfirmDialog(owner,
-					"Are you sure you want to delete this object?", "Warning",
-					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				EncogWorkBench.getInstance().getCurrentFile().delete(
-						(DirectoryEntry) object);
-				EncogWorkBench.getInstance().getMainWindow().redraw();
-			}
+		if (owner.getTabManager().find(selected) != null) {
+			EncogWorkBench.displayError("Can't Delete Object",
+					"This object can not be deleted while it is open.");
+			return;
 		}
+			
+		EncogWorkBench.getInstance().getCurrentFile().delete(selected);
+		EncogWorkBench.getInstance().getMainWindow().redraw();
 	}
 
 	public void performBrowse() {
@@ -444,8 +437,8 @@ public class EncogDocumentOperations {
 		}
 	}
 
-	public void performObjectsProperties() {
-		final DirectoryEntry selected = (DirectoryEntry) owner.getSelectedValue();
+	public void performObjectsProperties(DirectoryEntry selected) {
+
 		final EditEncogObjectProperties dialog = new EditEncogObjectProperties(owner);
 		dialog.getNameField().setValue(selected.getName());
 		dialog.getDescription().setValue(selected.getDescription());

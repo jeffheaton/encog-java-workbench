@@ -237,7 +237,7 @@ public class EncogMenus {
 		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_CREATE)) {
 			owner.getOperations().performObjectsCreate();
 		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_DELETE)) {
-			owner.getOperations().performObjectsDelete();
+			owner.getPopupMenus().performPopupDelete();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_CLOSE)) {
 			owner.getOperations().performFileClose();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW)) {

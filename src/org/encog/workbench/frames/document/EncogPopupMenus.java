@@ -32,6 +32,7 @@ package org.encog.workbench.frames.document;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -41,6 +42,7 @@ import org.encog.neural.networks.Network;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.persist.EncogPersistedObject;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.process.training.Training;
 
@@ -92,34 +94,49 @@ public class EncogPopupMenus {
 		this.popupGeneralProperties = owner.addItem(this.popupGeneral, "Properties", 'p');
 	}
 
-
 	public void actionPerformed(final ActionEvent event) {
-		DirectoryEntry selected = (DirectoryEntry) this.owner.getSelectedValue();
+		performPopupMenu(event.getSource());
+	}
+	
+	public void performPopupMenu(final Object source) {
+		boolean first = true;
+		List<DirectoryEntry> list = this.owner.getSelectedValue();
+		
+		if( list==null)
+			return;
 
-		if (event.getSource() == this.popupNetworkDelete) {
-			owner.getOperations().performObjectsDelete();
-		} else if (event.getSource() == this.popupNetworkQuery) {
-			owner.getOperations().performNetworkQuery();
-		} else if (event.getSource() == this.popupNetworkOpen) {
-			owner.getOperations().openItem(selected);
-		} else if (event.getSource() == this.popupNetworkProperties) {
-			this.owner.getOperations().performObjectsProperties();
-		} else if (event.getSource() == this.popupDataDelete) {
-			owner.getOperations().performObjectsDelete();
-		} else if (event.getSource() == this.popupDataOpen) {
-			owner.getOperations().openItem(selected);
-		} else if (event.getSource() == this.popupDataProperties) {
-			this.owner.getOperations().performObjectsProperties();
-		} else if (event.getSource() == this.popupDataImport) {
-			owner.getOperations().performImport(selected);
-		} else if (event.getSource() == this.popupDataExport) {
-			owner.getOperations().performExport(selected);
-		} else if (event.getSource() == this.popupGeneralDelete) {
-			owner.getOperations().performObjectsDelete();
-		} else if (event.getSource() == this.popupGeneralOpen) {
-			owner.getOperations().openItem(selected);
-		} else if (event.getSource() == this.popupGeneralProperties) {
-			owner.getOperations().performObjectsProperties();
+		for(DirectoryEntry selected: list )
+		{		
+			if( (source == this.popupNetworkDelete) ||
+				(source == this.popupDataDelete) ||
+				(source == this.popupGeneralDelete) )
+			{			
+				if ( first && !EncogWorkBench.askQuestion(
+					"Warning", "Are you sure you want to delete these object(s)?") ) {
+					return;
+				}
+				owner.getOperations().performObjectsDelete(selected);
+			} else if (source == this.popupNetworkQuery) {
+				owner.getOperations().performNetworkQuery(selected);
+			} else if (source == this.popupNetworkOpen) {
+				owner.getOperations().openItem(selected);
+			} else if (source == this.popupNetworkProperties) {
+				this.owner.getOperations().performObjectsProperties(selected);
+			} else if (source == this.popupDataOpen) {
+				owner.getOperations().openItem(selected);
+			} else if (source == this.popupDataProperties) {
+				this.owner.getOperations().performObjectsProperties(selected);
+			} else if (source == this.popupDataImport) {
+				owner.getOperations().performImport(selected);
+			} else if (source == this.popupDataExport) {
+				owner.getOperations().performExport(selected);
+			} else if (source == this.popupGeneralOpen) {
+				owner.getOperations().openItem(selected);
+			} else if (source == this.popupGeneralProperties) {
+				owner.getOperations().performObjectsProperties(selected);
+			}
+			
+			first = false;
 		}
 	}
 	
@@ -141,6 +158,11 @@ public class EncogPopupMenus {
 				this.popupGeneral.show(e.getComponent(), e.getX(), e.getY());
 			}
 		}
+		
+	}
+
+	public void performPopupDelete() {
+		this.performPopupMenu(this.popupNetworkDelete);
 		
 	}
 	
