@@ -103,17 +103,13 @@ public class EncogPopupMenus {
 		} else if (event.getSource() == this.popupNetworkOpen) {
 			owner.getOperations().openItem(selected);
 		} else if (event.getSource() == this.popupNetworkProperties) {
-			final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
-					owner, selected);
-			dialog.process();
+			this.owner.getOperations().performObjectsProperties();
 		} else if (event.getSource() == this.popupDataDelete) {
 			owner.getOperations().performObjectsDelete();
 		} else if (event.getSource() == this.popupDataOpen) {
 			owner.getOperations().openItem(selected);
 		} else if (event.getSource() == this.popupDataProperties) {
-			final EditEncogObjectProperties dialog = new EditEncogObjectProperties
-			(owner, selected);
-			dialog.process();
+			this.owner.getOperations().performObjectsProperties();
 		} else if (event.getSource() == this.popupDataImport) {
 			owner.getOperations().performImport(selected);
 		} else if (event.getSource() == this.popupDataExport) {

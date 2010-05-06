@@ -89,6 +89,12 @@ public class EncogDocumentOperations {
 	public void openItem(final Object item) {
 
 		DirectoryEntry entry = (DirectoryEntry) item;
+		if( EncogWorkBench.getInstance().getCurrentFile().find(entry)==null )
+		{
+			EncogWorkBench.displayError("Object", "Can't find that object.");
+			return;
+		}
+
 
 		if (entry.getType().equals(EncogPersistedCollection.TYPE_TRAINING)) {
 
@@ -440,9 +446,23 @@ public class EncogDocumentOperations {
 
 	public void performObjectsProperties() {
 		final DirectoryEntry selected = (DirectoryEntry) owner.getSelectedValue();
-		final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
-				owner, selected);
-		dialog.process();
+		final EditEncogObjectProperties dialog = new EditEncogObjectProperties(owner);
+		dialog.getNameField().setValue(selected.getName());
+		dialog.getDescription().setValue(selected.getDescription());
+		if( dialog.process() )
+		{
+			if (EncogWorkBench.getInstance().getCurrentFile().find(dialog.getNameField().getValue()) != null) {
+				EncogWorkBench.displayError("Data Error",
+						"That name is already in use, please choose another.");
+				return;
+			}
+			
+			EncogWorkBench.getInstance().getCurrentFile().updateProperties(
+					selected.getName(), 
+					dialog.getNameField().getValue(), 
+					dialog.getDescription().getValue() );
+			EncogWorkBench.getInstance().getMainWindow().redraw();
+		}
 	}
 
 	public void performFileRevert() {

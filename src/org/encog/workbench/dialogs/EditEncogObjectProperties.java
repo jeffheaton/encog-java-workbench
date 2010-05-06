@@ -49,124 +49,37 @@ import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
+import org.encog.workbench.dialogs.common.TextField;
 
-public class EditEncogObjectProperties extends JDialog implements
-		WindowListener, ActionListener {
+public class EditEncogObjectProperties extends EncogPropertiesDialog {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JTextField ctrlName;
-	private JTextField ctrlDescription;
-	private JButton ctrlOK;
-	private JButton ctrlCancel;
-	private final DirectoryEntry entry;
+	private final TextField name;
+	private final TextField description;
 
-	public EditEncogObjectProperties(final Frame owner,
-			final DirectoryEntry entry) {
-		super(owner, true);
+	public EditEncogObjectProperties(final Frame owner) {
+		super(owner);
+
+		addProperty(this.name = new TextField("name","Name",true));
+		addProperty(this.description = new TextField("description","Description",false));
 		
-		
-
-		this.setLocation(200, 100);
-
-		if ( EncogPersistedCollection.TYPE_BASIC_NET.equals(entry.getType()) ) {
-			setTitle("Network Properties");
-		} else if ( EncogPersistedCollection.TYPE_TRAINING.equals(entry.getType()) ) {
-			setTitle("Neural Data Set Properties");
-		}
-		else
-			setTitle("Edit: " + entry.getType());
-
-		final Container content = getContentPane();
-		content.setLayout(new GridLayout(3, 1, 10, 10));
-		content.add(new JLabel("Name"));
-		content.add(this.ctrlName = new JTextField());
-		content.add(new JLabel("Description"));
-		content.add(this.ctrlDescription = new JTextField());
-		content.add(this.ctrlOK = new JButton("OK"));
-		content.add(this.ctrlCancel = new JButton("Cancel"));
-
+		setTitle("Encog Object Properties");
 		setModal(true);
 		setResizable(false);
+		this.setSize(640,100);
 
-		pack();
-
-		this.ctrlOK.addActionListener(this);
-		this.ctrlCancel.addActionListener(this);
-		addWindowListener(this);
-
-		this.entry = entry;
+		render();
 
 	}
 
-	public void actionPerformed(final ActionEvent e) {
-		if (e.getSource() == this.ctrlOK) {
-			
-			String name = this.ctrlName.getText().trim();
-			String desc = this.ctrlDescription.getText().trim();
-			
-			if( !this.entry.getName().equals(name))
-			{
-			
-			if (EncogWorkBench.getInstance().getCurrentFile().find(name) != null) {
-				EncogWorkBench.displayError("Data Error",
-						"That name is already in use, please choose another.");
-				return;
-			}
-			}
-			if (this.ctrlName.getText().trim().length() < 1) {
-				EncogWorkBench.displayError("Data Error",
-						"You must provide a name.");
-				return;
-			}
-			EncogWorkBench.getInstance().getCurrentFile().updateProperties(this.entry.getName(),name,desc);
-			//this.object.setName(this.ctrlName.getText());
-			//this.object.setDescription(this.ctrlDescription.getText());
-			dispose();
-		} else if (e.getSource() == this.ctrlCancel) {
-			dispose();
-		}
-
+	public TextField getNameField() {
+		return name;
 	}
 
-	public void process() {
-		setVisible(true);
+	public TextField getDescription() {
+		return description;
 	}
-
-	public void windowActivated(final WindowEvent e) {
-		this.ctrlName.setText(this.entry.getName());
-		this.ctrlDescription.setText(this.entry.getDescription());
-	}
-
-	public void windowClosed(final WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void windowClosing(final WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void windowDeactivated(final WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void windowDeiconified(final WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void windowIconified(final WindowEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void windowOpened(final WindowEvent e) {
-
-	}
+	
+	
 
 }
