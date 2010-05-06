@@ -49,14 +49,14 @@ public class EncogCollectionModel extends DefaultTreeModel {
     	
     	root.removeAllChildren();
     	
-    	Map<String,List<DirectoryEntry>> sorted = new HashMap();
+    	Map<String,Set<DirectoryEntry>> sorted = new HashMap();
     	
     	for(DirectoryEntry entry: encog.getDirectory() )
     	{
-    		List<DirectoryEntry> list = sorted.get(entry.getType());
+    		Set<DirectoryEntry> list = sorted.get(entry.getType());
     		if( list==null )
     		{
-    			list = new ArrayList<DirectoryEntry>();
+    			list = new TreeSet<DirectoryEntry>();
     			sorted.put(entry.getType(), list);
     		}
     		
@@ -72,7 +72,7 @@ public class EncogCollectionModel extends DefaultTreeModel {
     	{
     		EncogObjectDirectory dir = new EncogObjectDirectory(key); 
     		root.add(dir);
-    		List<DirectoryEntry> list = sorted.get(key);
+    		Set<DirectoryEntry> list = sorted.get(key);
     		
     		for(DirectoryEntry entry: list)
     		{
