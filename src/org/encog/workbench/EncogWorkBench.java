@@ -173,17 +173,21 @@ public class EncogWorkBench implements Runnable {
 	}
 
 	public static void load(final String filename) {
+		getInstance().getMainWindow().beginWait();
 		getInstance().getCurrentFile().load(
 				new FilePersistence(new File(filename)));
 		getInstance().setCurrentFileName(filename);
 		getInstance().getMainWindow().redraw();
+		getInstance().getMainWindow().endWait();
 	}
 
 	public static void save(final String filename) {
+		getInstance().getMainWindow().beginWait();
 		getInstance().getCurrentFile().save(
 				new FilePersistence(new File(filename)));
 		getInstance().setCurrentFileName(filename);
 		getInstance().getMainWindow().redraw();
+		getInstance().getMainWindow().endWait();
 	}
 
 	/**

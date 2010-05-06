@@ -221,6 +221,7 @@ public class EncogMenus {
 	}
 
 	public void actionPerformed(final ActionEvent event) {
+		EncogWorkBench.getInstance().getMainWindow().endWait();
 		if (event.getActionCommand().equals(EncogMenus.FILE_OPEN)) {
 			owner.getOperations().performFileOpen();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_SAVE)) {

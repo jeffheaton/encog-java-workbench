@@ -30,6 +30,7 @@
 
 package org.encog.workbench.frames.document;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -314,6 +315,18 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	public JTree getTree() {
 		return this.tree;
+	}
+	
+	public void beginWait()
+	{
+		Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR);
+		setCursor(hourglassCursor);
+	}
+	
+	public void endWait()
+	{
+		Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
+		setCursor(normalCursor);
 	}
 
 }
