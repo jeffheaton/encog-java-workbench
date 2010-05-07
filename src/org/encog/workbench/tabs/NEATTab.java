@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.encog.mathutil.EncogMath;
 import org.encog.neural.networks.synapse.neat.NEATLink;
 import org.encog.neural.networks.synapse.neat.NEATNeuron;
 import org.encog.neural.networks.synapse.neat.NEATSynapse;
@@ -27,6 +28,26 @@ public class NEATTab extends EncogCommonTab  {
 		return new Point(x,y);
 	}
 	
+	
+	  private void paintArrow(Graphics g, int x0, int y0, int x1,int y1){
+			int deltaX = x1 - x0;
+			int deltaY = y1 - y0;
+			
+			double length = Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
+			
+			double frac = 10/length;
+
+			g.drawLine(x0,y0,x1,y1);
+			g.drawLine(
+				x0 + (int)((1-frac)*deltaX + frac*deltaY),
+				y0 + (int)((1-frac)*deltaY - frac*deltaX),
+				   x1, y1);
+			g.drawLine(x0 + (int)((1-frac)*deltaX - frac*deltaY),
+				   y0 + (int)((1-frac)*deltaY + frac*deltaX),
+				   x1, y1);
+
+		    }
+	
 	public void paint(Graphics g)
 	{
 		int height = getHeight()-10;
@@ -45,8 +66,15 @@ public class NEATTab extends EncogCommonTab  {
 			
 			for( NEATLink link: neuron.getOutputboundLinks() )
 			{
-				Point p2 = plotLocation(link.getToNeuron());
-				g.drawLine(pt.x+5,pt.y+5,p2.x+5,p2.y+5);
+				if( link.getFromNeuron()==link.getToNeuron())
+				{
+					g.drawOval(pt.x-23, pt.y-23, 32, 32);
+				}
+				else
+				{
+					Point p2 = plotLocation(link.getToNeuron());
+					paintArrow(g,pt.x+5,pt.y+10,p2.x+5,p2.y);
+				}
 			}
 			
 			switch(neuron.getNeuronType())
