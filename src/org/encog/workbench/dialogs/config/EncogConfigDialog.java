@@ -32,9 +32,9 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		addProperty(this.defaultError = new DoubleField("default error","Default Error Percent",true,0,1));
 		addProperty(this.threadCount = new IntegerField("thread count","Thread Count (0=auto)",true,0,10000));
 		beginTab("Encog Cloud");
-		addProperty(this.network = new TextField("network","Network",true));
-		addProperty(this.userID = new TextField("user id","User ID",true));
-		addProperty(this.password = new PasswordField("password","Password",true));
+		addProperty(this.network = new TextField("network","Network",false));
+		addProperty(this.userID = new TextField("user id","User ID",false));
+		addProperty(this.password = new PasswordField("password","Password",false));
 		addProperty(this.autoConnect = new CheckField("autoconnect","Auto Connect to Encog Cloud"));
 		render();
 	}
