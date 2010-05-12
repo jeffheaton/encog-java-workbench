@@ -30,8 +30,10 @@
 
 package org.encog.workbench.process;
 
+import org.encog.bot.BotUtil;
 import org.encog.neural.activation.ActivationSigmoid;
 import org.encog.neural.activation.ActivationTANH;
+import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.ADALINEPattern;
 import org.encog.neural.pattern.ART1Pattern;
@@ -50,6 +52,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateADALINEDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateART1;
+import org.encog.workbench.dialogs.createnetwork.CreateAutomatic;
 import org.encog.workbench.dialogs.createnetwork.CreateBAMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateBlotzmannDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateCPNDialog;
@@ -63,6 +66,7 @@ import org.encog.workbench.dialogs.createnetwork.CreateRBFDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateRSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
+import org.encog.workbench.tabs.incremental.IncrementalPruneTab;
 
 public class CreateNeuralNetwork {
 
@@ -75,6 +79,9 @@ public class CreateNeuralNetwork {
 			switch (dialog.getType()) {
 			case Empty:
 				network = createEmpty(name);
+				break;
+			case Automatic:
+				network = createAutomatic(name);
 				break;
 			case Feedforward:
 				network = createFeedForward(name);
@@ -234,6 +241,56 @@ public class CreateNeuralNetwork {
 
 	}
 
+	private static BasicNetwork createAutomatic(String name) {
+		CreateAutomatic dialog = new CreateAutomatic(EncogWorkBench
+				.getInstance().getMainWindow());
+		dialog.setActivationFunction(new ActivationTANH());
+
+		NeuralDataSet training = dialog.getTraining();
+		
+		
+		if( training == null ) {
+			return null;
+		}
+		
+		FeedForwardPattern pattern = new FeedForwardPattern();
+		pattern.setActivationFunction(dialog.getActivationFunction());
+		pattern.setInputNeurons(training.getInputSize());
+		pattern.setOutputNeurons(training.getIdealSize());
+		
+		dialog.getWeightTries().setValue(5);
+		dialog.getIterations().setValue(25);
+		
+		if (dialog.process()) {
+			
+			IncrementalPruneTab tab = new IncrementalPruneTab(
+					dialog.getIterations().getValue(),
+					dialog.getWeightTries().getValue(),
+					training,
+					pattern,
+					name);
+			
+			for (int i = 0; i < dialog.getHidden().getModel().size(); i++) {
+				String str = (String) dialog.getHidden().getModel()
+						.getElementAt(i);
+				
+				String lowStr = BotUtil.extract(str,"low=",".",0);
+				String highStr = BotUtil.extract(str,"high=",",",0);
+				int low = Integer.parseInt(lowStr);
+				int high = Integer.parseInt(highStr);
+				
+				tab.addHiddenRange(low,high);
+			}
+			
+			
+
+			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Incremental Prune");
+			return null;
+		}
+		return null;
+
+	}
+	
 	private static BasicNetwork createEmpty(String name) {
 		BasicNetwork network = new BasicNetwork();
 		network.setName(name);

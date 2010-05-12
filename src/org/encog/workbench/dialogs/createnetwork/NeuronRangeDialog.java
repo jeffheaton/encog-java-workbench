@@ -30,21 +30,35 @@
 
 package org.encog.workbench.dialogs.createnetwork;
 
-public enum NeuralNetworkType {
-	Empty,
-	Automatic,
-	ADALINE,
-	ART1,
-	BAM,
-	Boltzmann,
-	CPN,
-	Feedforward,
-	RBF,
-	SOM,
-	RSOM,
-	Hopfield,
-	Elman,
-	Jordan,
-	NEAT
+import java.awt.Frame;
+
+import javax.swing.JTextField;
+
+import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
+import org.encog.workbench.dialogs.common.IntegerField;
+import org.encog.workbench.dialogs.common.PropertiesField;
+import org.encog.workbench.dialogs.common.PropertyType;
+
+public class NeuronRangeDialog extends EncogPropertiesDialog {
+
+	private final IntegerField low;
+	private final IntegerField high;
 	
+	public NeuronRangeDialog(Frame owner) {
+		super(owner);
+		setTitle("Hidden Layer Range");
+		setSize(400,400);
+		setLocation(200,200);
+		addProperty(this.low = new IntegerField("low","Low Neuron Count",true,0,100000));
+		addProperty(this.high = new IntegerField("high","High Neuron Count",true,1,100000));
+		render();
+	}
+
+	public IntegerField getLow() {
+		return low;
+	}
+
+	public IntegerField getHigh() {
+		return high;
+	}
 }

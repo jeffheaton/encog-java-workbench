@@ -28,23 +28,42 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.dialogs.createnetwork;
+package org.encog.workbench.tabs.incremental;
 
-public enum NeuralNetworkType {
-	Empty,
-	Automatic,
-	ADALINE,
-	ART1,
-	BAM,
-	Boltzmann,
-	CPN,
-	Feedforward,
-	RBF,
-	SOM,
-	RSOM,
-	Hopfield,
-	Elman,
-	Jordan,
-	NEAT
-	
+import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+
+import org.encog.workbench.dialogs.training.BasicTrainingProgress;
+
+/**
+ * Panel to display the current training status.
+ * @author jheaton
+ *
+ */
+public class IncrementalPruneChart extends JPanel {
+
+	/**
+	 * The serial id.
+	 */
+	private static final long serialVersionUID = 1L;
+	private final IncrementalPruneTab parent;
+
+	/**
+	 * Construct the panel.
+	 * @param parent The parent.
+	 */
+	public IncrementalPruneChart(final IncrementalPruneTab parent) {
+		this.parent = parent;
+	}
+
+	/**
+	 * Paint the panel, use the parent to do the painting.
+	 */
+	public void paint(final Graphics g) {
+		int width = getWidth();
+		int height = getHeight();
+		this.parent.paintChart(g,width,height);
+	}
 }
