@@ -632,7 +632,8 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 		EditBasicLayer dialog = new EditBasicLayer(EncogWorkBench.getInstance().getMainWindow(), this.selected);
 		dialog.setActivationFunction(this.selected.getActivationFunction());
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
-		dialog.getUseThreshold().setValue(this.selected.hasBias());
+		dialog.getUseBias().setValue(this.selected.hasBias());
+		dialog.getBiasActivation().setValue(this.selected.getBiasActivation());
 		dialog.setTableEditable();
 
 		for (int i = 0; i < this.selected.getNeuronCount(); i++) {
@@ -648,12 +649,12 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 
 		if (dialog.process()) {
 			// were thresholds added or removed
-			if (!dialog.getUseThreshold().getValue()) {
+			if (!dialog.getUseBias().getValue()) {
 				// removed
 				this.selected.setBiasWeights(null);
 			} else {
 				// add thresholds if needed
-				if (dialog.getUseThreshold().getValue()
+				if (dialog.getUseBias().getValue()
 						&& !this.selected.hasBias()) {
 					this.selected.setBiasWeights(new double[this.selected
 							.getNeuronCount()]);
@@ -670,7 +671,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 			} else {
 				// if the neuron count did not change, copy any new threshold
 				// values
-				boolean updateThreshold = dialog.getUseThreshold().getValue();
+				boolean updateThreshold = dialog.getUseBias().getValue();
 
 				if (updateThreshold) {
 					for (int i = 0; i < this.selected.getNeuronCount(); i++) {
@@ -687,7 +688,8 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 			}
 
 			this.selected.setActivationFunction(dialog.getActivationFunction());
-
+			this.selected.setBiasActivation(dialog.getBiasActivation().getValue());
+			
 			collectTags(this.selected, dialog.getTags());
 
 			repaint();
@@ -735,6 +737,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 				contextLayer);
 		dialog.setActivationFunction(this.selected.getActivationFunction());
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
+		dialog.getBiasActivation().setValue(this.selected.getBiasActivation());
 
 		for (int i = 0; i < this.selected.getNeuronCount(); i++) {
 			dialog.getThresholdTable().setValue(i, 0, "#" + (i + 1));
@@ -748,9 +751,9 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 		}
 
 		if (this.selected.hasBias()) {
-			dialog.getUseThreshold().setValue(true);
+			dialog.getUseBias().setValue(true);
 		} else {
-			dialog.getUseThreshold().setValue(false);
+			dialog.getUseBias().setValue(false);
 		}
 
 		dialog.setTableEditable();
@@ -758,12 +761,12 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 
 		if (dialog.process()) {
 			// were thresholds added or removed
-			if (!dialog.getUseThreshold().getValue()) {
+			if (!dialog.getUseBias().getValue()) {
 				// removed
 				this.selected.setBiasWeights(null);
 			} else {
 				// add thresholds if needed
-				if (dialog.getUseThreshold().getValue()
+				if (dialog.getUseBias().getValue()
 						&& !this.selected.hasBias()) {
 					this.selected.setBiasWeights(new double[this.selected
 							.getNeuronCount()]);
@@ -780,7 +783,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 			} else {
 				// if the neuron count did not change, copy threshold and
 				// context values
-				boolean updateThreshold = dialog.getUseThreshold().getValue();
+				boolean updateThreshold = dialog.getUseBias().getValue();
 				for (int i = 0; i < this.selected.getNeuronCount(); i++) {
 					double thresholdValue = 0;
 					double contextValue = 0;
@@ -800,6 +803,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 			}
 
 			this.selected.setActivationFunction(dialog.getActivationFunction());
+			this.selected.setBiasActivation(dialog.getBiasActivation().getValue());
 			collectTags(this.selected, dialog.getTags());
 			repaint();
 

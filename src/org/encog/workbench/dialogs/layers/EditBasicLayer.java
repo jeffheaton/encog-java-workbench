@@ -41,6 +41,7 @@ import org.encog.workbench.dialogs.common.BuildingListField;
 import org.encog.workbench.dialogs.common.BuildingListListener;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.CheckListener;
+import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.PopupField;
@@ -55,11 +56,12 @@ public class EditBasicLayer extends EditLayerDialog implements
 	 */
 	private static final long serialVersionUID = 8751974232848993273L;
 	
-	public final static String[] COLUMN_HEADS = {"Neuron","Threshold"};
+	public final static String[] COLUMN_HEADS = {"Neuron","Bias"};
 	
 	private PopupField activationField;
-	private CheckField useThreshold;
+	private CheckField useBias;
 	private TableField thresholdTable;
+	private DoubleField biasActivation;
 	
 	private ActivationFunction activationFunction;
 
@@ -70,12 +72,13 @@ public class EditBasicLayer extends EditLayerDialog implements
 		setLocation(200, 200);
 		addProperty(this.activationField = new PopupField("activation",
 				"Activation Function", true));
-		addProperty(this.useThreshold = new CheckField("use threshold",
-				"Use Threshold Values"));
-		addProperty(this.thresholdTable = new TableField("threshold values", 
-				"Threshold Values",true, 100, layer.getNeuronCount(), COLUMN_HEADS));
-
-		this.useThreshold.setListener(this);
+		addProperty(this.useBias = new CheckField("use bias",
+				"Use Bias Values"));
+		addProperty(this.biasActivation = new DoubleField("Bias Activation",
+				"Bias Activation", true, 1,-1));
+		addProperty(this.thresholdTable = new TableField("bias weights", 
+				"Bias Weights",true, 100, layer.getNeuronCount(), COLUMN_HEADS));
+		this.useBias.setListener(this);
 		render();
 		setTableEditable();
 	}
@@ -114,8 +117,8 @@ public class EditBasicLayer extends EditLayerDialog implements
 		setTableEditable();
 	}
 
-	public CheckField getUseThreshold() {
-		return useThreshold;
+	public CheckField getUseBias() {
+		return useBias;
 	}
 	
 	public void generateThresholdValues()
@@ -123,7 +126,7 @@ public class EditBasicLayer extends EditLayerDialog implements
 		for(int i=0;i<this.getNeuronCount().getValue();i++)
 		{
 			this.thresholdTable.setValue(i,0,"#"+(i+1));
-			if( this.useThreshold.getValue() )
+			if( this.useBias.getValue() )
 				this.thresholdTable.setValue(i,1,"0");
 			else
 				this.thresholdTable.setValue(i,1,"N/A");
@@ -136,5 +139,14 @@ public class EditBasicLayer extends EditLayerDialog implements
 		this.thresholdTable.getModel().setEditable(0,false);
 		this.thresholdTable.getModel().setEditable(1,true);
 	}
+
+	/**
+	 * @return the biasActivation
+	 */
+	public DoubleField getBiasActivation() {
+		return biasActivation;
+	}
+	
+	
 	
 }
