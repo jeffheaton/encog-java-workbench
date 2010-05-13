@@ -56,6 +56,7 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 	private final PopupField activationField;
 	private final IntegerField iterations;
 	private final IntegerField weightTries;
+	private final IntegerField windowSize;
 
 	private ActivationFunction activationFunction;
 
@@ -81,6 +82,8 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 				"Training Iterations", true, 1, 100000));
 		addProperty(this.weightTries = new IntegerField("weight tries",
 				"Weights to Try", true, 1, 100000));
+		addProperty(this.windowSize = new IntegerField("window size",
+				"Number of Top Networks", true, 1, 100000));
 		render();
 	}
 
@@ -192,5 +195,11 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 	public IntegerField getWeightTries() {
 		return weightTries;
 	}
+
+	public IntegerField getWindowSize() {
+		return windowSize;
+	}
+	
+	
 
 }

@@ -112,7 +112,7 @@ public class GenerateVB extends BasicGenerate {
 			this.appendToLine(currentLayer.getActivationFunction().getClass().getSimpleName());
 			this.appendToLine("()");
 			this.appendToLine(",");
-			this.appendToLine(currentLayer.hasThreshold()?"true":"false");
+			this.appendToLine(currentLayer.hasBias()?"true":"false");
 			this.appendToLine(",");
 			this.appendToLine(""+currentLayer.getNeuronCount());
 			this.appendToLine(")");
@@ -129,7 +129,7 @@ public class GenerateVB extends BasicGenerate {
 			this.appendToLine(currentLayer.getActivationFunction().getClass().getSimpleName());
 			this.appendToLine("()");
 			this.appendToLine(",");
-			this.appendToLine(currentLayer.hasThreshold()?"true":"false");
+			this.appendToLine(currentLayer.hasBias()?"true":"false");
 			this.appendToLine(",");
 			this.appendToLine(""+currentLayer.getNeuronCount());
 			this.appendToLine(")");

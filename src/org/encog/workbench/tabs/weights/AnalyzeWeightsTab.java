@@ -88,7 +88,7 @@ public class AnalyzeWeightsTab extends EncogCommonTab implements ActionListener 
         
         // threshold values
         this.dataWeights = new HistogramDataset();
-        double[] values3 = this.analyze.getThresholdValues();
+        double[] values3 = this.analyze.getBiasValues();
         this.dataWeights.addSeries("Thresholds", values3, 50);
             
     }

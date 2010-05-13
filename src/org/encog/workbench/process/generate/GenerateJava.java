@@ -114,7 +114,7 @@ public class GenerateJava extends BasicGenerate {
 			this.appendToLine(layer.getActivationFunction().getClass().getSimpleName());
 			this.appendToLine("()");
 			this.appendToLine(",");
-			this.appendToLine(layer.hasThreshold()?"true":"false");
+			this.appendToLine(layer.hasBias()?"true":"false");
 			this.appendToLine(",");
 			this.appendToLine(""+layer.getNeuronCount());
 			this.appendToLine(");");
@@ -132,7 +132,7 @@ public class GenerateJava extends BasicGenerate {
 			this.appendToLine(layer.getActivationFunction().getClass().getSimpleName());
 			this.appendToLine("()");
 			this.appendToLine(",");
-			this.appendToLine(layer.hasThreshold()?"true":"false");
+			this.appendToLine(layer.hasBias()?"true":"false");
 			this.appendToLine(",");
 			this.appendToLine(""+layer.getNeuronCount());
 			this.appendToLine(");");

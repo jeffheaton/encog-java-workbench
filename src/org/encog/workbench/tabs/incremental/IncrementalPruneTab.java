@@ -104,8 +104,9 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 	private int weightTries;
 	private NeuralDataSet training;
 	private FeedForwardPattern pattern;
+	private int windowSize;
 
-	public IncrementalPruneTab(int iterations, int weightTries, NeuralDataSet training,
+	public IncrementalPruneTab(int iterations, int weightTries, int windowSize, NeuralDataSet training,
 			FeedForwardPattern pattern, String name) {
 		super(null);
 
@@ -114,9 +115,10 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 		this.training = training;
 		this.pattern = pattern;
 		this.name = name;
+		this.windowSize = windowSize;
 		
 		this.prune = new PruneIncremental(this.training, this.pattern,
-				this.iterations, this.weightTries , this);
+				this.iterations, this.weightTries , this.windowSize, this);
 		this.prune.init();
 
 		this.buttonStart = new JButton("Start");
@@ -282,22 +284,27 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 			
 			g.drawString("Chart not supported for more than 2 layers.", 0, 20);
 		}
-		else if( this.prune.getHidden1Size()>0 && 
-				this.prune.getHidden2Size()>0 )
+		else if( this.prune.getHidden1Size()>0  )
 		{
-			int blockWidth = (width-32)/this.prune.getHidden2Size();
+			int blockWidth = (this.prune.getHidden2Size()>0) ? (width-32)/this.prune.getHidden2Size() : (width-32);
 			int blockHeight = (height-32)/this.prune.getHidden1Size();
 
 			g.setFont(this.headFont);
-			g.drawString("H1", 10, height/2);
-			g.drawString("H2", width/2, 15);
-			
+
+			g.drawString("H1", 10, height/2);			
 			g.drawString(""+this.prune.getHidden().get(0).getMin(), 10, 42);
-			g.drawString(""+this.prune.getHidden().get(1).getMin(), 32, 15);
+			
+			if( this.prune.getHidden().size()>1 )
+			{
+				g.drawString("H2", width/2, 15);
+				g.drawString(""+this.prune.getHidden().get(1).getMin(), 32, 15);
+			}
+			
+			int xLimit = Math.max(this.prune.getHidden2Size(),1); 
 
 			for(int y=0;y<this.prune.getHidden1Size();y++)
 			{
-				for(int x=0;x<this.prune.getHidden2Size();x++)
+				for(int x=0;x<xLimit;x++)
 				{
 					int xLoc = x*blockWidth;
 					int yLoc = y*blockHeight;

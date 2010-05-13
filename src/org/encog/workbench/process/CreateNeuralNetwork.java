@@ -254,18 +254,19 @@ public class CreateNeuralNetwork {
 		}
 		
 		FeedForwardPattern pattern = new FeedForwardPattern();
-		pattern.setActivationFunction(dialog.getActivationFunction());
 		pattern.setInputNeurons(training.getInputSize());
 		pattern.setOutputNeurons(training.getIdealSize());
 		
 		dialog.getWeightTries().setValue(5);
 		dialog.getIterations().setValue(25);
+		dialog.getWindowSize().setValue(10);
 		
 		if (dialog.process()) {
-			
+			pattern.setActivationFunction(dialog.getActivationFunction());			
 			IncrementalPruneTab tab = new IncrementalPruneTab(
 					dialog.getIterations().getValue(),
 					dialog.getWeightTries().getValue(),
+					dialog.getWindowSize().getValue(),
 					training,
 					pattern,
 					name);
