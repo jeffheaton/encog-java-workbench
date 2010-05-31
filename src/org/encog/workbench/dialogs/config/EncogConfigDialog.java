@@ -20,6 +20,7 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 	private DoubleField defaultError;
 	private CheckField autoConnect;
 	private IntegerField threadCount;
+	private CheckField useOpenCL;
 	
 	public EncogConfigDialog(Frame owner) {
 		super(owner);
@@ -31,6 +32,7 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		beginTab("Training");
 		addProperty(this.defaultError = new DoubleField("default error","Default Error Percent",true,0,1));
 		addProperty(this.threadCount = new IntegerField("thread count","Thread Count (0=auto)",true,0,10000));
+		addProperty(this.useOpenCL = new CheckField("use opencl","Use Graphics Card(GPU)"));
 		beginTab("Encog Cloud");
 		addProperty(this.network = new TextField("network","Network",false));
 		addProperty(this.userID = new TextField("user id","User ID",false));
@@ -62,7 +64,9 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 	public IntegerField getThreadCount() {
 		return threadCount;
 	}
-	
-	
-	
+
+	public CheckField getUseOpenCL() {
+		return useOpenCL;
+	}
+
 }

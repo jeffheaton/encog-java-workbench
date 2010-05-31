@@ -37,6 +37,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.encog.Encog;
 import org.encog.EncogError;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
@@ -425,6 +426,7 @@ public class EncogDocumentOperations {
 		dialog.getNetwork().setValue(config.getEncogCloudNetwork());
 		dialog.getAutoConnect().setValue(config.isAutoConnect());
 		dialog.getThreadCount().setValue(config.getThreadCount());
+		dialog.getUseOpenCL().setValue(config.isUseOpenCL());
 
 		if (dialog.process()) {
 			config.setEncogCloudUserID(dialog.getUserID().getValue());
@@ -433,7 +435,22 @@ public class EncogDocumentOperations {
 			config.setAutoConnect(dialog.getAutoConnect().getValue());
 			config.setEncogCloudNetwork(dialog.getNetwork().getValue());
 			config.setThreadCount(dialog.getThreadCount().getValue());
+			config.setUseOpenCL(dialog.getUseOpenCL().getValue());			
 			EncogWorkBench.saveConfig();
+			
+			if( config.isUseOpenCL() && Encog.getInstance().getCL()==null)
+			{
+				EncogWorkBench.initCL();
+				if( Encog.getInstance().getCL()!=null )
+				{
+					EncogWorkBench.displayMessage("OpenCL", "Success, your graphics card(s) are now ready to help train neural networks.");
+				}
+			}
+			else if( !EncogWorkBench.getInstance().getConfig().isUseOpenCL() && Encog.getInstance().getCL()!=null )
+			{
+				EncogWorkBench.displayMessage("OpenCL", "Encog Workbench will stop using your GPU the next time\nthe workbench is restarted.");
+			}
+
 		}
 	}
 

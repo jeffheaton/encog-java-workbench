@@ -41,6 +41,7 @@ import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.encog.Encog;
 import org.encog.EncogError;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
@@ -348,6 +349,10 @@ public class EncogWorkBench implements Runnable {
 			CloudProcess.performAutoConnect();
 		}
 		
+		if( EncogWorkBench.getInstance().getConfig().isUseOpenCL()) {
+			EncogWorkBench.initCL();
+		}
+		
 		Thread thread = new Thread(this);
 		thread.setDaemon(true);
 		thread.start();
@@ -376,6 +381,21 @@ public class EncogWorkBench implements Runnable {
 			EncogWorkBench.displayError("Internal error", t.getMessage());
 			t.printStackTrace();
 		}
+	}
+
+	public static void initCL() {
+		try
+		{
+			Encog.getInstance().initCL();
+		}
+		catch(Throwable t)
+		{
+			EncogWorkBench.displayError("Error", "Can't init OpenCL.\n  Make sure you have a compatible graphics card,\n and the drivers have  been installed.");
+			EncogWorkBench.displayError("Error", t);
+			EncogWorkBench.getInstance().getConfig().setUseOpenCL(false);
+			EncogWorkBench.saveConfig();
+		}
+		
 	}
 
 }

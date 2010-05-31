@@ -46,6 +46,7 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	private boolean autoConnect = false;
 	private double defaultError = 0.01;
 	private int threadCount = 0;
+	private boolean useOpenCL;
 	
 	public Persistor createPersistor() {
 		return null;
@@ -116,6 +117,15 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	public void setThreadCount(int threadCount) {
 		this.threadCount = threadCount;
 	}
+
+	public boolean isUseOpenCL() {
+		return useOpenCL;
+	}
+
+	public void setUseOpenCL(boolean useOpenCL) {
+		this.useOpenCL = useOpenCL;
+	}
+	
 	
 	
 }
