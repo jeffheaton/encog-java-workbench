@@ -51,6 +51,7 @@ import org.encog.neural.activation.ActivationFunction;
 import org.encog.neural.activation.ActivationGaussian;
 import org.encog.neural.activation.ActivationLOG;
 import org.encog.neural.activation.ActivationLinear;
+import org.encog.neural.activation.ActivationRamp;
 import org.encog.neural.activation.ActivationSIN;
 import org.encog.neural.activation.ActivationSigmoid;
 import org.encog.neural.activation.ActivationSoftMax;
@@ -64,7 +65,7 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 	public static final String[] ACTIVATION_FUNCTION = { "ActivationBiPolar", "ActivationCompetitive",
 			"ActivationGaussian", "ActivationLinear", "ActivationLOG",
 			"ActivationSigmoid", "ActivationSIN", "ActivationSoftMax",
-			"ActivationStep", "ActivationTANH" };
+			"ActivationStep", "ActivationTANH", "ActivationRamp" };
 
 	private JComboBox select = new JComboBox(ACTIVATION_FUNCTION);
 	private EquationPanel equation;
@@ -153,6 +154,9 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 		case 9:
 			newActivation = new ActivationTANH();
 			break;
+		case 10:
+			newActivation = new ActivationRamp();
+			break;			
 
 		}
 		
@@ -164,7 +168,8 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 		this.equation.setupEquation(newActivation,!der);
 		
 		if( this.activation instanceof ActivationGaussian ||
-			this.activation instanceof ActivationStep )
+			this.activation instanceof ActivationStep || 
+			this.activation instanceof ActivationRamp )
 		{
 			this.gaussian.setEnabled(true);
 		}
@@ -220,6 +225,33 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 					((ActivationStep)this.activation).setCenter( center );
 					((ActivationStep)this.activation).setLow(low );
 					((ActivationStep)this.activation).setHigh( high);
+					this.equation.setupEquation(activation,!this.derivative.isSelected());
+				}
+			}
+			else if (this.activation instanceof ActivationRamp) {
+				RampDialog dialog = new RampDialog(this);
+				ActivationRamp step = (ActivationRamp) this.activation;
+
+				dialog.getLowThreshold().setValue(
+						step.getLow());
+				dialog.getHighThreshold().setValue(
+						step.getHigh());
+				dialog.getLowValue().setValue(
+						step.getLow());
+				dialog.getHighValue().setValue(
+						step.getHigh());
+				if (dialog.process()) {
+					double lowThreshold = dialog.getLowThreshold().getValue();
+					double highThreshold = dialog.getHighThreshold().getValue();
+					double lowValue = dialog.getLowThreshold().getValue();
+					double highValue = dialog.getHighThreshold().getValue();
+					
+					this.activation = new ActivationRamp();
+					((ActivationRamp)this.activation).setThresholdLow(lowThreshold );
+					((ActivationRamp)this.activation).setThresholdHigh(highThreshold);
+					((ActivationRamp)this.activation).setLow(lowValue );
+					((ActivationRamp)this.activation).setHigh(highValue);
+					
 					this.equation.setupEquation(activation,!this.derivative.isSelected());
 				}
 			}
