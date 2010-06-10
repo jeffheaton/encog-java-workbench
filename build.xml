@@ -121,10 +121,6 @@
 		<exec executable="launch4jc" dir="${path.build.util}">			
 			<arg value="launch.xml" />
 		</exec>
-
-		<zip destfile="${path.dist}/encog-workbench-win-${encog.version}-${DSTAMP}-${TSTAMP}.zip">
-			<fileset dir="${path.stage}" />
-		</zip>
 		
 		<!-- Create Source distributable -->
 		<copy todir="${path.stage.src.sub}" file="${basedir}/build.xml" />
@@ -140,6 +136,12 @@
 		<copy todir="${path.stage.src.sub}/jar">
 			<fileset dir="${path.jar}" />
 		</copy>
+
+		<!-- Zip it all up -->
+		<zip destfile="${path.dist}/encog-workbench-win-${encog.version}-${DSTAMP}-${TSTAMP}.zip">
+			<fileset dir="${path.stage}" />
+		</zip>
+		
 				
 
 	</target>
