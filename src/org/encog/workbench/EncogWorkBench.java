@@ -70,7 +70,7 @@ import org.w3c.dom.Element;
 public class EncogWorkBench implements Runnable {
 
 	public final static String CONFIG_FILENAME = ".EncogWorkbench.conf";
-	public final static String VERSION = "2.4";
+	public final static String VERSION = "2.5";
 	public static final String COPYRIGHT = "Copyright 2010 by Heaton Research, Inc.";
 
 	/**
