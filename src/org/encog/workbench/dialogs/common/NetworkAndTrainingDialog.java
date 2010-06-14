@@ -100,6 +100,8 @@ public abstract class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 				.getCurrentFile().getDirectory()) {
 			if (obj.getType().equals(EncogPersistedCollection.TYPE_BASIC_NET) ) {
 				this.networks.add(obj.getName());
+			} else if (obj.getType().equals(EncogPersistedCollection.TYPE_SVM) ) {
+				this.networks.add(obj.getName());
 			} else if (obj.getType().equals(EncogPersistedCollection.TYPE_TRAINING) ) {
 				this.trainingSets.add(obj.getName());
 			}

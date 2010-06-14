@@ -85,6 +85,7 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 		this.model.addElement("Instar");
 		this.model.addElement("Outstar");
 		this.model.addElement("NeuroEvolution of Augmenting Topologies (NEAT)");
+		this.model.addElement("Support Vector Machine");
 
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -134,6 +135,9 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 		case 11:
 			this.type = TrainingType.NEAT;
 			break;
+		case 12:
+			this.type = TrainingType.SVM;
+			break;
 		}
 	}
 
@@ -175,6 +179,9 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 			break;
 		case NEAT:
 			this.list.setSelectedIndex(11);
+			break;
+		case SVM:
+			this.list.setSelectedIndex(12);
 			break;
 		}
 	}
@@ -238,7 +245,10 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 					.setText("NeuroEvolution of Augmenting Topologies (NEAT) is a genetic algorithm for the generation of evolving artificial neural networks.  It is used to train a NEAT population of NEAT neural networks.  This training method does not work for regular feedforward neural networks.");
 			break;
 			
-			
+		case 12:
+			this.text
+					.setText("This training method can only be used with Support Vector Machines.");
+			break;	
 
 		}
 

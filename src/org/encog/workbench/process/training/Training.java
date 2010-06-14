@@ -32,10 +32,14 @@ package org.encog.workbench.process.training;
 
 import java.awt.Frame;
 
+import org.encog.neural.data.Indexable;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.logic.SOMLogic;
+import org.encog.neural.networks.svm.SVMNetwork;
+import org.encog.neural.networks.training.svm.SVMTrain;
+import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.IntegerField;
@@ -65,6 +69,7 @@ import org.encog.workbench.dialogs.training.scg.InputSCG;
 import org.encog.workbench.dialogs.training.scg.ProgressSCG;
 import org.encog.workbench.dialogs.training.som.InputSOM;
 import org.encog.workbench.dialogs.training.som.ProgressSOM;
+import org.encog.workbench.dialogs.training.svm.InputSVM;
 import org.encog.workbench.process.validate.ValidateTraining;
 
 public class Training {
@@ -391,7 +396,9 @@ public class Training {
 				case NEAT:
 					performNEAT();
 					break;
-					
+				case SVM:
+					performSVM();
+					break;
 				}
 			}
 		}
@@ -531,5 +538,33 @@ public class Training {
 			EncogWorkBench.getInstance().getMainWindow().openTab(train, "NEAT");
 		}
 
+	}
+	
+	public void performSVM()
+	{
+		InputSVM dialog = new InputSVM(EncogWorkBench
+				.getInstance().getMainWindow());
+		if( dialog.process() )
+		{
+			final ValidateTraining validate = new ValidateTraining(dialog.getNetwork(), 
+					(BasicNeuralDataSet) dialog.getTrainingSet());
+
+			if (!validate.validateIsSupervised()) {
+				return;
+			}
+					
+			
+			if( !validate.validateSVM() ) {
+				return;
+			}
+
+			final NeuralDataSet trainingSet = dialog.getTrainingSet();
+			final SVMNetwork network = (SVMNetwork)dialog.getNetwork();
+			
+			SVMTrain training = new SVMTrain(network,(Indexable)trainingSet);
+			training.iteration();
+			EncogWorkBench.displayMessage("Training Complete", "Iterations:" + 
+					Format.formatInteger(network.getParams().statIterations));
+		}
 	}
 }

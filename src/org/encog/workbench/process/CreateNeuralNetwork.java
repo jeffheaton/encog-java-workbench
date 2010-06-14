@@ -48,6 +48,7 @@ import org.encog.neural.pattern.NEATPattern;
 import org.encog.neural.pattern.RSOMPattern;
 import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.pattern.SOMPattern;
+import org.encog.neural.pattern.SVMPattern;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateADALINEDialog;
@@ -65,6 +66,7 @@ import org.encog.workbench.dialogs.createnetwork.CreateNeuralNetworkDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateRBFDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateRSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateSOMDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateSVMDialog;
 import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
 import org.encog.workbench.tabs.incremental.IncrementalPruneTab;
 
@@ -122,6 +124,9 @@ public class CreateNeuralNetwork {
 			case NEAT:
 				network = createNEAT(name);
 				break;
+			case SVM:
+				network = createSVM(name);
+				break;
 			default:
 				network = createEmpty(name);
 				break;
@@ -147,6 +152,19 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 
+	private static BasicNetwork createSVM(String name) {
+		CreateSVMDialog dialog = new CreateSVMDialog(EncogWorkBench
+				.getInstance().getMainWindow());
+		if (dialog.process()) {
+			SVMPattern rsom = new SVMPattern();
+			rsom.setInputNeurons(dialog.getInputCount().getValue());
+			rsom.setOutputNeurons(dialog.getOutputCount().getValue());
+			return rsom.generate();
+		} else
+			return null;
+	}
+
+	
 	private static BasicNetwork createRBF(String name) {
 		CreateRBFDialog dialog = new CreateRBFDialog(EncogWorkBench
 				.getInstance().getMainWindow());

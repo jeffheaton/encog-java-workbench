@@ -60,7 +60,7 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 
 	public CreateNeuralNetworkDialog(Frame owner) {
 		super(owner);
-		setTitle("Create a Neural Network");
+		setTitle("Create a Network");
 
 		this.setSize(500, 250);
 		this.setLocation(50, 100);
@@ -85,6 +85,7 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 		this.model.addElement("Recurrent - Jordan");
 		this.model.addElement("Recurrent - SOM");
 		this.model.addElement("NeuroEvolution of Augmenting Topologies (NEAT)");
+		this.model.addElement("Support Vector Machine (SVM)");
 
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -147,6 +148,9 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 		case 14:
 			this.type = NeuralNetworkType.NEAT;
 			break;
+		case 15:
+			this.type = NeuralNetworkType.SVM;
+			break;
 		}
 	}
 
@@ -198,7 +202,9 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 		case NEAT:
 			this.list.setSelectedIndex(14);
 			break;
-
+		case SVM:
+			this.list.setSelectedIndex(15);
+			break;
 		}
 
 	}
@@ -284,7 +290,9 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			
 		case 14:
 			this.text.setText("NeuroEvolution of Augmenting Topologies (NEAT) is a neural network that starts with only an input and ouput layer.  The hidden neurons are evolved as the network trains.");
-			break;			
+			break;
+		case 15:
+			this.text.setText("A Support Vector Machine (SVM) is not really a neural network.  However, SVM’s work very similar in terms of their input and output.  SVM’s can often be trained faster and with better accuracy than neural networks.");
 		}
 
 		this.text.setSelectionStart(0);

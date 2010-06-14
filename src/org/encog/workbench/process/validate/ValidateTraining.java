@@ -36,6 +36,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.logic.FeedforwardLogic;
 import org.encog.neural.networks.logic.SimpleRecurrentLogic;
+import org.encog.neural.networks.svm.SVMNetwork;
 import org.encog.neural.networks.synapse.Synapse;
 import org.encog.neural.networks.synapse.neat.NEATSynapse;
 import org.encog.workbench.EncogWorkBench;
@@ -198,6 +199,17 @@ public class ValidateTraining {
 					"Only works with a NEAT network, which is a 2-layer network with a NEAT synapse.");
 			return false;
 		}
+		return true;
+	}
+
+	public boolean validateSVM() {
+		if( !(this.network instanceof SVMNetwork) ) {
+			EncogWorkBench.displayError(
+					"Training Error", 
+					"This training only works with a Support Vector Machine (SVM).");
+			return false;
+		}
+		
 		return true;
 	}
 

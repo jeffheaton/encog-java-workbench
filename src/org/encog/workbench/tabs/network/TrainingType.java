@@ -42,5 +42,6 @@ public enum TrainingType {
 	ADALINE,
 	Instar,
 	Outstar,
-	NEAT
+	NEAT,
+	SVM
 }
