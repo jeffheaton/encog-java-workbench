@@ -43,6 +43,7 @@ import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.svm.SVMNetwork;
 import org.encog.neural.networks.training.neat.NEATGenome;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
@@ -68,6 +69,7 @@ import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.tabs.PropertyDataTab;
+import org.encog.workbench.tabs.SVMTab;
 import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.TrainingDataTab;
 import org.encog.workbench.tabs.network.NetworkTab;
@@ -145,6 +147,16 @@ public class EncogDocumentOperations {
 				final PopulationTab tab = new PopulationTab(pop2);
 				owner.openTab(tab);
 			}
+		} else if( entry.getType().equals(EncogPersistedCollection.TYPE_SVM)) {
+			DirectoryEntry svm = (DirectoryEntry) item;
+			if (owner.getTabManager().checkBeforeOpen(svm,
+					BasicPopulation.class)) {
+				SVMNetwork svn2 = (SVMNetwork) EncogWorkBench
+						.getInstance().getCurrentFile().find(svm);
+				final SVMTab tab = new SVMTab(svn2);
+				owner.openTab(tab);
+			}
+		
 		} else {
 			EncogWorkBench.displayError("Error",
 					"Unknown object type.\nDo not know how to open.");
