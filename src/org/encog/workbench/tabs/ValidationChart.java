@@ -43,16 +43,22 @@ public class ValidationChart {
 	private NeuralDataSet training;
 
 	public void perform(Frame owner) {
+		try {
 		final InputValidationChart dialog = new InputValidationChart(
 				EncogWorkBench.getInstance().getMainWindow());
 
 		if (dialog.process()) {
 			network = dialog.getNetwork();
-			training = dialog.getValidationSet();
+			training = dialog.getTrainingSet();
 
 			ResultValidationChart chart = new ResultValidationChart();
 			chart.setData(training, network);
 			EncogWorkBench.getInstance().getMainWindow().openModalTab(chart, "Validation");
+		}
+		}
+		catch(Throwable t)
+		{
+			EncogWorkBench.displayError("An Error Occured", t);
 		}
 	}
 }

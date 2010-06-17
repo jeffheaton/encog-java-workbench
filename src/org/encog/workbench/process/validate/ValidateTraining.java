@@ -99,9 +99,8 @@ public class ValidateTraining {
 
 
 
-	public boolean validateInputSize() {
-		Layer layer = this.network.getLayer(BasicNetwork.TAG_INPUT);
-		final int inputNeurons = layer.getNeuronCount();
+	public boolean validateInputSize() {		
+		final int inputNeurons = this.network.getInputCount();
 		final int trainingInputs = this.training.getInputSize();
 
 		if (inputNeurons != trainingInputs) {
@@ -140,8 +139,7 @@ public class ValidateTraining {
 	}
 
 	public boolean validateOutputSize() {
-		Layer output = this.network.getLayer(BasicNetwork.TAG_OUTPUT);
-		final int outputNeurons = output.getNeuronCount();
+		final int outputNeurons = this.network.getOutputCount();
 		final int trainingOutputs = this.training.getIdealSize();
 
 		if (outputNeurons != trainingOutputs) {
@@ -210,6 +208,18 @@ public class ValidateTraining {
 			return false;
 		}
 		
+		return true;
+	}
+	
+	public boolean validateHasLayers()
+	{
+		if( this.network.getLayer(BasicNetwork.TAG_INPUT)==null || this.network.getLayer(BasicNetwork.TAG_OUTPUT)==null )
+		{
+			EncogWorkBench.displayError(
+					"Training Error", 
+					"This training only works with a neural network that has both an input and output layer.");
+			return false;
+		}
 		return true;
 	}
 

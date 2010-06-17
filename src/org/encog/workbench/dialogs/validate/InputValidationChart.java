@@ -41,12 +41,10 @@ import org.encog.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
+import org.encog.workbench.dialogs.common.NetworkAndTrainingDialog;
 
-public class InputValidationChart extends EncogPropertiesDialog {
+public class InputValidationChart extends NetworkAndTrainingDialog {
 	private static final long serialVersionUID = 3377283752032159041L;
-
-	private ComboBoxField comboNetwork;
-	private ComboBoxField comboValidation;
 
 	/**
 	 * All available networks to display in the combo box.
@@ -65,48 +63,11 @@ public class InputValidationChart extends EncogPropertiesDialog {
 	 */
 	public InputValidationChart(final Frame owner) {
 		super(owner);
-		findData();
 		setTitle("Validation Chart");
 		setSize(400, 400);
 		setLocation(200, 200);
-		addProperty(this.comboNetwork = new ComboBoxField("network",
-				"Neural Network", true, this.networks));
-		addProperty(this.comboValidation = new ComboBoxField("validation set",
-				"Validation Set", true, this.trainingSets));
 		render();
 	}
 
-	/**
-	 * Obtain the data needed to fill in the network and training set combo
-	 * boxes.
-	 */
-	private void findData() {
-		for (final DirectoryEntry obj : EncogWorkBench.getInstance()
-				.getCurrentFile().getDirectory()) {
-			if (obj.getType().equals(EncogPersistedCollection.TYPE_BASIC_NET)) {
-				this.networks.add(obj.getName());
-			} else if (obj.getType().equals(
-					EncogPersistedCollection.TYPE_TRAINING)) {
-				this.trainingSets.add(obj.getName());
-			}
-		}
-	}
 
-	/**
-	 * @return The network that the user chose.
-	 */
-	public BasicNetwork getNetwork() {
-		String networkName = (String) this.comboNetwork.getSelectedValue();
-		return (BasicNetwork) EncogWorkBench.getInstance().getCurrentFile()
-				.find(networkName);
-	}
-
-	/**
-	 * @return The training set that the user chose.
-	 */
-	public NeuralDataSet getValidationSet() {
-		String trainingName = (String) this.comboValidation.getSelectedValue();
-		return (NeuralDataSet) EncogWorkBench.getInstance().getCurrentFile()
-				.find(trainingName);
-	}
 }

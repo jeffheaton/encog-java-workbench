@@ -290,16 +290,16 @@ public class EncogWorkBench implements Runnable {
 	public static void displayError(String title, Throwable t,
 			BasicNetwork network, NeuralDataSet set) {
 		if (t instanceof EncogError) {
-			displayError(title, t);
+			displayError(title,
+					"An error occured while performing this operation:\n"
+							+ t.toString());
 			t.printStackTrace();
 		} else
 			ErrorDialog.handleError(t, network, set);
 	}
 
 	public static void displayError(String title, Throwable t) {
-		displayError(title,
-				"An error occured while performing this operation:\n"
-						+ t.toString());
+		displayError(title,t,null,null);
 	}
 
 	public static void save() {

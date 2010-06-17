@@ -98,6 +98,11 @@ public class Training {
 			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
+			
+			if( !validate.validateHasLayers() ) {
+				return;
+			}
+
 
 			final ProgressAnneal train = new ProgressAnneal(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
@@ -127,6 +132,11 @@ public class Training {
 			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
+			
+			if( !validate.validateHasLayers() ) {
+				return;
+			}
+
 			
 			this.network = dialog.getNetwork();
 			this.training = dialog.getTrainingSet();
@@ -162,6 +172,11 @@ public class Training {
 			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
+			
+			if( !validate.validateHasLayers() ) {
+				return;
+			}
+
 
 			final ProgressGenetic train = new ProgressGenetic(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
@@ -195,6 +210,11 @@ public class Training {
 			if( !validate.validateInputSize() ) {
 				return;
 			}
+			
+			if( !validate.validateHasLayers() ) {
+				return;
+			}
+
 
 			final ProgressSOM train = new ProgressSOM(EncogWorkBench
 					.getInstance().getMainWindow(), network, training, dialog
@@ -224,6 +244,11 @@ public class Training {
 			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
+			
+			if( !validate.validateHasLayers() ) {
+				return;
+			}
+
 
 			this.network = dialog.getNetwork();
 			this.training = dialog.getTrainingSet();
@@ -257,6 +282,11 @@ public class Training {
 			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
+			
+			if( !validate.validateHasLayers() ) {
+				return;
+			}
+			
 
 			this.network = dialog.getNetwork();
 			this.training = dialog.getTrainingSet();
@@ -282,6 +312,11 @@ public class Training {
 			if (!validate.validateIsSupervised()) {
 				return;
 			}
+			
+			if( !validate.validateHasLayers() ) {
+				return;
+			}
+			
 			
 			if( !validate.validateFeedforwardOrSRN() ) {
 				return;
@@ -314,6 +349,11 @@ public class Training {
 			if( !validate.validateFeedforwardOrSRN() ) {
 				return;
 			}
+			
+			if( !validate.validateHasLayers() ) {
+				return;
+			}
+			
 
 			this.network = dialog.getNetwork();
 			this.training = dialog.getTrainingSet();
@@ -342,6 +382,11 @@ public class Training {
 			if( !validate.validateFeedforwardOrSRN() ) {
 				return;
 			}
+			
+			if( !validate.validateHasLayers() ) {
+				return;
+			}
+			
 
 			this.network = dialog.getNetwork();
 			this.training = dialog.getTrainingSet();
@@ -426,6 +471,11 @@ public class Training {
 			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
+			
+			if( !validate.validateHasLayers() ) {
+				return;
+			}
+
 
 			final BasicNetwork network = dialog.getNetwork();
 			final NeuralDataSet training = dialog.getTrainingSet();
@@ -457,6 +507,11 @@ public class Training {
 			if( !validate.validateInputAndOuputSizes() ) {
 				return;
 			}
+			
+			if( !validate.validateHasLayers() ) {
+				return;
+			}
+			
 
 			final BasicNetwork network = dialog.getNetwork();
 			final NeuralDataSet training = dialog.getTrainingSet();
@@ -506,6 +561,10 @@ public class Training {
 			}
 			
 			if( !validate.validateInputAndOuputSizes() ) {
+				return;
+			}
+			
+			if( !validate.validateHasLayers() ) {
 				return;
 			}
 

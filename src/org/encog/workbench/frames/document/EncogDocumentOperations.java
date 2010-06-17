@@ -31,7 +31,6 @@
 package org.encog.workbench.frames.document;
 
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -48,6 +47,7 @@ import org.encog.neural.networks.training.neat.NEATGenome;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.solve.genetic.population.BasicPopulation;
+import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.BenchmarkDialog;
@@ -496,7 +496,7 @@ public class EncogDocumentOperations {
 
 				double error = network.calculateError(training);
 				EncogWorkBench.displayMessage("Error For this Network", ""
-						+ error);
+						+ Format.formatPercent(error));
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error Evaluating Network", t);
