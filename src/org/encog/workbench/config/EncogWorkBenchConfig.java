@@ -31,6 +31,7 @@
 package org.encog.workbench.config;
 
 import org.encog.EncogError;
+import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.persist.Persistor;
 import org.encog.workbench.util.SimpleEncrypt;
@@ -39,7 +40,7 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 
 	private String name = "workbenchConfig";
 	private String description = "workbenchDescription";
-	
+
 	private String encogCloudNetwork = "http://cloud.encog.com";
 	private String encogCloudPassword;
 	private String encogCloudUserID;
@@ -47,7 +48,8 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	private double defaultError = 0.01;
 	private int threadCount = 0;
 	private boolean useOpenCL;
-	
+	private int errorCalculation;
+
 	public Persistor createPersistor() {
 		return null;
 	}
@@ -63,7 +65,7 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 
 	public void setDescription(String theDescription) {
 		this.description = theDescription;
-		
+
 	}
 
 	public void setName(String name) {
@@ -125,7 +127,33 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	public void setUseOpenCL(boolean useOpenCL) {
 		this.useOpenCL = useOpenCL;
 	}
-	
-	
-	
+
+	public ErrorCalculationMode getErrorCalculation() {
+		switch (this.errorCalculation) {
+		case 0:
+			return ErrorCalculationMode.RMS;
+		case 1:
+			return ErrorCalculationMode.MSE;
+		case 2:
+			return ErrorCalculationMode.ARCTAN;
+		default:
+			return ErrorCalculationMode.RMS;
+		}
+	}
+
+	public void setErrorCalculation(ErrorCalculationMode errorCalculation) {
+		switch(errorCalculation)
+		{
+			case RMS:
+				this.errorCalculation = 0;
+				break;
+			case MSE:
+				this.errorCalculation = 1;
+				break;
+			case ARCTAN:
+				this.errorCalculation = 2;
+				break;
+		}
+	}
+
 }

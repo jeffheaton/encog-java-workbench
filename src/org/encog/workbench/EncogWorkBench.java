@@ -43,6 +43,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.encog.Encog;
 import org.encog.EncogError;
+import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.parse.tags.read.ReadXML;
@@ -352,6 +353,8 @@ public class EncogWorkBench implements Runnable {
 		if( EncogWorkBench.getInstance().getConfig().isUseOpenCL()) {
 			EncogWorkBench.initCL();
 		}
+		
+		ErrorCalculation.setMode(EncogWorkBench.getInstance().getConfig().getErrorCalculation());
 		
 		Thread thread = new Thread(this);
 		thread.setDaemon(true);

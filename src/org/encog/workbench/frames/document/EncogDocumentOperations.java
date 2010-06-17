@@ -33,11 +33,14 @@ package org.encog.workbench.frames.document;
 import java.awt.Frame;
 import java.io.File;
 
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.encog.Encog;
 import org.encog.EncogError;
+import org.encog.mathutil.error.ErrorCalculation;
+import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
@@ -93,12 +96,10 @@ public class EncogDocumentOperations {
 	public void openItem(final Object item) {
 
 		DirectoryEntry entry = (DirectoryEntry) item;
-		if( EncogWorkBench.getInstance().getCurrentFile().find(entry)==null )
-		{
+		if (EncogWorkBench.getInstance().getCurrentFile().find(entry) == null) {
 			EncogWorkBench.displayError("Object", "Can't find that object.");
 			return;
 		}
-
 
 		if (entry.getType().equals(EncogPersistedCollection.TYPE_TRAINING)) {
 
@@ -113,8 +114,7 @@ public class EncogDocumentOperations {
 				EncogPersistedCollection.TYPE_BASIC_NET)) {
 
 			final DirectoryEntry net = (DirectoryEntry) item;
-			if (owner.getTabManager().checkBeforeOpen(net,
-					BasicNetwork.class)) {
+			if (owner.getTabManager().checkBeforeOpen(net, BasicNetwork.class)) {
 				BasicNetwork net2 = (BasicNetwork) EncogWorkBench.getInstance()
 						.getCurrentFile().find(net);
 				final NetworkTab tab = new NetworkTab(net2);
@@ -134,7 +134,8 @@ public class EncogDocumentOperations {
 			if (owner.getTabManager().checkBeforeOpen(prop, PropertyData.class)) {
 				PropertyData prop2 = (PropertyData) EncogWorkBench
 						.getInstance().getCurrentFile().find(prop);
-				final PropertyDataTab tab = new PropertyDataTab(owner.getDocumentTabs(), prop2);
+				final PropertyDataTab tab = new PropertyDataTab(owner
+						.getDocumentTabs(), prop2);
 				owner.openTab(tab);
 			}
 		} else if (entry.getType().equals(
@@ -147,16 +148,16 @@ public class EncogDocumentOperations {
 				final PopulationTab tab = new PopulationTab(pop2);
 				owner.openTab(tab);
 			}
-		} else if( entry.getType().equals(EncogPersistedCollection.TYPE_SVM)) {
+		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_SVM)) {
 			DirectoryEntry svm = (DirectoryEntry) item;
 			if (owner.getTabManager().checkBeforeOpen(svm,
 					BasicPopulation.class)) {
-				SVMNetwork svn2 = (SVMNetwork) EncogWorkBench
-						.getInstance().getCurrentFile().find(svm);
+				SVMNetwork svn2 = (SVMNetwork) EncogWorkBench.getInstance()
+						.getCurrentFile().find(svm);
 				final SVMTab tab = new SVMTab(svn2);
 				owner.openTab(tab);
 			}
-		
+
 		} else {
 			EncogWorkBench.displayError("Error",
 					"Unknown object type.\nDo not know how to open.");
@@ -311,15 +312,15 @@ public class EncogDocumentOperations {
 	public void performObjectsCreate() {
 
 		try {
-			CreateObjectDialog dialog = new CreateObjectDialog(EncogWorkBench.getInstance().getMainWindow());
-			
+			CreateObjectDialog dialog = new CreateObjectDialog(EncogWorkBench
+					.getInstance().getMainWindow());
+
 			dialog.setType(ObjectType.NeuralNetwork);
-			
-			if( !dialog.process() )
+
+			if (!dialog.process())
 				return;
-			
-			switch(dialog.getType())
-			{
+
+			switch (dialog.getType()) {
 			case NeuralNetwork:
 				CreateNeuralNetwork.process(generateNextID("network-"));
 				break;
@@ -345,7 +346,7 @@ public class EncogDocumentOperations {
 				performCreateTrainingData();
 				break;
 			}
-			
+
 		} catch (EncogError t) {
 			EncogWorkBench.displayError("Error creating object", t);
 			logger.error("Error creating object", t);
@@ -380,7 +381,7 @@ public class EncogDocumentOperations {
 					"This object can not be deleted while it is open.");
 			return;
 		}
-			
+
 		EncogWorkBench.getInstance().getCurrentFile().delete(selected);
 		EncogWorkBench.getInstance().getMainWindow().redraw();
 	}
@@ -391,8 +392,8 @@ public class EncogDocumentOperations {
 	}
 
 	public void performHelpAbout() {
-		//AboutEncog dialog = new AboutEncog();
-		//dialog.process();
+		// AboutEncog dialog = new AboutEncog();
+		// dialog.process();
 		EncogWorkBench.getInstance().getMainWindow().displayAboutTab();
 	}
 
@@ -439,6 +440,20 @@ public class EncogDocumentOperations {
 		dialog.getAutoConnect().setValue(config.isAutoConnect());
 		dialog.getThreadCount().setValue(config.getThreadCount());
 		dialog.getUseOpenCL().setValue(config.isUseOpenCL());
+		switch (config.getErrorCalculation()) {
+		case RMS:
+			((JComboBox) dialog.getErrorCalculation().getField())
+					.setSelectedIndex(0);
+			break;
+		case MSE:
+			((JComboBox) dialog.getErrorCalculation().getField())
+					.setSelectedIndex(1);
+			break;
+		case ARCTAN:
+			((JComboBox) dialog.getErrorCalculation().getField())
+					.setSelectedIndex(2);
+			break;
+		}
 
 		if (dialog.process()) {
 			config.setEncogCloudUserID(dialog.getUserID().getValue());
@@ -447,20 +462,37 @@ public class EncogDocumentOperations {
 			config.setAutoConnect(dialog.getAutoConnect().getValue());
 			config.setEncogCloudNetwork(dialog.getNetwork().getValue());
 			config.setThreadCount(dialog.getThreadCount().getValue());
-			config.setUseOpenCL(dialog.getUseOpenCL().getValue());			
-			EncogWorkBench.saveConfig();
-			
-			if( config.isUseOpenCL() && Encog.getInstance().getCL()==null)
+			config.setUseOpenCL(dialog.getUseOpenCL().getValue());
+			switch(((JComboBox) dialog.getErrorCalculation().getField()).getSelectedIndex())
 			{
-				EncogWorkBench.initCL();
-				if( Encog.getInstance().getCL()!=null )
-				{
-					EncogWorkBench.displayMessage("OpenCL", "Success, your graphics card(s) are now ready to help train neural networks.");
-				}
+				case 0:
+					config.setErrorCalculation(ErrorCalculationMode.RMS);
+					break;
+				case 1:
+					config.setErrorCalculation(ErrorCalculationMode.MSE);
+					break;
+				case 2:
+					config.setErrorCalculation(ErrorCalculationMode.ARCTAN);
+					break;
 			}
-			else if( !EncogWorkBench.getInstance().getConfig().isUseOpenCL() && Encog.getInstance().getCL()!=null )
-			{
-				EncogWorkBench.displayMessage("OpenCL", "Encog Workbench will stop using your GPU the next time\nthe workbench is restarted.");
+			EncogWorkBench.saveConfig();
+
+			ErrorCalculation.setMode(EncogWorkBench.getInstance().getConfig()
+					.getErrorCalculation());
+
+			if (config.isUseOpenCL() && Encog.getInstance().getCL() == null) {
+				EncogWorkBench.initCL();
+				if (Encog.getInstance().getCL() != null) {
+					EncogWorkBench
+							.displayMessage("OpenCL",
+									"Success, your graphics card(s) are now ready to help train neural networks.");
+				}
+			} else if (!EncogWorkBench.getInstance().getConfig().isUseOpenCL()
+					&& Encog.getInstance().getCL() != null) {
+				EncogWorkBench
+						.displayMessage(
+								"OpenCL",
+								"Encog Workbench will stop using your GPU the next time\nthe workbench is restarted.");
 			}
 
 		}
@@ -468,21 +500,21 @@ public class EncogDocumentOperations {
 
 	public void performObjectsProperties(DirectoryEntry selected) {
 
-		final EditEncogObjectProperties dialog = new EditEncogObjectProperties(owner);
+		final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
+				owner);
 		dialog.getNameField().setValue(selected.getName());
 		dialog.getDescription().setValue(selected.getDescription());
-		if( dialog.process() )
-		{
-			if (EncogWorkBench.getInstance().getCurrentFile().find(dialog.getNameField().getValue()) != null) {
+		if (dialog.process()) {
+			if (EncogWorkBench.getInstance().getCurrentFile().find(
+					dialog.getNameField().getValue()) != null) {
 				EncogWorkBench.displayError("Data Error",
 						"That name is already in use, please choose another.");
 				return;
 			}
-			
+
 			EncogWorkBench.getInstance().getCurrentFile().updateProperties(
-					selected.getName(), 
-					dialog.getNameField().getValue(), 
-					dialog.getDescription().getValue() );
+					selected.getName(), dialog.getNameField().getValue(),
+					dialog.getDescription().getValue());
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 	}

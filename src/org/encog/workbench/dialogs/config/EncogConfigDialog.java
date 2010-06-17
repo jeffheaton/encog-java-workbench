@@ -51,16 +51,23 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 	private CheckField autoConnect;
 	private IntegerField threadCount;
 	private CheckField useOpenCL;
+	private ComboBoxField errorCalculation;
 	
 	public EncogConfigDialog(Frame owner) {
 		super(owner);
 		List<String> servers = new ArrayList<String>();
+		List<String> errorMethods = new ArrayList<String>();
+		
 		servers.add("cloud.encog.com");
 		servers.add("devcloud.encog.com");
+		errorMethods.add("Root Mean Square");
+		errorMethods.add("Mean Square Error");
+		errorMethods.add("Arc-Tan Error");
 		setTitle("Encog Configuration");
 		setSize(500,300);
 		beginTab("Training");
 		addProperty(this.defaultError = new DoubleField("default error","Default Error Percent",true,0,1));
+		addProperty(this.errorCalculation = new ComboBoxField("error calculation", "Error Calculation", true, errorMethods));
 		addProperty(this.threadCount = new IntegerField("thread count","Thread Count (0=auto)",true,0,10000));
 		addProperty(this.useOpenCL = new CheckField("use opencl","Use Graphics Card(GPU)"));
 		beginTab("Encog Cloud");
@@ -98,5 +105,11 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 	public CheckField getUseOpenCL() {
 		return useOpenCL;
 	}
+
+	public ComboBoxField getErrorCalculation() {
+		return errorCalculation;
+	}
+	
+	
 
 }
