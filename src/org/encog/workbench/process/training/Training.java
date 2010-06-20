@@ -441,8 +441,8 @@ public class Training {
 				case NEAT:
 					performNEAT();
 					break;
-				case SVM:
-					performSVM();
+				case SVMSimple:
+					performSVMSimple();
 					break;
 				}
 			}
@@ -599,10 +599,13 @@ public class Training {
 
 	}
 	
-	public void performSVM()
+	public void performSVMSimple()
 	{
 		InputSVM dialog = new InputSVM(EncogWorkBench
 				.getInstance().getMainWindow());
+		dialog.getC().setValue(1);
+		dialog.getGamma().setValue(0);
+		
 		if( dialog.process() )
 		{
 			final ValidateTraining validate = new ValidateTraining(dialog.getNetwork(), 
@@ -620,10 +623,11 @@ public class Training {
 			final NeuralDataSet trainingSet = dialog.getTrainingSet();
 			final SVMNetwork network = (SVMNetwork)dialog.getNetwork();
 			
-			SVMTrain training = new SVMTrain(network,(Indexable)trainingSet);
-			training.iteration();
-			EncogWorkBench.displayMessage("Training Complete", "Iterations:" + 
-					Format.formatInteger(network.getParams().statIterations));
+			SVMTrain training = new SVMTrain(network,trainingSet);
+			training.train(dialog.getGamma().getValue(),dialog.getC().getValue());
+			this.network = training.getNetwork();
+			EncogWorkBench.displayMessage("Training Complete", "Final error: " + 
+					Format.formatPercent(this.network.calculateError(trainingSet)));
 		}
 	}
 }

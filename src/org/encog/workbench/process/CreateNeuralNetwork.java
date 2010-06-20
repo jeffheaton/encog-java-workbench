@@ -35,6 +35,8 @@ import org.encog.neural.activation.ActivationSigmoid;
 import org.encog.neural.activation.ActivationTANH;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.svm.KernelType;
+import org.encog.neural.networks.svm.SVMType;
 import org.encog.neural.pattern.ADALINEPattern;
 import org.encog.neural.pattern.ART1Pattern;
 import org.encog.neural.pattern.BAMPattern;
@@ -155,11 +157,15 @@ public class CreateNeuralNetwork {
 	private static BasicNetwork createSVM(String name) {
 		CreateSVMDialog dialog = new CreateSVMDialog(EncogWorkBench
 				.getInstance().getMainWindow());
+		dialog.setSVMType(SVMType.EpsilonSupportVectorRegression);
+		dialog.setKernelType(KernelType.RadialBasisFunction);
 		if (dialog.process()) {
-			SVMPattern rsom = new SVMPattern();
-			rsom.setInputNeurons(dialog.getInputCount().getValue());
-			rsom.setOutputNeurons(dialog.getOutputCount().getValue());
-			return rsom.generate();
+			SVMPattern svm = new SVMPattern();
+			svm.setInputNeurons(dialog.getInputCount().getValue());
+			svm.setOutputNeurons(dialog.getOutputCount().getValue());
+			svm.setKernelType(dialog.getKernelType());
+			svm.setSVMType(dialog.getSVMType());
+			return svm.generate();
 		} else
 			return null;
 	}

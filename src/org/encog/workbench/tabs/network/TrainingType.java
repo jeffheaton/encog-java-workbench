@@ -43,5 +43,6 @@ public enum TrainingType {
 	Instar,
 	Outstar,
 	NEAT,
-	SVM
+	SVMSimple,
+	SVMCross
 }

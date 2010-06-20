@@ -85,7 +85,8 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 		this.model.addElement("Instar");
 		this.model.addElement("Outstar");
 		this.model.addElement("NeuroEvolution of Augmenting Topologies (NEAT)");
-		this.model.addElement("Support Vector Machine");
+		this.model.addElement("Support Vector Machine - Simple");
+		this.model.addElement("Support Vector Machine - Cross");
 
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -136,7 +137,10 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 			this.type = TrainingType.NEAT;
 			break;
 		case 12:
-			this.type = TrainingType.SVM;
+			this.type = TrainingType.SVMSimple;
+			break;
+		case 13:
+			this.type = TrainingType.SVMCross;
 			break;
 		}
 	}
@@ -180,8 +184,11 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 		case NEAT:
 			this.list.setSelectedIndex(11);
 			break;
-		case SVM:
+		case SVMSimple:
 			this.list.setSelectedIndex(12);
+			break;
+		case SVMCross:
+			this.list.setSelectedIndex(13);
 			break;
 		}
 	}
@@ -247,9 +254,11 @@ public class ChooseTrainingMethodDialog extends EncogCommonDialog implements
 			
 		case 12:
 			this.text
-					.setText("This training method can only be used with Support Vector Machines.");
+					.setText("This training method can only be used with Support Vector Machines.  Do a very fast train of a SVM, for RBF kernel type SVM's a gamma and C will be used to train the network.  Training will be fairly quick.");
 			break;	
-
+		case 13:
+			this.text.setText("This training method can only be used with Support Vector Machines that use an RBF kernel.  For other SVM's just use SVM simple.  This method will cycle through values of gamma and C searching for an optimial pair to use to train the network. ");
+			break;
 		}
 
 		this.text.setSelectionStart(0);
