@@ -100,7 +100,7 @@ public class ProgressSOM extends BasicTrainingProgress {
 	public void startup() {
 		CompetitiveTraining train = new CompetitiveTraining(
 				getNetwork(),
-				0.7,
+				this.learningRate,
 				getTrainingData(),
 				new NeighborhoodSingle());
 

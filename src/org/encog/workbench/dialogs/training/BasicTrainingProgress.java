@@ -456,7 +456,12 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 				this.currentError = this.train.getError();
 
 				if (this.currentError < this.maxError) {
-					this.status = "Done";
+					this.status = "Max Error Reached";
+					this.cancel = true;
+				}
+				
+				if( this.train.isTrainingDone() ) {
+					this.status = "Training Complete";
 					this.cancel = true;
 				}
 

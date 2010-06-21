@@ -70,6 +70,8 @@ import org.encog.workbench.dialogs.training.scg.ProgressSCG;
 import org.encog.workbench.dialogs.training.som.InputSOM;
 import org.encog.workbench.dialogs.training.som.ProgressSOM;
 import org.encog.workbench.dialogs.training.svm.InputSVM;
+import org.encog.workbench.dialogs.training.svm.ImputSearchSVM;
+import org.encog.workbench.dialogs.training.svm.ProgressSVM;
 import org.encog.workbench.process.validate.ValidateTraining;
 
 public class Training {
@@ -444,6 +446,9 @@ public class Training {
 				case SVMSimple:
 					performSVMSimple();
 					break;
+				case SVMCross:
+					performSVMSearch();
+					break;
 				}
 			}
 		}
@@ -628,6 +633,52 @@ public class Training {
 			this.network = training.getNetwork();
 			EncogWorkBench.displayMessage("Training Complete", "Final error: " + 
 					Format.formatPercent(this.network.calculateError(trainingSet)));
+		}
+	}
+	
+	public void performSVMSearch()
+	{
+		ImputSearchSVM dialog = new ImputSearchSVM(EncogWorkBench
+				.getInstance().getMainWindow());
+		
+		dialog.getBeginningGamma().setValue(SVMTrain.DEFAULT_GAMMA_BEGIN);
+		dialog.getEndingGamma().setValue(SVMTrain.DEFAULT_GAMMA_END);
+		dialog.getStepGamma().setValue(SVMTrain.DEFAULT_GAMMA_STEP);
+		dialog.getBeginningC().setValue(SVMTrain.DEFAULT_CONST_BEGIN);
+		dialog.getEndingC().setValue(SVMTrain.DEFAULT_CONST_END);
+		dialog.getStepC().setValue(SVMTrain.DEFAULT_CONST_STEP);
+		
+		if( dialog.process() )
+		{
+			final ValidateTraining validate = new ValidateTraining(dialog.getNetwork(), 
+					(BasicNeuralDataSet) dialog.getTrainingSet());
+
+			if (!validate.validateIsSupervised()) {
+				return;
+			}
+					
+			
+			if( !validate.validateSVM() ) {
+				return;
+			}
+
+			final NeuralDataSet trainingSet = dialog.getTrainingSet();
+			final SVMNetwork network = (SVMNetwork)dialog.getNetwork();
+
+			final ProgressSVM train = new ProgressSVM(
+					EncogWorkBench.getInstance().getMainWindow(), network,
+					trainingSet, 
+					dialog.getBeginningGamma().getValue(),
+					dialog.getEndingGamma().getValue(),
+					dialog.getStepGamma().getValue(),
+					dialog.getBeginningC().getValue(),
+					dialog.getEndingC().getValue(),
+					dialog.getEndingGamma().getValue(),
+					dialog.getMaxError().getValue());
+
+			EncogWorkBench.getInstance().getMainWindow().openTab(train, "SVM");
+	
+
 		}
 	}
 }
