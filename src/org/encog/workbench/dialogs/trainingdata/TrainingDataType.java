@@ -34,6 +34,7 @@ public enum TrainingDataType {
 
 	Empty,
 	ImportCSV,
+	LinkCSV,
 	MarketWindow,
 	PredictWindow,
 	Random,

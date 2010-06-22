@@ -31,6 +31,7 @@
 package org.encog.workbench.process.validate;
 
 import org.encog.mathutil.rbf.RadialBasisFunction;
+import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.Layer;
@@ -44,10 +45,10 @@ import org.encog.workbench.EncogWorkBench;
 public class ValidateTraining {
 
 	BasicNetwork network;
-	BasicNeuralDataSet training;
+	NeuralDataSet training;
 
 	public ValidateTraining(final BasicNetwork network,
-			final BasicNeuralDataSet training) {
+			final NeuralDataSet training) {
 		this.network = network;
 		this.training = training;
 	}

@@ -36,6 +36,7 @@ public enum ObjectType {
 	NEATPopulation,
 	PropertyData,
 	Text,
-	TrainingData		
+	TrainingData,
+	EncogScript
 	
 }

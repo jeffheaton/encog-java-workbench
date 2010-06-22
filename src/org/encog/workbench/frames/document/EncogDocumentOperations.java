@@ -45,11 +45,13 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
+import org.encog.neural.data.external.ExternalDataSource;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.svm.SVMNetwork;
 import org.encog.neural.networks.training.neat.NEATGenome;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
+import org.encog.script.EncogScript;
 import org.encog.solve.genetic.population.BasicPopulation;
 import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
@@ -71,6 +73,8 @@ import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.generate.CodeGeneration;
+import org.encog.workbench.tabs.EncogScriptTab;
+import org.encog.workbench.tabs.ExternalLinkTab;
 import org.encog.workbench.tabs.PropertyDataTab;
 import org.encog.workbench.tabs.SVMTab;
 import org.encog.workbench.tabs.TextDataTab;
@@ -151,14 +155,35 @@ public class EncogDocumentOperations {
 		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_SVM)) {
 			DirectoryEntry svm = (DirectoryEntry) item;
 			if (owner.getTabManager().checkBeforeOpen(svm,
-					BasicPopulation.class)) {
+					SVMNetwork.class)) {
 				SVMNetwork svn2 = (SVMNetwork) EncogWorkBench.getInstance()
 						.getCurrentFile().find(svm);
 				final SVMTab tab = new SVMTab(svn2);
 				owner.openTab(tab);
 			}
 
-		} else {
+		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_LINK)) {
+			DirectoryEntry link = (DirectoryEntry) item;
+			if (owner.getTabManager().checkBeforeOpen(link,
+					BasicPopulation.class)) {
+				ExternalDataSource link2 = (ExternalDataSource) EncogWorkBench.getInstance()
+						.getCurrentFile().find(link);
+				final ExternalLinkTab tab = new ExternalLinkTab(link2);
+				owner.openTab(tab);
+			}
+
+		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_SCRIPT)) {
+			DirectoryEntry script = (DirectoryEntry) item;
+			if (owner.getTabManager().checkBeforeOpen(script,
+					BasicPopulation.class)) {
+				EncogScript script2 = (EncogScript) EncogWorkBench.getInstance()
+						.getCurrentFile().find(script);
+				final EncogScriptTab tab = new EncogScriptTab(script2);
+				owner.openTab(tab);
+			}
+
+		} 		
+		else {
 			EncogWorkBench.displayError("Error",
 					"Unknown object type.\nDo not know how to open.");
 		}
@@ -321,6 +346,14 @@ public class EncogDocumentOperations {
 				return;
 
 			switch (dialog.getType()) {
+			case EncogScript:
+				final EncogScript script = new EncogScript();
+				script.setDescription("An Encog script");
+				script.setSource("println \"Hello World\"");
+				EncogWorkBench.getInstance().getCurrentFile().add(
+						generateNextID("script-"), script);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+				break;				
 			case NeuralNetwork:
 				CreateNeuralNetwork.process(generateNextID("network-"));
 				break;
@@ -572,6 +605,9 @@ public class EncogDocumentOperations {
 				break;
 			case ImportCSV:
 				CreateTrainingData.createImportCSV();
+				break;
+			case LinkCSV:
+				CreateTrainingData.createLinkCSV();
 				break;
 			case MarketWindow:
 				CreateTrainingData.createMarketWindow();

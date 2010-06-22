@@ -70,6 +70,7 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 
 		this.model.addElement("Empty Training Set");
 		this.model.addElement("Import Training Set from CSV");
+		this.model.addElement("Link Training Set from CSV");
 		this.model.addElement("Market Data Training Set");
 		this.model.addElement("Prediction Window from CSV");
 		this.model.addElement("Random Training Set");		
@@ -98,20 +99,23 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			break;
 		case 1:
 			this.type = TrainingDataType.ImportCSV;
-			break;		
+			break;
 		case 2:
-			this.type = TrainingDataType.MarketWindow;
+			this.type = TrainingDataType.LinkCSV;
 			break;
 		case 3:
-			this.type = TrainingDataType.PredictWindow;
+			this.type = TrainingDataType.MarketWindow;
 			break;
 		case 4:
-			this.type = TrainingDataType.Random;
+			this.type = TrainingDataType.PredictWindow;
 			break;
 		case 5:
-			this.type = TrainingDataType.XORTemp;
+			this.type = TrainingDataType.Random;
 			break;
 		case 6:
+			this.type = TrainingDataType.XORTemp;
+			break;
+		case 7:
 			this.type = TrainingDataType.XOR;
 			break;		
 		}
@@ -125,6 +129,9 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			break;
 		case ImportCSV:
 			this.list.setSelectedIndex(1);
+			break;
+		case LinkCSV:
+			this.list.setSelectedIndex(2);
 			break;
 		case MarketWindow:
 			this.list.setSelectedIndex(3);
@@ -162,30 +169,36 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 
 		case 1:
 			this.text
-					.setText("Import training data from a CSV file.  A comma separated value (CSV) file is a common source of data for neural network training.");
+					.setText("Import training data from a CSV file.  A comma separated value (CSV) file is a common source of data for neural network training.  The contents of the CSV will be copied to your Encog EG file.  This may not be practical with large files.");
 			break;
-								
+			
 		case 2:
+			this.text
+					.setText("Link training data from a CSV file.  A comma separated value (CSV) file is a common source of data for neural network training.  The file will not be copied to your Encog EG file, rather a link will be kept.");
+			break;
+
+								
+		case 3:
 			this.text
 					.setText("Download market data from Yahoo Finance.  You need to enter a ticker symbol and date range.  You must also specify the size of the input window used to predict the output/prediction window.");
 			break;
 
-		case 3:
+		case 4:
 			this.text
 					.setText("Use a CSV file to input prediction data. You will be prompted for an input and output window size.  The data will be formatted according to these two window sizes.");
 			break;
 
-		case 4:
+		case 5:
 			this.text
 					.setText("Create a training set of random numbers.  This is really only useful for some testing purposes.  ");
 			break;
 
-		case 5:
+		case 6:
 			this.text
 					.setText("Create training data that uses the XOR function over time.  This is commonly used as a very simple test for Elman and Jordan style neural networks.  The XOR as temporal data is the sequence 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0.");
 			break;
 
-		case 6:
+		case 7:
 			this.text
 					.setText("Creates the classic XOR input data used to test many different neural network types.  This consists of four training pairs, each with two input values and one ideal value.");
 			break;

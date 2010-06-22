@@ -35,6 +35,7 @@ import java.awt.Frame;
 import org.encog.neural.data.Indexable;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
+import org.encog.neural.data.external.ExternalDataSource;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.logic.SOMLogic;
 import org.encog.neural.networks.svm.SVMNetwork;
@@ -79,15 +80,25 @@ public class Training {
 	private BasicNetwork network;
 	private NeuralDataSet training;
 	
+	public void initTraining(NeuralDataSet training, BasicNetwork network)
+	{
+		if( training instanceof ExternalDataSource )
+		{
+			ExternalDataSource ext = (ExternalDataSource)training;
+			ext.init(network);
+		}
+	}
+		
 	public void performAnneal() {
 		final InputAnneal dialog = new InputAnneal(EncogWorkBench.getInstance()
 				.getMainWindow());
-		if (dialog.process()) {
+		if (dialog.process()) {			
 			this.network = dialog.getNetwork();
 			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);
 
 			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+					.getNetwork(),  dialog.getTrainingSet());
 
 			if (!validate.validateIsSupervised() ) {
 				return;
@@ -121,7 +132,11 @@ public class Training {
 				EncogWorkBench.getInstance().getMainWindow());
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+					.getNetwork(),  dialog.getTrainingSet());
+			
+			this.network = dialog.getNetwork();
+			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);
 
 			if (!validate.validateIsSupervised()) {
 				return;
@@ -139,10 +154,6 @@ public class Training {
 				return;
 			}
 
-			
-			this.network = dialog.getNetwork();
-			this.training = dialog.getTrainingSet();
-
 			final ProgressBackpropagation train = new ProgressBackpropagation(
 					EncogWorkBench.getInstance().getMainWindow(), network,
 					training, dialog.getLearningRate().getValue(), dialog
@@ -159,9 +170,10 @@ public class Training {
 		if (dialog.process()) {
 			this.network = dialog.getNetwork();
 			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);
 
 			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+					.getNetwork(), dialog.getTrainingSet());
 
 			if (!validate.validateIsSupervised()) {
 				return;
@@ -197,9 +209,10 @@ public class Training {
 		if (dialog.process()) {
 			this.network = dialog.getNetwork();
 			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);
 
 			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+					.getNetwork(), dialog.getTrainingSet());
 
 			if (!validate.validateIsUnsupervised()) {
 				return;
@@ -233,7 +246,11 @@ public class Training {
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+					.getNetwork(),  dialog.getTrainingSet());
+			
+			this.network = dialog.getNetwork();
+			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);
 
 			if (!validate.validateIsSupervised()) {
 				return;
@@ -250,10 +267,6 @@ public class Training {
 			if( !validate.validateHasLayers() ) {
 				return;
 			}
-
-
-			this.network = dialog.getNetwork();
-			this.training = dialog.getTrainingSet();
 
 			final ProgressResilient train = new ProgressResilient(
 					EncogWorkBench.getInstance().getMainWindow(), network,
@@ -271,7 +284,11 @@ public class Training {
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+					.getNetwork(), dialog.getTrainingSet());
+			
+			this.network = dialog.getNetwork();
+			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);			
 
 			if (!validate.validateIsSupervised()) {
 				return;
@@ -289,10 +306,6 @@ public class Training {
 				return;
 			}
 			
-
-			this.network = dialog.getNetwork();
-			this.training = dialog.getTrainingSet();
-
 			final ProgressManhattan train = new ProgressManhattan(
 					EncogWorkBench.getInstance().getMainWindow(), network,
 					training, dialog.getFixedDelta().getValue(), dialog
@@ -309,7 +322,11 @@ public class Training {
 				EncogWorkBench.getInstance().getMainWindow());
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+					.getNetwork(), dialog.getTrainingSet());
+			
+			this.network = dialog.getNetwork();
+			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);			
 
 			if (!validate.validateIsSupervised()) {
 				return;
@@ -328,9 +345,6 @@ public class Training {
 				return;
 			}
 
-			this.network = dialog.getNetwork();
-			this.training = dialog.getTrainingSet();
-
 			final ProgressAdaline train = new ProgressAdaline(
 					EncogWorkBench.getInstance().getMainWindow(), network,
 					training, dialog.getLearningRate().getValue(), dialog.getMaxError()
@@ -346,7 +360,11 @@ public class Training {
 				EncogWorkBench.getInstance().getMainWindow());
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+					.getNetwork(), dialog.getTrainingSet());
+			
+			this.network = dialog.getNetwork();
+			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);
 			
 			if( !validate.validateFeedforwardOrSRN() ) {
 				return;
@@ -355,10 +373,6 @@ public class Training {
 			if( !validate.validateHasLayers() ) {
 				return;
 			}
-			
-
-			this.network = dialog.getNetwork();
-			this.training = dialog.getTrainingSet();
 
 			final ProgressInstar train = new ProgressInstar(
 					EncogWorkBench.getInstance().getMainWindow(), network,
@@ -375,7 +389,11 @@ public class Training {
 				EncogWorkBench.getInstance().getMainWindow());
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+					.getNetwork(), dialog.getTrainingSet());
+			
+			this.network = dialog.getNetwork();
+			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);			
 
 			if (!validate.validateIsSupervised() ) {
 				return;
@@ -388,10 +406,6 @@ public class Training {
 			if( !validate.validateHasLayers() ) {
 				return;
 			}
-			
-
-			this.network = dialog.getNetwork();
-			this.training = dialog.getTrainingSet();
 
 			final ProgressOutstar train = new ProgressOutstar(
 					EncogWorkBench.getInstance().getMainWindow(), network,
@@ -450,6 +464,7 @@ public class Training {
 					performSVMSearch();
 					break;
 				}
+				
 			}
 		}
 		catch(Throwable t)
@@ -458,12 +473,16 @@ public class Training {
 		}
 	}
 	
-	public static void performSCG() {
+	public void performSCG() {
 		final InputSCG dialog = new InputSCG(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+					.getNetwork(), dialog.getTrainingSet());
+
+			this.network = dialog.getNetwork();
+			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);			
 
 			if (!validate.validateIsSupervised()) {
 				return;
@@ -480,10 +499,6 @@ public class Training {
 			if( !validate.validateHasLayers() ) {
 				return;
 			}
-
-
-			final BasicNetwork network = dialog.getNetwork();
-			final NeuralDataSet training = dialog.getTrainingSet();
 
 			final ProgressSCG train = new ProgressSCG(
 					EncogWorkBench.getInstance().getMainWindow(), network,
@@ -494,12 +509,16 @@ public class Training {
 
 	}
 	
-	public static void performLMA() {
+	public void performLMA() {
 		final InputLMA dialog = new InputLMA(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog
-					.getNetwork(), (BasicNeuralDataSet) dialog.getTrainingSet());
+					.getNetwork(), dialog.getTrainingSet());
+			
+			this.network = dialog.getNetwork();
+			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);
 
 			if (!validate.validateIsSupervised()) {
 				return;
@@ -516,10 +535,6 @@ public class Training {
 			if( !validate.validateHasLayers() ) {
 				return;
 			}
-			
-
-			final BasicNetwork network = dialog.getNetwork();
-			final NeuralDataSet training = dialog.getTrainingSet();
 
 			final ProgressLMA train = new ProgressLMA(
 					EncogWorkBench.getInstance().getMainWindow(), network,
@@ -531,7 +546,7 @@ public class Training {
 
 	}
 	
-	public static void performNEAT() {
+	public void performNEAT() {
 		final InputNEAT dialog = new InputNEAT(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
@@ -555,7 +570,11 @@ public class Training {
 		
 		if (dialog.process()) {
 			final ValidateTraining validate = new ValidateTraining(dialog.getNetwork(), 
-					(BasicNeuralDataSet) dialog.getTrainingSet());
+				 dialog.getTrainingSet());
+			
+			this.network = dialog.getNetwork();
+			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);
 
 			if (!validate.validateIsSupervised()) {
 				return;
@@ -614,7 +633,11 @@ public class Training {
 		if( dialog.process() )
 		{
 			final ValidateTraining validate = new ValidateTraining(dialog.getNetwork(), 
-					(BasicNeuralDataSet) dialog.getTrainingSet());
+					dialog.getTrainingSet());
+			
+			this.network = dialog.getNetwork();
+			this.training = dialog.getTrainingSet();
+			initTraining(this.training,this.network);
 
 			if (!validate.validateIsSupervised()) {
 				return;

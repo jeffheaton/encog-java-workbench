@@ -35,6 +35,8 @@ import java.util.GregorianCalendar;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.encog.neural.data.market.TickerSymbol;
 import org.encog.neural.data.NeuralData;
@@ -42,6 +44,7 @@ import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
+import org.encog.neural.data.external.ExternalDataSource;
 import org.encog.neural.data.market.MarketDataDescription;
 import org.encog.neural.data.market.MarketDataType;
 import org.encog.neural.data.market.MarketNeuralDataSet;
@@ -55,12 +58,14 @@ import org.encog.neural.data.temporal.TemporalDataDescription.Type;
 import org.encog.util.benchmark.RandomTrainingFactory;
 import org.encog.util.csv.ReadCSV;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.CreateDataSet;
 import org.encog.workbench.dialogs.trainingdata.CreateEmptyTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateMarketTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTemporalDataDialog;
 import org.encog.workbench.dialogs.trainingdata.RandomTrainingDataDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.frames.document.EncogDocumentOperations;
+import org.encog.workbench.util.ImportExportUtility;
 import org.encog.workbench.util.NeuralConst;
 import org.encog.workbench.util.TemporalXOR;
 
@@ -102,6 +107,24 @@ public class CreateTrainingData {
 	public static void createImportCSV() {
 		ImportExport.performImport(null);
 	}
+	
+	public static void createLinkCSV() {
+		final JFrame frame = EncogWorkBench.getInstance().getMainWindow();
+		final JFileChooser fc = new JFileChooser();
+		fc.addChoosableFileFilter(EncogDocumentFrame.CSV_FILTER);
+		final int result = fc.showOpenDialog(frame);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			ExternalDataSource link = new ExternalDataSource();
+			link.setLink(fc.getSelectedFile());
+			
+			EncogWorkBench.getInstance().getCurrentFile().add(
+					EncogDocumentOperations.generateNextID("link-"),
+					link);
+			EncogWorkBench.getInstance().getMainWindow().redraw();
+		
+		}
+	}
+
 
 	public static void createMarketWindow() {
 		CreateMarketTrainingDialog dialog = new CreateMarketTrainingDialog(
