@@ -44,6 +44,18 @@ public class ExternalLinkTab extends EncogCommonTab {
 		g.drawString(this.object.getLink(), 150, y);
 		y += g.getFontMetrics().getHeight();
 		
+		g.setFont(EncogFonts.getInstance().getHeadFont());
+		g.drawString("Input Count:", 10, y);
+		g.setFont(EncogFonts.getInstance().getBodyFont());
+		g.drawString(""+this.object.getInputCount(), 150, y);
+		y += g.getFontMetrics().getHeight();
+		
+		g.setFont(EncogFonts.getInstance().getHeadFont());
+		g.drawString("Ideal Count:", 10, y);
+		g.setFont(EncogFonts.getInstance().getBodyFont());
+		g.drawString(""+this.object.getIdealCount(), 150, y);
+		y += g.getFontMetrics().getHeight();
+		
 	}
 
 

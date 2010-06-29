@@ -85,7 +85,7 @@ public class Training {
 		if( training instanceof ExternalDataSource )
 		{
 			ExternalDataSource ext = (ExternalDataSource)training;
-			ext.init(network);
+			ext.init();
 		}
 	}
 		

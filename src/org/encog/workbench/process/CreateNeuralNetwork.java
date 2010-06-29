@@ -34,6 +34,7 @@ import org.encog.bot.BotUtil;
 import org.encog.neural.activation.ActivationSigmoid;
 import org.encog.neural.activation.ActivationTANH;
 import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.data.external.ExternalDataSource;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.svm.KernelType;
 import org.encog.neural.networks.svm.SVMType;
@@ -269,23 +270,27 @@ public class CreateNeuralNetwork {
 		CreateAutomatic dialog = new CreateAutomatic(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.setActivationFunction(new ActivationTANH());
-
-		NeuralDataSet training = dialog.getTraining();
-		
-		
-		if( training == null ) {
-			return null;
-		}
-		
-		FeedForwardPattern pattern = new FeedForwardPattern();
-		pattern.setInputNeurons(training.getInputSize());
-		pattern.setOutputNeurons(training.getIdealSize());
 		
 		dialog.getWeightTries().setValue(5);
 		dialog.getIterations().setValue(25);
 		dialog.getWindowSize().setValue(10);
-		
+
 		if (dialog.process()) {
+			NeuralDataSet training = dialog.getTraining();			
+			
+			if( training == null ) {
+				return null;
+			}
+			
+			if( training instanceof ExternalDataSource ) {
+				((ExternalDataSource)training).init();
+			}
+			
+			FeedForwardPattern pattern = new FeedForwardPattern();
+			pattern.setInputNeurons(training.getInputSize());
+			pattern.setOutputNeurons(training.getIdealSize());
+		
+			
 			pattern.setActivationFunction(dialog.getActivationFunction());			
 			IncrementalPruneTab tab = new IncrementalPruneTab(
 					dialog.getIterations().getValue(),

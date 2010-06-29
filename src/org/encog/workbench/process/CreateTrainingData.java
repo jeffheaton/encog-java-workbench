@@ -58,7 +58,7 @@ import org.encog.neural.data.temporal.TemporalDataDescription.Type;
 import org.encog.util.benchmark.RandomTrainingFactory;
 import org.encog.util.csv.ReadCSV;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.CreateDataSet;
+import org.encog.workbench.dialogs.InputAndIdealDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateEmptyTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateMarketTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTemporalDataDialog;
@@ -94,7 +94,7 @@ public class CreateTrainingData {
 				double inputData[][] = new double[1][input];
 
 				BasicNeuralDataSet trainingData = new BasicNeuralDataSet(
-						inputData,null);
+						inputData, null);
 				trainingData.setDescription("Empty Training data");
 				EncogWorkBench.getInstance().getCurrentFile().add(
 						EncogDocumentOperations.generateNextID("data-"),
@@ -107,63 +107,143 @@ public class CreateTrainingData {
 	public static void createImportCSV() {
 		ImportExport.performImport(null);
 	}
-	
+
 	public static void createLinkCSV() {
 		final JFrame frame = EncogWorkBench.getInstance().getMainWindow();
 		final JFileChooser fc = new JFileChooser();
 		fc.addChoosableFileFilter(EncogDocumentFrame.CSV_FILTER);
 		final int result = fc.showOpenDialog(frame);
 		if (result == JFileChooser.APPROVE_OPTION) {
-			ExternalDataSource link = new ExternalDataSource();
-			link.setLink(fc.getSelectedFile());
-			
-			EncogWorkBench.getInstance().getCurrentFile().add(
-					EncogDocumentOperations.generateNextID("link-"),
-					link);
-			EncogWorkBench.getInstance().getMainWindow().redraw();
-		
+			InputAndIdealDialog dialog = new InputAndIdealDialog(EncogWorkBench
+					.getInstance().getMainWindow());
+			if (dialog.process()) {
+				ExternalDataSource link = new ExternalDataSource();
+				link.setInputCount(dialog.getInputCount().getValue());
+				link.setIdealCount(dialog.getIdealCount().getValue());
+				link.setLink(fc.getSelectedFile());
+
+				EncogWorkBench.getInstance().getCurrentFile().add(
+						EncogDocumentOperations.generateNextID("link-"), link);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+			}
 		}
 	}
-
 
 	public static void createMarketWindow() {
 		CreateMarketTrainingDialog dialog = new CreateMarketTrainingDialog(
 				EncogWorkBench.getInstance().getMainWindow());
-		
+
 		dialog.getFromDay().setValue(1);
 		dialog.getFromMonth().setValue(1);
 		dialog.getFromYear().setValue(1995);
-		
+
 		dialog.getToDay().setValue(31);
 		dialog.getToMonth().setValue(12);
 		dialog.getToYear().setValue(2005);
-		
+
 		dialog.getInputWindow().setValue(7);
 		dialog.getOutputWindow().setValue(1);
-		
-		((JComboBox)dialog.getNormalizationType().getField()).setSelectedIndex(1);
-		
-		if( dialog.process() )
-		{
+
+		((JComboBox) dialog.getNormalizationType().getField())
+				.setSelectedIndex(1);
+
+		if (dialog.process()) {
 			String ticker = dialog.getTicker().getValue();
 			int fromDay = dialog.getFromDay().getValue();
 			int fromMonth = dialog.getFromMonth().getValue();
 			int fromYear = dialog.getFromYear().getValue();
-			
+
 			int toDay = dialog.getToDay().getValue();
 			int toMonth = dialog.getToMonth().getValue();
 			int toYear = dialog.getToYear().getValue();
-			
+
 			int inputWindow = dialog.getInputWindow().getValue();
 			int outputWindow = dialog.getOutputWindow().getValue();
-			
-			Calendar begin = new GregorianCalendar(fromYear, fromMonth-1, fromDay);
-			Calendar end = new GregorianCalendar(toYear, toMonth-1, toDay);
-			
+
+			Calendar begin = new GregorianCalendar(fromYear, fromMonth - 1,
+					fromDay);
+			Calendar end = new GregorianCalendar(toYear, toMonth - 1, toDay);
+
 			Type type;
-			
-			switch(((JComboBox)dialog.getNormalizationType().getField()).getSelectedIndex())
-			{
+
+			switch (((JComboBox) dialog.getNormalizationType().getField())
+					.getSelectedIndex()) {
+			case 0:
+				type = Type.RAW;
+				break;
+			case 1:
+				type = Type.PERCENT_CHANGE;
+				break;
+			case 2:
+				type = Type.DELTA_CHANGE;
+				break;
+			default:
+				type = Type.RAW;
+				break;
+			}
+
+			try {
+				final MarketLoader loader = new YahooFinanceLoader();
+				final MarketNeuralDataSet market = new MarketNeuralDataSet(
+						loader, inputWindow, outputWindow);
+				final MarketDataDescription desc = new MarketDataDescription(
+						new TickerSymbol(ticker),
+						MarketDataType.ADJUSTED_CLOSE, type, true, true);
+				market.addDescription(desc);
+
+				if (end.getTimeInMillis() < begin.getTimeInMillis()) {
+					EncogWorkBench.displayError("Dates",
+							"Ending date should not be before begin date.");
+					return;
+				}
+
+				market.load(begin.getTime(), end.getTime());
+				market.generate();
+
+				BasicNeuralDataSet training = new BasicNeuralDataSet();
+
+				for (NeuralDataPair data : market) {
+					training.add(data);
+				}
+
+				training.setDescription("Market data for: " + ticker);
+
+				EncogWorkBench.getInstance().getCurrentFile().add(
+						EncogDocumentOperations.generateNextID("data-"),
+						training);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+			} catch (LoaderError e) {
+				EncogWorkBench.displayError("Ticker Symbol",
+						"Invalid ticker symbol.");
+			}
+
+		}
+
+	}
+
+	public static void createPredictWindow() {
+		final JFileChooser fc = new JFileChooser();
+		fc.addChoosableFileFilter(EncogDocumentFrame.CSV_FILTER);
+		final int result = fc.showOpenDialog(EncogWorkBench.getInstance()
+				.getMainWindow());
+		if (result == JFileChooser.APPROVE_OPTION) {
+			CreateTemporalDataDialog dialog = new CreateTemporalDataDialog(
+					EncogWorkBench.getInstance().getMainWindow());
+			((JComboBox) dialog.getNormalizationType().getField())
+					.setSelectedIndex(1);
+
+			if (dialog.process()) {
+				ReadCSV read = new ReadCSV(fc.getSelectedFile().toString(),
+						false, ',');
+				int inputWindow = dialog.getInputWindow().getValue();
+				int predictWindow = dialog.getOutputWindow().getValue();
+				TemporalNeuralDataSet temp = new TemporalNeuralDataSet(
+						inputWindow, predictWindow);
+
+				Type type;
+
+				switch (((JComboBox) dialog.getNormalizationType().getField())
+						.getSelectedIndex()) {
 				case 0:
 					type = Type.RAW;
 					break;
@@ -176,110 +256,28 @@ public class CreateTrainingData {
 				default:
 					type = Type.RAW;
 					break;
-			}
-			
-			try
-			{
-			final MarketLoader loader = new YahooFinanceLoader();
-			final MarketNeuralDataSet market = new MarketNeuralDataSet(loader,
-					inputWindow, outputWindow);
-			final MarketDataDescription desc = new MarketDataDescription(
-					new TickerSymbol(ticker), MarketDataType.ADJUSTED_CLOSE, 
-					type, true, true);
-			market.addDescription(desc);
-			
-			if( end.getTimeInMillis()<begin.getTimeInMillis() )
-			{
-				EncogWorkBench.displayError("Dates", "Ending date should not be before begin date.");
-				return;
-			}
-
-			market.load(begin.getTime(), end.getTime());
-			market.generate();
-			
-			BasicNeuralDataSet training = new BasicNeuralDataSet();
-			
-			for(NeuralDataPair data: market)
-			{
-				training.add(data);
-			}
-			
-			
-			training.setDescription("Market data for: " + ticker);
-			
-			
-			
-			EncogWorkBench.getInstance().getCurrentFile().add(
-					EncogDocumentOperations.generateNextID("data-"),
-					training);
-			EncogWorkBench.getInstance().getMainWindow().redraw();
-			}
-			catch(LoaderError e)
-			{
-				EncogWorkBench.displayError("Ticker Symbol", "Invalid ticker symbol.");
-			}
-			
-			
-		}
-		
-	}
-
-	public static void createPredictWindow() {
-		final JFileChooser fc = new JFileChooser();
-		fc.addChoosableFileFilter(EncogDocumentFrame.CSV_FILTER);
-		final int result = fc.showOpenDialog(EncogWorkBench.getInstance().getMainWindow());
-		if (result == JFileChooser.APPROVE_OPTION) {
-			CreateTemporalDataDialog dialog = new CreateTemporalDataDialog(EncogWorkBench.getInstance().getMainWindow());
-			((JComboBox)dialog.getNormalizationType().getField()).setSelectedIndex(1);
-			
-			if( dialog.process() )
-			{
-				ReadCSV read = new ReadCSV(fc.getSelectedFile().toString(),false,',');
-				int inputWindow = dialog.getInputWindow().getValue();
-				int predictWindow = dialog.getOutputWindow().getValue();
-				TemporalNeuralDataSet temp = new TemporalNeuralDataSet(inputWindow,predictWindow);
-				
-				Type type;
-				
-				switch(((JComboBox)dialog.getNormalizationType().getField()).getSelectedIndex())
-				{
-					case 0:
-						type = Type.RAW;
-						break;
-					case 1:
-						type = Type.PERCENT_CHANGE;
-						break;
-					case 2:
-						type = Type.DELTA_CHANGE;
-						break;
-					default:
-						type = Type.RAW;
-						break;
 				}
-				
-				temp.addDescription(new TemporalDataDescription(type,true,true));
+
+				temp.addDescription(new TemporalDataDescription(type, true,
+						true));
 				int index = 0;
-				while( read.next() )
-				{
+				while (read.next()) {
 					double value = read.getDouble(0);
 					TemporalPoint point = temp.createPoint(index++);
 					point.setData(0, value);
 				}
-				
+
 				temp.generate();
-				
+
 				BasicNeuralDataSet training = new BasicNeuralDataSet();
-				
-				for(NeuralDataPair data: temp)
-				{
+
+				for (NeuralDataPair data : temp) {
 					training.add(data);
 				}
-				
-				
-				training.setDescription("Temporal data for: " + fc.getSelectedFile().toString());
-				
-				
-				
+
+				training.setDescription("Temporal data for: "
+						+ fc.getSelectedFile().toString());
+
 				EncogWorkBench.getInstance().getCurrentFile().add(
 						EncogDocumentOperations.generateNextID("data-"),
 						training);
@@ -315,25 +313,25 @@ public class CreateTrainingData {
 
 	public static void createXORTemp() {
 
-		String str = EncogWorkBench.displayInput("How many training elements in the XOR temporal data set?");
-		
-		if( str!=null )
-		{	
+		String str = EncogWorkBench
+				.displayInput("How many training elements in the XOR temporal data set?");
+
+		if (str != null) {
 			int count = 0;
-			
-			try
-			{
+
+			try {
 				count = Integer.parseInt(str);
-			}
-			catch(NumberFormatException e)
-			{
-				EncogWorkBench.displayError("Error", "Must enter a valid number.");
+			} catch (NumberFormatException e) {
+				EncogWorkBench.displayError("Error",
+						"Must enter a valid number.");
 			}
 			TemporalXOR temp = new TemporalXOR();
-			BasicNeuralDataSet trainingData = (BasicNeuralDataSet)temp.generate(count);
+			BasicNeuralDataSet trainingData = (BasicNeuralDataSet) temp
+					.generate(count);
 			trainingData.setDescription("Random Training data");
 			EncogWorkBench.getInstance().getCurrentFile().add(
-					EncogDocumentOperations.generateNextID("data-"), trainingData);
+					EncogDocumentOperations.generateNextID("data-"),
+					trainingData);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 	}
@@ -347,5 +345,5 @@ public class CreateTrainingData {
 		EncogWorkBench.getInstance().getMainWindow().redraw();
 
 	}
-	
+
 }

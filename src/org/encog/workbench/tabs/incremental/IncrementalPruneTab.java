@@ -230,6 +230,7 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 
 	public void run() {
 
+		try {
 		this.prune.process();
 
 		this.buttonStart.setEnabled(false);
@@ -238,6 +239,11 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 
 		if (this.shouldExit) {
 			dispose();
+		}
+		}
+		catch(Throwable t)
+		{
+			EncogWorkBench.displayError("Error", t);
 		}
 	}
 

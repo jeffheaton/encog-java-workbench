@@ -43,10 +43,11 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.CreateDataSet;
+import org.encog.workbench.dialogs.InputAndIdealDialog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.encog.workbench.frames.document.EncogDocumentOperations;
 import org.encog.workbench.util.ImportExportUtility;
 
 public class ImportExport {
@@ -75,7 +76,7 @@ public class ImportExport {
 					clear = true;
 				}
 			} else {
-				final CreateDataSet dialog = new CreateDataSet(frame);
+				final InputAndIdealDialog dialog = new InputAndIdealDialog(frame);
 				if (!dialog.process()) {
 					return;
 				}
@@ -83,13 +84,13 @@ public class ImportExport {
 				set = new BasicNeuralDataSet();
 				NeuralData input = null;
 				NeuralData ideal = null;
-				input = new BasicNeuralData(dialog.getInputSize());
-				if (dialog.getIdealSize() > 0) {
-					ideal = new BasicNeuralData(dialog.getIdealSize());
+				input = new BasicNeuralData(dialog.getInputCount().getValue());
+				if (dialog.getIdealCount().getValue() > 0) {
+					ideal = new BasicNeuralData(dialog.getIdealCount().getValue());
 				}
 				set.add(input, ideal);
-				set.setName(dialog.getName());
-				set.setDescription(dialog.getDescription());
+				set.setName(EncogDocumentOperations.generateNextID("training-"));
+				set.setDescription("Imported Data");
 				clear = true;
 				addit = true;
 			}
