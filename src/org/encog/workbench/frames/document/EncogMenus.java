@@ -221,6 +221,8 @@ public class EncogMenus {
 	}
 
 	public void actionPerformed(final ActionEvent event) {
+		
+		try {
 		EncogWorkBench.getInstance().getMainWindow().endWait();
 		if (event.getActionCommand().equals(EncogMenus.FILE_OPEN)) {
 			owner.getOperations().performFileOpen();
@@ -270,6 +272,11 @@ public class EncogMenus {
 				EncogMenus.TOOLS_VALIDATION_CHART)) {
 			ValidationChart check = new ValidationChart();
 			check.perform(EncogWorkBench.getInstance().getMainWindow());
+		}
+		}
+		catch(Throwable t)
+		{
+			EncogWorkBench.displayError("Error", t);
 		}
 	}
 }

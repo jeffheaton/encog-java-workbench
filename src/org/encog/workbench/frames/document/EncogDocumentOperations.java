@@ -32,6 +32,7 @@ package org.encog.workbench.frames.document;
 
 import java.awt.Frame;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -65,7 +66,6 @@ import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
-import org.encog.workbench.frames.BrowserFrame;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.process.CreateNeuralNetwork;
@@ -73,6 +73,7 @@ import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.generate.CodeGeneration;
+import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.EncogScriptTab;
 import org.encog.workbench.tabs.ExternalLinkTab;
 import org.encog.workbench.tabs.PropertyDataTab;
@@ -334,7 +335,7 @@ public class EncogDocumentOperations {
 		return result;
 	}
 
-	public void performObjectsCreate() {
+	public void performObjectsCreate() throws IOException {
 
 		try {
 			CreateObjectDialog dialog = new CreateObjectDialog(EncogWorkBench
@@ -592,40 +593,82 @@ public class EncogDocumentOperations {
 
 	}
 
-	public void performCreateTrainingData() {
+	public void performCreateTrainingData() throws IOException {
 		CreateTrainingDataDialog dialog = new CreateTrainingDataDialog(
 				EncogWorkBench.getInstance().getMainWindow());
 
-		dialog.setType(TrainingDataType.Empty);
+		dialog.setType(TrainingDataType.Empty);	
 
-		if (dialog.process()) {
-			switch (dialog.getType()) {
-			case Empty:
-				CreateTrainingData.createEmpty();
-				break;
-			case ImportCSV:
-				CreateTrainingData.createImportCSV();
-				break;
-			case LinkCSV:
-				CreateTrainingData.createLinkCSV();
-				break;
-			case MarketWindow:
-				CreateTrainingData.createMarketWindow();
-				break;
-			case PredictWindow:
-				CreateTrainingData.createPredictWindow();
-				break;
-			case Random:
-				CreateTrainingData.createRandom();
-				break;
-			case XORTemp:
-				CreateTrainingData.createXORTemp();
-				break;
-			case XOR:
-				CreateTrainingData.createXOR();
-				break;
+		if (dialog.process()) {		
+			
+			if( dialog.shouldLink() && EncogWorkBench.getInstance().getCurrentFileName()==null)
+			{
+				EncogWorkBench.displayError("Error", "Can't link to external files until your main EG file is saved.");
+				return;
 			}
+			
+			if( dialog.shouldLink() )
+				performLinkTraining(dialog.getType());
+			else
+				performCreateTraining(dialog.getType());
+
 		}
+	}
+	
+	public void performCreateTraining(TrainingDataType type)
+	{
+		switch (type) {
+		case Empty:
+			CreateTrainingData.createEmpty();
+			break;
+		case ImportCSV:
+			CreateTrainingData.createImportCSV();
+			break;
+		case MarketWindow:
+			CreateTrainingData.createMarketWindow();
+			break;
+		case PredictWindow:
+			CreateTrainingData.createPredictWindow();
+			break;
+		case Random:
+			CreateTrainingData.createRandom();
+			break;
+		case XORTemp:
+			CreateTrainingData.createXORTemp();
+			break;
+		case XOR:
+			CreateTrainingData.createXOR();
+			break;
+		}
+		
+	}
+	
+	public void performLinkTraining(TrainingDataType type) throws IOException
+	{
+		switch (type) {
+		case Empty:
+			CreateTrainingData.linkEmpty();
+			break;
+		case ImportCSV:
+			CreateTrainingData.linkCSV();
+			break;
+		case MarketWindow:
+			CreateTrainingData.linkMarketWindow();
+			break;
+		case PredictWindow:
+			CreateTrainingData.createPredictWindow();
+			break;
+		case Random:
+			CreateTrainingData.createRandom();
+			break;
+		case XORTemp:
+			CreateTrainingData.createXORTemp();
+			break;
+		case XOR:
+			CreateTrainingData.createXOR();
+			break;
+		}
+		
 	}
 
 	public void performCloudLogin() {

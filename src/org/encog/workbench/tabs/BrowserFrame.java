@@ -28,7 +28,7 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.frames;
+package org.encog.workbench.tabs;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -56,7 +56,6 @@ import org.encog.bot.browse.Browser;
 import org.encog.bot.browse.WebPage;
 import org.encog.bot.browse.range.DocumentRange;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.tabs.EncogCommonTab;
 
 public class BrowserFrame extends EncogCommonTab implements TreeSelectionListener, ActionListener {
 

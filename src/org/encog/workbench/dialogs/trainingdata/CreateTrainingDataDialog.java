@@ -30,18 +30,23 @@
 
 package org.encog.workbench.dialogs.trainingdata;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JCheckBox;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
@@ -55,22 +60,26 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 	private JScrollPane scroll1 = new JScrollPane(list);
 	private JScrollPane scroll2 = new JScrollPane(text);
 	private TrainingDataType type;
+	private JCheckBox checkLink;
 
 	public CreateTrainingDataDialog(Frame owner) {
 		super(owner);
-		setTitle("Create a Neural Network");
+		setTitle("Create or Link Training Data");
 
 		this.setSize(500, 250);
 		this.setLocation(50, 100);
-		final Container content = getBodyPanel();
-		content.setLayout(new GridLayout(1, 2));
+		
+		final Container bottom = new JPanel();
+		
+		
+		final Container select = new JPanel();
+		select.setLayout(new GridLayout(1, 2));
 
-		content.add(this.scroll1);
-		content.add(this.scroll2);
+		select.add(this.scroll1);
+		select.add(this.scroll2);
 
 		this.model.addElement("Empty Training Set");
 		this.model.addElement("Import Training Set from CSV");
-		this.model.addElement("Link Training Set from CSV");
 		this.model.addElement("Market Data Training Set");
 		this.model.addElement("Prediction Window from CSV");
 		this.model.addElement("Random Training Set");		
@@ -83,6 +92,17 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		this.text.setEditable(false);
 		scroll2
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		final Container outer = getBodyPanel();
+		
+		bottom.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.checkLink = new JCheckBox("Store in External File(linked)");
+		bottom.add(this.checkLink);
+		
+		outer.setLayout(new BorderLayout());
+		outer.add(select,BorderLayout.CENTER);
+		outer.add(bottom,BorderLayout.SOUTH);
+		this.checkLink.setSelected(EncogWorkBench.getInstance().getCurrentFileName()!=null);
 	}
 
 	/**
@@ -101,21 +121,18 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			this.type = TrainingDataType.ImportCSV;
 			break;
 		case 2:
-			this.type = TrainingDataType.LinkCSV;
-			break;
-		case 3:
 			this.type = TrainingDataType.MarketWindow;
 			break;
-		case 4:
+		case 3:
 			this.type = TrainingDataType.PredictWindow;
 			break;
-		case 5:
+		case 4:
 			this.type = TrainingDataType.Random;
 			break;
-		case 6:
+		case 5:
 			this.type = TrainingDataType.XORTemp;
 			break;
-		case 7:
+		case 6:
 			this.type = TrainingDataType.XOR;
 			break;		
 		}
@@ -130,23 +147,20 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		case ImportCSV:
 			this.list.setSelectedIndex(1);
 			break;
-		case LinkCSV:
+		case MarketWindow:
 			this.list.setSelectedIndex(2);
 			break;
-		case MarketWindow:
+		case PredictWindow:
 			this.list.setSelectedIndex(3);
 			break;
-		case PredictWindow:
+		case Random:
 			this.list.setSelectedIndex(4);
 			break;
-		case Random:
+		case XORTemp:
 			this.list.setSelectedIndex(5);
 			break;
-		case XORTemp:
-			this.list.setSelectedIndex(6);
-			break;
 		case XOR:
-			this.list.setSelectedIndex(7);
+			this.list.setSelectedIndex(6);
 			break;		
 		}
 
@@ -210,5 +224,9 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 
 	}
 
+	public boolean shouldLink()
+	{
+		return this.checkLink.isSelected();
+	}
 
 }
