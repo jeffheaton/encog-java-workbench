@@ -656,16 +656,16 @@ public class EncogDocumentOperations {
 			CreateTrainingData.linkMarketWindow();
 			break;
 		case PredictWindow:
-			CreateTrainingData.createPredictWindow();
+			CreateTrainingData.linkPredictWindow();
 			break;
 		case Random:
-			CreateTrainingData.createRandom();
+			CreateTrainingData.linkRandom();
 			break;
 		case XORTemp:
-			CreateTrainingData.createXORTemp();
+			CreateTrainingData.linkXORTemp();
 			break;
 		case XOR:
-			CreateTrainingData.createXOR();
+			CreateTrainingData.linkXOR();
 			break;
 		}
 		
