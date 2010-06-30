@@ -50,6 +50,7 @@ import org.encog.neural.data.external.ExternalDataSource;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.svm.SVMNetwork;
 import org.encog.neural.networks.training.neat.NEATGenome;
+import org.encog.normalize.DataNormalization;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.script.EncogScript;
@@ -81,6 +82,7 @@ import org.encog.workbench.tabs.SVMTab;
 import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.TrainingDataTab;
 import org.encog.workbench.tabs.network.NetworkTab;
+import org.encog.workbench.tabs.normalize.DataNormalizationTab;
 import org.encog.workbench.tabs.population.PopulationTab;
 import org.encog.workbench.util.ExtensionFilter;
 import org.slf4j.Logger;
@@ -184,6 +186,17 @@ public class EncogDocumentOperations {
 			}
 
 		} 		
+		else if (entry.getType().equals(EncogPersistedCollection.TYPE_NORMALIZATION)) {
+			DirectoryEntry norm = (DirectoryEntry) item;
+			if (owner.getTabManager().checkBeforeOpen(norm,
+					DataNormalization.class)) {
+				DataNormalization norm2 = (DataNormalization) EncogWorkBench.getInstance()
+						.getCurrentFile().find(norm);
+				final DataNormalizationTab tab = new DataNormalizationTab(norm2);
+				owner.openTab(tab);
+			}
+
+		}
 		else {
 			EncogWorkBench.displayError("Error",
 					"Unknown object type.\nDo not know how to open.");
@@ -347,6 +360,12 @@ public class EncogDocumentOperations {
 				return;
 
 			switch (dialog.getType()) {
+			case DataNormalization:
+				final DataNormalization norm = new DataNormalization();
+				EncogWorkBench.getInstance().getCurrentFile().add(
+						generateNextID("norm-"), norm);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+				break;
 			case EncogScript:
 				final EncogScript script = new EncogScript();
 				script.setDescription("An Encog script");
