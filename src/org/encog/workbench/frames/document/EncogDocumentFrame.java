@@ -214,7 +214,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		for(int i=0;i<path.length;i++)
 		{
 			Object obj = path[i].getLastPathComponent();
-			result.add(((EncogCollectionEntry) obj).getEntry());
+			if( obj instanceof EncogCollectionEntry )
+				result.add(((EncogCollectionEntry) obj).getEntry());
 		}
 
 		return result;

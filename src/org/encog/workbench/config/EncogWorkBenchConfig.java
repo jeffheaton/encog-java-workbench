@@ -32,6 +32,7 @@ package org.encog.workbench.config;
 
 import org.encog.EncogError;
 import org.encog.mathutil.error.ErrorCalculationMode;
+import org.encog.persist.EncogCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.persist.Persistor;
 import org.encog.workbench.util.SimpleEncrypt;
@@ -154,6 +155,16 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 				this.errorCalculation = 2;
 				break;
 		}
+	}
+
+	public EncogCollection getCollection() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setCollection(EncogCollection collection) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
