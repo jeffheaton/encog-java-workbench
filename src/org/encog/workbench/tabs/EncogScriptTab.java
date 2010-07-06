@@ -31,10 +31,14 @@
 package org.encog.workbench.tabs;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -43,10 +47,11 @@ import org.encog.persist.EncogPersistedObject;
 import org.encog.script.EncogScript;
 import org.encog.workbench.util.EncogFonts;
 
-public class EncogScriptTab extends EncogCommonTab {
+public class EncogScriptTab extends EncogCommonTab implements ActionListener {
 
 	private final JTextArea text;
 	private final JScrollPane scroll;
+	private final JButton buttonExecute;
 	
 	public EncogScriptTab(EncogPersistedObject encogObject) {
 		super(encogObject);
@@ -60,6 +65,14 @@ public class EncogScriptTab extends EncogCommonTab {
 		this.scroll = new JScrollPane(this.text);
 		add(this.scroll, BorderLayout.CENTER);
 		this.text.setText(((EncogScript)getEncogObject()).getSource());
+		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.buttonExecute = new JButton("Execute");
+		buttonPanel.add(this.buttonExecute);
+		this.buttonExecute.addActionListener(this);
+		add(buttonPanel,BorderLayout.NORTH);
+		
 	}
 	
 
@@ -83,6 +96,16 @@ public class EncogScriptTab extends EncogCommonTab {
 
 	public boolean isTextSelected() {
 		return this.text.getSelectionEnd()>this.text.getSelectionStart();
+	}
+
+
+
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==this.buttonExecute) {
+			EncogScript script = (EncogScript)getEncogObject();
+			script.load();
+		}
+		
 	}
 
 }
