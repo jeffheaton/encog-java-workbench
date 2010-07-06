@@ -346,7 +346,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	public void componentResized(ComponentEvent e) {
 		if( this.documentSplit!=null )
-			this.documentSplit.setDividerLocation(this.getHeight()-150);
+			this.documentSplit.setDividerLocation(this.getHeight()-200);
 	}
 
 	public EncogOutputPanel getOutputPane() {
