@@ -56,7 +56,9 @@ import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.encog.workbench.frames.document.EncogOutputPanel;
 import org.encog.workbench.process.cloud.CloudProcess;
+import org.encog.workbench.util.WorkbenchLogHandler;
 import org.encog.cloud.EncogCloud;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -95,6 +97,8 @@ public class EncogWorkBench implements Runnable {
 	private EncogWorkBenchConfig config;
 
 	private EncogCloud cloud;
+	
+	private WorkbenchLogHandler logHandler;
 
 	/**
 	 * The current filename being edited.
@@ -104,6 +108,8 @@ public class EncogWorkBench implements Runnable {
 	public EncogWorkBench() {
 		this.config = new EncogWorkBenchConfig();
 		this.currentFile = new EncogMemoryCollection();
+		this.logHandler = new WorkbenchLogHandler();
+		Logging.getRootLogger().addHandler(this.logHandler);
 	}
 
 	/**
@@ -400,5 +406,32 @@ public class EncogWorkBench implements Runnable {
 		}
 		
 	}
+	
+	public void output(String str)
+	{
+		EncogOutputPanel pane = this.getMainWindow().getOutputPane();
+		if( pane!=null )
+		{
+			pane.output(str);
+		}
+	}
+	
+	public void outputLine(String str)
+	{
+		EncogOutputPanel pane = this.getMainWindow().getOutputPane();
+		if( pane!=null )
+		{
+			pane.outputLine(str);
+		}
+	}
+
+	/**
+	 * @return the logHandler
+	 */
+	public WorkbenchLogHandler getLogHandler() {
+		return logHandler;
+	}
+	
+	
 
 }

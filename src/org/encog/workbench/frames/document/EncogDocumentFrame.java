@@ -32,12 +32,14 @@ package org.encog.workbench.frames.document;
 
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -61,11 +63,14 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private EncogPopupMenus popupMenus;
 	private boolean closed = false;
 	private JTree tree;
-	private JSplitPane split;
+	private JSplitPane projectSplit;
 	private JTabbedPane documentTabs;
 	private EncogTabManager tabManager;
 	private AboutTab aboutTab;
 	private boolean modalTabOpen;
+
+	private JSplitPane documentSplit;
+	private EncogOutputPanel outputPanel;
 
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files", ".eg");
@@ -121,11 +126,16 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		this.documentTabs = new JTabbedPane();
 		this.documentTabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
 		
-		this.split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                scrollPane, this.documentTabs);
-		this.split.setDividerLocation(150);
+		this.outputPanel = new EncogOutputPanel();
 		
-		getContentPane().add(this.split);
+		this.documentSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+				this.documentTabs, this.outputPanel);
+		
+		this.projectSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+                scrollPane, this.documentSplit);
+		this.projectSplit.setDividerLocation(150);		
+		
+		getContentPane().add(this.projectSplit);
 		
 		
 		this.popupMenus.initPopup();
@@ -332,6 +342,15 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	{
 		Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 		setCursor(normalCursor);
+	}
+
+	public void componentResized(ComponentEvent e) {
+		if( this.documentSplit!=null )
+			this.documentSplit.setDividerLocation(this.getHeight()-150);
+	}
+
+	public EncogOutputPanel getOutputPane() {
+		return this.outputPanel;
 	}
 
 }

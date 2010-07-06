@@ -369,7 +369,7 @@ public class EncogDocumentOperations {
 			case EncogScript:
 				final EncogScript script = new EncogScript();
 				script.setDescription("An Encog script");
-				script.setSource("println \"Hello World\"");
+				script.setSource("sub main\n\tprint \"Hello World\"\nend sub");
 				EncogWorkBench.getInstance().getCurrentFile().add(
 						generateNextID("script-"), script);
 				EncogWorkBench.getInstance().getMainWindow().redraw();

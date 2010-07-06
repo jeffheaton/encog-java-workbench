@@ -31,6 +31,8 @@
 package org.encog.workbench.frames;
 
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -46,7 +48,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.EncogTabManager;
 
 public abstract class EncogCommonFrame extends JFrame implements
-		WindowListener, ActionListener, MouseListener {
+		WindowListener, ActionListener, MouseListener, ComponentListener {
 
 	private Object encogObject;
 	private EncogCommonFrame parent;
@@ -56,6 +58,7 @@ public abstract class EncogCommonFrame extends JFrame implements
 	public EncogCommonFrame(boolean closeSilent) {
 		this.closed = false;
 		addWindowListener(this);
+		addComponentListener(this);
 		this.closeSilent = closeSilent;
 	}
 
@@ -178,5 +181,25 @@ public abstract class EncogCommonFrame extends JFrame implements
 	public void windowIconified(final WindowEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public void componentHidden(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void componentMoved(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void componentResized(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void componentShown(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
