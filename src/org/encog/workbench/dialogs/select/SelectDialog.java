@@ -32,10 +32,18 @@ package org.encog.workbench.dialogs.select;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.GridLayout;
 import java.util.List;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 
@@ -45,27 +53,26 @@ import org.encog.workbench.dialogs.common.ValidationException;
  * @author jheaton
  *
  */
-public class SelectDialog extends EncogCommonDialog  {
+public class SelectDialog extends EncogCommonDialog implements ListSelectionListener {
 
 	/**
 	 * Serial id.
 	 */
 	private static final long serialVersionUID = 217379094416842461L;
 	
-	/**
-	 * The choice combo box that the user selects from.
-	 */
-	private final JList choices;
-	
-	/**
-	 * The SelectItems that form the list.
-	 */
-	private final List<SelectItem> choiceList;
 	
 	/**
 	 * The item that the user chose.
 	 */
 	private SelectItem selected;
+	
+	private DefaultListModel model = new DefaultListModel();
+	private JList list = new JList(model);
+	private JTextArea text = new JTextArea();
+	private JScrollPane scroll1 = new JScrollPane(list);
+	private JScrollPane scroll2 = new JScrollPane(text);
+	private List<SelectItem> choiceList;
+
 
 	/**
 	 * Construct the selection dialog box.
@@ -75,19 +82,27 @@ public class SelectDialog extends EncogCommonDialog  {
 	public SelectDialog(final JFrame owner, final List<SelectItem> choiceList) {
 		super(owner);
 		final Container content = this.getBodyPanel();
+		
+		
 		this.choiceList = choiceList;
+		this.setSize(500, 250);
+		this.setLocation(50, 100);
+		setTitle("Select");
+		content.setLayout(new GridLayout(1, 2));
 
-		final String[] list = new String[choiceList.size()];
-		for (int i = 0; i < choiceList.size(); i++) {
-			list[i] = this.choiceList.get(i).getText();
+		content.add(this.scroll1);
+		content.add(this.scroll2);
+		
+		for(SelectItem item : this.choiceList)
+		{
+			this.model.addElement(item.getText());
 		}
 
-		this.choices = new JList(list);
-		content.setLayout(new BorderLayout());
-		content.add(this.choices, BorderLayout.CENTER);
-		setTitle("Create Object");
-		this.choices.setSelectedIndex(0);
-		pack();
+		this.list.addListSelectionListener(this);
+		this.text.setLineWrap(true);
+		this.text.setWrapStyleWord(true);
+		this.text.setEditable(false);
+		scroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
 
@@ -103,7 +118,7 @@ public class SelectDialog extends EncogCommonDialog  {
 	 */
 	@Override
 	public void collectFields() throws ValidationException {
-		int index = this.choices.getSelectedIndex();
+		int index = this.list.getSelectedIndex();
 		if( index>=0 )
 			this.selected = this.choiceList.get(index);
 		else
@@ -117,8 +132,23 @@ public class SelectDialog extends EncogCommonDialog  {
 	 */
 	@Override
 	public void setFields() {
-		this.choices.setSelectedIndex(0);
+		this.list.setSelectedIndex(0);
 		
 	}
+	
+	public void valueChanged(ListSelectionEvent e) {
+		int index = list.getSelectedIndex();
+		
+		if( index!=-1 )
+		{
+			String desc = this.choiceList.get(index).getDescription();
+			this.text.setText(desc);
+			this.text.setSelectionStart(0);
+			this.text.setSelectionEnd(0);
+		}
+
+
+	}
+
 
 }

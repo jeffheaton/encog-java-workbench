@@ -114,8 +114,8 @@ public class ImportExport {
 		if (obj instanceof BasicNeuralDataSet) {
 			SelectItem itemCSV, itemXML;
 			final List<SelectItem> list = new ArrayList<SelectItem>();
-			list.add(itemCSV = new SelectItem("Export CSV"));
-			list.add(itemXML = new SelectItem("Export XML (EG format)"));
+			list.add(itemCSV = new SelectItem("Export CSV", "Export as a CSV file."));
+			list.add(itemXML = new SelectItem("Export XML (EG format)", "Export as an Encog XML EG file, for use with the workbench."));
 			final SelectDialog dialog = new SelectDialog(frame, list);
 			if( !dialog.process() )
 				return;

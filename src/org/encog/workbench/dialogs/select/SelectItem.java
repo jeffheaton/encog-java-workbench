@@ -43,13 +43,16 @@ public class SelectItem {
 	 * The text to display.
 	 */
 	private final String text;
+	
+	private final String description;
 
 	/**
 	 * Construct this item with the specified text.
 	 * @param text The text to display for this item.
 	 */
-	public SelectItem(final String text) {
+	public SelectItem(final String text, final String description) {
 		this.text = text;
+		this.description = description;
 	}
 
 	/**
@@ -58,5 +61,14 @@ public class SelectItem {
 	public String getText() {
 		return this.text;
 	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+	
+	
 
 }
