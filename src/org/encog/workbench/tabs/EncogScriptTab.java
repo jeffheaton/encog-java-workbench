@@ -120,8 +120,9 @@ public class EncogScriptTab extends EncogCommonTab implements ActionListener {
 			}
 			catch(BasicError ex)
 			{
-				EncogWorkBench.getInstance().outputLine("?" + ex.getMessage() + " Error");				
-				
+				EncogWorkBench.getInstance().outputLine("?" + ex.getMessage() + " Error");
+				if( ex.getLine()!=null )
+						EncogWorkBench.getInstance().outputLine("Near line: " + ex.getLine().toString() );
 			}
 			catch(Throwable t)
 			{
