@@ -36,6 +36,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
@@ -110,6 +111,7 @@ public class EncogWorkBench implements Runnable {
 		this.currentFile = new EncogMemoryCollection();
 		this.logHandler = new WorkbenchLogHandler();
 		Logging.getRootLogger().addHandler(this.logHandler);
+		Logging.getRootLogger().setLevel(Level.OFF);
 	}
 
 	/**

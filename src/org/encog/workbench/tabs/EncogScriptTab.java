@@ -45,7 +45,7 @@ import javax.swing.JTextArea;
 import org.encog.neural.data.TextData;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.script.EncogScript;
-import org.encog.script.basic.BasicError;
+import org.encog.script.basic.error.BasicError;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.WorkbenchConsoleInputOutput;

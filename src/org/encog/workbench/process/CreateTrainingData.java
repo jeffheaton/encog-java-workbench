@@ -153,7 +153,8 @@ public class CreateTrainingData {
 		ExternalDataSource link = new ExternalDataSource();
 		link.setInputCount(training.getInputSize());
 		link.setIdealCount(training.getIdealSize());
-		link.setLink(externalFile.toString());
+		link.storeRelativeLink(new File(externalFile.toString()),
+				EncogWorkBench.getInstance().getCurrentFile());
 
 		EncogWorkBench.getInstance().getCurrentFile().add(resourceName, link);
 		EncogWorkBench.getInstance().getMainWindow().redraw();
