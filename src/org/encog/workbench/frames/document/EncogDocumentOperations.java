@@ -40,6 +40,7 @@ import javax.swing.JOptionPane;
 
 import org.encog.Encog;
 import org.encog.EncogError;
+import org.encog.engine.util.Format;
 import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.neural.data.NeuralDataSet;
@@ -55,7 +56,6 @@ import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.script.EncogScript;
 import org.encog.solve.genetic.population.BasicPopulation;
-import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.BenchmarkDialog;
