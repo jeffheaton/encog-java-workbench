@@ -32,6 +32,7 @@ package org.encog.workbench.process.training;
 
 import java.awt.Frame;
 
+import org.encog.engine.util.Format;
 import org.encog.neural.data.Indexable;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
@@ -40,7 +41,6 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.logic.SOMLogic;
 import org.encog.neural.networks.svm.SVMNetwork;
 import org.encog.neural.networks.training.svm.SVMTrain;
-import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.IntegerField;

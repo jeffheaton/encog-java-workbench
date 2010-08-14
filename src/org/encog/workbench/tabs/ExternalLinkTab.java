@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import org.encog.mathutil.libsvm.svm_model;
 import org.encog.neural.data.external.ExternalDataSource;
 import org.encog.persist.EncogPersistedObject;
-import org.encog.util.Format;
 import org.encog.workbench.util.EncogFonts;
 
 public class ExternalLinkTab extends EncogCommonTab {

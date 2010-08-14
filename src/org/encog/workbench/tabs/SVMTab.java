@@ -4,10 +4,10 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 import org.encog.Encog;
+import org.encog.engine.util.Format;
 import org.encog.mathutil.libsvm.svm_model;
 import org.encog.neural.networks.svm.SVMNetwork;
 import org.encog.persist.EncogPersistedObject;
-import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.EncogFonts;
 

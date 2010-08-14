@@ -33,9 +33,9 @@ package org.encog.workbench.models;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import org.encog.engine.util.Format;
 import org.encog.solve.genetic.innovation.Innovation;
 import org.encog.solve.genetic.population.Population;
-import org.encog.util.Format;
 
 public class InnovationModel implements TableModel {
 

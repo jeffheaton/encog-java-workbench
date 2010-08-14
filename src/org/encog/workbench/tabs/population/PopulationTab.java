@@ -44,6 +44,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
+import org.encog.engine.util.Format;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.TrainingSetScore;
@@ -51,7 +52,6 @@ import org.encog.neural.networks.training.neat.NEATTraining;
 import org.encog.solve.genetic.genome.Genome;
 import org.encog.solve.genetic.population.BasicPopulation;
 import org.encog.solve.genetic.population.Population;
-import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditPopulationDialog;
 import org.encog.workbench.dialogs.ExtractGenomes;

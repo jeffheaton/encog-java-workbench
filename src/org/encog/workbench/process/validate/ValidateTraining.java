@@ -101,7 +101,13 @@ public class ValidateTraining {
 
 
 	public boolean validateInputSize() {		
-		final int inputNeurons = this.network.getInputCount();
+		int inputNeurons=0;
+		
+		Layer layer = this.network.getLayer(BasicNetwork.TAG_INPUT);
+		
+		if( layer!=null )
+			inputNeurons = layer.getNeuronCount();
+		
 		final int trainingInputs = this.training.getInputSize();
 
 		if (inputNeurons != trainingInputs) {
@@ -140,7 +146,13 @@ public class ValidateTraining {
 	}
 
 	public boolean validateOutputSize() {
-		final int outputNeurons = this.network.getOutputCount();
+		int outputNeurons = 0;
+		Layer layer = this.network.getLayer(BasicNetwork.TAG_OUTPUT);
+		
+		if( layer!=null )
+			outputNeurons = layer.getNeuronCount();
+		
+		
 		final int trainingOutputs = this.training.getIdealSize();
 
 		if (outputNeurons != trainingOutputs) {
