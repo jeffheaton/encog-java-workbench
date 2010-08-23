@@ -1,6 +1,6 @@
 package org.encog.workbench.util;
 
-import org.encog.script.basic.console.ConsoleInputOutput;
+import org.encog.script.ConsoleInputOutput;
 import org.encog.workbench.EncogWorkBench;
 
 public class WorkbenchConsoleInputOutput implements ConsoleInputOutput {

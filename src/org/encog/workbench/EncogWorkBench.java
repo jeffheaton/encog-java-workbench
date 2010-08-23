@@ -292,7 +292,7 @@ public class EncogWorkBench implements Runnable {
 	public static boolean displayQuery(String title, String message) {
 		int result = JOptionPane.showConfirmDialog(null, message, title,
 				JOptionPane.YES_NO_OPTION);
-
+		EncogWorkBench.getInstance().getMainWindow().endWait();
 		return result == JOptionPane.YES_OPTION;
 	}
 
@@ -309,6 +309,7 @@ public class EncogWorkBench implements Runnable {
 
 	public static void displayError(String title, Throwable t) {
 		displayError(title,t,null,null);
+		EncogWorkBench.getInstance().getMainWindow().endWait();
 	}
 
 	public static void save() {

@@ -45,7 +45,6 @@ import javax.swing.JTextArea;
 import org.encog.neural.data.TextData;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.script.EncogScript;
-import org.encog.script.basic.error.BasicError;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.WorkbenchConsoleInputOutput;
@@ -112,17 +111,6 @@ public class EncogScriptTab extends EncogCommonTab implements ActionListener {
 		if(e.getSource()==this.buttonExecute) {
 			try
 			{
-			save();
-			EncogScript script = (EncogScript)getEncogObject();
-			script.load();
-			script.setConsole(new WorkbenchConsoleInputOutput());
-			script.call();
-			}
-			catch(BasicError ex)
-			{
-				EncogWorkBench.getInstance().outputLine("?" + ex.getMessage() + " Error");
-				if( ex.getLine()!=null )
-						EncogWorkBench.getInstance().outputLine("Near line: " + ex.getLine().toString() );
 			}
 			catch(Throwable t)
 			{

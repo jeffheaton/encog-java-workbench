@@ -127,6 +127,7 @@ public class ErrorDialog extends EncogCommonDialog {
 		t.printStackTrace();
 		ErrorDialog dialog = new ErrorDialog(EncogWorkBench.getInstance().getMainWindow(),t,network,training);
 		dialog.process();
+		EncogWorkBench.getInstance().getMainWindow().endWait();
 	}
 
 }

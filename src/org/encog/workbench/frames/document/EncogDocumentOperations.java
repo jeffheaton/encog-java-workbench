@@ -32,6 +32,7 @@ package org.encog.workbench.frames.document;
 
 import java.awt.Frame;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JComboBox;
@@ -252,9 +253,12 @@ public class EncogDocumentOperations {
 			if (result == JFileChooser.APPROVE_OPTION) {
 				EncogWorkBench.load(fc.getSelectedFile().getAbsolutePath());
 			}
-		} catch (final Throwable e) {
-			EncogWorkBench.displayError("Can't Open File", e);
+		}  
+ 
+		catch (final Throwable e) {
+			EncogWorkBench.displayError("Can't Open File or File Corrupt", e);
 			e.printStackTrace();
+			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
 	}
 
@@ -267,6 +271,7 @@ public class EncogDocumentOperations {
 			}
 		} catch (final Throwable e) {
 			EncogWorkBench.displayError("Can't Save File", e);
+			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
 	}
 
