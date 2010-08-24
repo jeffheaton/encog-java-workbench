@@ -37,6 +37,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 
+import javax.script.ScriptException;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -45,6 +46,8 @@ import javax.swing.JTextArea;
 import org.encog.neural.data.TextData;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.script.EncogScript;
+import org.encog.script.EncogScriptError;
+import org.encog.script.EncogScriptRuntimeError;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.WorkbenchConsoleInputOutput;
@@ -111,6 +114,17 @@ public class EncogScriptTab extends EncogCommonTab implements ActionListener {
 		if(e.getSource()==this.buttonExecute) {
 			try
 			{
+				EncogScript script = (EncogScript)getEncogObject();
+				save();
+				script.run(new WorkbenchConsoleInputOutput());
+			}
+			catch(EncogScriptRuntimeError ex)
+			{
+				EncogWorkBench.getInstance().output(ex.getMessage()+"\n");
+			}
+			catch(EncogScriptError ex)
+			{
+				EncogWorkBench.displayError("Error",ex);
 			}
 			catch(Throwable t)
 			{
