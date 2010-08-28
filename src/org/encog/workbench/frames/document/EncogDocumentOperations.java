@@ -187,7 +187,7 @@ public class EncogDocumentOperations {
 			}
 
 		} 		
-		else if (entry.getType().equals(EncogPersistedCollection.TYPE_NORMALIZATION)) {
+		/*else if (entry.getType().equals(EncogPersistedCollection.TYPE_NORMALIZATION)) {
 			DirectoryEntry norm = (DirectoryEntry) item;
 			if (owner.getTabManager().checkBeforeOpen(norm,
 					DataNormalization.class)) {
@@ -197,7 +197,7 @@ public class EncogDocumentOperations {
 				owner.openTab(tab);
 			}
 
-		}
+		}*/
 		else {
 			EncogWorkBench.displayError("Error",
 					"Unknown object type.\nDo not know how to open.");

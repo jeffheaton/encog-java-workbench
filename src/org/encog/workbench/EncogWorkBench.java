@@ -53,6 +53,7 @@ import org.encog.persist.EncogMemoryCollection;
 import org.encog.persist.location.FilePersistence;
 import org.encog.persist.persistors.generic.Object2XML;
 import org.encog.persist.persistors.generic.XML2Object;
+import org.encog.script.javascript.EncogJavascriptEngine;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
@@ -101,6 +102,8 @@ public class EncogWorkBench implements Runnable {
 	
 	private WorkbenchLogHandler logHandler;
 
+	private ExecuteScript execute = new ExecuteScript();
+	
 	/**
 	 * The current filename being edited.
 	 */
@@ -354,6 +357,8 @@ public class EncogWorkBench implements Runnable {
 	public void init() {
 		EncogWorkBench.loadConfig();
 		
+		EncogJavascriptEngine.init();
+		
 		if( EncogWorkBench.getInstance().getConfig().isAutoConnect())
 		{
 			CloudProcess.performAutoConnect();
@@ -435,6 +440,9 @@ public class EncogWorkBench implements Runnable {
 		return logHandler;
 	}
 	
-	
+	public ExecuteScript getExecute()
+	{
+		return this.execute;
+	}
 
 }

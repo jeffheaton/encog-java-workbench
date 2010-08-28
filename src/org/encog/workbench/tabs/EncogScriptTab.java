@@ -49,6 +49,7 @@ import org.encog.script.EncogScript;
 import org.encog.script.EncogScriptError;
 import org.encog.script.EncogScriptRuntimeError;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.WorkbenchConsoleInputOutput;
 
@@ -112,19 +113,14 @@ public class EncogScriptTab extends EncogCommonTab implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==this.buttonExecute) {
-			try
-			{
-				EncogScript script = (EncogScript)getEncogObject();
-				save();
-				script.run(new WorkbenchConsoleInputOutput());
+			try {
+			EncogScript script = (EncogScript)getEncogObject();
+			save();
+			EncogWorkBench.getInstance().getExecute().execute(script);
 			}
-			catch(EncogScriptRuntimeError ex)
+			catch(WorkBenchError ex)
 			{
-				EncogWorkBench.getInstance().output(ex.getMessage()+"\n");
-			}
-			catch(EncogScriptError ex)
-			{
-				EncogWorkBench.displayError("Error",ex);
+				EncogWorkBench.displayError("Error", ex.getMessage());
 			}
 			catch(Throwable t)
 			{

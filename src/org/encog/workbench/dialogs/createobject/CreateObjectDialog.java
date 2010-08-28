@@ -68,7 +68,7 @@ ListSelectionListener {
 		content.add(this.scroll1);
 		content.add(this.scroll2);
 
-		this.model.addElement("Data Normalization");
+		//this.model.addElement("Data Normalization");
 		this.model.addElement("Encog Script");
 		this.model.addElement("Neural Network");
 		this.model.addElement("NEAT Population");
@@ -93,25 +93,25 @@ ListSelectionListener {
 	@Override
 	public void collectFields() throws ValidationException {
 		switch (list.getSelectedIndex()) {
-		case 0:
+		/*case 0:
 			this.type = ObjectType.DataNormalization;
-			break;
-		case 1:
+			break;*/
+		case 0:
 			this.type = ObjectType.EncogScript;
 			break;
-		case 2:
+		case 1:
 			this.type = ObjectType.NeuralNetwork;
 			break;
-		case 3:
+		case 2:
 			this.type = ObjectType.NEATPopulation;
 			break;		
-		case 4:
+		case 3:
 			this.type = ObjectType.PropertyData;
 			break;
-		case 5:
+		case 4:
 			this.type = ObjectType.Text;
 			break;
-		case 6:
+		case 5:
 			this.type = ObjectType.TrainingData;
 			break;	
 		}
@@ -120,26 +120,26 @@ ListSelectionListener {
 	@Override
 	public void setFields() {
 		switch (type) {
-		case DataNormalization:
+		/*case DataNormalization:
+			this.list.setSelectedIndex(0);
+			break;*/
+		case EncogScript:
 			this.list.setSelectedIndex(0);
 			break;
-		case EncogScript:
+		case NeuralNetwork:
 			this.list.setSelectedIndex(1);
 			break;
-		case NeuralNetwork:
+		case NEATPopulation:
 			this.list.setSelectedIndex(2);
 			break;
-		case NEATPopulation:
+		case PropertyData:
 			this.list.setSelectedIndex(3);
 			break;
-		case PropertyData:
+		case Text:
 			this.list.setSelectedIndex(4);
 			break;
-		case Text:
-			this.list.setSelectedIndex(5);
-			break;
 		case TrainingData:
-			this.list.setSelectedIndex(6);
+			this.list.setSelectedIndex(5);
 			break;
 			
 		}
@@ -156,35 +156,35 @@ ListSelectionListener {
 
 	public void valueChanged(ListSelectionEvent e) {
 		switch (list.getSelectedIndex()) {
-		case 0:
+		/*case 0:
 			this.text
 					.setText("Data for neural networks is rarely used in raw form.  This data must be normalized to be in specific ranges, generally between 0 and 1, or -1 and +1.");
-			break;		
-		case 1:
+			break;	*/	
+		case 0:
 			this.text
 					.setText("A script is a series of commands to perform operations on Encog objects.");
 			break;
-		case 2:
+		case 1:
 			this.text
 					.setText("A neural network is a construct that can recognize patterns.  Encog supports many different neural network architectures.  After selecting to create a neural network you will be allowed to choose the type of neural network to create.");
 			break;
 
-		case 3:
+		case 2:
 			this.text
 					.setText("Create NeuroEvolution of Augmenting Topologies (NEAT) population.  This will create a population of genomes that can be used to create NEAT neural networks.  NEAT networks are trained using a genetic algorithm both to vary weights and structures.");
 			break;
 								
-		case 4:
+		case 3:
 			this.text
 					.setText("Property data is a collection of name-value pairs.  Property data is not directly used by any part of Encog, however, third party applications often use property data to store configuration information with an Encog EG file.");
 			break;
 
-		case 5:
+		case 4:
 			this.text
 					.setText("Text object can be used to store freeform text.  Though not directly used by Encog, they can be used to store configuration or \"readme\" information in an Encog EG file.");
 			break;
 
-		case 6:
+		case 5:
 			this.text
 					.setText("Training data is used to train and evaluate neural networks.  There are a number of ways that training data can be generated.");
 			break;

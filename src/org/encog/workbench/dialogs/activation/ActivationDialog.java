@@ -70,7 +70,7 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 	private JComboBox select = new JComboBox(ACTIVATION_FUNCTION);
 	private EquationPanel equation;
 	private JCheckBox derivative;
-	private JButton gaussian;
+	private JButton params;
 	private ActivationFunction activation;
 
 	public ActivationDialog(JFrame owner) {
@@ -95,16 +95,16 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 		this.derivative = new JCheckBox("View Derivative");
 		upper.add(select, BorderLayout.CENTER);
 
-		this.gaussian = new JButton("Params");
+		this.params = new JButton("Params");
 
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new GridLayout(1, 2));
 		buttons.add(this.derivative);
-		buttons.add(this.gaussian);
+		buttons.add(this.params);
 
 		upper.add(buttons, BorderLayout.EAST);
 		this.derivative.addActionListener(this);
-		this.gaussian.addActionListener(this);
+		this.params.addActionListener(this);
 	}
 
 	@Override
@@ -167,17 +167,7 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 		
 		this.equation.setupEquation(newActivation,!der);
 		
-		if( this.activation instanceof ActivationGaussian ||
-			this.activation instanceof ActivationStep || 
-			this.activation instanceof ActivationRamp )
-		{
-			this.gaussian.setEnabled(true);
-		}
-		else
-		{
-			this.gaussian.setEnabled(false);
-		}
-
+		this.params.setEnabled(this.activation.getParams().length>0);
 	}
 
 	public void itemStateChanged(ItemEvent e) {
@@ -190,70 +180,14 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 		super.actionPerformed(e);
 		if (e.getSource() == this.derivative) {
 			changeEquation();
-		} else if (e.getSource() == this.gaussian) {
-			if (this.activation instanceof ActivationGaussian) {
-				GaussianDialog dialog = new GaussianDialog(this);
-				ActivationGaussian gaussian = (ActivationGaussian) this.activation;
-				dialog.getGaussianCenter().setValue(
-						gaussian.getGausian().getCenter());
-				dialog.getGaussianPeak().setValue(
-						gaussian.getGausian().getPeak());
-				dialog.getGaussianWidth().setValue(
-						gaussian.getGausian().getWidth());
-				if (dialog.process()) {
-					double peak = dialog.getGaussianPeak().getValue();
-					double width = dialog.getGaussianWidth().getValue();
-					double center = dialog.getGaussianCenter().getValue();
-					this.activation = new ActivationGaussian(center,peak,width);
-					this.equation.setupEquation(activation,!this.derivative.isSelected());
-				}
-			}
-			else if (this.activation instanceof ActivationStep) {
-				StepDialog dialog = new StepDialog(this);
-				ActivationStep step = (ActivationStep) this.activation;
-				dialog.getCenter().setValue(
-						step.getCenter());
-				dialog.getLow().setValue(
-						step.getLow());
-				dialog.getHigh().setValue(
-						step.getHigh());
-				if (dialog.process()) {
-					double low = dialog.getLow().getValue();
-					double high = dialog.getHigh().getValue();
-					double center = dialog.getCenter().getValue();
-					this.activation = new ActivationStep();
-					((ActivationStep)this.activation).setCenter( center );
-					((ActivationStep)this.activation).setLow(low );
-					((ActivationStep)this.activation).setHigh( high);
-					this.equation.setupEquation(activation,!this.derivative.isSelected());
-				}
-			}
-			else if (this.activation instanceof ActivationRamp) {
-				RampDialog dialog = new RampDialog(this);
-				ActivationRamp step = (ActivationRamp) this.activation;
-
-				dialog.getLowThreshold().setValue(
-						step.getLow());
-				dialog.getHighThreshold().setValue(
-						step.getHigh());
-				dialog.getLowValue().setValue(
-						step.getLow());
-				dialog.getHighValue().setValue(
-						step.getHigh());
-				if (dialog.process()) {
-					double lowThreshold = dialog.getLowThreshold().getValue();
-					double highThreshold = dialog.getHighThreshold().getValue();
-					double lowValue = dialog.getLowThreshold().getValue();
-					double highValue = dialog.getHighThreshold().getValue();
-					
-					this.activation = new ActivationRamp();
-					((ActivationRamp)this.activation).setThresholdLow(lowThreshold );
-					((ActivationRamp)this.activation).setThresholdHigh(highThreshold);
-					((ActivationRamp)this.activation).setLow(lowValue );
-					((ActivationRamp)this.activation).setHigh(highValue);
-					
-					this.equation.setupEquation(activation,!this.derivative.isSelected());
-				}
+		} else if (e.getSource() == this.params) {
+			
+			ParamsDialog dlg = new ParamsDialog(this,this.activation);
+			dlg.load(this.activation);
+			if( dlg.process() )
+			{
+				dlg.save(this.activation);
+				this.equation.setupEquation(this.activation,!this.derivative.isSelected());
 			}
 		}
 	}
