@@ -73,9 +73,12 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private EncogOutputPanel outputPanel;
 
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
-			"Encog Files", ".eg");
+			"Encog Files (*.eg)", ".eg");
 	public static final ExtensionFilter CSV_FILTER = new ExtensionFilter(
-			"CSV Files", ".csv");
+			"CSV Files (*.csv)", ".csv");
+	public static final ExtensionFilter ENCOG_BINARY = new ExtensionFilter(
+			"Binary Encog Training Files (*.egb)", ".egb");
+
 	public static final String WINDOW_TITLE = "Encog Workbench";
 	/**
 	 * 

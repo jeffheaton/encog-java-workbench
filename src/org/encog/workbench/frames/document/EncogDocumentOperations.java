@@ -48,7 +48,7 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.data.external.ExternalDataSource;
+import org.encog.neural.data.buffer.BufferedNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.svm.SVMNetwork;
 import org.encog.neural.networks.training.neat.NEATGenome;
@@ -63,6 +63,8 @@ import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EvaluateDialog;
 import org.encog.workbench.dialogs.PopulationDialog;
+import org.encog.workbench.dialogs.binary.DialogBinary2External;
+import org.encog.workbench.dialogs.binary.DialogExternal2Binary;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
 import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
@@ -166,11 +168,11 @@ public class EncogDocumentOperations {
 				owner.openTab(tab);
 			}
 
-		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_LINK)) {
+		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_BINARY)) {
 			DirectoryEntry link = (DirectoryEntry) item;
 			if (owner.getTabManager().checkBeforeOpen(link,
 					BasicPopulation.class)) {
-				ExternalDataSource link2 = (ExternalDataSource) EncogWorkBench.getInstance()
+				BufferedNeuralDataSet link2 = (BufferedNeuralDataSet) EncogWorkBench.getInstance()
 						.getCurrentFile().find(link);
 				final ExternalLinkTab tab = new ExternalLinkTab(link2);
 				owner.openTab(tab);
@@ -710,6 +712,23 @@ public class EncogDocumentOperations {
 		}
 		System.exit(0);
 
+	}
+
+	public void performBin2External() {
+		DialogBinary2External dialog  = new DialogBinary2External(EncogWorkBench.getInstance().getMainWindow());
+		if(dialog.process())
+		{
+			
+		}
+	}
+
+	public void performExternal2Bin() {
+		DialogExternal2Binary dialog  = new DialogExternal2Binary(EncogWorkBench.getInstance().getMainWindow());
+		if(dialog.process())
+		{
+			
+		}
+		
 	}
 
 }

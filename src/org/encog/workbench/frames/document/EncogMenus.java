@@ -70,7 +70,9 @@ public class EncogMenus {
 	public static final String TOOLS_BENCHMARK = "Benchmark Encog...";
 	public static final String TOOLS_BROWSE = "Browse Web Data...";
 	public static final String TOOLS_VALIDATION_CHART = "Validation Chart...";
-
+	public static final String TOOLS_BIN2EXTERNAL = "Convert Encog Binary to Other File...";
+	public static final String TOOLS_EXTERNAL2BIN = "Convert Other File to Encog Binary...";
+	
 	public static final String HELP_ABOUT = "About Encog Workbench...";
 
 	private JMenuBar menuBar;
@@ -104,7 +106,9 @@ public class EncogMenus {
 	private JMenuItem menuToolsBenchmark;
 	private JMenuItem menuToolsBrowse;
 	private JMenuItem menuToolsValidation;
-
+	private JMenuItem menuToolsBin2Ext;
+	private JMenuItem menuToolsExt2Bin;
+	
 	private JMenuItem menuHelpAbout;
 
 	private EncogDocumentFrame owner;
@@ -167,6 +171,8 @@ public class EncogMenus {
 		this.menuToolsEvaluate = owner.addItem(this.menuTools, EncogMenus.TOOLS_EVALUATE, 'e');
 		this.menuToolsBrowse = owner.addItem(this.menuTools, EncogMenus.TOOLS_BROWSE, 'b');
 		this.menuToolsValidation = owner.addItem(this.menuTools, EncogMenus.TOOLS_VALIDATION_CHART, 'v');
+		this.menuToolsBin2Ext = owner.addItem(this.menuTools, EncogMenus.TOOLS_BIN2EXTERNAL, 'x');
+		this.menuToolsExt2Bin = owner.addItem(this.menuTools, EncogMenus.TOOLS_EXTERNAL2BIN, 'y');
 		this.menuBar.add(this.menuTools);
 
 		this.menuHelp = new JMenu("Help");
@@ -272,6 +278,12 @@ public class EncogMenus {
 				EncogMenus.TOOLS_VALIDATION_CHART)) {
 			ValidationChart check = new ValidationChart();
 			check.perform(EncogWorkBench.getInstance().getMainWindow());
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BIN2EXTERNAL)) {
+			owner.getOperations().performBin2External();
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EXTERNAL2BIN)) {
+			owner.getOperations().performExternal2Bin();
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_CODE)) {
+			owner.getOperations().performGenerateCode();
 		}
 		}
 		catch(Throwable t)

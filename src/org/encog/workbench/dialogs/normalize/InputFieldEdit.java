@@ -52,10 +52,10 @@ public class InputFieldEdit extends EncogPropertiesDialog {
 	private void findData() {
 		for (final DirectoryEntry obj : EncogWorkBench.getInstance()
 				.getCurrentFile().getDirectory()) {
-			if (obj.getType().equals(EncogPersistedCollection.TYPE_LINK) ) {
+			if (obj.getType().equals(EncogPersistedCollection.TYPE_BINARY) ) {
 				this.trainingSets.add(obj.getName());
 			} else if (obj.getType().equals(EncogPersistedCollection.TYPE_TRAINING) ||
-					obj.getType().equals(EncogPersistedCollection.TYPE_LINK)) {
+					obj.getType().equals(EncogPersistedCollection.TYPE_BINARY)) {
 				this.trainingSets.add(obj.getName());
 			}
 		}

@@ -154,7 +154,7 @@ public class DataNormalizationTab extends EncogCommonTab implements
 	private void findData() {
 		for (final DirectoryEntry obj : EncogWorkBench.getInstance()
 				.getCurrentFile().getDirectory()) {
-			if (obj.getType().equals(EncogPersistedCollection.TYPE_LINK)) {
+			if (obj.getType().equals(EncogPersistedCollection.TYPE_BINARY)) {
 				this.comboTarget.addItem(obj.getName());
 			} else if (obj.getType().equals(
 					EncogPersistedCollection.TYPE_TRAINING)) {

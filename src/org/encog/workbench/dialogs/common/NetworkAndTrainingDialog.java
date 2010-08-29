@@ -103,7 +103,7 @@ public abstract class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 			} else if (obj.getType().equals(EncogPersistedCollection.TYPE_SVM) ) {
 				this.networks.add(obj.getName());
 			} else if (obj.getType().equals(EncogPersistedCollection.TYPE_TRAINING) ||
-					obj.getType().equals(EncogPersistedCollection.TYPE_LINK)) {
+					obj.getType().equals(EncogPersistedCollection.TYPE_BINARY)) {
 				this.trainingSets.add(obj.getName());
 			}
 		}

@@ -97,7 +97,7 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 			if (obj.getType().equals(EncogPersistedCollection.TYPE_TRAINING)) {
 				this.trainingSets.add(obj.getName());
 			}
-			else if (obj.getType().equals(EncogPersistedCollection.TYPE_LINK)) {
+			else if (obj.getType().equals(EncogPersistedCollection.TYPE_BINARY)) {
 				this.trainingSets.add(obj.getName());
 			}
 		}

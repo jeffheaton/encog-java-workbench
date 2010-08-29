@@ -48,7 +48,6 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.external.ExternalDataSource;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
@@ -249,13 +248,6 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 	}
 
 	private void performClose() {
-		
-		if( this.trainingData instanceof ExternalDataSource )
-		{
-			ExternalDataSource ext = (ExternalDataSource)trainingData;
-			ext.dispose();
-		}
-
 		
 		if (this.oldNetwork != null) {
 

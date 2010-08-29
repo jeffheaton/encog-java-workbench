@@ -34,7 +34,6 @@ import org.encog.bot.BotUtil;
 import org.encog.neural.activation.ActivationSigmoid;
 import org.encog.neural.activation.ActivationTANH;
 import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.external.ExternalDataSource;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.svm.KernelType;
 import org.encog.neural.networks.svm.SVMType;
@@ -53,7 +52,6 @@ import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.pattern.SOMPattern;
 import org.encog.neural.pattern.SVMPattern;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.activation.ActivationDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateADALINEDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateART1;
 import org.encog.workbench.dialogs.createnetwork.CreateAutomatic;
@@ -280,10 +278,6 @@ public class CreateNeuralNetwork {
 			
 			if( training == null ) {
 				return null;
-			}
-			
-			if( training instanceof ExternalDataSource ) {
-				((ExternalDataSource)training).init();
 			}
 			
 			FeedForwardPattern pattern = new FeedForwardPattern();

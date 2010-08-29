@@ -33,17 +33,13 @@ package org.encog.workbench.process.training;
 import java.awt.Frame;
 
 import org.encog.engine.util.Format;
-import org.encog.neural.data.Indexable;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.data.external.ExternalDataSource;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.logic.SOMLogic;
 import org.encog.neural.networks.svm.SVMNetwork;
 import org.encog.neural.networks.training.svm.SVMTrain;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.common.DoubleField;
-import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.training.ChooseTrainingMethodDialog;
 import org.encog.workbench.dialogs.training.adaline.InputAdaline;
 import org.encog.workbench.dialogs.training.adaline.ProgressAdaline;
@@ -53,7 +49,6 @@ import org.encog.workbench.dialogs.training.backpropagation.InputBackpropagation
 import org.encog.workbench.dialogs.training.backpropagation.ProgressBackpropagation;
 import org.encog.workbench.dialogs.training.genetic.InputGenetic;
 import org.encog.workbench.dialogs.training.genetic.ProgressGenetic;
-import org.encog.workbench.dialogs.training.hopfield.InputHopfield;
 import org.encog.workbench.dialogs.training.instar.InputInstar;
 import org.encog.workbench.dialogs.training.instar.ProgressInstar;
 import org.encog.workbench.dialogs.training.lma.InputLMA;
@@ -70,8 +65,8 @@ import org.encog.workbench.dialogs.training.scg.InputSCG;
 import org.encog.workbench.dialogs.training.scg.ProgressSCG;
 import org.encog.workbench.dialogs.training.som.InputSOM;
 import org.encog.workbench.dialogs.training.som.ProgressSOM;
-import org.encog.workbench.dialogs.training.svm.InputSVM;
 import org.encog.workbench.dialogs.training.svm.ImputSearchSVM;
+import org.encog.workbench.dialogs.training.svm.InputSVM;
 import org.encog.workbench.dialogs.training.svm.ProgressSVM;
 import org.encog.workbench.process.validate.ValidateTraining;
 
@@ -82,11 +77,6 @@ public class Training {
 	
 	public void initTraining(NeuralDataSet training, BasicNetwork network)
 	{
-		if( training instanceof ExternalDataSource )
-		{
-			ExternalDataSource ext = (ExternalDataSource)training;
-			ext.init();
-		}
 	}
 		
 	public void performAnneal() {

@@ -38,25 +38,21 @@ import java.util.GregorianCalendar;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
-import org.encog.neural.data.market.TickerSymbol;
-import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.data.external.ExternalDataSource;
 import org.encog.neural.data.market.MarketDataDescription;
 import org.encog.neural.data.market.MarketDataType;
 import org.encog.neural.data.market.MarketNeuralDataSet;
+import org.encog.neural.data.market.TickerSymbol;
 import org.encog.neural.data.market.loader.LoaderError;
 import org.encog.neural.data.market.loader.MarketLoader;
 import org.encog.neural.data.market.loader.YahooFinanceLoader;
 import org.encog.neural.data.temporal.TemporalDataDescription;
+import org.encog.neural.data.temporal.TemporalDataDescription.Type;
 import org.encog.neural.data.temporal.TemporalNeuralDataSet;
 import org.encog.neural.data.temporal.TemporalPoint;
-import org.encog.neural.data.temporal.TemporalDataDescription.Type;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.util.benchmark.RandomTrainingFactory;
 import org.encog.util.csv.ReadCSV;
@@ -119,14 +115,14 @@ public class CreateTrainingData {
 			InputAndIdealDialog dialog = new InputAndIdealDialog(EncogWorkBench
 					.getInstance().getMainWindow());
 			if (dialog.process()) {
-				ExternalDataSource link = new ExternalDataSource();
+				/*ExternalDataSource link = new ExternalDataSource();
 				link.setInputCount(dialog.getInputCount().getValue());
 				link.setIdealCount(dialog.getIdealCount().getValue());
 				link.setLink(fc.getSelectedFile());
 
 				EncogWorkBench.getInstance().getCurrentFile().add(
 						EncogDocumentOperations.generateNextID("link-"), link);
-				EncogWorkBench.getInstance().getMainWindow().redraw();
+				EncogWorkBench.getInstance().getMainWindow().redraw();*/
 			}
 		}
 	}
@@ -150,13 +146,13 @@ public class CreateTrainingData {
 
 		ImportExportUtility.exportCSV(training, externalFile.toString());
 
-		ExternalDataSource link = new ExternalDataSource();
+		/*ExternalDataSource link = new ExternalDataSource();
 		link.setInputCount(training.getInputSize());
 		link.setIdealCount(training.getIdealSize());
 		link.storeRelativeLink(new File(externalFile.toString()),
 				EncogWorkBench.getInstance().getCurrentFile());
 
-		EncogWorkBench.getInstance().getCurrentFile().add(resourceName, link);
+		EncogWorkBench.getInstance().getCurrentFile().add(resourceName, link);*/
 		EncogWorkBench.getInstance().getMainWindow().redraw();
 
 	}
@@ -420,12 +416,12 @@ public class CreateTrainingData {
 
 		ImportExportUtility.exportCSV(training, externalFile.toString());
 
-		ExternalDataSource link = new ExternalDataSource();
+		/*ExternalDataSource link = new ExternalDataSource();
 		link.setInputCount(training.getInputSize());
 		link.setIdealCount(training.getIdealSize());
 		link.setLink(externalFile.toString());
 
-		EncogWorkBench.getInstance().getCurrentFile().add(resourceName, link);
+		EncogWorkBench.getInstance().getCurrentFile().add(resourceName, link);*/
 		EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 	}
