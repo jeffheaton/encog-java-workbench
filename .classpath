@@ -8,5 +8,7 @@
 	<classpathentry kind="lib" path="jar/slf4j-jdk14-1.5.6.jar"/>
 	<classpathentry kind="lib" path="jar/JOCL-0.1.3a-beta.jar"/>
 	<classpathentry kind="lib" path="jar/encog-core-2.5.0.jar"/>
+	<classpathentry kind="lib" path="jar/encog-javascript-2.5.jar"/>
+	<classpathentry kind="lib" path="jar/js.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

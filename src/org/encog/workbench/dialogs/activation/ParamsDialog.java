@@ -8,8 +8,6 @@ import org.encog.neural.activation.ActivationFunction;
 import org.encog.workbench.dialogs.common.DecimalField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 
-import sun.rmi.server.Activation;
-
 public class ParamsDialog extends EncogPropertiesDialog {
 
 	DecimalField[] fields;
