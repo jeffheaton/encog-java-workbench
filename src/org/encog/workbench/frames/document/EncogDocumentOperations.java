@@ -48,7 +48,10 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
+import org.encog.neural.data.buffer.BinaryDataLoader;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.neural.data.buffer.codec.CSVDataCODEC;
+import org.encog.neural.data.buffer.codec.DataSetCODEC;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.svm.SVMNetwork;
 import org.encog.neural.networks.training.neat.NEATGenome;
@@ -57,17 +60,22 @@ import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.script.EncogScript;
 import org.encog.solve.genetic.population.BasicPopulation;
+import org.encog.util.csv.CSVFormat;
+import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EvaluateDialog;
+import org.encog.workbench.dialogs.ImportExportDialog;
 import org.encog.workbench.dialogs.PopulationDialog;
 import org.encog.workbench.dialogs.binary.DialogBinary2External;
+import org.encog.workbench.dialogs.binary.DialogCSV;
 import org.encog.workbench.dialogs.binary.DialogExternal2Binary;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
 import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
+import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
@@ -88,6 +96,7 @@ import org.encog.workbench.tabs.network.NetworkTab;
 import org.encog.workbench.tabs.normalize.DataNormalizationTab;
 import org.encog.workbench.tabs.population.PopulationTab;
 import org.encog.workbench.util.ExtensionFilter;
+import org.encog.workbench.util.OutputStatusReportable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -236,11 +245,31 @@ public class EncogDocumentOperations {
 		ImportExport.performExport(obj);
 	}
 
-	public void performFileClose() {
+	public void performFileNew() {
+		
 		if (!checkSave()) {
 			return;
 		}
-		EncogWorkBench.getInstance().close();
+		
+		String home = System.getProperty("user.home");
+		File encogFolders =  new File(home,"EncogProjects");
+		encogFolders.mkdir();
+		
+		CreateNewDocument dialog = new CreateNewDocument(EncogWorkBench.getInstance().getMainWindow());
+		dialog.getParentDirectory().setValue(encogFolders.toString());
+		dialog.getProjectFilename().setValue("MyEncogProject");
+		
+		
+		if( dialog.process() )
+		{
+			File parent = new File(dialog.getParentDirectory().getValue());
+			File project = new File(parent,dialog.getProjectFilename().getValue());
+			Directory.deleteDirectory(project); // the user was warned!
+			project.mkdir();
+			File projectFile = new File(project,dialog.getProjectFilename().getValue()+".eg");
+			EncogWorkBench.getInstance().close();
+			EncogWorkBench.save(projectFile.toString());
+		}
 	}
 
 	public void performFileOpen() {
@@ -460,6 +489,9 @@ public class EncogDocumentOperations {
 	boolean checkSave() {
 		final String currentFileName = EncogWorkBench.getInstance()
 				.getCurrentFileName();
+		
+		if( EncogWorkBench.getInstance().getCurrentFile()==null )
+			return true;
 
 		if (currentFileName != null
 				|| EncogWorkBench.getInstance().getCurrentFile().getDirectory()
@@ -626,47 +658,8 @@ public class EncogDocumentOperations {
 		dialog.setType(TrainingDataType.Empty);	
 
 		if (dialog.process()) {		
-			
-			if( dialog.shouldLink() && EncogWorkBench.getInstance().getCurrentFileName()==null)
-			{
-				EncogWorkBench.displayError("Error", "Can't link to external files until your main EG file is saved.");
-				return;
-			}
-			
-			if( dialog.shouldLink() )
-				performLinkTraining(dialog.getType());
-			else
-				performCreateTraining(dialog.getType());
-
+			performLinkTraining(dialog.getType());
 		}
-	}
-	
-	public void performCreateTraining(TrainingDataType type)
-	{
-		switch (type) {
-		case Empty:
-			CreateTrainingData.createEmpty();
-			break;
-		case ImportCSV:
-			CreateTrainingData.createImportCSV();
-			break;
-		case MarketWindow:
-			CreateTrainingData.createMarketWindow();
-			break;
-		case PredictWindow:
-			CreateTrainingData.createPredictWindow();
-			break;
-		case Random:
-			CreateTrainingData.createRandom();
-			break;
-		case XORTemp:
-			CreateTrainingData.createXORTemp();
-			break;
-		case XOR:
-			CreateTrainingData.createXOR();
-			break;
-		}
-		
 	}
 	
 	public void performLinkTraining(TrainingDataType type) throws IOException
@@ -718,7 +711,29 @@ public class EncogDocumentOperations {
 		DialogBinary2External dialog  = new DialogBinary2External(EncogWorkBench.getInstance().getMainWindow());
 		if(dialog.process())
 		{
+			File binaryFile = new File(dialog.getBinaryFile().getValue());
+			File externFile = new File(dialog.getExternalFile().getValue());
+			int fileType = dialog.getFileType().getSelectedIndex();
+			DataSetCODEC codec;
+			BinaryDataLoader loader;
 			
+			if( fileType==0)
+			{
+				DialogCSV dialog2 = new DialogCSV(EncogWorkBench.getInstance().getMainWindow());
+				if( dialog2.process() ) {
+					boolean headers = dialog2.getHeaders().getValue();
+					CSVFormat format;
+					
+					if( dialog2.getDecimalComma().getValue() )
+						format = CSVFormat.DECIMAL_COMMA;
+					else
+						format = CSVFormat.DECIMAL_POINT;
+					
+					codec = new CSVDataCODEC(externFile,format);
+					loader = new BinaryDataLoader(codec);
+					new ImportExportDialog(loader,binaryFile,false).setVisible(true);
+				}
+			}			
 		}
 	}
 
@@ -726,7 +741,37 @@ public class EncogDocumentOperations {
 		DialogExternal2Binary dialog  = new DialogExternal2Binary(EncogWorkBench.getInstance().getMainWindow());
 		if(dialog.process())
 		{
+			File binaryFile = new File(dialog.getBinaryFile().getValue());
+			File externFile = new File(dialog.getExternalFile().getValue());
+			int fileType = dialog.getFileType().getSelectedIndex();
+			int inputCount = dialog.getInputCount().getValue();
+			int idealCount = dialog.getIdealCount().getValue();
 			
+			// no extension
+			if (ExtensionFilter.getExtension(binaryFile) == null) {
+				binaryFile = new File(binaryFile.getPath() + ".egb");
+			}
+			
+			DataSetCODEC codec;
+			BinaryDataLoader loader;
+			
+			if( fileType==0)
+			{
+				DialogCSV dialog2 = new DialogCSV(EncogWorkBench.getInstance().getMainWindow());
+				if( dialog2.process() ) {
+					boolean headers = dialog2.getHeaders().getValue();
+					CSVFormat format;
+					
+					if( dialog2.getDecimalComma().getValue() )
+						format = CSVFormat.DECIMAL_COMMA;
+					else
+						format = CSVFormat.DECIMAL_POINT;
+					
+					codec = new CSVDataCODEC(externFile,format,headers,inputCount,idealCount);
+					loader = new BinaryDataLoader(codec);
+					new ImportExportDialog(loader,binaryFile,true).setVisible(true);
+				}
+			}
 		}
 		
 	}

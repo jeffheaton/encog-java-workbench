@@ -54,13 +54,12 @@ public class DialogExternal2Binary extends EncogPropertiesDialog {
 		
 		List<String> list = new ArrayList<String>();
 		list.add("CSV");
-		list.add("CSV (with decimal comma)");
 		
 		this.setSize(640, 200);
 		this.setTitle("Convert Other Format File to Encog Binary Training");
 
-		addProperty(this.binaryFile = new FileField("source file","Source File(*.csv)",true,true,EncogDocumentFrame.ENCOG_BINARY));
-		addProperty(this.externalFile = new FileField("target file","Target Encog Binary File(*.egb)",true,false,null));
+		addProperty(this.externalFile = new FileField("source file","Source File(*.csv)",true,false,null));
+		addProperty(this.binaryFile = new FileField("target file","Target Encog Binary File(*.egb)",true,true,EncogDocumentFrame.ENCOG_BINARY));
 		addProperty(this.fileType = new ComboBoxField("type type", "Export File Type",true,list));
 		addProperty(this.inputCount = new IntegerField("input count","Input Count",true,1,10000));
 		addProperty(this.idealCount = new IntegerField("ideal count","Ideal Count",true,0,10000));

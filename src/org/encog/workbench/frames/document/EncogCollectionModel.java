@@ -73,43 +73,39 @@ public class EncogCollectionModel extends DefaultTreeModel {
 	}
     }
     
-    public void invalidate(EncogMemoryCollection encog)
-    {
-    	EncogObjectDirectory root = (EncogObjectDirectory)this.getRoot();
-    	
-    	root.removeAllChildren();
-    	
-    	Map<String,Set<DirectoryEntry>> sorted = new HashMap();
-    	
-    	for(DirectoryEntry entry: encog.getDirectory() )
-    	{
-    		Set<DirectoryEntry> list = sorted.get(entry.getType());
-    		if( list==null )
-    		{
-    			list = new TreeSet<DirectoryEntry>();
-    			sorted.put(entry.getType(), list);
-    		}
-    		
-    		list.add(entry);
-    	}    	
-    	
-    	root.setName("Encog");
- 
-    	Set<String> dirsSorted = new TreeSet<String>();
-    	dirsSorted.addAll(sorted.keySet());
-    	
-    	for(String key: dirsSorted)
-    	{
-    		EncogObjectDirectory dir = new EncogObjectDirectory(key); 
-    		root.add(dir);
-    		Set<DirectoryEntry> list = sorted.get(key);
-    		
-    		for(DirectoryEntry entry: list)
-    		{
-    			EncogCollectionEntry node = new EncogCollectionEntry(entry);
-    			dir.add(node);
-    		}
-    	}    	
-    }
+	public void invalidate(EncogMemoryCollection encog) {
+		EncogObjectDirectory root = (EncogObjectDirectory) this.getRoot();
+
+		root.removeAllChildren();
+		root.setName("Encog");
+
+		if (encog != null) {
+			Map<String, Set<DirectoryEntry>> sorted = new HashMap();
+
+			for (DirectoryEntry entry : encog.getDirectory()) {
+				Set<DirectoryEntry> list = sorted.get(entry.getType());
+				if (list == null) {
+					list = new TreeSet<DirectoryEntry>();
+					sorted.put(entry.getType(), list);
+				}
+
+				list.add(entry);
+			}
+
+			Set<String> dirsSorted = new TreeSet<String>();
+			dirsSorted.addAll(sorted.keySet());
+
+			for (String key : dirsSorted) {
+				EncogObjectDirectory dir = new EncogObjectDirectory(key);
+				root.add(dir);
+				Set<DirectoryEntry> list = sorted.get(key);
+
+				for (DirectoryEntry entry : list) {
+					EncogCollectionEntry node = new EncogCollectionEntry(entry);
+					dir.add(node);
+				}
+			}
+		}
+	}
 }
 

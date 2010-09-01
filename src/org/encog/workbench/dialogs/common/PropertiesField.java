@@ -121,5 +121,15 @@ public abstract class PropertiesField {
 	{
 		this.field.repaint();
 	}
+
+	public JLabel getLabelControl() {
+		return labelControl;
+	}
+
+	public void setLabelControl(JLabel labelControl) {
+		this.labelControl = labelControl;
+	}
+	
+	
 	
 }

@@ -57,6 +57,7 @@ import org.encog.script.javascript.EncogJavascriptEngine;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
+import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.frames.document.EncogOutputPanel;
 import org.encog.workbench.process.cloud.CloudProcess;
@@ -111,7 +112,6 @@ public class EncogWorkBench implements Runnable {
 
 	public EncogWorkBench() {
 		this.config = new EncogWorkBenchConfig();
-		this.currentFile = new EncogMemoryCollection();
 		this.logHandler = new WorkbenchLogHandler();
 		Logging.getRootLogger().addHandler(this.logHandler);
 		Logging.getRootLogger().setLevel(Level.OFF);
@@ -187,27 +187,38 @@ public class EncogWorkBench implements Runnable {
 
 	public static void load(final String filename) {
 		getInstance().getMainWindow().beginWait();
-		getInstance().getCurrentFile().load(
-				new FilePersistence(new File(filename)));
+		getInstance().setCurrentFile(new EncogMemoryCollection());
+		getInstance().getCurrentFile().load(new FilePersistence(new File(filename)));
 		getInstance().setCurrentFileName(filename);
 		getInstance().getMainWindow().redraw();
 		getInstance().getMainWindow().endWait();
 	}
 
+	private void setCurrentFile(EncogMemoryCollection f) {
+		this.currentFile = f;
+		
+	}
+
 	public static void save(final String filename) {
+		if( filename!=null )
+		{
 		getInstance().getMainWindow().beginWait();
+		if( getInstance().getCurrentFile()==null )
+			getInstance().setCurrentFile(new EncogMemoryCollection());
 		getInstance().getCurrentFile().save(
 				new FilePersistence(new File(filename)));
 		getInstance().setCurrentFileName(filename);
 		getInstance().getMainWindow().redraw();
 		getInstance().getMainWindow().endWait();
+		}
 	}
 
 	/**
 	 * Close the current file.
 	 */
 	public void close() {
-		this.currentFile.clear();
+		if( this.currentFile!=null )
+			this.currentFile.clear();
 		this.currentFileName = null;
 		this.mainWindow.redraw();
 	}
@@ -388,10 +399,7 @@ public class EncogWorkBench implements Runnable {
 		workBench.setMainWindow(new EncogDocumentFrame());
 
 		workBench.init();
-
-		if (args.length > 0) {
-			EncogWorkBench.load(args[0]);
-		}
+		
 		try {
 			workBench.getMainWindow().setVisible(true);
 		} catch (Throwable t) {
@@ -413,6 +421,11 @@ public class EncogWorkBench implements Runnable {
 			EncogWorkBench.saveConfig();
 		}
 		
+	}
+	
+	public void clearOutput()
+	{
+		this.getMainWindow().getOutputPane().clear();
 	}
 	
 	public void output(String str)

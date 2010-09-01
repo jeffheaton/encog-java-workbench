@@ -28,51 +28,58 @@
  * http://www.heatonresearch.com/copyright.html
  */
 
-package org.encog.workbench.dialogs;
+package org.encog.workbench.dialogs.common;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Point;
 
-import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JProgressBar;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
-import org.encog.engine.StatusReportable;
-import org.encog.util.benchmark.EncogBenchmark;
-import org.encog.workbench.EncogWorkBench;
+public class InformationField extends PropertiesField {
 
-
-
-public class BenchmarkDialog extends JDialog implements Runnable, StatusReportable {
-
-	private JProgressBar progress;
-	private JLabel status;
+	private String value;
+	private int height;
 	
-	public BenchmarkDialog()
+	public InformationField(int height, String label) {
+		super(null, label, false);
+		this.height = height;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+		((JTextField)this.getField()).setText(value);
+	}
+	
+	public JLabel createLabel() 
 	{
-		progress = new JProgressBar(0,7);
-		setTitle("Please wait, benchmarking Encog.");
-		setSize(640,75);
-		Container content = this.getContentPane();
-		content.setLayout(new BorderLayout());
-		this.status = new JLabel("");
-		content.add(this.status, BorderLayout.CENTER);
-		content.add(progress, BorderLayout.SOUTH);
-		Thread thread = new Thread(this);
-		thread.start();
+		return null;
 	}
-
-	public void run() {
-		EncogBenchmark benchmark = new EncogBenchmark(this);
-		double d = benchmark.process();
-		dispose();
-		EncogWorkBench.displayMessage("Benchmark Complete", "This machine's rating is: " + d + "\n(lower is better)");
-	}
-
-	public void report(int total, int current, String status) {
-		this.status.setText(status);
-		this.progress.setValue(current);
+	
+	public int createField(JPanel panel, int x, int y,int width)
+	{
+		JTextArea l = new JTextArea(this.getLabel());
+		l.setEditable(false);
+		l.setLineWrap(true);
+		l.setBackground(this.getOwner().getBackground());
+		l.setWrapStyleWord(true);
+		l.setSize(new Dimension(this.getOwner().getWidth(),this.height*(l.getFontMetrics(l.getFont())).getHeight()));
+		this.setLabelControl(null);
+		l.setLocation(new Point(0,y));
+		panel.add(l);
 		
+		return y+100;
+	}
+
+
+	@Override
+	public void collect() throws ValidationException {
 	}
 
 }

@@ -101,7 +101,8 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 		for(PropertiesField field: properties)
 		{
 			JLabel label = field.createLabel();
-			maxLabelWidth = Math.max(maxLabelWidth, label.getWidth());
+			if( label!=null)
+				maxLabelWidth = Math.max(maxLabelWidth, label.getWidth());
 		}
 		
 		y=0;
@@ -179,8 +180,4 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 			return this.tabPane.getSelectedIndex();
 		}
 	}
-
-
-	
-
 }

@@ -128,7 +128,7 @@ abstract public class EncogCommonDialog extends JDialog implements
 	public void actionPerformed(final ActionEvent e) {
 
 		if (e.getSource() == this.ctrlOK) {
-			if (collect()) {
+			if ( collect() && passesValidation()) {
 				dispose();
 				this.shouldProcess = true;
 			}
@@ -136,6 +136,10 @@ abstract public class EncogCommonDialog extends JDialog implements
 			dispose();
 			this.shouldProcess = false;
 		}
+	}
+
+	public boolean passesValidation() {
+		return true;
 	}
 
 	/**

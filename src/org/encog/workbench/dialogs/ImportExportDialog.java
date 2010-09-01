@@ -32,26 +32,40 @@ package org.encog.workbench.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.io.File;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
 import org.encog.engine.StatusReportable;
+import org.encog.engine.util.Format;
+import org.encog.neural.data.buffer.BinaryDataLoader;
 import org.encog.util.benchmark.EncogBenchmark;
 import org.encog.workbench.EncogWorkBench;
 
 
 
-public class BenchmarkDialog extends JDialog implements Runnable, StatusReportable {
+public class ImportExportDialog extends JDialog implements Runnable, StatusReportable {
 
 	private JProgressBar progress;
 	private JLabel status;
+	private BinaryDataLoader loader;
+	private File binaryFile;
+	private boolean performImport;
 	
-	public BenchmarkDialog()
+	public ImportExportDialog(BinaryDataLoader loader,File binaryFile,boolean performImport)
 	{
-		progress = new JProgressBar(0,7);
-		setTitle("Please wait, benchmarking Encog.");
+		this.loader = loader;
+		this.binaryFile = binaryFile;
+		this.performImport = performImport;
+		progress = new JProgressBar(0,100);
+		
+		if( performImport )
+			setTitle("Please wait...importing...");
+		else
+			setTitle("Please wait...exporting...");
+		
 		setSize(640,75);
 		Container content = this.getContentPane();
 		content.setLayout(new BorderLayout());
@@ -63,16 +77,44 @@ public class BenchmarkDialog extends JDialog implements Runnable, StatusReportab
 	}
 
 	public void run() {
-		EncogBenchmark benchmark = new EncogBenchmark(this);
-		double d = benchmark.process();
+		this.loader.setStatus(this);
+		
+		if( performImport )
+			this.loader.external2Binary(binaryFile);
+		else
+			this.loader.binary2External(binaryFile);
+		
 		dispose();
-		EncogWorkBench.displayMessage("Benchmark Complete", "This machine's rating is: " + d + "\n(lower is better)");
+		
+		if( performImport )
+			EncogWorkBench.displayMessage("Done", "Import Complete");
+		else
+			EncogWorkBench.displayMessage("Done", "Export Complete");
 	}
 
 	public void report(int total, int current, String status) {
-		this.status.setText(status);
-		this.progress.setValue(current);
+		StringBuilder result = new StringBuilder();
 		
+		
+		if( total>0 )
+		{
+			double percent = (double)current/(double)total;
+			int value = (int)(100.0*percent);
+			this.progress.setValue(value);
+			result.append(Format.formatInteger(current));
+			result.append(" / ");
+			result.append(Format.formatInteger(total));
+			result.append(": ");
+		}
+		else
+		{
+			result.append(Format.formatInteger(current));
+			result.append(": ");
+			this.progress.setValue(0);
+		}
+		
+		result.append(status);
+		this.status.setText(result.toString());
 	}
 
 }

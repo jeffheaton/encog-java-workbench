@@ -47,11 +47,9 @@ import org.encog.workbench.tabs.ValidationChart;
 
 public class EncogMenus {
 	public static final String FILE_NEW = "New";
-	public static final String FILE_CLOSE = "Close";
-	public static final String FILE_OPEN = "Open...";
-	public static final String FILE_SAVE = "Save";
-	public static final String FILE_SAVE_AS = "Save As...";
-	public static final String FILE_REVERT = "Revert";
+	public static final String FILE_OPEN = "Open Project...";
+	public static final String FILE_SAVE = "Save Project";
+	public static final String FILE_REVERT = "Revert Project";
 	public static final String FILE_QUIT = "Quit...";
 	public static final String FILE_IMPORT = "Import CSV...";
 
@@ -83,10 +81,8 @@ public class EncogMenus {
 	private JMenu menuTools;
 	
 	private JMenuItem menuFileNew;
-	private JMenuItem menuFileClose;
 	private JMenuItem menuFileOpen;
 	private JMenuItem menuFileSave;
-	private JMenuItem menuFileSaveAs;
 	private JMenuItem menuFileRevert;
 	private JMenuItem menuFileQuit;
 	private JMenuItem menuFileImport;
@@ -126,13 +122,8 @@ public class EncogMenus {
 		this.menuFileOpen = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_OPEN,
 				'o'));
 		this.menuFile.addSeparator();
-		this.menuFileClose = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_CLOSE,
-				'c'));
-		this.menuFile.addSeparator();
 		this.menuFileSave = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_SAVE,
 				's'));
-		this.menuFileSaveAs = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_SAVE_AS,
-				'a'));
 		this.menuFileRevert = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_REVERT,
 				'r'));
 		this.menuFile.addSeparator();
@@ -187,6 +178,7 @@ public class EncogMenus {
 	{
 		boolean modal = this.owner.isModalTabOpen();
 		boolean supportsClipboard = false;
+		boolean documentOpen = EncogWorkBench.getInstance().getCurrentFile()!=null;
 		
 		JTabbedPane tabs = EncogWorkBench.getInstance().getMainWindow().getDocumentTabs();
 
@@ -199,29 +191,27 @@ public class EncogMenus {
 		}
 		
 		this.menuFileNew.setEnabled(!modal);
-		this.menuFileClose.setEnabled(!modal);
 		this.menuFileOpen.setEnabled(!modal);
-		this.menuFileSave.setEnabled(!modal);
-		this.menuFileSaveAs.setEnabled(!modal);
-		this.menuFileRevert.setEnabled(!modal);
+		this.menuFileSave.setEnabled(!modal && documentOpen);
+		this.menuFileRevert.setEnabled(!modal && documentOpen);
 		this.menuFileQuit.setEnabled(true);
 		this.menuFileImport.setEnabled(!modal);
 
-		this.menuEditCut.setEnabled(!modal && supportsClipboard);
-		this.menuEditCopy.setEnabled(!modal && supportsClipboard);
-		this.menuEditPaste.setEnabled(!modal && supportsClipboard);
+		this.menuEditCut.setEnabled(!modal && supportsClipboard && documentOpen);
+		this.menuEditCopy.setEnabled(!modal && supportsClipboard && documentOpen);
+		this.menuEditPaste.setEnabled(!modal && supportsClipboard && documentOpen);
 		this.menuEditConfig.setEnabled(!modal);
 
-		this.menuObjectsCreate.setEnabled(!modal);
-		this.menuObjectsDelete.setEnabled(!modal);
+		this.menuObjectsCreate.setEnabled(!modal && documentOpen);
+		this.menuObjectsDelete.setEnabled(!modal && documentOpen);
 
 		this.menuToolsCloud.setEnabled(!modal);
-		this.menuToolsTrain.setEnabled(!modal);
-		this.menuToolsGenerate.setEnabled(!modal);
-		this.menuToolsEvaluate.setEnabled(!modal);
+		this.menuToolsTrain.setEnabled(!modal && documentOpen);
+		this.menuToolsGenerate.setEnabled(!modal && documentOpen);
+		this.menuToolsEvaluate.setEnabled(!modal && documentOpen);
 		this.menuToolsBenchmark.setEnabled(!modal);
 		this.menuToolsBrowse.setEnabled(!modal);
-		this.menuToolsValidation.setEnabled(!modal);
+		this.menuToolsValidation.setEnabled(!modal && documentOpen);
 
 		this.menuHelpAbout.setEnabled(!modal);
 	}
@@ -234,8 +224,6 @@ public class EncogMenus {
 			owner.getOperations().performFileOpen();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_SAVE)) {
 			owner.getOperations().performFileSave();
-		} else if (event.getActionCommand().equals(EncogMenus.FILE_SAVE_AS)) {
-			owner.getOperations().performFileSaveAs();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_REVERT)) {
 			owner.getOperations().performFileRevert();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_IMPORT)) {
@@ -246,10 +234,8 @@ public class EncogMenus {
 			owner.getOperations().performObjectsCreate();
 		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_DELETE)) {
 			owner.getPopupMenus().performPopupDelete();
-		} else if (event.getActionCommand().equals(EncogMenus.FILE_CLOSE)) {
-			owner.getOperations().performFileClose();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW)) {
-			owner.getOperations().performFileClose();
+			owner.getOperations().performFileNew();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_CUT)) {
 			owner.getOperations().performEditCut();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_COPY)) {

@@ -34,19 +34,19 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.FileField;
 import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 
-public class DialogBinary2External extends EncogPropertiesDialog {
+public class DialogCSV extends EncogPropertiesDialog {
 	
-	private final FileField binaryFile;
-	private final FileField externalFile;
-	private final ComboBoxField fileType;
+	private final CheckField headers;
+	private final CheckField decimalComma;
 	
-	public DialogBinary2External(Frame owner) {
+	public DialogCSV(Frame owner) {
 		super(owner);
 		
 		List<String> list = new ArrayList<String>();
@@ -55,25 +55,21 @@ public class DialogBinary2External extends EncogPropertiesDialog {
 		this.setSize(640, 200);
 		this.setTitle("Convert Encog Binary Training to Other Format File");
 		
-		addProperty(this.binaryFile = new FileField("source file","Source Encog Binary File(*.egb)",true,false,EncogDocumentFrame.ENCOG_BINARY));
-		addProperty(this.externalFile = new FileField("target file","Target File",true,true,null));
-		addProperty(this.fileType = new ComboBoxField("type type", "Export File Type",true,list));
+		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
+		addProperty(this.decimalComma = new CheckField("decimal comma","Decimal Comma (instead of decimal point)"));
 		render();
 	}
 
-	public FileField getBinaryFile() {
-		return binaryFile;
+	public CheckField getHeaders() {
+		return headers;
 	}
 
-	public FileField getExternalFile() {
-		return externalFile;
-	}
-
-	public ComboBoxField getFileType() {
-		return fileType;
+	public CheckField getDecimalComma() {
+		return decimalComma;
 	}
 	
 	
 
-
+	
+	
 }

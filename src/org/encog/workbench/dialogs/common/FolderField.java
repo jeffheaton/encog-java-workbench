@@ -32,29 +32,21 @@ package org.encog.workbench.dialogs.common;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.frames.document.EncogDocumentFrame;
-import org.encog.workbench.util.ExtensionFilter;
-
-public class FileField extends PropertiesField implements ActionListener {
+public class FolderField extends PropertiesField implements ActionListener {
 
 	private String value;
 	private JButton button;
-	private boolean save;
-	private ExtensionFilter filter;
 
-	public FileField(String name, String label, boolean required, boolean save, ExtensionFilter filter) {
+	public FolderField(String name, String label, boolean required) {
 		super(name, label, required);
-		this.save = save;
-		this.filter = filter;
 	}
 
 	public String getValue() {
@@ -86,8 +78,8 @@ public class FileField extends PropertiesField implements ActionListener {
 		panel.add(button);
 
 		button.addActionListener(this);
-		
-		return y + button.getHeight()+2;
+
+		return y + button.getHeight() + 2;
 	}
 
 	@Override
@@ -101,22 +93,13 @@ public class FileField extends PropertiesField implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == this.button) {
-			if (this.save) {;
-				final JFileChooser fc = new JFileChooser();
-				fc.setFileFilter(this.filter);
-				final int result = fc.showSaveDialog(this.getOwner());
-				if (result == JFileChooser.APPROVE_OPTION) {
-					String file = fc.getSelectedFile().getAbsolutePath();
-					((JTextField)this.getField()).setText(file);
-				}
-			} else {
-				final JFileChooser fc = new JFileChooser();
-				fc.addChoosableFileFilter(this.filter);
-				final int result = fc.showOpenDialog(this.getOwner());
-				if (result == JFileChooser.APPROVE_OPTION) {
-					String file = fc.getSelectedFile().getAbsolutePath();
-					((JTextField)this.getField()).setText(file);
-				}
+			final JFileChooser fc = new JFileChooser();
+			fc.setCurrentDirectory(new File(((JTextField)this.getField()).getText()));
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			final int result = fc.showOpenDialog(this.getOwner());
+			if (result == JFileChooser.APPROVE_OPTION) {
+				String file = fc.getSelectedFile().getAbsolutePath();
+				((JTextField) this.getField()).setText(file);
 			}
 		}
 	}

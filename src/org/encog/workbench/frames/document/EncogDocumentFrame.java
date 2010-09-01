@@ -48,6 +48,7 @@ import javax.swing.tree.TreePath;
 
 import org.encog.persist.DirectoryEntry;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.tabs.AboutTab;
 import org.encog.workbench.tabs.ButtonTabComponent;
@@ -62,6 +63,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private EncogMenus menus;
 	private EncogPopupMenus popupMenus;
 	private boolean closed = false;
+	private boolean splashed = false;
 	private JTree tree;
 	private JSplitPane projectSplit;
 	private JTabbedPane documentTabs;
@@ -155,7 +157,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 		// set the title properly
 		if (EncogWorkBench.getInstance().getCurrentFileName() == null) {
-			setTitle(EncogDocumentFrame.WINDOW_TITLE + " : Untitled");
+			setTitle(EncogDocumentFrame.WINDOW_TITLE + " : No Project");
 		} else {
 			setTitle(EncogDocumentFrame.WINDOW_TITLE + " : "
 					+ EncogWorkBench.getInstance().getCurrentFileName());
@@ -164,6 +166,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		this.collectionModel.invalidate(EncogWorkBench.getInstance()
 				.getCurrentFile());
 		this.tree.updateUI();
+		
+		getMenus().updateMenus();
 	}
 
 	public void rightMouseClicked(final MouseEvent e, final Object item) {
@@ -176,6 +180,11 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void windowOpened(final WindowEvent e) {
+		if( !this.splashed ) {
+		EncogWorkbenchSplash splash = new EncogWorkbenchSplash();
+		splash.process();
+		this.splashed = true;
+		}
 	}
 
 	public void windowClosing(final WindowEvent e) {

@@ -60,18 +60,14 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 	private JScrollPane scroll1 = new JScrollPane(list);
 	private JScrollPane scroll2 = new JScrollPane(text);
 	private TrainingDataType type;
-	private JCheckBox checkLink;
 
 	public CreateTrainingDataDialog(Frame owner) {
 		super(owner);
-		setTitle("Create or Link Training Data");
+		setTitle("Create Training Data");
 
 		this.setSize(500, 250);
 		this.setLocation(50, 100);
-		
-		final Container bottom = new JPanel();
-		
-		
+
 		final Container select = new JPanel();
 		select.setLayout(new GridLayout(1, 2));
 
@@ -94,15 +90,9 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		final Container outer = getBodyPanel();
-		
-		bottom.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.checkLink = new JCheckBox("Store in External File(linked)");
-		bottom.add(this.checkLink);
-		
+				
 		outer.setLayout(new BorderLayout());
 		outer.add(select,BorderLayout.CENTER);
-		outer.add(bottom,BorderLayout.SOUTH);
-		this.checkLink.setSelected(EncogWorkBench.getInstance().getCurrentFileName()!=null);
 	}
 
 	/**
@@ -217,10 +207,4 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		this.text.setSelectionEnd(0);
 
 	}
-
-	public boolean shouldLink()
-	{
-		return this.checkLink.isSelected();
-	}
-
 }

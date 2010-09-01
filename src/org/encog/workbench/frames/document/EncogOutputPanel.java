@@ -97,4 +97,8 @@ public class EncogOutputPanel extends JPanel implements ActionListener {
 		} 
 		
 	}
+
+	public void clear() {
+		this.text.setText("");
+	}
 }
