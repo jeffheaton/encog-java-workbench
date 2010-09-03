@@ -40,8 +40,6 @@ public class ExternalLinkTab extends EncogCommonTab implements ActionListener {
 	private JButton addRow;
 	private JButton delRow;
 	private JButton export;
-	private RandomAccessFile raf;
-	private FileChannel fc;
 	
 	public ExternalLinkTab(EncogPersistedObject encogObject) {
 		super(encogObject);
@@ -62,18 +60,14 @@ public class ExternalLinkTab extends EncogCommonTab implements ActionListener {
 		this.delRow.addActionListener(this);
 		this.export.addActionListener(this);
 		add(this.toolbar, BorderLayout.PAGE_START);
+		this.object.close();
 		this.model = new BufferedDataSetTableModel(getData());
 		this.table = new JTable(this.model);
 		add(new JScrollPane(this.table), BorderLayout.CENTER);
 		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		//new ExcelAdapter( this.table );
-		this.object.close();
-		try {
-			this.raf = new RandomAccessFile(this.object.getFile(),"rw");
-			this.fc = this.raf.getChannel();
-		} catch (FileNotFoundException e) {
-			throw new EncogError(e);
-		}
+		
+
 	}
 	
 	/**
@@ -156,12 +150,7 @@ public class ExternalLinkTab extends EncogCommonTab implements ActionListener {
 	public void dispose()
 	{
 		super.dispose();
-		try {
-			this.fc.close();
-			this.raf.close();
-		} catch (IOException e) {
-			throw new EncogError(e);
-		}
+		this.model.close();
 		this.object.open();
 	}
 
