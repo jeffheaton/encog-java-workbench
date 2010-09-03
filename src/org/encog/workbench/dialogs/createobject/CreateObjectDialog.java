@@ -27,24 +27,30 @@
  * 
  * http://www.heatonresearch.com/copyright.html
  */
-
 package org.encog.workbench.dialogs.createobject;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
-import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
+import org.encog.workbench.process.validate.ResourceNameValidate;
 
 public class CreateObjectDialog  extends EncogCommonDialog implements
 ListSelectionListener {
@@ -55,19 +61,44 @@ ListSelectionListener {
 	private JScrollPane scroll1 = new JScrollPane(list);
 	private JScrollPane scroll2 = new JScrollPane(text);
 	private ObjectType type;
+	private JTextField objectNameField;
+	private String resourceName;
 
 	public CreateObjectDialog(Frame owner) {
 		super(owner);
 		setTitle("Create Object");
 
+		JPanel top = new JPanel();
+		JPanel bottom = new JPanel();
+		
 		this.setSize(500, 250);
 		this.setLocation(50, 100);
 		final Container content = getBodyPanel();
-		content.setLayout(new GridLayout(1, 2));
+		content.setLayout(new BorderLayout());
+		top.setLayout(new GridLayout(1, 2));
+		top.add(this.scroll1);
+		top.add(this.scroll2);
 
-		content.add(this.scroll1);
-		content.add(this.scroll2);
-
+		GridBagLayout gridBag = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 0.0;
+		
+		content.add(top,BorderLayout.CENTER);
+		bottom.setLayout(gridBag);
+		
+		Component comp1 = new JLabel("Object Name:  ");
+		this.objectNameField = new JTextField(20); 
+		
+		gridBag.setConstraints(comp1, c);
+		c.weightx = 1.0;
+		gridBag.setConstraints(this.objectNameField, c);
+		
+		bottom.add(comp1);
+		bottom.add(this.objectNameField);
+		
+		content.add(bottom,BorderLayout.SOUTH);
+		
 		//this.model.addElement("Data Normalization");
 		this.model.addElement("Encog Script");
 		this.model.addElement("Neural Network");
@@ -80,8 +111,7 @@ ListSelectionListener {
 		this.text.setLineWrap(true);
 		this.text.setWrapStyleWord(true);
 		this.text.setEditable(false);
-		scroll2
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
 	/**
@@ -93,9 +123,6 @@ ListSelectionListener {
 	@Override
 	public void collectFields() throws ValidationException {
 		switch (list.getSelectedIndex()) {
-		/*case 0:
-			this.type = ObjectType.DataNormalization;
-			break;*/
 		case 0:
 			this.type = ObjectType.EncogScript;
 			break;
@@ -114,6 +141,13 @@ ListSelectionListener {
 		case 5:
 			this.type = ObjectType.TrainingData;
 			break;	
+		}
+		
+		this.resourceName = this.objectNameField.getText();
+		
+		String error = ResourceNameValidate.validateResourceName(resourceName);
+		if( error!=null ) {
+			throw new ValidationException(error);
 		}
 	}
 
@@ -193,7 +227,14 @@ ListSelectionListener {
 
 		this.text.setSelectionStart(0);
 		this.text.setSelectionEnd(0);
-
 	}
 
+	public String getResourceName() {
+		return resourceName;
+	}
+	
+	
+	
+	
 }
+

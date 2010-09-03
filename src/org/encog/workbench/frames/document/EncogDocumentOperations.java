@@ -85,6 +85,7 @@ import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.generate.CodeGeneration;
+import org.encog.workbench.process.validate.ResourceNameValidate;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.EncogScriptTab;
 import org.encog.workbench.tabs.ExternalLinkTab;
@@ -395,23 +396,23 @@ public class EncogDocumentOperations {
 			if (!dialog.process())
 				return;
 
+			String name = dialog.getResourceName();
+			
 			switch (dialog.getType()) {
 			case DataNormalization:
 				final DataNormalization norm = new DataNormalization();
-				EncogWorkBench.getInstance().getCurrentFile().add(
-						generateNextID("norm-"), norm);
+				EncogWorkBench.getInstance().getCurrentFile().add(name, norm);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;
 			case EncogScript:
 				final EncogScript script = new EncogScript();
 				script.setDescription("An Encog script");
 				script.setSource("console.println(\'Hello World\')\n");
-				EncogWorkBench.getInstance().getCurrentFile().add(
-						generateNextID("script-"), script);
+				EncogWorkBench.getInstance().getCurrentFile().add(name, script);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;				
 			case NeuralNetwork:
-				CreateNeuralNetwork.process(generateNextID("network-"));
+				CreateNeuralNetwork.process(name);
 				break;
 			case NEATPopulation:
 				performCreatePopulation();
@@ -419,20 +420,18 @@ public class EncogDocumentOperations {
 			case PropertyData:
 				final PropertyData prop = new PropertyData();
 				prop.setDescription("Some property data");
-				EncogWorkBench.getInstance().getCurrentFile().add(
-						generateNextID("properties-"), prop);
+				EncogWorkBench.getInstance().getCurrentFile().add(name, prop);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;
 			case Text:
 				final TextData text = new TextData();
 				text.setDescription("A text file");
 				text.setText("Insert text here.");
-				EncogWorkBench.getInstance().getCurrentFile().add(
-						generateNextID("text-"), text);
+				EncogWorkBench.getInstance().getCurrentFile().add(name, text);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;
 			case TrainingData:
-				performCreateTrainingData();
+				performCreateTrainingData(name);
 				break;
 			}
 
@@ -597,10 +596,12 @@ public class EncogDocumentOperations {
 		dialog.getNameField().setValue(selected.getName());
 		dialog.getDescription().setValue(selected.getDescription());
 		if (dialog.process()) {
-			if (EncogWorkBench.getInstance().getCurrentFile().find(
-					dialog.getNameField().getValue()) != null) {
+			
+			String error = ResourceNameValidate.validateResourceName(dialog.getNameField().getValue());
+			
+			if (error != null) {
 				EncogWorkBench.displayError("Data Error",
-						"That name is already in use, please choose another.");
+						error);
 				return;
 			}
 
@@ -651,40 +652,40 @@ public class EncogDocumentOperations {
 
 	}
 
-	public void performCreateTrainingData() throws IOException {
+	public void performCreateTrainingData(String name) throws IOException {
 		CreateTrainingDataDialog dialog = new CreateTrainingDataDialog(
 				EncogWorkBench.getInstance().getMainWindow());
 
 		dialog.setType(TrainingDataType.Empty);	
 
 		if (dialog.process()) {		
-			performLinkTraining(dialog.getType());
+			performLinkTraining(dialog.getType(),name);
 		}
 	}
 	
-	public void performLinkTraining(TrainingDataType type) throws IOException
+	public void performLinkTraining(TrainingDataType type, String name) throws IOException
 	{
 		switch (type) {
 		case Empty:
-			CreateTrainingData.linkEmpty();
+			CreateTrainingData.linkEmpty(name);
 			break;
 		case ImportCSV:
-			CreateTrainingData.linkCSV();
+			CreateTrainingData.linkCSV(name);
 			break;
 		case MarketWindow:
-			CreateTrainingData.linkMarketWindow();
+			CreateTrainingData.linkMarketWindow(name);
 			break;
 		case PredictWindow:
-			CreateTrainingData.linkPredictWindow();
+			CreateTrainingData.linkPredictWindow(name);
 			break;
 		case Random:
-			CreateTrainingData.linkRandom();
+			CreateTrainingData.linkRandom(name);
 			break;
 		case XORTemp:
-			CreateTrainingData.linkXORTemp();
+			CreateTrainingData.linkXORTemp(name);
 			break;
 		case XOR:
-			CreateTrainingData.linkXOR();
+			CreateTrainingData.linkXOR(name);
 			break;
 		}
 		
