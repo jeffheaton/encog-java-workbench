@@ -82,7 +82,6 @@ import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
-import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.process.validate.ResourceNameValidate;
@@ -242,25 +241,16 @@ public class EncogDocumentOperations {
 
 	}
 
-	public void performExport(final Object obj) {
-		ImportExport.performExport(obj);
-	}
-
 	public void performFileNew() {
 		
 		if (!checkSave()) {
 			return;
 		}
-		
-		String home = System.getProperty("user.home");
-		File encogFolders =  new File(home,"EncogProjects");
-		encogFolders.mkdir();
-		
+
 		CreateNewDocument dialog = new CreateNewDocument(EncogWorkBench.getInstance().getMainWindow());
-		dialog.getParentDirectory().setValue(encogFolders.toString());
+		dialog.getParentDirectory().setValue(EncogWorkBench.getInstance().getEncogFolders().toString());
 		dialog.getProjectFilename().setValue("MyEncogProject");
-		
-		
+				
 		if( dialog.process() )
 		{
 			File parent = new File(dialog.getParentDirectory().getValue());
@@ -281,6 +271,7 @@ public class EncogDocumentOperations {
 
 			final JFileChooser fc = new JFileChooser();
 			fc.addChoosableFileFilter(EncogDocumentFrame.ENCOG_FILTER);
+			fc.setCurrentDirectory(EncogWorkBench.getInstance().getEncogFolders());
 			final int result = fc.showOpenDialog(owner);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				EncogWorkBench.load(fc.getSelectedFile().getAbsolutePath());
@@ -355,10 +346,6 @@ public class EncogDocumentOperations {
 		final CodeGeneration code = new CodeGeneration();
 		code.processCodeGeneration();
 
-	}
-
-	public void performImport(final Object obj) {
-		ImportExport.performImport(obj);
 	}
 
 	public void performNetworkQuery(DirectoryEntry item) {
@@ -707,74 +694,4 @@ public class EncogDocumentOperations {
 		System.exit(0);
 
 	}
-
-	public void performBin2External() {
-		DialogBinary2External dialog  = new DialogBinary2External(EncogWorkBench.getInstance().getMainWindow());
-		if(dialog.process())
-		{
-			File binaryFile = new File(dialog.getBinaryFile().getValue());
-			File externFile = new File(dialog.getExternalFile().getValue());
-			int fileType = dialog.getFileType().getSelectedIndex();
-			DataSetCODEC codec;
-			BinaryDataLoader loader;
-			
-			if( fileType==0)
-			{
-				DialogCSV dialog2 = new DialogCSV(EncogWorkBench.getInstance().getMainWindow());
-				if( dialog2.process() ) {
-					boolean headers = dialog2.getHeaders().getValue();
-					CSVFormat format;
-					
-					if( dialog2.getDecimalComma().getValue() )
-						format = CSVFormat.DECIMAL_COMMA;
-					else
-						format = CSVFormat.DECIMAL_POINT;
-					
-					codec = new CSVDataCODEC(externFile,format);
-					loader = new BinaryDataLoader(codec);
-					new ImportExportDialog(loader,binaryFile,false).setVisible(true);
-				}
-			}			
-		}
-	}
-
-	public void performExternal2Bin() {
-		DialogExternal2Binary dialog  = new DialogExternal2Binary(EncogWorkBench.getInstance().getMainWindow());
-		if(dialog.process())
-		{
-			File binaryFile = new File(dialog.getBinaryFile().getValue());
-			File externFile = new File(dialog.getExternalFile().getValue());
-			int fileType = dialog.getFileType().getSelectedIndex();
-			int inputCount = dialog.getInputCount().getValue();
-			int idealCount = dialog.getIdealCount().getValue();
-			
-			// no extension
-			if (ExtensionFilter.getExtension(binaryFile) == null) {
-				binaryFile = new File(binaryFile.getPath() + ".egb");
-			}
-			
-			DataSetCODEC codec;
-			BinaryDataLoader loader;
-			
-			if( fileType==0)
-			{
-				DialogCSV dialog2 = new DialogCSV(EncogWorkBench.getInstance().getMainWindow());
-				if( dialog2.process() ) {
-					boolean headers = dialog2.getHeaders().getValue();
-					CSVFormat format;
-					
-					if( dialog2.getDecimalComma().getValue() )
-						format = CSVFormat.DECIMAL_COMMA;
-					else
-						format = CSVFormat.DECIMAL_POINT;
-					
-					codec = new CSVDataCODEC(externFile,format,headers,inputCount,idealCount);
-					loader = new BinaryDataLoader(codec);
-					new ImportExportDialog(loader,binaryFile,true).setVisible(true);
-				}
-			}
-		}
-		
-	}
-
 }

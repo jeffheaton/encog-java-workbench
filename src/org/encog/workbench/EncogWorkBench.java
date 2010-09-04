@@ -458,4 +458,11 @@ public class EncogWorkBench implements Runnable {
 		return this.execute;
 	}
 
+	public File getEncogFolders() {
+		String home = System.getProperty("user.home");
+		File encogFolders =  new File(home,"EncogProjects");
+		encogFolders.mkdir();
+		return encogFolders;
+	}
+
 }

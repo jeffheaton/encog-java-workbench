@@ -30,13 +30,6 @@
 
 package org.encog.workbench.models;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileChannel.MapMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,117 +37,28 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.encog.EncogError;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.data.basic.BasicNeuralDataPair;
-import org.encog.neural.data.buffer.BufferedDataError;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
 import org.encog.neural.data.buffer.EncogEGBFile;
+import org.encog.workbench.EncogWorkBench;
 
 public class BufferedDataSetTableModel implements TableModel {
 
 	private final BufferedNeuralDataSet data;
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();
-	private RandomAccessFile raf;
-	private FileChannel fileChannel;
+	private EncogEGBFile egb;
 
-	/**
-	 * The record count.
-	 */
-	private int recordCount;
-
-	/**
-	 * The size of input data.
-	 */
-	private int inputSize;
-
-	/**
-	 * The size of ideal data.
-	 */
-	private int idealSize;
-
-	/**
-	 * The size of a record.
-	 */
-	private int recordSize;
-
-	/**
-	 * The byte buffer.
-	 */
-	private ByteBuffer byteBuffer;
 
 	public BufferedDataSetTableModel(final BufferedNeuralDataSet data) {
 		this.data = data;
-		open();
-	}
-
-	public void open() {
-		try {
-			File file = this.data.getFile();
-			this.raf = new RandomAccessFile(file, "rw");
-			this.fileChannel = this.raf.getChannel();
-
-			ByteBuffer bb = ByteBuffer
-					.allocate(EncogEGBFile.HEADER_SIZE);
-			bb.order(ByteOrder.LITTLE_ENDIAN);
-
-			this.fileChannel.read(bb);
-
-			boolean isEncogFile = true;
-
-			bb.position(0);
-			isEncogFile = isEncogFile ? bb.get() == 'E' : false;
-			isEncogFile = isEncogFile ? bb.get() == 'N' : false;
-			isEncogFile = isEncogFile ? bb.get() == 'C' : false;
-			isEncogFile = isEncogFile ? bb.get() == 'O' : false;
-			isEncogFile = isEncogFile ? bb.get() == 'G' : false;
-			isEncogFile = isEncogFile ? bb.get() == '-' : false;
-
-			if (!isEncogFile)
-				throw new BufferedDataError(
-						"File is not a valid Encog binary file.");
-
-			char v1 = (char) bb.get();
-			char v2 = (char) bb.get();
-			String versionStr = "" + v1 + v2;
-
-			try {
-				int version = Integer.parseInt(versionStr);
-				if (version > 0)
-					throw new BufferedDataError(
-							"File is from a newer version of Encog than is currently in use.");
-			} catch (NumberFormatException ex) {
-				throw new BufferedDataError("File has invalid version number.");
-			}
-
-			this.inputSize = (int) bb.getDouble();
-			this.idealSize = (int) bb.getDouble();
-
-			this.recordSize = (inputSize + idealSize)
-					* EncogEGBFile.DOUBLE_SIZE;
-
-			this.recordCount = (int) ((file.length() - (EncogEGBFile.DOUBLE_SIZE * 3)) / this.recordSize);
-
-			this.byteBuffer = ByteBuffer.allocate(this.recordSize);
-			this.byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-
-		} catch (IOException e) {
-			throw new EncogError(e);
-		}
+		this.egb = data.getEGB();
 	}
 
 	public void addIdealColumn() {
-		for (final NeuralDataPair pair : this.data) {
-			final BasicNeuralData ideal = (BasicNeuralData) pair.getIdeal();
-			final double[] d = new double[ideal.size() + 1];
-			for (int i = 0; i < ideal.size(); i++) {
-				d[i] = ideal.getData(i);
-			}
-			ideal.setData(d);
-
-		}
+		this.egb.addColumn(this.egb.getRecordCount()-1,false);
 
 		final TableModelEvent tce = new TableModelEvent(this,
 				TableModelEvent.HEADER_ROW);
@@ -163,15 +67,7 @@ public class BufferedDataSetTableModel implements TableModel {
 	}
 
 	public void addInputColumn() {
-		for (final NeuralDataPair pair : this.data) {
-			final BasicNeuralData input = (BasicNeuralData) pair.getInput();
-			final double[] d = new double[input.size() + 1];
-			for (int i = 0; i < input.size(); i++) {
-				d[i] = input.getData(i);
-			}
-			input.setData(d);
-
-		}
+		this.egb.addColumn(this.egb.getInputCount()-1,true);
 
 		final TableModelEvent tce = new TableModelEvent(this,
 				TableModelEvent.HEADER_ROW);
@@ -179,16 +75,8 @@ public class BufferedDataSetTableModel implements TableModel {
 	}
 
 	public void addRow(final int row) {
-		final int idealSize = this.data.getIdealSize();
-		final int inputSize = this.data.getInputSize();
-		final NeuralData idealData = new BasicNeuralData(idealSize);
-		final NeuralData inputData = new BasicNeuralData(inputSize);
-		final NeuralDataPair pair = new BasicNeuralDataPair(inputData,
-				idealData);
-		/*
-		 * if (row == -1) { this.data.add(pair); } else { this.data.add(row,
-		 * pair); }
-		 */
+		
+		this.egb.addRow(row);
 
 		final TableModelEvent tce = new TableModelEvent(this);
 		notifyListeners(tce);
@@ -199,72 +87,31 @@ public class BufferedDataSetTableModel implements TableModel {
 	}
 
 	public void delColumn(final int col) {
-		final int inputSize = this.data.getInputSize();
-
-		// does it fall inside of input or ideal?
-		if (col < inputSize) {
-			for (final NeuralDataPair pair : this.data) {
-				final NeuralData input = pair.getInput();
-				final double[] d = new double[input.size() - 1];
-				int t = 0;
-				for (int i = 0; i < input.size(); i++) {
-					if (i != col) {
-						d[t] = pair.getInput().getData(i);
-						t++;
-					}
-				}
-				input.setData(d);
-			}
-		} else {
-			for (final NeuralDataPair pair : this.data) {
-				final NeuralData ideal = pair.getIdeal();
-				final double[] d = new double[ideal.size() - 1];
-				int t = 0;
-				for (int i = 0; i < ideal.size(); i++) {
-					if (i != col - inputSize) {
-						d[t] = pair.getInput().getData(i);
-						t++;
-					}
-
-				}
-				ideal.setData(d);
+		
+		if( col==0 && this.egb.getInputCount()==1 )
+		{
+			EncogWorkBench.displayError("Error", "You can't delete the last input column.  There must be at least one input.");
+			return;
+		}
+		
+		if( this.egb.getRecordCount()<2 )
+		{
+			{
+				EncogWorkBench.displayError("Error", "There must be at least one column.");
+				return;
 			}
 		}
+		
+		this.egb.deleteCol(col);
 
 		final TableModelEvent tce = new TableModelEvent(this,
 				TableModelEvent.HEADER_ROW);
 		notifyListeners(tce);
-
 	}
 
 	public void delRow(final int row) {
 
-		try {
-
-			for (int i = row; i < this.recordCount - 1; i++) {
-				int s = (int) EncogEGBFile.HEADER_SIZE
-						+ (this.recordSize * i) + this.recordSize;
-				int t = (int) EncogEGBFile.HEADER_SIZE
-						+ (this.recordSize * i);
-
-				this.fileChannel.read(this.byteBuffer, s);
-				this.byteBuffer.flip();
-				this.fileChannel.write(this.byteBuffer, t);
-
-				s += EncogEGBFile.DOUBLE_SIZE;
-				t += EncogEGBFile.DOUBLE_SIZE;
-			}
-
-			this.recordCount--;
-
-			this.raf.setLength((int) (this.recordCount * EncogEGBFile.DOUBLE_SIZE)
-							+ EncogEGBFile.HEADER_SIZE);
-
-			close();
-			open();
-		} catch (IOException e) {
-			throw (new EncogError(e));
-		}
+		this.egb.deleteRow(row);
 
 		final TableModelEvent tce = new TableModelEvent(this);
 		notifyListeners(tce);
@@ -275,7 +122,7 @@ public class BufferedDataSetTableModel implements TableModel {
 	}
 
 	public int getColumnCount() {
-		return this.data.getIdealSize() + this.data.getInputSize();
+		return this.egb.getRecordCount();
 	}
 
 	public String getColumnName(final int columnIndex) {
@@ -287,7 +134,7 @@ public class BufferedDataSetTableModel implements TableModel {
 	}
 
 	public int getRowCount() {
-		return this.recordCount;
+		return this.egb.getNumberOfRecords();
 	}
 
 	public boolean isCellEditable(final int rowIndex, final int columnIndex) {
@@ -305,21 +152,7 @@ public class BufferedDataSetTableModel implements TableModel {
 	}
 
 	public Object getValueAt(int rowIndex, final int columnIndex) {
-		int index = (int) ((this.recordSize * rowIndex)
-				+ (columnIndex * EncogEGBFile.DOUBLE_SIZE) + EncogEGBFile.HEADER_SIZE);
-		double result;
-		try {
-			this.byteBuffer.clear();
-			this.byteBuffer.order(ByteOrder.BIG_ENDIAN);
-			this.byteBuffer.limit(EncogEGBFile.DOUBLE_SIZE * 2);
-			this.fileChannel.read(this.byteBuffer, index);
-			this.byteBuffer.position(0);
-			result = this.byteBuffer.getDouble();
-		} catch (IOException e) {
-			throw new EncogError(e);
-		}
-
-		return result;
+		return this.egb.read(rowIndex, columnIndex);
 	}
 
 	public void setValueAt(final Object rawValue, int rowIndex,
@@ -332,28 +165,7 @@ public class BufferedDataSetTableModel implements TableModel {
 			d = (Double.parseDouble(rawValue.toString()));
 		}
 
-		int index = (int) ((this.recordSize * rowIndex)
-				+ (columnIndex * EncogEGBFile.DOUBLE_SIZE) + EncogEGBFile.HEADER_SIZE);
-
-		try {
-			this.byteBuffer.clear();
-			this.byteBuffer.order(ByteOrder.BIG_ENDIAN);
-			this.byteBuffer.putDouble(d);
-			this.byteBuffer.flip();
-			this.fileChannel.write(this.byteBuffer, index);
-		} catch (IOException e) {
-			throw new EncogError(e);
-		}
-
-	}
-
-	public void close() {
-		try {
-			this.fileChannel.close();
-			this.raf.close();
-		} catch (IOException e) {
-			throw new EncogError(e);
-		}
+		this.egb.write(rowIndex, columnIndex, d);
 
 	}
 

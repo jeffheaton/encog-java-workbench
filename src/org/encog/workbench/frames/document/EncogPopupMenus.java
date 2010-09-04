@@ -59,7 +59,6 @@ public class EncogPopupMenus {
 
 	private JMenuItem popupDataProperties;
 	private JMenuItem popupDataOpen;
-	private JMenuItem popupDataImport;
 	private JMenuItem popupDataExport;
 	
 	private JPopupMenu popupGeneral;
@@ -85,7 +84,6 @@ public class EncogPopupMenus {
 		this.popupDataDelete = owner.addItem(this.popupData, "Delete", 'd');
 		this.popupDataOpen = owner.addItem(this.popupData, "Open", 'o');
 		this.popupDataProperties = owner.addItem(this.popupData, "Properties", 'p');
-		this.popupDataImport = owner.addItem(this.popupData, "Import...", 'i');
 		this.popupDataExport = owner.addItem(this.popupData, "Export...", 'e');
 		
 		this.popupGeneral = new JPopupMenu();
@@ -126,10 +124,6 @@ public class EncogPopupMenus {
 				owner.getOperations().openItem(selected);
 			} else if (source == this.popupDataProperties) {
 				this.owner.getOperations().performObjectsProperties(selected);
-			} else if (source == this.popupDataImport) {
-				owner.getOperations().performImport(selected);
-			} else if (source == this.popupDataExport) {
-				owner.getOperations().performExport(selected);
 			} else if (source == this.popupGeneralOpen) {
 				owner.getOperations().openItem(selected);
 			} else if (source == this.popupGeneralProperties) {

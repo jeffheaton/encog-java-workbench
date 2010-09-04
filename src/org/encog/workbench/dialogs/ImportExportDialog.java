@@ -43,76 +43,82 @@ import org.encog.engine.util.Format;
 import org.encog.neural.data.buffer.BinaryDataLoader;
 import org.encog.util.benchmark.EncogBenchmark;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.util.TaskComplete;
 
-
-
-public class ImportExportDialog extends JDialog implements Runnable, StatusReportable {
+public class ImportExportDialog extends JDialog implements Runnable,
+		StatusReportable {
 
 	private JProgressBar progress;
 	private JLabel status;
 	private BinaryDataLoader loader;
 	private File binaryFile;
 	private boolean performImport;
-	
-	public ImportExportDialog(BinaryDataLoader loader,File binaryFile,boolean performImport)
-	{
+	private TaskComplete done;
+
+	public ImportExportDialog(BinaryDataLoader loader, File binaryFile,
+			boolean performImport) {
 		this.loader = loader;
 		this.binaryFile = binaryFile;
 		this.performImport = performImport;
-		progress = new JProgressBar(0,100);
-		
-		if( performImport )
+		progress = new JProgressBar(0, 100);
+
+		if (performImport)
 			setTitle("Please wait...importing...");
 		else
 			setTitle("Please wait...exporting...");
-		
-		setSize(640,75);
+
+		setSize(640, 75);
 		Container content = this.getContentPane();
 		content.setLayout(new BorderLayout());
 		this.status = new JLabel("");
 		content.add(this.status, BorderLayout.CENTER);
 		content.add(progress, BorderLayout.SOUTH);
+	}
+
+	public void process(TaskComplete done) {
+		this.done = done;
+		setVisible(true);
 		Thread thread = new Thread(this);
 		thread.start();
 	}
 
 	public void run() {
 		this.loader.setStatus(this);
-		
-		if( performImport )
+
+		if (performImport)
 			this.loader.external2Binary(binaryFile);
 		else
 			this.loader.binary2External(binaryFile);
-		
+
 		dispose();
-		
-		if( performImport )
+
+		if (performImport)
 			EncogWorkBench.displayMessage("Done", "Import Complete");
 		else
 			EncogWorkBench.displayMessage("Done", "Export Complete");
+		
+		if( this.done!=null ) {
+			done.complete();
+		}
 	}
 
 	public void report(int total, int current, String status) {
 		StringBuilder result = new StringBuilder();
-		
-		
-		if( total>0 )
-		{
-			double percent = (double)current/(double)total;
-			int value = (int)(100.0*percent);
+
+		if (total > 0) {
+			double percent = (double) current / (double) total;
+			int value = (int) (100.0 * percent);
 			this.progress.setValue(value);
 			result.append(Format.formatInteger(current));
 			result.append(" / ");
 			result.append(Format.formatInteger(total));
 			result.append(": ");
-		}
-		else
-		{
+		} else {
 			result.append(Format.formatInteger(current));
 			result.append(": ");
 			this.progress.setValue(0);
 		}
-		
+
 		result.append(status);
 		this.status.setText(result.toString());
 	}

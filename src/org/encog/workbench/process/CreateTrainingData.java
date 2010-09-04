@@ -37,10 +37,11 @@ import java.util.GregorianCalendar;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 
+import org.encog.EncogError;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.data.basic.BasicNeuralDataPair;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.data.buffer.BinaryDataLoader;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
@@ -57,66 +58,25 @@ import org.encog.neural.data.temporal.TemporalDataDescription;
 import org.encog.neural.data.temporal.TemporalDataDescription.Type;
 import org.encog.neural.data.temporal.TemporalNeuralDataSet;
 import org.encog.neural.data.temporal.TemporalPoint;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.util.benchmark.RandomTrainingFactory;
 import org.encog.util.csv.ReadCSV;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.InputAndIdealDialog;
+import org.encog.workbench.dialogs.trainingdata.CreateEmptyTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateMarketTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTemporalDataDialog;
 import org.encog.workbench.dialogs.trainingdata.RandomTrainingDataDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
-import org.encog.workbench.frames.document.EncogDocumentOperations;
-import org.encog.workbench.util.ImportExportUtility;
 import org.encog.workbench.util.NeuralConst;
+import org.encog.workbench.util.TaskComplete;
 import org.encog.workbench.util.TemporalXOR;
 
 public class CreateTrainingData {
 
-
-	public static void createImportCSV() {
-		ImportExport.performImport(null);
-	}
-
-	public static void linkCSV(String name) {
-		final JFrame frame = EncogWorkBench.getInstance().getMainWindow();
-		final JFileChooser fc = new JFileChooser();
-		fc.addChoosableFileFilter(EncogDocumentFrame.CSV_FILTER);
-		final int result = fc.showOpenDialog(frame);
-		if (result == JFileChooser.APPROVE_OPTION) {
-			InputAndIdealDialog dialog = new InputAndIdealDialog(EncogWorkBench
-					.getInstance().getMainWindow());
-			if (dialog.process()) {
-				/*ExternalDataSource link = new ExternalDataSource();
-				link.setInputCount(dialog.getInputCount().getValue());
-				link.setIdealCount(dialog.getIdealCount().getValue());
-				link.setLink(fc.getSelectedFile());
-
-				EncogWorkBench.getInstance().getCurrentFile().add(
-						EncogDocumentOperations.generateNextID("link-"), link);
-				EncogWorkBench.getInstance().getMainWindow().redraw();*/
-			}
-		}
-	}
-
-
 	public static void linkMarketWindow(String name) throws IOException {
 		NeuralDataSet training = generateMarketWindow();
 
-		File parentDir = new File(EncogWorkBench.getInstance()
-				.getCurrentFileName()).getParentFile();
-		String resourceName = EncogDocumentOperations.generateNextID("data-");
-		File externalFile = new File(parentDir, resourceName + ".csv");
+		saveLink(name,training);
 
-		ImportExportUtility.exportCSV(training, externalFile.toString());
-
-		/*ExternalDataSource link = new ExternalDataSource();
-		link.setInputCount(training.getInputSize());
-		link.setIdealCount(training.getIdealSize());
-		link.storeRelativeLink(new File(externalFile.toString()),
-				EncogWorkBench.getInstance().getCurrentFile());
-
-		EncogWorkBench.getInstance().getCurrentFile().add(resourceName, link);*/
 		EncogWorkBench.getInstance().getMainWindow().redraw();
 
 	}
@@ -189,6 +149,7 @@ public class CreateTrainingData {
 					return null;
 				}
 
+				EncogWorkBench.getInstance().getMainWindow().beginWait();
 				market.load(begin.getTime(), end.getTime());
 				market.generate();
 
@@ -203,7 +164,10 @@ public class CreateTrainingData {
 				return training;
 			} catch (LoaderError e) {
 				EncogWorkBench.displayError("Ticker Symbol",
-						"Invalid ticker symbol.");
+						"Invalid ticker symbol, or cannot connect.");
+			}
+			finally {
+				EncogWorkBench.getInstance().getMainWindow().endWait();
 			}
 
 		}
@@ -275,29 +239,6 @@ public class CreateTrainingData {
 		return null;
 	}
 
-	private static BasicNeuralDataSet generateRandom() {
-		RandomTrainingDataDialog dialog = new RandomTrainingDataDialog(
-				EncogWorkBench.getInstance().getMainWindow());
-
-		dialog.getHigh().setValue(1);
-		dialog.getLow().setValue(-1);
-
-		if (dialog.process()) {
-			double high = dialog.getHigh().getValue();
-			double low = dialog.getLow().getValue();
-			int elements = dialog.getElements().getValue();
-			int input = dialog.getInput().getValue();
-			int output = dialog.getIdeal().getValue();
-
-			BasicNeuralDataSet trainingData = (BasicNeuralDataSet) RandomTrainingFactory
-					.generate(elements, input, output, low, high);
-			trainingData.setDescription("Random Training data");
-			return trainingData;
-		}
-
-		return null;
-	}
-
 	public static BasicNeuralDataSet generateXORTemp() {
 
 		String str = EncogWorkBench
@@ -330,20 +271,28 @@ public class CreateTrainingData {
 	}
 
 	public static void linkEmpty(String name) {
-		EncogWorkBench.displayError("Error", "Can't link an empty dataset.");
+		try {
+			CreateEmptyTrainingDialog dialog = new CreateEmptyTrainingDialog(
+					EncogWorkBench.getInstance().getMainWindow());
 
-	}
+			if (dialog.process()) {
+				int elements = dialog.getElements().getValue();
+				int input = dialog.getInput().getValue();
+				int output = dialog.getIdeal().getValue();
 
-	public static void createXOR() {
-		NeuralDataSet training = generateXOR();
-
-		if (training == null)
-			return;
-
-		EncogWorkBench.getInstance().getCurrentFile().add(
-				EncogDocumentOperations.generateNextID("data-"),
-				(EncogPersistedObject) training);
-		EncogWorkBench.getInstance().getMainWindow().redraw();
+				BufferedNeuralDataSet trainingData = createLink(name);
+				trainingData.setDescription("Training data");
+				NeuralDataPair pair = BasicNeuralDataPair.createPair(input,
+						output);
+				trainingData.beginLoad(input, output);
+				for (int i = 0; i < elements; i++) {
+					trainingData.add(pair);
+				}
+				trainingData.endLoad();
+			}
+		} catch (IOException ex) {
+			throw new EncogError(ex);
+		}
 	}
 
 	public static void linkXOR(String name) throws IOException {
@@ -351,47 +300,28 @@ public class CreateTrainingData {
 		saveLink(name, training);
 	}
 
-	public static void createXORTemp() {
-		NeuralDataSet training = generateXOR();
-		importResource(training);
-	}
-
 	public static void linkXORTemp(String name) throws IOException {
 		NeuralDataSet training = generateXOR();
 		saveLink(name, training);
 	}
 
-	private static void importResource(NeuralDataSet training) {
+	private static void saveLink(String name, NeuralDataSet training)
+			throws IOException {
 		if (training != null) {
-			EncogWorkBench.getInstance().getCurrentFile().add(
-					EncogDocumentOperations.generateNextID("data-"),
-					(EncogPersistedObject) training);
+			File parentDir = new File(EncogWorkBench.getInstance()
+					.getCurrentFileName()).getParentFile();
+
+			File binaryFile = new File(parentDir, name + ".egb");
+
+			DataSetCODEC codec = new NeuralDataSetCODEC(training);
+			BinaryDataLoader loader = new BinaryDataLoader(codec);
+			loader.external2Binary(binaryFile);
+
+			BufferedNeuralDataSet item = new BufferedNeuralDataSet(binaryFile);
+
+			EncogWorkBench.getInstance().getCurrentFile().add(name, item);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
-
-	}
-
-	private static void saveLink(String name, NeuralDataSet training) throws IOException {
-		if( training!=null ) {
-		File parentDir = new File(EncogWorkBench.getInstance()
-				.getCurrentFileName()).getParentFile();
-				
-		File binaryFile = new File(parentDir, name + ".egb");
-
-		DataSetCODEC codec = new NeuralDataSetCODEC(training);
-		BinaryDataLoader loader = new BinaryDataLoader(codec);
-		loader.external2Binary(binaryFile);
-
-		BufferedNeuralDataSet item = new BufferedNeuralDataSet(binaryFile);
-
-		EncogWorkBench.getInstance().getCurrentFile().add(name, item);
-		EncogWorkBench.getInstance().getMainWindow().redraw();
-		}
-	}
-
-	public static void createPredictWindow() {
-		NeuralDataSet training = generatePredictWindow();
-		importResource(training);
 	}
 
 	public static void linkPredictWindow(String name) throws IOException {
@@ -399,14 +329,63 @@ public class CreateTrainingData {
 		saveLink(name, training);
 	}
 
-	public static void createRandom() {
-		NeuralDataSet training = generateRandom();
-		importResource(training);		
+	public static void linkRandom(String name) throws IOException {
+		RandomTrainingDataDialog dialog = new RandomTrainingDataDialog(
+				EncogWorkBench.getInstance().getMainWindow());
+
+		dialog.getHigh().setValue(1);
+		dialog.getLow().setValue(-1);
+
+		if (dialog.process()) {
+			double high = dialog.getHigh().getValue();
+			double low = dialog.getLow().getValue();
+			int elements = dialog.getElements().getValue();
+			int input = dialog.getInput().getValue();
+			int output = dialog.getIdeal().getValue();
+
+			BufferedNeuralDataSet trainingData = createLink(name);
+			trainingData.setDescription("Random Training data");
+			trainingData.beginLoad(input, output);
+			RandomTrainingFactory.generate(trainingData,
+					System.currentTimeMillis(), elements, low, high);
+			trainingData.endLoad();
+
+		}
 	}
 
-	public static void linkRandom(String name) throws IOException {
-		NeuralDataSet training = generateRandom();
-		saveLink(name, training);
+	private static BufferedNeuralDataSet createLink(String name)
+			throws IOException {
+
+		File parentDir = new File(EncogWorkBench.getInstance()
+				.getCurrentFileName()).getParentFile();
+
+		File binaryFile = new File(parentDir, name + ".egb");
+
+		BufferedNeuralDataSet result = new BufferedNeuralDataSet(binaryFile);
+
+		EncogWorkBench.getInstance().getCurrentFile().add(name, result);
+		EncogWorkBench.getInstance().getMainWindow().redraw();
+		return result;
+	}
+
+	public static void linkCSV(String name) {
+
+		File parentDir = new File(EncogWorkBench.getInstance()
+				.getCurrentFileName()).getParentFile();
+
+		File binaryFile = new File(parentDir, name + ".egb");
+		
+		Object[] list = new Object[2];
+		list[0] = binaryFile;
+		list[1] = name;
+		
+		binaryFile = ImportExport.performExternal2Bin(binaryFile, new TaskComplete(list) {
+			public void complete() {
+				BufferedNeuralDataSet result = new BufferedNeuralDataSet((File) params[0]);
+				EncogWorkBench.getInstance().getCurrentFile().add((String) params[1], result);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+			}
+		});
 	}
 
 }

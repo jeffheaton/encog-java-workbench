@@ -40,6 +40,7 @@ import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.training.Training;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.TextDataTab;
@@ -51,7 +52,6 @@ public class EncogMenus {
 	public static final String FILE_SAVE = "Save Project";
 	public static final String FILE_REVERT = "Revert Project";
 	public static final String FILE_QUIT = "Quit...";
-	public static final String FILE_IMPORT = "Import CSV...";
 
 	public static final String EDIT_CUT = "Cut";
 	public static final String EDIT_COPY = "Copy";
@@ -85,7 +85,6 @@ public class EncogMenus {
 	private JMenuItem menuFileSave;
 	private JMenuItem menuFileRevert;
 	private JMenuItem menuFileQuit;
-	private JMenuItem menuFileImport;
 
 	private JMenuItem menuEditCut;
 	private JMenuItem menuEditCopy;
@@ -126,9 +125,6 @@ public class EncogMenus {
 				's'));
 		this.menuFileRevert = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_REVERT,
 				'r'));
-		this.menuFile.addSeparator();
-		this.menuFileImport = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_IMPORT,
-				'i'));
 		this.menuFile.addSeparator();
 		this.menuFileQuit = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_QUIT,
 				'q'));
@@ -195,7 +191,6 @@ public class EncogMenus {
 		this.menuFileSave.setEnabled(!modal && documentOpen);
 		this.menuFileRevert.setEnabled(!modal && documentOpen);
 		this.menuFileQuit.setEnabled(true);
-		this.menuFileImport.setEnabled(!modal);
 
 		this.menuEditCut.setEnabled(!modal && supportsClipboard && documentOpen);
 		this.menuEditCopy.setEnabled(!modal && supportsClipboard && documentOpen);
@@ -226,8 +221,6 @@ public class EncogMenus {
 			owner.getOperations().performFileSave();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_REVERT)) {
 			owner.getOperations().performFileRevert();
-		} else if (event.getActionCommand().equals(EncogMenus.FILE_IMPORT)) {
-			owner.getOperations().performImport(null);
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_QUIT)) {
 			owner.getOperations().performQuit();
 		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_CREATE)) {
@@ -265,9 +258,9 @@ public class EncogMenus {
 			ValidationChart check = new ValidationChart();
 			check.perform(EncogWorkBench.getInstance().getMainWindow());
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BIN2EXTERNAL)) {
-			owner.getOperations().performBin2External();
+			ImportExport.performBin2External();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EXTERNAL2BIN)) {
-			owner.getOperations().performExternal2Bin();
+			ImportExport.performExternal2Bin(null,null);
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_CODE)) {
 			owner.getOperations().performGenerateCode();
 		}

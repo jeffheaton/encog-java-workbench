@@ -60,7 +60,6 @@ public class ExternalLinkTab extends EncogCommonTab implements ActionListener {
 		this.delRow.addActionListener(this);
 		this.export.addActionListener(this);
 		add(this.toolbar, BorderLayout.PAGE_START);
-		this.object.close();
 		this.model = new BufferedDataSetTableModel(getData());
 		this.table = new JTable(this.model);
 		add(new JScrollPane(this.table), BorderLayout.CENTER);
@@ -142,7 +141,7 @@ public class ExternalLinkTab extends EncogCommonTab implements ActionListener {
 			}
 		} else if(action.getSource()==this.export)
 		{
-			ImportExport.performExport(this.getEncogObject());
+			//ImportExport.performExport(this.getEncogObject());
 		}
 
 	}
@@ -150,7 +149,6 @@ public class ExternalLinkTab extends EncogCommonTab implements ActionListener {
 	public void dispose()
 	{
 		super.dispose();
-		this.model.close();
 		this.object.open();
 	}
 

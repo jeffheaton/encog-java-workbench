@@ -78,7 +78,7 @@ public class TrainingDataTab extends EncogCommonTab implements ActionListener {
 		this.toolbar.add(this.addIdealColumn = new JButton("Add Ideal Column"));
 		this.toolbar.add(this.addRow = new JButton("Add Row"));
 		this.toolbar.add(this.delRow = new JButton("Delete Row"));
-		this.toolbar.add(this.export = new JButton("Export"));
+		//this.toolbar.add(this.export = new JButton("Export"));
 		this.addInputColumn.addActionListener(this);
 		this.delColumn.addActionListener(this);
 		this.addIdealColumn.addActionListener(this);
@@ -126,7 +126,7 @@ public class TrainingDataTab extends EncogCommonTab implements ActionListener {
 			}
 		} else if(action.getSource()==this.export)
 		{
-			ImportExport.performExport(this.getEncogObject());
+			//ImportExport.performExport(this.getEncogObject());
 		}
 
 	}

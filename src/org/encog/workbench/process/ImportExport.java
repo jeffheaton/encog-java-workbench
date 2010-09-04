@@ -30,127 +30,100 @@
 
 package org.encog.workbench.process;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import org.encog.neural.data.NeuralData;
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.basic.BasicNeuralData;
-import org.encog.neural.data.basic.BasicNeuralDataSet;
+import org.encog.neural.data.buffer.BinaryDataLoader;
+import org.encog.neural.data.buffer.codec.CSVDataCODEC;
+import org.encog.neural.data.buffer.codec.DataSetCODEC;
+import org.encog.util.csv.CSVFormat;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.InputAndIdealDialog;
-import org.encog.workbench.dialogs.select.SelectDialog;
-import org.encog.workbench.dialogs.select.SelectItem;
-import org.encog.workbench.frames.document.EncogDocumentFrame;
-import org.encog.workbench.frames.document.EncogDocumentOperations;
-import org.encog.workbench.util.ImportExportUtility;
+import org.encog.workbench.dialogs.ImportExportDialog;
+import org.encog.workbench.dialogs.binary.DialogBinary2External;
+import org.encog.workbench.dialogs.binary.DialogCSV;
+import org.encog.workbench.dialogs.binary.DialogExternal2Binary;
+import org.encog.workbench.util.ExtensionFilter;
+import org.encog.workbench.util.TaskComplete;
 
 public class ImportExport {
 	
-	public static void performImport(final Object obj) {
-
-		final JFrame frame = EncogWorkBench.getInstance().getMainWindow();
-		final JFileChooser fc = new JFileChooser();
-		fc.addChoosableFileFilter(EncogDocumentFrame.CSV_FILTER);
-		final int result = fc.showOpenDialog(frame);
-		if (result == JFileChooser.APPROVE_OPTION) {
-			BasicNeuralDataSet set = (BasicNeuralDataSet) obj;
-			boolean clear = false;
-			boolean addit = false;
-
-			if (obj != null) {
-				final int o = JOptionPane
-						.showConfirmDialog(
-								frame,
-								"Do you wish to delete information already in this result set?",
-								"Delete", JOptionPane.YES_NO_CANCEL_OPTION);
-
-				if (o == JOptionPane.CANCEL_OPTION) {
-					return;
-				} else if (o == JOptionPane.YES_OPTION) {
-					clear = true;
-				}
-			} else {
-				final InputAndIdealDialog dialog = new InputAndIdealDialog(frame);
-				if (!dialog.process()) {
-					return;
-				}
-
-				set = new BasicNeuralDataSet();
-				NeuralData input = null;
-				NeuralData ideal = null;
-				input = new BasicNeuralData(dialog.getInputCount().getValue());
-				if (dialog.getIdealCount().getValue() > 0) {
-					ideal = new BasicNeuralData(dialog.getIdealCount().getValue());
-				}
-				set.add(input, ideal);
-				set.setName(EncogDocumentOperations.generateNextID("training-"));
-				set.setDescription("Imported Data");
-				clear = true;
-				addit = true;
-			}
-
-			try {
-				ImportExportUtility.importCSV(set, fc.getSelectedFile()
-						.toString(), clear);
-				if (addit) {
-					EncogWorkBench.getInstance().getCurrentFile().add(set.getName(), set);
-					EncogWorkBench.getInstance().getMainWindow().redraw();
-				}
-			} catch (final Exception e) {
-				JOptionPane.showMessageDialog(frame, e.getMessage(),
-						"Can't Import File", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-	}
-	
-	public static void performExport(final Object obj) {
-		final JFrame frame = EncogWorkBench.getInstance().getMainWindow();
-		if (obj instanceof BasicNeuralDataSet) {
-			SelectItem itemCSV, itemXML;
-			final List<SelectItem> list = new ArrayList<SelectItem>();
-			list.add(itemCSV = new SelectItem("Export CSV", "Export as a CSV file."));
-			list.add(itemXML = new SelectItem("Export XML (EG format)", "Export as an Encog XML EG file, for use with the workbench."));
-			final SelectDialog dialog = new SelectDialog(frame, list);
-			if( !dialog.process() )
-				return;
+	public static void performBin2External() {
+		DialogBinary2External dialog  = new DialogBinary2External(EncogWorkBench.getInstance().getMainWindow());
+		if(dialog.process())
+		{
+			File binaryFile = new File(dialog.getBinaryFile().getValue());
+			File externFile = new File(dialog.getExternalFile().getValue());
+			int fileType = dialog.getFileType().getSelectedIndex();
+			DataSetCODEC codec;
+			BinaryDataLoader loader;
 			
-			SelectItem result = dialog.getSelected();
-
-			final JFileChooser fc = new JFileChooser();
-
-			if (result == itemCSV) {
-				fc.setFileFilter(EncogDocumentFrame.CSV_FILTER);
-			} else {
-				fc.setFileFilter(EncogDocumentFrame.ENCOG_FILTER);
-			}
-
-			final int r = fc.showSaveDialog(frame);
-
-			if (r != JFileChooser.APPROVE_OPTION) {
-				return;
-			}
-
-			try {
-
-				if (result == itemCSV) {
-					ImportExportUtility.exportCSV((NeuralDataSet) obj, fc
-							.getSelectedFile().toString());
-				} else if (result == itemXML) {
-					ImportExportUtility.exportXML((BasicNeuralDataSet) obj, fc
-							.getSelectedFile().toString());
+			if( fileType==0)
+			{
+				DialogCSV dialog2 = new DialogCSV(EncogWorkBench.getInstance().getMainWindow());
+				if( dialog2.process() ) {
+					boolean headers = dialog2.getHeaders().getValue();
+					CSVFormat format;
+					
+					if( dialog2.getDecimalComma().getValue() )
+						format = CSVFormat.DECIMAL_COMMA;
+					else
+						format = CSVFormat.DECIMAL_POINT;
+					
+					codec = new CSVDataCODEC(externFile,format);
+					loader = new BinaryDataLoader(codec);
+					new ImportExportDialog(loader,binaryFile,false).setVisible(true);
 				}
-				JOptionPane.showMessageDialog(frame, "Export succssful.",
-						"Complete", JOptionPane.INFORMATION_MESSAGE);
-			} catch (final IOException e) {
-				JOptionPane.showMessageDialog(frame, e.getMessage(),
-						"Can't Export File", JOptionPane.ERROR_MESSAGE);
-			}
+			}			
 		}
 	}
+
+	public static File performExternal2Bin(File inBinaryFile, TaskComplete done) {
+		
+		File binaryFile = inBinaryFile;
+		
+		DialogExternal2Binary dialog  = new DialogExternal2Binary(EncogWorkBench.getInstance().getMainWindow());
+		
+		if( binaryFile!=null ) {
+			dialog.getBinaryFile().setValue(binaryFile.toString());
+		}
+			
+		if(dialog.process())
+		{
+			binaryFile = new File(dialog.getBinaryFile().getValue());
+			File externFile = new File(dialog.getExternalFile().getValue());
+			int fileType = dialog.getFileType().getSelectedIndex();
+			int inputCount = dialog.getInputCount().getValue();
+			int idealCount = dialog.getIdealCount().getValue();
+			
+			// no extension
+			if (ExtensionFilter.getExtension(binaryFile) == null) {
+				binaryFile = new File(binaryFile.getPath() + ".egb");
+			}
+			
+			DataSetCODEC codec;
+			BinaryDataLoader loader;
+			
+			if( fileType==0)
+			{
+				DialogCSV dialog2 = new DialogCSV(EncogWorkBench.getInstance().getMainWindow());
+				if( dialog2.process() ) {
+					boolean headers = dialog2.getHeaders().getValue();
+					CSVFormat format;
+					
+					if( dialog2.getDecimalComma().getValue() )
+						format = CSVFormat.DECIMAL_COMMA;
+					else
+						format = CSVFormat.DECIMAL_POINT;
+					
+					codec = new CSVDataCODEC(externFile,format,headers,inputCount,idealCount);
+					loader = new BinaryDataLoader(codec);
+					ImportExportDialog dlg = new ImportExportDialog(loader,binaryFile,true);
+					dlg.process(done);
+				}
+			}
+			return binaryFile;
+		}
+		else 
+			return null;
+	}
+
 }
