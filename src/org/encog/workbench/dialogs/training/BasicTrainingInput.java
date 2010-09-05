@@ -31,11 +31,16 @@
 package org.encog.workbench.dialogs.training;
 
 import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.NetworkAndTrainingDialog;
@@ -57,10 +62,19 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 	/**
 	 * Text field that holds the maximum training error.
 	 */
-	private DoubleField maxError;
+	private final DoubleField maxError;
+	
+	private final ComboBoxField buffering;
 
 	public BasicTrainingInput(final Frame owner) {
 		super(owner);
+		
+		List<String> list = new ArrayList<String>();
+		
+		list.add("Memory (Fastest, if dataset fits)");
+		list.add("Disk (Slower, good w/large datasets");
+		
+		addProperty(this.buffering = new ComboBoxField("buffering", "Buffering", true, list));
 		addProperty(this.maxError = new DoubleField("max error","Maximum Error",true,0,1));
 	}
 
@@ -72,4 +86,24 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 		return this.maxError;
 	}
 
+
+	public ComboBoxField getBuffering() {
+		return buffering;
+	}
+	
+	/**
+	 * @return The training set that the user chose.
+	 */
+	public NeuralDataSet getTrainingSet() {
+		NeuralDataSet result = (NeuralDataSet)super.getTrainingSet();
+		
+		if( result instanceof BufferedNeuralDataSet && this.buffering.getSelectedIndex()==0 )
+		{
+			result = ((BufferedNeuralDataSet)result).loadToMemory();
+		}
+
+		return result;
+	}
+
+	
 }
