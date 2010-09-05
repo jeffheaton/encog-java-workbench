@@ -35,6 +35,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -113,6 +114,12 @@ public class AboutTab extends EncogCommonTab {
 		g.drawString("Processor Count:", 10, y);
 		g.setFont(EncogFonts.getInstance().getBodyFont());
 		g.drawString(""+Runtime.getRuntime().availableProcessors(), 150, y);
+		y += g.getFontMetrics().getHeight();
+		
+		g.setFont(EncogFonts.getInstance().getHeadFont());
+		g.drawString("Numeric Format:", 10, y);
+		g.setFont(EncogFonts.getInstance().getBodyFont());
+		g.drawString(""+ByteOrder.nativeOrder().toString(), 150, y);
 		y += g.getFontMetrics().getHeight();
 		
 		g.setFont(EncogFonts.getInstance().getHeadFont());
