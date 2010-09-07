@@ -815,14 +815,14 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 		RadialBasisFunctionLayer radialLayer = (RadialBasisFunctionLayer) this.selected;
 		EditRadialLayer dialog = new EditRadialLayer(EncogWorkBench.getInstance().getMainWindow(), radialLayer);
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
-		for (int i = 0; i < radialLayer.getRadialBasisFunction().length; i++) {
+		/*for (int i = 0; i < radialLayer.getRadialBasisFunction().length; i++) {
 			RadialBasisFunction rbf = radialLayer.getRadialBasisFunction()[i];
 			dialog.getRadial().getModel().setValueAt("" + (i + 1), i, 0);
 			dialog.getRadial().getModel()
 					.setValueAt("" + rbf.getCenter(), i, 1);
 			dialog.getRadial().getModel().setValueAt("" + rbf.getPeak(), i, 2);
 			dialog.getRadial().getModel().setValueAt("" + rbf.getWidth(), i, 3);
-		}
+		}*/
 
 		dialog.getChart().refresh();
 		populateTags(dialog.getTags());
@@ -838,7 +838,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 						.getValue());
 			} else {
 				// update the RBF's
-				for (int i = 0; i < radialLayer.getRadialBasisFunction().length; i++) {
+				/*for (int i = 0; i < radialLayer.getRadialBasisFunction().length; i++) {
 					double center = Double.parseDouble(dialog.getRadial()
 							.getValue(i, 1));
 					double peak = Double.parseDouble(dialog.getRadial()
@@ -848,7 +848,7 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 					radialLayer.getRadialBasisFunction()[i] = new GaussianFunction(
 							center, peak, width);
 
-				}
+				}*/
 			}
 			collectTags(this.selected, dialog.getTags());
 			repaint();

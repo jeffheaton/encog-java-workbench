@@ -32,6 +32,7 @@ package org.encog.workbench.dialogs.training.resilient;
 
 import java.awt.Frame;
 
+import org.encog.engine.network.train.prop.RPROPConst;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
@@ -101,7 +102,7 @@ public class ProgressResilient extends BasicTrainingProgress {
 	@Override
 	public void startup() {
 		final ResilientPropagation train = new ResilientPropagation(getNetwork(),
-				getTrainingData(), ResilientPropagation.DEFAULT_ZERO_TOLERANCE,
+				getTrainingData(), RPROPConst.DEFAULT_ZERO_TOLERANCE,
 				this.initialUpdate, this.maxStep );
 		
 		train.setNumThreads(EncogWorkBench.getInstance().getConfig().getThreadCount());
