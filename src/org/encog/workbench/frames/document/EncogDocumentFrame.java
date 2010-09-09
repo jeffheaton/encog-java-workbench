@@ -138,7 +138,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		
 		this.projectSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 scrollPane, this.documentSplit);
-		this.projectSplit.setDividerLocation(150);		
+		this.projectSplit.setDividerLocation(150);	
+		this.documentSplit.setDividerLocation(this.getHeight()-200);
 		
 		getContentPane().add(this.projectSplit);
 		
