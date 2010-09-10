@@ -815,16 +815,26 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 		RadialBasisFunctionLayer radialLayer = (RadialBasisFunctionLayer) this.selected;
 		EditRadialLayer dialog = new EditRadialLayer(EncogWorkBench.getInstance().getMainWindow(), radialLayer);
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
-		/*for (int i = 0; i < radialLayer.getRadialBasisFunction().length; i++) {
-			RadialBasisFunction rbf = radialLayer.getRadialBasisFunction()[i];
-			dialog.getRadial().getModel().setValueAt("" + (i + 1), i, 0);
-			dialog.getRadial().getModel()
-					.setValueAt("" + rbf.getCenter(), i, 1);
-			dialog.getRadial().getModel().setValueAt("" + rbf.getPeak(), i, 2);
-			dialog.getRadial().getModel().setValueAt("" + rbf.getWidth(), i, 3);
-		}*/
+		dialog.getDimensions().setValue(radialLayer.getDimensions());
+		
+		for(int i=0;i<radialLayer.getNeuronCount();i++)
+		{
+			dialog.getRadius().getModel().setValueAt(""+(i+1), i, 0);
+			dialog.getRadius().getModel().setValueAt(""+radialLayer.getRadius()[i], i, 1);
+		}
+		
+		int index = 0;
+		for(int i=0;i<radialLayer.getNeuronCount();i++)
+		{
+			for(int j=0;j<radialLayer.getDimensions();j++)
+			{
+				dialog.getCenter().getModel().setValueAt(""+(i+1), index, 0);
+				dialog.getCenter().getModel().setValueAt(""+(j+1), index, 1);
+				dialog.getCenter().getModel().setValueAt(""+radialLayer.getCenter()[i][j], index, 2);
+				index++;
+			}
+		}
 
-		dialog.getChart().refresh();
 		populateTags(dialog.getTags());
 
 		if (dialog.process()) {
@@ -837,18 +847,29 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 				prune.changeNeuronCount(this.selected, dialog.getNeuronCount()
 						.getValue());
 			} else {
-				// update the RBF's
-				/*for (int i = 0; i < radialLayer.getRadialBasisFunction().length; i++) {
-					double center = Double.parseDouble(dialog.getRadial()
-							.getValue(i, 1));
-					double peak = Double.parseDouble(dialog.getRadial()
-							.getValue(i, 2));
-					double width = Double.parseDouble(dialog.getRadial()
-							.getValue(i, 3));
-					radialLayer.getRadialBasisFunction()[i] = new GaussianFunction(
-							center, peak, width);
 
-				}*/
+				try {
+				// update the RBF's
+				for(int i=0;i<radialLayer.getNeuronCount();i++)
+				{
+					radialLayer.getRadius()[i] = Double.parseDouble(dialog.getRadius().getModel().getValueAt(i, 1).toString());
+				}
+				
+				index = 0;
+				for(int i=0;i<radialLayer.getNeuronCount();i++)
+				{
+					for(int j=0;j<radialLayer.getDimensions();j++)
+					{
+						radialLayer.getCenter()[i][j] = Double.parseDouble(dialog.getCenter().getModel().getValueAt(index, 2).toString());
+						index++;
+					}
+				}
+				}
+				catch(NumberFormatException ex)
+				{
+					EncogWorkBench.displayError("Error", "Invalid number");
+				}
+
 			}
 			collectTags(this.selected, dialog.getTags());
 			repaint();
