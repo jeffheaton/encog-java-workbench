@@ -32,54 +32,58 @@ package org.encog.workbench.dialogs.layers;
 
 import java.awt.Frame;
 
-import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.layers.RadialBasisFunctionLayer;
-import org.encog.workbench.dialogs.common.BuildingListField;
-import org.encog.workbench.dialogs.common.ChartField;
-import org.encog.workbench.dialogs.common.ChartListener;
-import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.TableField;
 
-public class EditRadialLayer extends EditLayerDialog implements ChartListener {
+public class EditRadialLayer extends EditLayerDialog  {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8751974232848993273L;
 	
-	private final static String[] COLUMN_HEADS = {"Neuron","Center","Peak","Width"};
+	private final static String[] RADIUS_HEADS = {"Neuron","Radius"};
+	private final static String[] CENTER_HEADS = {"Neuron","Dimension","Center"};
 	
-	private ChartField chart;
-	private TableField radial;
+	private IntegerField dimensions;
+	private TableField radius;
+	private TableField center;
 
 	public EditRadialLayer(Frame owner, RadialBasisFunctionLayer layer) {
 		super(owner);
 		setTitle("Edit Radial Basis Layer");
 		setSize(600, 500);
 		setLocation(200, 200);
-		addProperty(this.chart = new ChartField("chart",new RBFChartGenerator(this),200));
-		addProperty(this.radial = new TableField("radial basis functions",
-			"Radial Basis Functions",true,100,layer.getNeuronCount(),COLUMN_HEADS));
-		this.chart.setListener(this);
+		addProperty(this.dimensions = new IntegerField("dimensions", "Dimensions(previous layer count)", true,0,1000));
+		addProperty(this.radius  = new TableField("radial basis functions",
+				"Radius",true,100,layer.getNeuronCount(),RADIUS_HEADS));
+		addProperty(this.center = new TableField("radial basis functions",
+			"Centers",true,100,layer.getNeuronCount()*layer.getDimensions(),CENTER_HEADS));
+
 		render();
 	}
 
-	public TableField getRadial() {
-		return radial;
+	/**
+	 * @return the radius
+	 */
+	public TableField getRadius() {
+		return radius;
 	}
 
-
-	public void refresh(ChartField chart) {
-		chart.refresh();
+	/**
+	 * @return the center
+	 */
+	public TableField getCenter() {
+		return center;
 	}
 
-
-	public ChartField getChart() {
-		return this.chart;
+	/**
+	 * @return the dimensions
+	 */
+	public IntegerField getDimensions() {
+		return dimensions;
 	}
-
-	
 	
 	
 }
