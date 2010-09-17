@@ -83,6 +83,7 @@ public class ImportExportDialog extends JDialog implements Runnable,
 	}
 
 	public void run() {
+		try {
 		this.loader.setStatus(this);
 
 		if (performImport)
@@ -99,6 +100,10 @@ public class ImportExportDialog extends JDialog implements Runnable,
 		
 		if( this.done!=null ) {
 			done.complete();
+		}
+		}
+		catch(Throwable t) {
+			EncogWorkBench.displayError("Error", t);
 		}
 	}
 

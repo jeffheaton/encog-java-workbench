@@ -5,6 +5,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -21,13 +22,15 @@ import org.encog.mathutil.libsvm.svm_model;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
 import org.encog.persist.EncogPersistedObject;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.models.BufferedDataSetTableModel;
 import org.encog.workbench.models.TrainingSetTableModel;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.ExcelAdapter;
+import org.encog.workbench.util.TaskComplete;
 
-public class ExternalLinkTab extends EncogCommonTab implements ActionListener {
+public class BinaryDataTab extends EncogCommonTab implements ActionListener {
 
 	private BufferedNeuralDataSet object;
 	private BufferedDataSetTableModel model;
@@ -41,7 +44,7 @@ public class ExternalLinkTab extends EncogCommonTab implements ActionListener {
 	private JButton delRow;
 	private JButton export;
 	
-	public ExternalLinkTab(EncogPersistedObject encogObject) {
+	public BinaryDataTab(EncogPersistedObject encogObject) {
 		super(encogObject);
 		this.object = (BufferedNeuralDataSet)encogObject;
 		setLayout(new BorderLayout());
@@ -65,48 +68,7 @@ public class ExternalLinkTab extends EncogCommonTab implements ActionListener {
 		add(new JScrollPane(this.table), BorderLayout.CENTER);
 		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		//new ExcelAdapter( this.table );
-		
-
-	}
-	
-	/**
-	 * Paint the panel.
-	 * @param g The graphics object to use.
-	 */
-	/*public void paint(final Graphics g) {
-		super.paint(g);
-		final FontMetrics fm = g.getFontMetrics();
-		g.setFont(EncogFonts.getInstance().getTitleFont());
-		int y = fm.getHeight();
-		g.setFont(EncogFonts.getInstance().getTitleFont());
-		g.drawString("External Data Source", 0, y);
-		y += g.getFontMetrics().getHeight();
-		
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("File:", 10, y);
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString(this.object.getFile().toString(), 150, y);
-		y += g.getFontMetrics().getHeight();
-		
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("Input Count:", 10, y);
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString(""+this.object.getInputSize(), 150, y);
-		y += g.getFontMetrics().getHeight();
-		
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("Ideal Count:", 10, y);
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString(""+this.object.getIdealSize(), 150, y);
-		y += g.getFontMetrics().getHeight();
-		
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("Record Count:", 10, y);
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString(""+this.object.getRecordCount(), 150, y);
-		y += g.getFontMetrics().getHeight();
-		
-	}*/
+	}	
 	
 	public void actionPerformed(final ActionEvent action) {
 		final int row = this.table.getSelectedRow();
@@ -140,8 +102,12 @@ public class ExternalLinkTab extends EncogCommonTab implements ActionListener {
 				this.model.delRow(row);
 			}
 		} else if(action.getSource()==this.export)
-		{
-			//ImportExport.performExport(this.getEncogObject());
+		{			
+			Object[] list = new Object[2];
+			list[0] = this.getData().getFile();
+			list[1] = null;
+			
+			ImportExport.performBin2External(this.getData().getFile(), null);
 		}
 
 	}

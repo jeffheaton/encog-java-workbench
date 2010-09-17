@@ -32,7 +32,6 @@ package org.encog.workbench.frames.document;
 
 import java.awt.Frame;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JComboBox;
@@ -48,10 +47,7 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.data.buffer.BinaryDataLoader;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
-import org.encog.neural.data.buffer.codec.CSVDataCODEC;
-import org.encog.neural.data.buffer.codec.DataSetCODEC;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.svm.SVMNetwork;
 import org.encog.neural.networks.training.neat.NEATGenome;
@@ -60,18 +56,13 @@ import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.script.EncogScript;
 import org.encog.solve.genetic.population.BasicPopulation;
-import org.encog.util.csv.CSVFormat;
 import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EvaluateDialog;
-import org.encog.workbench.dialogs.ImportExportDialog;
 import org.encog.workbench.dialogs.PopulationDialog;
-import org.encog.workbench.dialogs.binary.DialogBinary2External;
-import org.encog.workbench.dialogs.binary.DialogCSV;
-import org.encog.workbench.dialogs.binary.DialogExternal2Binary;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
 import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
@@ -85,18 +76,16 @@ import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.process.validate.ResourceNameValidate;
+import org.encog.workbench.tabs.BinaryDataTab;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.EncogScriptTab;
-import org.encog.workbench.tabs.ExternalLinkTab;
 import org.encog.workbench.tabs.PropertyDataTab;
 import org.encog.workbench.tabs.SVMTab;
 import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.TrainingDataTab;
 import org.encog.workbench.tabs.network.NetworkTab;
-import org.encog.workbench.tabs.normalize.DataNormalizationTab;
 import org.encog.workbench.tabs.population.PopulationTab;
 import org.encog.workbench.util.ExtensionFilter;
-import org.encog.workbench.util.OutputStatusReportable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -183,7 +172,7 @@ public class EncogDocumentOperations {
 					BasicPopulation.class)) {
 				BufferedNeuralDataSet link2 = (BufferedNeuralDataSet) EncogWorkBench.getInstance()
 						.getCurrentFile().find(link);
-				final ExternalLinkTab tab = new ExternalLinkTab(link2);
+				final BinaryDataTab tab = new BinaryDataTab(link2);
 				owner.openTab(tab);
 			}
 

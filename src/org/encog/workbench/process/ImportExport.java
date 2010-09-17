@@ -47,33 +47,7 @@ import org.encog.workbench.util.TaskComplete;
 public class ImportExport {
 	
 	public static void performBin2External() {
-		DialogBinary2External dialog  = new DialogBinary2External(EncogWorkBench.getInstance().getMainWindow());
-		if(dialog.process())
-		{
-			File binaryFile = new File(dialog.getBinaryFile().getValue());
-			File externFile = new File(dialog.getExternalFile().getValue());
-			int fileType = dialog.getFileType().getSelectedIndex();
-			DataSetCODEC codec;
-			BinaryDataLoader loader;
-			
-			if( fileType==0)
-			{
-				DialogCSV dialog2 = new DialogCSV(EncogWorkBench.getInstance().getMainWindow());
-				if( dialog2.process() ) {
-					boolean headers = dialog2.getHeaders().getValue();
-					CSVFormat format;
-					
-					if( dialog2.getDecimalComma().getValue() )
-						format = CSVFormat.DECIMAL_COMMA;
-					else
-						format = CSVFormat.DECIMAL_POINT;
-					
-					codec = new CSVDataCODEC(externFile,format);
-					loader = new BinaryDataLoader(codec);
-					new ImportExportDialog(loader,binaryFile,false).setVisible(true);
-				}
-			}			
-		}
+		performBin2External(null,null);
 	}
 
 	public static File performExternal2Bin(File inBinaryFile, TaskComplete done) {
@@ -124,6 +98,40 @@ public class ImportExport {
 		}
 		else 
 			return null;
+	}
+
+	public static void performBin2External(File inBinaryFile, TaskComplete done) {
+		DialogBinary2External dialog  = new DialogBinary2External(EncogWorkBench.getInstance().getMainWindow());
+		dialog.getBinaryFile().setValue(inBinaryFile.toString());
+		if(dialog.process())
+		{
+			File binaryFile = new File(dialog.getBinaryFile().getValue());
+			File externFile = new File(dialog.getExternalFile().getValue());
+			int fileType = dialog.getFileType().getSelectedIndex();
+			DataSetCODEC codec;
+			BinaryDataLoader loader;
+			
+			if( fileType==0)
+			{
+				DialogCSV dialog2 = new DialogCSV(EncogWorkBench.getInstance().getMainWindow());
+				if( dialog2.process() ) {
+					boolean headers = dialog2.getHeaders().getValue();
+					CSVFormat format;
+					
+					if( dialog2.getDecimalComma().getValue() )
+						format = CSVFormat.DECIMAL_COMMA;
+					else
+						format = CSVFormat.DECIMAL_POINT;
+					
+					codec = new CSVDataCODEC(externFile,format);
+					loader = new BinaryDataLoader(codec);
+					
+					ImportExportDialog dlg = new ImportExportDialog(loader,binaryFile,false);
+					dlg.process(done);
+				}
+			}			
+		}
+		
 	}
 
 }
