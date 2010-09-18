@@ -1,5 +1,5 @@
 /*
- * Encog(tm) Workbench v2.5
+ * Encog(tm) Workbench v2.4
  * http://www.heatonresearch.com/encog/
  * http://code.google.com/p/encog-java/
  * 
@@ -68,7 +68,7 @@ public class JavaClassPathUtil {
 		for(int i = 0; i<str.length(); i++)
 		{
 			char ch = str.charAt(i);
-			if( ch==File.pathSeparatorChar )
+			if( ch==File.separatorChar )
 				ch = replace;
 			result.append(ch);
 		}
