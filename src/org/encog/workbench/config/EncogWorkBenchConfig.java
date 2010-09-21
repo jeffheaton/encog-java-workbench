@@ -30,8 +30,7 @@
 
 package org.encog.workbench.config;
 
-import org.encog.EncogError;
-import org.encog.mathutil.error.ErrorCalculationMode;
+import org.encog.engine.util.ErrorCalculationMode;
 import org.encog.persist.EncogCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.persist.Persistor;

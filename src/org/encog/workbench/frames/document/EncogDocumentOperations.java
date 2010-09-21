@@ -40,9 +40,9 @@ import javax.swing.JOptionPane;
 
 import org.encog.Encog;
 import org.encog.EncogError;
+import org.encog.engine.util.ErrorCalculation;
+import org.encog.engine.util.ErrorCalculationMode;
 import org.encog.engine.util.Format;
-import org.encog.mathutil.error.ErrorCalculation;
-import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;

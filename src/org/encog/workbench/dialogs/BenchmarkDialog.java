@@ -50,7 +50,7 @@ public class BenchmarkDialog extends JDialog implements Runnable, StatusReportab
 	
 	public BenchmarkDialog()
 	{
-		progress = new JProgressBar(0,7);
+		progress = new JProgressBar(0,4);
 		setTitle("Please wait, benchmarking Encog.");
 		setSize(640,75);
 		Container content = this.getContentPane();
@@ -64,9 +64,9 @@ public class BenchmarkDialog extends JDialog implements Runnable, StatusReportab
 
 	public void run() {
 		EncogBenchmark benchmark = new EncogBenchmark(this);
-		double d = benchmark.process();
+		String s = benchmark.process();
 		dispose();
-		EncogWorkBench.displayMessage("Benchmark Complete", "This machine's rating is: " + d + "\n(lower is better)");
+		EncogWorkBench.displayMessage("Benchmark Complete", s + "\n(higher is better)");
 	}
 
 	public void report(int total, int current, String status) {

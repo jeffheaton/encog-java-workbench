@@ -39,12 +39,11 @@ import java.io.InputStream;
 import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.encog.Encog;
 import org.encog.EncogError;
-import org.encog.mathutil.error.ErrorCalculation;
+import org.encog.cloud.EncogCloud;
+import org.encog.engine.util.ErrorCalculation;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.parse.tags.read.ReadXML;
@@ -57,14 +56,10 @@ import org.encog.script.javascript.EncogJavascriptEngine;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
-import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.frames.document.EncogOutputPanel;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.util.WorkbenchLogHandler;
-import org.encog.cloud.EncogCloud;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * Main class for the Encog Workbench. The main method in this class starts up
