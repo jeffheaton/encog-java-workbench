@@ -31,7 +31,6 @@
 package org.encog.workbench.dialogs.activation;
 
 import org.encog.neural.activation.ActivationFunction;
-import org.encog.util.ActivationUtil;
 import org.jfree.data.function.Function2D;
 
 public class ActivationFunction2D implements Function2D {
@@ -39,9 +38,10 @@ public class ActivationFunction2D implements Function2D {
 	private final ActivationFunction activation;
 	
 	public double getValue(double d) {
-		double[] array = ActivationUtil.toArray(d);
+		double[] array = new double[1];
+		array[0] = d;
 		this.activation.activationFunction(array);
-		return ActivationUtil.fromArray(array);
+		return array[0];
 	}
 
 	public ActivationFunction2D(ActivationFunction activation)
