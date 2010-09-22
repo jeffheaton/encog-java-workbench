@@ -127,7 +127,7 @@ public class ValidateTraining {
 	}
 
 	public boolean validateIsUnsupervised() {
-		if (!this.training.isSupervised()) {
+		if (this.training.isSupervised()) {
 			EncogWorkBench
 					.displayError(
 							"Training Error",
