@@ -67,10 +67,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private JSplitPane documentSplit;
 	private EncogOutputPanel outputPanel;
 
+	private final static String[] B = {".csv",".xlsx"};
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files (*.eg)", ".eg");
-	public static final ExtensionFilter CSV_FILTER = new ExtensionFilter(
-			"CSV Files (*.csv)", ".csv");
+	public static final ExtensionFilter CSV_FILTER = new ExtensionFilter("External Files (*.xlsx,*.csv)",B);
 	public static final ExtensionFilter ENCOG_BINARY = new ExtensionFilter(
 			"Binary Encog Training Files (*.egb)", ".egb");
 

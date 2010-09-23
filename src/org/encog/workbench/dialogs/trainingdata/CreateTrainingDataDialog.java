@@ -68,7 +68,7 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		select.add(this.scroll2);
 
 		this.model.addElement("Empty Training Set");
-		this.model.addElement("Import Training Set from CSV");
+		this.model.addElement("Import Training Set from File");
 		this.model.addElement("Market Data Training Set");
 		this.model.addElement("Prediction Window from CSV");
 		this.model.addElement("Random Training Set");		
@@ -166,7 +166,7 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 
 		case 1:
 			this.text
-					.setText("Import training data from a CSV file.  A comma separated value (CSV) file is a common source of data for neural network training.  The contents of the CSV will be copied to your Encog EG file.  This may not be practical with large files.");
+					.setText("Import training data from a CSV or Excel file.  A comma separated value (CSV) file is a common source of data for neural network training.  The contents of the CSV will be copied to your Encog EG file.  This may not be practical with large files.  Data can also be imported from the new Microsoft XLSX format. (Excel 2007/2010)");
 			break;
 								
 		case 2:

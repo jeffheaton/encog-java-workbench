@@ -44,6 +44,7 @@ public class DialogBinary2External extends EncogPropertiesDialog {
 		
 		List<String> list = new ArrayList<String>();
 		list.add("CSV");
+		list.add("Excel (*.xlsx)");
 		
 		this.setSize(640, 200);
 		this.setTitle("Convert Encog Binary Training to Other Format File");
