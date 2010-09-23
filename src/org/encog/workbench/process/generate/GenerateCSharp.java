@@ -181,7 +181,7 @@ public class GenerateCSharp extends BasicGenerate {
 		line.append( nameLayer(synapse.getFromLayer()));
 		line.append(",");
 		line.append( nameLayer(synapse.getToLayer()));
-		line.append(")");
+		line.append(");");
 		
 		this.addLine(line.toString());
 	}
