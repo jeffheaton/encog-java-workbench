@@ -58,6 +58,7 @@ import org.encog.neural.networks.logic.BoltzmannLogic;
 import org.encog.neural.networks.logic.FeedforwardLogic;
 import org.encog.neural.networks.logic.HopfieldLogic;
 import org.encog.neural.networks.logic.NeuralLogic;
+import org.encog.neural.networks.logic.SOMLogic;
 import org.encog.neural.networks.logic.SimpleRecurrentLogic;
 import org.encog.neural.networks.synapse.DirectSynapse;
 import org.encog.neural.networks.synapse.OneToOneSynapse;
@@ -111,7 +112,7 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 
 	public static final String[] LOGIC = { "Feed Forward", "Simple Recurrent",
 			"Adaptive Resonance Theory", "Bidirectional", "Boltzmann",
-			"Hopfield" };
+			"Hopfield", "SOM" };
 
 	public NetworkTab(final BasicNetwork data) {
 		super(data);
@@ -461,6 +462,14 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 			this.comboLogic.setSelectedIndex(3);
 		else if (logic instanceof BoltzmannLogic)
 			this.comboLogic.setSelectedIndex(4);
+		//----------------------------------------------------------------------------------------------
+		// watch out! SOMLogic inherits from SimpleRecurrentLogic which inherits from FeedforwardLogic.
+		// "instanceof" returns true if the test is performed against ANY of these classes,
+		// thus, the ORDER of the test is critical: put children first, then parents (so to speak).
+		//----------------------------------------------------------------------------------------------
+		else if (logic instanceof SOMLogic) // added by SYSBERG
+			this.comboLogic.setSelectedIndex(6); // added by SYSBERG
+		//---------------------------------------------------------------------------------------------
 		else if (logic instanceof FeedforwardLogic)
 			this.comboLogic.setSelectedIndex(0);
 		else if (logic instanceof HopfieldLogic)
@@ -487,6 +496,9 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 			break;
 		case 5:
 			newLogic = new HopfieldLogic();
+			break;
+		case 6:
+			newLogic = new SOMLogic();
 			break;
 		default:
 			newLogic = new SimpleRecurrentLogic();
