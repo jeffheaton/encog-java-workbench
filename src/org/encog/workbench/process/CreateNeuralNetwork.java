@@ -24,8 +24,8 @@
 package org.encog.workbench.process;
 
 import org.encog.bot.BotUtil;
-import org.encog.neural.activation.ActivationSigmoid;
-import org.encog.neural.activation.ActivationTANH;
+import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.svm.KernelType;

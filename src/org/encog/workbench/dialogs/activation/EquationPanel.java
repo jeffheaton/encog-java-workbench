@@ -25,32 +25,23 @@ package org.encog.workbench.dialogs.activation;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
-import java.awt.Color;
 
 import javax.swing.JPanel;
 
-import org.encog.neural.activation.ActivationFunction;
-import org.encog.neural.activation.ActivationSIN;
-import org.encog.neural.activation.ActivationSigmoid;
+import org.encog.engine.network.activation.ActivationFunction;
+import org.encog.engine.network.activation.ActivationSigmoid;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.annotations.XYAnnotation;
-import org.jfree.chart.annotations.XYPointerAnnotation;
-import org.jfree.chart.annotations.XYTextAnnotation;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.function.Function2D;
-import org.jfree.data.function.NormalDistributionFunction2D;
 import org.jfree.data.general.DatasetUtilities;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
-import org.jfree.ui.TextAnchor;
 
 public class EquationPanel extends JPanel {
 	

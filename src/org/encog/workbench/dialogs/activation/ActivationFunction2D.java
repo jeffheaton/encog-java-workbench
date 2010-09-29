@@ -23,7 +23,7 @@
  */
 package org.encog.workbench.dialogs.activation;
 
-import org.encog.neural.activation.ActivationFunction;
+import org.encog.engine.network.activation.ActivationFunction;
 import org.jfree.data.function.Function2D;
 
 public class ActivationFunction2D implements Function2D {
@@ -33,7 +33,7 @@ public class ActivationFunction2D implements Function2D {
 	public double getValue(double d) {
 		double[] array = new double[1];
 		array[0] = d;
-		this.activation.activationFunction(array);
+		this.activation.activationFunction(array,0,array.length);
 		return array[0];
 	}
 

@@ -24,10 +24,8 @@
 package org.encog.workbench.dialogs.activation;
 
 import java.awt.BorderLayout;
-import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -38,18 +36,18 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.encog.neural.activation.ActivationBiPolar;
-import org.encog.neural.activation.ActivationCompetitive;
-import org.encog.neural.activation.ActivationFunction;
-import org.encog.neural.activation.ActivationGaussian;
-import org.encog.neural.activation.ActivationLOG;
-import org.encog.neural.activation.ActivationLinear;
-import org.encog.neural.activation.ActivationRamp;
-import org.encog.neural.activation.ActivationSIN;
-import org.encog.neural.activation.ActivationSigmoid;
-import org.encog.neural.activation.ActivationSoftMax;
-import org.encog.neural.activation.ActivationStep;
-import org.encog.neural.activation.ActivationTANH;
+import org.encog.engine.network.activation.ActivationBiPolar;
+import org.encog.engine.network.activation.ActivationCompetitive;
+import org.encog.engine.network.activation.ActivationFunction;
+import org.encog.engine.network.activation.ActivationGaussian;
+import org.encog.engine.network.activation.ActivationLOG;
+import org.encog.engine.network.activation.ActivationLinear;
+import org.encog.engine.network.activation.ActivationRamp;
+import org.encog.engine.network.activation.ActivationSIN;
+import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.engine.network.activation.ActivationSoftMax;
+import org.encog.engine.network.activation.ActivationStep;
+import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 

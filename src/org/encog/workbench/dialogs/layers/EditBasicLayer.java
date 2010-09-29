@@ -24,19 +24,13 @@
 package org.encog.workbench.dialogs.layers;
 
 import java.awt.Frame;
-import java.awt.Window;
 
-import org.encog.neural.activation.ActivationFunction;
+import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.neural.networks.layers.Layer;
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
-import org.encog.workbench.dialogs.common.BuildingListField;
-import org.encog.workbench.dialogs.common.BuildingListListener;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.CheckListener;
 import org.encog.workbench.dialogs.common.DoubleField;
-import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
-import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.PopupField;
 import org.encog.workbench.dialogs.common.PopupListener;
 import org.encog.workbench.dialogs.common.TableField;

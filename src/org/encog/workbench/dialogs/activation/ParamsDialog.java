@@ -27,7 +27,7 @@ import java.awt.Frame;
 
 import javax.swing.JDialog;
 
-import org.encog.neural.activation.ActivationFunction;
+import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.workbench.dialogs.common.DecimalField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 

@@ -25,16 +25,14 @@ package org.encog.workbench.dialogs.training.neat;
 
 import java.awt.Frame;
 
-import org.encog.neural.activation.ActivationFunction;
-import org.encog.neural.activation.ActivationStep;
+import org.encog.engine.network.activation.ActivationFunction;
+import org.encog.engine.network.activation.ActivationStep;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.synapse.neat.NEATSynapse;
 import org.encog.neural.networks.training.CalculateScore;
-import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.neural.networks.training.neat.NEATTraining;
-import org.encog.neural.networks.training.propagation.scg.ScaledConjugateGradient;
 import org.encog.solve.genetic.population.Population;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
