@@ -27,18 +27,13 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
+import org.encog.Encog;
+import org.encog.engine.opencl.EncogCLDevice;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.NetworkAndTrainingDialog;
-import org.encog.workbench.dialogs.common.PropertiesField;
-import org.encog.workbench.dialogs.common.ValidationException;
 
 /**
  * A common training input dialog box used by all of the other training
@@ -58,18 +53,47 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 	private final DoubleField maxError;
 	
 	private final ComboBoxField buffering;
+	
+	private ComboBoxField comboDevice;
+	private boolean showDevice = false;
+
+	private final List<String> devices = new ArrayList<String>();
+
 
 	public BasicTrainingInput(final Frame owner) {
+		this(owner,false);
+	}
+	
+	public BasicTrainingInput(Frame owner, boolean b) {
 		super(owner);
-		
+		findData();
+		this.showDevice = b;
 		List<String> list = new ArrayList<String>();
+		
+		if( this.showDevice )
+			addProperty(this.comboDevice = new ComboBoxField("device","Target Device",true,this.devices));
 		
 		list.add("Memory (Fastest, if dataset fits)");
 		list.add("Disk (Slower, good w/large datasets");
 		
 		addProperty(this.buffering = new ComboBoxField("buffering", "Buffering", true, list));
 		addProperty(this.maxError = new DoubleField("max error","Maximum Error",true,0,1));
+
 	}
+
+	private void findData() {
+		
+		
+		this.devices.add("CPU (non-OpenCL)");
+		
+		if( Encog.getInstance().getCL()!=null )
+		{
+			for(EncogCLDevice device: Encog.getInstance().getCL().getDevices() ) {
+				this.devices.add(device.toString());
+			}
+		}
+	}
+
 
 
 	/**
@@ -98,5 +122,33 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 		return result;
 	}
 
+	public EncogCLDevice getDevice() {
+		if( this.comboDevice==null )
+			return null;
+		
+		int selected = this.comboDevice.getSelectedIndex();
+		
+		if( selected==0 )
+			return null;
+		else
+			return Encog.getInstance().getCL().getDevices().get(selected-1);
+	}
+
+	/**
+	 * @return the showDevice
+	 */
+	public boolean isShowDevice() {
+		return showDevice;
+	}
+
+	/**
+	 * @param showDevice the showDevice to set
+	 */
+	public void setShowDevice(boolean showDevice) {
+		this.showDevice = showDevice;
+	}
+	
+	
+	
 	
 }

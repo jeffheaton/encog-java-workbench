@@ -91,7 +91,7 @@ public class ProgressManhattan extends BasicTrainingProgress {
 	@Override
 	public void startup() {
 		final Train train = new ManhattanPropagation(getNetwork(),
-				getTrainingData(), this.fixedDelta);
+				getTrainingData(), this.getDevice(),this.fixedDelta);
 
 		setTrain(train);
 	}

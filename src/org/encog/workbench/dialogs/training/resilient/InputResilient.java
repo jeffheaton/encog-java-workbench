@@ -23,18 +23,11 @@
  */
 package org.encog.workbench.dialogs.training.resilient;
 
-import java.awt.Container;
 import java.awt.Frame;
-import java.awt.GridLayout;
-
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 
 import org.encog.engine.network.train.prop.RPROPConst;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
-import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.dialogs.training.BasicTrainingInput;
 
 /**
@@ -58,7 +51,7 @@ public class InputResilient extends BasicTrainingInput {
 	 * @param owner
 	 */
 	public InputResilient(final Frame owner) {
-		super(owner);
+		super(owner,true);
 		setTitle("Train Resilient Propagation");
 		addProperty(this.maxStep = new DoubleField("max step","Max Step",true,0,-1));
 		addProperty(this.initialUpdate = new DoubleField("initial update","Initial Update",true,0,-1));
@@ -75,9 +68,4 @@ public class InputResilient extends BasicTrainingInput {
 	public DoubleField getInitialUpdate() {
 		return initialUpdate;
 	}
-	
-	
-	
-	
-
 }

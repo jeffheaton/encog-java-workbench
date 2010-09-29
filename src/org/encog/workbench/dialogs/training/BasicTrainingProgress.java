@@ -40,6 +40,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import org.encog.engine.opencl.EncogCLDevice;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
@@ -116,6 +117,8 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 	 */
 	private BasicNetwork network;
 
+	private EncogCLDevice device;
+	
 	private BasicNetwork oldNetwork;
 
 	/**
@@ -545,5 +548,21 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 	public void saveNetwork() {
 
 	}
+
+	/**
+	 * @return the device
+	 */
+	public EncogCLDevice getDevice() {
+		return device;
+	}
+
+	/**
+	 * @param device the device to set
+	 */
+	public void setDevice(EncogCLDevice device) {
+		this.device = device;
+	}
+	
+	
 
 }

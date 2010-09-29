@@ -57,9 +57,9 @@ public class InputBackpropagation extends BasicTrainingInput {
 	 * @param owner
 	 */
 	public InputBackpropagation(final Frame owner) {
-		super(owner);
+		super(owner,true);
 		setTitle("Train Backpropagation");
-
+		setShowDevice(true);
 		addProperty(this.learningRate = new DoubleField("learning rate","Learning Rate",true,-1,-1));
 		addProperty(this.momentum = new DoubleField("momentum","Momentum",true,-1,-1));
 		render();

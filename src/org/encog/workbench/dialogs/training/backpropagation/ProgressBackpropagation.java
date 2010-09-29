@@ -97,7 +97,7 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 	@Override
 	public void startup() {
 		final Backpropagation train = new Backpropagation(getNetwork(),
-				getTrainingData(), this.learningRate, this.momentum);
+				getTrainingData(), this.getDevice(),this.learningRate, this.momentum);
 		train.setNumThreads(EncogWorkBench.getInstance().getConfig().getThreadCount());
 
 		setTrain(train);

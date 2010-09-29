@@ -95,7 +95,7 @@ public class ProgressResilient extends BasicTrainingProgress {
 	@Override
 	public void startup() {
 		final ResilientPropagation train = new ResilientPropagation(getNetwork(),
-				getTrainingData(), null,
+				getTrainingData(), this.getDevice(),
 				this.initialUpdate, this.maxStep );
 		
 		train.setNumThreads(EncogWorkBench.getInstance().getConfig().getThreadCount());

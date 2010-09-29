@@ -50,8 +50,9 @@ public class InputManhattan extends BasicTrainingInput {
 	 * @param owner
 	 */
 	public InputManhattan(final Frame owner) {
-		super(owner);
+		super(owner,true);
 		setTitle("Train Manhattan Update Rule");
+		setShowDevice(true);
 		
 		addProperty(this.fixedDelta = new DoubleField("fixed delta","Fixed Delta",true,0,-1));
 		render();

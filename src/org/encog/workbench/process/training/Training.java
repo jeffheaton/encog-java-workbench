@@ -25,6 +25,7 @@ package org.encog.workbench.process.training;
 
 import java.awt.Frame;
 
+import org.encog.engine.opencl.EncogCLDevice;
 import org.encog.engine.util.Format;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
@@ -250,12 +251,15 @@ public class Training {
 			if( !validate.validateHasLayers() ) {
 				return;
 			}
+			
+			EncogCLDevice device = dialog.getDevice();
 
 			final ProgressResilient train = new ProgressResilient(
 					EncogWorkBench.getInstance().getMainWindow(), network,
 					training, dialog.getInitialUpdate().getValue(), dialog
 							.getMaxStep().getValue(), dialog.getMaxError()
 							.getValue());
+			train.setDevice(device);
 
 			EncogWorkBench.getInstance().getMainWindow().openModalTab(train, "RPROP");
 		}
