@@ -25,9 +25,11 @@ package org.encog.workbench.dialogs.training.backpropagation;
 
 import java.awt.Frame;
 
+import org.encog.engine.network.train.prop.OpenCLTrainingProfile;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
+import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
@@ -96,8 +98,9 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 	 */
 	@Override
 	public void startup() {
+		OpenCLTrainingProfile profile = EncogUtility.createProfileRatio(getNetwork(), getTrainingData(), getOpenCLRatio());
 		final Backpropagation train = new Backpropagation(getNetwork(),
-				getTrainingData(), this.getDevice(),this.learningRate, this.momentum);
+				getTrainingData(), profile,this.learningRate, this.momentum);
 		train.setNumThreads(EncogWorkBench.getInstance().getConfig().getThreadCount());
 
 		setTrain(train);

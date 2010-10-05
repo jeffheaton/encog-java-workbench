@@ -25,11 +25,13 @@ package org.encog.workbench.dialogs.training.manhattan;
 
 import java.awt.Frame;
 
+import org.encog.engine.network.train.prop.OpenCLTrainingProfile;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.neural.networks.training.propagation.manhattan.ManhattanPropagation;
+import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
 /**
@@ -90,8 +92,10 @@ public class ProgressManhattan extends BasicTrainingProgress {
 	 */
 	@Override
 	public void startup() {
+		
+		OpenCLTrainingProfile profile = EncogUtility.createProfileRatio(getNetwork(), getTrainingData(), getOpenCLRatio());
 		final Train train = new ManhattanPropagation(getNetwork(),
-				getTrainingData(), this.getDevice(),this.fixedDelta);
+				getTrainingData(), profile,this.fixedDelta);
 
 		setTrain(train);
 	}

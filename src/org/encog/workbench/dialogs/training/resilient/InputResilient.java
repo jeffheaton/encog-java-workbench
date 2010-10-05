@@ -68,4 +68,6 @@ public class InputResilient extends BasicTrainingInput {
 	public DoubleField getInitialUpdate() {
 		return initialUpdate;
 	}
+
+
 }

@@ -25,7 +25,6 @@ package org.encog.workbench.dialogs.training;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Frame;
@@ -36,9 +35,7 @@ import java.text.NumberFormat;
 import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
 
 import org.encog.engine.opencl.EncogCLDevice;
 import org.encog.neural.data.NeuralDataSet;
@@ -120,6 +117,8 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 	private EncogCLDevice device;
 	
 	private BasicNetwork oldNetwork;
+	
+	private double openCLRatio;
 
 	/**
 	 * The training data.
@@ -562,7 +561,18 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 	public void setDevice(EncogCLDevice device) {
 		this.device = device;
 	}
-	
-	
 
+	/**
+	 * @return the openCLRatio
+	 */
+	public double getOpenCLRatio() {
+		return openCLRatio;
+	}
+
+	/**
+	 * @param openCLRatio the openCLRatio to set
+	 */
+	public void setOpenCLRatio(double openCLRatio) {
+		this.openCLRatio = openCLRatio;
+	}
 }

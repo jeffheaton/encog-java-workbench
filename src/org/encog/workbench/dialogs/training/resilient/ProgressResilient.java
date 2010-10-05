@@ -25,12 +25,14 @@ package org.encog.workbench.dialogs.training.resilient;
 
 import java.awt.Frame;
 
+import org.encog.engine.network.train.prop.OpenCLTrainingProfile;
 import org.encog.engine.network.train.prop.RPROPConst;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.BasicTrainingProgress;
 
@@ -94,8 +96,11 @@ public class ProgressResilient extends BasicTrainingProgress {
 	 */
 	@Override
 	public void startup() {
+				
+		OpenCLTrainingProfile profile = EncogUtility.createProfileRatio(getDevice(), getNetwork(), getTrainingData(), getOpenCLRatio());
+
 		final ResilientPropagation train = new ResilientPropagation(getNetwork(),
-				getTrainingData(), this.getDevice(),
+				getTrainingData(), profile,
 				this.initialUpdate, this.maxStep );
 		
 		train.setNumThreads(EncogWorkBench.getInstance().getConfig().getThreadCount());

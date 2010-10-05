@@ -143,6 +143,9 @@ public class Training {
 					training, dialog.getLearningRate().getValue(), dialog
 							.getMomentum().getValue(), dialog.getMaxError()
 							.getValue());
+			
+			train.setDevice(dialog.getDevice());
+			train.setOpenCLRatio(dialog.getRatio());
 
 			EncogWorkBench.getInstance().getMainWindow().openTab(train, "Backprop");
 		}
@@ -251,15 +254,15 @@ public class Training {
 			if( !validate.validateHasLayers() ) {
 				return;
 			}
-			
-			EncogCLDevice device = dialog.getDevice();
 
 			final ProgressResilient train = new ProgressResilient(
 					EncogWorkBench.getInstance().getMainWindow(), network,
 					training, dialog.getInitialUpdate().getValue(), dialog
 							.getMaxStep().getValue(), dialog.getMaxError()
 							.getValue());
-			train.setDevice(device);
+			
+			train.setDevice(dialog.getDevice());
+			train.setOpenCLRatio(dialog.getRatio());
 
 			EncogWorkBench.getInstance().getMainWindow().openModalTab(train, "RPROP");
 		}
@@ -298,6 +301,9 @@ public class Training {
 					training, dialog.getFixedDelta().getValue(), dialog
 							.getMaxError().getValue());
 
+			train.setDevice(dialog.getDevice());
+			train.setOpenCLRatio(dialog.getRatio());
+			
 			EncogWorkBench.getInstance().getMainWindow().openTab(train, "Manhattan");
 		}
 
