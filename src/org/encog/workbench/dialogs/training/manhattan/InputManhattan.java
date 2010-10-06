@@ -58,7 +58,8 @@ public class InputManhattan extends BasicTrainingInput {
 		render();
 		this.fixedDelta.setValue(0.000001);
 		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
-
+		if( this.isShowDevice() )
+			this.getRatio().setValue(1.0);
 	}
 
 

@@ -145,7 +145,7 @@ public class Training {
 							.getValue());
 			
 			train.setDevice(dialog.getDevice());
-			train.setOpenCLRatio(dialog.getRatio());
+			train.setOpenCLRatio(dialog.getRatio().getValue());
 
 			EncogWorkBench.getInstance().getMainWindow().openTab(train, "Backprop");
 		}
@@ -262,7 +262,7 @@ public class Training {
 							.getValue());
 			
 			train.setDevice(dialog.getDevice());
-			train.setOpenCLRatio(dialog.getRatio());
+			train.setOpenCLRatio(dialog.getRatio().getValue());
 
 			EncogWorkBench.getInstance().getMainWindow().openModalTab(train, "RPROP");
 		}
@@ -302,7 +302,7 @@ public class Training {
 							.getMaxError().getValue());
 
 			train.setDevice(dialog.getDevice());
-			train.setOpenCLRatio(dialog.getRatio());
+			train.setOpenCLRatio(dialog.getRatio().getValue());
 			
 			EncogWorkBench.getInstance().getMainWindow().openTab(train, "Manhattan");
 		}

@@ -81,6 +81,7 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 		
 		addProperty(this.buffering = new ComboBoxField("buffering", "Buffering", true, list));
 		addProperty(this.maxError = new DoubleField("max error","Maximum Error",true,0,1));
+		
 
 	}
 
@@ -152,8 +153,9 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 	}
 	
 	
-	public double getRatio() {
-		return this.clRatio.getValue();
+	public DoubleField getRatio() {
+		return this.clRatio;
 	}
+
 	
 }
