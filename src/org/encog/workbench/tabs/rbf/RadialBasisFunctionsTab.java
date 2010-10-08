@@ -27,26 +27,16 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
-import org.encog.engine.network.activation.ActivationFunction;
-import org.encog.engine.network.rbf.RadialBasisFunctionMulti;
-import org.encog.mathutil.rbf.GaussianFunctionMulti;
-import org.encog.mathutil.rbf.InverseMultiquadricFunctionMulti;
-import org.encog.mathutil.rbf.MultiquadricFunctionMulti;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.layers.Layer;
-import org.encog.neural.networks.structure.AnalyzeNetwork;
-import org.encog.neural.networks.structure.NetworkCODEC;
-import org.encog.persist.EncogPersistedObject;
-import org.encog.workbench.dialogs.activation.ActivationFunction2D;
-import org.encog.workbench.dialogs.activation.DerivativeFunction2D;
+import org.encog.engine.network.rbf.RadialBasisFunction;
+import org.encog.mathutil.rbf.GaussianFunction;
+import org.encog.mathutil.rbf.InverseMultiquadricFunction;
+import org.encog.mathutil.rbf.MexicanHatFunction;
+import org.encog.mathutil.rbf.MultiquadricFunction;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -57,8 +47,6 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.function.Function2D;
 import org.jfree.data.general.DatasetUtilities;
-import org.jfree.data.statistics.HistogramDataset;
-import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -71,7 +59,7 @@ public class RadialBasisFunctionsTab extends EncogCommonTab implements ActionLis
 	private static final long serialVersionUID = 4472644832610364833L;
 
 	private JButton buttonClose;
-	private RadialBasisFunctionMulti rbf;
+	private RadialBasisFunction rbf;
 	private JComboBox typeCombo;
 	private ChartPanel chartPanel;
 	
@@ -92,8 +80,8 @@ public class RadialBasisFunctionsTab extends EncogCommonTab implements ActionLis
 		
 		//
 		double[] center = { 0.0 };
-		double[] width = { 1.0 };
-		this.rbf = new GaussianFunctionMulti(1.0,center,width);
+
+		this.rbf = new GaussianFunction(1.0,center,1.0);
 		
 		XYDataset dataset = this.createDataset();
 		JFreeChart chart = this.createChart(dataset);
@@ -103,9 +91,10 @@ public class RadialBasisFunctionsTab extends EncogCommonTab implements ActionLis
 		this.typeCombo = new JComboBox();
 		
 		this.add(this.typeCombo,BorderLayout.NORTH);
-		this.typeCombo.addItem(GaussianFunctionMulti.class.getSimpleName());
-		this.typeCombo.addItem(MultiquadricFunctionMulti.class.getSimpleName());
-		this.typeCombo.addItem(InverseMultiquadricFunctionMulti.class.getSimpleName());
+		this.typeCombo.addItem(GaussianFunction.class.getSimpleName());
+		this.typeCombo.addItem(MultiquadricFunction.class.getSimpleName());
+		this.typeCombo.addItem(InverseMultiquadricFunction.class.getSimpleName());
+		this.typeCombo.addItem(MexicanHatFunction.class.getSimpleName());
 		
 		this.typeCombo.addActionListener(this);
 	}
@@ -167,19 +156,21 @@ public class RadialBasisFunctionsTab extends EncogCommonTab implements ActionLis
 		} else if( e.getSource()==this.typeCombo ) {
 			int index = this.typeCombo.getSelectedIndex();
 
-			double[] center = { 0.0 };
-			double[] width = { 1.0 };
+			double[] center = { 0.0 };			
 						
 			switch(index) {
 				case 0:
-					this.rbf = new GaussianFunctionMulti(1.0,center,width); 
+					this.rbf = new GaussianFunction(1.0,center,1.0); 
 					break;
 				case 1:
-					this.rbf = new MultiquadricFunctionMulti(1.0,center,width);
+					this.rbf = new MultiquadricFunction(1.0,center,1.0);
 					break;
 				case 2:
-					this.rbf = new InverseMultiquadricFunctionMulti(1.0,center,width);
+					this.rbf = new InverseMultiquadricFunction(1.0,center,1.0);
 					break;
+				case 3:
+					this.rbf = new MexicanHatFunction(1.0,center,1.0);
+					break;					
 			}
 			
 			XYDataset dataset = this.createDataset();

@@ -23,12 +23,12 @@
  */
 package org.encog.workbench.tabs.rbf;
 
-import org.encog.engine.network.rbf.RadialBasisFunctionMulti;
+import org.encog.engine.network.rbf.RadialBasisFunction;
 import org.jfree.data.function.Function2D;
 
 public class RBFFunction2D implements Function2D {
 
-	private final RadialBasisFunctionMulti rbf;
+	private final RadialBasisFunction rbf;
 	
 	public double getValue(double d) {
 		double[] array = new double[1];
@@ -36,7 +36,7 @@ public class RBFFunction2D implements Function2D {
 		return this.rbf.calculate(array);
 	}
 
-	public RBFFunction2D(RadialBasisFunctionMulti rbf)
+	public RBFFunction2D(RadialBasisFunction rbf)
 	{
 		this.rbf = rbf;
 	}

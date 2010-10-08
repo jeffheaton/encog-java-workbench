@@ -36,7 +36,9 @@ public class RadialBasisFunction2D implements Function2D {
 	}
 	
 	public double getValue(double x) {
-		return radial.calculate(x);
+		double[] d = new double[1];
+		d[0] = x;
+		return radial.calculate(d);
 	}
 
 }
