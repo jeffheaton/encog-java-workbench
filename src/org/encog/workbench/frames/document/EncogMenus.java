@@ -63,7 +63,9 @@ public class EncogMenus {
 	public static final String TOOLS_VALIDATION_CHART = "Validation Chart...";
 	public static final String TOOLS_BIN2EXTERNAL = "Convert Encog Binary to Other File...";
 	public static final String TOOLS_EXTERNAL2BIN = "Convert Other File to Encog Binary...";
+	public static final String TOOLS_RBF = "Chart RBF...";
 	
+		
 	public static final String HELP_ABOUT = "About Encog Workbench...";
 
 	private JMenuBar menuBar;
@@ -96,6 +98,7 @@ public class EncogMenus {
 	private JMenuItem menuToolsValidation;
 	private JMenuItem menuToolsBin2Ext;
 	private JMenuItem menuToolsExt2Bin;
+	private JMenuItem menuToolsRBF;	
 	
 	private JMenuItem menuHelpAbout;
 
@@ -153,7 +156,8 @@ public class EncogMenus {
 		this.menuToolsValidation = owner.addItem(this.menuTools, EncogMenus.TOOLS_VALIDATION_CHART, 'v');
 		this.menuToolsBin2Ext = owner.addItem(this.menuTools, EncogMenus.TOOLS_BIN2EXTERNAL, 'x');
 		this.menuToolsExt2Bin = owner.addItem(this.menuTools, EncogMenus.TOOLS_EXTERNAL2BIN, 'y');
-		this.menuBar.add(this.menuTools);
+		this.menuToolsRBF = owner.addItem(this.menuTools, EncogMenus.TOOLS_RBF, 'r');
+		this.menuBar.add(this.menuTools);		
 
 		this.menuHelp = new JMenu("Help");
 		this.menuHelpAbout = this.menuHelp.add(owner.addItem(this.menuHelp, EncogMenus.HELP_ABOUT,
@@ -256,7 +260,11 @@ public class EncogMenus {
 			ImportExport.performExternal2Bin(null,null);
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_CODE)) {
 			owner.getOperations().performGenerateCode();
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_RBF)) {
+			owner.getOperations().performRBF();
 		}
+	
+		
 		}
 		catch(Throwable t)
 		{

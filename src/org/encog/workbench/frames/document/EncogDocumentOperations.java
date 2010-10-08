@@ -78,6 +78,7 @@ import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.TrainingDataTab;
 import org.encog.workbench.tabs.network.NetworkTab;
 import org.encog.workbench.tabs.population.PopulationTab;
+import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
 import org.encog.workbench.util.ExtensionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -448,6 +449,12 @@ public class EncogDocumentOperations {
 		this.owner.openTab(browse, "Browser" + (browser++));
 	}
 
+	public void performRBF() {
+		RadialBasisFunctionsTab rbf = new RadialBasisFunctionsTab();
+		this.owner.openTab(rbf, "RBF" );
+	}
+	
+	
 	public void performHelpAbout() {
 		// AboutEncog dialog = new AboutEncog();
 		// dialog.process();
