@@ -23,7 +23,7 @@
  */
 package org.encog.workbench.process.validate;
 
-import org.encog.mathutil.rbf.RadialBasisFunction;
+import org.encog.engine.network.rbf.RadialBasisFunction;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;

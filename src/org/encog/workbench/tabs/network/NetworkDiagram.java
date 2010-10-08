@@ -45,8 +45,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import org.encog.EncogError;
+import org.encog.engine.network.rbf.RadialBasisFunction;
 import org.encog.mathutil.rbf.GaussianFunction;
-import org.encog.mathutil.rbf.RadialBasisFunction;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.ContextLayer;
