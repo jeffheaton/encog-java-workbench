@@ -98,7 +98,7 @@ public class ProgressBackpropagation extends BasicTrainingProgress {
 	 */
 	@Override
 	public void startup() {
-		OpenCLTrainingProfile profile = EncogUtility.createProfileRatio(getNetwork(), getTrainingData(), getOpenCLRatio());
+		OpenCLTrainingProfile profile = new OpenCLTrainingProfile(this.getDevice());
 		final Backpropagation train = new Backpropagation(getNetwork(),
 				getTrainingData(), profile,this.learningRate, this.momentum);
 		train.setNumThreads(EncogWorkBench.getInstance().getConfig().getThreadCount());

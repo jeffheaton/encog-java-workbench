@@ -93,7 +93,7 @@ public class ProgressManhattan extends BasicTrainingProgress {
 	@Override
 	public void startup() {
 		
-		OpenCLTrainingProfile profile = EncogUtility.createProfileRatio(getNetwork(), getTrainingData(), getOpenCLRatio());
+		OpenCLTrainingProfile profile = new OpenCLTrainingProfile(this.getDevice());
 		final Train train = new ManhattanPropagation(getNetwork(),
 				getTrainingData(), profile,this.fixedDelta);
 

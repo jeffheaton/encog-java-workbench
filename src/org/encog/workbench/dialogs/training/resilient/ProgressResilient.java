@@ -97,7 +97,7 @@ public class ProgressResilient extends BasicTrainingProgress {
 	@Override
 	public void startup() {
 				
-		OpenCLTrainingProfile profile = EncogUtility.createProfileRatio(getDevice(), getNetwork(), getTrainingData(), getOpenCLRatio());
+		OpenCLTrainingProfile profile = new OpenCLTrainingProfile(this.getDevice());
 
 		final ResilientPropagation train = new ResilientPropagation(getNetwork(),
 				getTrainingData(), profile,
