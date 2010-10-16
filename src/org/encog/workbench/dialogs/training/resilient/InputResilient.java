@@ -59,8 +59,6 @@ public class InputResilient extends BasicTrainingInput {
 		this.maxStep.setValue(RPROPConst.DEFAULT_MAX_STEP);
 		this.initialUpdate.setValue(RPROPConst.DEFAULT_INITIAL_UPDATE);
 		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
-		if( this.isShowDevice() )
-			this.getRatio().setValue(1.0);
 	}
 
 	public DoubleField getMaxStep() {

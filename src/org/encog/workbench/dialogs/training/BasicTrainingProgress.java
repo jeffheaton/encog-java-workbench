@@ -118,7 +118,6 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 	
 	private BasicNetwork oldNetwork;
 	
-	private double openCLRatio;
 
 	/**
 	 * The training data.
@@ -562,17 +561,4 @@ public abstract class BasicTrainingProgress extends EncogCommonTab implements
 		this.device = device;
 	}
 
-	/**
-	 * @return the openCLRatio
-	 */
-	public double getOpenCLRatio() {
-		return openCLRatio;
-	}
-
-	/**
-	 * @param openCLRatio the openCLRatio to set
-	 */
-	public void setOpenCLRatio(double openCLRatio) {
-		this.openCLRatio = openCLRatio;
-	}
 }

@@ -51,7 +51,6 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 	 * Text field that holds the maximum training error.
 	 */
 	private final DoubleField maxError;
-	private DoubleField clRatio;
 	
 	private final ComboBoxField buffering;
 	
@@ -73,7 +72,6 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 		
 		if( this.showDevice ) {
 			addProperty(this.comboDevice = new ComboBoxField("device","Target Device",true,this.devices));
-			addProperty(this.clRatio = new DoubleField("OpenCL ratio","OpenCL Ratio",true,0,1));
 		}
 		
 		list.add("Memory (Fastest, if dataset fits)");
@@ -151,11 +149,5 @@ public abstract class BasicTrainingInput extends NetworkAndTrainingDialog {
 	public void setShowDevice(boolean showDevice) {
 		this.showDevice = showDevice;
 	}
-	
-	
-	public DoubleField getRatio() {
-		return this.clRatio;
-	}
 
-	
 }

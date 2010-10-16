@@ -65,8 +65,7 @@ public class InputBackpropagation extends BasicTrainingInput {
 		render();
 		this.learningRate.setValue(0.7);
 		this.momentum.setValue(0.0);
-		if( this.isShowDevice() )
-			this.getRatio().setValue(1.0);
+
 		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	}
 
