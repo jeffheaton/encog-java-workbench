@@ -97,7 +97,9 @@ public class ProgressResilient extends BasicTrainingProgress {
 	@Override
 	public void startup() {
 				
-		OpenCLTrainingProfile profile = new OpenCLTrainingProfile(this.getDevice());
+		OpenCLTrainingProfile profile = null;
+		if( this.getDevice()!=null )
+			profile = new OpenCLTrainingProfile(this.getDevice());
 
 		final ResilientPropagation train = new ResilientPropagation(getNetwork(),
 				getTrainingData(), profile,

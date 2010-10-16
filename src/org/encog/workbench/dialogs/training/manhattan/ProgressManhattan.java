@@ -93,7 +93,10 @@ public class ProgressManhattan extends BasicTrainingProgress {
 	@Override
 	public void startup() {
 		
-		OpenCLTrainingProfile profile = new OpenCLTrainingProfile(this.getDevice());
+		OpenCLTrainingProfile profile = null;
+		if( this.getDevice()!=null )
+			profile = new OpenCLTrainingProfile(this.getDevice());
+		
 		final Train train = new ManhattanPropagation(getNetwork(),
 				getTrainingData(), profile,this.fixedDelta);
 
