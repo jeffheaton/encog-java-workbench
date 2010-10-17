@@ -262,22 +262,27 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	public void openTab(EncogCommonTab tab) {
 	
-		int i = this.documentTabs.getTabCount();
-		
-        this.documentTabs.add(tab.getEncogObject().getName(), tab);
-        documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
-        this.tabManager.add(tab);
-        this.documentTabs.setSelectedComponent(tab);
-        this.menus.updateMenus();
+		openTab(tab,null);
 	}
 	
 	public void openTab(EncogCommonTab tab, String title) {
+		String titleToUse;
 		
 		int i = this.documentTabs.getTabCount();
 		
-        this.documentTabs.add(title, tab);
-        documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
-        this.tabManager.add(tab);
+		if( title==null && tab.getEncogObject()!=null )
+			titleToUse = tab.getEncogObject().getName();
+		else
+			titleToUse = title;
+		
+		
+        this.documentTabs.add(titleToUse, tab);
+ 
+        if( !this.tabManager.contains(tab)) {
+        	if( i<this.documentTabs.getTabCount() )
+        		documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
+        	this.tabManager.add(tab);
+        }
         this.documentTabs.setSelectedComponent(tab);
         this.menus.updateMenus();
 	}
