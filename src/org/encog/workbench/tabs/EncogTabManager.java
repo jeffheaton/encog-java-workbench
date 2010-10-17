@@ -47,6 +47,9 @@ public class EncogTabManager {
 		tab.setParent(this.owner);
 	}
 
+	public boolean contains(EncogCommonTab tab) {
+		return this.tabs.contains(tab);
+	}
 	
 	public boolean checkBeforeOpen(final DirectoryEntry object,
 			final Class<?> c) {
