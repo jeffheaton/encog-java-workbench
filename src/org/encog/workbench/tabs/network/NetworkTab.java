@@ -68,6 +68,8 @@ import org.encog.neural.networks.synapse.WeightlessSynapse;
 import org.encog.neural.networks.synapse.neat.NEATSynapse;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.RandomizeNetworkDialog;
+import org.encog.workbench.dialogs.select.SelectDialog;
+import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
@@ -75,9 +77,10 @@ import org.encog.workbench.models.NetworkListModel;
 import org.encog.workbench.process.training.Training;
 import org.encog.workbench.process.validate.ValidateNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.NEATTab;
 import org.encog.workbench.tabs.network.NetworkTool.Type;
-import org.encog.workbench.tabs.weights.AnalyzeWeightsTab;
+import org.encog.workbench.tabs.visualize.NEATTab;
+import org.encog.workbench.tabs.visualize.structure.StructureTab;
+import org.encog.workbench.tabs.visualize.weights.AnalyzeWeightsTab;
 
 public class NetworkTab extends EncogCommonTab implements ActionListener {
 
@@ -91,7 +94,7 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 	private JButton buttonTrain;
 	private JButton buttonValidate;
 	private JButton buttonProperties;
-	private JButton buttonAnalyze;
+	private JButton buttonVisualize;
 	private JComboBox comboLogic;
 	private NetworkListModel model;
 	private JScrollPane scroll;
@@ -146,7 +149,7 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 		this.toolbar.add(this.buttonValidate = new JButton("Validate"));
 		this.toolbar.add(this.buttonProperties = new JButton(
 				"Network Properties"));
-		this.toolbar.add(this.buttonAnalyze = new JButton("Analyze"));
+		this.toolbar.add(this.buttonVisualize = new JButton("Visualize"));
 
 		this.buttonRandomize.addActionListener(this);
 		this.buttonQuery.addActionListener(this);
@@ -154,7 +157,7 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 		this.buttonValidate.addActionListener(this);
 		this.buttonProperties.addActionListener(this);
 		this.comboLogic.addActionListener(this);
-		this.buttonAnalyze.addActionListener(this);
+		this.buttonVisualize.addActionListener(this);
 
 		add(this.toolbar, BorderLayout.PAGE_START);
 		this.scroll = new JScrollPane(networkDiagram = new NetworkDiagram(this));
@@ -179,8 +182,8 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 			performProperties();
 		} else if (action.getSource() == this.comboLogic) {
 			collectLogic();
-		}  else if (action.getSource() == this.buttonAnalyze ) {
-			analyzeWeights();
+		}  else if (action.getSource() == this.buttonVisualize ) {
+			this.handleVisualize();
 		}
 	}
 
@@ -518,7 +521,34 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 		}
 	}
 	
+	public void handleVisualize()
+	{
+		SelectItem selectWeights;
+		SelectItem selectStructure;
+		List<SelectItem> list = new ArrayList<SelectItem>();
+		list.add(selectWeights = new SelectItem("Weights Histogram","A histogram of the weights."));
+		list.add(selectStructure = new SelectItem("Network Structure","The structure of the neural network."));
+		SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance().getMainWindow(),list);
+		sel.setVisible(true);
+		
+		if( sel.getSelected()==selectWeights)
+		{
+			analyzeWeights();	
+		}
+		else if( sel.getSelected()==selectStructure)
+		{
+			analyzeStructure();	
+		}
+		
+	}
+	
 	public void analyzeWeights()
+	{
+		AnalyzeWeightsTab tab = new AnalyzeWeightsTab(this.getEncogObject());
+		EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Analyze Weights");
+	}
+	
+	public void analyzeStructure()
 	{
 		NEATSynapse neat = null;
 		BasicNetwork network = (BasicNetwork) this.getEncogObject();
@@ -531,13 +561,13 @@ public class NetworkTab extends EncogCommonTab implements ActionListener {
 		
 		if( neat==null )
 		{		
-			AnalyzeWeightsTab tab = new AnalyzeWeightsTab(this.getEncogObject());
-			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Analyze Weights");
+			StructureTab tab = new StructureTab(this.getEncogObject());
+			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Analyze Structure");
 		}
 		else
 		{
 			NEATTab tab = new NEATTab(network ,neat);
-			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "NEAT Network");
-		}		
+			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "NEAT Structure");
+		}
 	}
 }

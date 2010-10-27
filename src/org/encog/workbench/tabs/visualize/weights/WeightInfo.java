@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.tabs.weights;
+package org.encog.workbench.tabs.visualize.weights;
 
 import java.awt.Color;
 import java.awt.Dimension;

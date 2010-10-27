@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.tabs;
+package org.encog.workbench.tabs.visualize;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -34,6 +34,7 @@ import org.encog.neural.networks.synapse.neat.NEATLink;
 import org.encog.neural.networks.synapse.neat.NEATNeuron;
 import org.encog.neural.networks.synapse.neat.NEATSynapse;
 import org.encog.persist.EncogPersistedObject;
+import org.encog.workbench.tabs.EncogCommonTab;
 
 public class NEATTab extends EncogCommonTab  {
 
