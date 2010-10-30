@@ -51,8 +51,8 @@ public class EditRadialLayer extends EditLayerDialog  {
 		addProperty(this.dimensions = new IntegerField("dimensions", "Dimensions(previous layer count)", true,0,1000));
 		addProperty(this.radius  = new TableField("radial basis functions",
 				"Radius",true,100,layer.getNeuronCount(),RADIUS_HEADS));
-		addProperty(this.center = new TableField("radial basis functions",
-			"Centers",true,100,layer.getNeuronCount()*layer.getDimensions(),CENTER_HEADS));
+		/*addProperty(this.center = new TableField("radial basis functions",
+			"Centers",true,100,layer.getNeuronCount()*layer.getDimensions(),CENTER_HEADS));*/
 
 		render();
 	}

@@ -343,8 +343,8 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 				Layer layer = (Layer) c.newInstance();
 
 				if (layer instanceof RadialBasisFunctionLayer) {
-					((RadialBasisFunctionLayer) layer)
-							.randomizeGaussianCentersAndWidths(-1, 1);
+					//((RadialBasisFunctionLayer) layer)
+					//		.randomizeGaussianCentersAndWidths(-1, 1);
 				}
 
 				this.parent.getNetworkToolbar().setSelected(null);
@@ -808,24 +808,24 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 		RadialBasisFunctionLayer radialLayer = (RadialBasisFunctionLayer) this.selected;
 		EditRadialLayer dialog = new EditRadialLayer(EncogWorkBench.getInstance().getMainWindow(), radialLayer);
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
-		dialog.getDimensions().setValue(radialLayer.getDimensions());
+		//dialog.getDimensions().setValue(radialLayer.getDimensions());
 		
 		for(int i=0;i<radialLayer.getNeuronCount();i++)
 		{
 			dialog.getRadius().getModel().setValueAt(""+(i+1), i, 0);
-			dialog.getRadius().getModel().setValueAt(""+radialLayer.getRadius()[i], i, 1);
+			//dialog.getRadius().getModel().setValueAt(""+radialLayer.getRadius()[i], i, 1);
 		}
 		
 		int index = 0;
 		for(int i=0;i<radialLayer.getNeuronCount();i++)
 		{
-			for(int j=0;j<radialLayer.getDimensions();j++)
+			/*for(int j=0;j<radialLayer.getDimensions();j++)
 			{
 				dialog.getCenter().getModel().setValueAt(""+(i+1), index, 0);
 				dialog.getCenter().getModel().setValueAt(""+(j+1), index, 1);
 				dialog.getCenter().getModel().setValueAt(""+radialLayer.getCenter()[i][j], index, 2);
 				index++;
-			}
+			}*/
 		}
 
 		populateTags(dialog.getTags());
@@ -845,17 +845,17 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 				// update the RBF's
 				for(int i=0;i<radialLayer.getNeuronCount();i++)
 				{
-					radialLayer.getRadius()[i] = Double.parseDouble(dialog.getRadius().getModel().getValueAt(i, 1).toString());
+				//	radialLayer.getRadius()[i] = Double.parseDouble(dialog.getRadius().getModel().getValueAt(i, 1).toString());
 				}
 				
 				index = 0;
 				for(int i=0;i<radialLayer.getNeuronCount();i++)
 				{
-					for(int j=0;j<radialLayer.getDimensions();j++)
+					/*for(int j=0;j<radialLayer.getDimensions();j++)
 					{
 						radialLayer.getCenter()[i][j] = Double.parseDouble(dialog.getCenter().getModel().getValueAt(index, 2).toString());
 						index++;
-					}
+					}*/
 				}
 				}
 				catch(NumberFormatException ex)
