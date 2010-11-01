@@ -140,8 +140,7 @@
 		<copy todir="${path.stage.src.sub}" file="${basedir}/.classpath" />
 		<copy todir="${path.stage.src.sub}" file="${basedir}/.project" />
 		<copy todir="${path.stage.src.sub}" file="${basedir}/copyright.txt" />
-		<copy todir="${path.stage.src.sub}" file="${basedir}/workbench.sh" />
-		<copy todir="${path.stage.src.sub}" file="${jarfile.startable}" />
+		<copy todir="${path.stage.sub}" file="${jarfile.startable}" />
 
 		<copy todir="${path.stage.src.sub}/src">
 			<fileset dir="${path.src}" />
