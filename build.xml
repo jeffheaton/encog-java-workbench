@@ -124,11 +124,14 @@
 			<fileset dir="${path.jar}" />
 		</copy>
 		<copy todir="${path.stage.sub}" file="${basedir}/copyright.txt" />
+
+		<!-- Create Windows batch file -->				
+		<echo file="${path.stage.sub}/workbench.bat">@echo off
+start javaw -server -jar ${jarfile.startable}
+		</echo>
 		
-		<java classname="org.encog.workbench.util.JavaClassPathUtil">
-			<classpath refid="classpath" />
-			<arg value="${path.stage.sub}"/>
-		</java>
+		<echo file="${path.stage.sub}/workbench.sh">javaw -server -jar ${jarfile.startable}
+		</echo>		
 		
 		<exec executable="launch4jc" dir="${path.build.util}">			
 			<arg value="launch.xml" />
@@ -161,8 +164,9 @@
 
 	<target name="clean-all" depends="clean" description="Delete the source code">
 		<delete dir="${path.src}" />
+		<delete dir="${path.jar}" />
 		<delete>
-			<fileset dir="${basedir}" excludes="build.xml" />
+			<fileset dir="${basedir}" excludes="build.xml,encog.properties" />
 		</delete>
 	</target>
 
