@@ -8,7 +8,8 @@ import java.util.List;
 public class DrawnNeuron {
 	
 	private final DrawnNeuronType type;
-	private final List<DrawnConnection> connections = new ArrayList<DrawnConnection>();
+	private final List<DrawnConnection> outbound = new ArrayList<DrawnConnection>();
+	private final List<DrawnConnection> inbound = new ArrayList<DrawnConnection>();
 	private final double x;
 	private final double y;
 	private final int size;
@@ -76,12 +77,17 @@ public class DrawnNeuron {
 	}
 
 	/**
-	 * @return the connections
+	 * @return the outbound connections
 	 */
-	public List<DrawnConnection> getConnections() {
-		return connections;
+	public List<DrawnConnection> getOutbound() {
+		return outbound;
 	}
 
-	
+	/**
+	 * @return the inbound connections
+	 */
+	public List<DrawnConnection> getInbound() {
+		return outbound;
+	}
 	
 }

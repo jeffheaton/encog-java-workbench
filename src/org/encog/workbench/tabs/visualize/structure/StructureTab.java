@@ -96,7 +96,8 @@ public class StructureTab extends EncogCommonTab  {
 				for( DrawnNeuron connectTo : connections )
 				{
 					DrawnConnection connection = new DrawnConnection(neuron,connectTo);
-					neuron.getConnections().add(connection);
+					neuron.getOutbound().add(connection);
+					neuron.getInbound().add(connection);
 				}
 			}
 			
@@ -117,7 +118,7 @@ public class StructureTab extends EncogCommonTab  {
 		for(DrawnNeuron neuron: this.neurons)
 		{
 			neuron.paint(g,width,height);
-			for(DrawnConnection connection: neuron.getConnections())
+			for(DrawnConnection connection: neuron.getOutbound())
 			{
 				connection.paint(g, width, height);
 			}
