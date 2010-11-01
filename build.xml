@@ -39,7 +39,7 @@
 	<property name="path.jar" location="${basedir}/jar" />
 	<property name="jarfile" location="${path.jar}/encog-workbench-${encog.version}.jar" />
 	<property name="jarfile.startable.name" value="EncogWorkbenchStartable-${encog.version}.jar" />
-	<property name="jarfile.startable" location="${path.jar}/${jarfile-startable-name}" />
+	<property name="jarfile.startable" location="${basedir}/${jarfile-startable-name}" />
 	<echo>${jarfile.startable.name}</echo>		
 	<path id="classpath">
 		<fileset dir="${path.jar}" />
@@ -141,7 +141,7 @@
 		<copy todir="${path.stage.src.sub}" file="${basedir}/.project" />
 		<copy todir="${path.stage.src.sub}" file="${basedir}/copyright.txt" />
 		<copy todir="${path.stage.src.sub}" file="${basedir}/workbench.sh" />
-		<copy todir="${jarfile.startable}" file="${basedir}/${jarfile.startable.name}" />
+		<copy todir="${path.stage.src.sub}" file="${jarfile.startable}" />
 
 		<copy todir="${path.stage.src.sub}/src">
 			<fileset dir="${path.src}" />
