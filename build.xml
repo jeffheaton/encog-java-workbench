@@ -37,6 +37,10 @@
 	<property name="path.dist" location="${basedir}/dist" />
 	<property name="path.stage" location="${basedir}/stage" />
 	<property name="path.jar" location="${basedir}/jar" />
+	<property name="jarfile" location="${path.jar}/encog-workbench-${encog.version}.jar" />
+	<property name="jarfile.startable.name" value="EncogWorkbenchStartable-${encog.version}.jar" />
+	<property name="jarfile.startable" location="${path.jar}/${jarfile-startable-name}" />
+	<echo>${jarfile.startable.name}</echo>		
 	<path id="classpath">
 		<fileset dir="${path.jar}" />
 	</path>
@@ -61,6 +65,7 @@
 
 	<target name="init">
 		<!-- Create the build directory structure used by compile -->
+		<delete dir="${path.build}" />
 		<mkdir dir="${path.build}" />		
 		
 	</target>
@@ -80,17 +85,30 @@
 
 		<manifest file="MANIFEST.MF">
 			<attribute name="Built-By" value="${user.name}" />
-			<attribute name="Implementation-Version" value="${version.num}-b${encog.version}" />
+			<attribute name="Implementation-Version" value="${encog.version}" />
+			<attribute name="Main-Class" value="org.encog.workbench.EncogWorkBench" />
 		</manifest>
-
-		<property name="jarfile" location="${path.jar}/encog-workbench-${encog.version}.jar" />
 		
 		<copy todir="${path.build}/resource">
 			<fileset dir="${path.src}/resource" />
 		</copy>
 
 		<jar jarfile="${jarfile}" basedir="${path.build}" manifest="MANIFEST.MF" />
+		
+		<unjar src="${path.jar}/encog-core-2.5.0.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/encog-javascript-2.5.jar" dest="${path.build}"/>
+		
+		<unjar src="${path.jar}/jcommon-1.0.16.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/jfreechart-1.0.13.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/JOCL-0.1.3a-beta.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/js.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/slf4j-api-1.5.6.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/slf4j-jdk14-1.5.6.jar" dest="${path.build}"/>
+		
+		<delete dir="${path.build}/doc" />
+		<delete dir="${path.build}/META-INF" />
 
+		<jar jarfile="${jarfile.startable}" basedir="${path.build}" manifest="MANIFEST.MF" />
 	</target>
 
 	<target name="cc-build" depends="clean-all,checkout,compile,dist">
@@ -112,12 +130,6 @@
 			<arg value="${path.stage.sub}"/>
 		</java>
 		
-		<java classname="org.encog.workbench.util.JavaLaunchUtil">
-			<classpath refid="classpath" />
-			<arg value="${path.stage.sub}"/>
-			<arg value="${path.build.util}"/>
-		</java>
-		
 		<exec executable="launch4jc" dir="${path.build.util}">			
 			<arg value="launch.xml" />
 		</exec>
@@ -128,6 +140,8 @@
 		<copy todir="${path.stage.src.sub}" file="${basedir}/.classpath" />
 		<copy todir="${path.stage.src.sub}" file="${basedir}/.project" />
 		<copy todir="${path.stage.src.sub}" file="${basedir}/copyright.txt" />
+		<copy todir="${path.stage.src.sub}" file="${basedir}/workbench.sh" />
+		<copy todir="${jarfile.startable}" file="${basedir}/${jarfile.startable.name}" />
 
 		<copy todir="${path.stage.src.sub}/src">
 			<fileset dir="${path.src}" />
@@ -156,7 +170,7 @@
 	<target name="clean" description="clean up">
 		<!-- Delete the ${build} and ${dist} directory trees -->
 		<delete dir="${path.stage}" />
-		<delete dir="${path.jar}" />
+		<delete dir="${path.lib}" />
 		<delete dir="${path.build}" />
 		<delete dir="${path.build.util}" />
 		<delete dir="${path.dist}" />
