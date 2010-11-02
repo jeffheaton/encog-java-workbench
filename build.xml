@@ -28,8 +28,6 @@
 	<description>
         Build the Workbench JAR file for Encog.
     </description>
-	<!-- load the properties file -->
-	<property file="encog.properties"/>
 	<!-- set global properties for this build -->
 	<property name="path.src" location="${basedir}/src" />
 	<property name="path.build" location="${basedir}/build" />
@@ -37,9 +35,6 @@
 	<property name="path.dist" location="${basedir}/dist" />
 	<property name="path.stage" location="${basedir}/stage" />
 	<property name="path.jar" location="${basedir}/jar" />
-	<property name="jarfile" location="${path.jar}/encog-workbench-${encog.version}.jar" />
-	<property name="jarfile.startable.name">EncogWorkbenchStartable-${encog.version}.jar</property>
-	<property name="jarfile.startable" location="${basedir}/${jarfile.startable.name}" />
 		
 	<path id="classpath">
 		<fileset dir="${path.jar}" />
@@ -67,7 +62,15 @@
 		<!-- Create the build directory structure used by compile -->
 		<delete dir="${path.build}" />
 		<mkdir dir="${path.build}" />		
-		
+	</target>
+	
+	<target name="version">
+		<!-- load the properties file -->
+		<property file="encog.properties"/>
+		<!-- name the jar file -->
+		<property name="jarfile" location="${path.jar}/encog-workbench-${encog.version}.jar" />
+		<property name="jarfile.startable.name">EncogWorkbenchStartable-${encog.version}.jar</property>
+		<property name="jarfile.startable" location="${basedir}/${jarfile.startable.name}" />		
 	</target>
 
 	<target name="compile" depends="init" description="compile the source ">
@@ -78,7 +81,7 @@
 
 	</target>
 
-	<target name="dist" depends="compile" description="generate the distribution">
+	<target name="dist" depends="compile,version" description="generate the distribution">
 
 		<!-- Create the distribution directory -->
 		<mkdir dir="${path.dist}" />		
