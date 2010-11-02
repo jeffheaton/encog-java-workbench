@@ -47,6 +47,7 @@ import javax.swing.JPopupMenu;
 import org.encog.EncogError;
 import org.encog.engine.network.rbf.RadialBasisFunction;
 import org.encog.mathutil.rbf.GaussianFunction;
+import org.encog.mathutil.rbf.RBFEnum;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.layers.ContextLayer;
@@ -808,62 +809,26 @@ public class NetworkDiagram extends JPanel implements MouseListener,
 		RadialBasisFunctionLayer radialLayer = (RadialBasisFunctionLayer) this.selected;
 		EditRadialLayer dialog = new EditRadialLayer(EncogWorkBench.getInstance().getMainWindow(), radialLayer);
 		dialog.getNeuronCount().setValue(this.selected.getNeuronCount());
-		//dialog.getDimensions().setValue(radialLayer.getDimensions());
+		dialog.getDimensions().setValue(radialLayer.getRadialBasisFunction()[0].getDimensions());
 		
-		for(int i=0;i<radialLayer.getNeuronCount();i++)
-		{
-			dialog.getRadius().getModel().setValueAt(""+(i+1), i, 0);
-			//dialog.getRadius().getModel().setValueAt(""+radialLayer.getRadius()[i], i, 1);
-		}
-		
-		int index = 0;
-		for(int i=0;i<radialLayer.getNeuronCount();i++)
-		{
-			/*for(int j=0;j<radialLayer.getDimensions();j++)
-			{
-				dialog.getCenter().getModel().setValueAt(""+(i+1), index, 0);
-				dialog.getCenter().getModel().setValueAt(""+(j+1), index, 1);
-				dialog.getCenter().getModel().setValueAt(""+radialLayer.getCenter()[i][j], index, 2);
-				index++;
-			}*/
-		}
-
 		populateTags(dialog.getTags());
 
 		if (dialog.process()) {
 
-			if (dialog.getNeuronCount().getValue() != this.selected
-					.getNeuronCount()) {
-				// did the neuron count change?
+			int desiredNeuronCount = dialog.getNeuronCount().getValue();
+			int currentNeuronCount = radialLayer.getNeuronCount();
+			
+			int desiredDimensions = dialog.getDimensions().getValue();
+			int currentDimensions = radialLayer.getRadialBasisFunction()[0].getDimensions();
+			
+			// did the neuron count or dimensions change?
+			if ( (desiredNeuronCount!=currentNeuronCount) || (desiredDimensions!=currentDimensions) ) {
 				PruneSelective prune = new PruneSelective(
 						(BasicNetwork) this.parent.getEncogObject());
-				prune.changeNeuronCount(this.selected, dialog.getNeuronCount()
-						.getValue());
-			} else {
-
-				try {
-				// update the RBF's
-				for(int i=0;i<radialLayer.getNeuronCount();i++)
-				{
-				//	radialLayer.getRadius()[i] = Double.parseDouble(dialog.getRadius().getModel().getValueAt(i, 1).toString());
-				}
-				
-				index = 0;
-				for(int i=0;i<radialLayer.getNeuronCount();i++)
-				{
-					/*for(int j=0;j<radialLayer.getDimensions();j++)
-					{
-						radialLayer.getCenter()[i][j] = Double.parseDouble(dialog.getCenter().getModel().getValueAt(index, 2).toString());
-						index++;
-					}*/
-				}
-				}
-				catch(NumberFormatException ex)
-				{
-					EncogWorkBench.displayError("Error", "Invalid number");
-				}
-
+				prune.changeNeuronCount(this.selected, desiredNeuronCount);
+				radialLayer.randomizeRBFCentersAndWidths(desiredDimensions, 0.0, 1, RBFEnum.Gaussian);
 			}
+							
 			collectTags(this.selected, dialog.getTags());
 			repaint();
 		}
