@@ -36,12 +36,7 @@ public class EditRadialLayer extends EditLayerDialog  {
 	 */
 	private static final long serialVersionUID = 8751974232848993273L;
 	
-	private final static String[] RADIUS_HEADS = {"Neuron","Radius"};
-	private final static String[] CENTER_HEADS = {"Neuron","Dimension","Center"};
-	
 	private IntegerField dimensions;
-	private TableField radius;
-	private TableField center;
 
 	public EditRadialLayer(Frame owner, RadialBasisFunctionLayer layer) {
 		super(owner);
@@ -49,26 +44,8 @@ public class EditRadialLayer extends EditLayerDialog  {
 		setSize(600, 500);
 		setLocation(200, 200);
 		addProperty(this.dimensions = new IntegerField("dimensions", "Dimensions(previous layer count)", true,0,1000));
-		addProperty(this.radius  = new TableField("radial basis functions",
-				"Radius",true,100,layer.getNeuronCount(),RADIUS_HEADS));
-		/*addProperty(this.center = new TableField("radial basis functions",
-			"Centers",true,100,layer.getNeuronCount()*layer.getDimensions(),CENTER_HEADS));*/
 
 		render();
-	}
-
-	/**
-	 * @return the radius
-	 */
-	public TableField getRadius() {
-		return radius;
-	}
-
-	/**
-	 * @return the center
-	 */
-	public TableField getCenter() {
-		return center;
 	}
 
 	/**
@@ -76,8 +53,6 @@ public class EditRadialLayer extends EditLayerDialog  {
 	 */
 	public IntegerField getDimensions() {
 		return dimensions;
-	}
-	
-	
+	}	
 }
 
