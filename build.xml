@@ -69,7 +69,7 @@
 		<property file="encog.properties"/>
 		<!-- name the jar file -->
 		<property name="jarfile" location="${path.jar}/encog-workbench-${encog.version}.jar" />
-		<property name="jarfile.startable.name">EncogWorkbenchStartable-${encog.version}.jar</property>
+		<property name="jarfile.startable.name" value="EncogWorkbenchStartable-${encog.version}.jar" />
 		<property name="jarfile.startable" location="${basedir}/${jarfile.startable.name}" />		
 	</target>
 
