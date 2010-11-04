@@ -136,6 +136,12 @@ start javaw -server -jar ${jarfile.startable}
 		<echo file="${path.stage.sub}/workbench.sh">javaw -server -jar ${jarfile.startable}
 		</echo>		
 		
+		<java classname="org.encog.workbench.util.JavaLaunchUtil">
+			<classpath refid="classpath" />
+			<arg value="${path.stage.sub}"/>
+			<arg value="${path.build.util}"/>
+		</java>
+		
 		<exec executable="launch4jc" dir="${path.build.util}">			
 			<arg value="launch.xml" />
 		</exec>
