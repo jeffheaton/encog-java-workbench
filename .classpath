@@ -7,8 +7,22 @@
 	<classpathentry kind="lib" path="jar/slf4j-api-1.5.6.jar"/>
 	<classpathentry kind="lib" path="jar/slf4j-jdk14-1.5.6.jar"/>
 	<classpathentry kind="lib" path="jar/JOCL-0.1.3a-beta.jar"/>
-	<classpathentry kind="lib" path="jar/encog-javascript-2.5.jar"/>
 	<classpathentry kind="lib" path="jar/js.jar"/>
-	<classpathentry kind="lib" path="jar/encog-core-2.5.0.jar"/>
+	<classpathentry kind="lib" path="jar/encog-javascript-2.5.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/encog-core"/>
+	<classpathentry kind="lib" path="jar/collections-generic-4.01.jar"/>
+	<classpathentry kind="lib" path="jar/colt-1.2.0.jar"/>
+	<classpathentry kind="lib" path="jar/concurrent-1.3.4.jar"/>
+	<classpathentry kind="lib" path="jar/j3d-core-1.3.1.jar"/>
+	<classpathentry kind="lib" path="jar/jung-3d-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jar/jung-algorithms-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jar/jung-api-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jar/jung-graph-impl-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jar/jung-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jar/jung-jai-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jar/jung-visualization-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jar/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="jar/vecmath-1.3.1.jar"/>
+	<classpathentry kind="lib" path="jar/wstx-asl-3.2.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
