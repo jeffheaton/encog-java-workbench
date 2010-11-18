@@ -1,5 +1,5 @@
 /*
- * Encog(tm) Workbench v2.5
+ * Encog(tm) Workbench v2.6 
  * http://www.heatonresearch.com/encog/
  * http://code.google.com/p/encog-java/
  
