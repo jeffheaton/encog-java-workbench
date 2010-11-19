@@ -24,14 +24,27 @@
 package org.encog.workbench.tabs.visualize.structure;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
+
+import org.apache.commons.collections15.Transformer;
 import org.encog.engine.network.flat.FlatNetwork;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.tabs.EncogCommonTab;
+
+import edu.uci.ics.jung.algorithms.layout.StaticLayout;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 
 public class StructureTab extends EncogCommonTab  {
 	
@@ -40,11 +53,54 @@ public class StructureTab extends EncogCommonTab  {
 	
 	public StructureTab(EncogPersistedObject encogObject) {
 		super(encogObject);
+
+		this.flat = ((BasicNetwork)(this.getEncogObject())).getStructure().getFlat();
 		
+		// Graph<V, E> where V is the type of the vertices
+		// and E is the type of the edges
+		Graph<DrawnNeuron, DrawnConnection> g = buildGraph();
+		
+		Transformer<DrawnNeuron, Point2D> staticTranformer = new Transformer<DrawnNeuron, Point2D>() {
+
+            public Point2D transform(DrawnNeuron n) {
+            	int x = (int)(n.getX()*300);
+            	int y = (int)(n.getY()*300);
+
+
+                Point2D result = new Point(x+32, y);
+                return result;
+            }
+        };
+		
+		// The Layout<V, E> is parameterized by the vertex and edge types
+		StaticLayout<DrawnNeuron, DrawnConnection> layout = new StaticLayout<DrawnNeuron, DrawnConnection>(g, staticTranformer);
+		
+		layout.setSize(new Dimension(300,300)); // sets the initial size of the space
+		// The BasicVisualizationServer<V,E> is parameterized by the edge types
+		BasicVisualizationServer<DrawnNeuron, DrawnConnection> vv =
+		new BasicVisualizationServer<DrawnNeuron, DrawnConnection>(layout);
+		vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
+		
+		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+		
+		this.add(vv);		
+	}
+	
+	public Graph<DrawnNeuron, DrawnConnection> buildGraph()
+	{
+		int inputCount = 1;
+		int outputCount = 1;
+		int hiddenCount = 1;
+		int biasCount = 1;
+		int contextCount = 1;
+		
+		List<DrawnNeuron> neurons = new ArrayList<DrawnNeuron>();
+		Graph<DrawnNeuron, DrawnConnection> result = new SparseMultigraph<DrawnNeuron, DrawnConnection>();
 		List<DrawnNeuron> lastFedNeurons;
 		List<DrawnNeuron> connections = new ArrayList<DrawnNeuron>();
-		this.flat = ((BasicNetwork)encogObject).getStructure().getFlat();
+		
 		int layerCount = flat.getLayerCounts().length;
+		int neuronNumber = 1;
 		
 		for(int currentLayer=0;currentLayer<layerCount;currentLayer++)
 		{
@@ -57,25 +113,37 @@ public class StructureTab extends EncogCommonTab  {
 			{
 				DrawnNeuronType type;
 				
+				String name = "?";
 				// not a bias or context
 				if( currentNeuron<feedCount )
 				{
 					if( currentLayer==0 )
+					{
 						type = DrawnNeuronType.Output;
+						name = "O"+(outputCount++);
+					}
 					else if( currentLayer==(layerCount-1) )
+					{
 						type = DrawnNeuronType.Input;
+						name = "I"+(inputCount++);
+					}
 					else
+					{
 						type = DrawnNeuronType.Hidden;
+						name = "H"+(hiddenCount++);
+					}
 				}
 				// is a bias
 				else if( currentNeuron==feedCount )
 				{
 					type = DrawnNeuronType.Bias;
+					name = "B"+(biasCount++);
 				}
 				// is a context
 				else
 				{
 					type = DrawnNeuronType.Context;
+					name = "C"+(contextCount++);
 				}
 				
 				double y = (double)currentNeuron/(double)neuronCount;
@@ -84,7 +152,7 @@ public class StructureTab extends EncogCommonTab  {
 				margin = 1.0 - margin;
 				margin/=2.0;
 				
-				DrawnNeuron neuron = new DrawnNeuron(type,x,y+margin,32);
+				DrawnNeuron neuron = new DrawnNeuron(type,name,x,y+margin);
 				neurons.add(neuron);
 				
 				if( neuron.getType()==DrawnNeuronType.Hidden 
@@ -103,25 +171,17 @@ public class StructureTab extends EncogCommonTab  {
 			
 			connections = lastFedNeurons;
 		}		
-	}
 		
-	 	
-	public void paint(Graphics g)
-	{
-		int height = getHeight()-10;
-		int width = getWidth()-10;
-		
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(0, 0, getWidth()-1, getHeight()-1);
-		g.setColor(Color.BLUE);
-		
-		for(DrawnNeuron neuron: this.neurons)
+		for(DrawnNeuron neuron: neurons)
 		{
-			neuron.paint(g,width,height);
-			for(DrawnConnection connection: neuron.getOutbound())
+			result.addVertex(neuron);
+			for(DrawnConnection connection: neuron.getOutbound() )
 			{
-				connection.paint(g, width, height);
+				result.addEdge(connection,connection.getFrom(),connection.getTo(),EdgeType.DIRECTED);
 			}
 		}		
+		
+		return result;
+
 	}
 }
