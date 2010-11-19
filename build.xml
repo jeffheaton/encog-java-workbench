@@ -98,7 +98,7 @@
 
 		<jar jarfile="${jarfile}" basedir="${path.build}" manifest="MANIFEST.MF" />
 		
-		<unjar src="${path.jar}/encog-core-2.5.0.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/encog-core-2.6.0.jar" dest="${path.build}"/>
 		<unjar src="${path.jar}/encog-javascript-2.5.jar" dest="${path.build}"/>
 		
 		<unjar src="${path.jar}/jcommon-1.0.16.jar" dest="${path.build}"/>
