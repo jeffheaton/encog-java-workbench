@@ -27,7 +27,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.Paint;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -36,9 +35,10 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 import org.apache.commons.collections15.Transformer;
 import org.encog.engine.network.flat.FlatNetwork;
@@ -50,7 +50,6 @@ import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -59,14 +58,11 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 public class StructureTab extends EncogCommonTab {
 
 	private FlatNetwork flat;
-	private List<DrawnNeuron> neurons = new ArrayList<DrawnNeuron>();
-	private JPanel buttons;
 	private VisualizationViewer<DrawnNeuron, DrawnConnection> vv;
 	
 	public StructureTab(EncogPersistedObject encogObject) {
@@ -82,7 +78,7 @@ public class StructureTab extends EncogCommonTab {
 		Transformer<DrawnNeuron, Point2D> staticTranformer = new Transformer<DrawnNeuron, Point2D>() {
 
 			public Point2D transform(DrawnNeuron n) {
-				int x = (int) (n.getX() * 300);
+				int x = (int) (n.getX() * 600);
 				int y = (int) (n.getY() * 300);
 
 				Point2D result = new Point(x + 32, y);
@@ -130,6 +126,16 @@ public class StructureTab extends EncogCommonTab {
 		vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint);
 		vv.setVertexToolTipTransformer(new ToStringLabeller());
 		
+		vv.setVertexToolTipTransformer(new Transformer<DrawnNeuron,String>() {
+			public String transform(DrawnNeuron edge) {
+				return edge.getToolTip();
+			}});
+		
+		vv.setEdgeToolTipTransformer(new Transformer<DrawnConnection,String>() {
+			public String transform(DrawnConnection edge) {
+				return edge.getToolTip();
+			}});
+		
 		final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
 		this.setLayout(new BorderLayout());
         add(panel, BorderLayout.CENTER);
@@ -166,6 +172,8 @@ public class StructureTab extends EncogCommonTab {
         controls.add(plus);
         controls.add(minus);
         controls.add(reset);
+        Border border = BorderFactory.createEtchedBorder();
+        controls.setBorder(border);
         add(controls, BorderLayout.NORTH);
         
         
@@ -235,11 +243,15 @@ public class StructureTab extends EncogCommonTab {
 					lastFedNeurons.add(neuron);
 				}
 
-				for (DrawnNeuron connectTo : connections) {
-					DrawnConnection connection = new DrawnConnection(neuron,
-							connectTo);
+				int toNeuron = 0;
+				int count = connections.size();				
+				for (DrawnNeuron connectTo : connections) {					
+					int weightIndex = flat.getLayerIndex()[currentLayer]+(toNeuron*count)+currentNeuron;
+					double w = this.flat.getWeights()[weightIndex];
+					DrawnConnection connection = new DrawnConnection(neuron, connectTo, w);
 					neuron.getOutbound().add(connection);
 					neuron.getInbound().add(connection);
+					toNeuron++;
 				}
 			}
 
