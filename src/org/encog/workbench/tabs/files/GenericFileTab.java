@@ -1,4 +1,4 @@
-package org.encog.workbench.tabs;
+package org.encog.workbench.tabs.files;
 
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -6,17 +6,15 @@ import java.io.File;
 import java.util.Date;
 
 import org.encog.engine.util.Format;
+import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;
 
-public class GenericFileTab extends EncogCommonTab {
-
-	public File file;
+public class GenericFileTab extends BasicFileTab {
 	
 	public GenericFileTab(File file) {
-		super(null);
-		this.file = file;
+		super(file);
 	}
-	
+
 	public void paint(final Graphics g) {
 		super.paint(g);
 		

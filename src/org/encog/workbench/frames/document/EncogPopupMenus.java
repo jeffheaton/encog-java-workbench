@@ -34,6 +34,7 @@ import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.tree.ProjectFile;
+import org.encog.workbench.frames.document.tree.ProjectItem;
 
 public class EncogPopupMenus {
 
@@ -55,6 +56,10 @@ public class EncogPopupMenus {
 	private JMenuItem popupGeneralDelete;
 	private JMenuItem popupGeneralProperties;
 	private EncogDocumentFrame owner;
+	
+	private JPopupMenu popupFile;
+	private JMenuItem popupFileDelete;
+	private JMenuItem popupFileRefresh;
 	
 	public EncogPopupMenus(EncogDocumentFrame owner) {
 		this.owner = owner;
@@ -79,6 +84,10 @@ public class EncogPopupMenus {
 		this.popupGeneralDelete = owner.addItem(this.popupGeneral, "Delete", 'd');
 		this.popupGeneralOpen = owner.addItem(this.popupGeneral, "Open", 'o');
 		this.popupGeneralProperties = owner.addItem(this.popupGeneral, "Properties", 'p');
+		
+		this.popupFile = new JPopupMenu();
+		this.popupFileDelete = owner.addItem(this.popupFile, "Delete", 'd');
+		this.popupFileRefresh = owner.addItem(this.popupFile, "Refresh", 'r');
 	}
 
 	public void actionPerformed(final ActionEvent event) {
@@ -86,24 +95,41 @@ public class EncogPopupMenus {
 	}
 	
 	public void performPopupMenu(final Object source) {
+		
+		if( source==this.popupFileRefresh ) {
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+		}
+		
 		boolean first = true;
-		List<DirectoryEntry> list = this.owner.getTree().getSelectedValue();
+		List<ProjectItem> list = this.owner.getTree().getSelectedValue();
+		
 		
 		if( list==null)
 			return;
 
-		for(DirectoryEntry selected: list )
+		for(ProjectItem selected: list )
 		{		
+			if( source == this.popupFileDelete ) {
+				if ( first && !EncogWorkBench.askQuestion(
+						"Warning", "Are you sure you want to delete these file(s)?") ) {
+						return;
+				}
+				first = false;
+				if( selected instanceof ProjectFile ) {
+					((ProjectFile)selected).getFile().delete();
+				}
+				EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+			} else
 			if( (source == this.popupNetworkDelete) ||
 				(source == this.popupDataDelete) ||
 				(source == this.popupGeneralDelete) )
 			{			
-				if ( first && !EncogWorkBench.askQuestion(
+				/*if ( first && !EncogWorkBench.askQuestion(
 					"Warning", "Are you sure you want to delete these object(s)?") ) {
 					return;
 				}
-				owner.getOperations().performObjectsDelete(selected);
-			} else if (source == this.popupNetworkQuery) {
+				owner.getOperations().performObjectsDelete(selected);*/
+			} /*else if (source == this.popupNetworkQuery) {
 				owner.getOperations().performNetworkQuery(selected);
 			} else if (source == this.popupNetworkOpen) {
 				owner.getOperations().openItem(selected);
@@ -117,7 +143,7 @@ public class EncogPopupMenus {
 				owner.getOperations().openItem(selected);
 			} else if (source == this.popupGeneralProperties) {
 				owner.getOperations().performObjectsProperties(selected);
-			}
+			}*/
 			
 			first = false;
 		}
@@ -142,7 +168,7 @@ public class EncogPopupMenus {
 			}
 		}
 		else if( item instanceof ProjectFile ) {
-			this.popupGeneral.show(e.getComponent(), e.getX(), e.getY());
+			this.popupFile.show(e.getComponent(), e.getX(), e.getY());
 		}
 		
 	}

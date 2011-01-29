@@ -15,7 +15,7 @@ import javax.swing.tree.TreePath;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogMemoryCollection;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
-import org.encog.workbench.tabs.GenericFileTab;
+import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.util.MouseUtil;
 
 public class ProjectTree extends JPanel implements MouseListener {
@@ -42,9 +42,9 @@ public class ProjectTree extends JPanel implements MouseListener {
 
 	}
 	
-	public List<DirectoryEntry> getSelectedValue() {
+	public List<ProjectItem> getSelectedValue() {
 		
-		List<DirectoryEntry> result = new ArrayList<DirectoryEntry>();
+		List<ProjectItem> result = new ArrayList<ProjectItem>();
 		TreePath[] path = this.tree.getSelectionPaths();
 		
 		if( path==null || path.length==0 )
@@ -53,8 +53,8 @@ public class ProjectTree extends JPanel implements MouseListener {
 		for(int i=0;i<path.length;i++)
 		{
 			Object obj = path[i].getLastPathComponent();
-			//if( obj instanceof EncogCollectionEntry )
-			//	result.add(((EncogCollectionEntry) obj).getEntry());
+			if( obj instanceof ProjectItem )
+				result.add((ProjectItem) obj);
 		}
 
 		return result;
@@ -67,9 +67,17 @@ public class ProjectTree extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		TreePath path = this.tree.getSelectionPath();
 
+		// see if something should be selected because of right-click
 		if (MouseUtil.isRightClick(e)) {
-			path = this.tree.getClosestPathForLocation(e.getX(), e.getY());
-			this.tree.setSelectionPath(path);
+			TreePath[] currentPaths = this.tree.getSelectionPaths();
+			TreePath rightPath = this.tree.getClosestPathForLocation(e.getX(), e.getY());
+			boolean included = false;
+			for(TreePath t: currentPaths) {
+				if( t.equals(rightPath) )
+					included = true;
+			}
+			if(!included)
+				this.tree.setSelectionPath(path = rightPath);
 		}
 		
 
@@ -132,6 +140,11 @@ public class ProjectTree extends JPanel implements MouseListener {
 
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	public void refresh() {
+		this.collectionModel.invalidate();
 		
 	}
 

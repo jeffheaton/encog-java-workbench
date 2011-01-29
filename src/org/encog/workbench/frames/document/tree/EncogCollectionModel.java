@@ -156,6 +156,10 @@ public class EncogCollectionModel implements TreeModel {
 		}
 	}
 
+	public void invalidate() {
+		invalidate(this.path);
+	}
+
 
     
 }

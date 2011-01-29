@@ -34,6 +34,8 @@ import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.encog.workbench.tabs.files.BasicFileTab;
+import org.encog.workbench.tabs.files.GenericFileTab;
 
 public class EncogTabManager {
 	private final List<EncogCommonTab> tabs = new ArrayList<EncogCommonTab>();
@@ -143,8 +145,8 @@ public class EncogTabManager {
 	public EncogCommonTab find(File file) {
 		for (final EncogCommonTab tab : this.tabs) {
 		
-			if( tab instanceof GenericFileTab ) {
-				GenericFileTab gft = (GenericFileTab)tab;
+			if( tab instanceof BasicFileTab ) {
+				BasicFileTab gft = (BasicFileTab)tab;
 				if( gft.getFile().equals(file) )
 					return tab;
 			}			

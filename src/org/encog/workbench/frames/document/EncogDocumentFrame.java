@@ -42,8 +42,11 @@ import org.encog.workbench.tabs.AboutTab;
 import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.EncogTabManager;
-import org.encog.workbench.tabs.GenericFileTab;
+import org.encog.workbench.tabs.files.GenericFileTab;
+import org.encog.workbench.tabs.files.ImageFileTab;
+import org.encog.workbench.tabs.files.TextFileTab;
 import org.encog.workbench.util.ExtensionFilter;
+import org.encog.workbench.util.FileUtil;
 
 public class EncogDocumentFrame extends EncogCommonFrame {
 
@@ -315,8 +318,20 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public void openFile(File file) {
 		EncogCommonTab tab = this.tabManager.find(file);
 		if( tab == null ) {
-			tab = new GenericFileTab(file);
-			this.openTab(tab, file.getName());
+			String extension = FileUtil.getFileExt(file);
+			if( extension.equalsIgnoreCase("txt") || extension.equalsIgnoreCase("csv") ) {
+				tab = new TextFileTab(file);
+				this.openTab(tab, file.getName());
+			} else if( extension.equalsIgnoreCase("jpg") 
+					|| extension.equalsIgnoreCase("jpeg")
+					|| extension.equalsIgnoreCase("gif")
+					|| extension.equalsIgnoreCase("png") ) {
+				tab = new ImageFileTab(file);
+				this.openTab(tab, file.getName());
+			} else {			
+				tab = new GenericFileTab(file);
+				this.openTab(tab, file.getName());
+			}
 		} else {
 			this.documentTabs.setSelectedComponent(tab);
 	        this.menus.updateMenus();
