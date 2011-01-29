@@ -171,7 +171,7 @@ public class EncogMenus {
 	{
 		boolean modal = this.owner.isModalTabOpen();
 		boolean supportsClipboard = false;
-		boolean documentOpen = EncogWorkBench.getInstance().getCurrentFile()!=null;
+		boolean documentOpen = EncogWorkBench.getInstance().getCurrentFileName()!=null;
 		
 		JTabbedPane tabs = EncogWorkBench.getInstance().getMainWindow().getDocumentTabs();
 
@@ -215,11 +215,11 @@ public class EncogMenus {
 		if (event.getActionCommand().equals(EncogMenus.FILE_CHANGE_DIR)) {
 			owner.getOperations().performFileChooseDirectory();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_OPEN)) {
-			owner.getOperations().performFileOpen();
+			//owner.getOperations().performFileOpen();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_SAVE)) {
-			owner.getOperations().performFileSave();
+			//owner.getOperations().performFileSave();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_REVERT)) {
-			owner.getOperations().performFileRevert();
+			//owner.getOperations().performFileRevert();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_QUIT)) {
 			owner.getOperations().performQuit();
 		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_CREATE)) {

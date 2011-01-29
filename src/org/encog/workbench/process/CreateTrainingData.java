@@ -312,7 +312,7 @@ public class CreateTrainingData {
 
 			BufferedNeuralDataSet item = new BufferedNeuralDataSet(binaryFile);
 
-			EncogWorkBench.getInstance().getCurrentFile().add(name, item);
+			//EncogWorkBench.getInstance().getCurrentFile().add(name, item);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 	}
@@ -356,7 +356,7 @@ public class CreateTrainingData {
 
 		BufferedNeuralDataSet result = new BufferedNeuralDataSet(binaryFile);
 
-		EncogWorkBench.getInstance().getCurrentFile().add(name, result);
+		//EncogWorkBench.getInstance().getCurrentFile().add(name, result);
 		EncogWorkBench.getInstance().getMainWindow().redraw();
 		return result;
 	}
@@ -375,7 +375,7 @@ public class CreateTrainingData {
 		binaryFile = ImportExport.performExternal2Bin(binaryFile, new TaskComplete(list) {
 			public void complete() {
 				BufferedNeuralDataSet result = new BufferedNeuralDataSet((File) params[0]);
-				EncogWorkBench.getInstance().getCurrentFile().add((String) params[1], result);
+				//EncogWorkBench.getInstance().getCurrentFile().add((String) params[1], result);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
 		});

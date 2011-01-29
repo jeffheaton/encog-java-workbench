@@ -66,12 +66,13 @@ public class ExtractGenomes extends EncogPropertiesDialog {
 	
 	public NeuralDataSet getTrainingSet() {
 		String trainingName = (String)this.comboTraining.getSelectedValue();
-		return (NeuralDataSet)EncogWorkBench.getInstance().getCurrentFile().find(trainingName);
+		///return (NeuralDataSet)EncogWorkBench.getInstance().getCurrentFile().find(trainingName);
+		return null;
 	}
 
 	
 	private void findData() {
-		for (final DirectoryEntry obj : EncogWorkBench.getInstance()
+		/*for (final DirectoryEntry obj : EncogWorkBench.getInstance()
 				.getCurrentFile().getDirectory()) {
 			if (obj.getType().equals(EncogPersistedCollection.TYPE_TRAINING) ) {
 				this.trainingSets.add(obj.getName());
@@ -79,12 +80,14 @@ public class ExtractGenomes extends EncogPropertiesDialog {
 			else if (obj.getType().equals(EncogPersistedCollection.TYPE_BASIC_NET) ) {
 				this.networks.add(obj.getName());
 			}
-		}
+		}*/
 	}
 	
 	public BasicNetwork getNetwork() {
-		String name = (String)this.comboNetwork.getSelectedValue();
+		/*String name = (String)this.comboNetwork.getSelectedValue();
 		return (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(name);
+		*/
+		return null;
 	}
 
 	public IntegerField getGenomesToExtract() {

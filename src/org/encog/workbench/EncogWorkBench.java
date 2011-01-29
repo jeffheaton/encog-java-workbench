@@ -78,11 +78,6 @@ public class EncogWorkBench implements Runnable {
 	private EncogDocumentFrame mainWindow;
 
 	/**
-	 * The current file being edited.
-	 */
-	private EncogMemoryCollection currentFile;
-
-	/**
 	 * Config info for the workbench.
 	 */
 	private EncogWorkBenchConfig config;
@@ -171,51 +166,6 @@ public class EncogWorkBench implements Runnable {
 		}
 
 		return EncogWorkBench.instance;
-	}
-
-	public static void load(final String filename) {
-		getInstance().getMainWindow().beginWait();
-		getInstance().setCurrentFile(new EncogMemoryCollection());
-		getInstance().getCurrentFile().load(new FilePersistence(new File(filename)));
-		getInstance().setCurrentFileName(filename);
-		getInstance().getMainWindow().redraw();
-		getInstance().getMainWindow().endWait();
-	}
-
-	private void setCurrentFile(EncogMemoryCollection f) {
-		this.currentFile = f;
-		
-	}
-
-	public static void save(final String filename) {
-		if( filename!=null )
-		{
-		getInstance().getMainWindow().beginWait();
-		if( getInstance().getCurrentFile()==null )
-			getInstance().setCurrentFile(new EncogMemoryCollection());
-		getInstance().getCurrentFile().save(
-				new FilePersistence(new File(filename)));
-		getInstance().setCurrentFileName(filename);
-		getInstance().getMainWindow().redraw();
-		getInstance().getMainWindow().endWait();
-		}
-	}
-
-	/**
-	 * Close the current file.
-	 */
-	public void close() {
-		if( this.currentFile!=null )
-			this.currentFile.clear();
-		this.currentFileName = null;
-		this.mainWindow.redraw();
-	}
-
-	/**
-	 * @return the currentFile
-	 */
-	public EncogMemoryCollection getCurrentFile() {
-		return this.currentFile;
 	}
 
 	/**
@@ -312,10 +262,6 @@ public class EncogWorkBench implements Runnable {
 	public static void displayError(String title, Throwable t) {
 		displayError(title,t,null,null);
 		EncogWorkBench.getInstance().getMainWindow().endWait();
-	}
-
-	public static void save() {
-		save(getInstance().getCurrentFileName());
 	}
 
 	public EncogCloud getCloud() {

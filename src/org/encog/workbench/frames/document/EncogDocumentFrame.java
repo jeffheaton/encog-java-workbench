@@ -160,7 +160,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		if (!this.closed) {
 			if (EncogWorkBench.displayQuery("Save?",
 					"Would you like to save your changes?")) {
-				this.operations.performFileSave();
+				//this.operations.performFileSave();
 			}
 			this.closed = true;
 		}
@@ -189,10 +189,6 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		return popupMenus;
 	}
 
-	protected void openItem(Object item) {
-		this.operations.openItem(item);
-
-	}
 
 	public void openTab(EncogCommonTab tab) {
 

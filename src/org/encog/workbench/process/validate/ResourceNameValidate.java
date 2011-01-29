@@ -44,10 +44,10 @@ public class ResourceNameValidate {
 	
 	public static String validateResourceName(String name)
 	{
-		if (EncogWorkBench.getInstance().getCurrentFile().find(
+		/*if (EncogWorkBench.getInstance().getCurrentFile().find(
 				name) != null) {
 			return("That name is already in use, please choose another.");
-		}
+		}*/
 		
 		if( hasInvalidChars(name) ) {
 			return "That name has invalid chars, only use alphanumeric, dash or underbar.";

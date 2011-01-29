@@ -89,7 +89,7 @@ public abstract class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	 * combo boxes.
 	 */
 	private void findData() {
-		for (final DirectoryEntry obj : EncogWorkBench.getInstance()
+		/*for (final DirectoryEntry obj : EncogWorkBench.getInstance()
 				.getCurrentFile().getDirectory()) {
 			if (obj.getType().equals(EncogPersistedCollection.TYPE_BASIC_NET) ) {
 				this.networks.add(obj.getName());
@@ -99,23 +99,25 @@ public abstract class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 					obj.getType().equals(EncogPersistedCollection.TYPE_BINARY)) {
 				this.trainingSets.add(obj.getName());
 			}
-		}
+		}*/
 	}
 
 	/**
 	 * @return The network that the user chose.
 	 */
 	public BasicNetwork getNetwork() {
-		String networkName = (String)this.comboNetwork.getSelectedValue();
-		return (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(networkName);
+		return null;
+		//String networkName = (String)this.comboNetwork.getSelectedValue();
+		//return (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(networkName);
 	}
 
 	/**
 	 * @return The training set that the user chose.
 	 */
 	public NeuralDataSet getTrainingSet() {
-		String trainingName = (String)this.comboTraining.getSelectedValue();
-		return (NeuralDataSet)EncogWorkBench.getInstance().getCurrentFile().find(trainingName);
+		return null;
+		//String trainingName = (String)this.comboTraining.getSelectedValue();
+		//return (NeuralDataSet)EncogWorkBench.getInstance().getCurrentFile().find(trainingName);
 	}
 
 }

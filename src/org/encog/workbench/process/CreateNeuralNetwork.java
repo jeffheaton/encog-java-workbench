@@ -125,8 +125,8 @@ public class CreateNeuralNetwork {
 			}
 
 			if (network != null) {
-				EncogWorkBench.getInstance().getCurrentFile()
-						.add(name, network);
+				/*EncogWorkBench.getInstance().getCurrentFile()
+						.add(name, network);*/
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
 		}

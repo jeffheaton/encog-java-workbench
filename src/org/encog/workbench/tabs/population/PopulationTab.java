@@ -146,7 +146,7 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 				BasicNetwork network = (BasicNetwork)genome.getOrganism();
 				network.setDescription("Top genetic neural network, score=" + Format.formatDouble(genome.getScore(),5) );
 				String name = prefix + i;
-				EncogWorkBench.getInstance().getCurrentFile().add(name,network);
+				//EncogWorkBench.getInstance().getCurrentFile().add(name,network);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
 			

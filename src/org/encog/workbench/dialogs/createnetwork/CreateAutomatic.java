@@ -85,7 +85,7 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 	 * boxes.
 	 */
 	private void findData() {
-		for (final DirectoryEntry obj : EncogWorkBench.getInstance()
+		/*for (final DirectoryEntry obj : EncogWorkBench.getInstance()
 				.getCurrentFile().getDirectory()) {
 			if (obj.getType().equals(EncogPersistedCollection.TYPE_TRAINING)) {
 				this.trainingSets.add(obj.getName());
@@ -93,7 +93,7 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 			else if (obj.getType().equals(EncogPersistedCollection.TYPE_BINARY)) {
 				this.trainingSets.add(obj.getName());
 			}
-		}
+		}*/
 	}
 
 	private String askNeurons(int layer) {
@@ -183,9 +183,10 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 	 * @return The training set that the user chose.
 	 */
 	public NeuralDataSet getTraining() {
-		String trainingName = (String) this.comboTraining.getSelectedValue();
+		/*String trainingName = (String) this.comboTraining.getSelectedValue();
 		return (NeuralDataSet) EncogWorkBench.getInstance().getCurrentFile()
-				.find(trainingName);
+				.find(trainingName);*/
+		return null;
 	}
 
 	public IntegerField getWeightTries() {

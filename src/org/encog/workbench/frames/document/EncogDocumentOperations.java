@@ -93,88 +93,6 @@ public class EncogDocumentOperations {
 		this.owner = owner;
 	}
 
-	public void openItem(final Object item) {
-
-		DirectoryEntry entry = (DirectoryEntry) item;
-		if (EncogWorkBench.getInstance().getCurrentFile().find(entry) == null) {
-			EncogWorkBench.displayError("Object", "Can't find that object.");
-			return;
-		}
-
-		if (entry.getType().equals(EncogPersistedCollection.TYPE_TRAINING)) {
-
-			if (owner.getTabManager().checkBeforeOpen(entry,
-					TrainingDataTab.class)) {
-				BasicNeuralDataSet set = (BasicNeuralDataSet) EncogWorkBench
-						.getInstance().getCurrentFile().find(entry);
-				final TrainingDataTab tab = new TrainingDataTab(set);
-				this.owner.openTab(tab);
-			}
-		} else if (entry.getType().equals(
-				EncogPersistedCollection.TYPE_BASIC_NET)) {
-
-			/*final DirectoryEntry net = (DirectoryEntry) item;
-			if (owner.getTabManager().checkBeforeOpen(net, BasicNetwork.class)) {
-				BasicNetwork net2 = (BasicNetwork) EncogWorkBench.getInstance()
-						.getCurrentFile().find(net);
-				final NetworkTab tab = new NetworkTab(net2);
-				this.owner.openTab(tab);
-			}*/
-		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_TEXT)) {
-			DirectoryEntry text = (DirectoryEntry) item;
-			if (owner.getTabManager().checkBeforeOpen(text, TextData.class)) {
-				TextData text2 = (TextData) EncogWorkBench.getInstance()
-						.getCurrentFile().find(text);
-				final TextDataTab tab = new TextDataTab(text2);
-				this.owner.openTab(tab);
-			}
-		} else if (entry.getType().equals(
-				EncogPersistedCollection.TYPE_PROPERTY)) {
-			DirectoryEntry prop = (DirectoryEntry) item;
-			if (owner.getTabManager().checkBeforeOpen(prop, PropertyData.class)) {
-				PropertyData prop2 = (PropertyData) EncogWorkBench
-						.getInstance().getCurrentFile().find(prop);
-				final PropertyDataTab tab = new PropertyDataTab(owner
-						.getDocumentTabs(), prop2);
-				owner.openTab(tab);
-			}
-		} else if (entry.getType().equals(
-				EncogPersistedCollection.TYPE_POPULATION)) {
-			DirectoryEntry prop = (DirectoryEntry) item;
-			if (owner.getTabManager().checkBeforeOpen(prop,
-					BasicPopulation.class)) {
-				BasicPopulation pop2 = (BasicPopulation) EncogWorkBench
-						.getInstance().getCurrentFile().find(prop);
-				final PopulationTab tab = new PopulationTab(pop2);
-				owner.openTab(tab);
-			}
-		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_SVM)) {
-			/*DirectoryEntry svm = (DirectoryEntry) item;
-			if (owner.getTabManager().checkBeforeOpen(svm,
-					SVMNetwork.class)) {
-				SVMNetwork svn2 = (SVMNetwork) EncogWorkBench.getInstance()
-						.getCurrentFile().find(svm);
-				final SVMTab tab = new SVMTab(svn2);
-				owner.openTab(tab);
-			}*/
-
-		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_SCRIPT)) {
-			DirectoryEntry script = (DirectoryEntry) item;
-			if (owner.getTabManager().checkBeforeOpen(script,
-					BasicPopulation.class)) {
-				EncogScript script2 = (EncogScript) EncogWorkBench.getInstance()
-						.getCurrentFile().find(script);
-				final EncogScriptTab tab = new EncogScriptTab(script2);
-				owner.openTab(tab);
-			}
-
-		}
-		else {
-			EncogWorkBench.displayError("Error",
-					"Unknown object type.\nDo not know how to open.");
-		}
-	}
-
 	public void performEditCopy() {
 		final Frame frame = EncogWorkBench.getCurrentFocus();
 		if (frame instanceof EncogCommonFrame) {
@@ -238,107 +156,17 @@ public class EncogDocumentOperations {
 		}
 	}
 
-	public void performFileOpen() {
-		try {
-			if (!checkSave()) {
-				return;
-			}
-
-			final JFileChooser fc = new JFileChooser();
-			fc.addChoosableFileFilter(EncogDocumentFrame.ENCOG_FILTER);
-			fc.setCurrentDirectory(EncogWorkBench.getInstance().getEncogFolders());
-			final int result = fc.showOpenDialog(owner);
-			if (result == JFileChooser.APPROVE_OPTION) {
-				EncogWorkBench.load(fc.getSelectedFile().getAbsolutePath());
-			}
-		}  
- 
-		catch (final Throwable e) {
-			EncogWorkBench.displayError("Can't Open File or File Corrupt", e);
-			e.printStackTrace();
-			EncogWorkBench.getInstance().getMainWindow().endWait();
-		}
-	}
-
-	public void performFileSave() {
-		try {
-			if (EncogWorkBench.getInstance().getCurrentFileName() == null) {
-				performFileSaveAs();
-			} else {
-				EncogWorkBench.save();
-			}
-		} catch (final Throwable e) {
-			EncogWorkBench.displayError("Can't Save File", e);
-			EncogWorkBench.getInstance().getMainWindow().endWait();
-		}
-	}
-
-	public void performFileSaveAs() {
-		try {
-			final JFileChooser fc = new JFileChooser();
-			fc.setFileFilter(EncogDocumentFrame.ENCOG_FILTER);
-			final int result = fc.showSaveDialog(owner);
-
-			if (result == JFileChooser.APPROVE_OPTION) {
-				File file = fc.getSelectedFile();
-
-				// no extension
-				if (ExtensionFilter.getExtension(file) == null) {
-					file = new File(file.getPath() + ".eg");
-				}
-				// wrong extension
-				else if (ExtensionFilter.getExtension(file).compareTo("eg") != 0) {
-
-					if (JOptionPane
-							.showConfirmDialog(
-									owner,
-									"Encog files are usually stored with the .eg extension. \nDo you wish to save with the name you specified?",
-									"Warning", JOptionPane.OK_CANCEL_OPTION) != JOptionPane.OK_OPTION) {
-						return;
-					}
-				}
-
-				// file doesn't exist yet
-				if (file.exists()) {
-					final int response = JOptionPane.showConfirmDialog(null,
-							"Overwrite existing file?", "Confirm Overwrite",
-							JOptionPane.OK_CANCEL_OPTION,
-							JOptionPane.QUESTION_MESSAGE);
-					if (response == JOptionPane.CANCEL_OPTION) {
-						return;
-					}
-				}
-
-				EncogWorkBench.save(file.getAbsolutePath());
-			}
-		} catch (final Throwable e) {
-			EncogWorkBench.displayError("Can't Save File", e);
-		}
-
-	}
 
 	public void performNetworkQuery(DirectoryEntry item) {
 
-		if (owner.getTabManager()
+/*		if (owner.getTabManager()
 				.checkBeforeOpen(item, NetworkQueryFrame.class)) {
 			BasicNetwork net = (BasicNetwork) EncogWorkBench.getInstance()
 					.getCurrentFile().find(item);
 			final NetworkQueryFrame frame = new NetworkQueryFrame(net);
 			frame.setVisible(true);
 		}
-
-	}
-
-	public static String generateNextID(String base) {
-		int index = 1;
-		String result = "";
-
-		do {
-			result = base + index;
-			index++;
-		} while (EncogWorkBench.getInstance().getCurrentFile().exists(result));
-
-		return result;
+*/
 	}
 
 	public void performObjectsCreate() throws IOException {
@@ -357,14 +185,14 @@ public class EncogDocumentOperations {
 			switch (dialog.getType()) {
 			case DataNormalization:
 				final DataNormalization norm = new DataNormalization();
-				EncogWorkBench.getInstance().getCurrentFile().add(name, norm);
+				//EncogWorkBench.getInstance().getCurrentFile().add(name, norm);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;
 			case EncogScript:
 				final EncogScript script = new EncogScript();
 				script.setDescription("An Encog script");
 				script.setSource("console.println(\'Hello World\')\n");
-				EncogWorkBench.getInstance().getCurrentFile().add(name, script);
+				//EncogWorkBench.getInstance().getCurrentFile().add(name, script);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;				
 			case NeuralNetwork:
@@ -376,14 +204,14 @@ public class EncogDocumentOperations {
 			case PropertyData:
 				final PropertyData prop = new PropertyData();
 				prop.setDescription("Some property data");
-				EncogWorkBench.getInstance().getCurrentFile().add(name, prop);
+				//EncogWorkBench.getInstance().getCurrentFile().add(name, prop);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;
 			case Text:
 				final TextData text = new TextData();
 				text.setDescription("A text file");
 				text.setText("Insert text here.");
-				EncogWorkBench.getInstance().getCurrentFile().add(name, text);
+				//EncogWorkBench.getInstance().getCurrentFile().add(name, text);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;
 			case TrainingData:
@@ -411,8 +239,8 @@ public class EncogDocumentOperations {
 			}
 
 			pop.setDescription("Population");
-			EncogWorkBench.getInstance().getCurrentFile().add(
-					generateNextID("population-"), pop);
+			//EncogWorkBench.getInstance().getCurrentFile().add(
+			//		generateNextID("population-"), pop);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 
@@ -426,7 +254,7 @@ public class EncogDocumentOperations {
 			return;
 		}
 
-		EncogWorkBench.getInstance().getCurrentFile().delete(selected);
+		//EncogWorkBench.getInstance().getCurrentFile().delete(selected);
 		EncogWorkBench.getInstance().getMainWindow().redraw();
 	}
 
@@ -445,35 +273,6 @@ public class EncogDocumentOperations {
 		// AboutEncog dialog = new AboutEncog();
 		// dialog.process();
 		EncogWorkBench.getInstance().getMainWindow().displayAboutTab();
-	}
-
-	boolean checkSave() {
-		final String currentFileName = EncogWorkBench.getInstance()
-				.getCurrentFileName();
-		
-		if( EncogWorkBench.getInstance().getCurrentFile()==null )
-			return true;
-
-		if (currentFileName != null
-				|| EncogWorkBench.getInstance().getCurrentFile().getDirectory()
-						.size() > 0) {
-			final String f = currentFileName != null ? currentFileName
-					: "Untitled";
-			final int response = JOptionPane.showConfirmDialog(null, "Save "
-					+ f + ", first?", "Save", JOptionPane.YES_NO_CANCEL_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
-			if (response == JOptionPane.YES_OPTION) {
-				performFileSave();
-				return true;
-			} else if (response == JOptionPane.NO_OPTION) {
-				return true;
-			} else {
-				return false;
-			}
-
-		}
-
-		return true;
 	}
 
 	public void performEditConfig() {
@@ -567,22 +366,11 @@ public class EncogDocumentOperations {
 				return;
 			}
 
-			EncogWorkBench.getInstance().getCurrentFile().updateProperties(
+			/* (EncogWorkBench.getInstance().getCurrentFile().updateProperties(
 					selected.getName(), dialog.getNameField().getValue(),
-					dialog.getDescription().getValue());
+					dialog.getDescription().getValue());*/
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
-	}
-
-	public void performFileRevert() {
-		if (EncogWorkBench.askQuestion("Revert",
-				"Would you like to revert to the last time you saved?")) {
-			EncogWorkBench.load(EncogWorkBench.getInstance()
-					.getCurrentFileName());
-			EncogWorkBench.getInstance().getCurrentFile().buildDirectory();
-			EncogWorkBench.getInstance().getMainWindow().redraw();
-		}
-
 	}
 
 	public void performEvaluate() {
