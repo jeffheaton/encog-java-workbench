@@ -23,6 +23,7 @@
  */
 package org.encog.workbench.tabs;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,6 +138,19 @@ public class EncogTabManager {
 
 	public boolean alreadyOpen(EncogCommonTab tab) {
 		return this.tabs.contains(tab);
+	}
+
+	public EncogCommonTab find(File file) {
+		for (final EncogCommonTab tab : this.tabs) {
+		
+			if( tab instanceof GenericFileTab ) {
+				GenericFileTab gft = (GenericFileTab)tab;
+				if( gft.getFile().equals(file) )
+					return tab;
+			}			
+		}
+		return null;
+		
 	}
 
 }

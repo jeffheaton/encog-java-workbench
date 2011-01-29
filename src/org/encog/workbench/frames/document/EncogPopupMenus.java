@@ -33,6 +33,7 @@ import javax.swing.JPopupMenu;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 
 public class EncogPopupMenus {
 
@@ -86,7 +87,7 @@ public class EncogPopupMenus {
 	
 	public void performPopupMenu(final Object source) {
 		boolean first = true;
-		List<DirectoryEntry> list = this.owner.getSelectedValue();
+		List<DirectoryEntry> list = this.owner.getTree().getSelectedValue();
 		
 		if( list==null)
 			return;
@@ -123,7 +124,7 @@ public class EncogPopupMenus {
 	}
 	
 	public void rightMouseClicked(final MouseEvent e, final Object item) {
-		
+
 		if( item instanceof DirectoryEntry )
 		{
 			DirectoryEntry entry = (DirectoryEntry)item;
@@ -139,6 +140,9 @@ public class EncogPopupMenus {
 			{
 				this.popupGeneral.show(e.getComponent(), e.getX(), e.getY());
 			}
+		}
+		else if( item instanceof ProjectFile ) {
+			this.popupGeneral.show(e.getComponent(), e.getX(), e.getY());
 		}
 		
 	}

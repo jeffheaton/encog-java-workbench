@@ -28,27 +28,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTree;
-import javax.swing.tree.TreePath;
 
-import org.encog.persist.DirectoryEntry;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
 import org.encog.workbench.frames.EncogCommonFrame;
+import org.encog.workbench.frames.document.tree.ProjectTree;
 import org.encog.workbench.tabs.AboutTab;
 import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.EncogTabManager;
+import org.encog.workbench.tabs.GenericFileTab;
 import org.encog.workbench.util.ExtensionFilter;
-import org.encog.workbench.util.MouseUtil;
 
 public class EncogDocumentFrame extends EncogCommonFrame {
 
@@ -56,8 +51,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private EncogMenus menus;
 	private EncogPopupMenus popupMenus;
 	private boolean closed = false;
-	private boolean splashed = false;
-	private JTree tree;
+	private boolean splashed = false;	
 	private JSplitPane projectSplit;
 	private JTabbedPane documentTabs;
 	private EncogTabManager tabManager;
@@ -66,6 +60,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	private JSplitPane documentSplit;
 	private EncogOutputPanel outputPanel;
+	private ProjectTree tree;
 
 	private final static String[] B = {".csv",".xlsx"};
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
@@ -80,7 +75,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	 */
 	private static final long serialVersionUID = -4161616483326975155L;
 
-	private final EncogCollectionModel collectionModel;
+	
 
 	public EncogDocumentFrame() {
 		this.setSize(750, 480);
@@ -93,7 +88,6 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 		addWindowListener(this);
 
-		this.collectionModel = createModel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.aboutTab = new AboutTab();
@@ -108,19 +102,9 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		this.popupMenus.actionPerformed(event);
 	}
 
-	private EncogCollectionModel createModel() {
-		EncogObjectDirectory root = new EncogObjectDirectory("Encog");
-		return new EncogCollectionModel(root);
-	}
-
 	private void initContents() {
-		// setup the contents list
-		this.tree = new JTree(this.collectionModel);
-		//this.tree.setRootVisible(false);
-		this.tree.addMouseListener(this);
-
-		final JScrollPane scrollPane = new JScrollPane(this.tree);
-
+		
+		this.tree = new ProjectTree(this);
 		this.documentTabs = new JTabbedPane();
 		this.documentTabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
 		
@@ -130,7 +114,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 				this.documentTabs, this.outputPanel);
 		
 		this.projectSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                scrollPane, this.documentSplit);
+                this.tree, this.documentSplit);
 		this.projectSplit.setDividerLocation(150);	
 		this.documentSplit.setDividerLocation(this.getHeight()-200);
 		
@@ -138,9 +122,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		
 		
 		this.popupMenus.initPopup();
-		this.collectionModel.invalidate(EncogWorkBench.getInstance()
+		
+		this.tree.invalidate(EncogWorkBench.getInstance()
 				.getCurrentFile());
-		this.tree.updateUI();
+		
 		this.tabManager = new EncogTabManager(this);
 		
 		this.menus.updateMenus();
@@ -157,15 +142,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 					+ EncogWorkBench.getInstance().getCurrentFileName());
 		}
 
-		this.collectionModel.invalidate(EncogWorkBench.getInstance()
+		this.tree.invalidate(EncogWorkBench.getInstance()
 				.getCurrentFile());
-		this.tree.updateUI();
 		
 		getMenus().updateMenus();
-	}
-
-	public void rightMouseClicked(final MouseEvent e, final Object item) {
-		this.popupMenus.rightMouseClicked(e, item);
 	}
 
 	public void windowClosed(final WindowEvent e) {
@@ -219,46 +199,6 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	}
 
-	public List<DirectoryEntry> getSelectedValue() {
-		
-		List<DirectoryEntry> result = new ArrayList<DirectoryEntry>();
-		TreePath[] path = this.tree.getSelectionPaths();
-		
-		if( path==null || path.length==0 )
-			return null;
-				
-		for(int i=0;i<path.length;i++)
-		{
-			Object obj = path[i].getLastPathComponent();
-			if( obj instanceof EncogCollectionEntry )
-				result.add(((EncogCollectionEntry) obj).getEntry());
-		}
-
-		return result;
-	}
-
-	public void mouseClicked(MouseEvent e) {
-		TreePath path = this.tree.getSelectionPath();
-
-		if (path != null) {
-			Object obj = path.getLastPathComponent();
-
-			if (obj instanceof EncogCollectionEntry) {
-				DirectoryEntry item = ((EncogCollectionEntry) obj).getEntry();
-
-				if (MouseUtil.isRightClick(e)) {
-					rightMouseClicked(e, item);
-				}
-
-				if (e.getClickCount() == 2) {
-
-					openItem(item);
-				}
-
-			}
-		}
-
-	}
 
 	public void openTab(EncogCommonTab tab) {
 	
@@ -338,10 +278,6 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public boolean isModalTabOpen() {
 		return this.modalTabOpen;
 	}
-
-	public JTree getTree() {
-		return this.tree;
-	}
 	
 	public void beginWait()
 	{
@@ -363,5 +299,30 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public EncogOutputPanel getOutputPane() {
 		return this.outputPanel;
 	}
+
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @return the tree
+	 */
+	public ProjectTree getTree() {
+		return tree;
+	}
+
+	public void openFile(File file) {
+		EncogCommonTab tab = this.tabManager.find(file);
+		if( tab == null ) {
+			tab = new GenericFileTab(file);
+			this.openTab(tab, file.getName());
+		} else {
+			this.documentTabs.setSelectedComponent(tab);
+	        this.menus.updateMenus();
+		}
+	}
+	
+	
 
 }

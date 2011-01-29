@@ -87,7 +87,7 @@ public class AboutTab extends EncogCommonTab {
 		g.setFont(EncogFonts.getInstance().getBodyFont());
 		g.drawString( EncogWorkBench.COPYRIGHT, 0, y);
 		y += g.getFontMetrics().getHeight();
-		g.drawString( "Released under the LGPL license", 0, y);
+		g.drawString( "Released under the Apache license", 0, y);
 		y += g.getFontMetrics().getHeight();
 		y += g.getFontMetrics().getHeight();
 
