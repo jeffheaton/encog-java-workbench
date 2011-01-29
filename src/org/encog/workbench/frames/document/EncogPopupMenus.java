@@ -59,6 +59,8 @@ public class EncogPopupMenus {
 	
 	private JPopupMenu popupFile;
 	private JMenuItem popupFileDelete;
+	private JMenuItem popupFileOpen;
+	private JMenuItem popupFileOpenText;
 	private JMenuItem popupFileRefresh;
 	
 	public EncogPopupMenus(EncogDocumentFrame owner) {
@@ -86,6 +88,8 @@ public class EncogPopupMenus {
 		this.popupGeneralProperties = owner.addItem(this.popupGeneral, "Properties", 'p');
 		
 		this.popupFile = new JPopupMenu();
+		this.popupFileOpen = owner.addItem(this.popupFile, "Open", 'o');
+		this.popupFileOpenText = owner.addItem(this.popupFile, "Open as Text", 't');
 		this.popupFileDelete = owner.addItem(this.popupFile, "Delete", 'd');
 		this.popupFileRefresh = owner.addItem(this.popupFile, "Refresh", 'r');
 	}
@@ -119,6 +123,14 @@ public class EncogPopupMenus {
 					((ProjectFile)selected).getFile().delete();
 				}
 				EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+			} else if( source==this.popupFileOpen ) {
+				if( selected instanceof ProjectFile ) {
+					EncogWorkBench.getInstance().getMainWindow().openFile(((ProjectFile)selected).getFile());
+				}
+			} else if( source==this.popupFileOpenText ) {
+				if( selected instanceof ProjectFile ) {
+					EncogWorkBench.getInstance().getMainWindow().openTextFile(((ProjectFile)selected).getFile());
+				}
 			} else
 			if( (source == this.popupNetworkDelete) ||
 				(source == this.popupDataDelete) ||

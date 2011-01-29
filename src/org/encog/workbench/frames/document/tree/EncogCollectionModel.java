@@ -40,18 +40,18 @@ import javax.swing.tree.TreePath;
 
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogMemoryCollection;
-
+import org.encog.workbench.util.FileUtil;
 
 public class EncogCollectionModel implements TreeModel {
 
 	private String path;
 	private List<ProjectItem> files = new ArrayList<ProjectItem>();
 	private List<TreeModelListener> listeners = new ArrayList<TreeModelListener>();
-	
+
 	public EncogCollectionModel(String path) {
 		invalidate(path);
 	}
-	
+
 	public EncogCollectionModel() {
 	}
 
@@ -60,30 +60,28 @@ public class EncogCollectionModel implements TreeModel {
 	}
 
 	public Object getChild(Object parent, int index) {
-		if( parent==path ) {
+		if (parent == path) {
 			return this.files.get(index);
 		} else
-		return null;
+			return null;
 	}
 
 	public int getChildCount(Object parent) {
-		if( parent==path ) {
+		if (parent == path) {
 			return this.files.size();
 		} else
-		return 0;
+			return 0;
 	}
 
 	public boolean isLeaf(Object node) {
-		if( node==path ) {
+		if (node == path) {
 			return false;
-		}
-		else {
-			if( node instanceof ProjectDirectory )
-			{
+		} else {
+			if (node instanceof ProjectDirectory) {
 				return false;
-			}
-			else if( node instanceof ProjectFile ) 
-			{
+			} else if (node instanceof ProjectEGFile) {
+				return false;
+			} else if (node instanceof ProjectFile) {
 				return true;
 			}
 			return true;
@@ -92,11 +90,11 @@ public class EncogCollectionModel implements TreeModel {
 
 	public void valueForPathChanged(TreePath path, Object newValue) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public int getIndexOfChild(Object parent, Object child) {
-		if( parent==path ) {
+		if (parent == path) {
 			return this.files.indexOf(child);
 		} else {
 			return -1;
@@ -104,63 +102,65 @@ public class EncogCollectionModel implements TreeModel {
 	}
 
 	public void addTreeModelListener(TreeModelListener l) {
-		this.listeners.add(l);		
+		this.listeners.add(l);
 	}
 
 	public void removeTreeModelListener(TreeModelListener l) {
-		this.listeners.remove(l);		
+		this.listeners.remove(l);
 	}
 
 	public void invalidate(String path) {
-		
+
 		this.files.clear();
-		
-		if( path==null )
+
+		if (path == null)
 			return;
-		
+
 		this.path = path;
-		
+
 		// sort
 		TreeSet<File> folderList = new TreeSet<File>();
 		TreeSet<File> fileList = new TreeSet<File>();
-		
+
 		File file = new File(path);
-		for(File entry: file.listFiles())
-		{
-			if( !entry.isHidden() )
-			{
-				if( entry.isDirectory())
+		for (File entry : file.listFiles()) {
+			if (!entry.isHidden()) {
+				if (entry.isDirectory())
 					folderList.add(entry);
 				else
 					fileList.add(entry);
 			}
-				
+
 		}
-		
-		
+
 		// build list
 		this.files.clear();
-		
-		if( file.getParent()!=null )
-		{
+
+		if (file.getParent() != null) {
 			this.files.add(new ProjectParent(file.getParentFile()));
 		}
-		
-		for(File entry: folderList)
-		{
-			this.files.add(new ProjectDirectory(entry));			
+
+		for (File entry : folderList) {
+			this.files.add(new ProjectDirectory(entry));
 		}
-		
-		for(File entry: fileList)
-		{
-			this.files.add(new ProjectFile(entry));			
+
+		for (File entry : fileList) {
+			if (FileUtil.getFileExt(entry).equalsIgnoreCase("eg")) {
+				try {
+					this.files.add(new ProjectEGFile(entry));
+				} catch (Throwable t) {
+					this.files.add(new ProjectFile(entry));
+				}
+			} else {
+				this.files.add(new ProjectFile(entry));
+			}
 		}
-		
+
 		// notify
 		Object[] p = new Object[1];
 		p[0] = this.path;
 		TreeModelEvent e = new TreeModelEvent(this, p);
-		for(TreeModelListener l: this.listeners) {
+		for (TreeModelListener l : this.listeners) {
 			l.treeStructureChanged(e);
 		}
 	}
@@ -173,7 +173,4 @@ public class EncogCollectionModel implements TreeModel {
 		return this.path;
 	}
 
-
-    
 }
-

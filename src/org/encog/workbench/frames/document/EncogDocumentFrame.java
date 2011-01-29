@@ -312,10 +312,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 						|| extension.equalsIgnoreCase("csv")) {
 					tab = new TextFileTab(file);
 					this.openTab(tab, file.getName());
-				} else if(extension.equalsIgnoreCase("egb") ) {
+				} else if (extension.equalsIgnoreCase("egb")) {
 					tab = new BinaryDataTab(file);
 					this.openTab(tab, file.getName());
-				}else if (extension.equalsIgnoreCase("jpg")				
+				} else if (extension.equalsIgnoreCase("jpg")
 						|| extension.equalsIgnoreCase("jpeg")
 						|| extension.equalsIgnoreCase("gif")
 						|| extension.equalsIgnoreCase("png")) {
@@ -325,6 +325,22 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 					tab = new GenericFileTab(file);
 					this.openTab(tab, file.getName());
 				}
+			} else {
+				this.documentTabs.setSelectedComponent(tab);
+				this.menus.updateMenus();
+			}
+		} finally {
+			EncogWorkBench.getInstance().getMainWindow().endWait();
+		}
+	}
+
+	public void openTextFile(File file) {
+		try {
+			EncogWorkBench.getInstance().getMainWindow().beginWait();
+			EncogCommonTab tab = this.tabManager.find(file);
+			if (tab == null) {
+				tab = new TextFileTab(file);
+				this.openTab(tab, file.getName());
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
 				this.menus.updateMenus();
