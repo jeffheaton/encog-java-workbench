@@ -29,12 +29,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
-import javax.swing.JTree;
-import javax.swing.tree.TreePath;
 
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.process.ImportExport;
-import org.encog.workbench.process.training.Training;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.ValidationChart;
@@ -244,12 +241,8 @@ public class EncogMenus {
 			owner.getOperations().performBrowse();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EVALUATE)) {
 			owner.getOperations().performEvaluate();
-		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_CODE)) {
-			owner.getOperations().performGenerateCode();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_TRAIN)) {
-			Training training = new Training();
-			training
-					.perform(EncogWorkBench.getInstance().getMainWindow(), null);
+			
 		} else if (event.getActionCommand().equals(
 				EncogMenus.TOOLS_VALIDATION_CHART)) {
 			ValidationChart check = new ValidationChart();
@@ -258,8 +251,6 @@ public class EncogMenus {
 			ImportExport.performBin2External();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EXTERNAL2BIN)) {
 			ImportExport.performExternal2Bin(null,null);
-		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_CODE)) {
-			owner.getOperations().performGenerateCode();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_RBF)) {
 			owner.getOperations().performRBF();
 		}

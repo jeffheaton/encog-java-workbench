@@ -24,38 +24,29 @@
 package org.encog.workbench.tabs.population;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
 import org.encog.engine.util.Format;
+import org.encog.ml.genetic.genome.Genome;
+import org.encog.ml.genetic.population.BasicPopulation;
+import org.encog.ml.genetic.population.Population;
+import org.encog.neural.neat.training.NEATTraining;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.TrainingSetScore;
-import org.encog.neural.networks.training.neat.NEATTraining;
-import org.encog.solve.genetic.genome.Genome;
-import org.encog.solve.genetic.population.BasicPopulation;
-import org.encog.solve.genetic.population.Population;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.EditPopulationDialog;
 import org.encog.workbench.dialogs.ExtractGenomes;
-import org.encog.workbench.dialogs.common.DoubleField;
-import org.encog.workbench.dialogs.common.IntegerField;
-import org.encog.workbench.dialogs.synapse.MatrixTableModel;
-import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.models.GeneralPopulationModel;
 import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.SpeciesModel;
-import org.encog.workbench.process.training.Training;
 import org.encog.workbench.tabs.EncogCommonTab;
 
 public class PopulationTab  extends EncogCommonTab implements ActionListener {
@@ -186,8 +177,7 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 	}
 
 	private void performTrain() {
-		Training training = new Training();
-		training.perform(EncogWorkBench.getInstance().getMainWindow(), null);
+		
 		
 	}
 

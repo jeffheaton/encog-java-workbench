@@ -39,15 +39,9 @@ import org.encog.engine.StatusReportable;
 import org.encog.engine.util.Format;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.training.propagation.TrainingContinuation;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.pattern.FeedForwardPattern;
-import org.encog.neural.pattern.NeuralNetworkPattern;
 import org.encog.neural.prune.PruneIncremental;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.training.ChartPane;
-import org.encog.workbench.dialogs.training.TrainingStatusPanel;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;
 

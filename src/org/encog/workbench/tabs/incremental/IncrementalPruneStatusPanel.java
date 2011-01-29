@@ -28,8 +28,6 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import org.encog.workbench.dialogs.training.BasicTrainingProgress;
-
 /**
  * Panel to display the current training status.
  * @author jheaton

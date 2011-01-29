@@ -23,25 +23,8 @@
  */
 package org.encog.workbench.dialogs;
 
-import java.awt.Container;
 import java.awt.Frame;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.networks.Network;
-import org.encog.persist.DirectoryEntry;
-import org.encog.persist.EncogPersistedCollection;
-import org.encog.persist.EncogPersistedObject;
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.TextField;
 

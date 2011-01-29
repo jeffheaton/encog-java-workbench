@@ -36,19 +36,18 @@ import org.encog.EncogError;
 import org.encog.engine.util.ErrorCalculation;
 import org.encog.engine.util.ErrorCalculationMode;
 import org.encog.engine.util.Format;
+import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.svm.SVMNetwork;
-import org.encog.neural.networks.training.neat.NEATGenome;
 import org.encog.normalize.DataNormalization;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.script.EncogScript;
-import org.encog.solve.genetic.population.BasicPopulation;
 import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
@@ -67,7 +66,6 @@ import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.cloud.CloudProcess;
-import org.encog.workbench.process.generate.CodeGeneration;
 import org.encog.workbench.process.validate.ResourceNameValidate;
 import org.encog.workbench.tabs.BinaryDataTab;
 import org.encog.workbench.tabs.BrowserFrame;
@@ -76,7 +74,6 @@ import org.encog.workbench.tabs.PropertyDataTab;
 import org.encog.workbench.tabs.SVMTab;
 import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.TrainingDataTab;
-import org.encog.workbench.tabs.network.NetworkTab;
 import org.encog.workbench.tabs.population.PopulationTab;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
 import org.encog.workbench.util.ExtensionFilter;
@@ -115,13 +112,13 @@ public class EncogDocumentOperations {
 		} else if (entry.getType().equals(
 				EncogPersistedCollection.TYPE_BASIC_NET)) {
 
-			final DirectoryEntry net = (DirectoryEntry) item;
+			/*final DirectoryEntry net = (DirectoryEntry) item;
 			if (owner.getTabManager().checkBeforeOpen(net, BasicNetwork.class)) {
 				BasicNetwork net2 = (BasicNetwork) EncogWorkBench.getInstance()
 						.getCurrentFile().find(net);
 				final NetworkTab tab = new NetworkTab(net2);
 				this.owner.openTab(tab);
-			}
+			}*/
 		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_TEXT)) {
 			DirectoryEntry text = (DirectoryEntry) item;
 			if (owner.getTabManager().checkBeforeOpen(text, TextData.class)) {
@@ -151,14 +148,14 @@ public class EncogDocumentOperations {
 				owner.openTab(tab);
 			}
 		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_SVM)) {
-			DirectoryEntry svm = (DirectoryEntry) item;
+			/*DirectoryEntry svm = (DirectoryEntry) item;
 			if (owner.getTabManager().checkBeforeOpen(svm,
 					SVMNetwork.class)) {
 				SVMNetwork svn2 = (SVMNetwork) EncogWorkBench.getInstance()
 						.getCurrentFile().find(svm);
 				final SVMTab tab = new SVMTab(svn2);
 				owner.openTab(tab);
-			}
+			}*/
 
 		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_BINARY)) {
 			DirectoryEntry link = (DirectoryEntry) item;
@@ -322,12 +319,6 @@ public class EncogDocumentOperations {
 		} catch (final Throwable e) {
 			EncogWorkBench.displayError("Can't Save File", e);
 		}
-
-	}
-
-	public void performGenerateCode() {
-		final CodeGeneration code = new CodeGeneration();
-		code.processCodeGeneration();
 
 	}
 

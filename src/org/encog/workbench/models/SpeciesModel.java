@@ -27,8 +27,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.encog.engine.util.Format;
-import org.encog.solve.genetic.population.Population;
-import org.encog.solve.genetic.species.Species;
+import org.encog.ml.genetic.population.Population;
+import org.encog.ml.genetic.species.Species;
 
 public class SpeciesModel implements TableModel {
 

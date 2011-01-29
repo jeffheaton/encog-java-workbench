@@ -29,8 +29,8 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import org.encog.neural.networks.svm.KernelType;
-import org.encog.neural.networks.svm.SVMType;
+import org.encog.ml.svm.KernelType;
+import org.encog.ml.svm.SVMType;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;

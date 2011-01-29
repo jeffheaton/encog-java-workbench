@@ -27,6 +27,7 @@ import org.encog.engine.util.ErrorCalculationMode;
 import org.encog.persist.EncogCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.persist.Persistor;
+import org.encog.persist.map.PersistedObject;
 import org.encog.workbench.util.SimpleEncrypt;
 
 public class EncogWorkBenchConfig implements EncogPersistedObject {
@@ -155,6 +156,21 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	}
 
 	public void setCollection(EncogCollection collection) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean supportsMapPersistence() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void persistToMap(PersistedObject obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void persistFromMap(PersistedObject obj) {
 		// TODO Auto-generated method stub
 		
 	}

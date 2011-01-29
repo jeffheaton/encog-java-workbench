@@ -27,15 +27,10 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.persist.DirectoryEntry;
-import org.encog.persist.EncogPersistedCollection;
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
-import org.encog.workbench.process.generate.Generate.GenerateLanguage;
 
 public class RandomizeNetworkDialog extends EncogPropertiesDialog  {
 	private final DoubleField high;

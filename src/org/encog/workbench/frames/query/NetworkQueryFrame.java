@@ -108,12 +108,8 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 
 	public void windowOpened(final WindowEvent e) {
 		
-		Layer input = getData().getLayer(BasicNetwork.TAG_INPUT);
-		Layer output = getData().getLayer(BasicNetwork.TAG_OUTPUT);
-		
-		//
-		this.inputCount = input.getNeuronCount();
-		this.outputCount = output.getNeuronCount();
+		this.inputCount = getData().getInputCount();
+		this.outputCount = getData().getInputCount();
 
 		// create the graphic objects
 		setTitle("Query Network: " + getData().getName());

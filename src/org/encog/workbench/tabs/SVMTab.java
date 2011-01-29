@@ -26,21 +26,19 @@ package org.encog.workbench.tabs;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 
-import org.encog.Encog;
 import org.encog.engine.util.Format;
 import org.encog.mathutil.libsvm.svm_model;
-import org.encog.neural.networks.svm.SVMNetwork;
+import org.encog.ml.svm.SVM;
 import org.encog.persist.EncogPersistedObject;
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.EncogFonts;
 
 public class SVMTab extends EncogCommonTab {
 
-	private SVMNetwork network;
+	private SVM network;
 	
 	public SVMTab(EncogPersistedObject encogObject) {
 		super(encogObject);
-		this.network = (SVMNetwork)encogObject;
+		this.network = (SVM)encogObject;
 	}
 	
 	/**

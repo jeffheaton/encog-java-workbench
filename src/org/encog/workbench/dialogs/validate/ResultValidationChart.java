@@ -25,11 +25,9 @@ package org.encog.workbench.dialogs.validate;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -38,7 +36,6 @@ import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.NeuralOutputHolder;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -163,9 +160,9 @@ public class ResultValidationChart extends EncogCommonTab {
 
 	private NeuralData getCalculatedResult(NeuralDataPair data,
 			BasicNetwork network) {
-		NeuralOutputHolder out = new NeuralOutputHolder();
-		network.compute(data.getInput(), out);
-		return out.getOutput();
+		
+		NeuralData out = network.compute(data.getInput());
+		return out;
 	}
 
 	/**

@@ -24,17 +24,10 @@
 package org.encog.workbench.dialogs;
 
 import java.awt.Frame;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.encog.solve.genetic.species.Species;
-import org.encog.util.identity.BasicGenerateID;
-import org.encog.util.identity.GenerateID;
-import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
-import org.encog.workbench.dialogs.common.TextField;
 
 public class EditPopulationDialog  extends EncogPropertiesDialog {
 	
