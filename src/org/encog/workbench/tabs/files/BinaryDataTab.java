@@ -24,15 +24,9 @@
 package org.encog.workbench.tabs.files;
 
 import java.awt.BorderLayout;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -40,19 +34,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 
-import org.encog.EncogError;
-import org.encog.mathutil.libsvm.svm_model;
-import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
-import org.encog.persist.EncogPersistedObject;
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.models.BufferedDataSetTableModel;
-import org.encog.workbench.models.TrainingSetTableModel;
 import org.encog.workbench.process.ImportExport;
-import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.util.EncogFonts;
-import org.encog.workbench.util.ExcelAdapter;
-import org.encog.workbench.util.TaskComplete;
 
 public class BinaryDataTab extends BasicFileTab implements ActionListener {
 
@@ -70,7 +54,7 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 	
 	public BinaryDataTab(File file) {
 		super(new BufferedNeuralDataSet(file),file);
-		
+	
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);

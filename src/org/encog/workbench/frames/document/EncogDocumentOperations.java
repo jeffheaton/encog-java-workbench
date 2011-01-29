@@ -46,6 +46,7 @@ import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.normalize.DataNormalization;
 import org.encog.persist.DirectoryEntry;
+import org.encog.persist.EncogMemoryCollection;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.script.EncogScript;
 import org.encog.util.file.Directory;
@@ -202,10 +203,6 @@ public class EncogDocumentOperations {
 
 	public void performFileNew() {
 		
-		if (!checkSave()) {
-			return;
-		}
-
 		CreateNewDocument dialog = new CreateNewDocument(EncogWorkBench.getInstance().getMainWindow());
 		dialog.getParentDirectory().setValue(EncogWorkBench.getInstance().getEncogFolders().toString());
 		dialog.getProjectFilename().setValue("MyEncogProject");
@@ -217,8 +214,9 @@ public class EncogDocumentOperations {
 			Directory.deleteDirectory(project); // the user was warned!
 			project.mkdir();
 			File projectFile = new File(project,dialog.getProjectFilename().getValue()+".eg");
-			EncogWorkBench.getInstance().close();
-			EncogWorkBench.save(projectFile.toString());
+			EncogMemoryCollection temp = new EncogMemoryCollection();
+			temp.save(projectFile.toString());
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh(project.toString());
 		}
 	}
 	
