@@ -97,16 +97,31 @@
 		</copy>
 
 		<jar jarfile="${jarfile}" basedir="${path.build}" manifest="MANIFEST.MF" />
-		
-		<unjar src="${path.jar}/encog-core-2.6.0.jar" dest="${path.build}"/>
+				
+		<unjar src="${path.jar}/collections-generic-4.01.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/colt-1.2.0.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/concurrent-1.3.4.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/encog-core-3.0.0.jar" dest="${path.build}"/>
 		<unjar src="${path.jar}/encog-javascript-2.5.jar" dest="${path.build}"/>
-		
+		<unjar src="${path.jar}/hsqldb.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/j3d-core-1.3.1.jar" dest="${path.build}"/>
 		<unjar src="${path.jar}/jcommon-1.0.16.jar" dest="${path.build}"/>
 		<unjar src="${path.jar}/jfreechart-1.0.13.jar" dest="${path.build}"/>
-		<unjar src="${path.jar}/JOCL-0.1.3a-beta.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/jocl-0.1.4c.jar" dest="${path.build}"/>
 		<unjar src="${path.jar}/js.jar" dest="${path.build}"/>
-		<unjar src="${path.jar}/slf4j-api-1.5.6.jar" dest="${path.build}"/>
-		<unjar src="${path.jar}/slf4j-jdk14-1.5.6.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/jung-3d-2.0.1.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/jung-algorithms-2.0.1.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/jung-api-2.0.1.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/jung-graph-impl-2.0.1.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/jung-io-2.0.1.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/jung-jai-2.0.1.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/jung-visualization-2.0.1.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/junit-4.6.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/slf4j-api-1.6.1.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/slf4j-jdk14-1.6.1.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/stax-api-1.0.1.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/vecmath-1.3.1.jar" dest="${path.build}"/>
+		<unjar src="${path.jar}/wstx-asl-3.2.6.jar" dest="${path.build}"/>
 		
 		<delete dir="${path.build}/doc" />
 		<delete dir="${path.build}/META-INF" />
