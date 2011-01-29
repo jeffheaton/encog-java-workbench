@@ -37,6 +37,7 @@ import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.ValidationChart;
 
 public class EncogMenus {
+	public static final String FILE_CHANGE_DIR = "Change Directory";
 	public static final String FILE_NEW = "New";
 	public static final String FILE_OPEN = "Open Project...";
 	public static final String FILE_SAVE = "Save Project";
@@ -109,6 +110,8 @@ public class EncogMenus {
 		// menu bar
 		this.menuBar = new JMenuBar();
 		this.menuFile = new JMenu("File");
+		this.menuFileNew = this.menuFile.add(owner
+				.addItem(this.menuFile, EncogMenus.FILE_CHANGE_DIR, 'c'));
 		this.menuFileNew = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_NEW, 'n'));
 		this.menuFileOpen = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_OPEN,
@@ -209,7 +212,9 @@ public class EncogMenus {
 		
 		try {
 		EncogWorkBench.getInstance().getMainWindow().endWait();
-		if (event.getActionCommand().equals(EncogMenus.FILE_OPEN)) {
+		if (event.getActionCommand().equals(EncogMenus.FILE_CHANGE_DIR)) {
+			owner.getOperations().performFileChooseDirectory();
+		} else if (event.getActionCommand().equals(EncogMenus.FILE_OPEN)) {
 			owner.getOperations().performFileOpen();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_SAVE)) {
 			owner.getOperations().performFileSave();

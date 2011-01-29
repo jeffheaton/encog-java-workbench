@@ -14,6 +14,7 @@ import javax.swing.tree.TreePath;
 
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogMemoryCollection;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.util.MouseUtil;
@@ -22,13 +23,12 @@ public class ProjectTree extends JPanel implements MouseListener {
 	private JTree tree;
 	private final EncogCollectionModel collectionModel;
 	private EncogDocumentFrame doc;
-	private String path = "d:\\";
 	
 	public ProjectTree(EncogDocumentFrame doc)	
 	{
 		this.doc = doc;
 		// setup the contents list
-		this.collectionModel = new EncogCollectionModel("c:\\");
+		this.collectionModel = new EncogCollectionModel();
 		this.tree = new JTree(this.collectionModel);
 		//this.tree.setRootVisible(false);
 		this.tree.addMouseListener(this);
@@ -70,6 +70,8 @@ public class ProjectTree extends JPanel implements MouseListener {
 		// see if something should be selected because of right-click
 		if (MouseUtil.isRightClick(e)) {
 			TreePath[] currentPaths = this.tree.getSelectionPaths();
+			if( currentPaths==null )
+				return;
 			TreePath rightPath = this.tree.getClosestPathForLocation(e.getX(), e.getY());
 			boolean included = false;
 			for(TreePath t: currentPaths) {
@@ -117,11 +119,6 @@ public class ProjectTree extends JPanel implements MouseListener {
 			}
 		}
 	}
-	
-	public void invalidate(EncogMemoryCollection currentFile) {
-		this.collectionModel.invalidate("c:\\");
-		
-	}
 
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -145,6 +142,16 @@ public class ProjectTree extends JPanel implements MouseListener {
 
 	public void refresh() {
 		this.collectionModel.invalidate();
+
+	}
+
+	public void refresh(String path) {
+		this.collectionModel.invalidate(path);
+		EncogWorkBench.getInstance().getMainWindow().redraw();		
+	}
+
+	public String getPath() {
+		return this.collectionModel.getPath();
 		
 	}
 

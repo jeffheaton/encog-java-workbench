@@ -67,13 +67,13 @@ import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.validate.ResourceNameValidate;
-import org.encog.workbench.tabs.BinaryDataTab;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.EncogScriptTab;
 import org.encog.workbench.tabs.PropertyDataTab;
 import org.encog.workbench.tabs.SVMTab;
 import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.TrainingDataTab;
+import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.population.PopulationTab;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
 import org.encog.workbench.util.ExtensionFilter;
@@ -157,16 +157,6 @@ public class EncogDocumentOperations {
 				owner.openTab(tab);
 			}*/
 
-		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_BINARY)) {
-			DirectoryEntry link = (DirectoryEntry) item;
-			if (owner.getTabManager().checkBeforeOpen(link,
-					BasicPopulation.class)) {
-				BufferedNeuralDataSet link2 = (BufferedNeuralDataSet) EncogWorkBench.getInstance()
-						.getCurrentFile().find(link);
-				final BinaryDataTab tab = new BinaryDataTab(link2);
-				owner.openTab(tab);
-			}
-
 		} else if (entry.getType().equals(EncogPersistedCollection.TYPE_SCRIPT)) {
 			DirectoryEntry script = (DirectoryEntry) item;
 			if (owner.getTabManager().checkBeforeOpen(script,
@@ -177,18 +167,7 @@ public class EncogDocumentOperations {
 				owner.openTab(tab);
 			}
 
-		} 		
-		/*else if (entry.getType().equals(EncogPersistedCollection.TYPE_NORMALIZATION)) {
-			DirectoryEntry norm = (DirectoryEntry) item;
-			if (owner.getTabManager().checkBeforeOpen(norm,
-					DataNormalization.class)) {
-				DataNormalization norm2 = (DataNormalization) EncogWorkBench.getInstance()
-						.getCurrentFile().find(norm);
-				final DataNormalizationTab tab = new DataNormalizationTab(norm2);
-				owner.openTab(tab);
-			}
-
-		}*/
+		}
 		else {
 			EncogWorkBench.displayError("Error",
 					"Unknown object type.\nDo not know how to open.");
@@ -240,6 +219,24 @@ public class EncogDocumentOperations {
 			File projectFile = new File(project,dialog.getProjectFilename().getValue()+".eg");
 			EncogWorkBench.getInstance().close();
 			EncogWorkBench.save(projectFile.toString());
+		}
+	}
+	
+	public void performFileChooseDirectory() {
+		try {
+			final JFileChooser fc = new JFileChooser();
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			fc.setCurrentDirectory(EncogWorkBench.getInstance().getEncogFolders());
+			final int result = fc.showOpenDialog(owner);
+			if (result == JFileChooser.APPROVE_OPTION) {
+				String path = fc.getSelectedFile().getAbsolutePath();
+				EncogWorkBench.getInstance().getMainWindow().getTree().refresh(path);				
+			}
+		}  
+		catch (final Throwable e) {
+			EncogWorkBench.displayError("Can't Change Directory", e);
+			e.printStackTrace();
+			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
 	}
 

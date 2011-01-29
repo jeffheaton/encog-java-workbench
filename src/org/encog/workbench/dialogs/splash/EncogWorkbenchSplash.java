@@ -47,15 +47,15 @@ public class EncogWorkbenchSplash extends JDialog implements ActionListener {
 	public EncogWorkbenchSplash()
 	{
 		setLocation(100,100);
-		setSize(400,200);
+		setSize(500,200);
 		setModal(true);
 		setTitle("Welcome");
 		Container content = this.getContentPane();
 		content.setLayout(new BorderLayout());
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(1,3));
-		buttonPanel.add(this.buttonNew = new JButton("New Project..."));
-		buttonPanel.add(this.buttonOpen = new JButton("Open Project..."));
+		buttonPanel.add(this.buttonNew = new JButton("New Project Folder..."));
+		buttonPanel.add(this.buttonOpen = new JButton("Open Project Folder..."));
 		buttonPanel.add(this.buttonQuit = new JButton("Quit"));
 		content.add(buttonPanel,BorderLayout.SOUTH);
 		this.buttonNew.addActionListener(this);
@@ -75,7 +75,7 @@ public class EncogWorkbenchSplash extends JDialog implements ActionListener {
 		}
 		else if( e.getSource()==this.buttonOpen ) {
 			dispose();
-			EncogWorkBench.getInstance().getMainWindow().getOperations().performFileOpen();
+			EncogWorkBench.getInstance().getMainWindow().getOperations().performFileChooseDirectory();
 		}
 		else if( e.getSource()==this.buttonQuit ) {
 			dispose();

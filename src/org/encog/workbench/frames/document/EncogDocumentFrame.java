@@ -42,6 +42,7 @@ import org.encog.workbench.tabs.AboutTab;
 import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.EncogTabManager;
+import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.tabs.files.ImageFileTab;
 import org.encog.workbench.tabs.files.TextFileTab;
@@ -54,7 +55,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private EncogMenus menus;
 	private EncogPopupMenus popupMenus;
 	private boolean closed = false;
-	private boolean splashed = false;	
+	private boolean splashed = false;
 	private JSplitPane projectSplit;
 	private JTabbedPane documentTabs;
 	private EncogTabManager tabManager;
@@ -65,10 +66,11 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private EncogOutputPanel outputPanel;
 	private ProjectTree tree;
 
-	private final static String[] B = {".csv",".xlsx"};
+	private final static String[] B = { ".csv", ".xlsx" };
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
 			"Encog Files (*.eg)", ".eg");
-	public static final ExtensionFilter CSV_FILTER = new ExtensionFilter("External Files (*.xlsx,*.csv)",B);
+	public static final ExtensionFilter CSV_FILTER = new ExtensionFilter(
+			"External Files (*.xlsx,*.csv)", B);
 	public static final ExtensionFilter ENCOG_BINARY = new ExtensionFilter(
 			"Binary Encog Training Files (*.egb)", ".egb");
 
@@ -78,11 +80,9 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	 */
 	private static final long serialVersionUID = -4161616483326975155L;
 
-	
-
 	public EncogDocumentFrame() {
 		this.setSize(750, 480);
-		
+
 		EncogWorkBench.getInstance().setMainWindow(this);
 
 		this.operations = new EncogDocumentOperations(this);
@@ -94,7 +94,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.aboutTab = new AboutTab();
-		
+
 		this.menus.initMenuBar();
 		initContents();
 
@@ -106,31 +106,27 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	private void initContents() {
-		
+
 		this.tree = new ProjectTree(this);
 		this.documentTabs = new JTabbedPane();
 		this.documentTabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
-		
+
 		this.outputPanel = new EncogOutputPanel();
-		
+
 		this.documentSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 				this.documentTabs, this.outputPanel);
-		
+
 		this.projectSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                this.tree, this.documentSplit);
-		this.projectSplit.setDividerLocation(150);	
-		this.documentSplit.setDividerLocation(this.getHeight()-200);
-		
+				this.tree, this.documentSplit);
+		this.projectSplit.setDividerLocation(150);
+		this.documentSplit.setDividerLocation(this.getHeight() - 200);
+
 		getContentPane().add(this.projectSplit);
-		
-		
+
 		this.popupMenus.initPopup();
-		
-		this.tree.invalidate(EncogWorkBench.getInstance()
-				.getCurrentFile());
-		
+
 		this.tabManager = new EncogTabManager(this);
-		
+
 		this.menus.updateMenus();
 		redraw();
 	}
@@ -144,10 +140,6 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			setTitle(EncogDocumentFrame.WINDOW_TITLE + " : "
 					+ EncogWorkBench.getInstance().getCurrentFileName());
 		}
-
-		this.tree.invalidate(EncogWorkBench.getInstance()
-				.getCurrentFile());
-		
 		getMenus().updateMenus();
 	}
 
@@ -157,10 +149,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void windowOpened(final WindowEvent e) {
-		if( !this.splashed ) {
-		EncogWorkbenchSplash splash = new EncogWorkbenchSplash();
-		splash.process();
-		this.splashed = true;
+		if (!this.splashed) {
+			EncogWorkbenchSplash splash = new EncogWorkbenchSplash();
+			splash.process();
+			this.splashed = true;
 		}
 	}
 
@@ -202,101 +194,96 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	}
 
-
 	public void openTab(EncogCommonTab tab) {
-	
-		openTab(tab,null);
+
+		openTab(tab, null);
 	}
-	
+
 	public void openTab(EncogCommonTab tab, String title) {
 		String titleToUse;
-		
+
 		int i = this.documentTabs.getTabCount();
-		
-		if( title==null && tab.getEncogObject()!=null )
+
+		if (title == null && tab.getEncogObject() != null)
 			titleToUse = tab.getEncogObject().getName();
 		else
 			titleToUse = title;
-		
-		
-        this.documentTabs.add(titleToUse, tab);
- 
-        if( !this.tabManager.contains(tab)) {
-        	if( i<this.documentTabs.getTabCount() )
-        		documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
-        	this.tabManager.add(tab);
-        }
-        this.documentTabs.setSelectedComponent(tab);
-        this.menus.updateMenus();
+
+		this.documentTabs.add(titleToUse, tab);
+
+		if (!this.tabManager.contains(tab)) {
+			if (i < this.documentTabs.getTabCount())
+				documentTabs.setTabComponentAt(i, new ButtonTabComponent(this,
+						tab));
+			this.tabManager.add(tab);
+		}
+		this.documentTabs.setSelectedComponent(tab);
+		this.menus.updateMenus();
 	}
-	
+
 	public void openModalTab(EncogCommonTab tab, String title) {
-		
-		if( this.tabManager.alreadyOpen(tab) )
+
+		if (this.tabManager.alreadyOpen(tab))
 			return;
-		
+
 		int i = this.documentTabs.getTabCount();
-		
-        this.documentTabs.add(title, tab);
-        documentTabs.setTabComponentAt(i,new ButtonTabComponent(this,tab));	
-        this.tabManager.add(tab);
-        tab.setModal(true);
-        this.documentTabs.setSelectedComponent(tab);
-        this.documentTabs.setEnabled(false);
-        this.tree.setEnabled(false);
-        this.modalTabOpen = true;
-        this.menus.updateMenus();
-		
+
+		this.documentTabs.add(title, tab);
+		documentTabs.setTabComponentAt(i, new ButtonTabComponent(this, tab));
+		this.tabManager.add(tab);
+		tab.setModal(true);
+		this.documentTabs.setSelectedComponent(tab);
+		this.documentTabs.setEnabled(false);
+		this.tree.setEnabled(false);
+		this.modalTabOpen = true;
+		this.menus.updateMenus();
+
 	}
-	
+
 	public JTabbedPane getDocumentTabs() {
 		return this.documentTabs;
 	}
 
 	public void closeTab(EncogCommonTab tab) {
-		if( tab.close() ) {
+		if (tab.close()) {
 			this.tabManager.remove(tab);
 			getDocumentTabs().remove(tab);
-		
-			if( tab.isModal() ) {
+
+			if (tab.isModal()) {
 				this.documentTabs.setEnabled(true);
 				this.tree.setEnabled(true);
 				this.modalTabOpen = false;
 			}
 			this.menus.updateMenus();
 		}
-		
+
 	}
-	
-	public EncogTabManager getTabManager()
-	{
+
+	public EncogTabManager getTabManager() {
 		return this.tabManager;
 	}
-	
-	public void displayAboutTab()
-	{
+
+	public void displayAboutTab() {
 		this.openTab(this.aboutTab, "About");
 	}
 
 	public boolean isModalTabOpen() {
 		return this.modalTabOpen;
 	}
-	
-	public void beginWait()
-	{
+
+	public void beginWait() {
 		Cursor hourglassCursor = new Cursor(Cursor.WAIT_CURSOR);
 		setCursor(hourglassCursor);
 	}
-	
-	public void endWait()
-	{
+
+	public void endWait() {
 		Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 		setCursor(normalCursor);
 	}
 
 	public void componentResized(ComponentEvent e) {
-		if( this.documentSplit!=null )
-			this.documentSplit.setDividerLocation(this.getHeight()-200);
+		if (this.documentSplit != null)
+			this.documentSplit.setDividerLocation(this.getHeight() - 200);
 	}
 
 	public EncogOutputPanel getOutputPane() {
@@ -305,7 +292,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**
@@ -316,28 +303,35 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void openFile(File file) {
-		EncogCommonTab tab = this.tabManager.find(file);
-		if( tab == null ) {
-			String extension = FileUtil.getFileExt(file);
-			if( extension.equalsIgnoreCase("txt") || extension.equalsIgnoreCase("csv") ) {
-				tab = new TextFileTab(file);
-				this.openTab(tab, file.getName());
-			} else if( extension.equalsIgnoreCase("jpg") 
-					|| extension.equalsIgnoreCase("jpeg")
-					|| extension.equalsIgnoreCase("gif")
-					|| extension.equalsIgnoreCase("png") ) {
-				tab = new ImageFileTab(file);
-				this.openTab(tab, file.getName());
-			} else {			
-				tab = new GenericFileTab(file);
-				this.openTab(tab, file.getName());
+		try {
+			EncogWorkBench.getInstance().getMainWindow().beginWait();
+			EncogCommonTab tab = this.tabManager.find(file);
+			if (tab == null) {
+				String extension = FileUtil.getFileExt(file);
+				if (extension.equalsIgnoreCase("txt")
+						|| extension.equalsIgnoreCase("csv")) {
+					tab = new TextFileTab(file);
+					this.openTab(tab, file.getName());
+				} else if(extension.equalsIgnoreCase("egb") ) {
+					tab = new BinaryDataTab(file);
+					this.openTab(tab, file.getName());
+				}else if (extension.equalsIgnoreCase("jpg")				
+						|| extension.equalsIgnoreCase("jpeg")
+						|| extension.equalsIgnoreCase("gif")
+						|| extension.equalsIgnoreCase("png")) {
+					tab = new ImageFileTab(file);
+					this.openTab(tab, file.getName());
+				} else {
+					tab = new GenericFileTab(file);
+					this.openTab(tab, file.getName());
+				}
+			} else {
+				this.documentTabs.setSelectedComponent(tab);
+				this.menus.updateMenus();
 			}
-		} else {
-			this.documentTabs.setSelectedComponent(tab);
-	        this.menus.updateMenus();
+		} finally {
+			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
 	}
-	
-	
 
 }

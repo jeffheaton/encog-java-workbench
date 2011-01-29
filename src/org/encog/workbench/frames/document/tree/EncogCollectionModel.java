@@ -52,6 +52,9 @@ public class EncogCollectionModel implements TreeModel {
 		invalidate(path);
 	}
 	
+	public EncogCollectionModel() {
+	}
+
 	public Object getRoot() {
 		return path;
 	}
@@ -109,6 +112,12 @@ public class EncogCollectionModel implements TreeModel {
 	}
 
 	public void invalidate(String path) {
+		
+		this.files.clear();
+		
+		if( path==null )
+			return;
+		
 		this.path = path;
 		
 		// sort
@@ -158,6 +167,10 @@ public class EncogCollectionModel implements TreeModel {
 
 	public void invalidate() {
 		invalidate(this.path);
+	}
+
+	public String getPath() {
+		return this.path;
 	}
 
 

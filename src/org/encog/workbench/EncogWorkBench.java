@@ -222,7 +222,7 @@ public class EncogWorkBench implements Runnable {
 	 * @return the currentFileName
 	 */
 	public String getCurrentFileName() {
-		return this.currentFileName;
+		return this.getMainWindow().getTree().getPath();
 	}
 
 	/**

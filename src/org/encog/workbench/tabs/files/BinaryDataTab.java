@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.tabs;
+package org.encog.workbench.tabs.files;
 
 import java.awt.BorderLayout;
 import java.awt.FontMetrics;
@@ -49,11 +49,12 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.models.BufferedDataSetTableModel;
 import org.encog.workbench.models.TrainingSetTableModel;
 import org.encog.workbench.process.ImportExport;
+import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.ExcelAdapter;
 import org.encog.workbench.util.TaskComplete;
 
-public class BinaryDataTab extends EncogCommonTab implements ActionListener {
+public class BinaryDataTab extends BasicFileTab implements ActionListener {
 
 	private BufferedNeuralDataSet object;
 	private BufferedDataSetTableModel model;
@@ -67,9 +68,9 @@ public class BinaryDataTab extends EncogCommonTab implements ActionListener {
 	private JButton delRow;
 	private JButton export;
 	
-	public BinaryDataTab(EncogPersistedObject encogObject) {
-		super(encogObject);
-		this.object = (BufferedNeuralDataSet)encogObject;
+	public BinaryDataTab(File file) {
+		super(new BufferedNeuralDataSet(file),file);
+		
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);
