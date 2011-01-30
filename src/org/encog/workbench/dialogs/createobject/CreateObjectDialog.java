@@ -30,8 +30,11 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -42,6 +45,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 import org.encog.workbench.process.validate.ResourceNameValidate;
@@ -56,6 +60,7 @@ ListSelectionListener {
 	private JScrollPane scroll2 = new JScrollPane(text);
 	private ObjectType type;
 	private JTextField objectNameField;
+	private JComboBox targetEGField;
 	private String resourceName;
 
 	public CreateObjectDialog(Frame owner) {
@@ -74,22 +79,33 @@ ListSelectionListener {
 		top.add(this.scroll2);
 
 		GridBagLayout gridBag = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 0.0;
 		
 		content.add(top,BorderLayout.CENTER);
 		bottom.setLayout(gridBag);
 		
 		Component comp1 = new JLabel("Object Name:  ");
-		this.objectNameField = new JTextField(20); 
-		
-		gridBag.setConstraints(comp1, c);
-		c.weightx = 1.0;
-		gridBag.setConstraints(this.objectNameField, c);
-		
-		bottom.add(comp1);
-		bottom.add(this.objectNameField);
+		this.objectNameField = new JTextField(20);
+		Component comp2 = new JLabel("Target EG File:  ");
+		String[] egfiles = EncogWorkBench.getInstance().getMainWindow().getTree().listEGFiles();
+		this.targetEGField = new JComboBox(egfiles);
+
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 0;
+		bottom.add(comp1,c);
+		c.gridx = 1;
+		c.gridy = 0;
+		c.weightx = 1;
+		bottom.add(this.objectNameField,c);
+		c.gridx = 0;
+		c.gridy = 1;
+		bottom.add(comp2,c);
+		c.gridx = 1;
+		c.gridy = 1;
+		bottom.add(this.targetEGField,c);
 		
 		content.add(bottom,BorderLayout.SOUTH);
 		

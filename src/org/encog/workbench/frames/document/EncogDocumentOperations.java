@@ -179,6 +179,12 @@ public class EncogDocumentOperations {
 	public void performObjectsCreate() throws IOException {
 
 		try {
+			if( EncogWorkBench.getInstance().getMainWindow().getTree().listEGFiles().length <1 )
+			{
+				EncogWorkBench.displayError("Can't Create an Object","There are no EG files in the current directory tree.");
+				return;
+			}
+			
 			CreateObjectDialog dialog = new CreateObjectDialog(EncogWorkBench
 					.getInstance().getMainWindow());
 

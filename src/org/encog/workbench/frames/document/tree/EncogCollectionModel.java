@@ -25,21 +25,14 @@ package org.encog.workbench.frames.document.tree;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import org.encog.persist.DirectoryEntry;
-import org.encog.persist.EncogMemoryCollection;
 import org.encog.workbench.util.FileUtil;
 
 public class EncogCollectionModel implements TreeModel {
@@ -171,6 +164,23 @@ public class EncogCollectionModel implements TreeModel {
 
 	public String getPath() {
 		return this.path;
+	}
+
+	public String[] listEGFiles() {
+		List<String> files = new ArrayList<String>();
+		
+		for( ProjectItem item: this.files )
+		{
+			if( item instanceof ProjectEGFile )
+			{
+				files.add( ((ProjectEGFile)item).getFile().getName() );
+			}
+		}
+		
+		String[] result = new String[files.size()];
+		files.toArray(result);
+		
+		return result;
 	}
 
 }

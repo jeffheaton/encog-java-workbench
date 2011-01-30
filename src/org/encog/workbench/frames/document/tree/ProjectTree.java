@@ -155,4 +155,8 @@ public class ProjectTree extends JPanel implements MouseListener {
 		
 	}
 
+	public String[] listEGFiles() {
+		return this.collectionModel.listEGFiles();
+	}
+
 }
