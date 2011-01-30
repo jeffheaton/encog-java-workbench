@@ -38,7 +38,8 @@ import org.encog.workbench.tabs.ValidationChart;
 
 public class EncogMenus {
 	public static final String FILE_CHANGE_DIR = "Change Directory";
-	public static final String FILE_NEW = "New";
+	public static final String FILE_NEW_PROJECT = "New Project...";
+	public static final String FILE_NEW_FILE = "New File...";
 	public static final String FILE_OPEN = "Open Project...";
 	public static final String FILE_SAVE = "Save Project";
 	public static final String FILE_REVERT = "Revert Project";
@@ -113,7 +114,9 @@ public class EncogMenus {
 		this.menuFileNew = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_CHANGE_DIR, 'c'));
 		this.menuFileNew = this.menuFile.add(owner
-				.addItem(this.menuFile, EncogMenus.FILE_NEW, 'n'));
+				.addItem(this.menuFile, EncogMenus.FILE_NEW_PROJECT, 'n'));
+		this.menuFileNew = this.menuFile.add(owner
+				.addItem(this.menuFile, EncogMenus.FILE_NEW_FILE, 'f'));
 		this.menuFileOpen = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_OPEN,
 				'o'));
 		this.menuFile.addSeparator();
@@ -214,6 +217,10 @@ public class EncogMenus {
 		EncogWorkBench.getInstance().getMainWindow().endWait();
 		if (event.getActionCommand().equals(EncogMenus.FILE_CHANGE_DIR)) {
 			owner.getOperations().performFileChooseDirectory();
+		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW_PROJECT)) {
+			owner.getOperations().performFileNewProject();
+		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW_FILE)) {
+			owner.getOperations().performFileNewFile();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_OPEN)) {
 			//owner.getOperations().performFileOpen();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_SAVE)) {
@@ -226,8 +233,6 @@ public class EncogMenus {
 			owner.getOperations().performObjectsCreate();
 		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_DELETE)) {
 			owner.getPopupMenus().performPopupDelete();
-		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW)) {
-			owner.getOperations().performFileNew();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_CUT)) {
 			owner.getOperations().performEditCut();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_COPY)) {

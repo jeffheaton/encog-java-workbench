@@ -57,6 +57,8 @@ import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EvaluateDialog;
 import org.encog.workbench.dialogs.PopulationDialog;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
+import org.encog.workbench.dialogs.createfile.CreateFileDialog;
+import org.encog.workbench.dialogs.createfile.CreateFileType;
 import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
 import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
@@ -78,6 +80,7 @@ import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.population.PopulationTab;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
 import org.encog.workbench.util.ExtensionFilter;
+import org.encog.workbench.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,54 +122,58 @@ public class EncogDocumentOperations {
 
 	}
 
-	public void performFileNew() {
-		
-		CreateNewDocument dialog = new CreateNewDocument(EncogWorkBench.getInstance().getMainWindow());
-		dialog.getParentDirectory().setValue(EncogWorkBench.getInstance().getEncogFolders().toString());
+	public void performFileNewProject() {
+
+		CreateNewDocument dialog = new CreateNewDocument(EncogWorkBench
+				.getInstance().getMainWindow());
+		dialog.getParentDirectory().setValue(
+				EncogWorkBench.getInstance().getEncogFolders().toString());
 		dialog.getProjectFilename().setValue("MyEncogProject");
-				
-		if( dialog.process() )
-		{
+
+		if (dialog.process()) {
 			File parent = new File(dialog.getParentDirectory().getValue());
-			File project = new File(parent,dialog.getProjectFilename().getValue());
+			File project = new File(parent, dialog.getProjectFilename()
+					.getValue());
 			Directory.deleteDirectory(project); // the user was warned!
 			project.mkdir();
-			File projectFile = new File(project,dialog.getProjectFilename().getValue()+".eg");
+			File projectFile = new File(project, dialog.getProjectFilename()
+					.getValue() + ".eg");
 			EncogMemoryCollection temp = new EncogMemoryCollection();
 			temp.save(projectFile.toString());
-			EncogWorkBench.getInstance().getMainWindow().getTree().refresh(project.toString());
+			EncogWorkBench.getInstance().getMainWindow().getTree()
+					.refresh(project.toString());
 		}
 	}
-	
+
 	public void performFileChooseDirectory() {
 		try {
 			final JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			fc.setCurrentDirectory(EncogWorkBench.getInstance().getEncogFolders());
+			fc.setCurrentDirectory(EncogWorkBench.getInstance()
+					.getEncogFolders());
 			final int result = fc.showOpenDialog(owner);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				String path = fc.getSelectedFile().getAbsolutePath();
-				EncogWorkBench.getInstance().getMainWindow().getTree().refresh(path);				
+				EncogWorkBench.getInstance().getMainWindow().getTree()
+						.refresh(path);
 			}
-		}  
-		catch (final Throwable e) {
+		} catch (final Throwable e) {
 			EncogWorkBench.displayError("Can't Change Directory", e);
 			e.printStackTrace();
 			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
 	}
 
-
 	public void performNetworkQuery(DirectoryEntry item) {
 
-/*		if (owner.getTabManager()
-				.checkBeforeOpen(item, NetworkQueryFrame.class)) {
-			BasicNetwork net = (BasicNetwork) EncogWorkBench.getInstance()
-					.getCurrentFile().find(item);
-			final NetworkQueryFrame frame = new NetworkQueryFrame(net);
-			frame.setVisible(true);
-		}
-*/
+		/*		if (owner.getTabManager()
+						.checkBeforeOpen(item, NetworkQueryFrame.class)) {
+					BasicNetwork net = (BasicNetwork) EncogWorkBench.getInstance()
+							.getCurrentFile().find(item);
+					final NetworkQueryFrame frame = new NetworkQueryFrame(net);
+					frame.setVisible(true);
+				}
+		*/
 	}
 
 	public void performObjectsCreate() throws IOException {
@@ -181,7 +188,7 @@ public class EncogDocumentOperations {
 				return;
 
 			String name = dialog.getResourceName();
-			
+
 			switch (dialog.getType()) {
 			case DataNormalization:
 				final DataNormalization norm = new DataNormalization();
@@ -194,7 +201,7 @@ public class EncogDocumentOperations {
 				script.setSource("console.println(\'Hello World\')\n");
 				//EncogWorkBench.getInstance().getCurrentFile().add(name, script);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
-				break;				
+				break;
 			case NeuralNetwork:
 				CreateNeuralNetwork.process(name);
 				break;
@@ -265,10 +272,9 @@ public class EncogDocumentOperations {
 
 	public void performRBF() {
 		RadialBasisFunctionsTab rbf = new RadialBasisFunctionsTab();
-		this.owner.openTab(rbf, "RBF" );
+		this.owner.openTab(rbf, "RBF");
 	}
-	
-	
+
 	public void performHelpAbout() {
 		// AboutEncog dialog = new AboutEncog();
 		// dialog.process();
@@ -315,17 +321,17 @@ public class EncogDocumentOperations {
 			config.setEncogCloudNetwork(dialog.getNetwork().getValue());
 			config.setThreadCount(dialog.getThreadCount().getValue());
 			config.setUseOpenCL(dialog.getUseOpenCL().getValue());
-			switch(((JComboBox) dialog.getErrorCalculation().getField()).getSelectedIndex())
-			{
-				case 0:
-					config.setErrorCalculation(ErrorCalculationMode.RMS);
-					break;
-				case 1:
-					config.setErrorCalculation(ErrorCalculationMode.MSE);
-					break;
-				case 2:
-					config.setErrorCalculation(ErrorCalculationMode.ARCTAN);
-					break;
+			switch (((JComboBox) dialog.getErrorCalculation().getField())
+					.getSelectedIndex()) {
+			case 0:
+				config.setErrorCalculation(ErrorCalculationMode.RMS);
+				break;
+			case 1:
+				config.setErrorCalculation(ErrorCalculationMode.MSE);
+				break;
+			case 2:
+				config.setErrorCalculation(ErrorCalculationMode.ARCTAN);
+				break;
 			}
 			EncogWorkBench.saveConfig();
 
@@ -357,12 +363,12 @@ public class EncogDocumentOperations {
 		dialog.getNameField().setValue(selected.getName());
 		dialog.getDescription().setValue(selected.getDescription());
 		if (dialog.process()) {
-			
-			String error = ResourceNameValidate.validateResourceName(dialog.getNameField().getValue());
-			
+
+			String error = ResourceNameValidate.validateResourceName(dialog
+					.getNameField().getValue());
+
 			if (error != null) {
-				EncogWorkBench.displayError("Data Error",
-						error);
+				EncogWorkBench.displayError("Data Error", error);
 				return;
 			}
 
@@ -406,15 +412,15 @@ public class EncogDocumentOperations {
 		CreateTrainingDataDialog dialog = new CreateTrainingDataDialog(
 				EncogWorkBench.getInstance().getMainWindow());
 
-		dialog.setType(TrainingDataType.Empty);	
+		dialog.setType(TrainingDataType.Empty);
 
-		if (dialog.process()) {		
-			performLinkTraining(dialog.getType(),name);
+		if (dialog.process()) {
+			performLinkTraining(dialog.getType(), name);
 		}
 	}
-	
-	public void performLinkTraining(TrainingDataType type, String name) throws IOException
-	{
+
+	public void performLinkTraining(TrainingDataType type, String name)
+			throws IOException {
 		switch (type) {
 		case Empty:
 			CreateTrainingData.linkEmpty(name);
@@ -438,7 +444,7 @@ public class EncogDocumentOperations {
 			CreateTrainingData.linkXOR(name);
 			break;
 		}
-		
+
 	}
 
 	public void performCloudLogin() {
@@ -455,6 +461,39 @@ public class EncogDocumentOperations {
 
 		}
 		System.exit(0);
+
+	}
+
+	public void performFileNewFile() throws IOException {
+		CreateFileDialog dialog = new CreateFileDialog(EncogWorkBench
+				.getInstance().getMainWindow());
+		dialog.setType(CreateFileType.EGFile);
+		if (dialog.process()) {
+			if (dialog.getType() == CreateFileType.EGFile) {
+				String name = dialog.getFilename();
+				name = FileUtil.forceExtension(new File(name).getName(), "eg");
+				String basePath = EncogWorkBench.getInstance().getMainWindow()
+						.getTree().getPath();
+				File path = new File(basePath, name);
+				if (FileUtil.checkOverWrite(path)) {
+					EncogMemoryCollection encog = new EncogMemoryCollection();
+					encog.save(path.toString());
+					EncogWorkBench.getInstance().getMainWindow().getTree()
+							.refresh();
+				}
+			} else if (dialog.getType() == CreateFileType.TextFile) {
+				String name = dialog.getFilename();
+				name = FileUtil.forceExtension(new File(name).getName(), "txt");
+				String basePath = EncogWorkBench.getInstance().getMainWindow()
+						.getTree().getPath();
+				File path = new File(basePath, name);
+				if (FileUtil.checkOverWrite(path)) {
+					FileUtil.writeFileAsString(path, "");
+					EncogWorkBench.getInstance().getMainWindow().getTree()
+							.refresh();
+				}
+			}
+		}
 
 	}
 }

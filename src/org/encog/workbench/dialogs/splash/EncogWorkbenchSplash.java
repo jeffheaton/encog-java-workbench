@@ -71,7 +71,7 @@ public class EncogWorkbenchSplash extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource()==this.buttonNew ) {
 			dispose();
-			EncogWorkBench.getInstance().getMainWindow().getOperations().performFileNew();
+			EncogWorkBench.getInstance().getMainWindow().getOperations().performFileNewProject();
 		}
 		else if( e.getSource()==this.buttonOpen ) {
 			dispose();

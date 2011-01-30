@@ -1,14 +1,22 @@
 package org.encog.workbench.util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import org.encog.workbench.EncogWorkBench;
 
 public class FileUtil {
 	public static String getFileName(File file)
 	{
 		String fileName = file.toString();
 		int mid= fileName.lastIndexOf(".");
+		if( mid==-1 ) {
+			return fileName;
+		}
 	    return fileName.substring(0,mid); 
 	}
 	
@@ -16,6 +24,8 @@ public class FileUtil {
 	{
 		String fileName = file.toString();
 		int mid= fileName.lastIndexOf(".");
+		if( mid==-1)
+			return "";
 	    return fileName.substring(mid+1,fileName.length()); 
 	}
 	
@@ -35,5 +45,23 @@ public class FileUtil {
 	        return fileData.toString();
 	    }
 
+	public static String forceExtension(String name, String ext) {
+		String b = getFileName(new File(name));
+		return b + "." + ext;
+	}
 
+	public static void writeFileAsString(File path, String str)
+			throws IOException {
+       
+		BufferedWriter o = new BufferedWriter(new FileWriter(path));
+        o.write(str);
+        o.close();
+	}
+	
+	public static boolean checkOverWrite(File path) {
+		if( path.exists() ) {
+			return EncogWorkBench.askQuestion("Overwrite", "This file already exists.  Do you wish to overwrite it?");
+		}
+		return true;
+	}
 }
