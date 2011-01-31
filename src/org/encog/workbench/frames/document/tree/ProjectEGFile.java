@@ -27,11 +27,12 @@ public class ProjectEGFile extends ProjectFile {
 	
 	public void generateChildrenList()
 	{
+		this.collection.buildDirectory();
 		this.children = new ProjectEGItem[this.collection.getDirectory().size()];
 		int index = 0;
 		for(DirectoryEntry entry : this.collection.getDirectory() )
 		{
-			this.children[index++] = new ProjectEGItem(this.collection, collection.find(entry));
+			this.children[index++] = new ProjectEGItem(this.collection, collection.find(entry),this);
 		}
 		
 		Arrays.sort(this.children);

@@ -33,6 +33,7 @@ import javax.swing.JPopupMenu;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.frames.document.tree.ProjectEGItem;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
 
@@ -136,11 +137,11 @@ public class EncogPopupMenus {
 				(source == this.popupDataDelete) ||
 				(source == this.popupGeneralDelete) )
 			{			
-				/*if ( first && !EncogWorkBench.askQuestion(
+				if ( first && !EncogWorkBench.askQuestion(
 					"Warning", "Are you sure you want to delete these object(s)?") ) {
 					return;
 				}
-				owner.getOperations().performObjectsDelete(selected);*/
+				owner.getOperations().performObjectsDelete(selected);
 			} /*else if (source == this.popupNetworkQuery) {
 				owner.getOperations().performNetworkQuery(selected);
 			} else if (source == this.popupNetworkOpen) {
@@ -181,6 +182,9 @@ public class EncogPopupMenus {
 		}
 		else if( item instanceof ProjectFile ) {
 			this.popupFile.show(e.getComponent(), e.getX(), e.getY());
+		}
+		else if( item instanceof ProjectEGItem ) {
+			this.popupGeneral.show(e.getComponent(), e.getX(), e.getY());
 		}
 		
 	}

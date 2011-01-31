@@ -66,6 +66,8 @@ import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
+import org.encog.workbench.frames.document.tree.ProjectEGItem;
+import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
@@ -491,5 +493,16 @@ public class EncogDocumentOperations {
 			}
 		}
 
+	}
+
+	public void performObjectsDelete(Object selected) {
+		if( selected instanceof ProjectEGItem ) {
+			ProjectEGItem item = (ProjectEGItem)selected;
+			item.getCollection().delete(item.getObj().getName());
+			item.getCollection().save(item.getEncogFile().getFile().toString());
+			item.getEncogFile().generateChildrenList();
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+		}
+		
 	}
 }

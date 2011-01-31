@@ -7,11 +7,13 @@ public class ProjectEGItem extends ProjectItem implements Comparable<ProjectEGIt
 
 	private EncogMemoryCollection collection;
 	private EncogPersistedObject obj;
+	private ProjectEGFile encogFile;
 	
-	public ProjectEGItem(EncogMemoryCollection collection, EncogPersistedObject obj)
+	public ProjectEGItem(EncogMemoryCollection collection, EncogPersistedObject obj, ProjectEGFile encogFile)
 	{
 		this.collection = collection;
 		this.obj = obj;
+		this.encogFile = encogFile;
 	}
 	
 	public int compareTo(ProjectEGItem o) {
@@ -19,7 +21,7 @@ public class ProjectEGItem extends ProjectItem implements Comparable<ProjectEGIt
 	}
 	
 	public String toString() {
-		return this.obj.getName();
+		return this.obj.getName() + " (" + this.obj.getClass().getSimpleName() + ")";
 	}
 
 	/**
@@ -35,7 +37,8 @@ public class ProjectEGItem extends ProjectItem implements Comparable<ProjectEGIt
 	public EncogPersistedObject getObj() {
 		return obj;
 	}
-	
-	
 
+	public ProjectEGFile getEncogFile() {
+		return encogFile;
+	}
 }

@@ -51,7 +51,7 @@ public class PropertyDataTab extends EncogCommonTab implements ActionListener {
 	private PropertyDataModel model;
 	private JButton btnDel;
 	
-	public PropertyDataTab(JTabbedPane owner, PropertyData data)
+	public PropertyDataTab(PropertyData data)
 	{
 		super(data);
 		

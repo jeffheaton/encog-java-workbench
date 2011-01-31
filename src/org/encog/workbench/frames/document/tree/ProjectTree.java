@@ -13,8 +13,6 @@ import javax.swing.tree.TreePath;
 
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
-import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.util.MouseUtil;
 
 public class ProjectTree extends JPanel implements MouseListener {
@@ -83,30 +81,8 @@ public class ProjectTree extends JPanel implements MouseListener {
 
 		if (path != null) {
 			Object obj = path.getLastPathComponent();
-
-			if (obj instanceof ProjectDirectory) {
-				ProjectDirectory dir = ((ProjectDirectory) obj);
-
-				if (MouseUtil.isRightClick(e)) {
-					//rightMouseClicked(e, item);
-				}
-
-				if (e.getClickCount() == 2) {
-
-					this.collectionModel.invalidate(dir.getFile().toString());
-				}
-				
-				/*DirectoryEntry item = ((EncogCollectionEntry) obj).getEntry();
-
-				if (MouseUtil.isRightClick(e)) {
-					rightMouseClicked(e, item);
-				}
-
-				if (e.getClickCount() == 2) {
-
-					this.doc.openItem(item);
-				}*/
-			} else if( obj instanceof ProjectFile ) {
+			
+			if( obj instanceof ProjectFile ) {
 				if (MouseUtil.isRightClick(e)) {
 					rightMouseClicked(e, obj);
 				} else if (e.getClickCount() == 2) {
@@ -117,6 +93,8 @@ public class ProjectTree extends JPanel implements MouseListener {
 				if (e.getClickCount() == 2) {
 					ProjectEGItem egItem = (ProjectEGItem)obj;
 					EncogWorkBench.getInstance().getMainWindow().open(egItem.getObj());
+				} else if (MouseUtil.isRightClick(e)) {
+					EncogWorkBench.getInstance().getMainWindow().getPopupMenus().rightMouseClicked(e, obj);
 				}
 			}
 		}
