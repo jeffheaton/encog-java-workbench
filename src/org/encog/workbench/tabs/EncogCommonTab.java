@@ -35,6 +35,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -45,6 +46,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import org.encog.persist.EncogPersistedObject;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 
@@ -64,14 +66,19 @@ public class EncogCommonTab extends JPanel {
 		return encogObject;
 	}
 
-	public boolean close()
+	public boolean close() throws IOException
 	{
 		return true;
 	}
 	
 	public void dispose()
 	{
-		owner.closeTab(this);
+		try {
+			owner.closeTab(this);
+		}
+		catch(Throwable t) {
+			EncogWorkBench.displayError("Error", t);
+		}
 	}
 
 	public void setParent(EncogDocumentFrame owner) {

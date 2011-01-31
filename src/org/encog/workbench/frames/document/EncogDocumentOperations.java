@@ -258,17 +258,6 @@ public class EncogDocumentOperations {
 
 	}
 
-	public void performObjectsDelete(DirectoryEntry selected) {
-
-		if (owner.getTabManager().find(selected) != null) {
-			EncogWorkBench.displayError("Can't Delete Object",
-					"This object can not be deleted while it is open.");
-			return;
-		}
-
-		//EncogWorkBench.getInstance().getCurrentFile().delete(selected);
-		EncogWorkBench.getInstance().getMainWindow().redraw();
-	}
 
 	public void performBrowse() {
 		BrowserFrame browse = new BrowserFrame();
@@ -281,8 +270,6 @@ public class EncogDocumentOperations {
 	}
 
 	public void performHelpAbout() {
-		// AboutEncog dialog = new AboutEncog();
-		// dialog.process();
 		EncogWorkBench.getInstance().getMainWindow().displayAboutTab();
 	}
 

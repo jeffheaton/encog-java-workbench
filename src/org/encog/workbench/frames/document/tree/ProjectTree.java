@@ -13,6 +13,7 @@ import javax.swing.tree.TreePath;
 
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.util.MouseUtil;
 
@@ -113,8 +114,10 @@ public class ProjectTree extends JPanel implements MouseListener {
 					this.doc.openFile(pf.getFile());
 				}
 			} else if( obj instanceof ProjectEGItem ) {
-				ProjectEGItem egItem = (ProjectEGItem)obj;
-				EncogWorkBench.getInstance().getMainWindow().open(egItem.getObj());
+				if (e.getClickCount() == 2) {
+					ProjectEGItem egItem = (ProjectEGItem)obj;
+					EncogWorkBench.getInstance().getMainWindow().open(egItem.getObj());
+				}
 			}
 		}
 	}

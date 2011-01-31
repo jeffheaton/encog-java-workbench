@@ -29,6 +29,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
@@ -161,10 +162,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	public void windowClosing(final WindowEvent e) {
 		if (!this.closed) {
-			if (EncogWorkBench.displayQuery("Save?",
+			/*if (EncogWorkBench.displayQuery("Save?",
 					"Would you like to save your changes?")) {
 				//this.operations.performFileSave();
-			}
+			}*/
 			this.closed = true;
 		}
 		super.windowClosing(e);
@@ -191,7 +192,6 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public EncogPopupMenus getPopupMenus() {
 		return popupMenus;
 	}
-
 
 	public void openTab(EncogCommonTab tab) {
 
@@ -243,7 +243,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		return this.documentTabs;
 	}
 
-	public void closeTab(EncogCommonTab tab) {
+	public void closeTab(EncogCommonTab tab) throws IOException {
 		if (tab.close()) {
 			this.tabManager.remove(tab);
 			getDocumentTabs().remove(tab);
@@ -350,11 +350,18 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void open(EncogPersistedObject obj) {
-		if( obj instanceof EncogScript ) {
-			EncogScriptTab tab = new EncogScriptTab(obj);
-			this.openTab(tab,obj.getName());
+		if (obj instanceof EncogScript) {
+			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
+					.getTabManager().find(obj);
+
+			if (tab == null) {
+				tab = new EncogScriptTab(obj);
+				this.openTab(tab, obj.getName());
+			} else {
+				this.documentTabs.setSelectedComponent(tab);
+			}
 		}
-		
+
 	}
 
 }

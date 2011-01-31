@@ -27,6 +27,7 @@ import javax.swing.*;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 import java.awt.*;
@@ -93,7 +94,11 @@ public class ButtonTabComponent extends JPanel {
         }
 
         public void actionPerformed(ActionEvent e) {
+        	try {
         	owner.closeTab(tab);
+        	} catch(Throwable t) {
+        		EncogWorkBench.displayError("Error", t);
+        	}
         }
 
         //we don't want to update UI for this button

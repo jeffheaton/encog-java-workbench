@@ -54,25 +54,15 @@ public class EncogTabManager {
 		return this.tabs.contains(tab);
 	}
 	
-	public boolean checkBeforeOpen(final DirectoryEntry object,
-			final Class<?> c) {
-		final EncogCommonTab existing = find(object);
-		if (existing == null) {
-			return true;
-		}
-		
-		this.owner.getDocumentTabs().setSelectedComponent(existing);
-		return false;
-	}
-
-	public EncogCommonTab find(final DirectoryEntry object) {
+	public EncogCommonTab find(final EncogPersistedObject encogPersistedObject) {
 		for (final EncogCommonTab tab : this.tabs) {
 			
 			if( tab.getEncogObject()==null )
 				continue;
 			
 			EncogPersistedObject obj = (EncogPersistedObject)tab.getEncogObject();
-			if (obj.getName().equals(object.getName())) {
+			
+			if (obj!=null && obj.getCollection()==encogPersistedObject.getCollection() && obj.getName().equals(encogPersistedObject.getName())) {
 				return tab;
 			}
 		}

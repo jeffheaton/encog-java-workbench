@@ -7,8 +7,6 @@ import java.io.IOException;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import org.encog.neural.data.TextData;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.FileUtil;
@@ -48,9 +46,11 @@ public class TextFileTab extends BasicFileTab {
 		return this.text.getText();
 	}
 	
-	public boolean close()
+	public boolean close() throws IOException
 	{
-		//((TextData)getEncogObject()).setText(this.getText());
+		if( EncogWorkBench.askQuestion("Save", "Would you like to save this text file?")) {
+			FileUtil.writeFileAsString(this.getFile(), this.getText());
+		}
 		return true;
 	}
 
