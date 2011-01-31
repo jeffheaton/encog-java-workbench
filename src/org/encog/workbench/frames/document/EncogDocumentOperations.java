@@ -219,14 +219,18 @@ public class EncogDocumentOperations {
 			case PropertyData:
 				final PropertyData prop = new PropertyData();
 				prop.setDescription("Some property data");
-				//EncogWorkBench.getInstance().getCurrentFile().add(name, prop);
+				encog.add(name, prop);
+				encog.save(pef.getFile().toString());
+				pef.generateChildrenList();
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;
 			case Text:
 				final TextData text = new TextData();
 				text.setDescription("A text file");
 				text.setText("Insert text here.");
-				//EncogWorkBench.getInstance().getCurrentFile().add(name, text);
+				encog.add(name, text);
+				encog.save(pef.getFile().toString());
+				pef.generateChildrenList();
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;
 			}
