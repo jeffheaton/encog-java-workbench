@@ -3,7 +3,6 @@ package org.encog.workbench.frames.document.tree;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +11,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
-import org.encog.persist.DirectoryEntry;
-import org.encog.persist.EncogMemoryCollection;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.tabs.files.GenericFileTab;
@@ -112,10 +109,12 @@ public class ProjectTree extends JPanel implements MouseListener {
 				if (MouseUtil.isRightClick(e)) {
 					rightMouseClicked(e, obj);
 				} else if (e.getClickCount() == 2) {
-					ProjectFile pf = (ProjectFile)obj;
-					GenericFileTab tab = new GenericFileTab(pf.getFile());
+					ProjectFile pf = (ProjectFile)obj; 
 					this.doc.openFile(pf.getFile());
 				}
+			} else if( obj instanceof ProjectEGItem ) {
+				ProjectEGItem egItem = (ProjectEGItem)obj;
+				EncogWorkBench.getInstance().getMainWindow().open(egItem.getObj());
 			}
 		}
 	}
@@ -157,6 +156,10 @@ public class ProjectTree extends JPanel implements MouseListener {
 
 	public String[] listEGFiles() {
 		return this.collectionModel.listEGFiles();
+	}
+	
+	public ProjectFile findTreeFile(String filename) {
+		return this.collectionModel.findTreeFile(filename);		
 	}
 
 }

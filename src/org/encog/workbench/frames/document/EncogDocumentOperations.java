@@ -65,6 +65,7 @@ import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
@@ -184,7 +185,7 @@ public class EncogDocumentOperations {
 				EncogWorkBench.displayError("Can't Create an Object","There are no EG files in the current directory tree.");
 				return;
 			}
-			
+						
 			CreateObjectDialog dialog = new CreateObjectDialog(EncogWorkBench
 					.getInstance().getMainWindow());
 
@@ -194,18 +195,19 @@ public class EncogDocumentOperations {
 				return;
 
 			String name = dialog.getResourceName();
-
+			String filename = dialog.getFilename();
+			
+			ProjectEGFile pef = (ProjectEGFile)EncogWorkBench.getInstance().getMainWindow().getTree().findTreeFile(filename);
+			EncogMemoryCollection encog = pef.getCollection();
+			
 			switch (dialog.getType()) {
-			case DataNormalization:
-				final DataNormalization norm = new DataNormalization();
-				//EncogWorkBench.getInstance().getCurrentFile().add(name, norm);
-				EncogWorkBench.getInstance().getMainWindow().redraw();
-				break;
 			case EncogScript:
 				final EncogScript script = new EncogScript();
 				script.setDescription("An Encog script");
 				script.setSource("console.println(\'Hello World\')\n");
-				//EncogWorkBench.getInstance().getCurrentFile().add(name, script);
+				encog.add(name, script);
+				encog.save(pef.getFile().toString());
+				pef.generateChildrenList();
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;
 			case NeuralNetwork:
@@ -226,9 +228,6 @@ public class EncogDocumentOperations {
 				text.setText("Insert text here.");
 				//EncogWorkBench.getInstance().getCurrentFile().add(name, text);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
-				break;
-			case TrainingData:
-				performCreateTrainingData(name);
 				break;
 			}
 

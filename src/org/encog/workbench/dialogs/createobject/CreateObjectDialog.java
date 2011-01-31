@@ -242,9 +242,10 @@ ListSelectionListener {
 	public String getResourceName() {
 		return resourceName;
 	}
-	
-	
-	
+
+	public String getFilename() {
+		return (String)this.targetEGField.getSelectedItem();
+	}
 	
 }
 

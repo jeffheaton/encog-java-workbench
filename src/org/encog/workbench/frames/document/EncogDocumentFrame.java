@@ -34,6 +34,8 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
+import org.encog.persist.EncogPersistedObject;
+import org.encog.script.EncogScript;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
 import org.encog.workbench.frames.EncogCommonFrame;
@@ -41,6 +43,7 @@ import org.encog.workbench.frames.document.tree.ProjectTree;
 import org.encog.workbench.tabs.AboutTab;
 import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.EncogScriptTab;
 import org.encog.workbench.tabs.EncogTabManager;
 import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.files.GenericFileTab;
@@ -344,6 +347,14 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		} finally {
 			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
+	}
+
+	public void open(EncogPersistedObject obj) {
+		if( obj instanceof EncogScript ) {
+			EncogScriptTab tab = new EncogScriptTab(obj);
+			this.openTab(tab,obj.getName());
+		}
+		
 	}
 
 }

@@ -55,15 +55,27 @@ public class EncogCollectionModel implements TreeModel {
 	public Object getChild(Object parent, int index) {
 		if (parent == path) {
 			return this.files.get(index);
-		} else
-			return null;
+		} else {
+			if( parent instanceof ProjectEGFile ) {
+				return ((ProjectEGFile)parent).getChildren()[index];
+			}
+			else {
+				return null;
+			}
+		}
 	}
 
 	public int getChildCount(Object parent) {
 		if (parent == path) {
 			return this.files.size();
-		} else
-			return 0;
+		} else {
+			if( parent instanceof ProjectEGFile ) {
+				return ((ProjectEGFile)parent).getChildren().length;
+			}
+			else {
+				return 0;
+			}
+		}
 	}
 
 	public boolean isLeaf(Object node) {
@@ -139,7 +151,7 @@ public class EncogCollectionModel implements TreeModel {
 
 		for (File entry : fileList) {
 			if (FileUtil.getFileExt(entry).equalsIgnoreCase("eg")) {
-				try {
+				try {					
 					this.files.add(new ProjectEGFile(entry));
 				} catch (Throwable t) {
 					this.files.add(new ProjectFile(entry));
@@ -181,6 +193,22 @@ public class EncogCollectionModel implements TreeModel {
 		files.toArray(result);
 		
 		return result;
+	}
+
+	public ProjectFile findTreeFile(String filename) {
+
+		for( ProjectItem item: this.files )
+		{
+			if( item instanceof ProjectFile )
+			{
+				if( ((ProjectFile)item).getFile().getName().equalsIgnoreCase(filename) )
+				{
+					return (ProjectFile)item;
+				}
+			}
+		}
+				
+		return null;
 	}
 
 }
