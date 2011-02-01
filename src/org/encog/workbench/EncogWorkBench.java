@@ -29,6 +29,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
@@ -37,6 +39,7 @@ import org.encog.Encog;
 import org.encog.EncogError;
 import org.encog.cloud.EncogCloud;
 import org.encog.engine.util.ErrorCalculation;
+import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.parse.tags.read.ReadXML;
@@ -51,6 +54,10 @@ import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.frames.document.EncogOutputPanel;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
+import org.encog.workbench.frames.document.tree.ProjectEGItem;
+import org.encog.workbench.frames.document.tree.ProjectItem;
+import org.encog.workbench.frames.document.tree.ProjectTraining;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.util.WorkbenchLogHandler;
 
@@ -397,6 +404,39 @@ public class EncogWorkBench implements Runnable {
 		File encogFolders =  new File(home,"EncogProjects");
 		encogFolders.mkdir();
 		return encogFolders;
+	}
+
+	public List<ProjectTraining> getTrainingData() {
+		
+		List<ProjectTraining> result = new ArrayList<ProjectTraining>();
+		
+		for( ProjectItem item : this.getMainWindow().getTree().getModel().getData() )
+		{
+			if( item instanceof ProjectTraining )
+				result.add((ProjectTraining)item);
+		}
+		
+		return result;
+	}
+
+	public List<ProjectEGItem> getMLMethods() {
+		List<ProjectEGItem> result = new ArrayList<ProjectEGItem>();
+		
+		for( ProjectItem item : this.getMainWindow().getTree().getModel().getData() )
+		{
+			if( item instanceof ProjectEGFile )
+			{
+				for( ProjectEGItem egItem : ((ProjectEGFile)item).getChildren() )
+				{
+					if( egItem.getObj() instanceof MLMethod )
+					{
+						result.add(egItem);
+					}
+				}
+			}
+		}
+		
+		return result;
 	}
 
 }

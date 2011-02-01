@@ -122,11 +122,6 @@ ListSelectionListener {
 		}
 		
 		this.filename = this.objectNameField.getText();
-		
-		String error = ResourceNameValidate.validateResourceName(filename);
-		if( error!=null ) {
-			throw new ValidationException(error);
-		}
 	}
 
 	@Override

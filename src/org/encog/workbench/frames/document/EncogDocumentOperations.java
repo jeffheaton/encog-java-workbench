@@ -35,6 +35,7 @@ import org.encog.EncogError;
 import org.encog.engine.util.ErrorCalculation;
 import org.encog.engine.util.ErrorCalculationMode;
 import org.encog.engine.util.Format;
+import org.encog.ml.MLMethod;
 import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
@@ -57,17 +58,20 @@ import org.encog.workbench.dialogs.createfile.CreateFileType;
 import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
 import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
+import org.encog.workbench.dialogs.training.NetworkAndTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectEGItem;
+import org.encog.workbench.frames.document.tree.ProjectTraining;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.validate.ResourceNameValidate;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
+import org.encog.workbench.tabs.training.BasicTrainingProgress;
 import org.encog.workbench.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -367,12 +371,12 @@ public class EncogDocumentOperations {
 			EvaluateDialog dialog = new EvaluateDialog(EncogWorkBench
 					.getInstance().getMainWindow());
 			if (dialog.process()) {
-				BasicNetwork network = dialog.getNetwork();
-				NeuralDataSet training = dialog.getTrainingSet();
+				//BasicNetwork network = dialog.getNetwork();
+				//NeuralDataSet training = dialog.getTrainingSet();
 
-				double error = network.calculateError(training);
-				EncogWorkBench.displayMessage("Error For this Network", ""
-						+ Format.formatPercent(error));
+				//double error = network.calculateError(training);
+				//EncogWorkBench.displayMessage("Error For this Network", ""
+				//		+ Format.formatPercent(error));
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error Evaluating Network", t);
@@ -489,5 +493,19 @@ public class EncogDocumentOperations {
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
 		
+	}
+
+	public void performTrain() {
+		NetworkAndTrainingDialog dialog = new NetworkAndTrainingDialog(EncogWorkBench.getInstance().getMainWindow());
+		dialog.render();
+		if( dialog.process() ) {
+			ProjectEGItem methodItem = dialog.getNetwork();
+			ProjectTraining trainingItem = dialog.getTrainingSet();
+			
+			MLMethod method = (MLMethod)methodItem.getObj();
+			
+			BasicTrainingProgress tab = new BasicTrainingProgress();
+			EncogWorkBench.getInstance().getMainWindow().openTab(tab);
+		}
 	}
 }

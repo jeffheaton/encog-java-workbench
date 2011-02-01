@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.dialogs.common;
+package org.encog.workbench.dialogs.training;
 
 import java.awt.Frame;
 import java.util.ArrayList;
@@ -39,6 +39,10 @@ import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.common.ComboBoxField;
+import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
+import org.encog.workbench.frames.document.tree.ProjectEGItem;
+import org.encog.workbench.frames.document.tree.ProjectTraining;
 
 /**
  * Basic dialog box that displays two combo boxes used to select
@@ -47,7 +51,7 @@ import org.encog.workbench.EncogWorkBench;
  * common dialog box.
  * @author jheaton
  */
-public abstract class NetworkAndTrainingDialog extends EncogPropertiesDialog {
+public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 
 	private ComboBoxField comboTraining;
 	private ComboBoxField comboNetwork;
@@ -60,12 +64,12 @@ public abstract class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	/**
 	 * All available training sets to display in the combo box.
 	 */
-	private final List<String> trainingSets = new ArrayList<String>();
+	private List<ProjectTraining> trainingSets;
 	
 	/**
 	 * All available networks to display in the combo box.
 	 */
-	private final List<String> networks = new ArrayList<String>();
+	private List<ProjectEGItem> networks;
 
 	/**
 	 * Construct the dialog box.
@@ -89,35 +93,22 @@ public abstract class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	 * combo boxes.
 	 */
 	private void findData() {
-		/*for (final DirectoryEntry obj : EncogWorkBench.getInstance()
-				.getCurrentFile().getDirectory()) {
-			if (obj.getType().equals(EncogPersistedCollection.TYPE_BASIC_NET) ) {
-				this.networks.add(obj.getName());
-			} else if (obj.getType().equals(EncogPersistedCollection.TYPE_SVM) ) {
-				this.networks.add(obj.getName());
-			} else if (obj.getType().equals(EncogPersistedCollection.TYPE_TRAINING) ||
-					obj.getType().equals(EncogPersistedCollection.TYPE_BINARY)) {
-				this.trainingSets.add(obj.getName());
-			}
-		}*/
+		this.trainingSets = EncogWorkBench.getInstance().getTrainingData();
+		this.networks = EncogWorkBench.getInstance().getMLMethods();
 	}
 
 	/**
 	 * @return The network that the user chose.
 	 */
-	public BasicNetwork getNetwork() {
-		return null;
-		//String networkName = (String)this.comboNetwork.getSelectedValue();
-		//return (BasicNetwork)EncogWorkBench.getInstance().getCurrentFile().find(networkName);
+	public ProjectEGItem getNetwork() {
+		return (ProjectEGItem)this.comboNetwork.getSelectedValue();
 	}
 
 	/**
 	 * @return The training set that the user chose.
 	 */
-	public NeuralDataSet getTrainingSet() {
-		return null;
-		//String trainingName = (String)this.comboTraining.getSelectedValue();
-		//return (NeuralDataSet)EncogWorkBench.getInstance().getCurrentFile().find(trainingName);
+	public ProjectTraining getTrainingSet() {
+		return (ProjectTraining)this.comboTraining.getSelectedValue();
 	}
 
 }

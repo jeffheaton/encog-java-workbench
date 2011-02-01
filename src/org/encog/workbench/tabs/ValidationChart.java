@@ -41,8 +41,8 @@ public class ValidationChart {
 				EncogWorkBench.getInstance().getMainWindow());
 
 		if (dialog.process()) {
-			network = dialog.getNetwork();
-			training = dialog.getTrainingSet();
+			//network = dialog.getNetwork();
+			//training = dialog.getTrainingSet();
 
 			ResultValidationChart chart = new ResultValidationChart();
 			chart.setData(training, network);

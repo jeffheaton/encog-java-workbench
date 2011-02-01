@@ -1,5 +1,5 @@
 /*
- * Encog(tm) Workbench v2.6 
+ * Encog(tm) Workbench v2.5
  * http://www.heatonresearch.com/encog/
  * http://code.google.com/p/encog-java/
  
@@ -21,18 +21,39 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.dialogs;
+package org.encog.workbench.tabs.training;
 
-import java.awt.Frame;
+import java.awt.Dimension;
+import java.awt.Graphics;
 
-import org.encog.workbench.dialogs.training.NetworkAndTrainingDialog;
+import javax.swing.JPanel;
 
-public class EvaluateDialog extends NetworkAndTrainingDialog {
+/**
+ * Panel to display the current training status.
+ * @author jheaton
+ *
+ */
+public class TrainingStatusPanel extends JPanel {
 
-	public EvaluateDialog(Frame owner) {
-		super(owner);
-		setTitle("Evaluate Training Set");
-		render();
+	/**
+	 * The serial id.
+	 */
+	private static final long serialVersionUID = 1L;
+	private final BasicTrainingProgress parent;
+
+	/**
+	 * Construct the panel.
+	 * @param parent The parent.
+	 */
+	public TrainingStatusPanel(final BasicTrainingProgress parent) {
+		this.parent = parent;
+		setPreferredSize(new Dimension(640, 65));
 	}
 
+	/**
+	 * Paint the panel, use the parent to do the painting.
+	 */
+	public void paint(final Graphics g) {
+		this.parent.paintStatus(g);
+	}
 }

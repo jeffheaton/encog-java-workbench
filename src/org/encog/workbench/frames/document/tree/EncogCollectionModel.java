@@ -150,7 +150,11 @@ public class EncogCollectionModel implements TreeModel {
 		}
 
 		for (File entry : fileList) {
-			if (FileUtil.getFileExt(entry).equalsIgnoreCase("eg")) {
+			String ext = FileUtil.getFileExt(entry);
+			
+			if ( ext.equalsIgnoreCase("csv") || ext.equalsIgnoreCase("egb") ) {
+				this.files.add(new ProjectTraining(entry));
+			} else if (ext.equalsIgnoreCase("eg")) {
 				try {					
 					this.files.add(new ProjectEGFile(entry));
 				} catch (Throwable t) {
@@ -209,6 +213,11 @@ public class EncogCollectionModel implements TreeModel {
 		}
 				
 		return null;
+	}
+
+	public List<ProjectItem> getData() {
+		return this.files;
+		
 	}
 
 }

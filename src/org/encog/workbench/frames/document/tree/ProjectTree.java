@@ -143,4 +143,9 @@ public class ProjectTree extends JPanel implements MouseListener {
 		return this.collectionModel.findTreeFile(filename);		
 	}
 
+	public EncogCollectionModel getModel() {
+		return this.collectionModel;
+		
+	}
+
 }

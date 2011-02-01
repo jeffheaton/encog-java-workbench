@@ -252,7 +252,7 @@ public class EncogMenus {
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EVALUATE)) {
 			owner.getOperations().performEvaluate();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_TRAIN)) {
-			
+			owner.getOperations().performTrain();
 		} else if (event.getActionCommand().equals(
 				EncogMenus.TOOLS_VALIDATION_CHART)) {
 			ValidationChart check = new ValidationChart();
