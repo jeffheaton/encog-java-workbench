@@ -37,6 +37,7 @@ import javax.swing.JTabbedPane;
 
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.script.EncogScript;
 import org.encog.workbench.EncogWorkBench;
@@ -50,6 +51,7 @@ import org.encog.workbench.tabs.EncogScriptTab;
 import org.encog.workbench.tabs.EncogTabManager;
 import org.encog.workbench.tabs.PropertyDataTab;
 import org.encog.workbench.tabs.TextDataTab;
+import org.encog.workbench.tabs.bnetwork.BasicNetworkTab;
 import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.tabs.files.ImageFileTab;
@@ -149,6 +151,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 					+ EncogWorkBench.getInstance().getCurrentFileName());
 		}
 		getMenus().updateMenus();
+		this.tree.refresh();
 	}
 
 	public void windowClosed(final WindowEvent e) {
@@ -364,8 +367,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
 			}
-		}
-		else if (obj instanceof TextData) {
+		} else if (obj instanceof TextData) {
 			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
 					.getTabManager().find(obj);
 
@@ -375,13 +377,22 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
 			}
-		}
-		else if (obj instanceof PropertyData) {
+		} else if (obj instanceof PropertyData) {
 			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
 					.getTabManager().find(obj);
 
 			if (tab == null) {
-				tab = new PropertyDataTab((PropertyData)obj);
+				tab = new PropertyDataTab((PropertyData) obj);
+				this.openTab(tab, obj.getName());
+			} else {
+				this.documentTabs.setSelectedComponent(tab);
+			}
+		} else if (obj instanceof BasicNetwork) {
+			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
+					.getTabManager().find(obj);
+
+			if (tab == null) {
+				tab = new BasicNetworkTab((BasicNetwork) obj);
 				this.openTab(tab, obj.getName());
 			} else {
 				this.documentTabs.setSelectedComponent(tab);

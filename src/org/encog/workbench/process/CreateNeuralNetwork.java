@@ -44,6 +44,7 @@ import org.encog.neural.pattern.NEATPattern;
 import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.pattern.SOMPattern;
 import org.encog.neural.pattern.SVMPattern;
+import org.encog.persist.EncogMemoryCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createnetwork.CreateADALINEDialog;
@@ -63,11 +64,12 @@ import org.encog.workbench.dialogs.createnetwork.CreateRSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateSVMDialog;
 import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.tabs.incremental.IncrementalPruneTab;
 
 public class CreateNeuralNetwork {
 
-	public static void process(String name) {
+	public static void process(String name, ProjectEGFile pef) {
 		EncogPersistedObject network = null;
 		CreateNeuralNetworkDialog dialog = new CreateNeuralNetworkDialog(
 				EncogWorkBench.getInstance().getMainWindow());
@@ -125,8 +127,10 @@ public class CreateNeuralNetwork {
 			}
 
 			if (network != null) {
-				/*EncogWorkBench.getInstance().getCurrentFile()
-						.add(name, network);*/
+				EncogMemoryCollection encog = pef.getCollection();
+				encog.add(name, network);
+				encog.save(pef.getFile().toString());
+				pef.generateChildrenList();
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
 		}

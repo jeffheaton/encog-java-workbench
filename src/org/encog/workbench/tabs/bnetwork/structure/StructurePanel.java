@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.tabs.visualize.structure;
+package org.encog.workbench.tabs.bnetwork.structure;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -42,9 +42,6 @@ import javax.swing.border.Border;
 
 import org.apache.commons.collections15.Transformer;
 import org.encog.engine.network.flat.FlatNetwork;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.persist.EncogPersistedObject;
-import org.encog.workbench.tabs.EncogCommonTab;
 
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
@@ -60,16 +57,14 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
-public class StructureTab extends EncogCommonTab {
+public class StructurePanel extends JPanel {
 
 	private FlatNetwork flat;
 	private VisualizationViewer<DrawnNeuron, DrawnConnection> vv;
 	
-	public StructureTab(EncogPersistedObject encogObject) {
-		super(encogObject);
-
-		this.flat = ((BasicNetwork) (this.getEncogObject())).getStructure()
-				.getFlat();
+	public StructurePanel(FlatNetwork flat) {
+	
+		this.flat = flat;
 
 		// Graph<V, E> where V is the type of the vertices
 		// and E is the type of the edges
@@ -247,7 +242,7 @@ public class StructureTab extends EncogCommonTab {
 				int count = connections.size();				
 				for (DrawnNeuron connectTo : connections) {					
 					int weightIndex = flat.getLayerIndex()[currentLayer]+(toNeuron*count)+currentNeuron;
-					double w = this.flat.getWeights()[weightIndex];
+					double w = 0;// this.flat.getWeights()[weightIndex];
 					DrawnConnection connection = new DrawnConnection(neuron, connectTo, w);
 					neuron.getOutbound().add(connection);
 					neuron.getInbound().add(connection);

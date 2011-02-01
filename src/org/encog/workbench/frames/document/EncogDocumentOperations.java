@@ -29,7 +29,6 @@ import java.io.IOException;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
 import org.encog.Encog;
 import org.encog.EncogError;
@@ -40,14 +39,10 @@ import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
-import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.data.buffer.BufferedNeuralDataSet;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.normalize.DataNormalization;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogMemoryCollection;
-import org.encog.persist.EncogPersistedCollection;
 import org.encog.script.EncogScript;
 import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
@@ -67,22 +62,12 @@ import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectEGItem;
-import org.encog.workbench.frames.document.tree.ProjectItem;
-import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.validate.ResourceNameValidate;
 import org.encog.workbench.tabs.BrowserFrame;
-import org.encog.workbench.tabs.EncogScriptTab;
-import org.encog.workbench.tabs.PropertyDataTab;
-import org.encog.workbench.tabs.SVMTab;
-import org.encog.workbench.tabs.TextDataTab;
-import org.encog.workbench.tabs.TrainingDataTab;
-import org.encog.workbench.tabs.files.BinaryDataTab;
-import org.encog.workbench.tabs.population.PopulationTab;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
-import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -213,7 +198,7 @@ public class EncogDocumentOperations {
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 				break;
 			case NeuralNetwork:
-				CreateNeuralNetwork.process(name);
+				CreateNeuralNetwork.process(name,pef);
 				break;
 			case NEATPopulation:
 				performCreatePopulation();

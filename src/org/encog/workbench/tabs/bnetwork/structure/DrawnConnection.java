@@ -1,4 +1,4 @@
-package org.encog.workbench.tabs.visualize.structure;
+package org.encog.workbench.tabs.bnetwork.structure;
 
 
 import java.awt.Color;
