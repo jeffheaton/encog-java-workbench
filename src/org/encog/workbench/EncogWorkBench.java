@@ -25,10 +25,7 @@ package org.encog.workbench;
 
 import java.awt.Frame;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,12 +39,6 @@ import org.encog.engine.util.ErrorCalculation;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.parse.tags.read.ReadXML;
-import org.encog.parse.tags.write.WriteXML;
-import org.encog.persist.EncogMemoryCollection;
-import org.encog.persist.location.FilePersistence;
-import org.encog.persist.persistors.generic.Object2XML;
-import org.encog.persist.persistors.generic.XML2Object;
 import org.encog.script.javascript.EncogJavascriptEngine;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
@@ -206,20 +197,6 @@ public class EncogWorkBench implements Runnable {
 	}
 
 	public static void saveConfig() {
-		try {
-			String home = System.getProperty("user.home");
-			File file = new File(home, CONFIG_FILENAME);
-
-			FileOutputStream fos = new FileOutputStream(file);
-			WriteXML out = new WriteXML(fos);
-			out.beginDocument();
-			Object2XML xml = new Object2XML();
-			xml.save(EncogWorkBench.getInstance().getConfig(), out);
-			out.endDocument();
-			fos.close();
-		} catch (IOException e) {
-			throw new WorkBenchError(e);
-		}
 
 	}
 
@@ -228,13 +205,7 @@ public class EncogWorkBench implements Runnable {
 		File file = new File(home, CONFIG_FILENAME);
 
 		try {
-			InputStream is = new FileInputStream(file);
 
-			ReadXML readXML = new ReadXML(is);
-			readXML.readToTag();
-			XML2Object conv = new XML2Object();
-			conv.load(readXML, EncogWorkBench.getInstance().getConfig());
-			is.close();
 		} catch (Exception e) {
 			// ignore error reading config file, it probably exists already and just needs t obe created.
 		}
