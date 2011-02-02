@@ -42,10 +42,14 @@ import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.training.Train;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogMemoryCollection;
 import org.encog.script.EncogScript;
+import org.encog.util.csv.CSVFormat;
 import org.encog.util.file.Directory;
+import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.BenchmarkDialog;
@@ -502,9 +506,33 @@ public class EncogDocumentOperations {
 			ProjectEGItem methodItem = dialog.getNetwork();
 			ProjectTraining trainingItem = dialog.getTrainingSet();
 			
-			MLMethod method = (MLMethod)methodItem.getObj();
+			BasicNetwork method = (BasicNetwork)methodItem.getObj();
+			String ext = FileUtil.getFileExt(trainingItem.getFile());
 			
-			BasicTrainingProgress tab = new BasicTrainingProgress();
+			NeuralDataSet trainingData;
+			
+			if( ext.equalsIgnoreCase("csv") )
+			{
+				trainingData = EncogUtility.loadCSV2Memory(
+						trainingItem.getFile().toString(), 
+						method.getInputCount(), 
+						method.getOutputCount(), 
+						false, 
+						CSVFormat.ENGLISH);
+			}
+			else if( ext.equalsIgnoreCase("csv") )
+			{
+				trainingData = EncogUtility.loadEGB2Memory(trainingItem.getFile().toString());
+			}
+			else
+			{
+				EncogWorkBench.displayError("Error", "Uknown file extension: " + ext);
+				return;
+			}
+				
+			Train train = new ResilientPropagation(method,trainingData);
+			
+			BasicTrainingProgress tab = new BasicTrainingProgress(train,methodItem,trainingItem);
 			EncogWorkBench.getInstance().getMainWindow().openTab(tab);
 		}
 	}

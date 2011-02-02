@@ -53,9 +53,9 @@ public class EncogMenus {
 	public static final String OBJECTS_CREATE = "Create Object...";
 	public static final String OBJECTS_DELETE = "Delete Object...";
 
-	public static final String TOOLS_CLOUD = "Connect to an Encog Cloud...";
+	//public static final String TOOLS_CLOUD = "Connect to an Encog Cloud...";
 	public static final String TOOLS_TRAIN = "Train...";
-	public static final String TOOLS_CODE = "Generate Code...";
+	public static final String TOOLS_GENERATE_TRAINING = "Generate Training Data...";
 	public static final String TOOLS_EVALUATE = "Evaluate Network...";
 	public static final String TOOLS_BENCHMARK = "Benchmark Encog...";
 	public static final String TOOLS_BROWSE = "Browse Web Data...";
@@ -150,8 +150,8 @@ public class EncogMenus {
 		this.menuBar.add(this.menuObjects);
 
 		this.menuTools = new JMenu("Tools");
-		this.menuToolsCloud = owner.addItem(this.menuTools, EncogMenus.TOOLS_CLOUD, 'c');
-		this.menuToolsGenerate = owner.addItem(this.menuTools, EncogMenus.TOOLS_CODE, 'g');
+		//this.menuToolsCloud = owner.addItem(this.menuTools, EncogMenus.TOOLS_CLOUD, 'c');
+		this.menuToolsGenerate = owner.addItem(this.menuTools, EncogMenus.TOOLS_GENERATE_TRAINING, 'g');
 		this.menuToolsTrain = owner.addItem(this.menuTools, EncogMenus.TOOLS_TRAIN, 't');
 		this.menuToolsBenchmark = owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 'k');
 		this.menuToolsEvaluate = owner.addItem(this.menuTools, EncogMenus.TOOLS_EVALUATE, 'e');
@@ -200,7 +200,7 @@ public class EncogMenus {
 		this.menuObjectsCreate.setEnabled(!modal && documentOpen);
 		this.menuObjectsDelete.setEnabled(!modal && documentOpen);
 
-		this.menuToolsCloud.setEnabled(!modal);
+		//this.menuToolsCloud.setEnabled(!modal);
 		this.menuToolsTrain.setEnabled(!modal && documentOpen);
 		this.menuToolsGenerate.setEnabled(!modal && documentOpen);
 		this.menuToolsEvaluate.setEnabled(!modal && documentOpen);
@@ -245,9 +245,9 @@ public class EncogMenus {
 			owner.getOperations().performHelpAbout();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BENCHMARK)) {
 			owner.getOperations().performBenchmark();
-		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_CLOUD)) {
+		} /*else if (event.getActionCommand().equals(EncogMenus.TOOLS_CLOUD)) {
 			owner.getOperations().performCloudLogin();
-		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BROWSE)) {
+		}*/ else if (event.getActionCommand().equals(EncogMenus.TOOLS_BROWSE)) {
 			owner.getOperations().performBrowse();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EVALUATE)) {
 			owner.getOperations().performEvaluate();
@@ -263,6 +263,8 @@ public class EncogMenus {
 			ImportExport.performExternal2Bin(null,null);
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_RBF)) {
 			owner.getOperations().performRBF();
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_GENERATE_TRAINING)) {
+			owner.getOperations().performCreateTrainingData("");
 		}
 	
 		

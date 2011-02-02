@@ -44,6 +44,8 @@ import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.frames.document.tree.ProjectEGItem;
+import org.encog.workbench.frames.document.tree.ProjectTraining;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.TimeSpanFormatter;
@@ -202,6 +204,9 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	 * first.
 	 */
 	private boolean shouldExit;
+	
+	private ProjectEGItem methodItem;
+	private ProjectTraining trainingItem;
 
 	/**
 	 * Construct the dialog box.
@@ -209,9 +214,14 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	 * @param owner
 	 *            The owner of the dialog box.
 	 */
-	public BasicTrainingProgress() {
+	public BasicTrainingProgress(Train train, ProjectEGItem methodItem, ProjectTraining trainingItem) {
 		super(null);
 
+		this.train = train;
+		this.methodItem = methodItem;
+		this.trainingItem = trainingItem;
+		this.network = (BasicNetwork) this.methodItem.getObj();
+		
 		this.buttonStart = new JButton("Start");
 		this.buttonStop = new JButton("Stop");
 		this.buttonClose = new JButton("Close");
@@ -316,10 +326,6 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 		return this.trainingData;
 	}
 
-	public void iteration()
-	{
-		
-	}
 
 	public void paintStatus(final Graphics g) {
 		g.setColor(Color.white);
@@ -449,7 +455,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 				this.iteration++;
 				this.lastError = this.train.getError();
 
-				iteration();
+				this.train.iteration();
 
 				this.currentError = this.train.getError();
 
