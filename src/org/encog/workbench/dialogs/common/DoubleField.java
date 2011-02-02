@@ -61,7 +61,8 @@ public class DoubleField extends PropertiesField {
 		
 		try
 		{
-			d = Double.parseDouble(((JTextField)this.getField()).getText());
+			String txt = ((JTextField)this.getField()).getText();
+			d = Double.parseDouble(txt);
 		}
 		catch(NumberFormatException e)
 		{

@@ -63,6 +63,7 @@ import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
 import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
 import org.encog.workbench.dialogs.training.NetworkAndTrainingDialog;
+import org.encog.workbench.dialogs.training.TrainDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
@@ -500,8 +501,8 @@ public class EncogDocumentOperations {
 	}
 
 	public void performTrain() {
-		NetworkAndTrainingDialog dialog = new NetworkAndTrainingDialog(EncogWorkBench.getInstance().getMainWindow());
-		dialog.render();
+		TrainDialog dialog = new TrainDialog(EncogWorkBench.getInstance().getMainWindow());
+		
 		if( dialog.process() ) {
 			ProjectEGItem methodItem = dialog.getNetwork();
 			ProjectTraining trainingItem = dialog.getTrainingSet();
@@ -513,14 +514,23 @@ public class EncogDocumentOperations {
 			
 			if( ext.equalsIgnoreCase("csv") )
 			{
+				CSVFormat format;
+				
+				if( dialog.getUseDecimalComma().getValue() )
+					format = CSVFormat.DECIMAL_COMMA;
+				else
+					format = CSVFormat.ENGLISH;
+				
+				boolean headers = dialog.getHeaders().getValue();
+				
 				trainingData = EncogUtility.loadCSV2Memory(
 						trainingItem.getFile().toString(), 
 						method.getInputCount(), 
 						method.getOutputCount(), 
-						false, 
-						CSVFormat.ENGLISH);
+						headers, 
+						format);
 			}
-			else if( ext.equalsIgnoreCase("csv") )
+			else if( ext.equalsIgnoreCase("egb") )
 			{
 				trainingData = EncogUtility.loadEGB2Memory(trainingItem.getFile().toString());
 			}
@@ -533,6 +543,7 @@ public class EncogDocumentOperations {
 			Train train = new ResilientPropagation(method,trainingData);
 			
 			BasicTrainingProgress tab = new BasicTrainingProgress(train,methodItem,trainingItem);
+			tab.setMaxError(dialog.getMaxError().getValue()/100.0);
 			EncogWorkBench.getInstance().getMainWindow().openTab(tab);
 		}
 	}
