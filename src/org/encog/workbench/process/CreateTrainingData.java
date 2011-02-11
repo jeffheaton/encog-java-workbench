@@ -40,17 +40,6 @@ import org.encog.neural.data.buffer.BinaryDataLoader;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
 import org.encog.neural.data.buffer.codec.DataSetCODEC;
 import org.encog.neural.data.buffer.codec.NeuralDataSetCODEC;
-import org.encog.neural.data.market.MarketDataDescription;
-import org.encog.neural.data.market.MarketDataType;
-import org.encog.neural.data.market.MarketNeuralDataSet;
-import org.encog.neural.data.market.TickerSymbol;
-import org.encog.neural.data.market.loader.LoaderError;
-import org.encog.neural.data.market.loader.MarketLoader;
-import org.encog.neural.data.market.loader.YahooFinanceLoader;
-import org.encog.neural.data.temporal.TemporalDataDescription;
-import org.encog.neural.data.temporal.TemporalDataDescription.Type;
-import org.encog.neural.data.temporal.TemporalNeuralDataSet;
-import org.encog.neural.data.temporal.TemporalPoint;
 import org.encog.util.benchmark.RandomTrainingFactory;
 import org.encog.util.csv.ReadCSV;
 import org.encog.workbench.EncogWorkBench;
@@ -75,7 +64,7 @@ public class CreateTrainingData {
 	}
 
 	private static NeuralDataSet generateMarketWindow() {
-		CreateMarketTrainingDialog dialog = new CreateMarketTrainingDialog(
+		/*CreateMarketTrainingDialog dialog = new CreateMarketTrainingDialog(
 				EncogWorkBench.getInstance().getMainWindow());
 
 		dialog.getFromDay().setValue(1);
@@ -164,13 +153,13 @@ public class CreateTrainingData {
 			}
 
 		}
-
+*/
 		return null;
 
 	}
 
 	private static BasicNeuralDataSet generatePredictWindow() {
-		final JFileChooser fc = new JFileChooser();
+/*		final JFileChooser fc = new JFileChooser();
 		fc.addChoosableFileFilter(EncogDocumentFrame.CSV_FILTER);
 		final int result = fc.showOpenDialog(EncogWorkBench.getInstance()
 				.getMainWindow());
@@ -228,7 +217,7 @@ public class CreateTrainingData {
 
 				return training;
 			}
-		}
+		}*/
 		return null;
 	}
 
