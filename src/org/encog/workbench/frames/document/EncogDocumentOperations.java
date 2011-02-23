@@ -69,6 +69,7 @@ import org.encog.workbench.frames.document.tree.ProjectEGItem;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
+import org.encog.workbench.process.EncogAnalystWizard;
 import org.encog.workbench.process.validate.ResourceNameValidate;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
@@ -138,7 +139,7 @@ public class EncogDocumentOperations {
 			
 			if( EncogWorkBench.askQuestion("Wizard", "Would you like to use a wizard to generate files\nnecessary to work with a CSV data file?") )
 			{
-				
+				EncogAnalystWizard.createEncogAnalyst(projectFile);
 			}
 		}
 	}
