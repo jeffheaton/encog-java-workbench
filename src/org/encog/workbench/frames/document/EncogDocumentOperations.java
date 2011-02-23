@@ -135,6 +135,11 @@ public class EncogDocumentOperations {
 			temp.save(projectFile.toString());
 			EncogWorkBench.getInstance().getMainWindow().getTree()
 					.refresh(project.toString());
+			
+			if( EncogWorkBench.askQuestion("Wizard", "Would you like to use a wizard to generate files\nnecessary to work with a CSV data file?") )
+			{
+				
+			}
 		}
 	}
 
