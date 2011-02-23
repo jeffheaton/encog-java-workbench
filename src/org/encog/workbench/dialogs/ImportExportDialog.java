@@ -121,4 +121,9 @@ public class ImportExportDialog extends JDialog implements Runnable,
 		this.status.setText(result.toString());
 	}
 
+	public void reportPhase(int arg0, int arg1, String arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

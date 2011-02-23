@@ -446,11 +446,6 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 						this.network.getName() + "-rprop");*/
 			}
 
-			// connect to the cloud, if needed
-			if (EncogWorkBench.getInstance().getCloud() != null) {
-				train.setCloud(EncogWorkBench.getInstance().getCloud());
-			}
-
 			while (!this.cancel) {
 				this.iteration++;
 				this.lastError = this.train.getError();

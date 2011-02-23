@@ -238,7 +238,6 @@ public class CreateTrainingData {
 			TemporalXOR temp = new TemporalXOR();
 			BasicNeuralDataSet trainingData = (BasicNeuralDataSet) temp
 					.generate(count);
-			trainingData.setDescription("Random Training data");
 			return trainingData;
 		}
 
@@ -248,7 +247,6 @@ public class CreateTrainingData {
 	private static BasicNeuralDataSet generateXOR() {
 		final BasicNeuralDataSet trainingData = new BasicNeuralDataSet(
 				NeuralConst.XOR_INPUT, NeuralConst.XOR_IDEAL);
-		trainingData.setDescription("Training data");
 		return trainingData;
 	}
 

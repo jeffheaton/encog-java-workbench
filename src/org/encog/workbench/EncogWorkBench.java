@@ -25,7 +25,6 @@ package org.encog.workbench;
 
 import java.awt.Frame;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,7 +33,6 @@ import javax.swing.JOptionPane;
 
 import org.encog.Encog;
 import org.encog.EncogError;
-import org.encog.cloud.EncogCloud;
 import org.encog.engine.util.ErrorCalculation;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
@@ -49,7 +47,6 @@ import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectEGItem;
 import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
-import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.util.WorkbenchLogHandler;
 
 /**
@@ -80,8 +77,6 @@ public class EncogWorkBench implements Runnable {
 	 */
 	private EncogWorkBenchConfig config;
 
-	private EncogCloud cloud;
-	
 	private WorkbenchLogHandler logHandler;
 
 	private ExecuteScript execute = new ExecuteScript();
@@ -242,10 +237,6 @@ public class EncogWorkBench implements Runnable {
 		EncogWorkBench.getInstance().getMainWindow().endWait();
 	}
 
-	public EncogCloud getCloud() {
-		return cloud;
-	}
-
 	public void run() {
 		for (;;) {
 			try {
@@ -253,27 +244,7 @@ public class EncogWorkBench implements Runnable {
 			} catch (InterruptedException e) {
 				return;
 			}
-			background();
-		}
-	}
-
-	private void background() {
-		synchronized (this) {
-			if (cloud != null) {
-				if (!cloud.isConnected()) {
-					this.cloud = null;
-					EncogWorkBench.displayError("",
-							"Encog Cloud connection lost.");
-					return;
-				} else
-					System.out.println("Connected.");
-			}
-		}
-	}
-
-	public void setCloud(EncogCloud cloud) {
-		synchronized (this) {
-			this.cloud = cloud;
+			//background();
 		}
 	}
 
@@ -281,12 +252,7 @@ public class EncogWorkBench implements Runnable {
 		EncogWorkBench.loadConfig();
 		
 		EncogJavascriptEngine.init();
-		
-		if( EncogWorkBench.getInstance().getConfig().isAutoConnect())
-		{
-			CloudProcess.performAutoConnect();
-		}
-		
+				
 		if( EncogWorkBench.getInstance().getConfig().isUseOpenCL()) {
 			EncogWorkBench.initCL();
 		}

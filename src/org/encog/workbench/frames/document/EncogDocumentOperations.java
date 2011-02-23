@@ -34,8 +34,6 @@ import org.encog.Encog;
 import org.encog.EncogError;
 import org.encog.engine.util.ErrorCalculation;
 import org.encog.engine.util.ErrorCalculationMode;
-import org.encog.engine.util.Format;
-import org.encog.ml.MLMethod;
 import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
@@ -62,7 +60,6 @@ import org.encog.workbench.dialogs.createfile.CreateFileType;
 import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
 import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
-import org.encog.workbench.dialogs.training.NetworkAndTrainingDialog;
 import org.encog.workbench.dialogs.training.TrainDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
@@ -72,7 +69,6 @@ import org.encog.workbench.frames.document.tree.ProjectEGItem;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
-import org.encog.workbench.process.cloud.CloudProcess;
 import org.encog.workbench.process.validate.ResourceNameValidate;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
@@ -439,19 +435,8 @@ public class EncogDocumentOperations {
 
 	}
 
-	public void performCloudLogin() {
-		CloudProcess.Login();
-
-	}
-
 	public void performQuit() {
-		try {
-			EncogWorkBench.saveConfig();
-			if (EncogWorkBench.getInstance().getCloud() != null)
-				EncogWorkBench.getInstance().getCloud().logout();
-		} catch (Throwable t) {
 
-		}
 		System.exit(0);
 
 	}
