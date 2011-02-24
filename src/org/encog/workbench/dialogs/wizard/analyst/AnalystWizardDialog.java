@@ -27,6 +27,7 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.FileField;
@@ -35,9 +36,9 @@ import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 public class AnalystWizardDialog extends EncogPropertiesDialog {
 	
-	private final FileField binaryFile;
-	private final FileField externalFile;
-	private final ComboBoxField fileType;
+	private final FileField rawFile;
+	private final CheckField headers;
+	private final CheckField decimalComma;
 	
 	public AnalystWizardDialog(Frame owner) {
 		super(owner);
@@ -49,25 +50,33 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		this.setSize(640, 200);
 		this.setTitle("Setup Encog Analyst Wizard");
 		
-		addProperty(this.binaryFile = new FileField("source file","Source Encog Binary File(*.egb)",true,false,EncogDocumentFrame.ENCOG_BINARY));
-		addProperty(this.externalFile = new FileField("target file","Target File",true,true,null));
-		addProperty(this.fileType = new ComboBoxField("type type", "Export File Type",true,list));
+		addProperty(this.rawFile = new FileField("source file","Source CSV File(*.csv)",true,false,EncogDocumentFrame.CSV_FILTER));
+		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
+		addProperty(this.decimalComma = new CheckField("decimal comma","Decimal Comma (instead of decimal point)"));
+
 		render();
 	}
 
-	public FileField getBinaryFile() {
-		return binaryFile;
+	/**
+	 * @return the rawFile
+	 */
+	public FileField getRawFile() {
+		return rawFile;
 	}
 
-	public FileField getExternalFile() {
-		return externalFile;
+	/**
+	 * @return the headers
+	 */
+	public CheckField getHeaders() {
+		return headers;
 	}
 
-	public ComboBoxField getFileType() {
-		return fileType;
+	/**
+	 * @return the decimalComma
+	 */
+	public CheckField getDecimalComma() {
+		return decimalComma;
 	}
-	
-	
 
 
 }

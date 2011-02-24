@@ -51,6 +51,7 @@ import org.encog.workbench.tabs.EncogScriptTab;
 import org.encog.workbench.tabs.EncogTabManager;
 import org.encog.workbench.tabs.PropertyDataTab;
 import org.encog.workbench.tabs.TextDataTab;
+import org.encog.workbench.tabs.analyst.EncogAnalystTab;
 import org.encog.workbench.tabs.bnetwork.BasicNetworkTab;
 import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.files.GenericFileTab;
@@ -318,7 +319,11 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 						|| extension.equalsIgnoreCase("csv")) {
 					tab = new TextFileTab(file);
 					this.openTab(tab, file.getName());
-				} else if (extension.equalsIgnoreCase("egb")) {
+				} if( extension.equals("ega")) {
+					tab = new EncogAnalystTab(file);
+					this.openTab(tab,file.getName());
+				}
+				else if (extension.equalsIgnoreCase("egb")) {
 					tab = new BinaryDataTab(file);
 					this.openTab(tab, file.getName());
 				} else if (extension.equalsIgnoreCase("jpg")
