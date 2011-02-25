@@ -27,6 +27,8 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -54,7 +56,7 @@ public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 	private final EncogAnalyst analyst;
 	private final JComboBox tasks;
 	private final TasksModel model;
-	
+
 	public EncogAnalystTab(File file) {
 		super(file);
 		this.analyst = new EncogAnalyst();
@@ -68,48 +70,70 @@ public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 		this.scroll = new JScrollPane(this.text);
 		add(this.scroll, BorderLayout.CENTER);
 		loadFromFile();
-		
+
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.buttonExecute = new JButton("Execute");
-		
+
 		this.buttonAnalyzeData = new JButton("Analyze Ranges");
 		this.buttonAnalyzeData.addActionListener(this);
-		
+
 		this.buttonExecute.addActionListener(this);
-		this.tasks = new JComboBox(model = new TasksModel(this.analyst));		
-		
+		this.tasks = new JComboBox(model = new TasksModel(this.analyst));
+
 		buttonPanel.add(tasks);
 		buttonPanel.add(this.buttonExecute);
 		buttonPanel.add(this.buttonAnalyzeData);
-		
-		add(buttonPanel,BorderLayout.NORTH);
-		
-		compile();	
+
+		add(buttonPanel, BorderLayout.NORTH);
+
+		compile();
 	}
-	
+
 	public void compile() {
-		this.model.refresh();
-		
-		// set the selected item
-		if( this.analyst.getScript().getTask(EncogAnalyst.TASK_FULL)!=null) {
-			this.tasks.setSelectedItem(EncogAnalyst.TASK_FULL);
-		} else {
-			if( this.model.getSize()>0 )
-				this.tasks.setSelectedIndex(0);
+		try {
+			byte[] b = this.text.getText().getBytes();
+			ByteArrayInputStream ms = new ByteArrayInputStream(b);
+			this.analyst.load(ms);
+			ms.close();
+
+			this.model.refresh();
+
+			// set the selected item
+			if (this.analyst.getScript().getTask(EncogAnalyst.TASK_FULL) != null) {
+				this.tasks.setSelectedItem(EncogAnalyst.TASK_FULL);
+			} else {
+				if (this.model.getSize() > 0)
+					this.tasks.setSelectedIndex(0);
+			}
+		} catch (IOException ex) {
+			throw new WorkBenchError(ex);
 		}
 	}
-	
-	private void loadFromFile()
-	{
+
+	private void loadFromFile() {
 		try {
-			this.text.setText(org.encog.util.file.FileUtil.readFileAsString(file));
+			this.text.setText(org.encog.util.file.FileUtil
+					.readFileAsString(file));
 		} catch (IOException e) {
 			throw new WorkBenchError(e);
 		}
 	}
-	
-	private void saveToFile() {
+
+	public void setText(final String t) {
+		this.text.setText(t);
+	}
+
+	public String getText() {
+		return this.text.getText();
+	}
+
+	public boolean close() {
+		save();
+		return true;
+	}
+
+	public void save() {
 		try {
 			FileUtil.writeFileAsString(this.getFile(), this.text.getText());
 		} catch (IOException e) {
@@ -117,55 +141,55 @@ public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 		}
 	}
 
-
-	public void setText(final String t) {
-		this.text.setText(t);
-	}
-	
-	public String getText()
-	{
-		return this.text.getText();
-	}
-	
-	public boolean close()
-	{
-		save();
-		return true;
-	}
-
-	public void save()
-	{	
-		this.saveToFile();
-	}
-
-
 	public boolean isTextSelected() {
-		return this.text.getSelectionEnd()>this.text.getSelectionStart();
+		return this.text.getSelectionEnd() > this.text.getSelectionStart();
 	}
-
-
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==this.buttonExecute) {
-			try {
-				EncogWorkBench.getInstance().clearOutput();
-				String name = (String)this.tasks.getSelectedItem();
-				analyst.executeTask(name);
-			} catch(AnalystError ex) {
-				EncogWorkBench.getInstance().outputLine("***Encog Analyst Error");
-				EncogWorkBench.getInstance().outputLine(ex.getMessage());
-			} catch(Throwable t) {
-				EncogWorkBench.displayError("Error During Analyst Execution", t);
-			}
-		} if(e.getSource()==this.buttonAnalyzeData) {
-			saveToFile();
-			loadFromFile();
+		try {
+		if (e.getSource() == this.buttonExecute) {
+			execute();
+		}
+		if (e.getSource() == this.buttonAnalyzeData) {
+			analyzeData();
+		}
+		}
+		catch(Throwable t) {
+			EncogWorkBench.displayError("Error", t);
+		}
+
+	}
+
+	private void execute() {
+		try {
+			EncogWorkBench.getInstance().clearOutput();
+			String name = (String) this.tasks.getSelectedItem();
+			analyst.executeTask(name);
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+		} catch (AnalystError ex) {
+			EncogWorkBench.getInstance().outputLine("***Encog Analyst Error");
+			EncogWorkBench.getInstance().outputLine(ex.getMessage());
+		} catch (Throwable t) {
+			EncogWorkBench.displayError("Error During Analyst Execution", t);
+		}
+	}
+
+	private void analyzeData() {
+		try {
+			compile();
+
 			AnalystWizard wizard = new AnalystWizard(this.analyst);
 			wizard.reanalyze();
-			analyst.save(this.getFile());
-			loadFromFile();
+
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			analyst.save(os);
+			os.close();
+
+			this.text.setText(os.toString());
+		} catch (IOException ex) {
+			throw new WorkBenchError(ex);
 		}
-		
+
 	}
 
 }

@@ -44,7 +44,6 @@ import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogMemoryCollection;
-import org.encog.script.EncogScript;
 import org.encog.util.csv.CSVFormat;
 import org.encog.util.file.Directory;
 import org.encog.util.simple.EncogUtility;

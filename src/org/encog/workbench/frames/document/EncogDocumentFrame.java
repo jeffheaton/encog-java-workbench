@@ -319,7 +319,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 						|| extension.equalsIgnoreCase("csv")) {
 					tab = new TextFileTab(file);
 					this.openTab(tab, file.getName());
-				} if( extension.equals("ega")) {
+				} else if( extension.equals("ega")) {
 					tab = new EncogAnalystTab(file);
 					this.openTab(tab,file.getName());
 				}
