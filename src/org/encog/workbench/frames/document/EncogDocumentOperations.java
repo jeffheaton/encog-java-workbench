@@ -199,15 +199,6 @@ public class EncogDocumentOperations {
 			EncogMemoryCollection encog = pef.getCollection();
 			
 			switch (dialog.getType()) {
-			case EncogScript:
-				final EncogScript script = new EncogScript();
-				script.setDescription("An Encog script");
-				script.setSource("console.println(\'Hello World\')\n");
-				encog.add(name, script);
-				encog.save(pef.getFile().toString());
-				pef.generateChildrenList();
-				EncogWorkBench.getInstance().getMainWindow().redraw();
-				break;
 			case NeuralNetwork:
 				CreateNeuralNetwork.process(name,pef);
 				break;

@@ -63,6 +63,9 @@ public class EncogPopupMenus {
 	private JMenuItem popupFileOpen;
 	private JMenuItem popupFileOpenText;
 	private JMenuItem popupFileRefresh;
+
+	private JPopupMenu popupRefresh;
+	private JMenuItem popupRefreshItem;
 	
 	public EncogPopupMenus(EncogDocumentFrame owner) {
 		this.owner = owner;
@@ -93,6 +96,10 @@ public class EncogPopupMenus {
 		this.popupFileOpenText = owner.addItem(this.popupFile, "Open as Text", 't');
 		this.popupFileDelete = owner.addItem(this.popupFile, "Delete", 'd');
 		this.popupFileRefresh = owner.addItem(this.popupFile, "Refresh", 'r');
+		
+		this.popupRefresh = new JPopupMenu();
+		this.popupRefreshItem = owner.addItem(this.popupRefresh, "Refresh", 'r');
+
 	}
 
 	public void actionPerformed(final ActionEvent event) {
@@ -101,7 +108,7 @@ public class EncogPopupMenus {
 	
 	public void performPopupMenu(final Object source) {
 		
-		if( source==this.popupFileRefresh ) {
+		if( source==this.popupFileRefresh || source==this.popupRefreshItem ) {
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
 		
@@ -185,6 +192,8 @@ public class EncogPopupMenus {
 		}
 		else if( item instanceof ProjectEGItem ) {
 			this.popupGeneral.show(e.getComponent(), e.getX(), e.getY());
+		} else {
+			this.popupRefresh.show(e.getComponent(), e.getX(), e.getY());
 		}
 		
 	}

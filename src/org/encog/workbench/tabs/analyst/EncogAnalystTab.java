@@ -27,12 +27,9 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
-import javax.script.ScriptException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -41,23 +38,19 @@ import javax.swing.JTextArea;
 
 import org.encog.app.analyst.AnalystError;
 import org.encog.app.analyst.EncogAnalyst;
-import org.encog.neural.data.TextData;
-import org.encog.persist.EncogPersistedObject;
-import org.encog.script.EncogScript;
-import org.encog.script.EncogScriptError;
-import org.encog.script.EncogScriptRuntimeError;
+import org.encog.app.analyst.wizard.AnalystWizard;
+import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
-import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.files.BasicFileTab;
 import org.encog.workbench.util.EncogFonts;
-import org.encog.workbench.util.WorkbenchConsoleInputOutput;
 
 public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 
 	private final JTextArea text;
 	private final JScrollPane scroll;
 	private final JButton buttonExecute;
+	private final JButton buttonAnalyzeData;
 	private final EncogAnalyst analyst;
 	private final JComboBox tasks;
 	private final TasksModel model;
@@ -74,26 +67,25 @@ public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 		this.setLayout(new BorderLayout());
 		this.scroll = new JScrollPane(this.text);
 		add(this.scroll, BorderLayout.CENTER);
-		try {
-			this.text.setText(org.encog.util.file.FileUtil.readFileAsString(file));
-		} catch (IOException e) {
-			throw new WorkBenchError(e);
-		}
+		loadFromFile();
 		
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.buttonExecute = new JButton("Execute");
+		
+		this.buttonAnalyzeData = new JButton("Analyze Ranges");
+		this.buttonAnalyzeData.addActionListener(this);
 		
 		this.buttonExecute.addActionListener(this);
 		this.tasks = new JComboBox(model = new TasksModel(this.analyst));		
 		
 		buttonPanel.add(tasks);
 		buttonPanel.add(this.buttonExecute);
+		buttonPanel.add(this.buttonAnalyzeData);
 		
 		add(buttonPanel,BorderLayout.NORTH);
 		
-		compile();
-		
+		compile();	
 	}
 	
 	public void compile() {
@@ -108,6 +100,22 @@ public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 		}
 	}
 	
+	private void loadFromFile()
+	{
+		try {
+			this.text.setText(org.encog.util.file.FileUtil.readFileAsString(file));
+		} catch (IOException e) {
+			throw new WorkBenchError(e);
+		}
+	}
+	
+	private void saveToFile() {
+		try {
+			FileUtil.writeFileAsString(this.getFile(), this.text.getText());
+		} catch (IOException e) {
+			throw new WorkBenchError(e);
+		}
+	}
 
 
 	public void setText(final String t) {
@@ -127,7 +135,7 @@ public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 
 	public void save()
 	{	
-		
+		this.saveToFile();
 	}
 
 
@@ -149,6 +157,13 @@ public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 			} catch(Throwable t) {
 				EncogWorkBench.displayError("Error During Analyst Execution", t);
 			}
+		} if(e.getSource()==this.buttonAnalyzeData) {
+			saveToFile();
+			loadFromFile();
+			AnalystWizard wizard = new AnalystWizard(this.analyst);
+			wizard.reanalyze();
+			analyst.save(this.getFile());
+			loadFromFile();
 		}
 		
 	}

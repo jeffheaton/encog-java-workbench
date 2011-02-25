@@ -24,12 +24,9 @@
 package org.encog.workbench.dialogs.createobject;
 
 public enum ObjectType {
-	DataNormalization,
 	NeuralNetwork,
 	NEATPopulation,
 	PropertyData,
-	Text,
-	TrainingData,
-	EncogScript
+	Text
 	
 }
