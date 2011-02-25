@@ -45,12 +45,11 @@ import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.tabs.files.BasicFileTab;
+import org.encog.workbench.tabs.files.text.BasicTextTab;
 import org.encog.workbench.util.EncogFonts;
 
-public class EncogAnalystTab extends BasicFileTab implements ActionListener {
+public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
-	private final JTextArea text;
-	private final JScrollPane scroll;
 	private final JButton buttonExecute;
 	private final JButton buttonAnalyzeData;
 	private final EncogAnalyst analyst;
@@ -61,14 +60,6 @@ public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 		super(file);
 		this.analyst = new EncogAnalyst();
 		this.analyst.load(file);
-		this.text = new JTextArea();
-		this.text.setFont(EncogFonts.getInstance().getCodeFont());
-		this.text.setEditable(true);
-		this.text.setLineWrap(true);
-		this.text.setWrapStyleWord(true);
-		this.setLayout(new BorderLayout());
-		this.scroll = new JScrollPane(this.text);
-		add(this.scroll, BorderLayout.CENTER);
 		loadFromFile();
 
 		JPanel buttonPanel = new JPanel();
@@ -92,7 +83,7 @@ public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 
 	public void compile() {
 		try {
-			byte[] b = this.text.getText().getBytes();
+			byte[] b = this.getText().getBytes();
 			ByteArrayInputStream ms = new ByteArrayInputStream(b);
 			this.analyst.load(ms);
 			ms.close();
@@ -113,38 +104,13 @@ public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 
 	private void loadFromFile() {
 		try {
-			this.text.setText(org.encog.util.file.FileUtil
+			this.setText(org.encog.util.file.FileUtil
 					.readFileAsString(file));
 		} catch (IOException e) {
 			throw new WorkBenchError(e);
 		}
 	}
-
-	public void setText(final String t) {
-		this.text.setText(t);
-	}
-
-	public String getText() {
-		return this.text.getText();
-	}
-
-	public boolean close() {
-		save();
-		return true;
-	}
-
-	public void save() {
-		try {
-			FileUtil.writeFileAsString(this.getFile(), this.text.getText());
-		} catch (IOException e) {
-			throw new WorkBenchError(e);
-		}
-	}
-
-	public boolean isTextSelected() {
-		return this.text.getSelectionEnd() > this.text.getSelectionStart();
-	}
-
+	
 	public void actionPerformed(ActionEvent e) {
 		try {
 		if (e.getSource() == this.buttonExecute) {
@@ -185,7 +151,7 @@ public class EncogAnalystTab extends BasicFileTab implements ActionListener {
 			analyst.save(os);
 			os.close();
 
-			this.text.setText(os.toString());
+			this.setText(os.toString());
 		} catch (IOException ex) {
 			throw new WorkBenchError(ex);
 		}
