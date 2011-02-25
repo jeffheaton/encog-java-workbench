@@ -35,18 +35,13 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import org.encog.app.analyst.AnalystError;
 import org.encog.app.analyst.EncogAnalyst;
 import org.encog.app.analyst.wizard.AnalystWizard;
-import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
-import org.encog.workbench.tabs.files.BasicFileTab;
 import org.encog.workbench.tabs.files.text.BasicTextTab;
-import org.encog.workbench.util.EncogFonts;
 
 public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
@@ -59,7 +54,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 	public EncogAnalystTab(File file) {
 		super(file);
 		this.analyst = new EncogAnalyst();
-		this.analyst.load(file);
+		
 		loadFromFile();
 
 		JPanel buttonPanel = new JPanel();
@@ -81,7 +76,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 		compile();
 	}
 
-	public void compile() {
+	public boolean compile() {
 		try {
 			byte[] b = this.getText().getBytes();
 			ByteArrayInputStream ms = new ByteArrayInputStream(b);
@@ -97,9 +92,18 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 				if (this.model.getSize() > 0)
 					this.tasks.setSelectedIndex(0);
 			}
-		} catch (IOException ex) {
-			throw new WorkBenchError(ex);
+			return true;
 		}
+		catch (AnalystError ex) {			
+			EncogWorkBench.getInstance().clearOutput();
+			EncogWorkBench.getInstance().outputLine("**Compile Error");
+			EncogWorkBench.getInstance().outputLine(ex.getMessage());
+			EncogWorkBench.displayError("Error", "This Analyst Script has compile errors.");
+			return false;
+		}
+		catch (IOException ex) {
+			throw new WorkBenchError(ex);
+		}		
 	}
 
 	private void loadFromFile() {
@@ -142,7 +146,8 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
 	private void analyzeData() {
 		try {
-			compile();
+			if( !compile() )
+				return;
 
 			AnalystWizard wizard = new AnalystWizard(this.analyst);
 			wizard.reanalyze();
