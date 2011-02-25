@@ -27,14 +27,10 @@ public class BasicTextTab extends BasicFileTab {
 		this.editor = new NonWrappingTextPane();				
 		this.editor.setFont(EncogFonts.getInstance().getCodeFont());
 		this.editor.setEditable(true);
-		//this.text.setPreferredSize(new Dimension(Integer.MAX_VALUE,Integer.MAX_VALUE));
-		// this.text.setLineWrap(true);
-		// this.text.setWrapStyleWord(true);
 
 		this.setLayout(new BorderLayout());
 		this.scroll = new JScrollPane(this.editor);
 		add(this.scroll, BorderLayout.CENTER);	
-		
 		loadFile();
 	}
 

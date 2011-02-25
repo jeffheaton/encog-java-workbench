@@ -35,13 +35,19 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import org.encog.app.analyst.AnalystError;
 import org.encog.app.analyst.EncogAnalyst;
 import org.encog.app.analyst.wizard.AnalystWizard;
+import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
+import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
+import org.encog.workbench.tabs.files.BasicFileTab;
 import org.encog.workbench.tabs.files.text.BasicTextTab;
+import org.encog.workbench.util.EncogFonts;
 
 public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 

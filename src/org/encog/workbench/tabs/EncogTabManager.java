@@ -145,4 +145,11 @@ public class EncogTabManager {
 		
 	}
 
+	public void closeAll() {
+		Object[] list = this.tabs.toArray();
+		for(int i=0;i<list.length;i++) {
+			EncogCommonTab tab = (EncogCommonTab)list[i];
+			tab.dispose();
+		}
+	}
 }

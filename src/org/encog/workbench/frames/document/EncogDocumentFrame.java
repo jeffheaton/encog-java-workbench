@@ -407,6 +407,13 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void changeDirectory(String path) {
+		if( this.tabManager.getTabs().size()>0 ) {
+			if( !EncogWorkBench.askQuestion("Changing Directory", "Before you can change the directory, all windows must be closed.\nDo you wish to continue?") ) {
+				return;				
+			}
+			this.tabManager.closeAll();
+		}
+		
 		EncogWorkBench.getInstance().getMainWindow().getTree()
 		.refresh(path);		
 	}
