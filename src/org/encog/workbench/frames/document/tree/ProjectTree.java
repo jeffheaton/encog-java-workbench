@@ -3,6 +3,7 @@ package org.encog.workbench.frames.document.tree;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,12 +92,23 @@ public class ProjectTree extends JPanel implements MouseListener {
 			} else if (obj instanceof ProjectEGItem) {
 				if (e.getClickCount() == 2) {
 					ProjectEGItem egItem = (ProjectEGItem) obj;
-					EncogWorkBench.getInstance().getMainWindow().open(
-							egItem.getObj());
+					EncogWorkBench.getInstance().getMainWindow()
+							.open(egItem.getObj());
 				} else if (MouseUtil.isRightClick(e)) {
 					EncogWorkBench.getInstance().getMainWindow()
 							.getPopupMenus().rightMouseClicked(e, obj);
 				}
+			} else if (obj instanceof ProjectParent && e.getClickCount() == 2) {
+				File p = new File(this.collectionModel.getPath())
+						.getParentFile();
+				EncogWorkBench.getInstance().getMainWindow()
+						.changeDirectory(p.toString());
+			} else if (obj instanceof ProjectDirectory
+					&& e.getClickCount() == 2) {
+				File p = new File(new File(this.collectionModel.getPath()),
+						obj.toString());
+				EncogWorkBench.getInstance().getMainWindow()
+						.changeDirectory(p.toString());
 			} else {
 				if (MouseUtil.isRightClick(e)) {
 					rightMouseClicked(e, null);

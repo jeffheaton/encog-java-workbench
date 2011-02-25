@@ -152,8 +152,7 @@ public class EncogDocumentOperations {
 			final int result = fc.showOpenDialog(owner);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				String path = fc.getSelectedFile().getAbsolutePath();
-				EncogWorkBench.getInstance().getMainWindow().getTree()
-						.refresh(path);
+				EncogWorkBench.getInstance().getMainWindow().changeDirectory(path);
 			}
 		} catch (final Throwable e) {
 			EncogWorkBench.displayError("Can't Change Directory", e);

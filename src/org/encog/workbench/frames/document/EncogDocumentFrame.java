@@ -406,4 +406,9 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	}
 
+	public void changeDirectory(String path) {
+		EncogWorkBench.getInstance().getMainWindow().getTree()
+		.refresh(path);		
+	}
+
 }
