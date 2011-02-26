@@ -56,7 +56,12 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	/**
 	 * The stop button.
 	 */
-	private final JButton buttonStop;
+	private final JButton buttonStopAll;
+	
+	/**
+	 * Stop the current command.
+	 */
+	private final JButton buttonStopCurrent;
 
 	/**
 	 * The close button.
@@ -78,10 +83,8 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	 */
 	private Thread thread;
 
-	/**
-	 * Has training been canceled.
-	 */
-	private boolean cancel;
+	private boolean cancelCommand;
+	private boolean cancelAll;
 
 
 	/**
@@ -123,23 +126,28 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		this.targetTask = targetTask;
 		
 		this.buttonStart = new JButton("Start");
-		this.buttonStop = new JButton("Stop");
+		this.buttonStopAll = new JButton("Stop All Commands");
+		this.buttonStopCurrent = new JButton("Stop Current Command");
 		this.buttonClose = new JButton("Close");
 
 		this.buttonStart.addActionListener(this);
-		this.buttonStop.addActionListener(this);
+		this.buttonStopAll.addActionListener(this);
 		this.buttonClose.addActionListener(this);
+		this.buttonStopCurrent.addActionListener(this);
 
 		setLayout(new BorderLayout());
 		this.panelBody = new AnalystStatusPanel(this);
 		this.panelButtons = new JPanel();
 		this.panelButtons.add(this.buttonStart);
-		this.panelButtons.add(this.buttonStop);
-		this.panelButtons.add(this.buttonClose);
+		this.panelButtons.add(this.buttonStopAll);
+		this.panelButtons.add(this.buttonStopCurrent);
+		this.panelButtons.add(this.buttonClose);		
+		
 		add(this.panelBody, BorderLayout.CENTER);
 		add(this.panelButtons, BorderLayout.SOUTH);
 
-		this.buttonStop.setEnabled(false);
+		this.buttonStopAll.setEnabled(false);
+		this.buttonStopCurrent.setEnabled(false);
 
 		this.bodyFont = EncogFonts.getInstance().getBodyFont();
 		this.headFont = EncogFonts.getInstance().getHeadFont();
@@ -160,8 +168,10 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			dispose();
 		} else if (e.getSource() == this.buttonStart) {
 			performStart();
-		} else if (e.getSource() == this.buttonStop) {
-			performStop();
+		} else if (e.getSource() == this.buttonStopAll) {
+			performStopAll();
+		} else if (e.getSource() == this.buttonStopCurrent) {
+			performStopCurrent();
 		}
 	}
 	
@@ -171,8 +181,8 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			performClose();
 			return true;
 		} else {
-		//	this.shouldExit = true;
-			this.cancel = true;
+			this.shouldExit = true;
+			this.cancelAll = true;
 			return false;
 		}		
 	}
@@ -250,8 +260,10 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			return;
 
 		this.buttonStart.setEnabled(false);
-		this.buttonStop.setEnabled(true);
-		this.cancel = false;
+		this.buttonStopAll.setEnabled(true);
+		this.buttonStopCurrent.setEnabled(true);
+		this.cancelAll = false;
+		this.cancelCommand = false;
 		this.status = "Started";
 		this.thread = new Thread(this);
 		this.thread.start();
@@ -260,10 +272,18 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	/**
 	 * Request that the training stop.
 	 */
-	private void performStop() {
+	private void performStopAll() {
 		this.status = "Canceled";
-		this.cancel = true;
+		this.cancelCommand = true;
+		this.cancelAll = true;
+		this.analyst.stopCurrentTask();
 	}
+	
+	private void performStopCurrent() {
+		this.cancelCommand = true;
+		this.analyst.stopCurrentTask();
+	}
+
 
 	
 
@@ -327,25 +347,21 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	private void stopped() {
 		this.thread = null;
 		this.buttonStart.setEnabled(true);
-		this.buttonStop.setEnabled(false);
-		this.cancel = true;
-	}
-
-	public void saveNetwork() {
-
+		this.buttonStopAll.setEnabled(false);
+		this.buttonStopCurrent.setEnabled(false);
+		this.cancelAll = true;
 	}
 
 	public void requestShutdown() {
-		// TODO Auto-generated method stub
-		
+		this.cancelAll = true;
 	}
 
 	public boolean shouldShutDown() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.cancelAll;
 	}
 
 	public void reportCommandBegin(int total, int current, String name) {
+		this.cancelCommand = false;
 		this.currentCommandName=name;
 		this.totalCommands=total;
 		this.currentCommandNumber=current;
@@ -357,9 +373,16 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		update();
 	}
 
-	public void reportCommandEnd() {
+	public void reportCommandEnd(boolean canceled) {
 		this.commandTime.stop();
-		String str = "Done with Command #" + this.currentCommandNumber + ": " + this.currentCommandName + ", elapsed time: " + Format.formatTimeSpan((int)(this.commandTime.getElapsedMilliseconds()/1000));
+		String str;
+		
+		if( canceled )
+			str = "Canceled";
+		else
+			str = "Done with";
+		
+		str += " Command #" + this.currentCommandNumber + ": " + this.currentCommandName + ", elapsed time: " + Format.formatTimeSpan((int)(this.commandTime.getElapsedMilliseconds()/1000));
 		EncogWorkBench.getInstance().outputLine(str);
 		update(true);
 	}
@@ -401,6 +424,14 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			this.lastUpdate = now;
 			repaint();
 		}
+	}
+
+	public void requestCancelCommand() {
+		this.cancelCommand = true;
+	}
+
+	public boolean shouldStopCommand() {
+		return this.cancelCommand;
 	}
 
 }
