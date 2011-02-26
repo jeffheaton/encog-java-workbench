@@ -1,6 +1,8 @@
 package org.encog.workbench.tabs.files.text;
 
 import java.awt.BorderLayout;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -15,7 +17,7 @@ import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.tabs.files.BasicFileTab;
 import org.encog.workbench.util.EncogFonts;
 
-public class BasicTextTab extends BasicFileTab {
+public class BasicTextTab extends BasicFileTab implements ComponentListener {
 
 	private final NonWrappingTextPane editor;
 	private final JScrollPane scroll;
@@ -30,7 +32,8 @@ public class BasicTextTab extends BasicFileTab {
 
 		this.setLayout(new BorderLayout());
 		this.scroll = new JScrollPane(this.editor);
-		add(this.scroll, BorderLayout.CENTER);	
+		add(this.scroll, BorderLayout.CENTER);
+		this.addComponentListener(this);
 		loadFile();
 	}
 
@@ -78,5 +81,25 @@ public class BasicTextTab extends BasicFileTab {
 
 	public boolean isTextSelected() {
 		return this.editor.getSelectionEnd() > this.editor.getSelectionStart();
+	}
+
+	public void componentResized(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void componentMoved(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void componentShown(ComponentEvent e) {
+		this.dirty.setDirty(false);
+		
+	}
+
+	public void componentHidden(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
