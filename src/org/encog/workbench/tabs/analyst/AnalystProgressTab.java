@@ -37,6 +37,8 @@ import javax.swing.JPanel;
 import org.encog.app.analyst.AnalystError;
 import org.encog.app.analyst.AnalystListener;
 import org.encog.app.analyst.EncogAnalyst;
+import org.encog.engine.util.Format;
+import org.encog.engine.util.Stopwatch;
 import org.encog.neural.networks.training.Train;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -96,11 +98,17 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	
 	private EncogAnalyst analyst;
 	private String targetTask = "";
-	private String currentTaskName = "";
-	private int currentTaskNumber;
-	private int totalTasks;
+	private String currentCommandName = "";
+	private String commandStatus = "";
+	private String trainingError = "";
+	private String trainingIterations = "";
+	private int currentCommandNumber;
+	private int totalCommands;
 	private boolean shouldExit;
-
+	private long lastUpdate;
+	private Stopwatch totalTime = new Stopwatch();
+	private Stopwatch commandTime = new Stopwatch();
+	
 	/**
 	 * Construct the dialog box.
 	 * 
@@ -180,13 +188,15 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		g.setFont(this.headFont);
 		final FontMetrics fm = g.getFontMetrics();
 		int y = fm.getHeight();
-		g.drawString("Current Status:", 10, y);
+		g.drawString("Overall Status:", 10, y);
 		y += fm.getHeight();
 		g.drawString("Running Task:", 10, y);
 		y += fm.getHeight();
 		g.drawString("Current Command Name:", 10, y);
 		y += fm.getHeight();
 		g.drawString("Current Command Number:", 10, y);
+		y += fm.getHeight();
+		g.drawString("Current Command Status:", 10, y);
 		
 
 		y = fm.getHeight();
@@ -194,17 +204,39 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		y += fm.getHeight();
 		g.drawString("Command Elapsed Time:", 300, y);
 		y += fm.getHeight();
-		g.drawString("Performance:", 300, y);
+		g.drawString("Training Iterations:", 300, y);
+		y += fm.getHeight();
+		g.drawString("Training Error:", 300, y);
+
 
 		y = fm.getHeight();
 		g.setFont(this.bodyFont);
 
 		g.drawString(this.status, 175, y);
 		y += fm.getHeight();
-		g.drawString(this.currentTaskName, 175, y);
+		g.drawString(this.targetTask, 175, y);
 		y += fm.getHeight();
-		g.drawString("" + 100.0 * 0 + "%", 175, y);
+		g.drawString(this.currentCommandName, 175, y);
+		y += fm.getHeight();
+		g.drawString(this.currentCommandNumber + "/" + this.totalCommands, 175, y);
+		y += fm.getHeight();
+		g.drawString(this.commandStatus, 175, y);
+		y += fm.getHeight();
+		
+		String time1 = Format.formatTimeSpan((int)(this.totalTime.getElapsedMilliseconds()/1000));
+		String time2 = Format.formatTimeSpan((int)(this.commandTime.getElapsedMilliseconds()/1000));
+
 		y = fm.getHeight();
+		g.setFont(this.bodyFont);
+
+		g.drawString(time1, 450, y);
+		y += fm.getHeight();
+		g.drawString(time2, 450, y);
+		y += fm.getHeight();
+		g.drawString(this.trainingIterations, 450, y);
+		y += fm.getHeight();
+		g.drawString(this.trainingError, 450, y);
+
 
 	}
 
@@ -242,6 +274,11 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	public void run() {
 
 		try {
+			this.status = "Running...";
+			this.totalTime.reset();
+			this.commandTime.reset();
+			this.totalTime.start();
+			update();
 			analyst.addAnalystListener(this);
 			analyst.executeTask(this.targetTask);		
 			analyst.removeAnalystListener(this);
@@ -249,6 +286,9 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			
 			shutdown();
 			stopped();
+			
+			this.status = "Done.";
+			update(true);
 
 			if (this.shouldExit) {
 				dispose();
@@ -306,33 +346,61 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	}
 
 	public void reportCommandBegin(int total, int current, String name) {
+		this.currentCommandName=name;
+		this.totalCommands=total;
+		this.currentCommandNumber=current;
+		this.commandTime.reset();
+		this.commandTime.start();
 		String str = "Beginning Command #" + current + "/" + total + ": " + name;
-		EncogWorkBench.getInstance().outputLine(str);		
+		this.commandStatus = "Running";
+		EncogWorkBench.getInstance().outputLine(str);
+		update();
 	}
 
 	public void reportCommandEnd() {
-		// TODO Auto-generated method stub
-		
+		this.commandTime.stop();
+		String str = "Done with Command #" + this.currentCommandNumber + ": " + this.currentCommandName + ", elapsed time: " + Format.formatTimeSpan((int)(this.commandTime.getElapsedMilliseconds()/1000));
+		EncogWorkBench.getInstance().outputLine(str);
+		update(true);
 	}
 
 	public void reportTrainingBegin() {
-		// TODO Auto-generated method stub
-		
+		update();
 	}
 
 	public void reportTrainingEnd() {
-		// TODO Auto-generated method stub
-		
+		this.commandStatus = "Training Done";
+		update(true);
 	}
 
 	public void reportTraining(Train train) {
-		// TODO Auto-generated method stub
-		
+		this.commandStatus = "Training";
+		this.trainingIterations = Format.formatInteger(train.getIteration());
+		this.trainingError = Format.formatPercent(train.getError());
+		update();
 	}
 
 	public void report(int total, int current, String message) {
-		// TODO Auto-generated method stub
-		
+		if (total == 0) {
+			this.commandStatus = current + " : " + message;
+		} else {
+			this.commandStatus = current + "/" + total + " : " + message;
+		}
+		update();		
+	}
+	
+	public void update()
+	{
+		update(false);
+	}
+	
+	public void update(boolean force)
+	{
+		long now = System.currentTimeMillis();
+		if( (now-this.lastUpdate)>1000 || force ) {
+			this.lastUpdate = now;
+			repaint();
+		}
 	}
 
 }
