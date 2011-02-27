@@ -30,7 +30,10 @@ public class EncogAnalystWizard {
 			if(dialog.getDecimalComma().getValue())
 				format = CSVFormat.DECIMAL_COMMA;
 			
+			wizard.setMethodType(dialog.getMethodType());
+			
 			wizard.wizard(targetCSVFile, headers, format);
+			
 			analyst.save(egaFile);
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}

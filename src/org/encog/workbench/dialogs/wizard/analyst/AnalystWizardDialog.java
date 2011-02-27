@@ -27,6 +27,7 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.encog.app.analyst.wizard.WizardMethodType;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
@@ -37,8 +38,11 @@ import org.encog.workbench.frames.document.EncogDocumentFrame;
 public class AnalystWizardDialog extends EncogPropertiesDialog {
 	
 	private final FileField rawFile;
+	private final ComboBoxField method;
 	private final CheckField headers;
 	private final CheckField decimalComma;
+	
+	private final List<String> methods = new ArrayList<String>();
 	
 	public AnalystWizardDialog(Frame owner) {
 		super(owner);
@@ -47,10 +51,16 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		list.add("CSV");
 		list.add("Excel (*.xlsx)");
 		
+		methods.add("Feedforward Network");
+		methods.add("RBF Network");
+		methods.add("Support Vector Machine");
+		methods.add("PNN/GRNN Network");
+		
 		this.setSize(640, 200);
 		this.setTitle("Setup Encog Analyst Wizard");
 		
 		addProperty(this.rawFile = new FileField("source file","Source CSV File(*.csv)",true,false,EncogDocumentFrame.CSV_FILTER));
+		addProperty(this.method = new ComboBoxField("method", "Machine Learning", true, methods));
 		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
 		addProperty(this.decimalComma = new CheckField("decimal comma","Decimal Comma (instead of decimal point)"));
 
@@ -76,6 +86,22 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	 */
 	public CheckField getDecimalComma() {
 		return decimalComma;
+	}
+	
+	public WizardMethodType getMethodType()
+	{
+		switch(this.method.getSelectedIndex()) {
+			case 0:
+				return WizardMethodType.FeedForward;
+			case 1:
+				return WizardMethodType.RBF;
+			case 2:
+				return WizardMethodType.SVM;
+			case 3:
+				return WizardMethodType.PNN;
+			default:
+				return null;
+		}
 	}
 
 
