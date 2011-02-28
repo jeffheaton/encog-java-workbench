@@ -80,17 +80,14 @@ public class SVMTab extends EncogCommonTab {
 		y += g.getFontMetrics().getHeight();
 		y += g.getFontMetrics().getHeight();
 		
-		for(int i=0;i<network.getModels().length;i++)
-		{
-			g.drawString("Model " + (i+1) + ":" , 10, y);
-			svm_model model = network.getModels()[i];
+			g.drawString("Model:" , 10, y);
+			svm_model model = network.getModel();
 			if( model!=null )
 			{
 				g.drawString("g: " + Format.formatDouble(model.param.gamma,5) , 100, y);
 				g.drawString("C: " + Format.formatDouble(model.param.C,5) , 200, y);
 			}
 			y += g.getFontMetrics().getHeight();
-		}
 		
 	}
 
