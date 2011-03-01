@@ -37,10 +37,11 @@ import java.util.jar.Manifest;
 
 import org.encog.Encog;
 import org.encog.persist.EncogPersistedObject;
+import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.EncogFonts;
 
-public class AboutTab extends EncogCommonTab {
+public class AboutTab extends HTMLTab {
 	
 	/**
 	 * JAR files currently in use.
@@ -67,86 +68,43 @@ public class AboutTab extends EncogCommonTab {
 				} catch (final IOException e) {
 					// ignore the JAR
 				}
-			}
+			}			
 		}
+		
+		generate();
 	}
 	
-	/**
-	 * Paint the panel.
-	 * @param g The graphics object to use.
-	 */
-	public void paint(final Graphics g) {
-		super.paint(g);
-		final FontMetrics fm = g.getFontMetrics();
-		g.setFont(EncogFonts.getInstance().getTitleFont());
-		int y = fm.getHeight();
-		g.setFont(EncogFonts.getInstance().getTitleFont());
-		g.drawString("Encog Workbench v" + EncogWorkBench.VERSION, 0, y);
-		y += g.getFontMetrics().getHeight();
-
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString( EncogWorkBench.COPYRIGHT, 0, y);
-		y += g.getFontMetrics().getHeight();
-		g.drawString( "Released under the Apache license", 0, y);
-		y += g.getFontMetrics().getHeight();
-		y += g.getFontMetrics().getHeight();
-
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("Java Version:", 10, y);
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString(System.getProperty("java.version"), 150, y);
-		y += g.getFontMetrics().getHeight();
+	public void generate() {
+		HTMLReport report = new HTMLReport();
+		report.beginHTML();
+		String title = "Encog Workbench v" + EncogWorkBench.VERSION;
+		report.title(title);
+		report.beginBody();
+		report.h1(title);
+		report.para("Encog Workbench is released under the Apache License.  For more information see the license file released with the Encog Workbench.");
+		report.h3(EncogWorkBench.COPYRIGHT);
 		
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("Java 64/32-Bit:", 10, y);
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString(System.getProperty("sun.arch.data.model"), 150, y);
-		y += g.getFontMetrics().getHeight();
-		
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("Processor Count:", 10, y);
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString(""+Runtime.getRuntime().availableProcessors(), 150, y);
-		y += g.getFontMetrics().getHeight();
-		
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("Numeric Format:", 10, y);
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString(""+ByteOrder.nativeOrder().toString(), 150, y);
-		y += g.getFontMetrics().getHeight();
-		
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("OS Name/Version:", 10, y);
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString(System.getProperty("os.name") + "("
-				+ System.getProperty("os.version") + ")", 150, y);
-		y += g.getFontMetrics().getHeight();
+		report.beginTable();
+		report.tablePair("Java Version", System.getProperty("java.version"));
+		report.tablePair("Java 64/32-Bit", System.getProperty("sun.arch.data.model"));
+		report.tablePair("Processor Count", ""+Runtime.getRuntime().availableProcessors());
+		report.tablePair("OS Name/Version", ""+ByteOrder.nativeOrder().toString());
+		report.tablePair("Encog Core Version", ""+Encog.VERSION);	
+		report.endTable();
 
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("Encog Core Version:", 10, y);
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString(Encog.getInstance().getProperties().get(
-				Encog.ENCOG_VERSION), 150, y);
-		y += g.getFontMetrics().getHeight();
-
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("Encog File Version:", 10, y);
-		g.setFont(EncogFonts.getInstance().getBodyFont());
-		g.drawString(Encog.getInstance().getProperties().get(
-				Encog.ENCOG_FILE_VERSION), 150, y);
-		y += g.getFontMetrics().getHeight();
-
-		y += g.getFontMetrics().getHeight();
-		g.setFont(EncogFonts.getInstance().getHeadFont());
-		g.drawString("Active JAR Files:", 10, y);
-		y += g.getFontMetrics().getHeight();
-
-		g.setFont(EncogFonts.getInstance().getBodyFont());
+		report.h3("Active JAR Files");
+		report.beginList();
 		for (final String file : this.jars) {
-			g.drawString(file, 20, y);
-			y += g.getFontMetrics().getHeight();
-		}
-
+			report.listItem(file);
+		}		
+		report.endList();
+		report.endBody();
+		report.endHTML();
+		
+		
+		this.display(report.toString());
 	}
+	
+
 
 }
