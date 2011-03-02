@@ -211,15 +211,15 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		
 
 		y = fm.getHeight();
-		g.drawString("Elapsed Time:", 300, y);
+		g.drawString("Elapsed Time:", 350, y);
 		y += fm.getHeight();
-		g.drawString("Command Elapsed Time:", 300, y);
+		g.drawString("Command Elapsed Time:", 350, y);
 		y += fm.getHeight();
-		g.drawString("Training Iterations:", 300, y);
+		g.drawString("Training Iterations:", 350, y);
 		y += fm.getHeight();
-		g.drawString("Training Error:", 300, y);
+		g.drawString("Training Error:", 350, y);
 		y += fm.getHeight();
-		g.drawString("Training Type:", 300, y);
+		g.drawString("Training Type:", 350, y);
 
 
 		y = fm.getHeight();
@@ -231,7 +231,7 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		y += fm.getHeight();
 		g.drawString(this.currentCommandName, 175, y);
 		y += fm.getHeight();
-		g.drawString(this.currentCommandNumber + "/" + this.totalCommands, 175, y);
+		g.drawString(this.currentCommandNumber + " / " + this.totalCommands, 175, y);
 		y += fm.getHeight();
 		g.drawString(this.commandStatus, 175, y);
 		y += fm.getHeight();
@@ -242,16 +242,16 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		y = fm.getHeight();
 		g.setFont(this.bodyFont);
 
-		g.drawString(time1, 450, y);
+		g.drawString(time1, 500, y);
 		y += fm.getHeight();
-		g.drawString(time2, 450, y);
+		g.drawString(time2, 500, y);
 		y += fm.getHeight();
-		g.drawString(this.trainingIterations, 450, y);
+		g.drawString(this.trainingIterations, 500, y);
 		y += fm.getHeight();
-		g.drawString(this.trainingError, 450, y);
+		g.drawString(this.trainingError, 500, y);
 		y += fm.getHeight();
 		if( train!=null ) {
-			g.drawString(train.getClass().getSimpleName(), 450, y);
+			g.drawString(train.getClass().getSimpleName(), 500, y);
 		}
 
 
@@ -417,9 +417,9 @@ public class AnalystProgressTab extends EncogCommonTab implements
 
 	public void report(int total, int current, String message) {
 		if (total == 0) {
-			this.commandStatus = current + " : " + message;
+			this.commandStatus = Format.formatInteger(current) + " : " + message;
 		} else {
-			this.commandStatus = current + "/" + total + " : " + message;
+			this.commandStatus = Format.formatInteger(current) + "/" + Format.formatInteger(total) + " : " + message;
 		}
 		update();		
 	}
