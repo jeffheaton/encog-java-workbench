@@ -304,6 +304,17 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			analyst.removeAnalystListener(this);
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 			
+		} catch (AnalystError ex) {
+			EncogWorkBench.getInstance().outputLine("***Encog Analyst Error");
+			EncogWorkBench.getInstance().outputLine(ex.getMessage());
+			this.status = "Error encountered.";
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+		} catch (Throwable t) {
+			EncogWorkBench.displayError("Error", t);
+			shutdown();
+			stopped();
+			dispose();
+		} finally {
 			shutdown();
 			stopped();
 			
@@ -313,15 +324,7 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			if (this.shouldExit) {
 				dispose();
 			}
-		} catch (AnalystError ex) {
-			EncogWorkBench.getInstance().outputLine("***Encog Analyst Error");
-			EncogWorkBench.getInstance().outputLine(ex.getMessage());
-		} catch (Throwable t) {
-			EncogWorkBench.displayError("Error", t);
-			shutdown();
-			stopped();
-			dispose();
-		} 
+		}
 	}
 
 

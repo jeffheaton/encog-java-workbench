@@ -35,6 +35,7 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
+import org.encog.ml.svm.SVM;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
 import org.encog.neural.networks.BasicNetwork;
@@ -50,7 +51,9 @@ import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.EncogScriptTab;
 import org.encog.workbench.tabs.EncogTabManager;
 import org.encog.workbench.tabs.PropertyDataTab;
+import org.encog.workbench.tabs.SVMTab;
 import org.encog.workbench.tabs.TextDataTab;
+import org.encog.workbench.tabs.UnknownObjectTab;
 import org.encog.workbench.tabs.analyst.EncogAnalystTab;
 import org.encog.workbench.tabs.bnetwork.BasicNetworkTab;
 import org.encog.workbench.tabs.files.BinaryDataTab;
@@ -319,11 +322,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 						|| extension.equalsIgnoreCase("csv")) {
 					tab = new TextFileTab(file);
 					this.openTab(tab, file.getName());
-				} else if( extension.equals("ega")) {
+				} else if (extension.equals("ega")) {
 					tab = new EncogAnalystTab(file);
-					this.openTab(tab,file.getName());
-				}
-				else if (extension.equalsIgnoreCase("egb")) {
+					this.openTab(tab, file.getName());
+				} else if (extension.equalsIgnoreCase("egb")) {
 					tab = new BinaryDataTab(file);
 					this.openTab(tab, file.getName());
 				} else if (extension.equalsIgnoreCase("jpg")
@@ -362,12 +364,12 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void open(EncogPersistedObject obj) {
-		if (obj instanceof EncogScript) {
+		if (obj instanceof SVM) {
 			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
 					.getTabManager().find(obj);
 
 			if (tab == null) {
-				tab = new EncogScriptTab(obj);
+				tab = new SVMTab(obj);
 				this.openTab(tab, obj.getName());
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
@@ -402,20 +404,32 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
 			}
+		} else {
+			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
+					.getTabManager().find(obj);
+
+			if (tab == null) {
+				tab = new UnknownObjectTab(obj);
+				this.openTab(tab, obj.getName());
+			} else {
+				this.documentTabs.setSelectedComponent(tab);
+			}
 		}
 
 	}
 
 	public void changeDirectory(String path) {
-		if( this.tabManager.getTabs().size()>0 ) {
-			if( !EncogWorkBench.askQuestion("Changing Directory", "Before you can change the directory, all windows must be closed.\nDo you wish to continue?") ) {
-				return;				
+		if (this.tabManager.getTabs().size() > 0) {
+			if (!EncogWorkBench
+					.askQuestion(
+							"Changing Directory",
+							"Before you can change the directory, all windows must be closed.\nDo you wish to continue?")) {
+				return;
 			}
 			this.tabManager.closeAll();
 		}
-		
-		EncogWorkBench.getInstance().getMainWindow().getTree()
-		.refresh(path);		
+
+		EncogWorkBench.getInstance().getMainWindow().getTree().refresh(path);
 	}
 
 }
