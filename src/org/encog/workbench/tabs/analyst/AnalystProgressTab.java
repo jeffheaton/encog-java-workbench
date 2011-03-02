@@ -111,6 +111,7 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	private long lastUpdate;
 	private Stopwatch totalTime = new Stopwatch();
 	private Stopwatch commandTime = new Stopwatch();
+	private Train train;
 	
 	/**
 	 * Construct the dialog box.
@@ -217,6 +218,8 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		g.drawString("Training Iterations:", 300, y);
 		y += fm.getHeight();
 		g.drawString("Training Error:", 300, y);
+		y += fm.getHeight();
+		g.drawString("Training Type:", 300, y);
 
 
 		y = fm.getHeight();
@@ -246,6 +249,10 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		g.drawString(this.trainingIterations, 450, y);
 		y += fm.getHeight();
 		g.drawString(this.trainingError, 450, y);
+		y += fm.getHeight();
+		if( train!=null ) {
+			g.drawString(train.getClass().getSimpleName(), 450, y);
+		}
 
 
 	}
@@ -396,10 +403,12 @@ public class AnalystProgressTab extends EncogCommonTab implements
 
 	public void reportTrainingEnd() {
 		this.commandStatus = "Training Done";
+		this.train = null;
 		update(true);
 	}
 
 	public void reportTraining(Train train) {
+		this.train = train;
 		this.commandStatus = "Training";
 		this.trainingIterations = Format.formatInteger(train.getIteration());
 		this.trainingError = Format.formatPercent(train.getError());

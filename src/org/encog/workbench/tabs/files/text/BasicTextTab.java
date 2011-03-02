@@ -102,4 +102,10 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public BasicTextDocListener getDirty() {
+		return dirty;
+	}
+	
+	
 }

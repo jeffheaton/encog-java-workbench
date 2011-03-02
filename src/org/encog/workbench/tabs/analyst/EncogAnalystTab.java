@@ -54,7 +54,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 	public EncogAnalystTab(File file) {
 		super(file);
 		this.analyst = new EncogAnalyst();
-		
+
 		loadFromFile();
 
 		JPanel buttonPanel = new JPanel();
@@ -78,6 +78,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
 	public boolean compile() {
 		try {
+		
 			byte[] b = this.getText().getBytes();
 			ByteArrayInputStream ms = new ByteArrayInputStream(b);
 			this.analyst.load(ms);
@@ -93,53 +94,66 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 					this.tasks.setSelectedIndex(0);
 			}
 			return true;
-		}
-		catch (AnalystError ex) {			
+		} catch (AnalystError ex) {
 			EncogWorkBench.getInstance().clearOutput();
 			EncogWorkBench.getInstance().outputLine("**Compile Error");
 			EncogWorkBench.getInstance().outputLine(ex.getMessage());
-			EncogWorkBench.displayError("Error", "This Analyst Script has compile errors.");
+			EncogWorkBench.displayError("Error",
+					"This Analyst Script has compile errors.");
 			return false;
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			throw new WorkBenchError(ex);
-		}		
+		}
 	}
 
 	private void loadFromFile() {
 		try {
-			this.setText(org.encog.util.file.FileUtil
-					.readFileAsString(file));
+			this.setText(org.encog.util.file.FileUtil.readFileAsString(file));
 		} catch (IOException e) {
 			throw new WorkBenchError(e);
 		}
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		try {
-		if (e.getSource() == this.buttonExecute) {
-			execute();
-		}
-		if (e.getSource() == this.buttonAnalyzeData) {
-			analyzeData();
-		}
-		}
-		catch(Throwable t) {
+			if (e.getSource() == this.buttonExecute) {
+				execute();
+			}
+			if (e.getSource() == this.buttonAnalyzeData) {
+				analyzeData();
+			}
+		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
 		}
+	}
 
+	private boolean forceSave() {
+		if (this.getDirty().isDirty()) {
+			if (EncogWorkBench
+					.askQuestion(
+							"Save",
+							"To perform this operation, you must save your script.\nWould you like to save this script?")) {
+				this.saveFile();
+				return true;
+			}
+			return false;
+		}
+		return true;
 	}
 
 	private void execute() {
-		EncogWorkBench.getInstance().clearOutput();
-		String name = (String) this.tasks.getSelectedItem();
-		AnalystProgressTab tab = new AnalystProgressTab(this.analyst,name);
-		EncogWorkBench.getInstance().getMainWindow().openModalTab(tab,"Analyst");
+		if (forceSave()) {
+			EncogWorkBench.getInstance().clearOutput();
+			String name = (String) this.tasks.getSelectedItem();
+			AnalystProgressTab tab = new AnalystProgressTab(this.analyst, name);
+			EncogWorkBench.getInstance().getMainWindow()
+					.openModalTab(tab, "Analyst");
+		}
 	}
 
 	private void analyzeData() {
 		try {
-			if( !compile() )
+			if (!compile())
 				return;
 
 			AnalystWizard wizard = new AnalystWizard(this.analyst);
