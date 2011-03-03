@@ -27,20 +27,20 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.encog.app.analyst.AnalystFileFormat;
 import org.encog.app.analyst.wizard.WizardMethodType;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.FileField;
-import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 public class AnalystWizardDialog extends EncogPropertiesDialog {
 	
 	private final FileField rawFile;
 	private final ComboBoxField method;
+	private final ComboBoxField format;
 	private final CheckField headers;
-	private final CheckField decimalComma;
 	
 	private final List<String> methods = new ArrayList<String>();
 	
@@ -51,6 +51,13 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		list.add("CSV");
 		list.add("Excel (*.xlsx)");
 		
+		List<String> csvFormat = new ArrayList<String>();
+		csvFormat.add("Decimal Point (USA/English) & Comma Separator");
+		csvFormat.add("Decimal Point (USA/English) & Space Separator");
+		csvFormat.add("Decimal Point (USA/English) & Semicolon Separator");
+		csvFormat.add("Decimal Comma (Non-USA/English) & Space Separator");
+		csvFormat.add("Decimal Comma (Non-USA/English) & Semicolon Separator");
+		
 		methods.add("Feedforward Network");
 		methods.add("RBF Network");
 		methods.add("Support Vector Machine");
@@ -60,9 +67,9 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		this.setTitle("Setup Encog Analyst Wizard");
 		
 		addProperty(this.rawFile = new FileField("source file","Source CSV File(*.csv)",true,false,EncogDocumentFrame.CSV_FILTER));
-		addProperty(this.method = new ComboBoxField("method", "Machine Learning", true, methods));
+		addProperty(this.method = new ComboBoxField("format", "File Format", true, csvFormat));
+		addProperty(this.format = new ComboBoxField("method", "Machine Learning", true, methods));
 		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
-		addProperty(this.decimalComma = new CheckField("decimal comma","Decimal Comma (instead of decimal point)"));
 
 		render();
 	}
@@ -81,12 +88,6 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		return headers;
 	}
 
-	/**
-	 * @return the decimalComma
-	 */
-	public CheckField getDecimalComma() {
-		return decimalComma;
-	}
 	
 	public WizardMethodType getMethodType()
 	{
@@ -103,6 +104,21 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 				return null;
 		}
 	}
-
-
+	
+	public AnalystFileFormat getFormat() {
+		switch( this.format.getSelectedIndex()) {
+			case 0:
+				return AnalystFileFormat.DECPNT_COMMA;
+			case 1:
+				return AnalystFileFormat.DECPNT_SPACE;
+			case 2:
+				return AnalystFileFormat.DECPNT_SEMI;
+			case 3:
+				return AnalystFileFormat.DECCOMMA_SPACE;
+			case 4:
+				return AnalystFileFormat.DECCOMMA_SEMI;
+			default:
+				return null;
+		}
+	}
 }

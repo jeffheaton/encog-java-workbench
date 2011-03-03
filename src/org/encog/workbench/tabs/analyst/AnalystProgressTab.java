@@ -39,6 +39,7 @@ import org.encog.app.analyst.AnalystListener;
 import org.encog.app.analyst.EncogAnalyst;
 import org.encog.engine.util.Format;
 import org.encog.engine.util.Stopwatch;
+import org.encog.ml.MLTrain;
 import org.encog.neural.networks.training.Train;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -111,7 +112,7 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	private long lastUpdate;
 	private Stopwatch totalTime = new Stopwatch();
 	private Stopwatch commandTime = new Stopwatch();
-	private Train train;
+	private MLTrain train;
 	
 	/**
 	 * Construct the dialog box.
@@ -407,7 +408,7 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		update(true);
 	}
 
-	public void reportTraining(Train train) {
+	public void reportTraining(MLTrain train) {
 		this.train = train;
 		this.commandStatus = "Training";
 		this.trainingIterations = Format.formatInteger(train.getIteration());

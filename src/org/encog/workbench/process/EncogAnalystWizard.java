@@ -2,6 +2,7 @@ package org.encog.workbench.process;
 
 import java.io.File;
 
+import org.encog.app.analyst.AnalystFileFormat;
 import org.encog.app.analyst.EncogAnalyst;
 import org.encog.app.analyst.wizard.AnalystWizard;
 import org.encog.util.csv.CSVFormat;
@@ -25,11 +26,8 @@ public class EncogAnalystWizard {
 			EncogAnalyst analyst = new EncogAnalyst();
 			AnalystWizard wizard = new AnalystWizard(analyst);
 			boolean headers = dialog.getHeaders().getValue();
-			CSVFormat format = CSVFormat.DECIMAL_POINT;
-			
-			if(dialog.getDecimalComma().getValue())
-				format = CSVFormat.DECIMAL_COMMA;
-			
+			AnalystFileFormat format = dialog.getFormat();
+						
 			wizard.setMethodType(dialog.getMethodType());
 			
 			wizard.wizard(targetCSVFile, headers, format);
