@@ -67,8 +67,8 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		this.setTitle("Setup Encog Analyst Wizard");
 		
 		addProperty(this.rawFile = new FileField("source file","Source CSV File(*.csv)",true,false,EncogDocumentFrame.CSV_FILTER));
-		addProperty(this.method = new ComboBoxField("format", "File Format", true, csvFormat));
-		addProperty(this.format = new ComboBoxField("method", "Machine Learning", true, methods));
+		addProperty(this.format = new ComboBoxField("format", "File Format", true, csvFormat));
+		addProperty(this.method = new ComboBoxField("method", "Machine Learning", true, methods));
 		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
 
 		render();
@@ -106,7 +106,8 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	}
 	
 	public AnalystFileFormat getFormat() {
-		switch( this.format.getSelectedIndex()) {
+		int idx = this.format.getSelectedIndex(); 
+		switch( idx ) {
 			case 0:
 				return AnalystFileFormat.DECPNT_COMMA;
 			case 1:
