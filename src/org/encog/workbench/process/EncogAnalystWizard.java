@@ -34,6 +34,8 @@ public class EncogAnalystWizard {
 				AnalystFileFormat format = dialog.getFormat();
 
 				wizard.setMethodType(dialog.getMethodType());
+				wizard.setTargetField(dialog.getTargetField());
+				wizard.setGoal(dialog.getGoal());
 
 				wizard.wizard(targetCSVFile, headers, format);
 
