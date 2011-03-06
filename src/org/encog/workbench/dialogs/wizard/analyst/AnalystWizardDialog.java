@@ -35,6 +35,7 @@ import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.FileField;
 import org.encog.workbench.dialogs.common.IntegerField;
+import org.encog.workbench.dialogs.common.TextField;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 public class AnalystWizardDialog extends EncogPropertiesDialog {
@@ -43,7 +44,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	private final ComboBoxField method;
 	private final ComboBoxField format;
 	private final ComboBoxField goal;
-	private final IntegerField targetField;
+	private final TextField targetField;
 	private final CheckField headers;
 	
 	private final List<String> methods = new ArrayList<String>();
@@ -53,7 +54,6 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		
 		List<String> list = new ArrayList<String>();
 		list.add("CSV");
-		list.add("Excel (*.xlsx)");
 		
 		List<String> csvFormat = new ArrayList<String>();
 		csvFormat.add("Decimal Point (USA/English) & Comma Separator");
@@ -79,12 +79,11 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		addProperty(this.format = new ComboBoxField("format", "File Format", true, csvFormat));
 		addProperty(this.method = new ComboBoxField("method", "Machine Learning", true, methods));
 		addProperty(this.goal = new ComboBoxField("goal", "Goal", true, goalList));
-		addProperty(this.targetField = new IntegerField("target field", "Target Field(-1 for auto)", true, -1, 1000));
+		addProperty(this.targetField = new TextField("target field", "Target Field(blank for auto)", false));
 		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
 
 		render();
-		
-		this.targetField.setValue(-1);
+	
 	}
 
 	/**
@@ -148,7 +147,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		}
 	}
 	
-	public int getTargetField() {
+	public String getTargetField() {
 		return this.targetField.getValue();
 	}
 }
