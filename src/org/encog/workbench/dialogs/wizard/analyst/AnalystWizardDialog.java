@@ -46,6 +46,9 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	private final ComboBoxField goal;
 	private final TextField targetField;
 	private final CheckField headers;
+	private final IntegerField lagCount;
+	private final IntegerField leadCount;
+	private final CheckField includeTarget;
 	
 	private final List<String> methods = new ArrayList<String>();
 	
@@ -72,7 +75,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		methods.add("Support Vector Machine");
 		methods.add("PNN/GRNN Network");
 		
-		this.setSize(640, 220);
+		this.setSize(640, 280);
 		this.setTitle("Setup Encog Analyst Wizard");
 		
 		addProperty(this.rawFile = new FileField("source file","Source CSV File(*.csv)",true,false,EncogDocumentFrame.CSV_FILTER));
@@ -81,8 +84,14 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		addProperty(this.goal = new ComboBoxField("goal", "Goal", true, goalList));
 		addProperty(this.targetField = new TextField("target field", "Target Field(blank for auto)", false));
 		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
-
+		addProperty(this.lagCount = new IntegerField("lag count","Lag Count",true,0,1000));
+		addProperty(this.leadCount = new IntegerField("lead count","Lead Count",true,0,1000));
+		addProperty(this.includeTarget = new CheckField("include target","Include Target in Input"));
+		
 		render();
+		
+		this.lagCount.setValue(0);
+		this.leadCount.setValue(0);
 	
 	}
 
@@ -150,4 +159,28 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	public String getTargetField() {
 		return this.targetField.getValue();
 	}
+
+	/**
+	 * @return the lagCount
+	 */
+	public IntegerField getLagCount() {
+		return lagCount;
+	}
+
+	/**
+	 * @return the leadCount
+	 */
+	public IntegerField getLeadCount() {
+		return leadCount;
+	}
+
+	/**
+	 * @return the includeTarget
+	 */
+	public CheckField getIncludeTarget() {
+		return includeTarget;
+	}
+	
+	
+	
 }

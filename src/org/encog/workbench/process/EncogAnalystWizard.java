@@ -36,6 +36,9 @@ public class EncogAnalystWizard {
 				wizard.setMethodType(dialog.getMethodType());
 				wizard.setTargetField(dialog.getTargetField());
 				wizard.setGoal(dialog.getGoal());
+				wizard.setLagWindowSize(dialog.getLagCount().getValue());
+				wizard.setLeadWindowSize(dialog.getLeadCount().getValue());
+				wizard.setIncludeTargetField(dialog.getIncludeTarget().getValue());
 
 				wizard.wizard(targetCSVFile, headers, format);
 
