@@ -37,12 +37,9 @@ import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.ValidationChart;
 
 public class EncogMenus {
-	public static final String FILE_CHANGE_DIR = "Change Directory";
+	public static final String FILE_CHANGE_DIR = "Change Directory/Open Project";
 	public static final String FILE_NEW_PROJECT = "New Project...";
 	public static final String FILE_NEW_FILE = "New File...";
-	public static final String FILE_OPEN = "Open Project...";
-	public static final String FILE_SAVE = "Save Project";
-	public static final String FILE_REVERT = "Revert Project";
 	public static final String FILE_QUIT = "Quit...";
 
 	public static final String EDIT_CUT = "Cut";
@@ -75,9 +72,6 @@ public class EncogMenus {
 	private JMenu menuTools;
 	
 	private JMenuItem menuFileNew;
-	private JMenuItem menuFileOpen;
-	private JMenuItem menuFileSave;
-	private JMenuItem menuFileRevert;
 	private JMenuItem menuFileQuit;
 
 	private JMenuItem menuEditCut;
@@ -88,7 +82,6 @@ public class EncogMenus {
 	private JMenuItem menuObjectsCreate;
 	private JMenuItem menuObjectsDelete;
 
-	private JMenuItem menuToolsCloud;
 	private JMenuItem menuToolsTrain;
 	private JMenuItem menuToolsGenerate;
 	private JMenuItem menuToolsEvaluate;
@@ -117,13 +110,6 @@ public class EncogMenus {
 				.addItem(this.menuFile, EncogMenus.FILE_NEW_PROJECT, 'n'));
 		this.menuFileNew = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_NEW_FILE, 'f'));
-		this.menuFileOpen = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_OPEN,
-				'o'));
-		this.menuFile.addSeparator();
-		this.menuFileSave = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_SAVE,
-				's'));
-		this.menuFileRevert = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_REVERT,
-				'r'));
 		this.menuFile.addSeparator();
 		this.menuFileQuit = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_QUIT,
 				'q'));
@@ -186,10 +172,7 @@ public class EncogMenus {
 			supportsClipboard = true;
 		}
 		
-		this.menuFileNew.setEnabled(!modal);
-		this.menuFileOpen.setEnabled(!modal);
-		this.menuFileSave.setEnabled(!modal && documentOpen);
-		this.menuFileRevert.setEnabled(!modal && documentOpen);
+		this.menuFileNew.setEnabled(!modal && documentOpen);	
 		this.menuFileQuit.setEnabled(true);
 
 		this.menuEditCut.setEnabled(!modal && supportsClipboard && documentOpen);
@@ -221,12 +204,6 @@ public class EncogMenus {
 			owner.getOperations().performFileNewProject();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW_FILE)) {
 			owner.getOperations().performFileNewFile();
-		} else if (event.getActionCommand().equals(EncogMenus.FILE_OPEN)) {
-			//owner.getOperations().performFileOpen();
-		} else if (event.getActionCommand().equals(EncogMenus.FILE_SAVE)) {
-			//owner.getOperations().performFileSave();
-		} else if (event.getActionCommand().equals(EncogMenus.FILE_REVERT)) {
-			//owner.getOperations().performFileRevert();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_QUIT)) {
 			owner.getOperations().performQuit();
 		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_CREATE)) {
