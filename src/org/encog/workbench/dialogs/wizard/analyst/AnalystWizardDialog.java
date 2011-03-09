@@ -78,12 +78,14 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		this.setSize(640, 280);
 		this.setTitle("Setup Encog Analyst Wizard");
 		
+		beginTab("General");
 		addProperty(this.rawFile = new FileField("source file","Source CSV File(*.csv)",true,false,EncogDocumentFrame.CSV_FILTER));
 		addProperty(this.format = new ComboBoxField("format", "File Format", true, csvFormat));
 		addProperty(this.method = new ComboBoxField("method", "Machine Learning", true, methods));
 		addProperty(this.goal = new ComboBoxField("goal", "Goal", true, goalList));
 		addProperty(this.targetField = new TextField("target field", "Target Field(blank for auto)", false));
 		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
+		beginTab("Time Series");
 		addProperty(this.lagCount = new IntegerField("lag count","Lag Count",true,0,1000));
 		addProperty(this.leadCount = new IntegerField("lead count","Lead Count",true,0,1000));
 		addProperty(this.includeTarget = new CheckField("include target","Include Target in Input"));
