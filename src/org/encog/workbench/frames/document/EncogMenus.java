@@ -31,6 +31,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.process.CreateNewFile;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.TextDataTab;
@@ -105,9 +106,9 @@ public class EncogMenus {
 		this.menuBar = new JMenuBar();
 		this.menuFile = new JMenu("File");
 		this.menuFileNew = this.menuFile.add(owner
-				.addItem(this.menuFile, EncogMenus.FILE_CHANGE_DIR, 'c'));
-		this.menuFileNew = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_NEW_PROJECT, 'n'));
+		this.menuFileNew = this.menuFile.add(owner
+				.addItem(this.menuFile, EncogMenus.FILE_CHANGE_DIR, 'c'));
 		this.menuFileNew = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_NEW_FILE, 'f'));
 		this.menuFile.addSeparator();
@@ -203,7 +204,7 @@ public class EncogMenus {
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW_PROJECT)) {
 			owner.getOperations().performFileNewProject();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW_FILE)) {
-			owner.getOperations().performFileNewFile();
+			CreateNewFile.performCreateFile();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_QUIT)) {
 			owner.getOperations().performQuit();
 		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_CREATE)) {
@@ -237,7 +238,7 @@ public class EncogMenus {
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BIN2EXTERNAL)) {
 			ImportExport.performBin2External();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EXTERNAL2BIN)) {
-			ImportExport.performExternal2Bin(null,null);
+			ImportExport.performExternal2Bin(null,null,null);
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_RBF)) {
 			owner.getOperations().performRBF();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_GENERATE_TRAINING)) {

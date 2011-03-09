@@ -436,39 +436,6 @@ public class EncogDocumentOperations {
 
 	}
 
-	public void performFileNewFile() throws IOException {
-		CreateFileDialog dialog = new CreateFileDialog(EncogWorkBench
-				.getInstance().getMainWindow());
-		dialog.setType(CreateFileType.EGFile);
-		if (dialog.process()) {
-			if (dialog.getType() == CreateFileType.EGFile) {
-				String name = dialog.getFilename();
-				name = FileUtil.forceExtension(new File(name).getName(), "eg");
-				String basePath = EncogWorkBench.getInstance().getMainWindow()
-						.getTree().getPath();
-				File path = new File(basePath, name);
-				if (FileUtil.checkOverWrite(path)) {
-					EncogMemoryCollection encog = new EncogMemoryCollection();
-					encog.save(path.toString());
-					EncogWorkBench.getInstance().getMainWindow().getTree()
-							.refresh();
-				}
-			} else if (dialog.getType() == CreateFileType.TextFile) {
-				String name = dialog.getFilename();
-				name = FileUtil.forceExtension(new File(name).getName(), "txt");
-				String basePath = EncogWorkBench.getInstance().getMainWindow()
-						.getTree().getPath();
-				File path = new File(basePath, name);
-				if (FileUtil.checkOverWrite(path)) {
-					FileUtil.writeFileAsString(path, "");
-					EncogWorkBench.getInstance().getMainWindow().getTree()
-							.refresh();
-				}
-			}
-		}
-
-	}
-
 	public void performObjectsDelete(Object selected) {
 		if( selected instanceof ProjectEGItem ) {
 			ProjectEGItem item = (ProjectEGItem)selected;

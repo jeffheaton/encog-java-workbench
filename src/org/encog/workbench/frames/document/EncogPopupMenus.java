@@ -25,6 +25,7 @@ package org.encog.workbench.frames.document;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.List;
 
 import javax.swing.JMenuItem;
@@ -32,10 +33,12 @@ import javax.swing.JPopupMenu;
 
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
+import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.tree.ProjectEGItem;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
+import org.encog.workbench.process.ImportExport;
 
 public class EncogPopupMenus {
 
@@ -63,6 +66,12 @@ public class EncogPopupMenus {
 	private JMenuItem popupFileOpen;
 	private JMenuItem popupFileOpenText;
 	private JMenuItem popupFileRefresh;
+	
+	private JPopupMenu popupFileCSV;
+	private JMenuItem popupFileCSVDelete;
+	private JMenuItem popupFileCSVOpen;
+	private JMenuItem popupFileCSVRefresh;
+	private JMenuItem popupFileCSVExport;
 
 	private JPopupMenu popupRefresh;
 	private JMenuItem popupRefreshItem;
@@ -99,6 +108,12 @@ public class EncogPopupMenus {
 		
 		this.popupRefresh = new JPopupMenu();
 		this.popupRefreshItem = owner.addItem(this.popupRefresh, "Refresh", 'r');
+				
+		this.popupFileCSV = new JPopupMenu();
+		this.popupFileCSVOpen = owner.addItem(this.popupFileCSV, "Open", 'o');
+		this.popupFileCSVDelete = owner.addItem(this.popupFileCSV, "Delete", 'd');
+		this.popupFileCSVRefresh = owner.addItem(this.popupFileCSV, "Refresh", 'r');
+		this.popupFileCSVExport = owner.addItem(this.popupFileCSV, "Export to Training(EGB)", 'x');
 
 	}
 
@@ -108,7 +123,9 @@ public class EncogPopupMenus {
 	
 	public void performPopupMenu(final Object source) {
 		
-		if( source==this.popupFileRefresh || source==this.popupRefreshItem ) {
+		if( source==this.popupFileRefresh 
+				|| source==this.popupRefreshItem
+				|| source==this.popupFileCSVRefresh) {
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
 		
@@ -131,7 +148,7 @@ public class EncogPopupMenus {
 					((ProjectFile)selected).getFile().delete();
 				}
 				EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
-			} else if( source==this.popupFileOpen ) {
+			} else if( source==this.popupFileOpen || source==this.popupFileCSVOpen ) {
 				if( selected instanceof ProjectFile ) {
 					EncogWorkBench.getInstance().getMainWindow().openFile(((ProjectFile)selected).getFile());
 				}
@@ -142,28 +159,19 @@ public class EncogPopupMenus {
 			} else
 			if( (source == this.popupNetworkDelete) ||
 				(source == this.popupDataDelete) ||
-				(source == this.popupGeneralDelete) )
+				(source == this.popupGeneralDelete) ||
+				(source == this.popupFileCSVDelete))
 			{			
 				if ( first && !EncogWorkBench.askQuestion(
 					"Warning", "Are you sure you want to delete these object(s)?") ) {
 					return;
 				}
 				owner.getOperations().performObjectsDelete(selected);
-			} /*else if (source == this.popupNetworkQuery) {
-				owner.getOperations().performNetworkQuery(selected);
-			} else if (source == this.popupNetworkOpen) {
-				owner.getOperations().openItem(selected);
-			} else if (source == this.popupNetworkProperties) {
-				this.owner.getOperations().performObjectsProperties(selected);
-			} else if (source == this.popupDataOpen) {
-				owner.getOperations().openItem(selected);
-			} else if (source == this.popupDataProperties) {
-				this.owner.getOperations().performObjectsProperties(selected);
-			} else if (source == this.popupGeneralOpen) {
-				owner.getOperations().openItem(selected);
-			} else if (source == this.popupGeneralProperties) {
-				owner.getOperations().performObjectsProperties(selected);
-			}*/
+			} if( source==this.popupFileCSVExport ) {
+				String sourceFile = ((ProjectFile)selected).getFile().toString();
+				String targetFile = FileUtil.forceExtension(sourceFile,"egb");
+				ImportExport.performExternal2Bin(new File(sourceFile),new File(targetFile),null);
+			}
 			
 			first = false;
 		}
@@ -188,7 +196,12 @@ public class EncogPopupMenus {
 			}
 		}
 		else if( item instanceof ProjectFile ) {
-			this.popupFile.show(e.getComponent(), e.getX(), e.getY());
+			ProjectFile file = (ProjectFile)item;
+			if( file.getExtension().equalsIgnoreCase("csv") ){
+				this.popupFileCSV.show(e.getComponent(), e.getX(), e.getY());
+			} else { 
+				this.popupFile.show(e.getComponent(), e.getX(), e.getY());
+		}
 		}
 		else if( item instanceof ProjectEGItem ) {
 			this.popupGeneral.show(e.getComponent(), e.getX(), e.getY());

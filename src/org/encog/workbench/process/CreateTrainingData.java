@@ -358,14 +358,14 @@ public class CreateTrainingData {
 		Object[] list = new Object[2];
 		list[0] = binaryFile;
 		list[1] = name;
-		
+/*		
 		binaryFile = ImportExport.performExternal2Bin(binaryFile, new TaskComplete(list) {
 			public void complete() {
 				BufferedNeuralDataSet result = new BufferedNeuralDataSet((File) params[0]);
 				//EncogWorkBench.getInstance().getCurrentFile().add((String) params[1], result);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
-		});
+		});*/
 	}
 
 }

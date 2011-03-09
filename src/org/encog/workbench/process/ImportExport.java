@@ -44,15 +44,19 @@ public class ImportExport {
 		performBin2External(null, null);
 	}
 
-	public static File performExternal2Bin(File inBinaryFile, TaskComplete done) {
+	public static File performExternal2Bin(File sourceFile, File targetFile, TaskComplete done) {
 
-		File binaryFile = inBinaryFile;
+		File binaryFile = targetFile;
 
 		DialogExternal2Binary dialog = new DialogExternal2Binary(EncogWorkBench
 				.getInstance().getMainWindow());
 
 		if (binaryFile != null) {
 			dialog.getBinaryFile().setValue(binaryFile.toString());
+		}
+		
+		if( sourceFile!=null ) {
+			dialog.getExternalFile().setValue(sourceFile.toString());
 		}
 
 		if (dialog.process()) {
@@ -96,7 +100,7 @@ public class ImportExport {
 				ImportExportDialog dlg = new ImportExportDialog(loader,
 						binaryFile, true);
 				dlg.process(done);
-			}
+			}			
 			return binaryFile;
 		} else
 			return null;

@@ -25,6 +25,7 @@ package org.encog.workbench.dialogs.common;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -96,6 +97,8 @@ public class FileField extends PropertiesField implements ActionListener {
 		if (e.getSource() == this.button) {
 			if (this.save) {;
 				final JFileChooser fc = new JFileChooser();
+				if(EncogWorkBench.getInstance().getCurrentFileName()!=null )
+					fc.setCurrentDirectory(new File(EncogWorkBench.getInstance().getCurrentFileName()));
 				fc.setFileFilter(this.filter);
 				final int result = fc.showSaveDialog(this.getOwner());
 				if (result == JFileChooser.APPROVE_OPTION) {
@@ -104,6 +107,8 @@ public class FileField extends PropertiesField implements ActionListener {
 				}
 			} else {
 				final JFileChooser fc = new JFileChooser();
+				if(EncogWorkBench.getInstance().getCurrentFileName()!=null )
+					fc.setCurrentDirectory(new File(EncogWorkBench.getInstance().getCurrentFileName()));
 				fc.addChoosableFileFilter(this.filter);
 				final int result = fc.showOpenDialog(this.getOwner());
 				if (result == JFileChooser.APPROVE_OPTION) {

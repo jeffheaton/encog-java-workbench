@@ -94,8 +94,10 @@ ListSelectionListener {
 		content.add(bottom,BorderLayout.SOUTH);
 		
 		//this.model.addElement("Data Normalization");
-		this.model.addElement("Text File");
-		this.model.addElement("Encog EG File");
+		this.model.addElement("Text File (*.txt)");
+		this.model.addElement("Encog EG File (*.eg)");
+		this.model.addElement("CSV File (*.csv)");
+		this.model.addElement("Training File (*.egb)");
 		
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -119,6 +121,12 @@ ListSelectionListener {
 		case 1:
 			this.type = CreateFileType.EGFile;
 			break;
+		case 2:
+			this.type = CreateFileType.CSVFile;
+			break;
+		case 3:
+			this.type = CreateFileType.TrainingFile;
+			break;
 		}
 		
 		this.filename = this.objectNameField.getText();
@@ -133,6 +141,12 @@ ListSelectionListener {
 		case EGFile:
 			this.list.setSelectedIndex(1);
 			break;			
+		case CSVFile:
+			this.list.setSelectedIndex(2);
+			break;
+		case TrainingFile:
+			this.list.setSelectedIndex(3);
+			break;
 		}
 	}
 
@@ -153,6 +167,14 @@ ListSelectionListener {
 		case 1:
 			this.text
 					.setText("A Encog EG file usually ends with the extension .eg.  These files hold neural networks and other machine learning data.");
+			break;
+		case 2:
+			this.text
+					.setText("CSV files hold tables of data.  Encog uses CSV files for many different purposes.");
+			break;
+		case 3:
+			this.text
+					.setText("A binary training file.  Encog training files can be either supervised or unsupervised.  They are stored in a cross-platform binary format and can be easily converted to/from CSV files.");
 			break;
 			
 		}

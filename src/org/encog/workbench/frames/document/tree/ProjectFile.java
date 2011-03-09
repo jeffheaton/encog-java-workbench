@@ -2,6 +2,8 @@ package org.encog.workbench.frames.document.tree;
 
 import java.io.File;
 
+import org.encog.util.file.FileUtil;
+
 public class ProjectFile extends ProjectItem {
 	private File file;
 	
@@ -27,5 +29,9 @@ public class ProjectFile extends ProjectItem {
 	public String toString()
 	{
 		return file.getName();
+	}
+
+	public String getExtension() {
+		return FileUtil.getFileExt(file);
 	}
 }

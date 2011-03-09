@@ -110,12 +110,12 @@ ListSelectionListener {
 		content.add(bottom,BorderLayout.SOUTH);
 		
 		//this.model.addElement("Data Normalization");
-		this.model.addElement("Encog Script");
+		//this.model.addElement("Encog Script");
 		this.model.addElement("Neural Network");
 		this.model.addElement("NEAT Population");
 		this.model.addElement("Property Data");
 		this.model.addElement("Text");
-		this.model.addElement("Training Data");		
+		//this.model.addElement("Training Data");		
 		
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);

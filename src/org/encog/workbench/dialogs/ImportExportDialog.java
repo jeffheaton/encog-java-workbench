@@ -77,26 +77,27 @@ public class ImportExportDialog extends JDialog implements Runnable,
 
 	public void run() {
 		try {
-		this.loader.setStatus(this);
+			this.loader.setStatus(this);
 
-		if (performImport)
-			this.loader.external2Binary(binaryFile);
-		else
-			this.loader.binary2External(binaryFile);
+			if (performImport)
+				this.loader.external2Binary(binaryFile);
+			else
+				this.loader.binary2External(binaryFile);
 
-		dispose();
+			dispose();
 
-		if (performImport)
-			EncogWorkBench.displayMessage("Done", "Import Complete");
-		else
-			EncogWorkBench.displayMessage("Done", "Export Complete");
-		
-		if( this.done!=null ) {
-			done.complete();
-		}
-		}
-		catch(Throwable t) {
+			if (performImport)
+				EncogWorkBench.displayMessage("Done", "Import Complete");
+			else
+				EncogWorkBench.displayMessage("Done", "Export Complete");
+
+			if (this.done != null) {
+				done.complete();
+			}
+		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
+		} finally {
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
 	}
 
@@ -123,7 +124,7 @@ public class ImportExportDialog extends JDialog implements Runnable,
 
 	public void reportPhase(int arg0, int arg1, String arg2) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
