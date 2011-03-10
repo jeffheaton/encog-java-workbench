@@ -111,7 +111,7 @@ public class ProjectTree extends JPanel implements MouseListener {
 						.changeDirectory(p.toString());
 			} else {
 				if (MouseUtil.isRightClick(e)) {
-					rightMouseClicked(e, null);
+					rightMouseClicked(e, obj);
 				}
 			}
 		}
