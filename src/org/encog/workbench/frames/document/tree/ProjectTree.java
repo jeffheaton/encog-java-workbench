@@ -1,6 +1,14 @@
 package org.encog.workbench.frames.document.tree;
 
 import java.awt.BorderLayout;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -12,14 +20,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
+import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.util.MouseUtil;
 
-public class ProjectTree extends JPanel implements MouseListener {
+public class ProjectTree extends JPanel implements MouseListener,
+		DropTargetListener {
 	private JTree tree;
 	private final EncogCollectionModel collectionModel;
 	private EncogDocumentFrame doc;
+	private DropTarget dt;
 
 	public ProjectTree(EncogDocumentFrame doc) {
 		this.doc = doc;
@@ -34,6 +45,7 @@ public class ProjectTree extends JPanel implements MouseListener {
 		this.add(scrollPane, BorderLayout.CENTER);
 
 		this.tree.updateUI();
+		dt = new DropTarget(this, this);
 
 	}
 
@@ -162,6 +174,73 @@ public class ProjectTree extends JPanel implements MouseListener {
 
 	public EncogCollectionModel getModel() {
 		return this.collectionModel;
+
+	}
+
+	public void dragEnter(DropTargetDragEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void dragExit(DropTargetEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void dragOver(DropTargetDragEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void drop(DropTargetDropEvent dtde) {
+		try {
+			if( EncogWorkBench.getInstance().getProjectDirectory()==null ) {
+				EncogWorkBench.displayError("Error", "Open a project before using drag and drop.");
+				return;
+			}
+			
+			if( !EncogWorkBench.askQuestion("Drag and Drop", "Copy the file(s) to the project?") )
+			{
+				return;
+			}
+			
+			Transferable tr = dtde.getTransferable();
+			DataFlavor[] flavors = tr.getTransferDataFlavors();
+			for (int i = 0; i < flavors.length; i++) {
+				if (flavors[i].isFlavorJavaFileListType()) {
+					dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+					java.util.List list = (java.util.List) tr
+							.getTransferData(flavors[i]);
+										
+					for (int j = 0; j < list.size(); j++) {
+						File sourceFile = new File(list.get(i).toString());
+						
+						if( sourceFile.isDirectory() ) {
+							EncogWorkBench.displayError("Drag and Drop", "Can't drop folder.");
+							return;
+						}
+						
+						String name = sourceFile.getName();
+						File targetFile = new File(EncogWorkBench.getInstance().getProjectDirectory(),name);
+						FileUtil.copy(sourceFile, targetFile);
+					}
+
+					// If we made it this far, everything worked.
+					dtde.dropComplete(true);
+					EncogWorkBench.getInstance().refresh();
+					return;
+				}
+			}
+		} catch (Exception e) {			
+			EncogWorkBench.displayError("Drag and Drop", e);			
+		}
+		
+		dtde.rejectDrop();
+
+	}
+
+	public void dropActionChanged(DropTargetDragEvent arg0) {
+		// TODO Auto-generated method stub
 
 	}
 

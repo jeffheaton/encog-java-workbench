@@ -377,7 +377,16 @@ public class EncogWorkBench implements Runnable {
 	}
 
 	public File getProjectDirectory() {
-		return new File(this.getMainWindow().getTree().getModel().getPath());
+		String str = this.getMainWindow().getTree().getModel().getPath();
+		if( str==null )
+			return null;
+		else
+		return new File(str);
+	}
+
+	public void refresh() {
+		this.getMainWindow().getTree().refresh();
+		
 	}
 
 }
