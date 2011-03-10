@@ -151,8 +151,16 @@ public class EncogPopupMenus {
 	public void performPopupMenu(final Object source) {
 
 		if (source == this.popupFileRefresh || source == this.popupRefreshItem
-				|| source == this.popupFileCSVRefresh) {
+				|| source == this.popupFileCSVRefresh || source==popupRootRefreshItem) {
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+		}
+		
+		else if (source == this.popupRootNewFile ) {
+			try {
+				CreateNewFile.performCreateFile();
+			} catch (IOException e) {
+				EncogWorkBench.displayError("Error", e);
+			}
 		}
 
 		boolean first = true;
@@ -206,14 +214,7 @@ public class EncogPopupMenus {
 			} else if (source == this.popupFileCSVWizard) {
 				File sourceFile = ((ProjectFile) selected).getFile();
 				EncogAnalystWizard.createEncogAnalyst(sourceFile);
-			} else if (source == this.popupRootNewFile ) {
-				try {
-					CreateNewFile.performCreateFile();
-				} catch (IOException e) {
-					EncogWorkBench.displayError("Error", e);
-				}
-			}
-
+			} 
 			first = false;
 		}
 	}
