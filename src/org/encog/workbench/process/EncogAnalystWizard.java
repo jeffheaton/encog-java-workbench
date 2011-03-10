@@ -35,6 +35,9 @@ public class EncogAnalystWizard {
 				
 				egaFile = new File(FileUtil.forceExtension(
 						targetCSVFile.toString(), "ega"));
+				
+				File egFile = new File(FileUtil.forceExtension(
+						targetCSVFile.toString(), "eg"));
 
 				analyst = new EncogAnalyst();
 				AnalystWizard wizard = new AnalystWizard(analyst);
@@ -47,7 +50,7 @@ public class EncogAnalystWizard {
 				wizard.setLagWindowSize(dialog.getLagCount().getValue());
 				wizard.setLeadWindowSize(dialog.getLeadCount().getValue());
 				wizard.setIncludeTargetField(dialog.getIncludeTarget().getValue());
-				wizard.setEGName(projectFile);
+				wizard.setEGName(egFile);
 
 				wizard.wizard(targetCSVFile, headers, format);
 
