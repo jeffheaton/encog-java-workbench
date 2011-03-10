@@ -11,21 +11,30 @@ import org.encog.workbench.dialogs.wizard.analyst.AnalystWizardDialog;
 import org.encog.workbench.util.FileUtil;
 
 public class EncogAnalystWizard {
-	public static void createEncogAnalyst(File projectFile) {
+	public static void createEncogAnalyst(File csvFile) {
 		AnalystWizardDialog dialog = new AnalystWizardDialog(EncogWorkBench
 				.getInstance().getMainWindow());
+		
+		if( csvFile!=null ) {
+			dialog.getRawFile().setValue(csvFile.toString());
+		}
+		
 		if (dialog.process()) {
 			EncogAnalyst analyst = null;
-			File projectFolder = projectFile.getParentFile();
-			File egaFile = new File(FileUtil.forceExtension(
-					projectFile.toString(), "ega"));
-
+			File projectFolder = EncogWorkBench.getInstance().getProjectDirectory();
+			File egaFile = null;
+			
 			try {
 				File sourceCSVFile = new File(dialog.getRawFile().getValue());
 				File targetCSVFile = new File(projectFolder,
 						sourceCSVFile.getName());
 
-				org.encog.util.file.FileUtil.copy(sourceCSVFile, targetCSVFile);
+				if( !sourceCSVFile.toString().equals(targetCSVFile.toString())) {
+					org.encog.util.file.FileUtil.copy(sourceCSVFile, targetCSVFile);
+				}
+				
+				egaFile = new File(FileUtil.forceExtension(
+						targetCSVFile.toString(), "ega"));
 
 				analyst = new EncogAnalyst();
 				AnalystWizard wizard = new AnalystWizard(analyst);

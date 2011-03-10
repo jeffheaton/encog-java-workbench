@@ -38,6 +38,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.tree.ProjectEGItem;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
+import org.encog.workbench.process.EncogAnalystWizard;
 import org.encog.workbench.process.ImportExport;
 
 public class EncogPopupMenus {
@@ -72,6 +73,7 @@ public class EncogPopupMenus {
 	private JMenuItem popupFileCSVOpen;
 	private JMenuItem popupFileCSVRefresh;
 	private JMenuItem popupFileCSVExport;
+	private JMenuItem popupFileCSVWizard;
 
 	private JPopupMenu popupRefresh;
 	private JMenuItem popupRefreshItem;
@@ -114,6 +116,7 @@ public class EncogPopupMenus {
 		this.popupFileCSVDelete = owner.addItem(this.popupFileCSV, "Delete", 'd');
 		this.popupFileCSVRefresh = owner.addItem(this.popupFileCSV, "Refresh", 'r');
 		this.popupFileCSVExport = owner.addItem(this.popupFileCSV, "Export to Training(EGB)", 'x');
+		this.popupFileCSVWizard = owner.addItem(this.popupFileCSV, "Analyst Wizard...", 'w');
 
 	}
 
@@ -167,11 +170,15 @@ public class EncogPopupMenus {
 					return;
 				}
 				owner.getOperations().performObjectsDelete(selected);
-			} if( source==this.popupFileCSVExport ) {
+			} else if( source==this.popupFileCSVExport ) {
 				String sourceFile = ((ProjectFile)selected).getFile().toString();
 				String targetFile = FileUtil.forceExtension(sourceFile,"egb");
 				ImportExport.performExternal2Bin(new File(sourceFile),new File(targetFile),null);
+			} else if( source==this.popupFileCSVWizard ) {
+				File sourceFile = ((ProjectFile)selected).getFile();
+				EncogAnalystWizard.createEncogAnalyst(sourceFile);
 			}
+			
 			
 			first = false;
 		}

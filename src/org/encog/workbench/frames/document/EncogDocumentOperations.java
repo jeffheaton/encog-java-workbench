@@ -138,7 +138,7 @@ public class EncogDocumentOperations {
 			
 			if( EncogWorkBench.askQuestion("Wizard", "Would you like to use a wizard to generate files\nnecessary to work with a CSV data file?") )
 			{
-				EncogAnalystWizard.createEncogAnalyst(projectFile);
+				EncogAnalystWizard.createEncogAnalyst(null);
 			}
 		}
 	}
