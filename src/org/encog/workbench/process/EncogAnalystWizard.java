@@ -6,7 +6,6 @@ import org.encog.EncogError;
 import org.encog.app.analyst.AnalystFileFormat;
 import org.encog.app.analyst.EncogAnalyst;
 import org.encog.app.analyst.wizard.AnalystWizard;
-import org.encog.util.csv.CSVFormat;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.wizard.analyst.AnalystWizardDialog;
 import org.encog.workbench.util.FileUtil;
@@ -39,6 +38,7 @@ public class EncogAnalystWizard {
 				wizard.setLagWindowSize(dialog.getLagCount().getValue());
 				wizard.setLeadWindowSize(dialog.getLeadCount().getValue());
 				wizard.setIncludeTargetField(dialog.getIncludeTarget().getValue());
+				wizard.setEGName(projectFile);
 
 				wizard.wizard(targetCSVFile, headers, format);
 

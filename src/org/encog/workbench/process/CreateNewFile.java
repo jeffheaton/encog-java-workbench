@@ -3,10 +3,15 @@ package org.encog.workbench.process;
 import java.io.File;
 import java.io.IOException;
 
+import org.encog.EncogError;
+import org.encog.neural.data.NeuralDataPair;
+import org.encog.neural.data.basic.BasicNeuralDataPair;
+import org.encog.neural.data.buffer.BufferedNeuralDataSet;
 import org.encog.persist.EncogMemoryCollection;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createfile.CreateFileDialog;
 import org.encog.workbench.dialogs.createfile.CreateFileType;
+import org.encog.workbench.dialogs.trainingdata.CreateEmptyTrainingDialog;
 import org.encog.workbench.util.FileUtil;
 
 public class CreateNewFile {
@@ -24,41 +29,61 @@ public class CreateNewFile {
 				return;
 			}
 			
+			String basePath = EncogWorkBench.getInstance().getMainWindow()
+			.getTree().getPath();
+			
 			if (dialog.getType() == CreateFileType.EGFile) {
 				
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
-				String basePath = EncogWorkBench.getInstance().getMainWindow()
-						.getTree().getPath();
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
 					EncogMemoryCollection encog = new EncogMemoryCollection();
 					encog.save(path.toString());
-					EncogWorkBench.getInstance().getMainWindow().getTree()
-							.refresh();
 				}
 			} else if (dialog.getType() == CreateFileType.TextFile) {
 				
 				name = FileUtil.forceExtension(new File(name).getName(), "txt");
-				String basePath = EncogWorkBench.getInstance().getMainWindow()
-						.getTree().getPath();
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
-					FileUtil.writeFileAsString(path, "");
-					EncogWorkBench.getInstance().getMainWindow().getTree()
-							.refresh();
+					FileUtil.writeFileAsString(path, "");					
 				}
 			} else if (dialog.getType() == CreateFileType.CSVFile) {
 
 				name = FileUtil.forceExtension(new File(name).getName(), "csv");
-				String basePath = EncogWorkBench.getInstance().getMainWindow()
-						.getTree().getPath();
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
 					FileUtil.writeFileAsString(path, "");
-					EncogWorkBench.getInstance().getMainWindow().getTree()
-							.refresh();
 				}
+			} else if (dialog.getType() == CreateFileType.TrainingFile) {
+				name = FileUtil.forceExtension(new File(name).getName(), "egb");
+				File path = new File(basePath, name);
+				createNewEGB(path);
 			}
+			
+			EncogWorkBench.getInstance().getMainWindow().getTree()
+			.refresh();
+		}
+	}
+	
+	private static void createNewEGB(File file)
+	{
+		CreateEmptyTrainingDialog dialog = new CreateEmptyTrainingDialog(
+				EncogWorkBench.getInstance().getMainWindow());
+
+		if (dialog.process()) {
+			int elements = dialog.getElements().getValue();
+			int input = dialog.getInput().getValue();
+			int output = dialog.getIdeal().getValue();
+
+			BufferedNeuralDataSet trainingData = new BufferedNeuralDataSet(file);
+			trainingData.setDescription("Training data");
+			NeuralDataPair pair = BasicNeuralDataPair.createPair(input,
+					output);
+			trainingData.beginLoad(input, output);
+			for (int i = 0; i < elements; i++) {
+				trainingData.add(pair);
+			}
+			trainingData.endLoad();
 		}
 	}
 }
