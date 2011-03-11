@@ -36,8 +36,7 @@ import org.encog.workbench.dialogs.common.IntegerField;
 public class RandomTrainingDataDialog extends EncogPropertiesDialog {
 	
 	private IntegerField elements;
-	private IntegerField input;
-	private IntegerField ideal;
+	private IntegerField columns;
 	private DoubleField low;
 	private DoubleField high;
 	
@@ -46,8 +45,7 @@ public class RandomTrainingDataDialog extends EncogPropertiesDialog {
 		setTitle("Random Training Data");
 		setSize(400,200);
 		addProperty(this.elements = new IntegerField("elements","Training Set Elements",true, 0, 1000000));
-		addProperty(this.input = new IntegerField("input","Input Field Count",true, 1, 1000));
-		addProperty(this.ideal = new IntegerField("ideal","Output Field Count",true, 0, 1000));
+		addProperty(this.columns = new IntegerField("columns","Random Column Count",true, 1, 1000));
 		addProperty(this.low = new DoubleField("low","Random Low Value",true, 0, -1));
 		addProperty(this.high = new DoubleField("high","Random High Value",true, 0, -1));
 		render();
@@ -57,14 +55,6 @@ public class RandomTrainingDataDialog extends EncogPropertiesDialog {
 		return elements;
 	}
 
-	public IntegerField getInput() {
-		return input;
-	}
-
-	public IntegerField getIdeal() {
-		return ideal;
-	}
-
 	public DoubleField getLow() {
 		return low;
 	}
@@ -72,6 +62,11 @@ public class RandomTrainingDataDialog extends EncogPropertiesDialog {
 	public DoubleField getHigh() {
 		return high;
 	}
+
+	public IntegerField getColumns() {
+		return columns;
+	}
+	
 	
 	
 

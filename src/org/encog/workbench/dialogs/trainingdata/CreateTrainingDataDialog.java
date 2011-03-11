@@ -136,6 +136,13 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		case 4:
 			this.type = TrainingDataType.XOR;
 			break;		
+		case 5:
+			this.type = TrainingDataType.Iris;
+			break;		
+		case 6:
+			this.type = TrainingDataType.Sunspots;
+			break;		
+			
 		}
 	}
 
@@ -156,7 +163,13 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			break;
 		case XOR:
 			this.list.setSelectedIndex(4);
-			break;		
+			break;
+		case Iris:
+			this.list.setSelectedIndex(5);
+			break;	
+		case Sunspots:
+			this.list.setSelectedIndex(6);
+			break;	
 		}
 
 	}
@@ -188,10 +201,20 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 
 		case 3:
 			this.text
+					.setText("XOR temporal data.  Represent XOR as a sequence of numbers, 1 input 1 output.  Output is the next predicted input.");
+			break;
+			
+		case 4:
+			this.text
+					.setText("Classic XOR operator as CSV data.");
+			break;
+			
+		case 5:
+			this.text
 					.setText("The Iris dataset is a classic machine learning dataset.  It contains 4 characteristics about 3 different iris species.");
 			break;
 
-		case 4:
+		case 6:
 			this.text
 					.setText("Download sunspot information from the Internet.");
 			break;

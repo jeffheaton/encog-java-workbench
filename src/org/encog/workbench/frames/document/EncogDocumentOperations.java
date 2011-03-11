@@ -419,15 +419,22 @@ public class EncogDocumentOperations {
 				CreateTrainingData.downloadMarketData(name);
 				break;
 			case Random:
-				CreateTrainingData.linkRandom(name);
+				CreateTrainingData.generateRandom(name);
 				break;
 			case XORTemp:
-				CreateTrainingData.linkXORTemp(name);
+				CreateTrainingData.generateXORTemp(name);
 				break;
 			case XOR:
-				CreateTrainingData.linkXOR(name);
+				CreateTrainingData.copyXOR(name);				
+				break;
+			case Iris:
+				CreateTrainingData.copyIris(name);
+				break;
+			case Sunspots:
+				CreateTrainingData.downloadSunspots(name);
 				break;
 			}
+			EncogWorkBench.getInstance().refresh();
 		}
 	}
 
