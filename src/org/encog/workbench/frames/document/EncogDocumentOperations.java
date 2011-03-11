@@ -395,43 +395,40 @@ public class EncogDocumentOperations {
 
 	}
 
-	public void performCreateTrainingData(String name) throws IOException {
+	public void performCreateTrainingData() throws IOException {
 		CreateTrainingDataDialog dialog = new CreateTrainingDataDialog(
 				EncogWorkBench.getInstance().getMainWindow());
 
-		dialog.setType(TrainingDataType.Empty);
-
+		dialog.setType(TrainingDataType.CopyCSV);
+		
 		if (dialog.process()) {
-			performLinkTraining(dialog.getType(), name);
+			String name = dialog.getFilenameName();
+			
+			if( name.trim().length()==0 ) {
+				EncogWorkBench.displayError("Error", "Must specify a filename.");
+				return;
+			}
+			
+			name = FileUtil.forceExtension(name, "csv");
+			
+			switch (dialog.getType()) {
+			case CopyCSV:
+				CreateTrainingData.copyCSV(name);
+				break;
+			case MarketWindow:
+				CreateTrainingData.downloadMarketData(name);
+				break;
+			case Random:
+				CreateTrainingData.linkRandom(name);
+				break;
+			case XORTemp:
+				CreateTrainingData.linkXORTemp(name);
+				break;
+			case XOR:
+				CreateTrainingData.linkXOR(name);
+				break;
+			}
 		}
-	}
-
-	public void performLinkTraining(TrainingDataType type, String name)
-			throws IOException {
-		switch (type) {
-		case Empty:
-			CreateTrainingData.linkEmpty(name);
-			break;
-		case ImportCSV:
-			CreateTrainingData.linkCSV(name);
-			break;
-		case MarketWindow:
-			CreateTrainingData.linkMarketWindow(name);
-			break;
-		case PredictWindow:
-			CreateTrainingData.linkPredictWindow(name);
-			break;
-		case Random:
-			CreateTrainingData.linkRandom(name);
-			break;
-		case XORTemp:
-			CreateTrainingData.linkXORTemp(name);
-			break;
-		case XOR:
-			CreateTrainingData.linkXOR(name);
-			break;
-		}
-
 	}
 
 	public void performQuit() {

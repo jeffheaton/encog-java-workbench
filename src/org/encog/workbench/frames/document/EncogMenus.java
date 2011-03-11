@@ -242,7 +242,7 @@ public class EncogMenus {
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_RBF)) {
 			owner.getOperations().performRBF();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_GENERATE_TRAINING)) {
-			owner.getOperations().performCreateTrainingData("");
+			owner.getOperations().performCreateTrainingData();
 		}
 	
 		

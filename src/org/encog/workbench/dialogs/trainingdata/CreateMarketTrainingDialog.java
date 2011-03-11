@@ -44,10 +44,6 @@ public class CreateMarketTrainingDialog  extends EncogPropertiesDialog {
 	private final IntegerField toMonth;
 	private final IntegerField toDay;
 	private final IntegerField toYear;
-	private final IntegerField inputWindow;
-	private final IntegerField outputWindow;
-	private final ComboBoxField normalizationType;
-
 	
 	public CreateMarketTrainingDialog(Frame owner) {
 		super(owner);
@@ -66,14 +62,6 @@ public class CreateMarketTrainingDialog  extends EncogPropertiesDialog {
 		addProperty(this.toDay = new IntegerField("end day","Ending Day(1-12)",true, 1, 31));
 		addProperty(this.toYear = new IntegerField("end year","Ending Year(1-12)",true, 1900, year));
 		
-		addProperty(this.inputWindow = new IntegerField("input window","Input Window",true,0,1000));
-		addProperty(this.outputWindow = new IntegerField("output window","Output Window",true, 0, 1000));
-
-		List<String> list = new ArrayList<String>();
-		list.add("Raw");
-		list.add("Percent Change");
-		list.add("Delta Change");
-		addProperty(this.normalizationType = new ComboBoxField("normalization type", "Normalization Type",true,list) );
 		
 		render();
 	}
@@ -113,21 +101,4 @@ public class CreateMarketTrainingDialog  extends EncogPropertiesDialog {
 		return toYear;
 	}
 
-
-	public IntegerField getInputWindow() {
-		return inputWindow;
-	}
-
-
-	public IntegerField getOutputWindow() {
-		return outputWindow;
-	}
-
-
-	public ComboBoxField getNormalizationType() {
-		return normalizationType;
-	}
-
-	
-	
 }

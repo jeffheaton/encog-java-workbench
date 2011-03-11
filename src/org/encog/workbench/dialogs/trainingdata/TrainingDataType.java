@@ -25,12 +25,12 @@ package org.encog.workbench.dialogs.trainingdata;
 
 public enum TrainingDataType {
 
-	Empty,
-	ImportCSV,
+	CopyCSV,
 	MarketWindow,
-	PredictWindow,
 	Random,
 	XORTemp,
-	XOR
+	XOR,
+	Iris,
+	Sunspots
 
 }
