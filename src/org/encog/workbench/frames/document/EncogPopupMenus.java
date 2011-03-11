@@ -170,7 +170,7 @@ public class EncogPopupMenus {
 			return;
 
 		for (ProjectItem selected : list) {
-			if (source == this.popupFileDelete) {
+			if (source == this.popupFileDelete || source==this.popupFileCSVDelete || source==this.popupDataDelete || source==this.popupGeneralDelete ) {
 				if (first
 						&& !EncogWorkBench
 								.askQuestion("Warning",
