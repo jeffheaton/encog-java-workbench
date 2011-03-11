@@ -37,6 +37,9 @@ import org.encog.engine.util.ErrorCalculation;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.persist.EncogMemoryCollection;
+import org.encog.persist.EncogPersistedObject;
+import org.encog.persist.location.FilePersistence;
 import org.encog.script.javascript.EncogJavascriptEngine;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
@@ -387,6 +390,32 @@ public class EncogWorkBench implements Runnable {
 	public void refresh() {
 		this.getMainWindow().getTree().refresh();
 		
+	}
+
+	public void revert(MLMethod method) {
+		if( method instanceof EncogPersistedObject ) {
+			revert((EncogPersistedObject)method);
+		}
+	}
+	
+	public void revert(EncogPersistedObject obj) {
+		EncogMemoryCollection memory = (EncogMemoryCollection)obj.getCollection();
+		FilePersistence loc = (FilePersistence)memory.getLocation() ;		
+		EncogMemoryCollection memory2 = new EncogMemoryCollection();
+		memory2.load(loc);
+		EncogPersistedObject obj2 = memory2.find(obj.getName());
+		memory.add(obj.getName(), obj2);
+	}
+	
+	public void save(MLMethod method) {
+		if( method instanceof EncogPersistedObject ) {
+			save((EncogPersistedObject)method);
+		}
+	}
+	
+	public void save(EncogPersistedObject obj) {
+		EncogMemoryCollection memory = (EncogMemoryCollection)obj.getCollection();
+		memory.save(memory.getLocation());
 	}
 
 }

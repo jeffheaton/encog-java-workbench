@@ -32,10 +32,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
+import org.encog.ml.MLMethod;
+import org.encog.ml.MLRegression;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -60,7 +63,7 @@ public class ResultValidationChart extends EncogCommonTab {
 		this.add(tabs,BorderLayout.CENTER);
 	}
 
-	public void setData(NeuralDataSet validationData, BasicNetwork network) {
+	public void setData(NeuralDataSet validationData, MLMethod method) {
 		ArrayList<XYSeries> validation = new ArrayList<XYSeries>();
 		ArrayList<XYSeries> computation = new ArrayList<XYSeries>();
 
@@ -72,7 +75,7 @@ public class ResultValidationChart extends EncogCommonTab {
 		for (NeuralDataPair dataRow : validationData) {
 			NeuralData input = dataRow.getInput();
 			NeuralData validIdeal = dataRow.getIdeal();
-			NeuralData computatedIdeal = getCalculatedResult(dataRow, network);
+			NeuralData computatedIdeal = getCalculatedResult(dataRow, method);
 			int inputCount = input.size();
 			int idealCount = validIdeal.size();
 
@@ -159,9 +162,16 @@ public class ResultValidationChart extends EncogCommonTab {
 	}
 
 	private NeuralData getCalculatedResult(NeuralDataPair data,
-			BasicNetwork network) {
+			MLMethod method) {
 		
-		NeuralData out = network.compute(data.getInput());
+		NeuralData out;
+		
+		if( method instanceof MLRegression ) {
+			out = ((MLRegression)method).compute(data.getInput());
+		} else {
+			throw new WorkBenchError("Unsupported Machine Learning Method:" + method.getClass().getSimpleName());
+		}
+		
 		return out;
 	}
 

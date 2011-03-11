@@ -25,6 +25,7 @@ package org.encog.workbench.tabs;
 
 import java.awt.Frame;
 
+import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
@@ -32,7 +33,7 @@ import org.encog.workbench.dialogs.validate.InputValidationChart;
 import org.encog.workbench.dialogs.validate.ResultValidationChart;
 
 public class ValidationChart {
-	private BasicNetwork network;
+	private MLMethod method;
 	private NeuralDataSet training;
 
 	public void perform(Frame owner) {
@@ -41,11 +42,11 @@ public class ValidationChart {
 				EncogWorkBench.getInstance().getMainWindow());
 
 		if (dialog.process()) {
-			//network = dialog.getNetwork();
-			//training = dialog.getTrainingSet();
+			method = dialog.getNetwork();
+			training = dialog.getTrainingSet();
 
 			ResultValidationChart chart = new ResultValidationChart();
-			chart.setData(training, network);
+			chart.setData(training, method);
 			EncogWorkBench.getInstance().getMainWindow().openModalTab(chart, "Validation");
 		}
 		}
