@@ -10,8 +10,6 @@ public class TrainDialog extends NetworkAndTrainingDialog {
 
 	private final DoubleField maxError;
 	private final CheckField loadToMemory;
-	private final CheckField useDecimalComma;
-	private final CheckField headers;
 	
 	public TrainDialog(Frame owner) {
 		super(owner);
@@ -20,10 +18,6 @@ public class TrainDialog extends NetworkAndTrainingDialog {
 				"Maximum Error Percent(0-100)", true, 0, 100));
 		addProperty(this.loadToMemory = new CheckField("load to memory",
 				"Load to Memory (better performance)"));
-		addProperty(this.useDecimalComma = new CheckField("decimal comma",
-		"Use decimal-comma and ; Separator(for CSV's)"));
-		addProperty(this.headers = new CheckField("CSV headers",
-		"CSV has headers"));
 		
 		render();
 		this.loadToMemory.setValue(true);
@@ -43,19 +37,4 @@ public class TrainDialog extends NetworkAndTrainingDialog {
 	public CheckField getLoadToMemory() {
 		return loadToMemory;
 	}
-
-	/**
-	 * @return the useDecimalComma
-	 */
-	public CheckField getUseDecimalComma() {
-		return useDecimalComma;
-	}
-
-	/**
-	 * @return the headers
-	 */
-	public CheckField getHeaders() {
-		return headers;
-	}
-	
 }
