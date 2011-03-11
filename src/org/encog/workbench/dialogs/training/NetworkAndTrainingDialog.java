@@ -24,6 +24,7 @@
 package org.encog.workbench.dialogs.training;
 
 import java.awt.Frame;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +33,10 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.basic.BasicNeuralDataSet;
+import org.encog.neural.data.buffer.BufferedNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
@@ -100,15 +103,17 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	/**
 	 * @return The network that the user chose.
 	 */
-	public ProjectEGItem getNetwork() {
-		return (ProjectEGItem)this.comboNetwork.getSelectedValue();
+	public MLMethod getNetwork() {
+		return (MLMethod)(((ProjectEGItem)this.comboNetwork.getSelectedValue()).getObj());
 	}
 
 	/**
 	 * @return The training set that the user chose.
 	 */
-	public ProjectTraining getTrainingSet() {
-		return (ProjectTraining)this.comboTraining.getSelectedValue();
+	public NeuralDataSet getTrainingSet() {
+		File file = ((ProjectTraining)this.comboTraining.getSelectedValue()).getFile();
+		BufferedNeuralDataSet result = new BufferedNeuralDataSet(file);
+		return result;
 	}
 
 }

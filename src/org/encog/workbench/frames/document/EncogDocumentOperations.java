@@ -34,6 +34,9 @@ import org.encog.Encog;
 import org.encog.EncogError;
 import org.encog.engine.util.ErrorCalculation;
 import org.encog.engine.util.ErrorCalculationMode;
+import org.encog.engine.util.Format;
+import org.encog.ml.MLMethod;
+import org.encog.ml.MLRegression;
 import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
@@ -367,12 +370,13 @@ public class EncogDocumentOperations {
 			EvaluateDialog dialog = new EvaluateDialog(EncogWorkBench
 					.getInstance().getMainWindow());
 			if (dialog.process()) {
-				//BasicNetwork network = dialog.getNetwork();
-				//NeuralDataSet training = dialog.getTrainingSet();
+				MLMethod method = dialog.getNetwork();
+				NeuralDataSet training = dialog.getTrainingSet();
 
-				//double error = network.calculateError(training);
-				//EncogWorkBench.displayMessage("Error For this Network", ""
-				//		+ Format.formatPercent(error));
+				double error = EncogUtility.calculateRegressionError((MLRegression)method, training);
+				
+				EncogWorkBench.displayMessage("Error For this Network", ""
+						+ Format.formatPercent(error));
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error Evaluating Network", t);
@@ -451,45 +455,12 @@ public class EncogDocumentOperations {
 		TrainDialog dialog = new TrainDialog(EncogWorkBench.getInstance().getMainWindow());
 		
 		if( dialog.process() ) {
-			ProjectEGItem methodItem = dialog.getNetwork();
-			ProjectTraining trainingItem = dialog.getTrainingSet();
+			MLMethod method = dialog.getNetwork();
+			NeuralDataSet trainingData = dialog.getTrainingSet();
+										
+			Train train = new ResilientPropagation((BasicNetwork)method,trainingData);
 			
-			BasicNetwork method = (BasicNetwork)methodItem.getObj();
-			String ext = FileUtil.getFileExt(trainingItem.getFile());
-			
-			NeuralDataSet trainingData;
-			
-			if( ext.equalsIgnoreCase("csv") )
-			{
-				CSVFormat format;
-				
-				if( dialog.getUseDecimalComma().getValue() )
-					format = CSVFormat.DECIMAL_COMMA;
-				else
-					format = CSVFormat.ENGLISH;
-				
-				boolean headers = dialog.getHeaders().getValue();
-				
-				trainingData = EncogUtility.loadCSV2Memory(
-						trainingItem.getFile().toString(), 
-						method.getInputCount(), 
-						method.getOutputCount(), 
-						headers, 
-						format);
-			}
-			else if( ext.equalsIgnoreCase("egb") )
-			{
-				trainingData = EncogUtility.loadEGB2Memory(trainingItem.getFile().toString());
-			}
-			else
-			{
-				EncogWorkBench.displayError("Error", "Uknown file extension: " + ext);
-				return;
-			}
-				
-			Train train = new ResilientPropagation(method,trainingData);
-			
-			BasicTrainingProgress tab = new BasicTrainingProgress(train,methodItem,trainingItem);
+			BasicTrainingProgress tab = new BasicTrainingProgress(train,method,trainingData);
 			tab.setMaxError(dialog.getMaxError().getValue()/100.0);
 			EncogWorkBench.getInstance().getMainWindow().openTab(tab);
 		}

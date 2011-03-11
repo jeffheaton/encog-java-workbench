@@ -38,6 +38,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.encog.engine.opencl.EncogCLDevice;
+import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
@@ -111,14 +112,9 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	 */
 	private Train train;
 
-	/**
-	 * The network being trained.
-	 */
-	private BasicNetwork network;
-
 	private EncogCLDevice device;
 	
-	private BasicNetwork oldNetwork;
+	private MLMethod oldMethod;
 	
 
 	/**
@@ -205,8 +201,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	 */
 	private boolean shouldExit;
 	
-	private ProjectEGItem methodItem;
-	private ProjectTraining trainingItem;
+	private MLMethod method;
 
 	/**
 	 * Construct the dialog box.
@@ -214,13 +209,12 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	 * @param owner
 	 *            The owner of the dialog box.
 	 */
-	public BasicTrainingProgress(Train train, ProjectEGItem methodItem, ProjectTraining trainingItem) {
+	public BasicTrainingProgress(Train train, MLMethod method, NeuralDataSet trainingData) {
 		super(null);
 
 		this.train = train;
-		this.methodItem = methodItem;
-		this.trainingItem = trainingItem;
-		this.network = (BasicNetwork) this.methodItem.getObj();
+		this.method = method;
+		this.trainingData = trainingData;
 		
 		this.buttonStart = new JButton("Start");
 		this.buttonStop = new JButton("Stop");
@@ -253,10 +247,10 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 
 	private void performClose() {
 		
-		if (this.oldNetwork != null) {
+		if (this.oldMethod != null) {
 
 			if (EncogWorkBench.askQuestion("Training",
-					"Save the training to this network?")) {
+					"Save the training?")) {
 
 				//EncogWorkBench.getInstance().getCurrentFile().add(
 				//		this.network.getName(), this.train.getNetwork());
@@ -308,8 +302,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	/**
 	 * @return the network
 	 */
-	public BasicNetwork getNetwork() {
-		return this.network;
+	public MLMethod getMethod() {
+		return this.method;
 	}
 
 	/**
@@ -430,7 +424,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 
 			startup();
 
-			this.oldNetwork = (BasicNetwork) network.clone();
+			//this.method = (MLMethod) method.clone();
 
 			// see if we need to continue training.
 			if (this.train instanceof ResilientPropagation) {
@@ -487,8 +481,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 				dispose();
 			}
 		} catch (Throwable t) {
-			EncogWorkBench.displayError("Error", t, this.network,
-					this.trainingData);
+			//EncogWorkBench.displayError("Error", t, this.network,
+				//	this.trainingData);
 			shutdown();
 			stopped();
 			dispose();
@@ -507,8 +501,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	 * @param network
 	 *            the network to set
 	 */
-	public void setNetwork(final BasicNetwork network) {
-		this.network = network;
+	public void setMethod(final MLMethod method) {
+		this.method = method;
 	}
 
 	/**

@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.encog.app.analyst.AnalystFileFormat;
 import org.encog.app.analyst.AnalystGoal;
+import org.encog.app.analyst.wizard.NormalizeRange;
 import org.encog.app.analyst.wizard.WizardMethodType;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
@@ -43,12 +44,16 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	private final FileField rawFile;
 	private final ComboBoxField method;
 	private final ComboBoxField format;
+	private final ComboBoxField range;
 	private final ComboBoxField goal;
 	private final TextField targetField;
 	private final CheckField headers;
 	private final IntegerField lagCount;
 	private final IntegerField leadCount;
 	private final CheckField includeTarget;
+	private final CheckField normalize;
+	private final CheckField segregate;
+	private final CheckField randomize;
 	
 	private final List<String> methods = new ArrayList<String>();
 	
@@ -68,6 +73,10 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		List<String> goalList = new ArrayList<String>();
 		goalList.add("Classification");
 		goalList.add("Regression");
+		
+		List<String> rangeList = new ArrayList<String>();
+		rangeList.add("-1 to 1");
+		rangeList.add("0 to 1");
 
 		
 		methods.add("Feedforward Network");
@@ -75,7 +84,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		methods.add("Support Vector Machine");
 		methods.add("PNN/GRNN Network");
 		
-		this.setSize(640, 280);
+		this.setSize(640, 300);
 		this.setTitle("Setup Encog Analyst Wizard");
 		
 		beginTab("General");
@@ -85,15 +94,25 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		addProperty(this.goal = new ComboBoxField("goal", "Goal", true, goalList));
 		addProperty(this.targetField = new TextField("target field", "Target Field(blank for auto)", false));
 		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
+		addProperty(this.range = new ComboBoxField("normalization range", "Normalization Range", true, rangeList));
 		beginTab("Time Series");
 		addProperty(this.lagCount = new IntegerField("lag count","Lag Count",true,0,1000));
 		addProperty(this.leadCount = new IntegerField("lead count","Lead Count",true,0,1000));
 		addProperty(this.includeTarget = new CheckField("include target","Include Target in Input"));
+		beginTab("Tasks");
+		addProperty(this.normalize = new CheckField("normalize","Normalize"));
+		addProperty(this.randomize = new CheckField("randomize","Randomize"));
+		addProperty(this.segregate = new CheckField("segregate","Segregate"));
+		
 		
 		render();
 		
 		this.lagCount.setValue(0);
 		this.leadCount.setValue(0);
+		
+		this.randomize.setValue(true);
+		this.segregate.setValue(true);
+		this.normalize.setValue(true);
 	
 	}
 
@@ -152,7 +171,19 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 			case 0:
 				return AnalystGoal.Classification;
 			case 1:
-				return AnalystGoal.Classification;
+				return AnalystGoal.Regression;
+			default:
+				return null;
+		}
+	}
+	
+	public NormalizeRange getRange() {
+		int idx = this.range.getSelectedIndex();
+		switch(idx) {
+			case 0:
+				return NormalizeRange.NegOne2One;
+			case 1:
+				return NormalizeRange.Zero2One;
 			default:
 				return null;
 		}
@@ -182,7 +213,27 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	public CheckField getIncludeTarget() {
 		return includeTarget;
 	}
-	
+
+	/**
+	 * @return the segregate
+	 */
+	public CheckField getSegregate() {
+		return segregate;
+	}
+
+	/**
+	 * @return the randomize
+	 */
+	public CheckField getRandomize() {
+		return randomize;
+	}
+
+	/**
+	 * @return the normalize
+	 */
+	public CheckField getNormalize() {
+		return normalize;
+	}	
 	
 	
 }

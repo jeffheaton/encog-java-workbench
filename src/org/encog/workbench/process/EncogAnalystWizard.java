@@ -51,6 +51,10 @@ public class EncogAnalystWizard {
 				wizard.setLeadWindowSize(dialog.getLeadCount().getValue());
 				wizard.setIncludeTargetField(dialog.getIncludeTarget().getValue());
 				wizard.setEGName(egFile);
+				wizard.setRange(dialog.getRange());
+				wizard.setTaskNormalize(dialog.getNormalize().getValue());
+				wizard.setTaskRandomize(dialog.getRandomize().getValue());
+				wizard.setTaskSegregate(dialog.getSegregate().getValue());
 
 				wizard.wizard(targetCSVFile, headers, format);
 

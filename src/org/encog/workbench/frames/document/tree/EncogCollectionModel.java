@@ -152,7 +152,7 @@ public class EncogCollectionModel implements TreeModel {
 		for (File entry : fileList) {
 			String ext = FileUtil.getFileExt(entry);
 			
-			if ( ext.equalsIgnoreCase("csv") || ext.equalsIgnoreCase("egb") ) {
+			if ( ext.equalsIgnoreCase("egb") ) {
 				this.files.add(new ProjectTraining(entry));
 			} else if (ext.equalsIgnoreCase("eg")) {
 				try {					
