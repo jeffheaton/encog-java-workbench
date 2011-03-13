@@ -36,7 +36,6 @@ import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
-import org.encog.engine.network.flat.FlatNetwork;
 import org.encog.mathutil.randomize.ConsistentRandomizer;
 import org.encog.mathutil.randomize.ConstRandomizer;
 import org.encog.mathutil.randomize.Distort;
@@ -45,15 +44,20 @@ import org.encog.mathutil.randomize.GaussianRandomizer;
 import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
 import org.encog.mathutil.randomize.Randomizer;
 import org.encog.mathutil.randomize.RangeRandomizer;
+import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.dialogs.RandomizeNetworkDialog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.models.NetworkListModel;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.mlmethod.structure.StructureTab;
+import org.encog.workbench.tabs.visualize.neat.NEATTab;
 import org.encog.workbench.tabs.visualize.weights.AnalyzeWeightsTab;
 
 public class MLMethodTab extends EncogCommonTab implements ActionListener {
@@ -273,11 +277,35 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		}
 		else if( sel.getSelected()==selectStructure)
 		{
-			//analyzeStructure();	
+			analyzeStructure();	
 		}
 		
 	}
 	
+	private void analyzeStructure() {
+		
+		EncogPersistedObject obj = this.getEncogObject();
+		
+		if( obj instanceof BasicNetwork )
+		{		
+			StructureTab tab = new StructureTab( ((BasicNetwork)this.getEncogObject()) );
+			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Network Structure");
+		}
+		else if( obj instanceof NEATNetwork )
+		{
+			NEATTab tab = new NEATTab((NEATNetwork)this.getEncogObject());
+			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "NEAT Structure");
+		}
+		else {
+			throw new WorkBenchError("No analysis available for: " + obj.getClass().getSimpleName());
+		}
+
+		
+		
+		
+		
+	}
+
 	public void analyzeWeights()
 	{
 		AnalyzeWeightsTab tab = new AnalyzeWeightsTab(this.getEncogObject());

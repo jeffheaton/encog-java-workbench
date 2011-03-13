@@ -42,6 +42,7 @@ import javax.swing.border.Border;
 
 import org.apache.commons.collections15.Transformer;
 import org.encog.engine.network.flat.FlatNetwork;
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
 
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
@@ -63,9 +64,10 @@ public class StructureTab extends EncogCommonTab {
 	private FlatNetwork flat;
 	private VisualizationViewer<DrawnNeuron, DrawnConnection> vv;
 	
-	public StructureTab(FlatNetwork flat) {
+	public StructureTab(BasicNetwork basicNetwork) {
 		super(null);
-		this.flat = flat;
+		
+		this.flat = basicNetwork.getStructure().getFlat();
 
 		// Graph<V, E> where V is the type of the vertices
 		// and E is the type of the edges
