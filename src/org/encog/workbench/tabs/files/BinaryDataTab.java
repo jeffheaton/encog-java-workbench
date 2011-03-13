@@ -40,7 +40,6 @@ import org.encog.workbench.process.ImportExport;
 
 public class BinaryDataTab extends BasicFileTab implements ActionListener {
 
-	private BufferedNeuralDataSet object;
 	private BufferedDataSetTableModel model;
 	private JToolBar toolbar;
 	private JTable table;
@@ -123,7 +122,6 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 	public void dispose()
 	{
 		super.dispose();
-		this.object.open();
 	}
 
 	public BufferedNeuralDataSet getData() {
