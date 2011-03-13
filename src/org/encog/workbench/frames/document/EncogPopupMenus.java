@@ -197,6 +197,7 @@ public class EncogPopupMenus {
 			} else if ((source == this.popupNetworkDelete)
 					|| (source == this.popupDataDelete)
 					|| (source == this.popupGeneralDelete)
+					|| (source == this.popupFileDelete)
 					|| (source == this.popupFileCSVDelete)) {
 				if (first
 						&& !EncogWorkBench
