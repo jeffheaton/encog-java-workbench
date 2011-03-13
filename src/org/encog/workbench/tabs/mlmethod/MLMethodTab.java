@@ -32,6 +32,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
@@ -45,6 +46,7 @@ import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
 import org.encog.mathutil.randomize.Randomizer;
 import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.RandomizeNetworkDialog;
 import org.encog.workbench.dialogs.select.SelectDialog;
@@ -52,7 +54,6 @@ import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.models.NetworkListModel;
 import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.mlmethod.structure.StructurePanel;
 import org.encog.workbench.tabs.visualize.weights.AnalyzeWeightsTab;
 
 public class MLMethodTab extends EncogCommonTab implements ActionListener {
@@ -70,13 +71,12 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	private JButton buttonVisualize;
 	private JComboBox comboLogic;
 	private NetworkListModel model;
-	private JScrollPane scroll;
-	private FlatNetwork flat;
+	private final JScrollPane scroll;
+	private final JEditorPane editor;
 
 	public MLMethodTab(final BasicNetwork data) {
 		super(data);
 
-		this.flat = data.getStructure().getFlat();
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);
@@ -96,9 +96,12 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		this.buttonVisualize.addActionListener(this);
 
 		add(this.toolbar, BorderLayout.PAGE_START);
-		//this.scroll = new JScrollPane(networkDiagram = new NetworkDiagram(this));
-		add(new StructurePanel(this.flat), BorderLayout.CENTER);
-
+		
+		this.editor = new JEditorPane("text/html","");				
+		this.editor.setEditable(false);
+		this.scroll = new JScrollPane(this.editor);
+		add(this.scroll, BorderLayout.CENTER);
+		produceReport();
 	}
 
 	public void actionPerformed(final ActionEvent action) {
@@ -281,5 +284,15 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Analyze Weights");
 	}
 	
+	public void produceReport() {
+		HTMLReport report = new HTMLReport();
+		report.beginHTML();
+		report.title("MLMethod");
+		report.beginBody();
+		report.h1(this.getEncogObject().getClass().getSimpleName());
+		report.endBody();
+		report.endHTML();
+		this.editor.setText(report.toString());
+	}
 
 }

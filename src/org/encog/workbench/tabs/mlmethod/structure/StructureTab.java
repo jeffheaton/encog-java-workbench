@@ -42,6 +42,7 @@ import javax.swing.border.Border;
 
 import org.apache.commons.collections15.Transformer;
 import org.encog.engine.network.flat.FlatNetwork;
+import org.encog.workbench.tabs.EncogCommonTab;
 
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
@@ -57,13 +58,13 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 
-public class StructurePanel extends JPanel {
+public class StructureTab extends EncogCommonTab {
 
 	private FlatNetwork flat;
 	private VisualizationViewer<DrawnNeuron, DrawnConnection> vv;
 	
-	public StructurePanel(FlatNetwork flat) {
-	
+	public StructureTab(FlatNetwork flat) {
+		super(null);
 		this.flat = flat;
 
 		// Graph<V, E> where V is the type of the vertices
