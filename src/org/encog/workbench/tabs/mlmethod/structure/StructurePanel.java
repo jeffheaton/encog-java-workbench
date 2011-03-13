@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.tabs.bnetwork.structure;
+package org.encog.workbench.tabs.mlmethod.structure;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

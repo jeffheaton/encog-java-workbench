@@ -1,4 +1,4 @@
-package org.encog.workbench.tabs.bnetwork.structure;
+package org.encog.workbench.tabs.mlmethod.structure;
 
 
 import java.awt.Color;

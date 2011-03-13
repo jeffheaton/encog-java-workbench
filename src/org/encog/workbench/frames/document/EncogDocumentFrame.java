@@ -35,6 +35,7 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
+import org.encog.ml.MLMethod;
 import org.encog.ml.svm.SVM;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
@@ -53,11 +54,11 @@ import org.encog.workbench.tabs.SVMTab;
 import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.UnknownObjectTab;
 import org.encog.workbench.tabs.analyst.EncogAnalystTab;
-import org.encog.workbench.tabs.bnetwork.BasicNetworkTab;
 import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.tabs.files.ImageFileTab;
 import org.encog.workbench.tabs.files.TextFileTab;
+import org.encog.workbench.tabs.mlmethod.MLMethodTab;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.FileUtil;
 
@@ -392,12 +393,12 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
 			}
-		} else if (obj instanceof BasicNetwork) {
+		} else if (obj instanceof MLMethod) {
 			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
 					.getTabManager().find(obj);
 
 			if (tab == null) {
-				tab = new BasicNetworkTab((BasicNetwork) obj);
+				tab = new MLMethodTab((BasicNetwork) obj);
 				this.openTab(tab, obj.getName());
 			} else {
 				this.documentTabs.setSelectedComponent(tab);

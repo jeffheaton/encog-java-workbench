@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.tabs.bnetwork;
+package org.encog.workbench.tabs.mlmethod;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -52,10 +52,10 @@ import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.models.NetworkListModel;
 import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.bnetwork.structure.StructurePanel;
+import org.encog.workbench.tabs.mlmethod.structure.StructurePanel;
 import org.encog.workbench.tabs.visualize.weights.AnalyzeWeightsTab;
 
-public class BasicNetworkTab extends EncogCommonTab implements ActionListener {
+public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 	/**
 	 * 
@@ -73,7 +73,7 @@ public class BasicNetworkTab extends EncogCommonTab implements ActionListener {
 	private JScrollPane scroll;
 	private FlatNetwork flat;
 
-	public BasicNetworkTab(final BasicNetwork data) {
+	public MLMethodTab(final BasicNetwork data) {
 		super(data);
 
 		this.flat = data.getStructure().getFlat();
