@@ -461,6 +461,16 @@ public class EncogDocumentOperations {
 		if( dialog.process() ) {
 			MLMethod method = dialog.getNetwork();
 			NeuralDataSet trainingData = dialog.getTrainingSet();
+			
+			if( method==null ) {
+				EncogWorkBench.displayError("Error", "Machine language method is required to train.");
+				return;
+			}
+			
+			if( trainingData==null ) {
+				EncogWorkBench.displayError("Error", "Training set is required to train.");
+				return;
+			}
 										
 			Train train = new ResilientPropagation((BasicNetwork)method,trainingData);
 			

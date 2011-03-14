@@ -223,10 +223,10 @@ public class CreateNeuralNetwork {
 	private static EncogPersistedObject createFeedForward(String name) {
 		CreateFeedforward dialog = new CreateFeedforward(EncogWorkBench
 				.getInstance().getMainWindow());
-		dialog.setActivationFunction(new ActivationTANH());
+		dialog.setActivationFunctionHidden(new ActivationTANH());
 		if (dialog.process()) {
 			FeedForwardPattern feedforward = new FeedForwardPattern();
-			feedforward.setActivationFunction(dialog.getActivationFunction());
+			feedforward.setActivationFunction(dialog.getActivationFunctionHidden());
 			feedforward.setInputNeurons(dialog.getInputCount().getValue());
 			for (int i = 0; i < dialog.getHidden().getModel().size(); i++) {
 				String str = (String) dialog.getHidden().getModel()

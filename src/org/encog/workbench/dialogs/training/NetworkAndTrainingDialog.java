@@ -104,6 +104,9 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	 * @return The network that the user chose.
 	 */
 	public MLMethod getNetwork() {
+		if( this.comboNetwork.getSelectedValue()==null )
+			return null;
+		
 		return (MLMethod)(((ProjectEGItem)this.comboNetwork.getSelectedValue()).getObj());
 	}
 
@@ -111,6 +114,8 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	 * @return The training set that the user chose.
 	 */
 	public NeuralDataSet getTrainingSet() {
+		if( this.comboTraining.getSelectedValue()==null )			
+			return null;
 		File file = ((ProjectTraining)this.comboTraining.getSelectedValue()).getFile();
 		BufferedNeuralDataSet result = new BufferedNeuralDataSet(file);
 		return result;

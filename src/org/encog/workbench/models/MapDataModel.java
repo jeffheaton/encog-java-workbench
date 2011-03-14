@@ -60,9 +60,9 @@ public class MapDataModel  implements TableModel {
 
 	public String getColumnName(int c) {
 		if(c==1)
-			return "Name";
-		else
 			return "Value";
+		else
+			return "Name";
 	}
 
 	public int getRowCount() {

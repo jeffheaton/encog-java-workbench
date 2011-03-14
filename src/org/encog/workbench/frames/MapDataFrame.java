@@ -49,6 +49,7 @@ public class MapDataFrame extends EncogCommonFrame {
 	private JButton btnAdd;
 	private MapDataModel model;
 	private JButton btnDel;
+	private Map<String,String> data;
 	
 	public MapDataFrame(Map<String,String> data, String title)
 	{
@@ -71,7 +72,7 @@ public class MapDataFrame extends EncogCommonFrame {
 		this.btnAdd.addActionListener(this);
 		this.panelButtons.add(this.btnDel);
 		this.btnDel.addActionListener(this);
-		
+		this.data = data;
 		
 	}
 	
@@ -94,7 +95,7 @@ public class MapDataFrame extends EncogCommonFrame {
 		}
 		
 		// check for dup
-		if( ((PropertyData)this.getEncogObject()).isDefined(str))
+		if( data.containsKey(str))
 		{
 			EncogWorkBench.displayError("Error", "Name already defined.");
 			return false;

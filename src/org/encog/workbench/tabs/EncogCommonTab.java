@@ -52,7 +52,7 @@ import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 public class EncogCommonTab extends JPanel {
 	
-	private final EncogPersistedObject encogObject;
+	private EncogPersistedObject encogObject;
 	private EncogDocumentFrame owner;
 	private boolean modal;
 	
@@ -91,6 +91,10 @@ public class EncogCommonTab extends JPanel {
 
 	public void setModal(boolean modal) {
 		this.modal = modal;
+	}
+
+	public void setEncogObject(EncogPersistedObject encogObject) {
+		this.encogObject = encogObject;
 	}
 	
 	

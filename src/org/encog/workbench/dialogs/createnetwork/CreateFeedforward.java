@@ -41,8 +41,11 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 	private IntegerField inputCount;
 	private IntegerField outputCount;
 	private BuildingListField hidden;
-	private PopupField activationField;
-	private ActivationFunction activationFunction;
+	private PopupField activationFieldHidden;
+	private PopupField activationFieldOutput;
+	private ActivationFunction activationFunctionHidden;
+	private ActivationFunction activationFunctionOutput;
+	
 
 	public CreateFeedforward(Frame owner) {
 		super(owner);
@@ -55,8 +58,10 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 				"Hidden Layer Counts"));
 		addProperty(this.outputCount = new IntegerField("output neurons",
 				"Output Neuron Count", true, 1, 100000));
-		addProperty(this.activationField = new PopupField("activation",
-				"Activation Function", true));
+		addProperty(this.activationFieldHidden = new PopupField("activation hidden",
+				"Activation Function Hidden", true));
+		addProperty(this.activationFieldHidden = new PopupField("activation output",
+				"Activation Function Output", true));
 		render();
 	}
 
@@ -122,31 +127,42 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 
 	public String popup(PopupField field) {
 		ActivationDialog dialog = new ActivationDialog(EncogWorkBench.getInstance().getMainWindow());
-		dialog.setActivation(this.activationFunction);
+		dialog.setActivation(this.activationFunctionHidden);
 		if( !dialog.process()  )
 			return null;
-		else
+		else if( field==this.activationFieldHidden )
 		{
-			this.activationFunction = dialog.getActivation();
+			this.activationFunctionHidden = dialog.getActivation();
+			return dialog.getActivation().getClass().getSimpleName();
+		} else if( field==this.activationFieldOutput )
+		{
+			this.activationFunctionOutput = dialog.getActivation();
 			return dialog.getActivation().getClass().getSimpleName();
 		}
+		else
+			return null;
 	}
 
-	public PopupField getActivationField() {
-		return activationField;
-	}
-
-	public ActivationFunction getActivationFunction() {
-		return activationFunction;
-	}
-
-	public void setActivationFunction(ActivationFunction activationFunction) {
-		this.activationFunction = activationFunction;
-		this.activationField.setValue(this.activationFunction.getClass().getSimpleName());
+	public PopupField getActivationHiddenField() {
+		return activationFieldHidden;
 	}
 	
-	
-	
-	
 
+	public ActivationFunction getActivationFunctionHidden() {
+		return activationFunctionHidden;
+	}
+
+	public void setActivationFunctionHidden(ActivationFunction activationFunction) {
+		this.activationFunctionHidden = activationFunction;
+		this.activationFieldHidden.setValue(this.activationFunctionHidden.getClass().getSimpleName());
+	}
+
+	public ActivationFunction getActivationFunctionOutput() {
+		return activationFunctionOutput;
+	}
+
+	public void setActivationFunctionOutput(ActivationFunction activationFunction) {
+		this.activationFunctionOutput = activationFunction;
+		this.activationFieldOutput.setValue(this.activationFunctionOutput.getClass().getSimpleName());
+	}
 }
