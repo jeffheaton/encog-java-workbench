@@ -36,6 +36,8 @@ import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
+import org.encog.engine.network.flat.FlatNetwork;
+import org.encog.engine.util.Format;
 import org.encog.mathutil.randomize.ConsistentRandomizer;
 import org.encog.mathutil.randomize.ConstRandomizer;
 import org.encog.mathutil.randomize.Distort;
@@ -44,6 +46,10 @@ import org.encog.mathutil.randomize.GaussianRandomizer;
 import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
 import org.encog.mathutil.randomize.Randomizer;
 import org.encog.mathutil.randomize.RangeRandomizer;
+import org.encog.ml.MLEncodable;
+import org.encog.ml.MLMethod;
+import org.encog.ml.MLRegression;
+import org.encog.ml.MLResettable;
 import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogPersistedObject;
@@ -54,6 +60,7 @@ import org.encog.workbench.dialogs.RandomizeNetworkDialog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.MapDataFrame;
+import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.models.NetworkListModel;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.mlmethod.structure.StructureTab;
@@ -78,8 +85,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	private final JScrollPane scroll;
 	private final JEditorPane editor;
 
-	public MLMethodTab(final BasicNetwork data) {
-		super(data);
+	public MLMethodTab(final MLMethod data) {
+		super((EncogPersistedObject) data);
 
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
@@ -232,7 +239,19 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	}
 
 	private void performQuery() {
+		try
+		{
+			NetworkQueryFrame query = new NetworkQueryFrame(
+					((MLRegression) this.getEncogObject()));
+			query.setVisible(true);
 
+		}
+		catch(Throwable t)
+		{
+			EncogWorkBench.displayError("Error", t, ((MLMethod) this.getEncogObject()), null);
+		}
+
+		
 	}
 
 	/**
@@ -318,6 +337,55 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		report.title("MLMethod");
 		report.beginBody();
 		report.h1(this.getEncogObject().getClass().getSimpleName());
+		
+		report.beginTable();
+		
+		if( this.getEncogObject() instanceof MLRegression ) {
+			MLRegression reg = (MLRegression)this.getEncogObject();
+			report.tablePair("Input Count", Format.formatInteger(reg.getInputCount()));
+			report.tablePair("Output Count", Format.formatInteger(reg.getOutputCount()));			
+		}
+		
+		if( this.getEncogObject() instanceof MLEncodable ) {
+			MLEncodable encode = (MLEncodable)this.getEncogObject();
+			report.tablePair("Encoded Length", Format.formatInteger(encode.encodedArrayLength()));
+		}
+		
+		report.tablePair("Resettable", (getEncogObject() instanceof MLResettable) ? "true":"false");
+		report.endTable();
+						
+		if( this.getEncogObject() instanceof BasicNetwork )
+		{
+			report.h3("Layers");
+			report.beginTable();
+			report.beginRow();
+			report.header("Layer #");
+			report.header("Total Count");
+			report.header("Neuron Count");
+			report.header("Activation Function");
+			report.header("Bias");
+			report.header("Context Size");
+			report.header("Context Offset");
+			report.endRow();
+
+			BasicNetwork network = (BasicNetwork)getEncogObject();
+			FlatNetwork flat = network.getStructure().getFlat();
+			
+			for(int l = 0; l<network.getLayerCount();l++)
+			{
+				report.beginRow();
+				report.cell(Format.formatInteger(l+1));
+				report.cell(Format.formatInteger(flat.getLayerCounts()[l]));
+				report.cell(Format.formatInteger(flat.getLayerFeedCounts()[l]));
+				report.cell(flat.getActivationFunctions()[l].getClass().getSimpleName());
+				report.cell(Format.formatDouble(flat.getBiasActivation()[l],4));
+				report.cell(Format.formatInteger(flat.getContextTargetSize()[l]));
+				report.cell(Format.formatInteger(flat.getContextTargetOffset()[l]));
+				report.endRow();
+			}
+			report.endTable();
+		}
+						
 		report.endBody();
 		report.endHTML();
 		this.editor.setText(report.toString());

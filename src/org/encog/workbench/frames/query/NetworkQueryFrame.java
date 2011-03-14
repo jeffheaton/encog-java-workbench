@@ -36,10 +36,13 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import org.encog.EncogError;
+import org.encog.ml.MLMethod;
+import org.encog.ml.MLRegression;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.Layer;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.EncogCommonFrame;
@@ -57,7 +60,7 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 	private int outputCount;
 	private JButton calculateButton;
 
-	public NetworkQueryFrame(final BasicNetwork data) {
+	public NetworkQueryFrame(final MLRegression data) {
 		super(true);
 		setEncogObject(data);
 		addWindowListener(this);
@@ -97,8 +100,8 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 
 	}
 
-	public BasicNetwork getData() {
-		return (BasicNetwork) getEncogObject();
+	public MLRegression getData() {
+		return (MLRegression) getEncogObject();
 	}
 
 	public void mouseClicked(final MouseEvent e) {
@@ -112,7 +115,7 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 		this.outputCount = getData().getInputCount();
 
 		// create the graphic objects
-		setTitle("Query Network: " + getData().getName());
+		setTitle("Query Network: " + ((EncogPersistedObject)getData()).getName());
 		this.setSize(640, 480);
 		final Container contents = getContentPane();
 		contents.setLayout(new BorderLayout());

@@ -29,6 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.encog.Encog;
+import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
@@ -42,7 +43,7 @@ public class ErrorDialog extends EncogCommonDialog {
 	private final JTextArea text;
 	private final JScrollPane scroll;
 	
-	public ErrorDialog(Frame owner, Throwable t, BasicNetwork network, NeuralDataSet dataset) {
+	public ErrorDialog(Frame owner, Throwable t, MLMethod network, NeuralDataSet dataset) {
 		super(owner);
 		this.setSize(640, 480);
 		setTitle("An Unhandled Error Occured");
@@ -115,7 +116,7 @@ public class ErrorDialog extends EncogCommonDialog {
 		
 	}
 	
-	public static void handleError(Throwable t, BasicNetwork network, NeuralDataSet training)
+	public static void handleError(Throwable t, MLMethod network, NeuralDataSet training)
 	{
 		t.printStackTrace();
 		ErrorDialog dialog = new ErrorDialog(EncogWorkBench.getInstance().getMainWindow(),t,network,training);

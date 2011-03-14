@@ -398,7 +398,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 					.getTabManager().find(obj);
 
 			if (tab == null) {
-				tab = new MLMethodTab((BasicNetwork) obj);
+				tab = new MLMethodTab((MLMethod)obj);
 				this.openTab(tab, obj.getName());
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
