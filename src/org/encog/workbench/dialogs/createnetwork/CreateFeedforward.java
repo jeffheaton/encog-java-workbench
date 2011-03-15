@@ -60,7 +60,7 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 				"Output Neuron Count", true, 1, 100000));
 		addProperty(this.activationFieldHidden = new PopupField("activation hidden",
 				"Activation Function Hidden", true));
-		addProperty(this.activationFieldHidden = new PopupField("activation output",
+		addProperty(this.activationFieldOutput = new PopupField("activation output",
 				"Activation Function Output", true));
 		render();
 	}

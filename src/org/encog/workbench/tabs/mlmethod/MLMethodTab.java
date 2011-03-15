@@ -35,6 +35,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
+import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.engine.network.flat.FlatNetwork;
 import org.encog.engine.util.Format;
@@ -55,6 +56,7 @@ import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.pattern.HopfieldPattern;
+import org.encog.neural.prune.PruneSelective;
 import org.encog.neural.thermal.HopfieldNetwork;
 import org.encog.persist.EncogCollection;
 import org.encog.persist.EncogMemoryCollection;
@@ -100,8 +102,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		this.toolbar.add(this.buttonQuery = new JButton("Query"));
 		this.toolbar.add(this.buttonTrain = new JButton("Train"));
 		this.toolbar.add(this.buttonRestructure = new JButton("Restructure"));
-		this.toolbar.add(this.buttonProperties = new JButton(
-				"Properties"));
+		this.toolbar.add(this.buttonProperties = new JButton("Properties"));
 		this.toolbar.add(this.buttonVisualize = new JButton("Visualize"));
 
 		this.buttonRandomize.addActionListener(this);
@@ -137,7 +138,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	}
 
 	private void performTrain() {
-		EncogWorkBench.getInstance().getMainWindow().getOperations().performTrain();
+		EncogWorkBench.getInstance().getMainWindow().getOperations()
+				.performTrain();
 	}
 
 	private void performRandomize() {
@@ -239,8 +241,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			query.setVisible(true);
 
 		} catch (Throwable t) {
-			EncogWorkBench.displayError("Error", t, ((MLMethod) this
-					.getEncogObject()), null);
+			EncogWorkBench.displayError("Error", t,
+					((MLMethod) this.getEncogObject()), null);
 		}
 
 	}
@@ -258,7 +260,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	}
 
 	public boolean close() {
-		if( EncogWorkBench.askQuestion("Save", "Would you like to save your changes?")) {
+		if (EncogWorkBench.askQuestion("Save",
+				"Would you like to save your changes?")) {
 			EncogWorkBench.getInstance().save(this.getEncogObject());
 			EncogWorkBench.getInstance().refresh();
 		} else {
@@ -269,11 +272,14 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 	public void performProperties() {
 		if (this.getEncogObject() instanceof MLProperties) {
-			MapDataFrame frame = new MapDataFrame(((MLProperties) this
-					.getEncogObject()).getProperties(), "Properties");
+			MapDataFrame frame = new MapDataFrame(
+					((MLProperties) this.getEncogObject()).getProperties(),
+					"Properties");
 			frame.setVisible(true);
 		} else {
-			EncogWorkBench.displayError("Error", "This Machine Learning Method type does not support properties.");
+			EncogWorkBench
+					.displayError("Error",
+							"This Machine Learning Method type does not support properties.");
 		}
 	}
 
@@ -302,14 +308,14 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		EncogPersistedObject obj = this.getEncogObject();
 
 		if (obj instanceof BasicNetwork) {
-			StructureTab tab = new StructureTab(((BasicNetwork) this
-					.getEncogObject()));
-			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab,
-					"Network Structure");
+			StructureTab tab = new StructureTab(
+					((BasicNetwork) this.getEncogObject()));
+			EncogWorkBench.getInstance().getMainWindow()
+					.openModalTab(tab, "Network Structure");
 		} else if (obj instanceof NEATNetwork) {
 			NEATTab tab = new NEATTab((NEATNetwork) this.getEncogObject());
-			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab,
-					"NEAT Structure");
+			EncogWorkBench.getInstance().getMainWindow()
+					.openModalTab(tab, "NEAT Structure");
 		} else {
 			throw new WorkBenchError("No analysis available for: "
 					+ obj.getClass().getSimpleName());
@@ -319,8 +325,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 	public void analyzeWeights() {
 		AnalyzeWeightsTab tab = new AnalyzeWeightsTab(this.getEncogObject());
-		EncogWorkBench.getInstance().getMainWindow().openModalTab(tab,
-				"Analyze Weights");
+		EncogWorkBench.getInstance().getMainWindow()
+				.openModalTab(tab, "Analyze Weights");
 	}
 
 	public void produceReport() {
@@ -334,16 +340,16 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 		if (this.getEncogObject() instanceof MLRegression) {
 			MLRegression reg = (MLRegression) this.getEncogObject();
-			report.tablePair("Input Count", Format.formatInteger(reg
-					.getInputCount()));
-			report.tablePair("Output Count", Format.formatInteger(reg
-					.getOutputCount()));
+			report.tablePair("Input Count",
+					Format.formatInteger(reg.getInputCount()));
+			report.tablePair("Output Count",
+					Format.formatInteger(reg.getOutputCount()));
 		}
 
 		if (this.getEncogObject() instanceof MLEncodable) {
 			MLEncodable encode = (MLEncodable) this.getEncogObject();
-			report.tablePair("Encoded Length", Format.formatInteger(encode
-					.encodedArrayLength()));
+			report.tablePair("Encoded Length",
+					Format.formatInteger(encode.encodedArrayLength()));
 		}
 
 		report.tablePair("Resettable",
@@ -373,13 +379,9 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				report.cell(Format.formatInteger(flat.getLayerFeedCounts()[l]));
 				report.cell(flat.getActivationFunctions()[l].getClass()
 						.getSimpleName());
-				report
-						.cell(Format.formatDouble(flat.getBiasActivation()[l],
-								4));
-				report.cell(Format
-						.formatInteger(flat.getContextTargetSize()[l]));
-				report.cell(Format
-						.formatInteger(flat.getContextTargetOffset()[l]));
+				report.cell(Format.formatDouble(flat.getBiasActivation()[l], 4));
+				report.cell(Format.formatInteger(flat.getContextTargetSize()[l]));
+				report.cell(Format.formatInteger(flat.getContextTargetOffset()[l]));
 				report.endRow();
 			}
 			report.endTable();
@@ -389,68 +391,117 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		report.endHTML();
 		this.editor.setText(report.toString());
 	}
-	
-	private void restructureHopfield(EncogCollection collection, String name, MLMethod method) {
-		HopfieldNetwork hopfield = (HopfieldNetwork)method;
+
+	private void restructureHopfield(EncogCollection collection, String name,
+			MLMethod method) {
+		HopfieldNetwork hopfield = (HopfieldNetwork) method;
 		CreateHopfieldDialog dialog = new CreateHopfieldDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.getNeuronCount().setValue(hopfield.getNeuronCount());
-		
-		if (dialog.process() && (hopfield.getNeuronCount()!=dialog.getNeuronCount().getValue())) {
+
+		if (dialog.process()
+				&& (hopfield.getNeuronCount() != dialog.getNeuronCount()
+						.getValue())) {
 			HopfieldPattern pattern = new HopfieldPattern();
 			pattern.setInputNeurons(dialog.getNeuronCount().getValue());
-			this.setEncogObject( hopfield = (HopfieldNetwork)pattern.generate() );
+			this.setEncogObject(hopfield = (HopfieldNetwork) pattern.generate());
 			collection.add(name, hopfield);
 			produceReport();
 		}
 	}
-	
-	private void restructureFeedforward(EncogCollection collection, String name, MLMethod method) {
+
+	private void restructureFeedforward(EncogCollection collection,
+			String name, MLMethod method) {
 		CreateFeedforward dialog = new CreateFeedforward(EncogWorkBench
 				.getInstance().getMainWindow());
-		BasicNetwork network = (BasicNetwork)this.getEncogObject();
-		dialog.setActivationFunctionHidden(new ActivationTANH());
+		BasicNetwork network = (BasicNetwork) this.getEncogObject();
+
+		ActivationFunction oldActivationOutput = network.getActivation(network
+				.getLayerCount() - 1);
+		dialog.setActivationFunctionOutput(oldActivationOutput);
 		dialog.getInputCount().setValue(network.getInputCount());
 		dialog.getOutputCount().setValue(network.getOutputCount());
-		int hiddenLayerCount = network.getLayerCount()-2;
-		
-		for(int i=0;i<hiddenLayerCount;i++) {
-			int num = network.getLayerNeuronCount(i+1);
-			String str = "Hidden Layer " + (i+1) + ": " + num + " neurons";
+		int hiddenLayerCount = network.getLayerCount() - 2;
+
+		ActivationFunction oldActivationHidden = new ActivationTANH();
+		for (int i = 0; i < hiddenLayerCount; i++) {
+			int num = network.getLayerNeuronCount(i + 1);
+			String str = "Hidden Layer " + (i + 1) + ": " + num + " neurons";
 			dialog.getHidden().getModel().addElement(str);
 		}
-		
+		dialog.setActivationFunctionHidden(oldActivationHidden);
+
 		if (dialog.process()) {
-			FeedForwardPattern feedforward = new FeedForwardPattern();
-			feedforward.setActivationFunction(dialog.getActivationFunctionHidden());
-			feedforward.setInputNeurons(dialog.getInputCount().getValue());
-			for (int i = 0; i < dialog.getHidden().getModel().size(); i++) {
-				String str = (String) dialog.getHidden().getModel()
-						.getElementAt(i);
-				int i1 = str.indexOf(':');
-				int i2 = str.indexOf("neur");
-				if (i1 != -1 && i2 != -1) {
-					str = str.substring(i1 + 1, i2).trim();
-					int neuronCount = Integer.parseInt(str);
-					feedforward.addHiddenLayer(neuronCount);
+			// decide if entire network is to be recreated
+			if ((dialog.getActivationFunctionHidden() != oldActivationHidden)
+					|| (dialog.getActivationFunctionOutput() != oldActivationOutput)
+					|| dialog.getHidden().getModel().size()!=(network.getLayerCount()-2)) {
+				FeedForwardPattern feedforward = new FeedForwardPattern();
+				feedforward.setActivationFunction(dialog
+						.getActivationFunctionHidden());
+				feedforward.setInputNeurons(dialog.getInputCount().getValue());
+				for (int i = 0; i < dialog.getHidden().getModel().size(); i++) {
+					String str = (String) dialog.getHidden().getModel()
+							.getElementAt(i);
+					int i1 = str.indexOf(':');
+					int i2 = str.indexOf("neur");
+					if (i1 != -1 && i2 != -1) {
+						str = str.substring(i1 + 1, i2).trim();
+						int neuronCount = Integer.parseInt(str);
+						feedforward.addHiddenLayer(neuronCount);
+					}
+				}
+				feedforward.setInputNeurons(dialog.getInputCount().getValue());
+				feedforward
+						.setOutputNeurons(dialog.getOutputCount().getValue());
+			} else {
+				// try to prune it
+				PruneSelective prune = new PruneSelective(network);
+				int newInputCount = dialog.getInputCount().getValue();
+				int newOutputCount = dialog.getOutputCount().getValue();
+				
+				// did input neurons change?
+				if( newInputCount!=network.getInputCount() ) {					
+					prune.changeNeuronCount(0, newInputCount);
+				}
+				
+				// did output neurons change?
+				if( newOutputCount!=network.getOutputCount() ) {					
+					prune.changeNeuronCount(0, newOutputCount);
+				}
+				
+				// did the hidden layers change?
+				for(int i=0;i<network.getLayerCount()-2;i++) {
+					int newHiddenCount = 1;
+					String str = (String) dialog.getHidden().getModel().getElementAt(i);
+					int i1 = str.indexOf(':');
+					int i2 = str.indexOf("neur");
+					if (i1 != -1 && i2 != -1) {
+						str = str.substring(i1 + 1, i2).trim();
+						newHiddenCount = Integer.parseInt(str);
+					}
+					
+					// did this hidden layer change?
+					if( network.getLayerNeuronCount(i)!=newHiddenCount) {
+						prune.changeNeuronCount(i+1, newHiddenCount);
+					}
 				}
 			}
-			feedforward.setInputNeurons(dialog.getInputCount().getValue());
-			feedforward.setOutputNeurons(dialog.getOutputCount().getValue());
-		}
+		} 
 	}
-	
+
 	private void performRestructure() {
-		MLMethod method = (MLMethod)this.getEncogObject();
+		MLMethod method = (MLMethod) this.getEncogObject();
 		EncogCollection collection = this.getEncogObject().getCollection();
 		String name = this.getEncogObject().getName();
-		
-		if( method instanceof HopfieldNetwork ) {			
-			restructureHopfield(collection,name,method);			
-		} else if( method instanceof BasicNetwork ) {
-			restructureFeedforward(collection,name,method);
+
+		if (method instanceof HopfieldNetwork) {
+			restructureHopfield(collection, name, method);
+		} else if (method instanceof BasicNetwork) {
+			restructureFeedforward(collection, name, method);
 		} else {
-			EncogWorkBench.displayError("Error", "This Machine Learning Method cannot be restructured.");
+			EncogWorkBench.displayError("Error",
+					"This Machine Learning Method cannot be restructured.");
 		}
 	}
 
