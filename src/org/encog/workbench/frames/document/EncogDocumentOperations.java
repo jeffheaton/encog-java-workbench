@@ -38,6 +38,7 @@ import org.encog.engine.util.Format;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLRegression;
 import org.encog.ml.genetic.population.BasicPopulation;
+import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
@@ -45,8 +46,10 @@ import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.neural.thermal.HopfieldNetwork;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogMemoryCollection;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.util.csv.CSVFormat;
 import org.encog.util.file.Directory;
 import org.encog.util.simple.EncogUtility;
@@ -471,12 +474,26 @@ public class EncogDocumentOperations {
 				EncogWorkBench.displayError("Error", "Training set is required to train.");
 				return;
 			}
-										
+			
+			if( method instanceof HopfieldNetwork ) {
+				HopfieldNetwork hp = (HopfieldNetwork)method;
+				for(NeuralDataPair pair: trainingData ) {
+					hp.addPattern(pair.getInput());
+				}
+				if( EncogWorkBench.askQuestion("Hopfield","Training done, save?") ) {
+					EncogWorkBench.getInstance().save((EncogPersistedObject)hp);
+				}
+			} else if( method instanceof BasicNetwork ) {
+									
 			Train train = new ResilientPropagation((BasicNetwork)method,trainingData);
 			
 			BasicTrainingProgress tab = new BasicTrainingProgress(train,method,trainingData);
 			tab.setMaxError(dialog.getMaxError().getValue()/100.0);
 			EncogWorkBench.getInstance().getMainWindow().openTab(tab);
+			}
+			else {
+				EncogWorkBench.displayError("Unknown Method", "No training method is available for: " + method.getClass().getName());
+			}
 		}
 	}
 }

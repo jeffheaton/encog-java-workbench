@@ -69,32 +69,31 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource() == this.calculateButton) {
 			try {
-			final BasicNeuralData input = new BasicNeuralData(this.inputCount);
-			for (int i = 0; i < this.inputCount; i++) {
-				double value = 0;
-				final String str = (String) this.inputTable.getValueAt(i, 1);
-				try {
-					value = Double.parseDouble(str);
-				} catch (final NumberFormatException e2) {
-					EncogWorkBench.displayError("Data Error",
-							"Please enter a valid input number.");
+				final BasicNeuralData input = new BasicNeuralData(
+						this.inputCount);
+				for (int i = 0; i < this.inputCount; i++) {
+					double value = 0;
+					final String str = (String) this.inputTable
+							.getValueAt(i, 1);
+					try {
+						value = Double.parseDouble(str);
+					} catch (final NumberFormatException e2) {
+						EncogWorkBench.displayError("Data Error",
+								"Please enter a valid input number.");
+					}
+					input.setData(i, value);
 				}
-				input.setData(i, value);
-			}
 
-			final NeuralData output = getData().compute(input);
+				final NeuralData output = getData().compute(input);
 
-			for (int i = 0; i < this.outputCount; i++) {
-				this.outputTable.setValueAt(output.getData(i), i, 1);
-			}
-		}
-			catch(EncogError ex)
-			{
+				for (int i = 0; i < this.outputCount; i++) {
+					this.outputTable.setValueAt(output.getData(i), i, 1);
+				}
+			} catch (EncogError ex) {
 				EncogWorkBench.displayError("Query Error", ex.getMessage());
-			}
-			catch(Throwable t)
-			{
-				ErrorDialog.handleError(t, (BasicNetwork)this.getEncogObject(), null);
+			} catch (Throwable t) {
+				ErrorDialog.handleError(t,
+						(BasicNetwork) this.getEncogObject(), null);
 			}
 		}
 
@@ -110,12 +109,13 @@ public class NetworkQueryFrame extends EncogCommonFrame {
 	}
 
 	public void windowOpened(final WindowEvent e) {
-		
+
 		this.inputCount = getData().getInputCount();
 		this.outputCount = getData().getInputCount();
 
 		// create the graphic objects
-		setTitle("Query Network: " + ((EncogPersistedObject)getData()).getName());
+		setTitle("Query Network: "
+				+ ((EncogPersistedObject) getData()).getName());
 		this.setSize(640, 480);
 		final Container contents = getContentPane();
 		contents.setLayout(new BorderLayout());

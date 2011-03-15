@@ -73,6 +73,7 @@ import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.mlmethod.structure.StructureTab;
+import org.encog.workbench.tabs.visualize.ThermalGrid.ThermalGridTab;
 import org.encog.workbench.tabs.visualize.neat.NEATTab;
 import org.encog.workbench.tabs.visualize.weights.AnalyzeWeightsTab;
 
@@ -98,7 +99,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);
-		this.toolbar.add(this.buttonRandomize = new JButton("Randomize"));
+		this.toolbar.add(this.buttonRandomize = new JButton("Randomize/Reset"));
 		this.toolbar.add(this.buttonQuery = new JButton("Query"));
 		this.toolbar.add(this.buttonTrain = new JButton("Train"));
 		this.toolbar.add(this.buttonRestructure = new JButton("Restructure"));
@@ -141,43 +142,51 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		EncogWorkBench.getInstance().getMainWindow().getOperations()
 				.performTrain();
 	}
+	
+	private void randomizeBasicNetwork() {
+		RandomizeNetworkDialog dialog = new RandomizeNetworkDialog(
+				EncogWorkBench.getInstance().getMainWindow());
+
+		dialog.getHigh().setValue(1);
+		dialog.getConstHigh().setValue(1);
+		dialog.getLow().setValue(-1);
+		dialog.getConstLow().setValue(-1);
+		dialog.getSeedValue().setValue(1000);
+		dialog.getConstantValue().setValue(0);
+		dialog.getPerturbPercent().setValue(0.01);
+
+		if (dialog.process()) {
+			switch (dialog.getCurrentTab()) {
+			case 0:
+				optionRandomize(dialog);
+				break;
+
+			case 1:
+				optionPerturb(dialog);
+				break;
+			case 2:
+				optionGaussian(dialog);
+				break;
+			case 3:
+				optionConsistent(dialog);
+				break;
+
+			case 4:
+				optionConstant(dialog);
+				break;
+			}
+		}
+		
+	}
 
 	private void performRandomize() {
 
 		if (EncogWorkBench.askQuestion("Are you sure?",
-				"Randomize network weights and lose all training?")) {
-
-			RandomizeNetworkDialog dialog = new RandomizeNetworkDialog(
-					EncogWorkBench.getInstance().getMainWindow());
-
-			dialog.getHigh().setValue(1);
-			dialog.getConstHigh().setValue(1);
-			dialog.getLow().setValue(-1);
-			dialog.getConstLow().setValue(-1);
-			dialog.getSeedValue().setValue(1000);
-			dialog.getConstantValue().setValue(0);
-			dialog.getPerturbPercent().setValue(0.01);
-
-			if (dialog.process()) {
-				switch (dialog.getCurrentTab()) {
-				case 0:
-					optionRandomize(dialog);
-					break;
-
-				case 1:
-					optionPerturb(dialog);
-					break;
-				case 2:
-					optionGaussian(dialog);
-					break;
-				case 3:
-					optionConsistent(dialog);
-					break;
-
-				case 4:
-					optionConstant(dialog);
-					break;
-				}
+				"Randomize/reset network weights and lose all training?")) {
+			if( this.getEncogObject() instanceof BasicNetwork ) {
+				randomizeBasicNetwork();
+			} else if( this.getEncogObject() instanceof MLResettable ) {
+				((MLResettable)getEncogObject()).reset();
 			}
 		}
 
@@ -286,11 +295,14 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	public void handleVisualize() {
 		SelectItem selectWeights;
 		SelectItem selectStructure;
+		SelectItem selectThermal;
 		List<SelectItem> list = new ArrayList<SelectItem>();
 		list.add(selectWeights = new SelectItem("Weights Histogram",
 				"A histogram of the weights."));
 		list.add(selectStructure = new SelectItem("Network Structure",
 				"The structure of the neural network."));
+		list.add(selectThermal = new SelectItem("Thermal Matrix",
+				"Shows the matrix of a Hopfield or Boltzmann Machine."));
 		SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
 				.getMainWindow(), list);
 		sel.setVisible(true);
@@ -299,8 +311,16 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			analyzeWeights();
 		} else if (sel.getSelected() == selectStructure) {
 			analyzeStructure();
+		} else if (sel.getSelected() == selectThermal) {
+			analyzeThermal();
 		}
 
+	}
+
+	private void analyzeThermal() {
+		EncogPersistedObject obj = this.getEncogObject();
+		ThermalGridTab tab = new ThermalGridTab((HopfieldNetwork)obj);
+		EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Thermal Grid");
 	}
 
 	private void analyzeStructure() {
