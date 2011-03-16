@@ -136,8 +136,6 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 		getContentPane().add(this.projectSplit);
 
-		this.popupMenus.initPopup();
-
 		this.tabManager = new EncogTabManager(this);
 
 		this.menus.updateMenus();

@@ -32,11 +32,10 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.encog.persist.DirectoryEntry;
-import org.encog.persist.EncogPersistedCollection;
+import org.encog.ml.MLMethod;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.frames.document.tree.ProjectDirectory;
 import org.encog.workbench.frames.document.tree.ProjectEGItem;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
@@ -46,102 +45,23 @@ import org.encog.workbench.process.ImportExport;
 
 public class EncogPopupMenus {
 
-	private JPopupMenu popupNetwork;
-	private JMenuItem popupNetworkDelete;
-
-	private JMenuItem popupNetworkProperties;
-	private JMenuItem popupNetworkOpen;
-	private JMenuItem popupNetworkQuery;
-	private JPopupMenu popupData;
-	private JMenuItem popupDataDelete;
-
-	private JMenuItem popupDataProperties;
-	private JMenuItem popupDataOpen;
-	private JMenuItem popupDataExport;
-
-	private JPopupMenu popupGeneral;
-	private JMenuItem popupGeneralOpen;
-	private JMenuItem popupGeneralDelete;
-	private JMenuItem popupGeneralProperties;
-	private EncogDocumentFrame owner;
-
 	private JPopupMenu popupFile;
+	private JMenuItem popupFileRefresh;
 	private JMenuItem popupFileDelete;
 	private JMenuItem popupFileOpen;
+	private JMenuItem popupFileProperties;
+	private JMenuItem popupFileQuery;
+	private JMenuItem popupFileExport;
 	private JMenuItem popupFileOpenText;
-	private JMenuItem popupFileRefresh;
-
-	private JPopupMenu popupFileCSV;
-	private JMenuItem popupFileCSVDelete;
-	private JMenuItem popupFileCSVOpen;
-	private JMenuItem popupFileCSVRefresh;
 	private JMenuItem popupFileCSVExport;
 	private JMenuItem popupFileCSVWizard;
-
-	private JPopupMenu popupRefresh;
-	private JMenuItem popupRefreshItem;
+	private JMenuItem popupFileNewFile;
+	private JMenuItem popupFileNewObject;
 	
-	private JPopupMenu popupRoot;
-	private JMenuItem popupRootRefreshItem;
-	private JMenuItem popupRootNewFile;
-
+	private EncogDocumentFrame owner;
+	
 	public EncogPopupMenus(EncogDocumentFrame owner) {
 		this.owner = owner;
-	}
-
-	void initPopup() {
-		// build network popup menu
-		this.popupNetwork = new JPopupMenu();
-		this.popupNetworkDelete = owner.addItem(this.popupNetwork, "Delete",
-				'd');
-		this.popupNetworkOpen = owner.addItem(this.popupNetwork, "Open", 'o');
-		this.popupNetworkProperties = owner.addItem(this.popupNetwork,
-				"Properties", 'p');
-		this.popupNetworkQuery = owner.addItem(this.popupNetwork, "Query", 'q');
-
-		this.popupData = new JPopupMenu();
-		this.popupDataDelete = owner.addItem(this.popupData, "Delete", 'd');
-		this.popupDataOpen = owner.addItem(this.popupData, "Open", 'o');
-		this.popupDataProperties = owner.addItem(this.popupData, "Properties",
-				'p');
-		this.popupDataExport = owner.addItem(this.popupData, "Export...", 'e');
-
-		this.popupGeneral = new JPopupMenu();
-		this.popupGeneralDelete = owner.addItem(this.popupGeneral, "Delete",
-				'd');
-		this.popupGeneralOpen = owner.addItem(this.popupGeneral, "Open", 'o');
-		this.popupGeneralProperties = owner.addItem(this.popupGeneral,
-				"Properties", 'p');
-
-		this.popupFile = new JPopupMenu();
-		this.popupFileOpen = owner.addItem(this.popupFile, "Open", 'o');
-		this.popupFileOpenText = owner.addItem(this.popupFile, "Open as Text",
-				't');
-		this.popupFileDelete = owner.addItem(this.popupFile, "Delete", 'd');
-		this.popupFileRefresh = owner.addItem(this.popupFile, "Refresh", 'r');
-
-		this.popupRefresh = new JPopupMenu();
-		this.popupRefreshItem = owner
-				.addItem(this.popupRefresh, "Refresh", 'r');
-
-		this.popupFileCSV = new JPopupMenu();
-		this.popupFileCSVOpen = owner.addItem(this.popupFileCSV, "Open", 'o');
-		this.popupFileCSVDelete = owner.addItem(this.popupFileCSV, "Delete",
-				'd');
-		this.popupFileCSVRefresh = owner.addItem(this.popupFileCSV, "Refresh",
-				'r');
-		this.popupFileCSVExport = owner.addItem(this.popupFileCSV,
-				"Export to Training(EGB)", 'x');
-		this.popupFileCSVWizard = owner.addItem(this.popupFileCSV,
-				"Analyst Wizard...", 'w');
-		
-		this.popupRoot = new JPopupMenu();
-		this.popupRootRefreshItem = owner
-			.addItem(this.popupRoot, "Refresh", 'r');
-		this.popupRootNewFile = owner
-			.addItem(this.popupRoot, "New File", 'n');
-
-
 	}
 
 	public void actionPerformed(final ActionEvent event) {
@@ -150,15 +70,21 @@ public class EncogPopupMenus {
 
 	public void performPopupMenu(final Object source) {
 
-		if (source == this.popupFileRefresh || source == this.popupRefreshItem
-				|| source == this.popupFileCSVRefresh || source==popupRootRefreshItem) {
+		if (source == this.popupFileRefresh ) {
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
 		
-		else if (source == this.popupRootNewFile ) {
+		else if (source == this.popupFileNewFile ) {
 			try {
 				CreateNewFile.performCreateFile();
 			} catch (IOException e) {
+				EncogWorkBench.displayError("Error", e);
+			}
+		}
+		else if( source==this.popupFileNewObject ) {
+			try {
+			EncogWorkBench.getInstance().getMainWindow().getOperations().performObjectsCreate();
+			}  catch (IOException e) {
 				EncogWorkBench.displayError("Error", e);
 			}
 		}
@@ -170,7 +96,7 @@ public class EncogPopupMenus {
 			return;
 
 		for (ProjectItem selected : list) {
-			if (source == this.popupFileDelete || source==this.popupFileCSVDelete || source==this.popupDataDelete || source==this.popupGeneralDelete ) {
+			if (source == this.popupFileDelete  ) {
 				if (first
 						&& !EncogWorkBench
 								.askQuestion("Warning",
@@ -183,8 +109,7 @@ public class EncogPopupMenus {
 				}
 				EncogWorkBench.getInstance().getMainWindow().getTree()
 						.refresh();
-			} else if (source == this.popupFileOpen
-					|| source == this.popupFileCSVOpen) {
+			} else if (source == this.popupFileOpen ) {
 				if (selected instanceof ProjectFile) {
 					EncogWorkBench.getInstance().getMainWindow()
 							.openFile(((ProjectFile) selected).getFile());
@@ -194,11 +119,7 @@ public class EncogPopupMenus {
 					EncogWorkBench.getInstance().getMainWindow()
 							.openTextFile(((ProjectFile) selected).getFile());
 				}
-			} else if ((source == this.popupNetworkDelete)
-					|| (source == this.popupDataDelete)
-					|| (source == this.popupGeneralDelete)
-					|| (source == this.popupFileDelete)
-					|| (source == this.popupFileCSVDelete)) {
+			} else if (source == this.popupFileDelete) {
 				if (first
 						&& !EncogWorkBench
 								.askQuestion("Warning",
@@ -222,36 +143,75 @@ public class EncogPopupMenus {
 
 	public void rightMouseClicked(final MouseEvent e, final Object item) {
 
-		if (item instanceof DirectoryEntry) {
-			DirectoryEntry entry = (DirectoryEntry) item;
-			if (EncogPersistedCollection.TYPE_BASIC_NET.equals(entry.getType())) {
-				this.popupNetwork.show(e.getComponent(), e.getX(), e.getY());
-			} else if (EncogPersistedCollection.TYPE_BASIC_NET.equals(entry
-					.getType())) {
-				this.popupData.show(e.getComponent(), e.getX(), e.getY());
-			} else {
-				this.popupGeneral.show(e.getComponent(), e.getX(), e.getY());
-			}
-		} else if (item instanceof ProjectFile) {
-			ProjectFile file = (ProjectFile) item;
-			if (file.getExtension().equalsIgnoreCase("csv")) {
-				this.popupFileCSV.show(e.getComponent(), e.getX(), e.getY());
-			} else {
-				this.popupFile.show(e.getComponent(), e.getX(), e.getY());
-			}
-		} else if (item instanceof ProjectEGItem) {
-			this.popupGeneral.show(e.getComponent(), e.getX(), e.getY());
-		} else if (item instanceof String) {
-			this.popupRoot.show(e.getComponent(), e.getX(), e.getY());
+		File file = null;
+		String ext = null;
+		EncogPersistedObject encogObj = null;
+		
+		if( item instanceof ProjectFile ) {
+			file = ((ProjectFile)item).getFile();
+			ext = FileUtil.getFileExt(file);
+		}
+		
+		if( item instanceof ProjectEGItem ) {
+			encogObj = ((ProjectEGItem)item).getObj();			
+		}
+		
+		// build network popup menu
+		this.popupFile = new JPopupMenu();
+		this.popupFileRefresh = owner.addItem(this.popupFile, "Refresh", 'r');
+		
+		if( ( file!=null || encogObj!=null ) && !"eg".equalsIgnoreCase(ext) ) {
+			this.popupFileOpen = owner.addItem(this.popupFile, "Open", 'o');
 		} else {
-			this.popupRefresh.show(e.getComponent(), e.getX(), e.getY());
+			this.popupFileOpen = null;
+		}
+		
+		if( file!=null || encogObj!=null ) {
+			this.popupFileDelete = owner.addItem(this.popupFile, "Delete",'d');			
+			this.popupFileProperties = owner.addItem(this.popupFile,"Properties", 'p');
+		} else {
+			this.popupFileDelete = null;
+			this.popupFileOpen = null;
+			this.popupFileProperties = null;
+		}
+		
+		if( encogObj instanceof MLMethod ) {
+			this.popupFileQuery = owner.addItem(this.popupFile, "Query", 'q');
+		} else {
+			this.popupFileQuery = null;
+		}
+		
+		//this.popupFileExport = owner.addItem(this.popupFile, "Export...", 'e');
+		
+		if( ext!=null && !"txt".equalsIgnoreCase(ext) ) {
+			this.popupFileOpenText = owner.addItem(this.popupFile, "Open as Text",'t');
+		} else {
+			this.popupFileOpenText = null;
+		}
+		
+		if( ext!=null && "csv".equalsIgnoreCase(ext) ) {
+			this.popupFileCSVExport = owner.addItem(this.popupFile, "Export to Training(EGB)", 'x');
+			this.popupFileCSVWizard = owner.addItem(this.popupFile, "Analyst Wizard...", 'w');
+		} else {
+			this.popupFileCSVExport = null;
+			this.popupFileCSVWizard = null;
+		}
+		
+		if(ext!=null && "eg".equalsIgnoreCase(ext)) {
+			this.popupFileNewObject = owner.addItem(this.popupFile, "New Object", 'n');
+		} else {
+			this.popupFileNewObject = null;
+		}
+		
+		if(file==null && encogObj==null) {
+			this.popupFileNewFile = owner.addItem(this.popupFile, "New File", 'n');
+		} else {
+			this.popupFileNewFile = null;
 		}
 
-	}
-
-	public void performPopupDelete() {
-		this.performPopupMenu(this.popupNetworkDelete);
+		this.popupFile.show(e.getComponent(), e.getX(), e.getY());
 
 	}
+
 
 }

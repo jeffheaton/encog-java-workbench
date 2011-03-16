@@ -48,9 +48,6 @@ public class EncogMenus {
 	public static final String EDIT_PASTE = "Paste";
 	public static final String EDIT_CONFIG = "Config...";
 
-	public static final String OBJECTS_CREATE = "Create Object...";
-	public static final String OBJECTS_DELETE = "Delete Object...";
-
 	//public static final String TOOLS_CLOUD = "Connect to an Encog Cloud...";
 	public static final String TOOLS_TRAIN = "Train...";
 	public static final String TOOLS_GENERATE_TRAINING = "Generate Training Data...";
@@ -68,7 +65,6 @@ public class EncogMenus {
 	private JMenuBar menuBar;
 	private JMenu menuFile;
 	private JMenu menuEdit;
-	private JMenu menuObjects;
 	private JMenu menuHelp;
 	private JMenu menuTools;
 	
@@ -79,9 +75,6 @@ public class EncogMenus {
 	private JMenuItem menuEditCopy;
 	private JMenuItem menuEditPaste;
 	private JMenuItem menuEditConfig;
-
-	private JMenuItem menuObjectsCreate;
-	private JMenuItem menuObjectsDelete;
 
 	private JMenuItem menuToolsTrain;
 	private JMenuItem menuToolsGenerate;
@@ -129,13 +122,6 @@ public class EncogMenus {
 				EncogMenus.EDIT_CONFIG, 'f'));
 		this.menuBar.add(this.menuEdit);
 
-		this.menuObjects = new JMenu("Objects");
-		this.menuObjectsCreate = this.menuObjects.add(owner.addItem(this.menuObjects,
-				EncogMenus.OBJECTS_CREATE, 'c'));
-		this.menuObjectsDelete = this.menuObjects.add(owner.addItem(this.menuObjects,
-				EncogMenus.OBJECTS_DELETE, 'd'));
-		this.menuBar.add(this.menuObjects);
-
 		this.menuTools = new JMenu("Tools");
 		//this.menuToolsCloud = owner.addItem(this.menuTools, EncogMenus.TOOLS_CLOUD, 'c');
 		this.menuToolsGenerate = owner.addItem(this.menuTools, EncogMenus.TOOLS_GENERATE_TRAINING, 'g');
@@ -181,9 +167,6 @@ public class EncogMenus {
 		this.menuEditPaste.setEnabled(!modal && supportsClipboard && documentOpen);
 		this.menuEditConfig.setEnabled(!modal);
 
-		this.menuObjectsCreate.setEnabled(!modal && documentOpen);
-		this.menuObjectsDelete.setEnabled(!modal && documentOpen);
-
 		//this.menuToolsCloud.setEnabled(!modal);
 		this.menuToolsTrain.setEnabled(!modal && documentOpen);
 		this.menuToolsGenerate.setEnabled(!modal && documentOpen);
@@ -207,10 +190,6 @@ public class EncogMenus {
 			CreateNewFile.performCreateFile();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_QUIT)) {
 			owner.getOperations().performQuit();
-		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_CREATE)) {
-			owner.getOperations().performObjectsCreate();
-		} else if (event.getActionCommand().equals(EncogMenus.OBJECTS_DELETE)) {
-			owner.getPopupMenus().performPopupDelete();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_CUT)) {
 			owner.getOperations().performEditCut();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_COPY)) {
