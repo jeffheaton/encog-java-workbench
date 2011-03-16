@@ -58,8 +58,8 @@ import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.pattern.HopfieldPattern;
 import org.encog.neural.prune.PruneSelective;
 import org.encog.neural.thermal.HopfieldNetwork;
+import org.encog.neural.thermal.ThermalNetwork;
 import org.encog.persist.EncogCollection;
-import org.encog.persist.EncogMemoryCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
@@ -70,9 +70,10 @@ import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.MapDataFrame;
-import org.encog.workbench.frames.query.NetworkQueryFrame;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.mlmethod.structure.StructureTab;
+import org.encog.workbench.tabs.query.general.RegressionQueryTab;
+import org.encog.workbench.tabs.query.thermal.QueryThermalTab;
 import org.encog.workbench.tabs.visualize.ThermalGrid.ThermalGridTab;
 import org.encog.workbench.tabs.visualize.neat.NEATTab;
 import org.encog.workbench.tabs.visualize.weights.AnalyzeWeightsTab;
@@ -245,15 +246,17 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 	private void performQuery() {
 		try {
-			NetworkQueryFrame query = new NetworkQueryFrame(
-					((MLRegression) this.getEncogObject()));
-			query.setVisible(true);
-
-		} catch (Throwable t) {
-			EncogWorkBench.displayError("Error", t,
-					((MLMethod) this.getEncogObject()), null);
+		if( this.getEncogObject() instanceof ThermalNetwork ) {
+			QueryThermalTab tab = new QueryThermalTab(((ThermalNetwork) this.getEncogObject()));
+			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Thermal Query");
+		} else {
+			RegressionQueryTab tab = new RegressionQueryTab(((MLRegression) this.getEncogObject()));
+			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Query Regression");
 		}
-
+		}
+		catch(Throwable t) {
+			EncogWorkBench.displayError("Error", t);
+		}
 	}
 
 	/**

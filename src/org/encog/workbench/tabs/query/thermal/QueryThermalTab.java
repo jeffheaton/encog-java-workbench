@@ -1,0 +1,66 @@
+package org.encog.workbench.tabs.query.thermal;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import org.encog.neural.thermal.ThermalNetwork;
+import org.encog.persist.EncogPersistedObject;
+import org.encog.workbench.tabs.EncogCommonTab;
+
+public class QueryThermalTab extends EncogCommonTab implements ActionListener {
+
+	private ThermalNetwork network;
+	
+	public QueryThermalTab(ThermalNetwork network) {
+		super(network);
+		this.network = network;
+		
+		this.setLayout(new BorderLayout());
+		
+		this.buttonTrain = new JButton("Train");
+		this.buttonGo = new JButton("Go");
+		this.buttonClear = new JButton("Clear");
+		this.buttonClearMatrix = new JButton("Clear Matrix");		
+		this.buttonPanel = new JPanel();
+		this.buttonPanel.add(this.buttonTrain);
+		this.buttonPanel.add(this.buttonGo);
+		this.buttonPanel.add(this.buttonClear);
+		this.buttonPanel.add(this.buttonClearMatrix);
+		this.add(this.buttonPanel, BorderLayout.SOUTH);
+
+		this.buttonTrain.addActionListener(this);
+		this.buttonGo.addActionListener(this);
+		this.buttonClear.addActionListener(this);
+		this.buttonClearMatrix.addActionListener(this);
+		
+		this.panel = new ThermalPanel(network);
+		this.add(this.panel, BorderLayout.CENTER);
+		
+	}
+	
+
+	private ThermalPanel panel;
+	private JPanel buttonPanel;
+	private JButton buttonTrain;
+	private JButton buttonGo;
+	private JButton buttonClear;
+	private JButton buttonClearMatrix;
+
+	public void actionPerformed(final ActionEvent e) {
+		if (e.getSource() == this.buttonClear) {
+			this.panel.clear();
+		} else if (e.getSource() == this.buttonClearMatrix) {
+			this.panel.clearMatrix();
+		} else if (e.getSource() == this.buttonGo) {
+			this.panel.go();
+		} else if (e.getSource() == this.buttonTrain) {
+			this.panel.train();
+		}
+	}
+
+
+}
