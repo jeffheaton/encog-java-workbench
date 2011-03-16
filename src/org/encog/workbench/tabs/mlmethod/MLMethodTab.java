@@ -401,7 +401,14 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 			for (int l = 0; l < network.getLayerCount(); l++) {
 				report.beginRow();
-				report.cell(Format.formatInteger(l + 1));
+				StringBuilder str = new StringBuilder();
+				str.append(Format.formatInteger(l + 1));
+				if( l==0 ) {
+					str.append(" (Output)");
+				} else if(l==network.getLayerCount()-1) {
+					str.append(" (Input)");
+				}
+				report.cell(str.toString());
 				report.cell(Format.formatInteger(flat.getLayerCounts()[l]));
 				report.cell(Format.formatInteger(flat.getLayerFeedCounts()[l]));
 				report.cell(flat.getActivationFunctions()[l].getClass()

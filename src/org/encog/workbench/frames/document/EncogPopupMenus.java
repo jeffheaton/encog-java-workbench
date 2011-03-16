@@ -105,7 +105,16 @@ public class EncogPopupMenus {
 				}
 				first = false;
 				if (selected instanceof ProjectFile) {
-					((ProjectFile) selected).getFile().delete();
+					File f = ((ProjectFile) selected).getFile(); 
+					if( !f.delete() )
+					{
+						if( FileUtil.getFileExt(f).equalsIgnoreCase("egb")) {
+							EncogWorkBench.displayError("Can't Delete", f.toString()+"\nUnfortunatly, due to a limitation in Java, EGB files cannot be deleted once opened.\nRestart the workbench, and you will be able to delete this file.");
+						} else {
+							EncogWorkBench.displayError("Can't Delete", f.toString());
+						}
+						
+					}
 				}
 				EncogWorkBench.getInstance().getMainWindow().getTree()
 						.refresh();

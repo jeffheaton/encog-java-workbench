@@ -41,7 +41,7 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 		super((EncogPersistedObject)data);
 		
 		this.inputCount = getData().getInputCount();
-		this.outputCount = getData().getInputCount();
+		this.outputCount = getData().getOutputCount();
 
 		// create the graphic objects
 		this.setSize(640, 480);
