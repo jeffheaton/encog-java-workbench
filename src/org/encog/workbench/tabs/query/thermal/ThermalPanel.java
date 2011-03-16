@@ -29,8 +29,8 @@ public class ThermalPanel extends JPanel implements MouseListener {
 
 		if (network.getProperties().containsKey("rows")
 				&& network.getProperties().containsKey("columns")) {
-			this.gridX = (int) network.getPropertyLong("rows");
-			this.gridY = (int) network.getPropertyLong("columns");
+			this.gridX = (int) network.getPropertyLong("columns");
+			this.gridY = (int) network.getPropertyLong("rows");
 		} else {
 			this.gridX = network.getNeuronCount();
 			this.gridY = 1;

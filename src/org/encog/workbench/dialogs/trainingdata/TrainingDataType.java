@@ -31,6 +31,9 @@ public enum TrainingDataType {
 	XORTemp,
 	XOR,
 	Iris,
-	Sunspots
+	Sunspots,
+	Patterns1,
+	Patterns2,
+	Digits
 
 }

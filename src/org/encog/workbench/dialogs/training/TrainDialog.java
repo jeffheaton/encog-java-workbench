@@ -2,6 +2,7 @@ package org.encog.workbench.dialogs.training;
 
 import java.awt.Frame;
 
+import org.encog.ml.MLMethod;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.IntegerField;
@@ -37,4 +38,5 @@ public class TrainDialog extends NetworkAndTrainingDialog {
 	public CheckField getLoadToMemory() {
 		return loadToMemory;
 	}
+
 }

@@ -197,4 +197,27 @@ public class CreateTrainingData {
 
 	}
 
+	public static void copyDigits(String name) {
+		File targetFile = new File(EncogWorkBench.getInstance()
+				.getProjectDirectory(), name);
+		FileUtil.copyResource("org/encog/workbench/data/digits.csv", targetFile);
+		
+	}
+
+	public static void copyPatterns1(String name) {
+		File targetFile = new File(EncogWorkBench.getInstance()
+				.getProjectDirectory(), name);
+		FileUtil.copyResource("org/encog/workbench/data/pattern1.csv", targetFile);
+
+		
+	}
+
+	public static void copyPatterns2(String name) {
+		File targetFile = new File(EncogWorkBench.getInstance()
+				.getProjectDirectory(), name);
+		FileUtil.copyResource("org/encog/workbench/data/pattern2.csv", targetFile);
+
+		
+	}
+
 }

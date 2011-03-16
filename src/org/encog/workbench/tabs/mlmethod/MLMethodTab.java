@@ -124,6 +124,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	}
 
 	public void actionPerformed(final ActionEvent action) {
+		try {
 		if (action.getSource() == this.buttonQuery) {
 			performQuery();
 		} else if (action.getSource() == this.buttonRandomize) {
@@ -136,12 +137,15 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			performProperties();
 		} else if (action.getSource() == this.buttonVisualize) {
 			this.handleVisualize();
+		} }
+		catch(Throwable t) {
+			EncogWorkBench.displayError("Error", t);
 		}
 	}
 
 	private void performTrain() {
 		EncogWorkBench.getInstance().getMainWindow().getOperations()
-				.performTrain();
+				.performTrain((MLMethod)this.getEncogObject());
 	}
 	
 	private void randomizeBasicNetwork() {

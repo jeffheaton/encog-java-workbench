@@ -103,6 +103,9 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		this.model.addElement("XOR Training Set");
 		this.model.addElement("Iris Dataset");
 		this.model.addElement("Sunspot Dataset");
+		this.model.addElement("Digits");
+		this.model.addElement("Simple Pattern (part 1)");
+		this.model.addElement("Simple Pattern (part 2)");
 		
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -141,6 +144,15 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			break;		
 		case 6:
 			this.type = TrainingDataType.Sunspots;
+			break;			
+		case 7:
+			this.type = TrainingDataType.Digits;
+			break;		
+		case 8:
+			this.type = TrainingDataType.Patterns1;
+			break;		
+		case 9:
+			this.type = TrainingDataType.Patterns2;
 			break;		
 			
 		}
@@ -169,7 +181,16 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			break;	
 		case Sunspots:
 			this.list.setSelectedIndex(6);
-			break;	
+			break;
+		case Digits:
+			this.list.setSelectedIndex(7);
+			break;
+		case Patterns1:
+			this.list.setSelectedIndex(8);
+			break;
+		case Patterns2:
+			this.list.setSelectedIndex(9);
+			break;
 		}
 
 	}
@@ -218,6 +239,22 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			this.text
 					.setText("Download sunspot information from the Internet.");
 			break;
+		case 7:
+			this.text
+					.setText("The 10 arabic digits.  Width is 5, height is 7.");
+			break;
+			
+		case 8:
+			this.text
+					.setText("A simple set of patterns.  Width is 5, height is 7.");
+			break;
+
+			
+		case 9:
+			this.text
+					.setText("More simple patters, eimilar to part 1. Part 2 can be used to find the best match in part 1.  Width is 10, height is 10.");
+			break;
+
 			
 		}
 

@@ -109,6 +109,18 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 		
 		return (MLMethod)(((ProjectEGItem)this.comboNetwork.getSelectedValue()).getObj());
 	}
+	
+
+	public void setMethod(MLMethod mlMethod) {
+		int i=0;
+		for( ProjectEGItem m : this.networks) {
+			if( m.getObj()==mlMethod) {
+				((JComboBox)this.comboNetwork.getField()).setSelectedIndex(i);
+				return;
+			}
+			i++;
+		}		
+	}
 
 	/**
 	 * @return The training set that the user chose.

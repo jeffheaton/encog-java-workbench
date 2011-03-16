@@ -436,6 +436,15 @@ public class EncogDocumentOperations {
 			case Sunspots:
 				CreateTrainingData.downloadSunspots(name);
 				break;
+			case Digits:
+				CreateTrainingData.copyDigits(name);
+				break;
+			case Patterns1:
+				CreateTrainingData.copyPatterns1(name);
+				break;
+			case Patterns2:
+				CreateTrainingData.copyPatterns2(name);
+				break;
 			}
 			EncogWorkBench.getInstance().refresh();
 		}
@@ -458,8 +467,10 @@ public class EncogDocumentOperations {
 		
 	}
 
-	public void performTrain() {
+	public void performTrain(MLMethod mlMethod) {
 		TrainDialog dialog = new TrainDialog(EncogWorkBench.getInstance().getMainWindow());
+		if( mlMethod!=null)
+			dialog.setMethod(mlMethod);
 		
 		if( dialog.process() ) {
 			MLMethod method = dialog.getNetwork();
