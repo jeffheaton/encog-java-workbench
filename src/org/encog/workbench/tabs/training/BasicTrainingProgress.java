@@ -379,14 +379,15 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	 */
 	private void performStart() {
 
-		if (!EncogWorkBench.getInstance().getMainWindow().getTabManager()
+		/*if (!EncogWorkBench.getInstance().getMainWindow().getTabManager()
 				.checkTrainingOrNetworkOpen())
-			return;
+			return;*/
 
 		this.started = new Date();
 		this.performanceLast = this.started;
 		this.performanceCount = -1;
 		this.performanceLastIteration = 0;
+		this.oldMethod = method;
 
 		this.buttonStart.setEnabled(false);
 		this.buttonStop.setEnabled(true);

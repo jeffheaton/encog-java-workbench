@@ -224,9 +224,12 @@ public class CreateNeuralNetwork {
 		CreateFeedforward dialog = new CreateFeedforward(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.setActivationFunctionHidden(new ActivationTANH());
+		dialog.setActivationFunctionOutput(new ActivationTANH());
+		
 		if (dialog.process()) {
 			FeedForwardPattern feedforward = new FeedForwardPattern();
 			feedforward.setActivationFunction(dialog.getActivationFunctionHidden());
+			feedforward.setActivationOutput(dialog.getActivationFunctionOutput());
 			feedforward.setInputNeurons(dialog.getInputCount().getValue());
 			for (int i = 0; i < dialog.getHidden().getModel().size(); i++) {
 				String str = (String) dialog.getHidden().getModel()

@@ -115,6 +115,10 @@ public class EncogPopupMenus {
 						}
 						
 					}
+				} else if (selected instanceof ProjectEGItem ) {
+					ProjectEGItem egi = (ProjectEGItem)selected;
+					egi.getCollection().delete(egi.getObj().getName());
+					egi.getCollection().save(egi.getEncogFile().getFile().toString());
 				}
 				EncogWorkBench.getInstance().getMainWindow().getTree()
 						.refresh();
