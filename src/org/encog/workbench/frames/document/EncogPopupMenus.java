@@ -149,7 +149,11 @@ public class EncogPopupMenus {
 			} else if (source == this.popupFileCSVWizard) {
 				File sourceFile = ((ProjectFile) selected).getFile();
 				EncogAnalystWizard.createEncogAnalyst(sourceFile);
-			} 
+			} else if( source== this.popupFileProperties) {
+				if( selected instanceof ProjectEGItem ) {
+					EncogWorkBench.getInstance().getMainWindow().getOperations().performObjectsProperties((ProjectEGItem)selected);
+				}
+			}
 			first = false;
 		}
 	}

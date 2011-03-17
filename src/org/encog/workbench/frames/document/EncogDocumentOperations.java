@@ -345,12 +345,12 @@ public class EncogDocumentOperations {
 		}
 	}
 
-	public void performObjectsProperties(DirectoryEntry selected) {
+	public void performObjectsProperties(ProjectEGItem selected) {
 
 		final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
 				owner);
-		dialog.getNameField().setValue(selected.getName());
-		dialog.getDescription().setValue(selected.getDescription());
+		dialog.getNameField().setValue(selected.getObj().getName());
+		dialog.getDescription().setValue(selected.getObj().getDescription());
 		if (dialog.process()) {
 
 			String error = ResourceNameValidate.validateResourceName(dialog
@@ -361,10 +361,11 @@ public class EncogDocumentOperations {
 				return;
 			}
 
-			/* (EncogWorkBench.getInstance().getCurrentFile().updateProperties(
-					selected.getName(), dialog.getNameField().getValue(),
-					dialog.getDescription().getValue());*/
-			EncogWorkBench.getInstance().getMainWindow().redraw();
+			selected.getCollection().updateProperties(
+					selected.getObj().getName(), dialog.getNameField().getValue(),
+					dialog.getDescription().getValue());
+			selected.getCollection().save(selected.getEncogFile().toString());
+			EncogWorkBench.getInstance().refresh();
 		}
 	}
 
