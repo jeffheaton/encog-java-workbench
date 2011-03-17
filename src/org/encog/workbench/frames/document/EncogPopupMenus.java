@@ -32,7 +32,6 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.encog.ml.MLMethod;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
@@ -50,8 +49,6 @@ public class EncogPopupMenus {
 	private JMenuItem popupFileDelete;
 	private JMenuItem popupFileOpen;
 	private JMenuItem popupFileProperties;
-	private JMenuItem popupFileQuery;
-	private JMenuItem popupFileExport;
 	private JMenuItem popupFileOpenText;
 	private JMenuItem popupFileCSVExport;
 	private JMenuItem popupFileCSVWizard;
@@ -152,6 +149,8 @@ public class EncogPopupMenus {
 			} else if( source== this.popupFileProperties) {
 				if( selected instanceof ProjectEGItem ) {
 					EncogWorkBench.getInstance().getMainWindow().getOperations().performObjectsProperties((ProjectEGItem)selected);
+				} else if( selected instanceof ProjectFile ) {
+					EncogWorkBench.getInstance().getMainWindow().getOperations().performFileProperties((ProjectFile)selected);
 				}
 			}
 			first = false;
@@ -191,14 +190,6 @@ public class EncogPopupMenus {
 			this.popupFileOpen = null;
 			this.popupFileProperties = null;
 		}
-		
-		if( encogObj instanceof MLMethod ) {
-			this.popupFileQuery = owner.addItem(this.popupFile, "Query", 'q');
-		} else {
-			this.popupFileQuery = null;
-		}
-		
-		//this.popupFileExport = owner.addItem(this.popupFile, "Export...", 'e');
 		
 		if( ext!=null && !"txt".equalsIgnoreCase(ext) ) {
 			this.popupFileOpenText = owner.addItem(this.popupFile, "Open as Text",'t');

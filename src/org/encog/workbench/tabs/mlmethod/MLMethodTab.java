@@ -70,6 +70,7 @@ import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.MapDataFrame;
+import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.mlmethod.structure.StructureTab;
 import org.encog.workbench.tabs.query.general.RegressionQueryTab;
@@ -144,8 +145,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	}
 
 	private void performTrain() {
-		EncogWorkBench.getInstance().getMainWindow().getOperations()
-				.performTrain((MLMethod)this.getEncogObject());
+		TrainBasicNetwork.performTrain((MLMethod)this.getEncogObject());
 	}
 	
 	private void randomizeBasicNetwork() {

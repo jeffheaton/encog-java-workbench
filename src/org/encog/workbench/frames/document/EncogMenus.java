@@ -30,9 +30,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
+import org.encog.ml.MLMethod;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.process.CreateNewFile;
 import org.encog.workbench.process.ImportExport;
+import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.ValidationChart;
@@ -209,7 +211,7 @@ public class EncogMenus {
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EVALUATE)) {
 			owner.getOperations().performEvaluate();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_TRAIN)) {
-			owner.getOperations().performTrain(null);
+			TrainBasicNetwork.performTrain(null);
 		} else if (event.getActionCommand().equals(
 				EncogMenus.TOOLS_VALIDATION_CHART)) {
 			ValidationChart check = new ValidationChart();

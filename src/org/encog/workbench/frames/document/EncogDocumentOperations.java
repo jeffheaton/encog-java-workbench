@@ -65,12 +65,14 @@ import org.encog.workbench.dialogs.createfile.CreateFileType;
 import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
 import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
+import org.encog.workbench.dialogs.training.ChooseBasicNetworkTrainingMethod;
 import org.encog.workbench.dialogs.training.TrainDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectEGItem;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
@@ -141,9 +143,11 @@ public class EncogDocumentOperations {
 			temp.save(projectFile.toString());
 			EncogWorkBench.getInstance().getMainWindow().getTree()
 					.refresh(project.toString());
-			
-			if( EncogWorkBench.askQuestion("Wizard", "Would you like to use a wizard to generate files\nnecessary to work with a CSV data file?") )
-			{
+
+			if (EncogWorkBench
+					.askQuestion(
+							"Wizard",
+							"Would you like to use a wizard to generate files\nnecessary to work with a CSV data file?")) {
 				EncogAnalystWizard.createEncogAnalyst(null);
 			}
 		}
@@ -158,7 +162,8 @@ public class EncogDocumentOperations {
 			final int result = fc.showOpenDialog(owner);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				String path = fc.getSelectedFile().getAbsolutePath();
-				EncogWorkBench.getInstance().getMainWindow().changeDirectory(path);
+				EncogWorkBench.getInstance().getMainWindow()
+						.changeDirectory(path);
 			}
 		} catch (final Throwable e) {
 			EncogWorkBench.displayError("Can't Change Directory", e);
@@ -169,25 +174,25 @@ public class EncogDocumentOperations {
 
 	public void performNetworkQuery(DirectoryEntry item) {
 
-		/*		if (owner.getTabManager()
-						.checkBeforeOpen(item, NetworkQueryFrame.class)) {
-					BasicNetwork net = (BasicNetwork) EncogWorkBench.getInstance()
-							.getCurrentFile().find(item);
-					final NetworkQueryFrame frame = new NetworkQueryFrame(net);
-					frame.setVisible(true);
-				}
-		*/
+		/*
+		 * if (owner.getTabManager() .checkBeforeOpen(item,
+		 * NetworkQueryFrame.class)) { BasicNetwork net = (BasicNetwork)
+		 * EncogWorkBench.getInstance() .getCurrentFile().find(item); final
+		 * NetworkQueryFrame frame = new NetworkQueryFrame(net);
+		 * frame.setVisible(true); }
+		 */
 	}
 
 	public void performObjectsCreate() throws IOException {
 
 		try {
-			if( EncogWorkBench.getInstance().getMainWindow().getTree().listEGFiles().length <1 )
-			{
-				EncogWorkBench.displayError("Can't Create an Object","There are no EG files in the current directory tree.");
+			if (EncogWorkBench.getInstance().getMainWindow().getTree()
+					.listEGFiles().length < 1) {
+				EncogWorkBench.displayError("Can't Create an Object",
+						"There are no EG files in the current directory tree.");
 				return;
 			}
-						
+
 			CreateObjectDialog dialog = new CreateObjectDialog(EncogWorkBench
 					.getInstance().getMainWindow());
 
@@ -198,13 +203,14 @@ public class EncogDocumentOperations {
 
 			String name = dialog.getResourceName();
 			String filename = dialog.getFilename();
-			
-			ProjectEGFile pef = (ProjectEGFile)EncogWorkBench.getInstance().getMainWindow().getTree().findTreeFile(filename);
+
+			ProjectEGFile pef = (ProjectEGFile) EncogWorkBench.getInstance()
+					.getMainWindow().getTree().findTreeFile(filename);
 			EncogMemoryCollection encog = pef.getCollection();
-			
+
 			switch (dialog.getType()) {
 			case NeuralNetwork:
-				CreateNeuralNetwork.process(name,pef);
+				CreateNeuralNetwork.process(name, pef);
 				break;
 			case NEATPopulation:
 				performCreatePopulation();
@@ -248,13 +254,12 @@ public class EncogDocumentOperations {
 			}
 
 			pop.setDescription("Population");
-			//EncogWorkBench.getInstance().getCurrentFile().add(
-			//		generateNextID("population-"), pop);
+			// EncogWorkBench.getInstance().getCurrentFile().add(
+			// generateNextID("population-"), pop);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 
 	}
-
 
 	public void performBrowse() {
 		BrowserFrame browse = new BrowserFrame();
@@ -362,9 +367,10 @@ public class EncogDocumentOperations {
 			}
 
 			selected.getCollection().updateProperties(
-					selected.getObj().getName(), dialog.getNameField().getValue(),
+					selected.getObj().getName(),
+					dialog.getNameField().getValue(),
 					dialog.getDescription().getValue());
-			selected.getCollection().save(selected.getEncogFile().toString());
+			selected.getCollection().save();
 			EncogWorkBench.getInstance().refresh();
 		}
 	}
@@ -377,8 +383,9 @@ public class EncogDocumentOperations {
 				MLMethod method = dialog.getNetwork();
 				NeuralDataSet training = dialog.getTrainingSet();
 
-				double error = EncogUtility.calculateRegressionError((MLRegression)method, training);
-				
+				double error = EncogUtility.calculateRegressionError(
+						(MLRegression) method, training);
+
 				EncogWorkBench.displayMessage("Error For this Network", ""
 						+ Format.formatPercent(error));
 			}
@@ -404,17 +411,18 @@ public class EncogDocumentOperations {
 				EncogWorkBench.getInstance().getMainWindow());
 
 		dialog.setType(TrainingDataType.CopyCSV);
-		
+
 		if (dialog.process()) {
 			String name = dialog.getFilenameName();
-			
-			if( name.trim().length()==0 ) {
-				EncogWorkBench.displayError("Error", "Must specify a filename.");
+
+			if (name.trim().length() == 0) {
+				EncogWorkBench
+						.displayError("Error", "Must specify a filename.");
 				return;
 			}
-			
+
 			name = FileUtil.forceExtension(name, "csv");
-			
+
 			switch (dialog.getType()) {
 			case CopyCSV:
 				CreateTrainingData.copyCSV(name);
@@ -429,7 +437,7 @@ public class EncogDocumentOperations {
 				CreateTrainingData.generateXORTemp(name);
 				break;
 			case XOR:
-				CreateTrainingData.copyXOR(name);				
+				CreateTrainingData.copyXOR(name);
 				break;
 			case Iris:
 				CreateTrainingData.copyIris(name);
@@ -458,54 +466,28 @@ public class EncogDocumentOperations {
 	}
 
 	public void performObjectsDelete(Object selected) {
-		if( selected instanceof ProjectEGItem ) {
-			ProjectEGItem item = (ProjectEGItem)selected;
+		if (selected instanceof ProjectEGItem) {
+			ProjectEGItem item = (ProjectEGItem) selected;
 			item.getCollection().delete(item.getObj().getName());
 			item.getCollection().save(item.getEncogFile().getFile().toString());
 			item.getEncogFile().generateChildrenList();
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
-		
+
 	}
 
-	public void performTrain(MLMethod mlMethod) {
-		TrainDialog dialog = new TrainDialog(EncogWorkBench.getInstance().getMainWindow());
-		if( mlMethod!=null)
-			dialog.setMethod(mlMethod);
-		
-		if( dialog.process() ) {
-			MLMethod method = dialog.getNetwork();
-			NeuralDataSet trainingData = dialog.getTrainingSet();
-			
-			if( method==null ) {
-				EncogWorkBench.displayError("Error", "Machine language method is required to train.");
-				return;
-			}
-			
-			if( trainingData==null ) {
-				EncogWorkBench.displayError("Error", "Training set is required to train.");
-				return;
-			}
-			
-			if( method instanceof HopfieldNetwork ) {
-				HopfieldNetwork hp = (HopfieldNetwork)method;
-				for(NeuralDataPair pair: trainingData ) {
-					hp.addPattern(pair.getInput());
-				}
-				if( EncogWorkBench.askQuestion("Hopfield","Training done, save?") ) {
-					EncogWorkBench.getInstance().save((EncogPersistedObject)hp);
-				}
-			} else if( method instanceof BasicNetwork ) {
-									
-			Train train = new ResilientPropagation((BasicNetwork)method,trainingData);
-			
-			BasicTrainingProgress tab = new BasicTrainingProgress(train,method,trainingData);
-			tab.setMaxError(dialog.getMaxError().getValue()/100.0);
-			EncogWorkBench.getInstance().getMainWindow().openTab(tab);
-			}
-			else {
-				EncogWorkBench.displayError("Unknown Method", "No training method is available for: " + method.getClass().getName());
-			}
+	public void performFileProperties(ProjectFile selected) {
+		String name = selected.getFile().getName();
+		String newName = EncogWorkBench
+				.displayInput("What would you like to rename the file \""
+						+ name + "\" to?");
+		if (newName != null) {
+			File oldFile = selected.getFile();
+			File dir = oldFile.getParentFile();
+			File newFile = new File(dir, newName);
+			oldFile.renameTo(newFile);
+			EncogWorkBench.getInstance().refresh();
 		}
+
 	}
 }
