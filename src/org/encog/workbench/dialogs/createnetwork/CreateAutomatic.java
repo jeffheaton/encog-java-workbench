@@ -31,6 +31,7 @@ import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogPersistedCollection;
+import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
 import org.encog.workbench.dialogs.common.BuildingListField;
@@ -40,6 +41,7 @@ import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.PopupField;
 import org.encog.workbench.dialogs.common.PopupListener;
+import org.encog.workbench.frames.document.tree.ProjectTraining;
 
 public class CreateAutomatic extends EncogPropertiesDialog implements
 		BuildingListListener, PopupListener {
@@ -56,7 +58,7 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 	/**
 	 * All available training sets to display in the combo box.
 	 */
-	private final List<String> trainingSets = new ArrayList<String>();
+	private List<ProjectTraining> trainingSets;
 
 	public CreateAutomatic(Frame owner) {
 		super(owner);
@@ -85,15 +87,7 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 	 * boxes.
 	 */
 	private void findData() {
-		/*for (final DirectoryEntry obj : EncogWorkBench.getInstance()
-				.getCurrentFile().getDirectory()) {
-			if (obj.getType().equals(EncogPersistedCollection.TYPE_TRAINING)) {
-				this.trainingSets.add(obj.getName());
-			}
-			else if (obj.getType().equals(EncogPersistedCollection.TYPE_BINARY)) {
-				this.trainingSets.add(obj.getName());
-			}
-		}*/
+		this.trainingSets = EncogWorkBench.getInstance().getTrainingData();
 	}
 
 	private String askNeurons(int layer) {
@@ -183,10 +177,8 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 	 * @return The training set that the user chose.
 	 */
 	public NeuralDataSet getTraining() {
-		/*String trainingName = (String) this.comboTraining.getSelectedValue();
-		return (NeuralDataSet) EncogWorkBench.getInstance().getCurrentFile()
-				.find(trainingName);*/
-		return null;
+		ProjectTraining training = (ProjectTraining) this.comboTraining.getSelectedValue();
+		return EncogUtility.loadEGB2Memory(training.getFile().toString());
 	}
 
 	public IntegerField getWeightTries() {
