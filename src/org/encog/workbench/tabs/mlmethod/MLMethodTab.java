@@ -48,7 +48,9 @@ import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
 import org.encog.mathutil.randomize.Randomizer;
 import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.ml.MLEncodable;
+import org.encog.ml.MLInput;
 import org.encog.ml.MLMethod;
+import org.encog.ml.MLOutput;
 import org.encog.ml.MLProperties;
 import org.encog.ml.MLRegression;
 import org.encog.ml.MLResettable;
@@ -365,10 +367,14 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 		report.beginTable();
 
-		if (this.getEncogObject() instanceof MLRegression) {
-			MLRegression reg = (MLRegression) this.getEncogObject();
+		if (this.getEncogObject() instanceof MLInput) {
+			MLInput reg = (MLInput) this.getEncogObject();
 			report.tablePair("Input Count",
 					Format.formatInteger(reg.getInputCount()));
+		}
+		
+		if (this.getEncogObject() instanceof MLOutput) {
+			MLOutput reg = (MLOutput) this.getEncogObject();
 			report.tablePair("Output Count",
 					Format.formatInteger(reg.getOutputCount()));
 		}
