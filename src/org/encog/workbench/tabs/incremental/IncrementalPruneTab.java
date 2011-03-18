@@ -41,6 +41,8 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.prune.PruneIncremental;
+import org.encog.persist.EncogMemoryCollection;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;
@@ -122,9 +124,10 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 	private NeuralDataSet training;
 	private FeedForwardPattern pattern;
 	private int windowSize;
+	private final EncogMemoryCollection collection;
 
 	public IncrementalPruneTab(int iterations, int weightTries, int windowSize, NeuralDataSet training,
-			FeedForwardPattern pattern, String name) {
+			FeedForwardPattern pattern, String name, EncogMemoryCollection collection) {
 		super(null);
 
 		this.weightTries = weightTries;
@@ -133,6 +136,7 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 		this.pattern = pattern;
 		this.name = name;
 		this.windowSize = windowSize;
+		this.collection = collection;
 		
 		this.prune = new PruneIncremental(this.training, this.pattern,
 				this.iterations, this.weightTries , this.windowSize, this);
@@ -404,9 +408,9 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 				if (EncogWorkBench.askQuestion("Network",
 						"Do you wish to save this network?")) {
 					if (network != null) {
-						//EncogWorkBench.getInstance().getCurrentFile().add(
-							//	this.name, network);
-						EncogWorkBench.getInstance().getMainWindow().redraw();
+						collection.add(name, network);
+						collection.save();
+						EncogWorkBench.getInstance().refresh();
 					}
 				}
 			}
@@ -423,4 +427,13 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 		// TODO Auto-generated method stub
 		
 	}
+
+	/**
+	 * @return the collection
+	 */
+	public EncogMemoryCollection getCollection() {
+		return collection;
+	}
+	
+	
 }

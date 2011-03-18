@@ -73,14 +73,13 @@ public class CreateNeuralNetwork {
 		EncogPersistedObject network = null;
 		CreateNeuralNetworkDialog dialog = new CreateNeuralNetworkDialog(
 				EncogWorkBench.getInstance().getMainWindow());
-		dialog.setType(NeuralNetworkType.Empty);
+		dialog.setType(NeuralNetworkType.Feedforward);
 		if (dialog.process()) {
 			switch (dialog.getType()) {
-			case Empty:
-				network = createEmpty(name);
-				break;
 			case Automatic:
-				network = createAutomatic(name);
+				EncogMemoryCollection encog = pef.getCollection();
+				createAutomatic(encog,name);
+				network=null;
 				break;
 			case Feedforward:
 				network = createFeedForward(name);
@@ -250,7 +249,7 @@ public class CreateNeuralNetwork {
 
 	}
 
-	private static BasicNetwork createAutomatic(String name) {
+	private static BasicNetwork createAutomatic(EncogMemoryCollection collection, String name) {
 		CreateAutomatic dialog = new CreateAutomatic(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.setActivationFunction(new ActivationTANH());
@@ -266,6 +265,7 @@ public class CreateNeuralNetwork {
 				return null;
 			}
 			
+			
 			FeedForwardPattern pattern = new FeedForwardPattern();
 			pattern.setInputNeurons(training.getInputSize());
 			pattern.setOutputNeurons(training.getIdealSize());
@@ -278,7 +278,8 @@ public class CreateNeuralNetwork {
 					dialog.getWindowSize().getValue(),
 					training,
 					pattern,
-					name);
+					name,
+					collection);
 			
 			for (int i = 0; i < dialog.getHidden().getModel().size(); i++) {
 				String str = (String) dialog.getHidden().getModel()

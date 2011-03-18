@@ -24,7 +24,6 @@
 package org.encog.workbench.dialogs.createnetwork;
 
 public enum NeuralNetworkType {
-	Empty,
 	Automatic,
 	ADALINE,
 	ART1,
@@ -34,7 +33,6 @@ public enum NeuralNetworkType {
 	Feedforward,
 	RBF,
 	SOM,
-	RSOM,
 	Hopfield,
 	Elman,
 	Jordan,
