@@ -12,8 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import org.encog.EncogError;
-import org.encog.ml.MLRegression;
-import org.encog.neural.data.NeuralData;
+import org.encog.ml.MLClassification;
 import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogPersistedObject;
@@ -22,7 +21,7 @@ import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.models.NetworkQueryModel;
 import org.encog.workbench.tabs.EncogCommonTab;
 
-public class RegressionQueryTab extends EncogCommonTab implements ActionListener {
+public class ClassificationQueryTab extends EncogCommonTab implements ActionListener {
 	/**
 	 * 
 	 */
@@ -33,7 +32,7 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 	private int outputCount;
 	private JButton calculateButton;
 
-	public RegressionQueryTab(final MLRegression data) {
+	public ClassificationQueryTab(final MLClassification data) {
 		super((EncogPersistedObject)data);
 		
 		this.inputCount = getData().getInputCount();
@@ -57,7 +56,7 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 		left.add(this.inputTable = new JTable(new NetworkQueryModel(
 				this.inputCount, 2)), BorderLayout.CENTER);
 		right.add(this.outputTable = new JTable(new NetworkQueryModel(
-				this.outputCount, 2)), BorderLayout.CENTER);
+				1, 2)), BorderLayout.CENTER);
 		this.add(this.calculateButton = new JButton("Calculate"),
 				BorderLayout.SOUTH);
 		this.outputTable.setEnabled(false);
@@ -67,11 +66,9 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 			this.inputTable.setValueAt("0.0", i - 1, 1);
 		}
 
-		for (int i = 1; i <= this.outputCount; i++) {
-			this.outputTable.setValueAt("Output " + i + ":", i - 1, 0);
-			this.outputTable.setValueAt("0.0", i - 1, 1);
-		}
-
+		this.outputTable.setValueAt("Classification Output:", 0, 0);
+		this.outputTable.setValueAt("0.0", 0, 1);
+		
 		this.calculateButton.addActionListener(this);
 	}
 
@@ -93,11 +90,10 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 					input.setData(i, value);
 				}
 
-				final NeuralData output = getData().compute(input);
+				final int output = getData().classify(input);
 
-				for (int i = 0; i < this.outputCount; i++) {
-					this.outputTable.setValueAt(output.getData(i), i, 1);
-				}
+				this.outputTable.setValueAt(output, 0, 1);
+
 			} catch (EncogError ex) {
 				EncogWorkBench.displayError("Query Error", ex.getMessage());
 			} catch (Throwable t) {
@@ -108,8 +104,8 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 
 	}
 
-	public MLRegression getData() {
-		return (MLRegression) getEncogObject();
+	public MLClassification getData() {
+		return (MLClassification) getEncogObject();
 	}
 
 	public void mouseClicked(final MouseEvent e) {

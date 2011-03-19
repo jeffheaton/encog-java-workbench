@@ -47,6 +47,7 @@ import org.encog.mathutil.randomize.GaussianRandomizer;
 import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
 import org.encog.mathutil.randomize.Randomizer;
 import org.encog.mathutil.randomize.RangeRandomizer;
+import org.encog.ml.MLClassification;
 import org.encog.ml.MLEncodable;
 import org.encog.ml.MLInput;
 import org.encog.ml.MLMethod;
@@ -75,6 +76,7 @@ import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.mlmethod.structure.StructureTab;
+import org.encog.workbench.tabs.query.general.ClassificationQueryTab;
 import org.encog.workbench.tabs.query.general.RegressionQueryTab;
 import org.encog.workbench.tabs.query.thermal.QueryThermalTab;
 import org.encog.workbench.tabs.visualize.ThermalGrid.ThermalGridTab;
@@ -128,28 +130,28 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 	public void actionPerformed(final ActionEvent action) {
 		try {
-		if (action.getSource() == this.buttonQuery) {
-			performQuery();
-		} else if (action.getSource() == this.buttonRandomize) {
-			performRandomize();
-		} else if (action.getSource() == this.buttonTrain) {
-			performTrain();
-		} else if (action.getSource() == this.buttonRestructure) {
-			performRestructure();
-		} else if (action.getSource() == this.buttonProperties) {
-			performProperties();
-		} else if (action.getSource() == this.buttonVisualize) {
-			this.handleVisualize();
-		} }
-		catch(Throwable t) {
+			if (action.getSource() == this.buttonQuery) {
+				performQuery();
+			} else if (action.getSource() == this.buttonRandomize) {
+				performRandomize();
+			} else if (action.getSource() == this.buttonTrain) {
+				performTrain();
+			} else if (action.getSource() == this.buttonRestructure) {
+				performRestructure();
+			} else if (action.getSource() == this.buttonProperties) {
+				performProperties();
+			} else if (action.getSource() == this.buttonVisualize) {
+				this.handleVisualize();
+			}
+		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
 		}
 	}
 
 	private void performTrain() {
-		TrainBasicNetwork.performTrain((MLMethod)this.getEncogObject());
+		TrainBasicNetwork.performTrain((MLMethod) this.getEncogObject());
 	}
-	
+
 	private void randomizeBasicNetwork() {
 		RandomizeNetworkDialog dialog = new RandomizeNetworkDialog(
 				EncogWorkBench.getInstance().getMainWindow());
@@ -183,17 +185,17 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				break;
 			}
 		}
-		
+
 	}
 
 	private void performRandomize() {
 
 		if (EncogWorkBench.askQuestion("Are you sure?",
 				"Randomize/reset network weights and lose all training?")) {
-			if( this.getEncogObject() instanceof BasicNetwork ) {
+			if (this.getEncogObject() instanceof BasicNetwork) {
 				randomizeBasicNetwork();
-			} else if( this.getEncogObject() instanceof MLResettable ) {
-				((MLResettable)getEncogObject()).reset();
+			} else if (this.getEncogObject() instanceof MLResettable) {
+				((MLResettable) getEncogObject()).reset();
 			}
 		}
 
@@ -252,15 +254,61 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 	private void performQuery() {
 		try {
-		if( this.getEncogObject() instanceof ThermalNetwork ) {
-			QueryThermalTab tab = new QueryThermalTab(((ThermalNetwork) this.getEncogObject()));
-			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Thermal Query");
-		} else {
-			RegressionQueryTab tab = new RegressionQueryTab(((MLRegression) this.getEncogObject()));
-			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Query Regression");
-		}
-		}
-		catch(Throwable t) {
+			if (this.getEncogObject() instanceof ThermalNetwork) {
+				QueryThermalTab tab = new QueryThermalTab(
+						((ThermalNetwork) this.getEncogObject()));
+				EncogWorkBench.getInstance().getMainWindow()
+						.openModalTab(tab, "Thermal Query");			
+			}
+			// only supports regression
+			else if (this.getEncogObject() instanceof MLRegression
+					&& !(this.getEncogObject() instanceof MLClassification)) {
+				RegressionQueryTab tab = new RegressionQueryTab(
+						((MLRegression) this.getEncogObject()));
+				EncogWorkBench.getInstance().getMainWindow()
+						.openModalTab(tab, "Query Regression");
+			}
+			// only supports classification
+			else if (this.getEncogObject() instanceof MLClassification
+					&& !(this.getEncogObject() instanceof MLRegression)) {
+				ClassificationQueryTab tab = new ClassificationQueryTab(
+						((MLClassification) this.getEncogObject()));
+				EncogWorkBench.getInstance().getMainWindow()
+						.openModalTab(tab, "Query Classification");
+			}
+			// let the user pick (supports either classification or regression)
+			else if (this.getEncogObject() instanceof MLClassification
+						|| (this.getEncogObject() instanceof MLRegression)) {
+				SelectItem selectClassification;
+				SelectItem selectRegression;
+				
+				List<SelectItem> list = new ArrayList<SelectItem>();
+				list.add(selectClassification = new SelectItem("Query Classification",
+						"Machine Learning output is a class."));
+				list.add(selectRegression = new SelectItem("Query Regression",
+						"Machine Learning output is a number(s)."));
+				SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
+						.getMainWindow(), list);
+				sel.setVisible(true);
+				
+				if( sel.getSelected()==selectClassification ) {
+					ClassificationQueryTab tab = new ClassificationQueryTab(
+							((MLClassification) this.getEncogObject()));
+					EncogWorkBench.getInstance().getMainWindow()
+							.openModalTab(tab, "Query Classification");					
+				} else if( sel.getSelected()==selectRegression ) {
+					RegressionQueryTab tab = new RegressionQueryTab(
+							((MLRegression) this.getEncogObject()));
+					EncogWorkBench.getInstance().getMainWindow()
+							.openModalTab(tab, "Query Regression");					
+				} 
+
+			}
+			// we have no way to query this ML type
+			else {
+				EncogWorkBench.displayMessage("Unable to Query", "No query for this ML method is available.");
+			}
+		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
 		}
 	}
@@ -328,8 +376,9 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 	private void analyzeThermal() {
 		EncogPersistedObject obj = this.getEncogObject();
-		ThermalGridTab tab = new ThermalGridTab((HopfieldNetwork)obj);
-		EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Thermal Grid");
+		ThermalGridTab tab = new ThermalGridTab((HopfieldNetwork) obj);
+		EncogWorkBench.getInstance().getMainWindow()
+				.openModalTab(tab, "Thermal Grid");
 	}
 
 	private void analyzeStructure() {
@@ -372,7 +421,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			report.tablePair("Input Count",
 					Format.formatInteger(reg.getInputCount()));
 		}
-		
+
 		if (this.getEncogObject() instanceof MLOutput) {
 			MLOutput reg = (MLOutput) this.getEncogObject();
 			report.tablePair("Output Count",
@@ -409,9 +458,9 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				report.beginRow();
 				StringBuilder str = new StringBuilder();
 				str.append(Format.formatInteger(l + 1));
-				if( l==0 ) {
+				if (l == 0) {
 					str.append(" (Output)");
-				} else if(l==network.getLayerCount()-1) {
+				} else if (l == network.getLayerCount() - 1) {
 					str.append(" (Input)");
 				}
 				report.cell(str.toString());
@@ -475,7 +524,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			// decide if entire network is to be recreated
 			if ((dialog.getActivationFunctionHidden() != oldActivationHidden)
 					|| (dialog.getActivationFunctionOutput() != oldActivationOutput)
-					|| dialog.getHidden().getModel().size()!=(network.getLayerCount()-2)) {
+					|| dialog.getHidden().getModel().size() != (network
+							.getLayerCount() - 2)) {
 				FeedForwardPattern feedforward = new FeedForwardPattern();
 				feedforward.setActivationFunction(dialog
 						.getActivationFunctionHidden());
@@ -499,35 +549,36 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				PruneSelective prune = new PruneSelective(network);
 				int newInputCount = dialog.getInputCount().getValue();
 				int newOutputCount = dialog.getOutputCount().getValue();
-				
+
 				// did input neurons change?
-				if( newInputCount!=network.getInputCount() ) {					
+				if (newInputCount != network.getInputCount()) {
 					prune.changeNeuronCount(0, newInputCount);
 				}
-				
+
 				// did output neurons change?
-				if( newOutputCount!=network.getOutputCount() ) {					
+				if (newOutputCount != network.getOutputCount()) {
 					prune.changeNeuronCount(0, newOutputCount);
 				}
-				
+
 				// did the hidden layers change?
-				for(int i=0;i<network.getLayerCount()-2;i++) {
+				for (int i = 0; i < network.getLayerCount() - 2; i++) {
 					int newHiddenCount = 1;
-					String str = (String) dialog.getHidden().getModel().getElementAt(i);
+					String str = (String) dialog.getHidden().getModel()
+							.getElementAt(i);
 					int i1 = str.indexOf(':');
 					int i2 = str.indexOf("neur");
 					if (i1 != -1 && i2 != -1) {
 						str = str.substring(i1 + 1, i2).trim();
 						newHiddenCount = Integer.parseInt(str);
 					}
-					
+
 					// did this hidden layer change?
-					if( network.getLayerNeuronCount(i)!=newHiddenCount) {
-						prune.changeNeuronCount(i+1, newHiddenCount);
+					if (network.getLayerNeuronCount(i) != newHiddenCount) {
+						prune.changeNeuronCount(i + 1, newHiddenCount);
 					}
 				}
 			}
-		} 
+		}
 	}
 
 	private void performRestructure() {
