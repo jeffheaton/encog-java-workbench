@@ -16,6 +16,7 @@ import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.neural.networks.training.propagation.manhattan.ManhattanPropagation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.networks.training.propagation.scg.ScaledConjugateGradient;
+import org.encog.neural.networks.training.simple.TrainAdaline;
 import org.encog.neural.som.SOM;
 import org.encog.neural.som.training.basic.BasicTrainSOM;
 import org.encog.neural.som.training.basic.neighborhood.NeighborhoodFunction;
@@ -25,6 +26,7 @@ import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.ChooseBasicNetworkTrainingMethod;
 import org.encog.workbench.dialogs.training.TrainDialog;
+import org.encog.workbench.dialogs.training.methods.InputADALINE;
 import org.encog.workbench.dialogs.training.methods.InputAnneal;
 import org.encog.workbench.dialogs.training.methods.InputBackpropagation;
 import org.encog.workbench.dialogs.training.methods.InputGenetic;
@@ -108,6 +110,9 @@ public class TrainBasicNetwork {
 					case Annealing:
 						performAnnealing((BasicNetwork) method, trainingData);
 						break;
+					case ADALINE:
+						performADALINE((BasicNetwork) method, trainingData);
+						break;
 					}
 				}
 			} else {
@@ -116,6 +121,20 @@ public class TrainBasicNetwork {
 								+ method.getClass().getName());
 			}
 		}
+	}
+
+	private static void performADALINE(BasicNetwork method,
+			NeuralDataSet trainingData) {
+		InputADALINE dialog = new InputADALINE();
+		if (dialog.process()) {
+			double learningRate = dialog.getLearningRate().getValue();
+
+			Train train = new TrainAdaline((BasicNetwork) method,
+					trainingData, learningRate);
+			startup(train, dialog.getMaxError().getValue() / 100.0);
+		}
+
+		
 	}
 
 	private static void performBPROP(BasicNetwork method,

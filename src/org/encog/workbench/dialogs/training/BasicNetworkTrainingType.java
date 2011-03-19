@@ -7,5 +7,6 @@ public enum BasicNetworkTrainingType {
 	PropagationManhattan,
 	LevenbergMarquardt,
 	Genetic,
-	Annealing
+	Annealing,
+	ADALINE
 }

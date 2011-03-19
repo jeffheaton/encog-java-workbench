@@ -72,6 +72,7 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 		this.model.addElement("Levenberg-Marquardt");
 		this.model.addElement("Genetic Algorithm");
 		this.model.addElement("Simulated Annealing");
+		this.model.addElement("ADALINE Training");
 
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -106,6 +107,9 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 		case 6:
 			this.type = BasicNetworkTrainingType.Annealing;
 			break;
+		case 7:
+			this.type = BasicNetworkTrainingType.ADALINE;
+			break;
 		}
 	}
 
@@ -132,6 +136,9 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 			break;
 		case Annealing:
 			this.list.setSelectedIndex(6);
+			break;
+		case ADALINE:
+			this.list.setSelectedIndex(7);
 			break;
 		}
 	}
@@ -172,6 +179,11 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 		case 6:
 			this.text
 					.setText("Simulated annealing is a process where the weights are randomized according to a temperature.  As this temperature decreases, the weights are kept if they improve the error rate of the neural network.  This training technique is implemented as supervised training.  This process simulates the metallurgical process of annealing where metals are slowly cooled to produce a more stable molecular structure.");
+			break;
+			
+		case 7:
+			this.text
+					.setText("An ADALINE neural network is a very simple 2-layer network.  This training type should be used with ADALINE neural networks.");
 			break;
 
 		}
