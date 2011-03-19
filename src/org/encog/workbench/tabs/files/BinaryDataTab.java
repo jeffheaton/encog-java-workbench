@@ -35,8 +35,11 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.models.BufferedDataSetTableModel;
 import org.encog.workbench.process.ImportExport;
+import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.visualize.grid.VisualizeGridTab;
 
 public class BinaryDataTab extends BasicFileTab implements ActionListener {
 
@@ -50,6 +53,7 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 	private JButton addRow;
 	private JButton delRow;
 	private JButton export;
+	private JButton visualize;
 	
 	public BinaryDataTab(File file) {
 		super(new BufferedNeuralDataSet(file),file);
@@ -63,6 +67,7 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 		this.toolbar.add(this.addRow = new JButton("Add Row"));
 		this.toolbar.add(this.delRow = new JButton("Delete Row"));
 		this.toolbar.add(this.export = new JButton("Export"));
+		this.toolbar.add(this.visualize = new JButton("Visualize"));
 		this.addInputColumn.addActionListener(this);
 		this.delColumn.addActionListener(this);
 		this.addIdealColumn.addActionListener(this);
@@ -74,6 +79,7 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 		this.table = new JTable(this.model);
 		add(new JScrollPane(this.table), BorderLayout.CENTER);
 		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		this.visualize.addActionListener(this);
 		//new ExcelAdapter( this.table );
 	}	
 	
@@ -115,6 +121,8 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 			list[1] = null;
 			
 			ImportExport.performBin2External(this.getData().getFile(), null);
+		} else if( action.getSource()==this.visualize) {
+			performVisualize();
 		}
 
 	}
@@ -126,6 +134,11 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 
 	public BufferedNeuralDataSet getData() {
 		return (BufferedNeuralDataSet) getEncogObject();
+	}
+	
+	public void performVisualize() {
+		EncogCommonTab tab = new VisualizeGridTab((BufferedNeuralDataSet) this.getEncogObject());
+		EncogWorkBench.getInstance().getMainWindow().openTab(tab,"Visualize Data");
 	}
 
 }
