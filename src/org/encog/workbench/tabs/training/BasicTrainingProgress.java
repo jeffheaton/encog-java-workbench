@@ -27,26 +27,28 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import org.encog.engine.opencl.EncogCLDevice;
+import org.encog.mathutil.randomize.Distort;
 import org.encog.ml.MLMethod;
+import org.encog.ml.MLResettable;
 import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.frames.document.tree.ProjectEGItem;
-import org.encog.workbench.frames.document.tree.ProjectTraining;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.TimeSpanFormatter;
@@ -62,6 +64,8 @@ import org.encog.workbench.util.TimeSpanFormatter;
 public class BasicTrainingProgress extends EncogCommonTab implements
 		Runnable, ActionListener {
 
+	private final JComboBox comboReset;
+	
 	/**
 	 * The start button.
 	 */
@@ -202,6 +206,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	private boolean shouldExit;
 	
 	private MLMethod method;
+	
+	private AtomicInteger resetOption = new AtomicInteger( -1 );
 
 	/**
 	 * Construct the dialog box.
@@ -212,6 +218,18 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	public BasicTrainingProgress(Train train, MLMethod method, NeuralDataSet trainingData) {
 		super(null);
 
+		List<String> list = new ArrayList<String>();
+		list.add("<Select Option>");
+		list.add("Reset");
+		list.add("Perturb 1%");
+		list.add("Perturb 5%");
+		list.add("Perturb 10%");
+		list.add("Perturb 15%");
+		list.add("Perturb 20%");
+		list.add("Perturb 50%");
+		
+		this.comboReset = new JComboBox(list.toArray());
+		
 		this.train = train;
 		this.method = method;
 		this.trainingData = trainingData;
@@ -219,10 +237,12 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 		this.buttonStart = new JButton("Start");
 		this.buttonStop = new JButton("Stop");
 		this.buttonClose = new JButton("Close");
+		
 
 		this.buttonStart.addActionListener(this);
 		this.buttonStop.addActionListener(this);
 		this.buttonClose.addActionListener(this);
+		this.comboReset.addActionListener(this);
 
 		setLayout(new BorderLayout());
 		this.panelBody = new JPanel();
@@ -230,6 +250,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 		this.panelButtons.add(this.buttonStart);
 		this.panelButtons.add(this.buttonStop);
 		this.panelButtons.add(this.buttonClose);
+		this.panelButtons.add(this.comboReset);
 		add(this.panelBody, BorderLayout.CENTER);
 		add(this.panelButtons, BorderLayout.SOUTH);
 		this.panelBody.setLayout(new BorderLayout());
@@ -284,6 +305,9 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 			performStart();
 		} else if (e.getSource() == this.buttonStop) {
 			performStop();
+		} else if( e.getSource()==this.comboReset) {
+			this.resetOption.set(this.comboReset.getSelectedIndex()-1);
+			this.comboReset.setSelectedIndex(0);
 		}
 	}
 	
@@ -444,6 +468,39 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 			while (!this.cancel) {
 				this.iteration++;
 				this.lastError = this.train.getError();
+				
+				if( this.resetOption.get()!=-1 ) {
+					switch(this.resetOption.get() ) {
+					case 0:
+						if( this.method instanceof MLResettable ) {
+							((MLResettable)this.method).reset();
+						} else {
+							EncogWorkBench.displayError("Error", "This Machine Learning method cannot be reset.");
+						}
+						break;
+					case 1:
+						(new Distort(0.01)).randomize(this.method);
+						break;
+					case 2:
+						(new Distort(0.05)).randomize(this.method);
+						break;
+					case 3:
+						(new Distort(0.1)).randomize(this.method);
+						break;
+					case 4:
+						(new Distort(0.15)).randomize(this.method);
+						break;
+					case 5:
+						(new Distort(0.20)).randomize(this.method);
+						break;
+					case 6:
+						(new Distort(0.50)).randomize(this.method);
+						break;
+						
+					}
+					
+					this.resetOption.set(-1);					
+				}
 
 				this.train.iteration();
 

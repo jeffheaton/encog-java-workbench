@@ -72,7 +72,7 @@ public class RandomizeNetworkDialog extends EncogPropertiesDialog  {
 		this.beginTab("Randomize");
 		addProperty(this.high = new DoubleField("high","High Range",true,0,-1));
 		addProperty(this.low = new DoubleField("low","Low Range",true,0,-1));
-		addProperty(this.type = new ComboBoxField("type","Low Range",true,types));
+		addProperty(this.type = new ComboBoxField("type","Type",true,types));
 		this.beginTab("Perturb");
 		addProperty(this.perturbPercent = new DoubleField("perturb percent","Perturb Percent",true,0,-1));
 		this.beginTab("Gaussian");

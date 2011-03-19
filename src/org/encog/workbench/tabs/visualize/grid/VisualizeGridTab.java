@@ -2,6 +2,8 @@ package org.encog.workbench.tabs.visualize.grid;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -20,7 +22,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.models.TrainingListModel;
 import org.encog.workbench.tabs.EncogCommonTab;
 
-public class VisualizeGridTab extends EncogCommonTab implements ListSelectionListener {
+public class VisualizeGridTab extends EncogCommonTab implements ListSelectionListener, ActionListener {
 	
 	private BufferedNeuralDataSet data;
 	private JScrollPane scroll;
@@ -29,6 +31,7 @@ public class VisualizeGridTab extends EncogCommonTab implements ListSelectionLis
 	private JTextField fieldWidth;
 	private JTextField fieldHeight;
 	private GridPanel grid;
+	private JButton btnUpdate;
 	
 	public VisualizeGridTab(BufferedNeuralDataSet data) {
 		super(null);
@@ -46,23 +49,29 @@ public class VisualizeGridTab extends EncogCommonTab implements ListSelectionLis
 		JPanel upperPanel = new JPanel();
 		upperPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		rightPanel.add(upperPanel,BorderLayout.NORTH);
-		upperPanel.add(new JLabel("Grid Dimensions:"));
+		upperPanel.add(new JLabel("Grid Dimensions(h x w):"));
 		upperPanel.add(this.fieldHeight = new JTextField(5));
-		upperPanel.add(new JLabel("x"));
+		upperPanel.add(new JLabel(" x "));
 		upperPanel.add(this.fieldWidth = new JTextField(5));
-		upperPanel.add(new JButton("Update"));
+		upperPanel.add(this.btnUpdate = new JButton("Update"));
 		rightPanel.add(this.grid = new GridPanel(),BorderLayout.CENTER);
 		
 		int width = (int)Math.sqrt(this.data.getInputSize());
 		int height = width;
 		while( (width*height) < this.data.getInputSize() ) {
-			width++;
+			height++;
 		}
 		this.fieldHeight.setText(""+height);
 		this.fieldWidth.setText(""+width);
+		
+		this.btnUpdate.addActionListener(this);
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
+		refresh();
+	}
+	
+	public void refresh() {
 		int selected = this.list.getSelectedIndex();
 		NeuralDataPair pair = BasicNeuralDataPair.createPair(this.data.getInputSize(), this.data.getIdealSize());
 		this.data.getRecord(selected, pair);
@@ -88,6 +97,12 @@ public class VisualizeGridTab extends EncogCommonTab implements ListSelectionLis
 		}
 		
 		this.grid.updateData(gridHeight,gridWidth,pair.getInput().getData());
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if( e.getSource()==this.btnUpdate) {
+			refresh();
+		}
 		
 	}
 }

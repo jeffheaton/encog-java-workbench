@@ -63,6 +63,7 @@ import org.encog.neural.prune.PruneSelective;
 import org.encog.neural.thermal.HopfieldNetwork;
 import org.encog.neural.thermal.ThermalNetwork;
 import org.encog.persist.EncogCollection;
+import org.encog.persist.EncogMemoryCollection;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
@@ -542,8 +543,11 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 					}
 				}
 				feedforward.setInputNeurons(dialog.getInputCount().getValue());
-				feedforward
-						.setOutputNeurons(dialog.getOutputCount().getValue());
+				feedforward.setOutputNeurons(dialog.getOutputCount().getValue());
+				BasicNetwork obj = (BasicNetwork) feedforward.generate();
+				EncogMemoryCollection c = (EncogMemoryCollection) this.getEncogObject().getCollection();				
+				c.add(name, obj);
+				this.setEncogObject(obj);
 			} else {
 				// try to prune it
 				PruneSelective prune = new PruneSelective(network);
@@ -578,6 +582,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 					}
 				}
 			}
+			produceReport();
 		}
 	}
 
