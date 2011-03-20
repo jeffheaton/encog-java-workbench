@@ -47,6 +47,7 @@ import org.encog.mathutil.randomize.GaussianRandomizer;
 import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
 import org.encog.mathutil.randomize.Randomizer;
 import org.encog.mathutil.randomize.RangeRandomizer;
+import org.encog.ml.BasicML;
 import org.encog.ml.MLClassification;
 import org.encog.ml.MLEncodable;
 import org.encog.ml.MLInput;
@@ -79,6 +80,7 @@ import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.mlmethod.structure.StructureTab;
 import org.encog.workbench.tabs.query.general.ClassificationQueryTab;
 import org.encog.workbench.tabs.query.general.RegressionQueryTab;
+import org.encog.workbench.tabs.query.ocr.OCRQueryTab;
 import org.encog.workbench.tabs.query.thermal.QueryThermalTab;
 import org.encog.workbench.tabs.visualize.ThermalGrid.ThermalGridTab;
 import org.encog.workbench.tabs.visualize.neat.NEATTab;
@@ -262,32 +264,22 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 						.openModalTab(tab, "Thermal Query");			
 			}
 			// only supports regression
-			else if (this.getEncogObject() instanceof MLRegression
-					&& !(this.getEncogObject() instanceof MLClassification)) {
-				RegressionQueryTab tab = new RegressionQueryTab(
-						((MLRegression) this.getEncogObject()));
-				EncogWorkBench.getInstance().getMainWindow()
-						.openModalTab(tab, "Query Regression");
-			}
-			// only supports classification
-			else if (this.getEncogObject() instanceof MLClassification
-					&& !(this.getEncogObject() instanceof MLRegression)) {
-				ClassificationQueryTab tab = new ClassificationQueryTab(
-						((MLClassification) this.getEncogObject()));
-				EncogWorkBench.getInstance().getMainWindow()
-						.openModalTab(tab, "Query Classification");
-			}
-			// let the user pick (supports either classification or regression)
-			else if (this.getEncogObject() instanceof MLClassification
-						|| (this.getEncogObject() instanceof MLRegression)) {
-				SelectItem selectClassification;
-				SelectItem selectRegression;
+			else {
+				SelectItem selectClassification = null;
+				SelectItem selectRegression = null;
+				SelectItem selectOCR;
 				
 				List<SelectItem> list = new ArrayList<SelectItem>();
+				if( this.getEncogObject() instanceof MLClassification ) {
 				list.add(selectClassification = new SelectItem("Query Classification",
 						"Machine Learning output is a class."));
+				}
+				if( this.getEncogObject() instanceof MLRegression ) {
 				list.add(selectRegression = new SelectItem("Query Regression",
 						"Machine Learning output is a number(s)."));
+				}
+				list.add(selectOCR = new SelectItem("Query OCR",
+					"Query using drawn chars.  Supports regression or classification."));
 				SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
 						.getMainWindow(), list);
 				sel.setVisible(true);
@@ -302,12 +294,12 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 							((MLRegression) this.getEncogObject()));
 					EncogWorkBench.getInstance().getMainWindow()
 							.openModalTab(tab, "Query Regression");					
-				} 
-
-			}
-			// we have no way to query this ML type
-			else {
-				EncogWorkBench.displayMessage("Unable to Query", "No query for this ML method is available.");
+				}  else if( sel.getSelected()==selectOCR ) {
+					OCRQueryTab tab = new OCRQueryTab(
+							((BasicML) this.getEncogObject()));
+					EncogWorkBench.getInstance().getMainWindow()
+							.openModalTab(tab, "Query OCR");					
+				}
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
