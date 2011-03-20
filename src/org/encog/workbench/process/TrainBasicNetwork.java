@@ -1,7 +1,9 @@
 package org.encog.workbench.process;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.encog.mathutil.randomize.RangeRandomizer;
-import org.encog.mathutil.rbf.RBFEnum;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
@@ -19,11 +21,12 @@ import org.encog.neural.networks.training.propagation.scg.ScaledConjugateGradien
 import org.encog.neural.networks.training.simple.TrainAdaline;
 import org.encog.neural.som.SOM;
 import org.encog.neural.som.training.basic.BasicTrainSOM;
-import org.encog.neural.som.training.basic.neighborhood.NeighborhoodFunction;
-import org.encog.neural.som.training.basic.neighborhood.NeighborhoodRBF;
+import org.encog.neural.som.training.clustercopy.SOMClusterCopyTraining;
 import org.encog.neural.thermal.HopfieldNetwork;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.select.SelectDialog;
+import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.dialogs.training.ChooseBasicNetworkTrainingMethod;
 import org.encog.workbench.dialogs.training.TrainDialog;
 import org.encog.workbench.dialogs.training.methods.InputADALINE;
@@ -71,16 +74,7 @@ public class TrainBasicNetwork {
 							.save((EncogPersistedObject) hp);
 				}
 			} else if (method instanceof SOM) {
-				InputSOM somDialog = new InputSOM();
-
-				if (somDialog.process()) {
-					BasicTrainSOM train = new BasicTrainSOM((SOM) method,
-							somDialog.getLearningRate().getValue(),
-							trainingData, somDialog.getNeighborhoodFunction());
-					train.setForceWinner(somDialog.getForceWinner().getValue());
-					startup(train, somDialog.getMaxError().getValue());
-				}
-
+				performSOM((SOM) method, trainingData);
 			} else if (method instanceof BasicNetwork) {
 
 				ChooseBasicNetworkTrainingMethod choose = new ChooseBasicNetworkTrainingMethod(
@@ -123,18 +117,56 @@ public class TrainBasicNetwork {
 		}
 	}
 
+	private static void performSOM(SOM som, NeuralDataSet trainingData) {
+
+		SelectItem selectBasicSOM;
+		SelectItem selectSOMClusterCopy;
+
+		List<SelectItem> list = new ArrayList<SelectItem>();
+		list.add(selectBasicSOM = new SelectItem(
+				"Basic SOM Neighborhood Training",
+				"Train the nerual network using the classic neighborhood based SOM training."));
+		list.add(selectSOMClusterCopy = new SelectItem(
+				"SOM Cluster Copy Training",
+				"Train the SOM using the cluser copy method."));
+		SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
+				.getMainWindow(), list);
+		sel.setVisible(true);
+
+		if (sel.getSelected() == selectBasicSOM) {
+			InputSOM somDialog = new InputSOM();
+
+			if (somDialog.process()) {
+				BasicTrainSOM train = new BasicTrainSOM(som, somDialog
+						.getLearningRate().getValue(), trainingData,
+						somDialog.getNeighborhoodFunction());
+				train.setForceWinner(somDialog.getForceWinner().getValue());
+				startup(train, somDialog.getMaxError().getValue());
+			}
+		} else if (sel.getSelected() == selectSOMClusterCopy) {
+			SOMClusterCopyTraining train = new SOMClusterCopyTraining(som,
+					trainingData);
+			train.iteration();
+			if (EncogWorkBench.askQuestion("SOM", "Training done, save?")) {
+				EncogWorkBench.getInstance().save((EncogPersistedObject) som);
+			} else {
+				EncogWorkBench.getInstance().revert((EncogPersistedObject) som);
+			}
+		}
+
+	}
+
 	private static void performADALINE(BasicNetwork method,
 			NeuralDataSet trainingData) {
 		InputADALINE dialog = new InputADALINE();
 		if (dialog.process()) {
 			double learningRate = dialog.getLearningRate().getValue();
 
-			Train train = new TrainAdaline((BasicNetwork) method,
-					trainingData, learningRate);
+			Train train = new TrainAdaline((BasicNetwork) method, trainingData,
+					learningRate);
 			startup(train, dialog.getMaxError().getValue() / 100.0);
 		}
 
-		
 	}
 
 	private static void performBPROP(BasicNetwork method,
@@ -233,10 +265,10 @@ public class TrainBasicNetwork {
 	}
 
 	private static void startup(Train train, double maxError) {
-		BasicTrainingProgress tab = new BasicTrainingProgress(train, train
-				.getNetwork(), train.getTraining());
+		BasicTrainingProgress tab = new BasicTrainingProgress(train,
+				train.getNetwork(), train.getTraining());
 		tab.setMaxError(maxError);
-		EncogWorkBench.getInstance().getMainWindow().openTab(tab);
+		EncogWorkBench.getInstance().getMainWindow().openTab(tab, "Training");
 
 	}
 

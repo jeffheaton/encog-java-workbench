@@ -23,7 +23,6 @@
  */
 package org.encog.workbench.dialogs.select;
 
-import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.util.List;

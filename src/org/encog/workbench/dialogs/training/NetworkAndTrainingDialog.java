@@ -132,5 +132,10 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 		BufferedNeuralDataSet result = new BufferedNeuralDataSet(file);
 		return result;
 	}
+	
+	public ComboBoxField getComboTraining() {
+		return this.comboTraining;
+	}
+
 
 }

@@ -92,11 +92,12 @@ public class InputSOM extends DialogMaxError {
 		addProperty(this.rows = new IntegerField("rows", "2D RBF Rows",true,0,1000000));
 		addProperty(this.forceWinner = new CheckField("force winner","Force Winner"));
 		render();
-		this.learningRate.setValue(0.7);
+		this.learningRate.setValue(0.25);
 		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
-		this.getRBFWidth().setValue(1);
+		this.getRBFWidth().setValue(2);
 		this.getCols().setValue(1);
 		this.getRows().setValue(1);
+		this.getForceWinner().setValue(true);
 
 	}
 

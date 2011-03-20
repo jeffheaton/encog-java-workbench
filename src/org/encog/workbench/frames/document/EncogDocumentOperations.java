@@ -35,6 +35,7 @@ import org.encog.EncogError;
 import org.encog.engine.util.ErrorCalculation;
 import org.encog.engine.util.ErrorCalculationMode;
 import org.encog.engine.util.Format;
+import org.encog.ml.MLError;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLRegression;
 import org.encog.ml.genetic.population.BasicPopulation;
@@ -46,6 +47,7 @@ import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.neural.som.SOM;
 import org.encog.neural.thermal.HopfieldNetwork;
 import org.encog.persist.DirectoryEntry;
 import org.encog.persist.EncogMemoryCollection;
@@ -383,11 +385,21 @@ public class EncogDocumentOperations {
 				MLMethod method = dialog.getNetwork();
 				NeuralDataSet training = dialog.getTrainingSet();
 
-				double error = EncogUtility.calculateRegressionError(
-						(MLRegression) method, training);
+				double error = 0;
 
-				EncogWorkBench.displayMessage("Error For this Network", ""
-						+ Format.formatPercent(error));
+				if (method instanceof MLError) {
+					error = ((MLError) method).calculateError(training);
+					EncogWorkBench.displayMessage("Error For this Network", ""
+							+ Format.formatPercent(error));
+
+				} else if (method instanceof SOM) {
+					EncogWorkBench
+							.displayError(
+									"Error",
+									"The Machine Learning method "
+											+ method.getClass().getSimpleName()
+											+ " does not support error calculation.");
+				}
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error Evaluating Network", t);
