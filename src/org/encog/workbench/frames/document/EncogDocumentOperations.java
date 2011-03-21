@@ -200,7 +200,7 @@ public class EncogDocumentOperations {
 				CreateNeuralNetwork.process(name, pef);
 				break;
 			case NEATPopulation:
-				performCreatePopulation();
+				performCreatePopulation(name, pef);
 				break;
 			case PropertyData:
 				final PropertyData prop = new PropertyData();
@@ -227,7 +227,7 @@ public class EncogDocumentOperations {
 		}
 	}
 
-	private void performCreatePopulation() {
+	private void performCreatePopulation(String name, ProjectEGFile pef) {
 		PopulationDialog dialog = new PopulationDialog(owner);
 
 		if (dialog.process()) {
@@ -241,8 +241,11 @@ public class EncogDocumentOperations {
 			}
 
 			pop.setDescription("Population");
-			// EncogWorkBench.getInstance().getCurrentFile().add(
-			// generateNextID("population-"), pop);
+			EncogMemoryCollection encog = pef.getCollection();
+			encog.add(name, pop);
+			encog.save(pef.getFile().toString());
+			pef.generateChildrenList();
+			EncogWorkBench.getInstance().getMainWindow().redraw();
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 
