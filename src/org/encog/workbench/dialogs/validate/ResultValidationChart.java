@@ -62,8 +62,8 @@ public class ResultValidationChart extends EncogCommonTab {
 	public ResultValidationChart() {
 		super(null);
 		setLayout(new BorderLayout());
-		this.add(tabs,BorderLayout.CENTER);
-		
+		this.add(tabs, BorderLayout.CENTER);
+
 	}
 
 	public void setData(NeuralDataSet validationData, MLMethod method) {
@@ -80,7 +80,7 @@ public class ResultValidationChart extends EncogCommonTab {
 			NeuralData validIdeal = dataRow.getIdeal();
 			NeuralData computatedIdeal = getCalculatedResult(dataRow, method);
 			int inputCount = input.size();
-			int idealCount = validIdeal==null ? 0 : validIdeal.size();
+			int idealCount = validIdeal == null ? 0 : validIdeal.size();
 
 			tableDataRow = new Vector<String>();
 			if (tableHeaders == null) {
@@ -88,7 +88,7 @@ public class ResultValidationChart extends EncogCommonTab {
 				for (int i = 0; i < inputCount; i++) {
 					tableHeaders.add("Input " + i);
 				}
-				for (int i = 0; i < idealCount; i++) {
+				for (int i = 0; i < computatedIdeal.size(); i++) {
 					tableHeaders.add("Ideal " + i);
 					tableHeaders.add("Result " + i);
 				}
@@ -104,15 +104,20 @@ public class ResultValidationChart extends EncogCommonTab {
 				createChart();
 			}
 
-			for (int i = 0; i < idealCount; i++) {
-				double v = validIdeal.getData(i);
+			for (int i = 0; i < computatedIdeal.size(); i++) {
 				double c = computatedIdeal.getData(i);
-
-				validation.get(i).add(key, v);
-				computation.get(i).add(key, c);
-
-				tableDataRow.add(new Double(v).toString());
+								
+				if (idealCount > 0) {
+					double v = validIdeal.getData(i);
+					validation.get(i).add(key, v);
+					tableDataRow.add(new Double(v).toString());
+					computation.get(i).add(key, c);
+				} else {
+					tableDataRow.add("N/A");
+				}
+				
 				tableDataRow.add(new Double(c).toString());
+
 			}
 
 			tableData.add(tableDataRow);
@@ -153,7 +158,7 @@ public class ResultValidationChart extends EncogCommonTab {
 
 	private void drawTable(Vector<Vector<String>> tableData,
 			Vector<String> tableHeaders) {
-		JTable table = new JTable(tableData, tableHeaders) {			
+		JTable table = new JTable(tableData, tableHeaders) {
 			private static final long serialVersionUID = 8364655578079933961L;
 
 			public boolean isCellEditable(int rowIndex, int vColIndex) {
@@ -164,21 +169,22 @@ public class ResultValidationChart extends EncogCommonTab {
 		tabs.addTab("Data", new JScrollPane(table));
 	}
 
-	private NeuralData getCalculatedResult(NeuralDataPair data,
-			MLMethod method) {
-		
+	private NeuralData getCalculatedResult(NeuralDataPair data, MLMethod method) {
+
 		NeuralData out;
-		
-		if( method instanceof MLRegression ) {
-			out = ((MLRegression)method).compute(data.getInput());
-		} else if( method instanceof MLClassification ) {
+
+		if (method instanceof MLRegression) {
+			out = ((MLRegression) method).compute(data.getInput());
+		} else if (method instanceof MLClassification) {
 			out = new BasicNeuralData(1);
-			out.setData(0,((MLClassification)method).classify(data.getInput()));
-			
+			out.setData(0,
+					((MLClassification) method).classify(data.getInput()));
+
 		} else {
-			throw new WorkBenchError("Unsupported Machine Learning Method:" + method.getClass().getSimpleName());
+			throw new WorkBenchError("Unsupported Machine Learning Method:"
+					+ method.getClass().getSimpleName());
 		}
-		
+
 		return out;
 	}
 
