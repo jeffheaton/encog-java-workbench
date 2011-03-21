@@ -36,6 +36,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
 import org.encog.ml.MLMethod;
+import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.ml.svm.SVM;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
@@ -59,6 +60,7 @@ import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.tabs.files.ImageFileTab;
 import org.encog.workbench.tabs.files.TextFileTab;
 import org.encog.workbench.tabs.mlmethod.MLMethodTab;
+import org.encog.workbench.tabs.population.PopulationTab;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.FileUtil;
 
@@ -401,6 +403,18 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
 			}
+		} else if (obj instanceof BasicPopulation ) {
+
+			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
+			.getTabManager().find(obj);
+
+			if (tab == null) {
+					tab = new PopulationTab((BasicPopulation)obj);
+					this.openTab(tab, obj.getName());
+			} else {
+				this.documentTabs.setSelectedComponent(tab);
+			}
+					
 		} else {
 			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
 					.getTabManager().find(obj);

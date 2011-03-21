@@ -54,9 +54,9 @@ public class EncogPopupMenus {
 	private JMenuItem popupFileCSVWizard;
 	private JMenuItem popupFileNewFile;
 	private JMenuItem popupFileNewObject;
-	
+
 	private EncogDocumentFrame owner;
-	
+
 	public EncogPopupMenus(EncogDocumentFrame owner) {
 		this.owner = owner;
 	}
@@ -66,94 +66,108 @@ public class EncogPopupMenus {
 	}
 
 	public void performPopupMenu(final Object source) {
+		try {
 
-		if (source == this.popupFileRefresh ) {
-			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
-		}
-		
-		else if (source == this.popupFileNewFile ) {
-			try {
-				CreateNewFile.performCreateFile();
-			} catch (IOException e) {
-				EncogWorkBench.displayError("Error", e);
-			}
-		}
-		else if( source==this.popupFileNewObject ) {
-			try {
-			EncogWorkBench.getInstance().getMainWindow().getOperations().performObjectsCreate();
-			}  catch (IOException e) {
-				EncogWorkBench.displayError("Error", e);
-			}
-		}
-
-		boolean first = true;
-		List<ProjectItem> list = this.owner.getTree().getSelectedValue();
-
-		if (list == null)
-			return;
-
-		for (ProjectItem selected : list) {
-			if (source == this.popupFileDelete  ) {
-				if (first
-						&& !EncogWorkBench
-								.askQuestion("Warning",
-										"Are you sure you want to delete these file(s)?")) {
-					return;
-				}
-				first = false;
-				if (selected instanceof ProjectFile) {
-					File f = ((ProjectFile) selected).getFile(); 
-					if( !f.delete() )
-					{
-						if( FileUtil.getFileExt(f).equalsIgnoreCase("egb")) {
-							EncogWorkBench.displayError("Can't Delete", f.toString()+"\nUnfortunatly, due to a limitation in Java, EGB files cannot be deleted once opened.\nRestart the workbench, and you will be able to delete this file.");
-						} else {
-							EncogWorkBench.displayError("Can't Delete", f.toString());
-						}
-						
-					}
-				} else if (selected instanceof ProjectEGItem ) {
-					ProjectEGItem egi = (ProjectEGItem)selected;
-					egi.getCollection().delete(egi.getObj().getName());
-					egi.getCollection().save(egi.getEncogFile().getFile().toString());
-				}
+			if (source == this.popupFileRefresh) {
 				EncogWorkBench.getInstance().getMainWindow().getTree()
 						.refresh();
-			} else if (source == this.popupFileOpen ) {
-				if (selected instanceof ProjectFile) {
-					EncogWorkBench.getInstance().getMainWindow()
-							.openFile(((ProjectFile) selected).getFile());
-				}
-			} else if (source == this.popupFileOpenText) {
-				if (selected instanceof ProjectFile) {
-					EncogWorkBench.getInstance().getMainWindow()
-							.openTextFile(((ProjectFile) selected).getFile());
-				}
-			} else if (source == this.popupFileDelete) {
-				if (first
-						&& !EncogWorkBench
-								.askQuestion("Warning",
-										"Are you sure you want to delete these object(s)?")) {
-					return;
-				}
-				owner.getOperations().performObjectsDelete(selected);
-			} else if (source == this.popupFileCSVExport) {
-				String sourceFile = ((ProjectFile) selected).getFile()
-						.toString();
-				String targetFile = FileUtil.forceExtension(sourceFile, "egb");
-				ImportExport.performExternal2Bin(new File(sourceFile),
-						new File(targetFile), null);
-			} else if (source == this.popupFileCSVWizard) {
-				File sourceFile = ((ProjectFile) selected).getFile();
-				EncogAnalystWizard.createEncogAnalyst(sourceFile);
-			} else if( source== this.popupFileProperties) {
-				if( selected instanceof ProjectEGItem ) {
-					EncogWorkBench.getInstance().getMainWindow().getOperations().performObjectsProperties((ProjectEGItem)selected);
-				} else if( selected instanceof ProjectFile ) {
-					EncogWorkBench.getInstance().getMainWindow().getOperations().performFileProperties((ProjectFile)selected);
-				}
 			}
-			first = false;
+
+			else if (source == this.popupFileNewFile) {
+				CreateNewFile.performCreateFile();
+
+			} else if (source == this.popupFileNewObject) {
+				EncogWorkBench.getInstance().getMainWindow().getOperations()
+						.performObjectsCreate();
+			}
+
+			boolean first = true;
+			List<ProjectItem> list = this.owner.getTree().getSelectedValue();
+
+			if (list == null)
+				return;
+
+			for (ProjectItem selected : list) {
+				if (source == this.popupFileDelete) {
+					if (first
+							&& !EncogWorkBench
+									.askQuestion("Warning",
+											"Are you sure you want to delete these file(s)?")) {
+						return;
+					}
+					first = false;
+					if (selected instanceof ProjectFile) {
+						File f = ((ProjectFile) selected).getFile();
+						if (!f.delete()) {
+							if (FileUtil.getFileExt(f).equalsIgnoreCase("egb")) {
+								EncogWorkBench
+										.displayError(
+												"Can't Delete",
+												f.toString()
+														+ "\nUnfortunatly, due to a limitation in Java, EGB files cannot be deleted once opened.\nRestart the workbench, and you will be able to delete this file.");
+							} else {
+								EncogWorkBench.displayError("Can't Delete",
+										f.toString());
+							}
+
+						}
+					} else if (selected instanceof ProjectEGItem) {
+						ProjectEGItem egi = (ProjectEGItem) selected;
+						egi.getCollection().delete(egi.getObj().getName());
+						egi.getCollection().save(
+								egi.getEncogFile().getFile().toString());
+					}
+					EncogWorkBench.getInstance().getMainWindow().getTree()
+							.refresh();
+				} else if (source == this.popupFileOpen) {
+					if (selected instanceof ProjectFile) {
+						EncogWorkBench.getInstance().getMainWindow()
+								.openFile(((ProjectFile) selected).getFile());
+					}
+				} else if (source == this.popupFileOpenText) {
+					if (selected instanceof ProjectFile) {
+						EncogWorkBench
+								.getInstance()
+								.getMainWindow()
+								.openTextFile(
+										((ProjectFile) selected).getFile());
+					}
+				} else if (source == this.popupFileDelete) {
+					if (first
+							&& !EncogWorkBench
+									.askQuestion("Warning",
+											"Are you sure you want to delete these object(s)?")) {
+						return;
+					}
+					owner.getOperations().performObjectsDelete(selected);
+				} else if (source == this.popupFileCSVExport) {
+					String sourceFile = ((ProjectFile) selected).getFile()
+							.toString();
+					String targetFile = FileUtil.forceExtension(sourceFile,
+							"egb");
+					ImportExport.performExternal2Bin(new File(sourceFile),
+							new File(targetFile), null);
+				} else if (source == this.popupFileCSVWizard) {
+					File sourceFile = ((ProjectFile) selected).getFile();
+					EncogAnalystWizard.createEncogAnalyst(sourceFile);
+				} else if (source == this.popupFileProperties) {
+					if (selected instanceof ProjectEGItem) {
+						EncogWorkBench
+								.getInstance()
+								.getMainWindow()
+								.getOperations()
+								.performObjectsProperties(
+										(ProjectEGItem) selected);
+					} else if (selected instanceof ProjectFile) {
+						EncogWorkBench.getInstance().getMainWindow()
+								.getOperations()
+								.performFileProperties((ProjectFile) selected);
+					}
+				}
+				first = false;
+			}
+		} catch (IOException e) {
+			EncogWorkBench.displayError("Error", e);
 		}
 	}
 
@@ -162,57 +176,63 @@ public class EncogPopupMenus {
 		File file = null;
 		String ext = null;
 		EncogPersistedObject encogObj = null;
-		
-		if( item instanceof ProjectFile ) {
-			file = ((ProjectFile)item).getFile();
+
+		if (item instanceof ProjectFile) {
+			file = ((ProjectFile) item).getFile();
 			ext = FileUtil.getFileExt(file);
 		}
-		
-		if( item instanceof ProjectEGItem ) {
-			encogObj = ((ProjectEGItem)item).getObj();			
+
+		if (item instanceof ProjectEGItem) {
+			encogObj = ((ProjectEGItem) item).getObj();
 		}
-		
+
 		// build network popup menu
 		this.popupFile = new JPopupMenu();
 		this.popupFileRefresh = owner.addItem(this.popupFile, "Refresh", 'r');
-		
-		if( ( file!=null || encogObj!=null ) && !"eg".equalsIgnoreCase(ext) ) {
+
+		if ((file != null || encogObj != null) && !"eg".equalsIgnoreCase(ext)) {
 			this.popupFileOpen = owner.addItem(this.popupFile, "Open", 'o');
 		} else {
 			this.popupFileOpen = null;
 		}
-		
-		if( file!=null || encogObj!=null ) {
-			this.popupFileDelete = owner.addItem(this.popupFile, "Delete",'d');			
-			this.popupFileProperties = owner.addItem(this.popupFile,"Properties", 'p');
+
+		if (file != null || encogObj != null) {
+			this.popupFileDelete = owner.addItem(this.popupFile, "Delete", 'd');
+			this.popupFileProperties = owner.addItem(this.popupFile,
+					"Properties", 'p');
 		} else {
 			this.popupFileDelete = null;
 			this.popupFileOpen = null;
 			this.popupFileProperties = null;
 		}
-		
-		if( ext!=null && !"txt".equalsIgnoreCase(ext) ) {
-			this.popupFileOpenText = owner.addItem(this.popupFile, "Open as Text",'t');
+
+		if (ext != null && !"txt".equalsIgnoreCase(ext)) {
+			this.popupFileOpenText = owner.addItem(this.popupFile,
+					"Open as Text", 't');
 		} else {
 			this.popupFileOpenText = null;
 		}
-		
-		if( ext!=null && "csv".equalsIgnoreCase(ext) ) {
-			this.popupFileCSVExport = owner.addItem(this.popupFile, "Export to Training(EGB)", 'x');
-			this.popupFileCSVWizard = owner.addItem(this.popupFile, "Analyst Wizard...", 'w');
+
+		if (ext != null && "csv".equalsIgnoreCase(ext)) {
+			this.popupFileCSVExport = owner.addItem(this.popupFile,
+					"Export to Training(EGB)", 'x');
+			this.popupFileCSVWizard = owner.addItem(this.popupFile,
+					"Analyst Wizard...", 'w');
 		} else {
 			this.popupFileCSVExport = null;
 			this.popupFileCSVWizard = null;
 		}
-		
-		if(ext!=null && "eg".equalsIgnoreCase(ext)) {
-			this.popupFileNewObject = owner.addItem(this.popupFile, "New Object", 'n');
+
+		if (ext != null && "eg".equalsIgnoreCase(ext)) {
+			this.popupFileNewObject = owner.addItem(this.popupFile,
+					"New Object", 'n');
 		} else {
 			this.popupFileNewObject = null;
 		}
-		
-		if(file==null && encogObj==null) {
-			this.popupFileNewFile = owner.addItem(this.popupFile, "New File", 'n');
+
+		if (file == null && encogObj == null) {
+			this.popupFileNewFile = owner.addItem(this.popupFile, "New File",
+					'n');
 		} else {
 			this.popupFileNewFile = null;
 		}
@@ -220,6 +240,5 @@ public class EncogPopupMenus {
 		this.popupFile.show(e.getComponent(), e.getX(), e.getY());
 
 	}
-
 
 }
