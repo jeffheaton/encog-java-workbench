@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import org.encog.EncogError;
+import org.encog.ml.MLMethod;
 import org.encog.ml.MLRegression;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.basic.BasicNeuralData;
@@ -101,8 +102,7 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 			} catch (EncogError ex) {
 				EncogWorkBench.displayError("Query Error", ex.getMessage());
 			} catch (Throwable t) {
-				ErrorDialog.handleError(t,
-						(BasicNetwork) this.getEncogObject(), null);
+				ErrorDialog.handleError(t,(MLMethod)this.getEncogObject(), null);
 			}
 		}
 

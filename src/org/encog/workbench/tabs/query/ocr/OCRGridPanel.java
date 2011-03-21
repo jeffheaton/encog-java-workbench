@@ -7,14 +7,9 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-import org.encog.engine.util.EngineArray;
 import org.encog.ml.BasicML;
 import org.encog.ml.MLInput;
 import org.encog.ml.MLMethod;
-import org.encog.neural.data.bipolar.BiPolarNeuralData;
-import org.encog.neural.thermal.BoltzmannMachine;
-import org.encog.neural.thermal.HopfieldNetwork;
-import org.encog.neural.thermal.ThermalNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 
@@ -144,6 +139,23 @@ public class OCRGridPanel extends JPanel implements MouseListener {
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public int getGridHeight() {
+		return gridY;
+	}
+	
+	public int getGridWidth() {
+		return gridX;
+	}
+
+	public void setGrid(boolean[] data) {
+		this.grid = data;
+		repaint();
+	}
+
+	public boolean []getGrid() {
+		return this.grid;
 	}
 
 }

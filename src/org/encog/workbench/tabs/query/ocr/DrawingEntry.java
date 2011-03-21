@@ -63,11 +63,6 @@ public class DrawingEntry extends JPanel {
 	protected int lastY = -1;
 
 	/**
-	 * The down sample component used with this component.
-	 */
-	protected Sample sample;
-
-	/**
 	 * Specifies the left boundary of the cropping rectangle.
 	 */
 	protected int downSampleLeft;
@@ -123,9 +118,10 @@ public class DrawingEntry extends JPanel {
 	/**
 	 * Called to downsample the image and store it in the down sample component.
 	 */
-	public void downSample() {
+	public boolean []downSample(int targetWidth,int targetHeight) {		
 		final int w = this.entryImage.getWidth(this);
 		final int h = this.entryImage.getHeight(this);
+		boolean[] result = new boolean[targetWidth*targetHeight];
 
 		final PixelGrabber grabber = new PixelGrabber(this.entryImage, 0, 0, w,
 				h, true);
@@ -136,27 +132,23 @@ public class DrawingEntry extends JPanel {
 			findBounds(w, h);
 
 			// now downsample
-			final SampleData data = this.sample.getData();
 
 			this.ratioX = (double) (this.downSampleRight - this.downSampleLeft)
-					/ (double) data.getWidth();
+					/ (double) targetWidth;
 			this.ratioY = (double) (this.downSampleBottom - this.downSampleTop)
-					/ (double) data.getHeight();
+					/ (double) targetHeight;
 
-			for (int y = 0; y < data.getHeight(); y++) {
-				for (int x = 0; x < data.getWidth(); x++) {
-					if (downSampleRegion(x, y)) {
-						data.setData(x, y, true);
-					} else {
-						data.setData(x, y, false);
-					}
+			int index = 0;
+			for (int y = 0; y < targetHeight; y++) {
+				for (int x = 0; x < targetWidth; x++) {
+					result[index++] = downSampleRegion(x, y);
 				}
 			}
-
-			this.sample.repaint();
 			repaint();
+
 		} catch (final InterruptedException e) {
 		}
+		return result;
 	}
 
 	/**
@@ -228,15 +220,6 @@ public class DrawingEntry extends JPanel {
 				break;
 			}
 		}
-	}
-
-	/**
-	 * Get the down sample component to be used with this component.
-	 * 
-	 * @return The down sample component.
-	 */
-	public Sample getSample() {
-		return this.sample;
 	}
 
 	/**
@@ -320,16 +303,6 @@ public class DrawingEntry extends JPanel {
 		getGraphics().drawImage(this.entryImage, 0, 0, this);
 		this.lastX = e.getX();
 		this.lastY = e.getY();
-	}
-
-	/**
-	 * Set the sample control to use. The sample control displays a downsampled
-	 * version of the character.
-	 * 
-	 * @param s
-	 */
-	public void setSample(final Sample s) {
-		this.sample = s;
 	}
 
 	/**
