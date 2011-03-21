@@ -32,11 +32,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
+import org.encog.ml.MLClassification;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLRegression;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -61,6 +63,7 @@ public class ResultValidationChart extends EncogCommonTab {
 		super(null);
 		setLayout(new BorderLayout());
 		this.add(tabs,BorderLayout.CENTER);
+		
 	}
 
 	public void setData(NeuralDataSet validationData, MLMethod method) {
@@ -77,7 +80,7 @@ public class ResultValidationChart extends EncogCommonTab {
 			NeuralData validIdeal = dataRow.getIdeal();
 			NeuralData computatedIdeal = getCalculatedResult(dataRow, method);
 			int inputCount = input.size();
-			int idealCount = validIdeal.size();
+			int idealCount = validIdeal==null ? 0 : validIdeal.size();
 
 			tableDataRow = new Vector<String>();
 			if (tableHeaders == null) {
@@ -150,14 +153,14 @@ public class ResultValidationChart extends EncogCommonTab {
 
 	private void drawTable(Vector<Vector<String>> tableData,
 			Vector<String> tableHeaders) {
-		JTable table = new JTable(tableData, tableHeaders) {
+		JTable table = new JTable(tableData, tableHeaders) {			
 			private static final long serialVersionUID = 8364655578079933961L;
 
 			public boolean isCellEditable(int rowIndex, int vColIndex) {
 				return false;
 			}
 		};
-
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tabs.addTab("Data", new JScrollPane(table));
 	}
 
@@ -168,6 +171,10 @@ public class ResultValidationChart extends EncogCommonTab {
 		
 		if( method instanceof MLRegression ) {
 			out = ((MLRegression)method).compute(data.getInput());
+		} else if( method instanceof MLClassification ) {
+			out = new BasicNeuralData(1);
+			out.setData(0,((MLClassification)method).classify(data.getInput()));
+			
 		} else {
 			throw new WorkBenchError("Unsupported Machine Learning Method:" + method.getClass().getSimpleName());
 		}
