@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import org.encog.ml.BasicML;
@@ -38,6 +39,8 @@ public class OCRGridPanel extends JPanel implements MouseListener {
 		{
 			EncogWorkBench.displayError("Error", "OCR Query cannot be used with " + method.getName());
 		}
+		
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		this.grid = new boolean[this.gridX * this.gridY];
 		

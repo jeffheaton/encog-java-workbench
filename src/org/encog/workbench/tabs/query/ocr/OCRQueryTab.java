@@ -1,10 +1,12 @@
 package org.encog.workbench.tabs.query.ocr;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -68,6 +70,9 @@ public class OCRQueryTab extends EncogCommonTab implements ActionListener {
 		panelLeft.setLayout(new GridLayout(2, 1));
 		panelLeft.add(this.panel);
 		panelLeft.add(this.entry);
+		
+		panelLeft.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		panelRight.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		body.add(panelLeft);
 		body.add(panelRight);
@@ -138,7 +143,6 @@ public class OCRQueryTab extends EncogCommonTab implements ActionListener {
 			performDownsample();
 		}
 		if (e.getSource() == this.buttonQuery) {
-			performDownsample();
 			performQuery();
 		}
 

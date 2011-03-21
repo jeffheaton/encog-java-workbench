@@ -12,6 +12,7 @@ import org.encog.neural.data.bipolar.BiPolarNeuralData;
 import org.encog.neural.thermal.BoltzmannMachine;
 import org.encog.neural.thermal.HopfieldNetwork;
 import org.encog.neural.thermal.ThermalNetwork;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 
 public class ThermalPanel extends JPanel implements MouseListener {
@@ -128,6 +129,12 @@ public class ThermalPanel extends JPanel implements MouseListener {
 	 * Train the neural network.
 	 */
 	public void train() {
+		
+		if( this.network instanceof BoltzmannMachine ) {
+			EncogWorkBench.displayError("Error", "Boltzmann machine training is not supported.");
+			return;
+		}
+		
 		BiPolarNeuralData pattern = new BiPolarNeuralData(this.grid.length);
 
 		for (int i = 0; i < this.grid.length; i++) {

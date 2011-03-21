@@ -13,6 +13,7 @@ import javax.swing.JTable;
 
 import org.encog.EncogError;
 import org.encog.ml.MLClassification;
+import org.encog.ml.MLMethod;
 import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogPersistedObject;
@@ -98,7 +99,7 @@ public class ClassificationQueryTab extends EncogCommonTab implements ActionList
 				EncogWorkBench.displayError("Query Error", ex.getMessage());
 			} catch (Throwable t) {
 				ErrorDialog.handleError(t,
-						(BasicNetwork) this.getEncogObject(), null);
+						(MLMethod) this.getEncogObject(), null);
 			}
 		}
 

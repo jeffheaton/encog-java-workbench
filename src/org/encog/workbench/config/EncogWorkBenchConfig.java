@@ -39,7 +39,7 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	private String encogCloudPassword;
 	private String encogCloudUserID;
 	private boolean autoConnect = false;
-	private double defaultError = 0.01;
+	private double defaultError = 1;
 	private int threadCount = 0;
 	private boolean useOpenCL;
 	private int errorCalculation;

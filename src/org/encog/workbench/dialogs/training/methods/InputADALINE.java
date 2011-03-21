@@ -24,7 +24,7 @@ public class InputADALINE extends DialogMaxError {
 		
 		addProperty(this.learningRate = new DoubleField("learning rate","Learning Rate",true,0,-1));
 		render();
-		this.learningRate.setValue(3);
+		this.learningRate.setValue(0.01);
 		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 
 	}

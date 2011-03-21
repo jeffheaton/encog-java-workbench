@@ -30,6 +30,7 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.image.PixelGrabber;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 /**
@@ -103,6 +104,7 @@ public class DrawingEntry extends JPanel {
 	public DrawingEntry() {
 		enableEvents(AWTEvent.MOUSE_MOTION_EVENT_MASK
 				| AWTEvent.MOUSE_EVENT_MASK | AWTEvent.COMPONENT_EVENT_MASK);
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	}
 
 	/**

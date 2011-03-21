@@ -73,6 +73,9 @@ public class VisualizeGridTab extends EncogCommonTab implements ListSelectionLis
 	
 	public void refresh() {
 		int selected = this.list.getSelectedIndex();
+		if( selected==-1 )
+			return;
+		
 		NeuralDataPair pair = BasicNeuralDataPair.createPair(this.data.getInputSize(), this.data.getIdealSize());
 		this.data.getRecord(selected, pair);
 		int gridHeight;

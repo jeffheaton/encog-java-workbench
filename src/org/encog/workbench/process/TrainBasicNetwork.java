@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.ml.MLMethod;
+import org.encog.neural.art.ART1;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
@@ -42,6 +43,7 @@ import org.encog.workbench.tabs.training.BasicTrainingProgress;
 
 public class TrainBasicNetwork {
 	public static void performTrain(MLMethod mlMethod) {
+				
 		TrainDialog dialog = new TrainDialog(EncogWorkBench.getInstance()
 				.getMainWindow());
 		if (mlMethod != null)
@@ -54,6 +56,12 @@ public class TrainBasicNetwork {
 			if (method == null) {
 				EncogWorkBench.displayError("Error",
 						"Machine language method is required to train.");
+				return;
+			}
+			
+			if( method instanceof ART1 ) {
+				EncogWorkBench.displayError("Error",
+				"ART1 Networks are not trained, they learn as they are queried.");
 				return;
 			}
 
