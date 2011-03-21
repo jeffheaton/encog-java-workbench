@@ -23,13 +23,15 @@
  */
 package org.encog.workbench;
 
+import org.encog.EncogError;
+
 /**
  * General error class for Encog.  All encog errors descend from this.
  * It is implemented as a RuntimeException, as a result it is non-checked.
  * 
  * @author jheaton
  */
-public class WorkBenchError extends RuntimeException {
+public class WorkBenchError extends EncogError {
 
 	/**
 	 * The serial id.
