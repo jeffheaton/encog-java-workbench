@@ -34,6 +34,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
 import org.encog.engine.util.Format;
+import org.encog.ml.MLMethod;
 import org.encog.ml.genetic.genome.Genome;
 import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.ml.genetic.population.Population;
@@ -47,6 +48,7 @@ import org.encog.workbench.dialogs.ExtractGenomes;
 import org.encog.workbench.models.GeneralPopulationModel;
 import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.SpeciesModel;
+import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
 
 public class NEATPopulationTab  extends EncogCommonTab implements ActionListener {
@@ -177,8 +179,7 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 	}
 
 	private void performTrain() {
-		
-		
+		TrainBasicNetwork.performTrain((MLMethod) this.getEncogObject());		
 	}
 
 
