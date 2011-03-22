@@ -33,6 +33,7 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.FileUtil;
 
 public class EncogCollectionModel implements TreeModel {
@@ -116,6 +117,7 @@ public class EncogCollectionModel implements TreeModel {
 
 	public void invalidate(String path) {
 
+		EncogWorkBench.getInstance().getMainWindow().beginWait();
 		this.files.clear();
 
 		if (path == null)
@@ -158,7 +160,7 @@ public class EncogCollectionModel implements TreeModel {
 				try {					
 					this.files.add(new ProjectEGFile(entry));
 				} catch (Throwable t) {
-					this.files.add(new ProjectFile(entry));
+					this.files.add(new ProjectFile(entry,true));
 				}
 			} else {
 				this.files.add(new ProjectFile(entry));
@@ -172,6 +174,8 @@ public class EncogCollectionModel implements TreeModel {
 		for (TreeModelListener l : this.listeners) {
 			l.treeStructureChanged(e);
 		}
+		
+		EncogWorkBench.getInstance().getMainWindow().endWait();
 	}
 
 	public void invalidate() {

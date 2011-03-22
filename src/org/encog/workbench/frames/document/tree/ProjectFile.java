@@ -6,10 +6,17 @@ import org.encog.util.file.FileUtil;
 
 public class ProjectFile extends ProjectItem {
 	private File file;
+	private boolean error;
 	
 	public ProjectFile(File file)
 	{
+		this(file,false);
+	}
+	
+	public ProjectFile(File file, boolean error)
+	{
 		this.file = file;
+		this.error = error;
 	}
 		
 	/**
@@ -28,7 +35,10 @@ public class ProjectFile extends ProjectItem {
 
 	public String toString()
 	{
-		return file.getName();
+		if( !error )
+			return file.getName();
+		else
+			return file.getName() + " - Error";
 	}
 
 	public String getExtension() {

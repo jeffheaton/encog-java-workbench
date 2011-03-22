@@ -236,6 +236,8 @@ public class EncogDocumentOperations {
 			int inputCount = dialog.getInputNeurons().getValue();
 			int outputCount = dialog.getOutputNeurons().getValue();
 			NEATPopulation pop = new NEATPopulation(inputCount,outputCount,populationSize);
+			pop.setNeatActivationFunction(dialog.getNeatActivationFunction());
+			pop.setOutputActivationFunction(dialog.getOutputActivationFunction());
 			pop.setDescription("Population");
 			EncogMemoryCollection encog = pef.getCollection();
 			encog.add(name, pop);
