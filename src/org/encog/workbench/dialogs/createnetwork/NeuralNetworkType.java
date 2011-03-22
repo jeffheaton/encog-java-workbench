@@ -36,7 +36,6 @@ public enum NeuralNetworkType {
 	Hopfield,
 	Elman,
 	Jordan,
-	NEAT,
 	SVM
 	
 }

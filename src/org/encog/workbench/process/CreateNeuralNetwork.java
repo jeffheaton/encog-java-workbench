@@ -26,7 +26,6 @@ package org.encog.workbench.process;
 import org.encog.bot.BotUtil;
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.engine.network.activation.ActivationTANH;
-import org.encog.ml.MLMethod;
 import org.encog.ml.svm.KernelType;
 import org.encog.ml.svm.SVMType;
 import org.encog.neural.data.NeuralDataSet;
@@ -57,10 +56,8 @@ import org.encog.workbench.dialogs.createnetwork.CreateElmanDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateFeedforward;
 import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateJordanDialog;
-import org.encog.workbench.dialogs.createnetwork.CreateNEATDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateNeuralNetworkDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateRBFDialog;
-import org.encog.workbench.dialogs.createnetwork.CreateRSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateSVMDialog;
 import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
@@ -114,9 +111,6 @@ public class CreateNeuralNetwork {
 			case ART1:
 				network = createART1(name);
 				break;		
-			case NEAT:
-				network = createNEAT(name);
-				break;
 			case SVM:
 				network = createSVM(name);
 				break;
@@ -366,24 +360,5 @@ public class CreateNeuralNetwork {
 			return art1.generate();
 		} else
 			return null;
-	}
-	
-	private static EncogPersistedObject createNEAT(String name) {
-		CreateNEATDialog dialog = new CreateNEATDialog(EncogWorkBench
-				.getInstance().getMainWindow());
-		dialog.setOutputActivationFunction(new ActivationSigmoid());
-		dialog.setNeatActivationFunction(new ActivationSigmoid());
-		if (dialog.process()) {
-			NEATPattern feedforward = new NEATPattern();
-			feedforward.setActivationFunction(dialog.getOutputActivationFunction());
-			feedforward.setNEATActivationFunction(dialog.getNeatActivationFunction());
-			feedforward.setInputNeurons(dialog.getInputCount().getValue());
-			feedforward.setInputNeurons(dialog.getInputCount().getValue());
-			feedforward.setOutputNeurons(dialog.getOutputCount().getValue());
-			return feedforward.generate();
-		}
-		return null;
-
-	}
-	
+	}	
 }

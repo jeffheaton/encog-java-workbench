@@ -25,14 +25,26 @@ package org.encog.workbench.dialogs;
 
 import java.awt.Frame;
 
+import org.encog.engine.network.activation.ActivationFunction;
+import org.encog.engine.network.activation.ActivationLinear;
+import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.activation.ActivationDialog;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
+import org.encog.workbench.dialogs.common.PopupField;
+import org.encog.workbench.dialogs.common.PopupListener;
 
-public class PopulationDialog extends EncogPropertiesDialog {
+public class PopulationDialog extends EncogPropertiesDialog implements PopupListener {
 
 	private final IntegerField populationSize;
 	private final IntegerField inputNeurons;
 	private final IntegerField outputNeurons;
+	private PopupField outputActivationField;
+	private PopupField neatActivationField;
+	private ActivationFunction outputActivationFunction;
+	private ActivationFunction neatActivationFunction;
+
 	
 	public PopulationDialog(Frame owner) {
 		super(owner);
@@ -42,8 +54,16 @@ public class PopulationDialog extends EncogPropertiesDialog {
 		addProperty(this.populationSize = new IntegerField("population size","Population Size",true,1,-1));
 		addProperty(this.inputNeurons = new IntegerField("input size","Input Neurons",true,1,-1));
 		addProperty(this.outputNeurons = new IntegerField("output size","output Neurons",true,1,-1));
+		
+		addProperty(this.outputActivationField = new PopupField("output activation",
+				"Output Activation Function", true));
+		addProperty(this.neatActivationField = new PopupField("NEAT activation",
+				"NEAT Activation Function", true));
+
 
 		render();
+		this.setNeatActivationFunction(new ActivationSigmoid());
+		this.setOutputActivationFunction(new ActivationLinear());
 	}
 
 	public IntegerField getPopulationSize() {
@@ -57,6 +77,62 @@ public class PopulationDialog extends EncogPropertiesDialog {
 	public IntegerField getOutputNeurons() {
 		return outputNeurons;
 	}
+	
+	public String popup(PopupField field) {
+		if (field == this.outputActivationField) {
+			ActivationDialog dialog = new ActivationDialog(EncogWorkBench
+					.getInstance().getMainWindow());
+			dialog.setActivation(this.outputActivationFunction);
+			if (!dialog.process())
+				return null;
+			else {
+				this.outputActivationFunction = dialog.getActivation();
+				return dialog.getActivation().getClass().getSimpleName();
+			}
+		} else if (field == this.neatActivationField) {
+			ActivationDialog dialog = new ActivationDialog(EncogWorkBench
+					.getInstance().getMainWindow());
+			dialog.setActivation(this.neatActivationFunction);
+			if (!dialog.process())
+				return null;
+			else {
+				this.neatActivationFunction = dialog.getActivation();
+				return dialog.getActivation().getClass().getSimpleName();
+			}
+		} else
+			return null;
+	}
+
+	public PopupField getOutputActivationField() {
+		return outputActivationField;
+	}
+
+	public PopupField getNeatActivationField() {
+		return neatActivationField;
+	}
+
+	public void setOutputActivationFunction(
+			ActivationFunction activationFunction) {
+		this.outputActivationFunction = activationFunction;
+		this.outputActivationField.setValue(activationFunction.getClass()
+				.getSimpleName());
+	}
+
+	public ActivationFunction getOutputActivationFunction() {
+		return outputActivationFunction;
+	}
+
+	public ActivationFunction getNeatActivationFunction() {
+		return neatActivationFunction;
+	}
+
+	public void setNeatActivationFunction(ActivationFunction activationFunction) {
+		this.neatActivationFunction = activationFunction;
+		this.neatActivationField.setValue(activationFunction.getClass()
+				.getSimpleName());
+		
+	}
+
 	
 	
 

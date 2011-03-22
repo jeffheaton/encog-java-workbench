@@ -131,9 +131,6 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			this.type = NeuralNetworkType.Jordan;
 			break;
 		case 12:
-			this.type = NeuralNetworkType.NEAT;
-			break;
-		case 13:
 			this.type = NeuralNetworkType.SVM;
 			break;
 		}
@@ -178,11 +175,8 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 		case Jordan:
 			this.list.setSelectedIndex(12);
 			break;
-		case NEAT:
-			this.list.setSelectedIndex(14);
-			break;
 		case SVM:
-			this.list.setSelectedIndex(15);
+			this.list.setSelectedIndex(13);
 			break;
 		}
 
@@ -257,11 +251,7 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			this.text
 					.setText("Simple Recurrent Network (SRN) Jordan Style - A recurrent neural network that has a context layer.  The context layer holds the previous output from the output layer and then echos that value back to the hidden layer's input.  The hidden layer then always receives input from the previous iteration's output layer.  Jordan neural networks are generally trained using genetic, simulated annealing, or one of the propagation techniques.  Jordan neural networks are typically used for prediction.");
 			break;
-
 		case 12:
-			this.text.setText("NeuroEvolution of Augmenting Topologies (NEAT) is a neural network that starts with only an input and ouput layer.  The hidden neurons are evolved as the network trains.");
-			break;
-		case 13:
 			this.text.setText("A Support Vector Machine (SVM) is not really a neural network.  However, SVM�s work very similar in terms of their input and output.  SVM�s can often be trained faster and with better accuracy than neural networks.");
 		}
 
