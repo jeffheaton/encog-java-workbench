@@ -274,7 +274,7 @@ public class TrainBasicNetwork {
 
 	private static void startup(Train train, double maxError) {
 		BasicTrainingProgress tab = new BasicTrainingProgress(train,
-				train.getNetwork(), train.getTraining());
+				(EncogPersistedObject)train.getNetwork(), train.getTraining());
 		tab.setMaxError(maxError);
 		EncogWorkBench.getInstance().getMainWindow().openTab(tab, "Training");
 

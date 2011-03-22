@@ -194,6 +194,9 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 		if( dialog.process())
 		{
 			NEATPopulation pop = dialog.getPopulation(); 
+
+			pop.setInputCount(2);
+			pop.setOutputCount(1);
 			NeuralDataSet training = dialog.getTrainingSet();
 
 			if( dialog.getLoadToMemory().getValue() ) {
@@ -204,7 +207,7 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 			NEATTraining train = new NEATTraining(score,pop);
 			
 			BasicTrainingProgress tab = new BasicTrainingProgress(train,
-					train.getNetwork(), train.getTraining());
+					pop, train.getTraining());
 			tab.setMaxError(dialog.getMaxError().getValue()/100);
 			EncogWorkBench.getInstance().getMainWindow().openTab(tab, "Training");
 

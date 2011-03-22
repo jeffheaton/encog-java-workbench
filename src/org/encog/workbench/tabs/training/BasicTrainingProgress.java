@@ -45,9 +45,11 @@ import org.encog.mathutil.randomize.Distort;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
 import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;
@@ -61,11 +63,11 @@ import org.encog.workbench.util.TimeSpanFormatter;
  * @author jheaton
  * 
  */
-public class BasicTrainingProgress extends EncogCommonTab implements
-		Runnable, ActionListener {
+public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
+		ActionListener {
 
 	private final JComboBox comboReset;
-	
+
 	/**
 	 * The start button.
 	 */
@@ -117,9 +119,6 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	private Train train;
 
 	private EncogCLDevice device;
-	
-	private MLMethod oldMethod;
-	
 
 	/**
 	 * The training data.
@@ -204,10 +203,9 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	 * first.
 	 */
 	private boolean shouldExit;
+
+	private AtomicInteger resetOption = new AtomicInteger(-1);
 	
-	private MLMethod method;
-	
-	private AtomicInteger resetOption = new AtomicInteger( -1 );
 
 	/**
 	 * Construct the dialog box.
@@ -215,8 +213,9 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	 * @param owner
 	 *            The owner of the dialog box.
 	 */
-	public BasicTrainingProgress(Train train, MLMethod method, NeuralDataSet trainingData) {
-		super(null);
+	public BasicTrainingProgress(Train train, EncogPersistedObject method,
+			NeuralDataSet trainingData) {
+		super(method);
 
 		List<String> list = new ArrayList<String>();
 		list.add("<Select Option>");
@@ -227,17 +226,15 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 		list.add("Perturb 15%");
 		list.add("Perturb 20%");
 		list.add("Perturb 50%");
-		
+
 		this.comboReset = new JComboBox(list.toArray());
-		
+
 		this.train = train;
-		this.method = method;
 		this.trainingData = trainingData;
-		
+
 		this.buttonStart = new JButton("Start");
 		this.buttonStop = new JButton("Stop");
 		this.buttonClose = new JButton("Close");
-		
 
 		this.buttonStart.addActionListener(this);
 		this.buttonStop.addActionListener(this);
@@ -267,28 +264,26 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	}
 
 	private void performClose() {
-		
-		if (this.oldMethod != null) {
 
-			if (EncogWorkBench.askQuestion("Training",
-					"Save the training?")) {
+		if (EncogWorkBench.askQuestion("Training", "Save the training?")) {
 
-				//EncogWorkBench.getInstance().getCurrentFile().add(
-				//		this.network.getName(), this.train.getNetwork());
-				saveNetwork();
-
-				if (this.train instanceof ResilientPropagation) {
-					ResilientPropagation rprop = (ResilientPropagation) this.train;
-					TrainingContinuation cont = rprop.pause();
-					cont.setDescription("Training state from last RPROP.");
-					//EncogWorkBench.getInstance().getCurrentFile().add(
-					//		this.network.getName() + "-rprop", cont);
-					EncogWorkBench.getInstance().getMainWindow().redraw();
-				}
-			} else {
-				//EncogWorkBench.getInstance().getCurrentFile().add(
-				//		this.network.getName(), this.oldNetwork);
+			if( this.getEncogObject()!=null ) {
+				EncogWorkBench.getInstance().save(this.getEncogObject());
+			} 
+			
+			if (this.train instanceof ResilientPropagation) {
+				ResilientPropagation rprop = (ResilientPropagation) this.train;
+				TrainingContinuation cont = rprop.pause();
+				cont.setDescription("Training state from last RPROP.");
+				// EncogWorkBench.getInstance().getCurrentFile().add(
+				// this.network.getName() + "-rprop", cont);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
+			EncogWorkBench.getInstance().refresh();
+		} else {
+			if( this.getEncogObject()!=null) {
+				EncogWorkBench.getInstance().revert(this.getEncogObject());
+			} 
 		}
 	}
 
@@ -305,14 +300,13 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 			performStart();
 		} else if (e.getSource() == this.buttonStop) {
 			performStop();
-		} else if( e.getSource()==this.comboReset) {
-			this.resetOption.set(this.comboReset.getSelectedIndex()-1);
+		} else if (e.getSource() == this.comboReset) {
+			this.resetOption.set(this.comboReset.getSelectedIndex() - 1);
 			this.comboReset.setSelectedIndex(0);
 		}
 	}
-	
-	public boolean close()
-	{
+
+	public boolean close() {
 		if (this.thread == null) {
 			performClose();
 			return true;
@@ -320,14 +314,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 			this.shouldExit = true;
 			this.cancel = true;
 			return false;
-		}		
-	}
-
-	/**
-	 * @return the network
-	 */
-	public MLMethod getMethod() {
-		return this.method;
+		}
 	}
 
 	/**
@@ -343,7 +330,6 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	public NeuralDataSet getTrainingData() {
 		return this.trainingData;
 	}
-
 
 	public void paintStatus(final Graphics g) {
 		g.setColor(Color.white);
@@ -403,15 +389,15 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	 */
 	private void performStart() {
 
-		/*if (!EncogWorkBench.getInstance().getMainWindow().getTabManager()
-				.checkTrainingOrNetworkOpen())
-			return;*/
+		/*
+		 * if (!EncogWorkBench.getInstance().getMainWindow().getTabManager()
+		 * .checkTrainingOrNetworkOpen()) return;
+		 */
 
 		this.started = new Date();
 		this.performanceLast = this.started;
 		this.performanceCount = -1;
 		this.performanceLastIteration = 0;
-		this.oldMethod = method;
 
 		this.buttonStart.setEnabled(false);
 		this.buttonStop.setEnabled(true);
@@ -449,57 +435,64 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 
 			startup();
 
-			//this.method = (MLMethod) method.clone();
+			// this.method = (MLMethod) method.clone();
 
 			// see if we need to continue training.
 			if (this.train instanceof ResilientPropagation) {
 				ResilientPropagation rprop = (ResilientPropagation) this.train;
-				/*TrainingContinuation state = (TrainingContinuation) EncogWorkBench
-						.getInstance().getCurrentFile().find(
-								this.network.getName() + "-rprop");
-				if (state != null) {
-					if (rprop.isValidResume(state))
-						rprop.resume(state);
-				}
-				EncogWorkBench.getInstance().getCurrentFile().delete(
-						this.network.getName() + "-rprop");*/
+				/*
+				 * TrainingContinuation state = (TrainingContinuation)
+				 * EncogWorkBench .getInstance().getCurrentFile().find(
+				 * this.network.getName() + "-rprop"); if (state != null) { if
+				 * (rprop.isValidResume(state)) rprop.resume(state); }
+				 * EncogWorkBench.getInstance().getCurrentFile().delete(
+				 * this.network.getName() + "-rprop");
+				 */
 			}
 
 			while (!this.cancel) {
 				this.iteration++;
 				this.lastError = this.train.getError();
-				
-				if( this.resetOption.get()!=-1 ) {
-					switch(this.resetOption.get() ) {
+
+				if (this.resetOption.get() != -1) {
+					if( !(getEncogObject() instanceof MLMethod) )
+					{
+						EncogWorkBench.displayError("Error", "This machine learning method cannot be reset or randomized.");
+						return;
+					}
+					
+					switch (this.resetOption.get()) {
 					case 0:
-						if( this.method instanceof MLResettable ) {
-							((MLResettable)this.method).reset();
+						if (this.getEncogObject() instanceof MLResettable) {
+							((MLResettable) this.getEncogObject()).reset();
 						} else {
-							EncogWorkBench.displayError("Error", "This Machine Learning method cannot be reset.");
+							EncogWorkBench
+									.displayError("Error",
+											"This Machine Learning method cannot be reset.");
 						}
 						break;
 					case 1:
-						(new Distort(0.01)).randomize(this.method);
+						(new Distort(0.01)).randomize((MLMethod)getEncogObject());
 						break;
 					case 2:
-						(new Distort(0.05)).randomize(this.method);
+						(new Distort(0.05)).randomize((MLMethod)getEncogObject());
 						break;
 					case 3:
-						(new Distort(0.1)).randomize(this.method);
+						(new Distort(0.1)).randomize((MLMethod)getEncogObject());
 						break;
 					case 4:
-						(new Distort(0.15)).randomize(this.method);
+						(new Distort(0.15)).randomize((MLMethod)getEncogObject());
 						break;
 					case 5:
-						(new Distort(0.20)).randomize(this.method);
+						(new Distort(0.20)).randomize((MLMethod)getEncogObject());
 						break;
 					case 6:
-						(new Distort(0.50)).randomize(this.method);
+						(new Distort(0.50)).randomize((MLMethod)getEncogObject());
 						break;
-						
+
 					}
-					
-					this.resetOption.set(-1);					
+
+					this.resetOption.set(-1);
 				}
 
 				this.train.iteration();
@@ -510,8 +503,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 					this.status = "Max Error Reached";
 					this.cancel = true;
 				}
-				
-				if( this.train.isTrainingDone() ) {
+
+				if (this.train.isTrainingDone()) {
 					this.status = "Training Complete";
 					this.cancel = true;
 				}
@@ -539,8 +532,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 				dispose();
 			}
 		} catch (Throwable t) {
-			//EncogWorkBench.displayError("Error", t, this.network,
-				//	this.trainingData);
+			// EncogWorkBench.displayError("Error", t, this.network,
+			// this.trainingData);
 			shutdown();
 			stopped();
 			dispose();
@@ -553,14 +546,6 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	 */
 	public void setMaxError(final double maxError) {
 		this.maxError = maxError;
-	}
-
-	/**
-	 * @param network
-	 *            the network to set
-	 */
-	public void setMethod(final MLMethod method) {
-		this.method = method;
 	}
 
 	/**
@@ -582,17 +567,15 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	/**
 	 * Implemented by subclasses to perform any shutdown after training.
 	 */
-	public void shutdown()
-	{
-		
+	public void shutdown() {
+
 	}
 
 	/**
 	 * Implemented by subclasses to perform any activity before training.
 	 */
-	public void startup()
-	{
-		
+	public void startup() {
+
 	}
 
 	/**
@@ -605,10 +588,6 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 		this.cancel = true;
 	}
 
-	public void saveNetwork() {
-
-	}
-
 	/**
 	 * @return the device
 	 */
@@ -617,10 +596,10 @@ public class BasicTrainingProgress extends EncogCommonTab implements
 	}
 
 	/**
-	 * @param device the device to set
+	 * @param device
+	 *            the device to set
 	 */
 	public void setDevice(EncogCLDevice device) {
 		this.device = device;
 	}
-
 }
