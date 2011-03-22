@@ -41,6 +41,7 @@ import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
+import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.som.SOM;
 import org.encog.persist.DirectoryEntry;
@@ -232,14 +233,7 @@ public class EncogDocumentOperations {
 
 		if (dialog.process()) {
 			int populationSize = dialog.getPopulationSize().getValue();
-			BasicPopulation pop = new BasicPopulation(populationSize);
-
-			for (int i = 0; i < populationSize; i++) {
-				pop.add(new NEATGenome(null, pop.assignGenomeID(), dialog
-						.getInputNeurons().getValue(), dialog
-						.getOutputNeurons().getValue()));
-			}
-
+			NEATPopulation pop = new NEATPopulation(populationSize);
 			pop.setDescription("Population");
 			EncogMemoryCollection encog = pef.getCollection();
 			encog.add(name, pop);

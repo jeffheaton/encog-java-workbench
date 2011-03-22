@@ -136,7 +136,7 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 			
 			CalculateScore score = new TrainingSetScore(dialog.getTrainingSet());
 			
-			final NEATTraining train = new NEATTraining(
+			/*final NEATTraining train = new NEATTraining(
 					score, dialog.getNetwork(),this.population);
 			
 			for(int i=0;i<count;i++)
@@ -149,7 +149,7 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 				//EncogWorkBench.getInstance().getCurrentFile().add(name,network);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
-			
+			*/
 		}
 		
 	}
