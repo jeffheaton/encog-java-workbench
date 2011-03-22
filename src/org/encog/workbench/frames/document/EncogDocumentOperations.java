@@ -52,11 +52,11 @@ import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EvaluateDialog;
-import org.encog.workbench.dialogs.PopulationDialog;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
 import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
 import org.encog.workbench.dialogs.createobject.ObjectType;
 import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
+import org.encog.workbench.dialogs.population.NewPopulationDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
@@ -229,7 +229,7 @@ public class EncogDocumentOperations {
 	}
 
 	private void performCreatePopulation(String name, ProjectEGFile pef) {
-		PopulationDialog dialog = new PopulationDialog(owner);
+		NewPopulationDialog dialog = new NewPopulationDialog(owner);
 
 		if (dialog.process()) {
 			int populationSize = dialog.getPopulationSize().getValue();

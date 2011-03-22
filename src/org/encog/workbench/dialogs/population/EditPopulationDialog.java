@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.dialogs;
+package org.encog.workbench.dialogs.population;
 
 import java.awt.Frame;
 
@@ -41,9 +41,8 @@ public class EditPopulationDialog  extends EncogPropertiesDialog {
 	
 	public EditPopulationDialog(Frame owner) {
 		super(owner);
-
-		setTitle("Extract Top Genomes");
-		setSize(400,200);
+		setTitle("Edit Population Info");
+		setSize(400,300);
 		setLocation(200,200);
 		
 		addProperty(oldAgePenalty = new DoubleField("old penalty","Old Age Penalty",true,0,1));
@@ -52,7 +51,7 @@ public class EditPopulationDialog  extends EncogPropertiesDialog {
 		addProperty(survivalRate = new DoubleField("survival rate","Survival Rate",true,0,Integer.MAX_VALUE));
 		addProperty(youngBonusAgeThreshold = new IntegerField("youth bonus","Youth Bonus",true,0,Integer.MAX_VALUE));
 		addProperty(youngScoreBonus = new DoubleField("youth threshold","Youth Threshold",true,0,Integer.MAX_VALUE));		
-		render();
+
 	}
 
 

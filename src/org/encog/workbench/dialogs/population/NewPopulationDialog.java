@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.dialogs;
+package org.encog.workbench.dialogs.population;
 
 import java.awt.Frame;
 
@@ -35,7 +35,7 @@ import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.PopupField;
 import org.encog.workbench.dialogs.common.PopupListener;
 
-public class PopulationDialog extends EncogPropertiesDialog implements PopupListener {
+public class NewPopulationDialog extends EncogPropertiesDialog implements PopupListener {
 
 	private final IntegerField populationSize;
 	private final IntegerField inputNeurons;
@@ -46,7 +46,7 @@ public class PopulationDialog extends EncogPropertiesDialog implements PopupList
 	private ActivationFunction neatActivationFunction;
 
 	
-	public PopulationDialog(Frame owner) {
+	public NewPopulationDialog(Frame owner) {
 		super(owner);
 		this.setSize(400, 200);
 		this.setTitle("Create NEAT Population");

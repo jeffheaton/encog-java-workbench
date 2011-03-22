@@ -38,18 +38,24 @@ import org.encog.ml.MLMethod;
 import org.encog.ml.genetic.genome.Genome;
 import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.ml.genetic.population.Population;
+import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATTraining;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.EditPopulationDialog;
 import org.encog.workbench.dialogs.ExtractGenomes;
+import org.encog.workbench.dialogs.population.EditNEATPopulationDialog;
+import org.encog.workbench.dialogs.population.EditPopulationDialog;
+import org.encog.workbench.dialogs.training.methods.InputNEAT;
 import org.encog.workbench.models.GeneralPopulationModel;
 import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.SpeciesModel;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.training.BasicTrainingProgress;
 
 public class NEATPopulationTab  extends EncogCommonTab implements ActionListener {
 
@@ -69,13 +75,13 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 	private final JScrollPane innovationScroll;
 	private final JTable innovationTable;
 	private final InnovationModel innovationModel;
-	private BasicPopulation population;
+	private NEATPopulation population;
 	
-	JTable tableGeneralPopulation;
+	private JTable tableGeneralPopulation;
 	private final NEATPopulationInfo pi;
 	
-	public NEATPopulationTab(BasicPopulation pop) {
-		super(pop);
+	public NEATPopulationTab(NEATPopulation obj) {
+		super(obj);
 		
 		setLayout(new BorderLayout());
 		JPanel buttonPanel = new JPanel();
@@ -91,19 +97,19 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 		mainPanel.setLayout(new BorderLayout());
 		JPanel about = new JPanel();
 		about.setLayout(new BorderLayout());
-		about.add(this.pi = new NEATPopulationInfo((Population)getEncogObject()), BorderLayout.CENTER);
+		about.add(this.pi = new NEATPopulationInfo((NEATPopulation)getEncogObject()), BorderLayout.CENTER);
 		mainPanel.add(about,BorderLayout.NORTH);
 		mainPanel.add(tabViews = new JTabbedPane(),BorderLayout.CENTER);
 		
-		this.populationModel = new GeneralPopulationModel(pop);
+		this.populationModel = new GeneralPopulationModel(obj);
 		this.populationTable = new JTable(this.populationModel);
 		this.populationScroll = new JScrollPane(this.populationTable);
 		
-		this.speciesModel = new SpeciesModel(pop);
+		this.speciesModel = new SpeciesModel(obj);
 		this.speciesTable = new JTable(this.speciesModel);
 		this.speciesScroll = new JScrollPane(this.speciesTable);
 		
-		this.innovationModel = new InnovationModel(pop);
+		this.innovationModel = new InnovationModel(obj);
 		this.innovationTable = new JTable(this.innovationModel);
 		this.innovationScroll = new JScrollPane(this.innovationTable);		
 		
@@ -111,7 +117,7 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 		this.tabViews.addTab("Species", this.speciesScroll);
 		this.tabViews.addTab("Innovation", this.innovationScroll);
 		
-		this.population = pop;
+		this.population = obj;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -157,7 +163,7 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 	}
 
 	private void performEdit() {
-		EditPopulationDialog dialog = new EditPopulationDialog(EncogWorkBench.getInstance().getMainWindow());
+		EditNEATPopulationDialog dialog = new EditNEATPopulationDialog();
 		
 		dialog.getOldAgePenalty().setValue(this.population.getOldAgePenalty());
 		dialog.getOldAgeThreshold().setValue(this.population.getOldAgeThreshold());
@@ -165,6 +171,8 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 		dialog.getSurvivalRate().setValue(this.population.getSurvivalRate());
 		dialog.getYoungBonusAgeThreshold().setValue(this.population.getYoungBonusAgeThreshold());
 		dialog.getYoungScoreBonus().setValue(this.population.getYoungScoreBonus());
+		dialog.setNeatActivationFunction(this.population.getNeatActivationFunction());
+		dialog.setOutputActivationFunction(this.population.getOutputActivationFunction());
 		
 		if( dialog.process() )
 		{
@@ -174,12 +182,33 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 			this.population.setSurvivalRate(dialog.getSurvivalRate().getValue());
 			this.population.setYoungBonusAgeThreshhold(dialog.getYoungBonusAgeThreshold().getValue());
 			this.population.setYoungScoreBonus(dialog.getYoungScoreBonus().getValue());
+			this.population.setNeatActivationFunction(dialog.getNeatActivationFunction());
+			this.population.setOutputActivationFunction(dialog.getOutputActivationFunction());
+			EncogWorkBench.getInstance().save(this.getEncogObject());
 			this.pi.repaint();
 		}
 	}
 
 	private void performTrain() {
-		TrainBasicNetwork.performTrain((MLMethod) this.getEncogObject());		
+		InputNEAT dialog = new InputNEAT();
+		if( dialog.process())
+		{
+			NEATPopulation pop = dialog.getPopulation(); 
+			NeuralDataSet training = dialog.getTrainingSet();
+
+			if( dialog.getLoadToMemory().getValue() ) {
+				training = ((BufferedNeuralDataSet)training).loadToMemory();
+			}
+			
+			CalculateScore score = new TrainingSetScore(training);
+			NEATTraining train = new NEATTraining(score,pop);
+			
+			BasicTrainingProgress tab = new BasicTrainingProgress(train,
+					train.getNetwork(), train.getTraining());
+			tab.setMaxError(dialog.getMaxError().getValue()/100);
+			EncogWorkBench.getInstance().getMainWindow().openTab(tab, "Training");
+
+		}		
 	}
 
 

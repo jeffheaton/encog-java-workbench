@@ -36,6 +36,7 @@ import org.encog.EncogError;
 import org.encog.engine.util.ErrorCalculation;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogMemoryCollection;
 import org.encog.persist.EncogPersistedObject;
@@ -416,6 +417,27 @@ public class EncogWorkBench implements Runnable {
 	public void save(EncogPersistedObject obj) {
 		EncogMemoryCollection memory = (EncogMemoryCollection)obj.getCollection();
 		memory.save(memory.getLocation());
+	}
+
+	public List<ProjectEGItem> getNEATPopulations() {
+		List<ProjectEGItem> result = new ArrayList<ProjectEGItem>();
+		
+		for( ProjectItem item : this.getMainWindow().getTree().getModel().getData() )
+		{
+			if( item instanceof ProjectEGFile )
+			{
+				for( ProjectEGItem egItem : ((ProjectEGFile)item).getChildren() )
+				{
+					if( egItem.getObj() instanceof NEATPopulation )
+					{
+						result.add(egItem);
+					}
+				}
+			}
+		}
+		
+		return result;
+
 	}
 
 }

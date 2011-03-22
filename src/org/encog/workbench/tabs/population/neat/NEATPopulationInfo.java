@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import org.encog.engine.util.Format;
 import org.encog.ml.genetic.genome.Genome;
 import org.encog.ml.genetic.population.Population;
+import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.training.genetic.NeuralGenome;
 import org.encog.workbench.WorkbenchFonts;
@@ -40,9 +41,9 @@ import org.encog.workbench.WorkbenchFonts;
 public class NEATPopulationInfo extends JPanel {
 
 	
-	Population population;
+	NEATPopulation population;
 	
-	public NEATPopulationInfo(Population population)
+	public NEATPopulationInfo(NEATPopulation population)
 	{
 		this.population = population;
 	}
@@ -58,9 +59,11 @@ public class NEATPopulationInfo extends JPanel {
 		int y = fm.getHeight();
 		g.drawString("Maximum Population Count:", 20, y);
 		g.drawString("Old Age Threshold:", 300, y);
+		g.drawString("NEAT Act. Function:", 580, y);
 		y+=fm.getHeight();
 		g.drawString("Current Population Count:", 20, y);
 		g.drawString("Old Age Penalty:", 300, y);
+		g.drawString("Output Act. Function:", 580, y);
 		y+=fm.getHeight();
 		g.drawString("Species Count:", 20, y);
 		g.drawString("Youth Age Threshold:", 300, y);
@@ -109,9 +112,11 @@ public class NEATPopulationInfo extends JPanel {
 		g.setFont(WorkbenchFonts.getTextFont());
 		g.drawString(Format.formatInteger(population.getPopulationSize()), 200, y);
 		g.drawString(Format.formatInteger(population.getOldAgeThreshold()), 450, y);
+		g.drawString(population.getNeatActivationFunction().getClass().getSimpleName(), 730, y);
 		y+=fm.getHeight();
 		g.drawString(Format.formatInteger(populationSize), 200, y);
 		g.drawString(Format.formatPercent(population.getOldAgePenalty()), 450, y);
+		g.drawString(population.getOutputActivationFunction().getClass().getSimpleName(), 730, y);		
 		y+=fm.getHeight();
 		g.drawString(Format.formatInteger(speciesSize), 200, y);
 		g.drawString(Format.formatInteger(population.getYoungBonusAgeThreshold()), 450, y);

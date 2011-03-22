@@ -40,6 +40,7 @@ import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.ml.svm.SVM;
 import org.encog.neural.data.PropertyData;
 import org.encog.neural.data.TextData;
+import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
@@ -408,8 +409,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
 			.getTabManager().find(obj);
 
-			if (tab == null) {
-					tab = new NEATPopulationTab((BasicPopulation)obj);
+			if (tab == null) {				
+					tab = new NEATPopulationTab((NEATPopulation)obj);
 					this.openTab(tab, obj.getName());
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
