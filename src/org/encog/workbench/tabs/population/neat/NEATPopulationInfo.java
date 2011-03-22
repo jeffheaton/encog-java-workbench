@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.tabs.population;
+package org.encog.workbench.tabs.population.neat;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -37,12 +37,12 @@ import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.training.genetic.NeuralGenome;
 import org.encog.workbench.WorkbenchFonts;
 
-public class PopulationInfo extends JPanel {
+public class NEATPopulationInfo extends JPanel {
 
 	
 	Population population;
 	
-	public PopulationInfo(Population population)
+	public NEATPopulationInfo(Population population)
 	{
 		this.population = population;
 	}

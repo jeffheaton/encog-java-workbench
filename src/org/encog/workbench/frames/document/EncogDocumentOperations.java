@@ -233,13 +233,14 @@ public class EncogDocumentOperations {
 
 		if (dialog.process()) {
 			int populationSize = dialog.getPopulationSize().getValue();
-			NEATPopulation pop = new NEATPopulation(populationSize);
+			int inputCount = dialog.getInputNeurons().getValue();
+			int outputCount = dialog.getOutputNeurons().getValue();
+			NEATPopulation pop = new NEATPopulation(inputCount,outputCount,populationSize);
 			pop.setDescription("Population");
 			EncogMemoryCollection encog = pef.getCollection();
 			encog.add(name, pop);
 			encog.save(pef.getFile().toString());
 			pef.generateChildrenList();
-			EncogWorkBench.getInstance().getMainWindow().redraw();
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 

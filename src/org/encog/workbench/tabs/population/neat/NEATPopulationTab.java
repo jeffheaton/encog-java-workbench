@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.tabs.population;
+package org.encog.workbench.tabs.population.neat;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -49,7 +49,7 @@ import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.SpeciesModel;
 import org.encog.workbench.tabs.EncogCommonTab;
 
-public class PopulationTab  extends EncogCommonTab implements ActionListener {
+public class NEATPopulationTab  extends EncogCommonTab implements ActionListener {
 
 	private JButton btnTrain;
 	private JButton btnEdit;
@@ -70,9 +70,9 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 	private BasicPopulation population;
 	
 	JTable tableGeneralPopulation;
-	private final PopulationInfo pi;
+	private final NEATPopulationInfo pi;
 	
-	public PopulationTab(BasicPopulation pop) {
+	public NEATPopulationTab(BasicPopulation pop) {
 		super(pop);
 		
 		setLayout(new BorderLayout());
@@ -89,7 +89,7 @@ public class PopulationTab  extends EncogCommonTab implements ActionListener {
 		mainPanel.setLayout(new BorderLayout());
 		JPanel about = new JPanel();
 		about.setLayout(new BorderLayout());
-		about.add(this.pi = new PopulationInfo((Population)getEncogObject()), BorderLayout.CENTER);
+		about.add(this.pi = new NEATPopulationInfo((Population)getEncogObject()), BorderLayout.CENTER);
 		mainPanel.add(about,BorderLayout.NORTH);
 		mainPanel.add(tabViews = new JTabbedPane(),BorderLayout.CENTER);
 		

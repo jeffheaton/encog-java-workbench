@@ -48,7 +48,7 @@ public class PopulationDialog extends EncogPropertiesDialog implements PopupList
 	
 	public PopulationDialog(Frame owner) {
 		super(owner);
-		this.setSize(320, 200);
+		this.setSize(400, 200);
 		this.setTitle("Create NEAT Population");
 		
 		addProperty(this.populationSize = new IntegerField("population size","Population Size",true,1,-1));

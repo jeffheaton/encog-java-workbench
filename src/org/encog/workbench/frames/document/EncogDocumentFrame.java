@@ -60,7 +60,7 @@ import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.tabs.files.ImageFileTab;
 import org.encog.workbench.tabs.files.TextFileTab;
 import org.encog.workbench.tabs.mlmethod.MLMethodTab;
-import org.encog.workbench.tabs.population.PopulationTab;
+import org.encog.workbench.tabs.population.neat.NEATPopulationTab;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.FileUtil;
 
@@ -409,7 +409,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			.getTabManager().find(obj);
 
 			if (tab == null) {
-					tab = new PopulationTab((BasicPopulation)obj);
+					tab = new NEATPopulationTab((BasicPopulation)obj);
 					this.openTab(tab, obj.getName());
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
