@@ -24,13 +24,9 @@
 package org.encog.workbench.config;
 
 import org.encog.engine.util.ErrorCalculationMode;
-import org.encog.persist.EncogCollection;
-import org.encog.persist.EncogPersistedObject;
-import org.encog.persist.Persistor;
-import org.encog.persist.map.PersistedObject;
 import org.encog.workbench.util.SimpleEncrypt;
 
-public class EncogWorkBenchConfig implements EncogPersistedObject {
+public class EncogWorkBenchConfig {
 
 	private String name = "workbenchConfig";
 	private String description = "workbenchDescription";
@@ -43,10 +39,6 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 	private int threadCount = 0;
 	private boolean useOpenCL;
 	private int errorCalculation;
-
-	public Persistor createPersistor() {
-		return null;
-	}
 
 	public String getDescription() {
 		return description;
@@ -150,29 +142,5 @@ public class EncogWorkBenchConfig implements EncogPersistedObject {
 		}
 	}
 
-	public EncogCollection getCollection() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setCollection(EncogCollection collection) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean supportsMapPersistence() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public void persistToMap(PersistedObject obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void persistFromMap(PersistedObject obj) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

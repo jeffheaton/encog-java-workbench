@@ -1,11 +1,11 @@
 package org.encog.workbench.tabs;
 
-import org.encog.persist.EncogPersistedObject;
 import org.encog.util.HTMLReport;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 
 public class UnknownObjectTab extends HTMLTab {
 
-	public UnknownObjectTab(EncogPersistedObject encogObject) {
+	public UnknownObjectTab(ProjectEGFile encogObject) {
 		super(encogObject);
 		HTMLReport report = new HTMLReport();
 		report.beginHTML();

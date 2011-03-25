@@ -36,10 +36,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import org.encog.neural.data.PropertyData;
-import org.encog.workbench.models.MapDataModel;
-import org.encog.workbench.models.PropertyDataModel;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.models.MapDataModel;
 
 public class MapDataFrame extends EncogCommonFrame {
 

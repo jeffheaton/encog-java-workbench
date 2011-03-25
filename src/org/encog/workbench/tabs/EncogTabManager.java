@@ -29,13 +29,10 @@ import java.util.List;
 
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.persist.DirectoryEntry;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.tabs.files.BasicFileTab;
-import org.encog.workbench.tabs.files.GenericFileTab;
 
 public class EncogTabManager {
 	private final List<EncogCommonTab> tabs = new ArrayList<EncogCommonTab>();
@@ -54,15 +51,13 @@ public class EncogTabManager {
 		return this.tabs.contains(tab);
 	}
 	
-	public EncogCommonTab find(final EncogPersistedObject encogPersistedObject) {
+	public EncogCommonTab find(final Object obj) {
 		for (final EncogCommonTab tab : this.tabs) {
 			
 			if( tab.getEncogObject()==null )
 				continue;
 			
-			EncogPersistedObject obj = (EncogPersistedObject)tab.getEncogObject();
-			
-			if (obj!=null && obj.getCollection()==encogPersistedObject.getCollection() && obj.getName().equals(encogPersistedObject.getName())) {
+			if ( obj==tab.getEncogObject() ) {
 				return tab;
 			}
 		}
@@ -89,14 +84,7 @@ public class EncogTabManager {
 	
 	public boolean isTrainingOrNetworkOpen()
 	{
-		for (final EncogCommonTab tab : this.tabs) {
-			EncogPersistedObject obj = (EncogPersistedObject)tab.getEncogObject();
-			if( obj instanceof BasicNetwork || obj instanceof NeuralDataSet )
-			{
-				return true;
-			}
-		}
-		
+
 		return false;
 	}
 	
@@ -106,11 +94,11 @@ public class EncogTabManager {
 		for(int i=0;i<list.length;i++) {
 			EncogCommonTab tab = (EncogCommonTab)list[i];
 			
-			if( tab.getEncogObject() instanceof BasicNetwork 
+			/*if( tab.getEncogObject() instanceof BasicNetwork 
 					|| tab.getEncogObject() instanceof NeuralDataSet )
 			{				
 				tab.dispose();
-			}
+			}*/
 		}
 	}
 	
@@ -133,14 +121,14 @@ public class EncogTabManager {
 	}
 
 	public EncogCommonTab find(File file) {
-		for (final EncogCommonTab tab : this.tabs) {
+		/*for (final EncogCommonTab tab : this.tabs) {
 		
 			if( tab instanceof BasicFileTab ) {
 				BasicFileTab gft = (BasicFileTab)tab;
 				if( gft.getFile().equals(file) )
 					return tab;
 			}			
-		}
+		}*/
 		return null;
 		
 	}

@@ -5,16 +5,14 @@ import java.awt.BorderLayout;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 
-import org.encog.persist.EncogPersistedObject;
-import org.encog.workbench.tabs.files.text.NonWrappingTextPane;
-import org.encog.workbench.util.EncogFonts;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 
 public class HTMLTab extends EncogCommonTab {
 
 	private final JScrollPane scroll;
 	private final JEditorPane editor;
 	
-	public HTMLTab(EncogPersistedObject encogObject) {
+	public HTMLTab(ProjectFile encogObject) {
 		super(encogObject);
 		
 		this.editor = new JEditorPane("text/html","");				

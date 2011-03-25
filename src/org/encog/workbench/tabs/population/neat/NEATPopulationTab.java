@@ -50,6 +50,7 @@ import org.encog.workbench.dialogs.ExtractGenomes;
 import org.encog.workbench.dialogs.population.EditNEATPopulationDialog;
 import org.encog.workbench.dialogs.population.EditPopulationDialog;
 import org.encog.workbench.dialogs.training.methods.InputNEAT;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.GeneralPopulationModel;
 import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.SpeciesModel;
@@ -75,14 +76,14 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 	private final JScrollPane innovationScroll;
 	private final JTable innovationTable;
 	private final InnovationModel innovationModel;
-	private NEATPopulation population;
 	
 	private JTable tableGeneralPopulation;
+	private NEATPopulation population;
 	private final NEATPopulationInfo pi;
 	
-	public NEATPopulationTab(NEATPopulation obj) {
+	public NEATPopulationTab(ProjectEGFile obj) {
 		super(obj);
-		
+		this.population = (NEATPopulation)obj.getObject();
 		setLayout(new BorderLayout());
 		JPanel buttonPanel = new JPanel();
 		add(buttonPanel, BorderLayout.NORTH);
@@ -97,27 +98,26 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 		mainPanel.setLayout(new BorderLayout());
 		JPanel about = new JPanel();
 		about.setLayout(new BorderLayout());
-		about.add(this.pi = new NEATPopulationInfo((NEATPopulation)getEncogObject()), BorderLayout.CENTER);
+		about.add(this.pi = new NEATPopulationInfo(population), BorderLayout.CENTER);
 		mainPanel.add(about,BorderLayout.NORTH);
 		mainPanel.add(tabViews = new JTabbedPane(),BorderLayout.CENTER);
 		
-		this.populationModel = new GeneralPopulationModel(obj);
+		this.populationModel = new GeneralPopulationModel(population);
 		this.populationTable = new JTable(this.populationModel);
 		this.populationScroll = new JScrollPane(this.populationTable);
 		
-		this.speciesModel = new SpeciesModel(obj);
+		this.speciesModel = new SpeciesModel(population);
 		this.speciesTable = new JTable(this.speciesModel);
 		this.speciesScroll = new JScrollPane(this.speciesTable);
 		
-		this.innovationModel = new InnovationModel(obj);
+		this.innovationModel = new InnovationModel(population);
 		this.innovationTable = new JTable(this.innovationModel);
 		this.innovationScroll = new JScrollPane(this.innovationTable);		
 		
 		this.tabViews.addTab("General Population", this.populationScroll);
 		this.tabViews.addTab("Species", this.speciesScroll);
 		this.tabViews.addTab("Innovation", this.innovationScroll);
-		
-		this.population = obj;
+	
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -184,7 +184,6 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 			this.population.setYoungScoreBonus(dialog.getYoungScoreBonus().getValue());
 			this.population.setNeatActivationFunction(dialog.getNeatActivationFunction());
 			this.population.setOutputActivationFunction(dialog.getOutputActivationFunction());
-			EncogWorkBench.getInstance().save(this.getEncogObject());
 			this.pi.repaint();
 		}
 	}
@@ -206,10 +205,10 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 			CalculateScore score = new TrainingSetScore(training);
 			NEATTraining train = new NEATTraining(score,pop);
 			
-			BasicTrainingProgress tab = new BasicTrainingProgress(train,
+			/*BasicTrainingProgress tab = new BasicTrainingProgress(train,
 					pop, train.getTraining());
 			tab.setMaxError(dialog.getMaxError().getValue()/100);
-			EncogWorkBench.getInstance().getMainWindow().openTab(tab, "Training");
+			EncogWorkBench.getInstance().getMainWindow().openTab(tab, "Training");*/
 
 		}		
 	}

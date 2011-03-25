@@ -24,13 +24,10 @@
 package org.encog.workbench.dialogs.createnetwork;
 
 import java.awt.Frame;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.neural.data.NeuralDataSet;
-import org.encog.persist.DirectoryEntry;
-import org.encog.persist.EncogPersistedCollection;
 import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;

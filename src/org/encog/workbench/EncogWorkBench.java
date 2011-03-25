@@ -37,18 +37,12 @@ import org.encog.engine.util.ErrorCalculation;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.persist.EncogMemoryCollection;
-import org.encog.persist.EncogPersistedObject;
-import org.encog.persist.location.FilePersistence;
-import org.encog.script.javascript.EncogJavascriptEngine;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.frames.document.EncogOutputPanel;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
-import org.encog.workbench.frames.document.tree.ProjectEGItem;
 import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 import org.encog.workbench.util.WorkbenchLogHandler;
@@ -82,8 +76,6 @@ public class EncogWorkBench implements Runnable {
 	private EncogWorkBenchConfig config;
 
 	private WorkbenchLogHandler logHandler;
-
-	private ExecuteScript execute = new ExecuteScript();
 	
 	/**
 	 * The current filename being edited.
@@ -254,9 +246,7 @@ public class EncogWorkBench implements Runnable {
 
 	public void init() {
 		EncogWorkBench.loadConfig();
-		
-		EncogJavascriptEngine.init();
-				
+
 		if( EncogWorkBench.getInstance().getConfig().isUseOpenCL()) {
 			EncogWorkBench.initCL();
 		}
@@ -335,11 +325,6 @@ public class EncogWorkBench implements Runnable {
 		return logHandler;
 	}
 	
-	public ExecuteScript getExecute()
-	{
-		return this.execute;
-	}
-
 	public File getEncogFolders() {
 		String home = System.getProperty("user.home");
 		File encogFolders =  new File(home,"EncogProjects");
@@ -360,25 +345,6 @@ public class EncogWorkBench implements Runnable {
 		return result;
 	}
 
-	public List<ProjectEGItem> getMLMethods() {
-		List<ProjectEGItem> result = new ArrayList<ProjectEGItem>();
-		
-		for( ProjectItem item : this.getMainWindow().getTree().getModel().getData() )
-		{
-			if( item instanceof ProjectEGFile )
-			{
-				for( ProjectEGItem egItem : ((ProjectEGFile)item).getChildren() )
-				{
-					if( egItem.getObj() instanceof MLMethod )
-					{
-						result.add(egItem);
-					}
-				}
-			}
-		}
-		
-		return result;
-	}
 
 	public File getProjectDirectory() {
 		String str = this.getMainWindow().getTree().getModel().getPath();
@@ -392,52 +358,4 @@ public class EncogWorkBench implements Runnable {
 		this.getMainWindow().getTree().refresh();
 		
 	}
-
-	public void revert(MLMethod method) {
-		if( method instanceof EncogPersistedObject ) {
-			revert((EncogPersistedObject)method);
-		}
-	}
-	
-	public void revert(EncogPersistedObject obj) {
-		EncogMemoryCollection memory = (EncogMemoryCollection)obj.getCollection();
-		FilePersistence loc = (FilePersistence)memory.getLocation() ;		
-		EncogMemoryCollection memory2 = new EncogMemoryCollection();
-		memory2.load(loc);
-		EncogPersistedObject obj2 = memory2.find(obj.getName());
-		memory.add(obj.getName(), obj2);
-	}
-	
-	public void save(MLMethod method) {
-		if( method instanceof EncogPersistedObject ) {
-			save((EncogPersistedObject)method);
-		}
-	}
-	
-	public void save(EncogPersistedObject obj) {
-		EncogMemoryCollection memory = (EncogMemoryCollection)obj.getCollection();
-		memory.save(memory.getLocation());
-	}
-
-	public List<ProjectEGItem> getNEATPopulations() {
-		List<ProjectEGItem> result = new ArrayList<ProjectEGItem>();
-		
-		for( ProjectItem item : this.getMainWindow().getTree().getModel().getData() )
-		{
-			if( item instanceof ProjectEGFile )
-			{
-				for( ProjectEGItem egItem : ((ProjectEGFile)item).getChildren() )
-				{
-					if( egItem.getObj() instanceof NEATPopulation )
-					{
-						result.add(egItem);
-					}
-				}
-			}
-		}
-		
-		return result;
-
-	}
-
 }

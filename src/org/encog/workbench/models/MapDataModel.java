@@ -31,8 +31,6 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.encog.neural.data.PropertyData;
-
 public class MapDataModel  implements TableModel {
 	
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();

@@ -24,8 +24,8 @@
 package org.encog.workbench.process;
 
 import org.encog.bot.BotUtil;
-import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.engine.network.activation.ActivationTANH;
+import org.encog.ml.MLMethod;
 import org.encog.ml.svm.KernelType;
 import org.encog.ml.svm.SVMType;
 import org.encog.neural.data.NeuralDataSet;
@@ -39,12 +39,9 @@ import org.encog.neural.pattern.ElmanPattern;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.pattern.HopfieldPattern;
 import org.encog.neural.pattern.JordanPattern;
-import org.encog.neural.pattern.NEATPattern;
 import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.pattern.SOMPattern;
 import org.encog.neural.pattern.SVMPattern;
-import org.encog.persist.EncogMemoryCollection;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createnetwork.CreateADALINEDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateART1;
@@ -67,15 +64,14 @@ import org.encog.workbench.tabs.incremental.IncrementalPruneTab;
 public class CreateNeuralNetwork {
 
 	public static void process(String name, ProjectEGFile pef) {
-		EncogPersistedObject network = null;
+		MLMethod network = null;
 		CreateNeuralNetworkDialog dialog = new CreateNeuralNetworkDialog(
 				EncogWorkBench.getInstance().getMainWindow());
 		dialog.setType(NeuralNetworkType.Feedforward);
 		if (dialog.process()) {
 			switch (dialog.getType()) {
 			case Automatic:
-				EncogMemoryCollection encog = pef.getCollection();
-				createAutomatic(encog,name);
+				createAutomatic(name);
 				network=null;
 				break;
 			case Feedforward:
@@ -114,22 +110,15 @@ public class CreateNeuralNetwork {
 			case SVM:
 				network = createSVM(name);
 				break;
-			default:
-				network = createEmpty(name);
-				break;
 			}
 
 			if (network != null) {
-				EncogMemoryCollection encog = pef.getCollection();
-				encog.add(name, network);
-				encog.save(pef.getFile().toString());
-				pef.generateChildrenList();
-				EncogWorkBench.getInstance().getMainWindow().redraw();
+				
 			}
 		}
 	}
 
-	private static EncogPersistedObject createSVM(String name) {
+	private static MLMethod createSVM(String name) {
 		CreateSVMDialog dialog = new CreateSVMDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.setSVMType(SVMType.EpsilonSupportVectorRegression);
@@ -146,7 +135,7 @@ public class CreateNeuralNetwork {
 	}
 
 	
-	private static EncogPersistedObject createRBF(String name) {
+	private static MLMethod createRBF(String name) {
 		CreateRBFDialog dialog = new CreateRBFDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -160,7 +149,7 @@ public class CreateNeuralNetwork {
 
 	}
 
-	private static EncogPersistedObject createJordan(String name) {
+	private static MLMethod createJordan(String name) {
 		CreateJordanDialog dialog = new CreateJordanDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -175,7 +164,7 @@ public class CreateNeuralNetwork {
 
 	}
 
-	private static EncogPersistedObject createElman(String name) {
+	private static MLMethod createElman(String name) {
 		CreateElmanDialog dialog = new CreateElmanDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -190,7 +179,7 @@ public class CreateNeuralNetwork {
 
 	}
 
-	private static EncogPersistedObject createHopfield(String name) {
+	private static MLMethod createHopfield(String name) {
 		CreateHopfieldDialog dialog = new CreateHopfieldDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -201,7 +190,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 
-	private static EncogPersistedObject createSOM(String name) {
+	private static MLMethod createSOM(String name) {
 		CreateSOMDialog dialog = new CreateSOMDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -213,7 +202,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 
-	private static EncogPersistedObject createFeedForward(String name) {
+	private static MLMethod createFeedForward(String name) {
 		CreateFeedforward dialog = new CreateFeedforward(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.setActivationFunctionHidden(new ActivationTANH());
@@ -243,7 +232,7 @@ public class CreateNeuralNetwork {
 
 	}
 
-	private static BasicNetwork createAutomatic(EncogMemoryCollection collection, String name) {
+	private static BasicNetwork createAutomatic(String name) {
 		CreateAutomatic dialog = new CreateAutomatic(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.setActivationFunction(new ActivationTANH());
@@ -272,8 +261,7 @@ public class CreateNeuralNetwork {
 					dialog.getWindowSize().getValue(),
 					training,
 					pattern,
-					name,
-					collection);
+					name);
 			
 			for (int i = 0; i < dialog.getHidden().getModel().size(); i++) {
 				String str = (String) dialog.getHidden().getModel()
@@ -296,13 +284,7 @@ public class CreateNeuralNetwork {
 
 	}
 	
-	private static BasicNetwork createEmpty(String name) {
-		BasicNetwork network = new BasicNetwork();
-		network.setName(name);
-		return network;
-	}
-	
-	private static EncogPersistedObject createADALINE(String name) {
+	private static MLMethod createADALINE(String name) {
 		CreateADALINEDialog dialog = new CreateADALINEDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -314,7 +296,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 	
-	private static EncogPersistedObject createBAM(String name) {
+	private static MLMethod createBAM(String name) {
 		CreateBAMDialog dialog = new CreateBAMDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -326,7 +308,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 	
-	private static EncogPersistedObject createBoltzmann(String name) {
+	private static MLMethod createBoltzmann(String name) {
 		CreateBlotzmannDialog dialog = new CreateBlotzmannDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -337,7 +319,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 	
-	private static EncogPersistedObject createCPN(String name) {
+	private static MLMethod createCPN(String name) {
 		CreateCPNDialog dialog = new CreateCPNDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -350,7 +332,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 	
-	private static EncogPersistedObject createART1(String name) {
+	private static MLMethod createART1(String name) {
 		CreateART1 dialog = new CreateART1(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {

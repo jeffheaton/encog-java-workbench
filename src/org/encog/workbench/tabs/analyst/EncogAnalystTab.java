@@ -41,6 +41,7 @@ import org.encog.app.analyst.EncogAnalyst;
 import org.encog.app.analyst.wizard.AnalystWizard;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.tabs.files.text.BasicTextTab;
 
 public class EncogAnalystTab extends BasicTextTab implements ActionListener {
@@ -51,7 +52,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 	private final JComboBox tasks;
 	private final TasksModel model;
 
-	public EncogAnalystTab(File file) {
+	public EncogAnalystTab(ProjectFile file) {
 		super(file);
 		this.analyst = new EncogAnalyst();
 
@@ -108,7 +109,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
 	private void loadFromFile() {
 		try {
-			this.setText(org.encog.util.file.FileUtil.readFileAsString(file));
+			this.setText(org.encog.util.file.FileUtil.readFileAsString(this.getEncogObject().getFile()));
 		} catch (IOException e) {
 			throw new WorkBenchError(e);
 		}

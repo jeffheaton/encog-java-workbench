@@ -24,7 +24,6 @@ import org.encog.neural.som.SOM;
 import org.encog.neural.som.training.basic.BasicTrainSOM;
 import org.encog.neural.som.training.clustercopy.SOMClusterCopyTraining;
 import org.encog.neural.thermal.HopfieldNetwork;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
@@ -78,8 +77,7 @@ public class TrainBasicNetwork {
 				}
 				if (EncogWorkBench.askQuestion("Hopfield",
 						"Training done, save?")) {
-					EncogWorkBench.getInstance()
-							.save((EncogPersistedObject) hp);
+
 				}
 			} else if (method instanceof SOM) {
 				performSOM((SOM) method, trainingData);
@@ -156,9 +154,9 @@ public class TrainBasicNetwork {
 					trainingData);
 			train.iteration();
 			if (EncogWorkBench.askQuestion("SOM", "Training done, save?")) {
-				EncogWorkBench.getInstance().save((EncogPersistedObject) som);
+				//EncogWorkBench.getInstance().save((EncogPersistedObject) som);
 			} else {
-				EncogWorkBench.getInstance().revert((EncogPersistedObject) som);
+				//EncogWorkBench.getInstance().revert((EncogPersistedObject) som);
 			}
 		}
 
@@ -273,10 +271,10 @@ public class TrainBasicNetwork {
 	}
 
 	private static void startup(Train train, double maxError) {
-		BasicTrainingProgress tab = new BasicTrainingProgress(train,
-				(EncogPersistedObject)train.getNetwork(), train.getTraining());
-		tab.setMaxError(maxError);
-		EncogWorkBench.getInstance().getMainWindow().openTab(tab, "Training");
+		/*BasicTrainingProgress tab = new BasicTrainingProgress(train,
+				(EncogPersistedObject)train.getNetwork(), train.getTraining());*/
+		//tab.setMaxError(maxError);
+		//EncogWorkBench.getInstance().getMainWindow().openTab(tab, "Training");
 
 	}
 

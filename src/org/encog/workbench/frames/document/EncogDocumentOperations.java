@@ -37,15 +37,9 @@ import org.encog.engine.util.ErrorCalculationMode;
 import org.encog.engine.util.Format;
 import org.encog.ml.MLError;
 import org.encog.ml.MLMethod;
-import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.PropertyData;
-import org.encog.neural.data.TextData;
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.som.SOM;
-import org.encog.persist.DirectoryEntry;
-import org.encog.persist.EncogMemoryCollection;
 import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
@@ -61,7 +55,6 @@ import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
-import org.encog.workbench.frames.document.tree.ProjectEGItem;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
@@ -125,10 +118,7 @@ public class EncogDocumentOperations {
 					.getValue());
 			Directory.deleteDirectory(project); // the user was warned!
 			project.mkdir();
-			File projectFile = new File(project, dialog.getProjectFilename()
-					.getValue() + ".eg");
-			EncogMemoryCollection temp = new EncogMemoryCollection();
-			temp.save(projectFile.toString());
+
 			EncogWorkBench.getInstance().getMainWindow().getTree()
 					.refresh(project.toString());
 
@@ -160,17 +150,6 @@ public class EncogDocumentOperations {
 		}
 	}
 
-	public void performNetworkQuery(DirectoryEntry item) {
-
-		/*
-		 * if (owner.getTabManager() .checkBeforeOpen(item,
-		 * NetworkQueryFrame.class)) { BasicNetwork net = (BasicNetwork)
-		 * EncogWorkBench.getInstance() .getCurrentFile().find(item); final
-		 * NetworkQueryFrame frame = new NetworkQueryFrame(net);
-		 * frame.setVisible(true); }
-		 */
-	}
-
 	public void performObjectsCreate() throws IOException {
 
 		try {
@@ -194,7 +173,6 @@ public class EncogDocumentOperations {
 
 			ProjectEGFile pef = (ProjectEGFile) EncogWorkBench.getInstance()
 					.getMainWindow().getTree().findTreeFile(filename);
-			EncogMemoryCollection encog = pef.getCollection();
 
 			switch (dialog.getType()) {
 			case NeuralNetwork:
@@ -203,23 +181,7 @@ public class EncogDocumentOperations {
 			case NEATPopulation:
 				performCreatePopulation(name, pef);
 				break;
-			case PropertyData:
-				final PropertyData prop = new PropertyData();
-				prop.setDescription("Some property data");
-				encog.add(name, prop);
-				encog.save(pef.getFile().toString());
-				pef.generateChildrenList();
-				EncogWorkBench.getInstance().getMainWindow().redraw();
-				break;
-			case Text:
-				final TextData text = new TextData();
-				text.setDescription("A text file");
-				text.setText("Insert text here.");
-				encog.add(name, text);
-				encog.save(pef.getFile().toString());
-				pef.generateChildrenList();
-				EncogWorkBench.getInstance().getMainWindow().redraw();
-				break;
+
 			}
 
 		} catch (EncogError t) {
@@ -239,10 +201,6 @@ public class EncogDocumentOperations {
 			pop.setNeatActivationFunction(dialog.getNeatActivationFunction());
 			pop.setOutputActivationFunction(dialog.getOutputActivationFunction());
 			pop.setDescription("Population");
-			EncogMemoryCollection encog = pef.getCollection();
-			encog.add(name, pop);
-			encog.save(pef.getFile().toString());
-			pef.generateChildrenList();
 			EncogWorkBench.getInstance().getMainWindow().redraw();
 		}
 
@@ -333,32 +291,6 @@ public class EncogDocumentOperations {
 								"OpenCL",
 								"Encog Workbench will stop using your GPU the next time\nthe workbench is restarted.");
 			}
-
-		}
-	}
-
-	public void performObjectsProperties(ProjectEGItem selected) {
-
-		final EditEncogObjectProperties dialog = new EditEncogObjectProperties(
-				owner);
-		dialog.getNameField().setValue(selected.getObj().getName());
-		dialog.getDescription().setValue(selected.getObj().getDescription());
-		if (dialog.process()) {
-
-			String error = ResourceNameValidate.validateResourceName(dialog
-					.getNameField().getValue());
-
-			if (error != null) {
-				EncogWorkBench.displayError("Data Error", error);
-				return;
-			}
-
-			selected.getCollection().updateProperties(
-					selected.getObj().getName(),
-					dialog.getNameField().getValue(),
-					dialog.getDescription().getValue());
-			selected.getCollection().save();
-			EncogWorkBench.getInstance().refresh();
 		}
 	}
 
@@ -462,16 +394,6 @@ public class EncogDocumentOperations {
 
 	}
 
-	public void performObjectsDelete(Object selected) {
-		if (selected instanceof ProjectEGItem) {
-			ProjectEGItem item = (ProjectEGItem) selected;
-			item.getCollection().delete(item.getObj().getName());
-			item.getCollection().save(item.getEncogFile().getFile().toString());
-			item.getEncogFile().generateChildrenList();
-			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
-		}
-
-	}
 
 	public void performFileProperties(ProjectFile selected) {
 		String name = selected.getFile().getName();

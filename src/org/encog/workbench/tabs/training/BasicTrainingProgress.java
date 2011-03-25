@@ -45,12 +45,11 @@ import org.encog.mathutil.randomize.Distort;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
 import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;
 import org.encog.workbench.util.TimeSpanFormatter;
@@ -213,7 +212,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 * @param owner
 	 *            The owner of the dialog box.
 	 */
-	public BasicTrainingProgress(Train train, EncogPersistedObject method,
+	public BasicTrainingProgress(Train train, ProjectEGFile method,
 			NeuralDataSet trainingData) {
 		super(method);
 
@@ -268,13 +267,12 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		if (EncogWorkBench.askQuestion("Training", "Save the training?")) {
 
 			if( this.getEncogObject()!=null ) {
-				EncogWorkBench.getInstance().save(this.getEncogObject());
+				//EncogWorkBench.getInstance().save(this.getEncogObject());
 			} 
 			
 			if (this.train instanceof ResilientPropagation) {
 				ResilientPropagation rprop = (ResilientPropagation) this.train;
 				TrainingContinuation cont = rprop.pause();
-				cont.setDescription("Training state from last RPROP.");
 				// EncogWorkBench.getInstance().getCurrentFile().add(
 				// this.network.getName() + "-rprop", cont);
 				EncogWorkBench.getInstance().getMainWindow().redraw();
@@ -282,7 +280,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 			EncogWorkBench.getInstance().refresh();
 		} else {
 			if( this.getEncogObject()!=null) {
-				EncogWorkBench.getInstance().revert(this.getEncogObject());
+				//EncogWorkBench.getInstance().revert(this.getEncogObject());
 			} 
 		}
 	}

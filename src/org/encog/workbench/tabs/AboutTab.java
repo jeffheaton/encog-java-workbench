@@ -24,8 +24,6 @@
 package org.encog.workbench.tabs;
 
 import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteOrder;
@@ -36,10 +34,8 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.encog.Encog;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.util.EncogFonts;
 
 public class AboutTab extends HTMLTab {
 	

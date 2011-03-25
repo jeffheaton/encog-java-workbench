@@ -25,26 +25,17 @@ package org.encog.workbench.dialogs.training;
 
 import java.awt.Frame;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.persist.DirectoryEntry;
-import org.encog.persist.EncogPersistedCollection;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
-import org.encog.workbench.frames.document.tree.ProjectEGItem;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 
 /**
@@ -72,7 +63,7 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	/**
 	 * All available networks to display in the combo box.
 	 */
-	private List<ProjectEGItem> networks;
+	private List<ProjectEGFile> networks;
 
 	/**
 	 * Construct the dialog box.
@@ -97,7 +88,7 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	 */
 	private void findData() {
 		this.trainingSets = EncogWorkBench.getInstance().getTrainingData();
-		this.networks = EncogWorkBench.getInstance().getMLMethods();
+		//this.networks = EncogWorkBench.getInstance().getMLMethods();
 	}
 
 	/**
@@ -107,17 +98,18 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 		if( this.comboNetwork.getSelectedValue()==null )
 			return null;
 		
-		return (MLMethod)(((ProjectEGItem)this.comboNetwork.getSelectedValue()).getObj());
+		//return (MLMethod)(((ProjectEGItem)this.comboNetwork.getSelectedValue()).getObj());
+		return null;
 	}
 	
 
 	public void setMethod(MLMethod mlMethod) {
 		int i=0;
-		for( ProjectEGItem m : this.networks) {
-			if( m.getObj()==mlMethod) {
+		for( ProjectEGFile m : this.networks) {
+			/*if( m.getObj()==mlMethod) {
 				((JComboBox)this.comboNetwork.getField()).setSelectedIndex(i);
 				return;
-			}
+			}*/
 			i++;
 		}		
 	}

@@ -37,7 +37,7 @@ public class OCRGridPanel extends JPanel implements MouseListener {
 			
 		} else
 		{
-			EncogWorkBench.displayError("Error", "OCR Query cannot be used with " + method.getName());
+			EncogWorkBench.displayError("Error", "OCR Query cannot be used with this method.");
 		}
 		
 		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));

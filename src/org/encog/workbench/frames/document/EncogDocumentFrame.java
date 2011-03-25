@@ -38,22 +38,17 @@ import javax.swing.JTabbedPane;
 import org.encog.ml.MLMethod;
 import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.ml.svm.SVM;
-import org.encog.neural.data.PropertyData;
-import org.encog.neural.data.TextData;
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
 import org.encog.workbench.frames.EncogCommonFrame;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectTree;
 import org.encog.workbench.tabs.AboutTab;
 import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.EncogTabManager;
-import org.encog.workbench.tabs.PropertyDataTab;
 import org.encog.workbench.tabs.SVMTab;
-import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.UnknownObjectTab;
 import org.encog.workbench.tabs.analyst.EncogAnalystTab;
 import org.encog.workbench.tabs.files.BinaryDataTab;
@@ -210,16 +205,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void openTab(EncogCommonTab tab, String title) {
-		String titleToUse;
 
 		int i = this.documentTabs.getTabCount();
 
-		if (title == null && tab.getEncogObject() != null)
-			titleToUse = tab.getEncogObject().getName();
-		else
-			titleToUse = title;
-
-		this.documentTabs.add(titleToUse, tab);
+		this.documentTabs.add(title, tab);
 
 		if (!this.tabManager.contains(tab)) {
 			if (i < this.documentTabs.getTabCount())
@@ -312,31 +301,31 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		return tree;
 	}
 
-	public void openFile(File file) {
+	public void openFile(ProjectFile file) {
 		try {
 			EncogWorkBench.getInstance().getMainWindow().beginWait();
 			EncogCommonTab tab = this.tabManager.find(file);
 			if (tab == null) {
-				String extension = FileUtil.getFileExt(file);
+				String extension = FileUtil.getFileExt(file.getFile());
 				if (extension.equalsIgnoreCase("txt")
 						|| extension.equalsIgnoreCase("csv")) {
 					tab = new TextFileTab(file);
-					this.openTab(tab, file.getName());
+					this.openTab(tab);
 				} else if (extension.equals("ega")) {
 					tab = new EncogAnalystTab(file);
-					this.openTab(tab, file.getName());
+					this.openTab(tab);
 				} else if (extension.equalsIgnoreCase("egb")) {
 					tab = new BinaryDataTab(file);
-					this.openTab(tab, file.getName());
+					this.openTab(tab);
 				} else if (extension.equalsIgnoreCase("jpg")
 						|| extension.equalsIgnoreCase("jpeg")
 						|| extension.equalsIgnoreCase("gif")
 						|| extension.equalsIgnoreCase("png")) {
 					tab = new ImageFileTab(file);
-					this.openTab(tab, file.getName());
+					this.openTab(tab);
 				} else {
 					tab = new GenericFileTab(file);
-					this.openTab(tab, file.getName());
+					this.openTab(tab);
 				}
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
@@ -347,13 +336,13 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		}
 	}
 
-	public void openTextFile(File file) {
+	public void openTextFile(ProjectFile file) {
 		try {
 			EncogWorkBench.getInstance().getMainWindow().beginWait();
 			EncogCommonTab tab = this.tabManager.find(file);
 			if (tab == null) {
 				tab = new TextFileTab(file);
-				this.openTab(tab, file.getName());
+				this.openTab(tab);
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
 				this.menus.updateMenus();
@@ -363,34 +352,14 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		}
 	}
 
-	public void open(EncogPersistedObject obj) {
-		if (obj instanceof SVM) {
+	public void open(Object obj) {
+		/*if (obj instanceof SVM) {
 			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
 					.getTabManager().find(obj);
 
 			if (tab == null) {
-				tab = new SVMTab(obj);
-				this.openTab(tab, obj.getName());
-			} else {
-				this.documentTabs.setSelectedComponent(tab);
-			}
-		} else if (obj instanceof TextData) {
-			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
-					.getTabManager().find(obj);
-
-			if (tab == null) {
-				tab = new TextDataTab(obj);
-				this.openTab(tab, obj.getName());
-			} else {
-				this.documentTabs.setSelectedComponent(tab);
-			}
-		} else if (obj instanceof PropertyData) {
-			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
-					.getTabManager().find(obj);
-
-			if (tab == null) {
-				tab = new PropertyDataTab((PropertyData) obj);
-				this.openTab(tab, obj.getName());
+				tab = new SVMTab((SVM)obj);
+				this.openTab(tab, "svm");
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
 			}
@@ -400,7 +369,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 			if (tab == null) {
 				tab = new MLMethodTab((MLMethod)obj);
-				this.openTab(tab, obj.getName());
+				this.openTab(tab, "mlmethod");
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
 			}
@@ -411,7 +380,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 			if (tab == null) {				
 					tab = new NEATPopulationTab((NEATPopulation)obj);
-					this.openTab(tab, obj.getName());
+					this.openTab(tab, "mlmethod");
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
 			}
@@ -422,11 +391,11 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 			if (tab == null) {
 				tab = new UnknownObjectTab(obj);
-				this.openTab(tab, obj.getName());
+				this.openTab(tab, "name");
 			} else {
 				this.documentTabs.setSelectedComponent(tab);
 			}
-		}
+		}*/
 
 	}
 

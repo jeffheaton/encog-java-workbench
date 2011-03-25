@@ -28,12 +28,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
-import javax.swing.JTable;
-
-import org.encog.persist.EncogPersistedObject;
-
 public class PropertyCollection {
 
 	private ObjectEditorModel model;

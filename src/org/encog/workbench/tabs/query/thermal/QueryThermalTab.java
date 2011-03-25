@@ -8,16 +8,16 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.encog.neural.thermal.ThermalNetwork;
-import org.encog.persist.EncogPersistedObject;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.tabs.EncogCommonTab;
 
 public class QueryThermalTab extends EncogCommonTab implements ActionListener {
 
 	private ThermalNetwork network;
 	
-	public QueryThermalTab(ThermalNetwork network) {
+	public QueryThermalTab(ProjectEGFile network) {
 		super(network);
-		this.network = network;
+		this.network = (ThermalNetwork) network.getObject();
 		
 		this.setLayout(new BorderLayout());
 		
@@ -37,7 +37,7 @@ public class QueryThermalTab extends EncogCommonTab implements ActionListener {
 		this.buttonClear.addActionListener(this);
 		this.buttonClearMatrix.addActionListener(this);
 		
-		this.panel = new ThermalPanel(network);
+		this.panel = new ThermalPanel(this.network);
 		this.add(this.panel, BorderLayout.CENTER);
 		
 	}

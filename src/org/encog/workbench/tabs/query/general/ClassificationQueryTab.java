@@ -15,10 +15,9 @@ import org.encog.EncogError;
 import org.encog.ml.MLClassification;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.basic.BasicNeuralData;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.error.ErrorDialog;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.NetworkQueryModel;
 import org.encog.workbench.tabs.EncogCommonTab;
 
@@ -33,8 +32,8 @@ public class ClassificationQueryTab extends EncogCommonTab implements ActionList
 	private int outputCount;
 	private JButton calculateButton;
 
-	public ClassificationQueryTab(final MLClassification data) {
-		super((EncogPersistedObject)data);
+	public ClassificationQueryTab(final ProjectEGFile data) {
+		super(data);
 		
 		this.inputCount = getData().getInputCount();
 		this.outputCount = getData().getOutputCount();

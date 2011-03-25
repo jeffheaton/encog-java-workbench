@@ -32,10 +32,8 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.encog.persist.EncogPersistedObject;
 import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.frames.document.tree.ProjectEGItem;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.process.CreateNewFile;
@@ -111,35 +109,21 @@ public class EncogPopupMenus {
 							}
 
 						}
-					} else if (selected instanceof ProjectEGItem) {
-						ProjectEGItem egi = (ProjectEGItem) selected;
-						egi.getCollection().delete(egi.getObj().getName());
-						egi.getCollection().save(
-								egi.getEncogFile().getFile().toString());
-					}
+					} 
 					EncogWorkBench.getInstance().getMainWindow().getTree()
 							.refresh();
 				} else if (source == this.popupFileOpen) {
 					if (selected instanceof ProjectFile) {
 						EncogWorkBench.getInstance().getMainWindow()
-								.openFile(((ProjectFile) selected).getFile());
+								.openFile((ProjectFile)selected);
 					}
 				} else if (source == this.popupFileOpenText) {
 					if (selected instanceof ProjectFile) {
 						EncogWorkBench
 								.getInstance()
 								.getMainWindow()
-								.openTextFile(
-										((ProjectFile) selected).getFile());
+								.openTextFile((ProjectFile) selected);
 					}
-				} else if (source == this.popupFileDelete) {
-					if (first
-							&& !EncogWorkBench
-									.askQuestion("Warning",
-											"Are you sure you want to delete these object(s)?")) {
-						return;
-					}
-					owner.getOperations().performObjectsDelete(selected);
 				} else if (source == this.popupFileCSVExport) {
 					String sourceFile = ((ProjectFile) selected).getFile()
 							.toString();
@@ -151,14 +135,7 @@ public class EncogPopupMenus {
 					File sourceFile = ((ProjectFile) selected).getFile();
 					EncogAnalystWizard.createEncogAnalyst(sourceFile);
 				} else if (source == this.popupFileProperties) {
-					if (selected instanceof ProjectEGItem) {
-						EncogWorkBench
-								.getInstance()
-								.getMainWindow()
-								.getOperations()
-								.performObjectsProperties(
-										(ProjectEGItem) selected);
-					} else if (selected instanceof ProjectFile) {
+					if (selected instanceof ProjectFile) {
 						EncogWorkBench.getInstance().getMainWindow()
 								.getOperations()
 								.performFileProperties((ProjectFile) selected);
@@ -175,28 +152,23 @@ public class EncogPopupMenus {
 
 		File file = null;
 		String ext = null;
-		EncogPersistedObject encogObj = null;
 
 		if (item instanceof ProjectFile) {
 			file = ((ProjectFile) item).getFile();
 			ext = FileUtil.getFileExt(file);
 		}
 
-		if (item instanceof ProjectEGItem) {
-			encogObj = ((ProjectEGItem) item).getObj();
-		}
-
 		// build network popup menu
 		this.popupFile = new JPopupMenu();
 		this.popupFileRefresh = owner.addItem(this.popupFile, "Refresh", 'r');
 
-		if ((file != null || encogObj != null) && !"eg".equalsIgnoreCase(ext)) {
+		if ((file != null ) && !"eg".equalsIgnoreCase(ext)) {
 			this.popupFileOpen = owner.addItem(this.popupFile, "Open", 'o');
 		} else {
 			this.popupFileOpen = null;
 		}
 
-		if (file != null || encogObj != null) {
+		if (file != null ) {
 			this.popupFileDelete = owner.addItem(this.popupFile, "Delete", 'd');
 			this.popupFileProperties = owner.addItem(this.popupFile,
 					"Properties", 'p');
@@ -230,7 +202,7 @@ public class EncogPopupMenus {
 			this.popupFileNewObject = null;
 		}
 
-		if (file == null && encogObj == null) {
+		if (file == null ) {
 			this.popupFileNewFile = owner.addItem(this.popupFile, "New File",
 					'n');
 		} else {

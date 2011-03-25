@@ -23,23 +23,17 @@
  */
 package org.encog.workbench.tabs;
 
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-
-import org.encog.engine.util.Format;
-import org.encog.mathutil.libsvm.svm_model;
 import org.encog.ml.svm.SVM;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.util.HTMLReport;
-import org.encog.workbench.util.EncogFonts;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 
 public class SVMTab extends HTMLTab {
 
 	private SVM network;
 	
-	public SVMTab(EncogPersistedObject encogObject) {
+	public SVMTab(ProjectEGFile encogObject) {
 		super(encogObject);
-		this.network = (SVM)encogObject;
+		this.network = (SVM)encogObject.getObject();
 		
 		HTMLReport report = new HTMLReport();
 		String title = "Support Vector Machine (SVM)";
@@ -48,10 +42,9 @@ public class SVMTab extends HTMLTab {
 		report.beginBody();
 		report.h1(title);
 		report.beginTable();
-		SVM svm = (SVM)this.getEncogObject();
-		report.tablePair("Name",this.getEncogObject().getName());
+		SVM svm = (SVM)encogObject.getObject();
 		report.tablePair("Input Count",""+svm.getInputCount());
-		report.tablePair("SVM Type",svm.getSvmType().toString());
+		report.tablePair("SVM Type",svm.getSVMType().toString());
 		report.tablePair("Kernel Type",svm.getKernelType().toString());
 		report.endTable();
 		report.endBody();

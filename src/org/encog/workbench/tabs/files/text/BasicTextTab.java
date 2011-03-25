@@ -14,6 +14,7 @@ import javax.swing.JTextArea;
 
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.tabs.files.BasicFileTab;
 import org.encog.workbench.util.EncogFonts;
 
@@ -23,7 +24,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 	private final JScrollPane scroll;
 	private final BasicTextDocListener dirty = new BasicTextDocListener();
 
-	public BasicTextTab(File file) {
+	public BasicTextTab(ProjectFile file) {
 		super(file);
 
 		this.editor = new NonWrappingTextPane();				
@@ -39,7 +40,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 
 	public void loadFile() {
 		try {
-			InputStream is = new FileInputStream(getFile());
+			InputStream is = new FileInputStream(this.getEncogObject().getFile());
 			this.editor.read(is, null);
 			is.close();
 			this.editor.getDocument().addDocumentListener(this.dirty);
@@ -52,7 +53,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 
 	public void saveFile() {
 		try {
-			FileWriter out = new FileWriter(getFile());
+			FileWriter out = new FileWriter(this.getEncogObject().getFile());
 			this.editor.write(out);
 			out.close();
 			dirty.setDirty(false);

@@ -57,12 +57,7 @@ public class EncogCollectionModel implements TreeModel {
 		if (parent == path) {
 			return this.files.get(index);
 		} else {
-			if( parent instanceof ProjectEGFile ) {
-				return ((ProjectEGFile)parent).getChildren()[index];
-			}
-			else {
-				return null;
-			}
+			return null;
 		}
 	}
 
@@ -70,12 +65,7 @@ public class EncogCollectionModel implements TreeModel {
 		if (parent == path) {
 			return this.files.size();
 		} else {
-			if( parent instanceof ProjectEGFile ) {
-				return ((ProjectEGFile)parent).getChildren().length;
-			}
-			else {
-				return 0;
-			}
+			return 0;			
 		}
 	}
 

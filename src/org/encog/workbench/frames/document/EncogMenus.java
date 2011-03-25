@@ -30,13 +30,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
-import org.encog.ml.MLMethod;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.process.CreateNewFile;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.TextDataTab;
 import org.encog.workbench.tabs.ValidationChart;
 
 public class EncogMenus {
@@ -155,11 +153,6 @@ public class EncogMenus {
 
 		
 		EncogCommonTab currentTab = (EncogCommonTab)tabs.getSelectedComponent();
-		
-		if( currentTab instanceof TextDataTab )
-		{
-			supportsClipboard = true;
-		}
 		
 		this.menuFileNew.setEnabled(!modal && documentOpen);	
 		this.menuFileQuit.setEnabled(true);

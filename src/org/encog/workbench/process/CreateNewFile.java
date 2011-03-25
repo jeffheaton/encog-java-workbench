@@ -3,11 +3,9 @@ package org.encog.workbench.process;
 import java.io.File;
 import java.io.IOException;
 
-import org.encog.EncogError;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.basic.BasicNeuralDataPair;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
-import org.encog.persist.EncogMemoryCollection;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createfile.CreateFileDialog;
 import org.encog.workbench.dialogs.createfile.CreateFileType;
@@ -37,8 +35,7 @@ public class CreateNewFile {
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
-					EncogMemoryCollection encog = new EncogMemoryCollection();
-					encog.save(path.toString());
+
 				}
 			} else if (dialog.getType() == CreateFileType.TextFile) {
 				
@@ -76,7 +73,7 @@ public class CreateNewFile {
 			int output = dialog.getIdeal().getValue();
 
 			BufferedNeuralDataSet trainingData = new BufferedNeuralDataSet(file);
-			trainingData.setDescription("Training data");
+
 			NeuralDataPair pair = BasicNeuralDataPair.createPair(input,
 					output);
 			trainingData.beginLoad(input, output);

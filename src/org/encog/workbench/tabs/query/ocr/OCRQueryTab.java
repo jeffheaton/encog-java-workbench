@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
@@ -19,9 +18,9 @@ import org.encog.ml.MLOutput;
 import org.encog.ml.MLRegression;
 import org.encog.neural.data.NeuralData;
 import org.encog.neural.data.basic.BasicNeuralData;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.error.ErrorDialog;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.NetworkQueryModel;
 import org.encog.workbench.tabs.EncogCommonTab;
 
@@ -37,12 +36,12 @@ public class OCRQueryTab extends EncogCommonTab implements ActionListener {
 	private JTable outputTable;
 	private boolean classification;
 
-	public OCRQueryTab(BasicML method) {
-		super((EncogPersistedObject) method);
+	public OCRQueryTab(ProjectEGFile method) {
+		super(method);
 
 		this.classification = method instanceof MLClassification;
 
-		this.method = method;
+		this.method = (BasicML) method.getObject();
 
 		this.setLayout(new BorderLayout());
 		JPanel body = new JPanel();

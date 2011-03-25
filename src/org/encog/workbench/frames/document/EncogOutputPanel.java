@@ -36,11 +36,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import org.encog.neural.data.TextData;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.util.EncogFonts;
-import org.encog.workbench.util.WorkbenchLogHandler;
 
 public class EncogOutputPanel extends JPanel implements ActionListener {
 	

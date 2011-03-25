@@ -99,16 +99,7 @@ public class ProjectTree extends JPanel implements MouseListener,
 					rightMouseClicked(e, obj);
 				} else if (e.getClickCount() == 2) {
 					ProjectFile pf = (ProjectFile) obj;
-					this.doc.openFile(pf.getFile());
-				}
-			} else if (obj instanceof ProjectEGItem) {
-				if (e.getClickCount() == 2) {
-					ProjectEGItem egItem = (ProjectEGItem) obj;
-					EncogWorkBench.getInstance().getMainWindow()
-							.open(egItem.getObj());
-				} else if (MouseUtil.isRightClick(e)) {
-					EncogWorkBench.getInstance().getMainWindow()
-							.getPopupMenus().rightMouseClicked(e, obj);
+					this.doc.openFile(pf);
 				}
 			} else if (obj instanceof ProjectParent && e.getClickCount() == 2) {
 				File p = new File(this.collectionModel.getPath())

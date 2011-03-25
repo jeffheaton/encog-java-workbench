@@ -36,10 +36,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.encog.persist.EncogPersistedObject;
-import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.tabs.EncogTabManager;
-
 public abstract class EncogCommonFrame extends JFrame implements
 		WindowListener, ActionListener, MouseListener, ComponentListener {
 

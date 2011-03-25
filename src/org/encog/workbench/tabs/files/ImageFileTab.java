@@ -1,31 +1,23 @@
 package org.encog.workbench.tabs.files;
 
-import java.awt.BorderLayout;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
-import org.encog.neural.data.TextData;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.util.EncogFonts;
-import org.encog.workbench.util.FileUtil;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 
 public class ImageFileTab extends BasicFileTab {
 	
 	private BufferedImage image;
 	
-	public ImageFileTab(File file) {
+	public ImageFileTab(ProjectFile file) {
 		super(file);
 		
 		try {
-		    this.image = ImageIO.read(file);
+		    this.image = ImageIO.read(file.getFile());
 		} catch (IOException e) {
 			EncogWorkBench.displayError("Error Loading Image", e);
 		}

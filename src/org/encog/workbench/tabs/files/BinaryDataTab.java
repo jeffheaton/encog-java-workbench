@@ -36,6 +36,8 @@ import javax.swing.JToolBar;
 
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.frames.document.tree.ProjectFile;
+import org.encog.workbench.frames.document.tree.ProjectTraining;
 import org.encog.workbench.models.BufferedDataSetTableModel;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -55,8 +57,12 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 	private JButton export;
 	private JButton visualize;
 	
-	public BinaryDataTab(File file) {
-		super(new BufferedNeuralDataSet(file),file);
+	private BufferedNeuralDataSet data;
+	
+	public BinaryDataTab(ProjectFile file) {
+		super(file);
+		
+		this.data = new BufferedNeuralDataSet(file.getFile());
 	
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
@@ -133,11 +139,11 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 	}
 
 	public BufferedNeuralDataSet getData() {
-		return (BufferedNeuralDataSet) getEncogObject();
+		return this.data;
 	}
 	
 	public void performVisualize() {
-		EncogCommonTab tab = new VisualizeGridTab((BufferedNeuralDataSet) this.getEncogObject());
+		EncogCommonTab tab = new VisualizeGridTab(data);
 		EncogWorkBench.getInstance().getMainWindow().openTab(tab,"Visualize Data");
 	}
 

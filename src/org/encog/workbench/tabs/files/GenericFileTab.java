@@ -14,6 +14,7 @@ import org.encog.Encog;
 import org.encog.engine.util.Format;
 import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;
 
@@ -22,7 +23,7 @@ public class GenericFileTab extends BasicFileTab {
 	private final JScrollPane scroll;
 	private final JEditorPane editor;
 	
-	public GenericFileTab(File file) {
+	public GenericFileTab(ProjectFile file) {
 		super(file);
 		
 		this.editor = new JEditorPane("text/html","");				
@@ -44,8 +45,8 @@ public class GenericFileTab extends BasicFileTab {
 		report.para("Unknown file type.  Do not know how to display.");
 		
 		report.beginTable();
-		report.tablePair("File Size", Format.formatMemory(file.length()));
-		report.tablePair("Last Modified", new Date(file.lastModified()).toString());
+		report.tablePair("File Size", Format.formatMemory(this.getEncogObject().getFile().length()));
+		report.tablePair("Last Modified", new Date(this.getEncogObject().getFile().lastModified()).toString());
 		
 		report.endTable();
 

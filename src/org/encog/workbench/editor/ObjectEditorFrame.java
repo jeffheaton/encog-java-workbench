@@ -25,7 +25,6 @@ package org.encog.workbench.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -34,9 +33,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
-import javax.swing.JButton;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -48,8 +45,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import org.encog.persist.EncogPersistedCollection;
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.util.MouseUtil;

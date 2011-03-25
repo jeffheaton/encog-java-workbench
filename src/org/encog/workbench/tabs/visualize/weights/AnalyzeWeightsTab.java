@@ -26,18 +26,15 @@ package org.encog.workbench.tabs.visualize.weights;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.networks.layers.Layer;
 import org.encog.neural.networks.structure.AnalyzeNetwork;
-import org.encog.neural.networks.structure.NetworkCODEC;
-import org.encog.persist.EncogPersistedObject;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -62,10 +59,10 @@ public class AnalyzeWeightsTab extends EncogCommonTab implements ActionListener 
 	private HistogramDataset dataWeights;
 	private HistogramDataset dataThresholds;
 	
-	public AnalyzeWeightsTab(EncogPersistedObject encogObject) {
+	public AnalyzeWeightsTab(ProjectEGFile encogObject) {
 		super(encogObject);
 		
-		this.network = (BasicNetwork)encogObject;
+		this.network = (BasicNetwork)encogObject.getObject();
 		this.analyze = new AnalyzeNetwork(this.network);
 		
 		this.setLayout(new BorderLayout());

@@ -23,66 +23,43 @@
  */
 package org.encog.workbench.tabs;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.plaf.basic.BasicButtonUI;
 
-import org.encog.persist.EncogPersistedObject;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 
 public class EncogCommonTab extends JPanel {
-	
-	private EncogPersistedObject encogObject;
+
+	private ProjectFile encogObject;
 	private EncogDocumentFrame owner;
 	private boolean modal;
-	
-	public EncogCommonTab(final EncogPersistedObject encogObject)
-	{
+
+	public EncogCommonTab(final ProjectFile encogObject) {
 		this.encogObject = encogObject;
 
 	}
 
-	public EncogPersistedObject getEncogObject() {
+	public ProjectFile getEncogObject() {
 		return encogObject;
 	}
 
-	public boolean close() throws IOException
-	{
+	public boolean close() throws IOException {
 		return true;
 	}
-	
-	public void dispose()
-	{
+
+	public void dispose() {
 		try {
 			owner.closeTab(this);
-		}
-		catch(Throwable t) {
+		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
 		}
 	}
 
 	public void setParent(EncogDocumentFrame owner) {
-		this.owner = owner;		
+		this.owner = owner;
 	}
 
 	public boolean isModal() {
@@ -93,10 +70,8 @@ public class EncogCommonTab extends JPanel {
 		this.modal = modal;
 	}
 
-	public void setEncogObject(EncogPersistedObject encogObject) {
+	public void setEncogObject(ProjectFile encogObject) {
 		this.encogObject = encogObject;
 	}
-	
-	
-	
+
 }

@@ -29,9 +29,6 @@ import java.util.List;
 
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
-import org.encog.persist.DirectoryEntry;
-import org.encog.persist.EncogPersistedCollection;
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;

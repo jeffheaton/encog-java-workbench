@@ -63,9 +63,6 @@ import org.encog.neural.pattern.HopfieldPattern;
 import org.encog.neural.prune.PruneSelective;
 import org.encog.neural.thermal.HopfieldNetwork;
 import org.encog.neural.thermal.ThermalNetwork;
-import org.encog.persist.EncogCollection;
-import org.encog.persist.EncogMemoryCollection;
-import org.encog.persist.EncogPersistedObject;
 import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
@@ -75,6 +72,7 @@ import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.MapDataFrame;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.mlmethod.structure.StructureTab;
@@ -101,10 +99,12 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	private JButton buttonVisualize;
 	private final JScrollPane scroll;
 	private final JEditorPane editor;
+	private MLMethod method;
 
-	public MLMethodTab(final MLMethod data) {
-		super((EncogPersistedObject) data);
+	public MLMethodTab(final ProjectEGFile data) {
+		super(data);
 
+		this.method = (MLMethod)data.getObject();
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);
@@ -195,7 +195,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 		if (EncogWorkBench.askQuestion("Are you sure?",
 				"Randomize/reset network weights and lose all training?")) {
-			if (this.getEncogObject() instanceof BasicNetwork) {
+			if (this.method instanceof BasicNetwork) {
 				randomizeBasicNetwork();
 			} else if (this.getEncogObject() instanceof MLResettable) {
 				((MLResettable) getEncogObject()).reset();
@@ -207,7 +207,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	private void optionConstant(RandomizeNetworkDialog dialog) {
 		double value = dialog.getConstantValue().getValue();
 		ConstRandomizer r = new ConstRandomizer(value);
-		r.randomize((BasicNetwork) getEncogObject());
+		r.randomize((BasicNetwork)this.method);
 	}
 
 	private void optionConsistent(RandomizeNetworkDialog dialog) {
@@ -215,14 +215,14 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		double min = dialog.getConstLow().getValue();
 		double max = dialog.getConstHigh().getValue();
 		ConsistentRandomizer c = new ConsistentRandomizer(min, max, seed);
-		c.randomize((BasicNetwork) getEncogObject());
+		c.randomize(this.method);
 	}
 
 	private void optionPerturb(RandomizeNetworkDialog dialog) {
 		double percent = dialog.getPerturbPercent().getValue();
 
 		Distort distort = new Distort(percent);
-		distort.randomize((BasicNetwork) getEncogObject());
+		distort.randomize((BasicNetwork) this.method);
 	}
 
 	private void optionGaussian(RandomizeNetworkDialog dialog) {
@@ -230,7 +230,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		double dev = dialog.getDeviation().getValue();
 
 		GaussianRandomizer g = new GaussianRandomizer(mean, dev);
-		g.randomize((BasicNetwork) getEncogObject());
+		g.randomize((BasicNetwork) this.method);
 	}
 
 	private void optionRandomize(RandomizeNetworkDialog dialog) {
@@ -252,14 +252,13 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		}
 
 		if (r != null)
-			r.randomize((BasicNetwork) this.getEncogObject());
+			r.randomize((BasicNetwork) this.method);
 	}
 
 	private void performQuery() {
 		try {
-			if (this.getEncogObject() instanceof ThermalNetwork) {
-				QueryThermalTab tab = new QueryThermalTab(
-						((ThermalNetwork) this.getEncogObject()));
+			if (this.method instanceof ThermalNetwork) {
+				QueryThermalTab tab = new QueryThermalTab((ProjectEGFile)this.getEncogObject());
 				EncogWorkBench.getInstance().getMainWindow()
 						.openModalTab(tab, "Thermal Query");			
 			}
@@ -286,17 +285,17 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				
 				if( sel.getSelected()==selectClassification ) {
 					ClassificationQueryTab tab = new ClassificationQueryTab(
-							((MLClassification) this.getEncogObject()));
+							((ProjectEGFile) this.getEncogObject()));
 					EncogWorkBench.getInstance().getMainWindow()
 							.openModalTab(tab, "Query Classification");					
 				} else if( sel.getSelected()==selectRegression ) {
 					RegressionQueryTab tab = new RegressionQueryTab(
-							((MLRegression) this.getEncogObject()));
+							((ProjectEGFile) this.getEncogObject()));
 					EncogWorkBench.getInstance().getMainWindow()
 							.openModalTab(tab, "Query Regression");					
 				}  else if( sel.getSelected()==selectOCR ) {
 					OCRQueryTab tab = new OCRQueryTab(
-							((BasicML) this.getEncogObject()));
+							((ProjectEGFile) this.method));
 					EncogWorkBench.getInstance().getMainWindow()
 							.openModalTab(tab, "Query OCR");					
 				}
@@ -310,7 +309,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	 * @return the data
 	 */
 	public BasicNetwork getData() {
-		return (BasicNetwork) getEncogObject();
+		return (BasicNetwork) this.method;
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -321,11 +320,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	public boolean close() {
 		if (EncogWorkBench.askQuestion("Save",
 				"Would you like to save your changes?")) {
-			EncogWorkBench.getInstance().save(this.getEncogObject());
-			EncogWorkBench.getInstance().refresh();
-		} else {
-			EncogWorkBench.getInstance().revert(this.getEncogObject());
-		}
+			getEncogObject().save();
+		}  
 		return true;
 	}
 
@@ -368,34 +364,31 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	}
 
 	private void analyzeThermal() {
-		EncogPersistedObject obj = this.getEncogObject();
-		ThermalGridTab tab = new ThermalGridTab((HopfieldNetwork) obj);
+		ThermalGridTab tab = new ThermalGridTab((ProjectEGFile) this.getEncogObject());
 		EncogWorkBench.getInstance().getMainWindow()
 				.openModalTab(tab, "Thermal Grid");
 	}
 
 	private void analyzeStructure() {
 
-		EncogPersistedObject obj = this.getEncogObject();
-
-		if (obj instanceof BasicNetwork) {
+		if (method instanceof BasicNetwork) {
 			StructureTab tab = new StructureTab(
-					((BasicNetwork) this.getEncogObject()));
+					((BasicNetwork)this.method));
 			EncogWorkBench.getInstance().getMainWindow()
 					.openModalTab(tab, "Network Structure");
-		} else if (obj instanceof NEATNetwork) {
-			NEATTab tab = new NEATTab((NEATNetwork) this.getEncogObject());
+		} else if (method instanceof NEATNetwork) {
+			NEATTab tab = new NEATTab((ProjectEGFile) this.getEncogObject());
 			EncogWorkBench.getInstance().getMainWindow()
 					.openModalTab(tab, "NEAT Structure");
 		} else {
 			throw new WorkBenchError("No analysis available for: "
-					+ obj.getClass().getSimpleName());
+					+ this.method.getClass().getSimpleName());
 		}
 
 	}
 
 	public void analyzeWeights() {
-		AnalyzeWeightsTab tab = new AnalyzeWeightsTab(this.getEncogObject());
+		AnalyzeWeightsTab tab = new AnalyzeWeightsTab((ProjectEGFile)this.getEncogObject());
 		EncogWorkBench.getInstance().getMainWindow()
 				.openModalTab(tab, "Analyze Weights");
 	}
@@ -431,7 +424,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				(getEncogObject() instanceof MLResettable) ? "true" : "false");
 		report.endTable();
 
-		if (this.getEncogObject() instanceof BasicNetwork) {
+		if (this.method instanceof BasicNetwork) {
 			report.h3("Layers");
 			report.beginTable();
 			report.beginRow();
@@ -444,7 +437,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			report.header("Context Offset");
 			report.endRow();
 
-			BasicNetwork network = (BasicNetwork) getEncogObject();
+			BasicNetwork network = (BasicNetwork) method;
 			FlatNetwork flat = network.getStructure().getFlat();
 
 			for (int l = 0; l < network.getLayerCount(); l++) {
@@ -474,8 +467,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		this.editor.setText(report.toString());
 	}
 
-	private void restructureHopfield(EncogCollection collection, String name,
-			MLMethod method) {
+	private void restructureHopfield() {
 		HopfieldNetwork hopfield = (HopfieldNetwork) method;
 		CreateHopfieldDialog dialog = new CreateHopfieldDialog(EncogWorkBench
 				.getInstance().getMainWindow());
@@ -485,18 +477,15 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				&& (hopfield.getNeuronCount() != dialog.getNeuronCount()
 						.getValue())) {
 			HopfieldPattern pattern = new HopfieldPattern();
-			pattern.setInputNeurons(dialog.getNeuronCount().getValue());
-			this.setEncogObject(hopfield = (HopfieldNetwork) pattern.generate());
-			collection.add(name, hopfield);
+			pattern.setInputNeurons(dialog.getNeuronCount().getValue());		
 			produceReport();
 		}
 	}
 
-	private void restructureFeedforward(EncogCollection collection,
-			String name, MLMethod method) {
+	private void restructureFeedforward() {
 		CreateFeedforward dialog = new CreateFeedforward(EncogWorkBench
 				.getInstance().getMainWindow());
-		BasicNetwork network = (BasicNetwork) this.getEncogObject();
+		BasicNetwork network = (BasicNetwork)method;
 
 		ActivationFunction oldActivationOutput = network.getActivation(network
 				.getLayerCount() - 1);
@@ -537,9 +526,6 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				feedforward.setInputNeurons(dialog.getInputCount().getValue());
 				feedforward.setOutputNeurons(dialog.getOutputCount().getValue());
 				BasicNetwork obj = (BasicNetwork) feedforward.generate();
-				EncogMemoryCollection c = (EncogMemoryCollection) this.getEncogObject().getCollection();				
-				c.add(name, obj);
-				this.setEncogObject(obj);
 			} else {
 				// try to prune it
 				PruneSelective prune = new PruneSelective(network);
@@ -579,14 +565,10 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	}
 
 	private void performRestructure() {
-		MLMethod method = (MLMethod) this.getEncogObject();
-		EncogCollection collection = this.getEncogObject().getCollection();
-		String name = this.getEncogObject().getName();
-
 		if (method instanceof HopfieldNetwork) {
-			restructureHopfield(collection, name, method);
+			restructureHopfield();
 		} else if (method instanceof BasicNetwork) {
-			restructureFeedforward(collection, name, method);
+			restructureFeedforward();
 		} else {
 			EncogWorkBench.displayError("Error",
 					"This Machine Learning Method cannot be restructured.");

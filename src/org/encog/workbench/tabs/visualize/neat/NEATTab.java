@@ -30,16 +30,16 @@ import java.awt.Point;
 import org.encog.neural.neat.NEATLink;
 import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATNeuron;
-import org.encog.persist.EncogPersistedObject;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.tabs.EncogCommonTab;
 
 public class NEATTab extends EncogCommonTab  {
 
 	public NEATNetwork network;
 	
-	public NEATTab(NEATNetwork network) {
+	public NEATTab(ProjectEGFile network) {
 		super(network);
-		this.network = network;
+		this.network = (NEATNetwork) network.getObject();
 	}
 	
 	private Point plotLocation(NEATNeuron neuron)

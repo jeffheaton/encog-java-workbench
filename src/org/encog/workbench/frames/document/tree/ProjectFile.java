@@ -44,4 +44,9 @@ public class ProjectFile extends ProjectItem {
 	public String getExtension() {
 		return FileUtil.getFileExt(file);
 	}
+
+	public void save() {
+		// TODO Auto-generated method stub
+		
+	}
 }

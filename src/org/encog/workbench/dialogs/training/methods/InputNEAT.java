@@ -34,7 +34,8 @@ import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
-import org.encog.workbench.frames.document.tree.ProjectEGItem;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 
 
@@ -56,7 +57,7 @@ public class InputNEAT extends EncogPropertiesDialog {
 	/**
 	 * All available networks to display in the combo box.
 	 */
-	private List<ProjectEGItem> populations;
+	private List<ProjectFile> populations;
 	
 	private final DoubleField maxError;
 	
@@ -94,7 +95,7 @@ public class InputNEAT extends EncogPropertiesDialog {
 	 */
 	private void findData() {
 		this.trainingSets = EncogWorkBench.getInstance().getTrainingData();
-		this.populations = EncogWorkBench.getInstance().getNEATPopulations();
+		//this.populations = EncogWorkBench.getInstance().getNEATPopulations();
 	}
 
 	/**
@@ -104,7 +105,7 @@ public class InputNEAT extends EncogPropertiesDialog {
 		if( this.comboPopulation.getSelectedValue()==null )
 			return null;
 		
-		return (NEATPopulation)(((ProjectEGItem)this.comboPopulation.getSelectedValue()).getObj());
+		return null;// (NEATPopulation)(((ProjectEGItem)this.comboPopulation.getSelectedValue()).getObj());
 	}
 	
 
@@ -131,8 +132,8 @@ public class InputNEAT extends EncogPropertiesDialog {
 		return trainingSets;
 	}
 
-	public List<ProjectEGItem> getPopulations() {
-		return populations;
+	public List<ProjectEGFile> getPopulations() {
+		return null;
 	}
 
 
