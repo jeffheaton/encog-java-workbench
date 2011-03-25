@@ -26,12 +26,22 @@ public class ProjectEGFile extends ProjectFile {
 	}
 
 	public Object getObject() {
-		return EncogWorkBench.getInstance().getProject().loadFromDirectory(getName());
+		if( this.obj == null ) {
+			this.obj = EncogWorkBench.getInstance().getProject().loadFromDirectory(getName());
+		}
+		
+		return this.obj;
 	}
 	
 	public void save() {
 		if( this.getObject()!=null ) {
 			EncogWorkBench.getInstance().getProject().saveToDirectory(this.getName(), this.getObject());
+		}
+	}
+	
+	public void revert() {
+		if( this.getObject()!=null ) {
+			this.obj = EncogWorkBench.getInstance().getProject().loadFromDirectory(this.getName());
 		}
 	}
 

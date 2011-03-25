@@ -267,7 +267,10 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		if (EncogWorkBench.askQuestion("Training", "Save the training?")) {
 
 			if( this.getEncogObject()!=null ) {
-				//EncogWorkBench.getInstance().save(this.getEncogObject());
+				this.getEncogObject().save();
+				if( this.getParentTab()!=null ) {
+					this.getParentTab().setEncogObject(this.getEncogObject());
+				}
 			} 
 			
 			if (this.train instanceof ResilientPropagation) {
@@ -280,7 +283,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 			EncogWorkBench.getInstance().refresh();
 		} else {
 			if( this.getEncogObject()!=null) {
-				//EncogWorkBench.getInstance().revert(this.getEncogObject());
+				((ProjectEGFile)this.getEncogObject()).revert();
 			} 
 		}
 	}

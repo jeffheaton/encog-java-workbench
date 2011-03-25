@@ -36,9 +36,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
 import org.encog.ml.MLMethod;
-import org.encog.ml.genetic.population.BasicPopulation;
-import org.encog.ml.svm.SVM;
-import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
@@ -50,15 +47,12 @@ import org.encog.workbench.tabs.AboutTab;
 import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.EncogTabManager;
-import org.encog.workbench.tabs.SVMTab;
-import org.encog.workbench.tabs.UnknownObjectTab;
 import org.encog.workbench.tabs.analyst.EncogAnalystTab;
 import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.tabs.files.ImageFileTab;
 import org.encog.workbench.tabs.files.TextFileTab;
 import org.encog.workbench.tabs.mlmethod.MLMethodTab;
-import org.encog.workbench.tabs.population.neat.NEATPopulationTab;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.FileUtil;
 
@@ -302,7 +296,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		Object obj = file.getObject();
 		EncogCommonTab tab = null;
 			
-		if( obj instanceof BasicNetwork ) {
+		if( obj instanceof MLMethod ) {
 			tab = new MLMethodTab(file);
 		} else {
 			tab = new GenericFileTab(file);

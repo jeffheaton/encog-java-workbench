@@ -47,7 +47,6 @@ import org.encog.mathutil.randomize.GaussianRandomizer;
 import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
 import org.encog.mathutil.randomize.Randomizer;
 import org.encog.mathutil.randomize.RangeRandomizer;
-import org.encog.ml.BasicML;
 import org.encog.ml.MLClassification;
 import org.encog.ml.MLEncodable;
 import org.encog.ml.MLInput;
@@ -104,6 +103,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	public MLMethodTab(final ProjectEGFile data) {
 		super(data);
 
+		setDirty(true);
 		this.method = (MLMethod)data.getObject();
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
@@ -152,7 +152,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	}
 
 	private void performTrain() {
-		TrainBasicNetwork.performTrain((MLMethod) this.getEncogObject());
+		TrainBasicNetwork t = new TrainBasicNetwork((ProjectEGFile)this.getEncogObject(),this);
+		t.performTrain();
 	}
 
 	private void randomizeBasicNetwork() {
@@ -197,8 +198,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				"Randomize/reset network weights and lose all training?")) {
 			if (this.method instanceof BasicNetwork) {
 				randomizeBasicNetwork();
-			} else if (this.getEncogObject() instanceof MLResettable) {
-				((MLResettable) getEncogObject()).reset();
+			} else if (method instanceof MLResettable) {
+				((MLResettable) method).reset();
 			}
 		}
 
@@ -269,11 +270,11 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				SelectItem selectOCR;
 				
 				List<SelectItem> list = new ArrayList<SelectItem>();
-				if( this.getEncogObject() instanceof MLClassification ) {
+				if( this.method instanceof MLClassification ) {
 				list.add(selectClassification = new SelectItem("Query Classification",
 						"Machine Learning output is a class."));
 				}
-				if( this.getEncogObject() instanceof MLRegression ) {
+				if( this.method instanceof MLRegression ) {
 				list.add(selectRegression = new SelectItem("Query Regression",
 						"Machine Learning output is a number(s)."));
 				}
@@ -318,9 +319,9 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	}
 
 	public void performProperties() {
-		if (this.getEncogObject() instanceof MLProperties) {
+		if ( this.method instanceof MLProperties) {
 			MapDataFrame frame = new MapDataFrame(
-					((MLProperties) this.getEncogObject()).getProperties(),
+					((MLProperties)method).getProperties(),
 					"Properties");
 			frame.setVisible(true);
 		} else {
@@ -390,30 +391,30 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		report.beginHTML();
 		report.title("MLMethod");
 		report.beginBody();
-		report.h1(this.getEncogObject().getClass().getSimpleName());
+		report.h1(this.method.getClass().getSimpleName());
 
 		report.beginTable();
 
-		if (this.getEncogObject() instanceof MLInput) {
-			MLInput reg = (MLInput) this.getEncogObject();
+		if (method instanceof MLInput) {
+			MLInput reg = (MLInput) method;
 			report.tablePair("Input Count",
 					Format.formatInteger(reg.getInputCount()));
 		}
 
-		if (this.getEncogObject() instanceof MLOutput) {
-			MLOutput reg = (MLOutput) this.getEncogObject();
+		if (method instanceof MLOutput) {
+			MLOutput reg = (MLOutput) method;
 			report.tablePair("Output Count",
 					Format.formatInteger(reg.getOutputCount()));
 		}
 
-		if (this.getEncogObject() instanceof MLEncodable) {
-			MLEncodable encode = (MLEncodable) this.getEncogObject();
+		if (method instanceof MLEncodable) {
+			MLEncodable encode = (MLEncodable)method;
 			report.tablePair("Encoded Length",
 					Format.formatInteger(encode.encodedArrayLength()));
 		}
 
 		report.tablePair("Resettable",
-				(getEncogObject() instanceof MLResettable) ? "true" : "false");
+				(method instanceof MLResettable) ? "true" : "false");
 		report.endTable();
 
 		if (this.method instanceof BasicNetwork) {

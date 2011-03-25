@@ -105,6 +105,8 @@ public class EncogPopupMenus {
 										f.toString());
 							}
 
+						} else {
+							EncogWorkBench.getInstance().getMainWindow().getTabManager().closeAll(f);
 						}
 					} 
 					EncogWorkBench.getInstance().getMainWindow().getTree()

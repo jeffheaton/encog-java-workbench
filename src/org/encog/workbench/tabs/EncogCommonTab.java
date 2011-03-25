@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 
 public abstract class EncogCommonTab extends JPanel {
@@ -36,10 +37,11 @@ public abstract class EncogCommonTab extends JPanel {
 	private ProjectFile encogObject;
 	private EncogDocumentFrame owner;
 	private boolean modal;
+	private boolean dirty = false;
+	private EncogCommonTab parentTab;
 
 	public EncogCommonTab(final ProjectFile encogObject) {
 		this.encogObject = encogObject;
-
 	}
 
 	public ProjectFile getEncogObject() {
@@ -47,11 +49,21 @@ public abstract class EncogCommonTab extends JPanel {
 	}
 
 	public boolean close() throws IOException {
-		if( this.getEncogObject()!=null ) {
+		// 
+		
+		if( this.getEncogObject()!=null && dirty ) {
 			if (EncogWorkBench.askQuestion("Save",
 					"Would you like to save your changes?")) {
-				getEncogObject().save();
-			}  			
+				// are we closing a parent or a child	
+				if( this.parentTab!=null ) {
+					this.parentTab.setEncogObject(encogObject);
+					getEncogObject().save();
+				} else {
+					getEncogObject().save();	
+				}
+			}  else {
+				((ProjectEGFile)getEncogObject()).revert();
+			}
 		}
 		return true;
 	}
@@ -82,4 +94,31 @@ public abstract class EncogCommonTab extends JPanel {
 	
 	public abstract String getName();
 
+	/**
+	 * @return the dirty
+	 */
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	/**
+	 * @param dirty the dirty to set
+	 */
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+
+	/**
+	 * @return the parentTab
+	 */
+	public EncogCommonTab getParentTab() {
+		return parentTab;
+	}
+
+	/**
+	 * @param parentTab the parentTab to set
+	 */
+	public void setParentTab(EncogCommonTab parentTab) {
+		this.parentTab = parentTab;
+	}
 }

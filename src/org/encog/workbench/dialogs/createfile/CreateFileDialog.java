@@ -93,11 +93,11 @@ ListSelectionListener {
 		
 		content.add(bottom,BorderLayout.SOUTH);
 		
-		//this.model.addElement("Data Normalization");
 		this.model.addElement("Text File (*.txt)");
 		this.model.addElement("Machine Learning Method (*.eg)");
 		this.model.addElement("CSV File (*.csv)");
 		this.model.addElement("Training File (*.egb)");
+		this.model.addElement("NEAT Population (*.eg)");
 		
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -127,6 +127,9 @@ ListSelectionListener {
 		case 3:
 			this.type = CreateFileType.TrainingFile;
 			break;
+		case 4:
+			this.type = CreateFileType.NEAT;
+			break;
 		}
 		
 		this.filename = this.objectNameField.getText();
@@ -146,6 +149,9 @@ ListSelectionListener {
 			break;
 		case TrainingFile:
 			this.list.setSelectedIndex(3);
+			break;
+		case NEAT:
+			this.list.setSelectedIndex(4);
 			break;
 		}
 	}
@@ -176,6 +182,11 @@ ListSelectionListener {
 			this.text
 					.setText("A binary training file.  Encog training files can be either supervised or unsupervised.  They are stored in a cross-platform binary format and can be easily converted to/from CSV files.");
 			break;
+		case 4:
+			this.text
+					.setText("Create NeuroEvolution of Augmenting Topologies (NEAT) population.  This will create a population of genomes that can be used to create NEAT neural networks.  NEAT networks are trained using a genetic algorithm both to vary weights and structures.");
+			break;
+
 			
 		}
 

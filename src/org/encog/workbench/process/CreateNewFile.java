@@ -6,9 +6,11 @@ import java.io.IOException;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.basic.BasicNeuralDataPair;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.neural.neat.NEATPopulation;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createfile.CreateFileDialog;
 import org.encog.workbench.dialogs.createfile.CreateFileType;
+import org.encog.workbench.dialogs.population.NewPopulationDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateEmptyTrainingDialog;
 import org.encog.workbench.util.FileUtil;
 
@@ -55,6 +57,10 @@ public class CreateNewFile {
 				name = FileUtil.forceExtension(new File(name).getName(), "egb");
 				File path = new File(basePath, name);
 				createNewEGB(path);
+			} else if( dialog.getType() == CreateFileType.NEAT ) {
+				name = FileUtil.forceExtension(new File(name).getName(), "eg");
+				File path = new File(basePath, name);
+				createNewPopulation(path);
 			}
 			
 			EncogWorkBench.getInstance().getMainWindow().getTree()
@@ -81,6 +87,21 @@ public class CreateNewFile {
 				trainingData.add(pair);
 			}
 			trainingData.endLoad();
+		}
+	}
+	
+	private static void createNewPopulation(File path) {
+		NewPopulationDialog dialog = new NewPopulationDialog();
+
+		if (dialog.process()) {
+			int populationSize = dialog.getPopulationSize().getValue();
+			int inputCount = dialog.getInputNeurons().getValue();
+			int outputCount = dialog.getOutputNeurons().getValue();
+			NEATPopulation pop = new NEATPopulation(inputCount,outputCount,populationSize);
+			pop.setNeatActivationFunction(dialog.getNeatActivationFunction());
+			pop.setOutputActivationFunction(dialog.getOutputActivationFunction());
+			EncogWorkBench.getInstance().save(path.toString(),pop);
+			EncogWorkBench.getInstance().refresh();
 		}
 	}
 }

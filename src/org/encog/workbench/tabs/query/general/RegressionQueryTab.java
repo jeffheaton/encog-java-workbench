@@ -78,6 +78,7 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource() == this.calculateButton) {
 			try {
+				setDirty(true);
 				final BasicNeuralData input = new BasicNeuralData(
 						this.inputCount);
 				for (int i = 0; i < this.inputCount; i++) {
@@ -108,7 +109,7 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 	}
 
 	public MLRegression getData() {
-		return (MLRegression) getEncogObject();
+		return (MLRegression)((ProjectEGFile)getEncogObject()).getObject();
 	}
 
 	public void mouseClicked(final MouseEvent e) {

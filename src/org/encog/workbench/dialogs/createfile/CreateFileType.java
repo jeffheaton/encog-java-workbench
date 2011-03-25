@@ -4,5 +4,6 @@ public enum CreateFileType {
 	TextFile,
 	MachineLearningMethod,
 	CSVFile,
-	TrainingFile
+	TrainingFile,
+	NEAT
 }

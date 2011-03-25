@@ -46,8 +46,8 @@ public class NewPopulationDialog extends EncogPropertiesDialog implements PopupL
 	private ActivationFunction neatActivationFunction;
 
 	
-	public NewPopulationDialog(Frame owner) {
-		super(owner);
+	public NewPopulationDialog() {
+		super(EncogWorkBench.getInstance().getMainWindow());
 		this.setSize(400, 200);
 		this.setTitle("Create NEAT Population");
 		

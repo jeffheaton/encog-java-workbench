@@ -36,6 +36,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 
 /**
@@ -88,7 +89,7 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	 */
 	private void findData() {
 		this.trainingSets = EncogWorkBench.getInstance().getTrainingData();
-		//this.networks = EncogWorkBench.getInstance().getMLMethods();
+		this.networks = EncogWorkBench.getInstance().getMLMethods();
 	}
 
 	/**
@@ -98,20 +99,12 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 		if( this.comboNetwork.getSelectedValue()==null )
 			return null;
 		
-		//return (MLMethod)(((ProjectEGItem)this.comboNetwork.getSelectedValue()).getObj());
-		return null;
+		return (MLMethod)(((ProjectEGFile)this.comboNetwork.getSelectedValue()).getObject());
 	}
 	
 
-	public void setMethod(MLMethod mlMethod) {
-		int i=0;
-		for( ProjectEGFile m : this.networks) {
-			/*if( m.getObj()==mlMethod) {
-				((JComboBox)this.comboNetwork.getField()).setSelectedIndex(i);
-				return;
-			}*/
-			i++;
-		}		
+	public void setMethod(ProjectFile method) {
+		((JComboBox)this.comboNetwork.getField()).setSelectedItem(method);
 	}
 
 	/**
@@ -127,6 +120,10 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	
 	public ComboBoxField getComboTraining() {
 		return this.comboTraining;
+	}
+	
+	public ComboBoxField getComboNetwork() {
+		return this.comboNetwork;
 	}
 
 

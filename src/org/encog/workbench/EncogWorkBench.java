@@ -39,6 +39,7 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.logging.Logging;
+import org.encog.util.obj.ReflectionUtil;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
@@ -349,7 +350,7 @@ public class EncogWorkBench implements Runnable {
 		
 	}
 
-	public void save(String name, MLMethod network) {
+	public void save(String name, Object network) {
 		File file = new File(getProjectDirectory(),name);
 		EncogDirectoryPersistence.saveObject(file, network);
 		refresh();
@@ -357,6 +358,23 @@ public class EncogWorkBench implements Runnable {
 
 	public EncogDirectoryPersistence getProject() {
 		return this.getMainWindow().getTree().getModel().getProjectDirectory();
+	}
+
+	public List<ProjectEGFile> getMLMethods() {
+		List<ProjectEGFile> result = new ArrayList<ProjectEGFile>();
+		
+		for( ProjectItem item : this.getMainWindow().getTree().getModel().getData() )
+		{
+			if( item instanceof ProjectEGFile ) {
+				ProjectEGFile item2 = (ProjectEGFile)item;
+				Class<?> clazz = ReflectionUtil.resolveEncogClass(item2.getEncogType());
+				if( MLMethod.class.isAssignableFrom(clazz)) {
+					result.add(item2);	
+				}				
+			}
+		}
+		
+		return result;
 	}
 
 }

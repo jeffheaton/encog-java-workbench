@@ -75,6 +75,7 @@ public class ClassificationQueryTab extends EncogCommonTab implements ActionList
 	public void actionPerformed(final ActionEvent e) {
 		if (e.getSource() == this.calculateButton) {
 			try {
+				setDirty(true);
 				final BasicNeuralData input = new BasicNeuralData(
 						this.inputCount);
 				for (int i = 0; i < this.inputCount; i++) {

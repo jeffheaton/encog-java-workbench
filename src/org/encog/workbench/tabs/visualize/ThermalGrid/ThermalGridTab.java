@@ -6,6 +6,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import org.encog.neural.thermal.ThermalNetwork;
+import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.ThermalModel;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -17,6 +18,10 @@ public class ThermalGridTab extends EncogCommonTab {
 	
 	public ThermalGridTab(ProjectEGFile file) {
 		super(file);
+		
+		if( !(file.getObject() instanceof ThermalNetwork) ) {
+			throw new WorkBenchError("Can't view network as thermal.");
+		}
 		
 		setLayout(new BorderLayout());
 		this.model = new ThermalModel((ThermalNetwork) file.getObject());

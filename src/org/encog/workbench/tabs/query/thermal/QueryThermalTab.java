@@ -58,6 +58,7 @@ public class QueryThermalTab extends EncogCommonTab implements ActionListener {
 		} else if (e.getSource() == this.buttonGo) {
 			this.panel.go();
 		} else if (e.getSource() == this.buttonTrain) {
+			setDirty(true);
 			this.panel.train();
 		}
 	}

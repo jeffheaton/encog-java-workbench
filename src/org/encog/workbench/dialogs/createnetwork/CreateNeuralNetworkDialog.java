@@ -23,7 +23,6 @@
  */
 package org.encog.workbench.dialogs.createnetwork;
 
-import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -32,8 +31,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -140,43 +137,43 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 	public void setFields() {
 		switch (type) {
 		case Automatic:
-			this.list.setSelectedIndex(1);
+			this.list.setSelectedIndex(0);
 			break;			
 		case ADALINE:
-			this.list.setSelectedIndex(2);
+			this.list.setSelectedIndex(1);
 			break;
 		case ART1:
-			this.list.setSelectedIndex(3);
+			this.list.setSelectedIndex(2);
 			break;			
 		case BAM:
-			this.list.setSelectedIndex(4);
+			this.list.setSelectedIndex(3);
 			break;
 		case Boltzmann:
-			this.list.setSelectedIndex(5);
+			this.list.setSelectedIndex(4);
 			break;
 		case CPN:
-			this.list.setSelectedIndex(6);
+			this.list.setSelectedIndex(5);
 			break;
 		case Feedforward:
-			this.list.setSelectedIndex(7);
+			this.list.setSelectedIndex(6);
 			break;
 		case RBF:
-			this.list.setSelectedIndex(8);
+			this.list.setSelectedIndex(7);
 			break;
 		case SOM:
-			this.list.setSelectedIndex(9);
+			this.list.setSelectedIndex(8);
 			break;
 		case Hopfield:
-			this.list.setSelectedIndex(10);
+			this.list.setSelectedIndex(9);
 			break;
 		case Elman:
-			this.list.setSelectedIndex(11);
+			this.list.setSelectedIndex(10);
 			break;
 		case Jordan:
-			this.list.setSelectedIndex(12);
+			this.list.setSelectedIndex(11);
 			break;
 		case SVM:
-			this.list.setSelectedIndex(13);
+			this.list.setSelectedIndex(12);
 			break;
 		}
 

@@ -140,4 +140,20 @@ public class EncogTabManager {
 			tab.dispose();
 		}
 	}
+
+	public void closeAll(File f) {
+		Object[] list = this.tabs.toArray();
+		for(int i=0;i<list.length;i++) {
+			EncogCommonTab tab = (EncogCommonTab)list[i];
+			if( tab.getEncogObject()!=null ) {
+				if( tab.getEncogObject().getFile() !=null ) {
+					if( tab.getEncogObject().getFile().equals(f)) {
+						tab.setDirty(false);
+						tab.dispose();						
+					}
+				}
+			}
+		}
+		
+	}
 }

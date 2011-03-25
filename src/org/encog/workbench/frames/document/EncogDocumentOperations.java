@@ -37,7 +37,6 @@ import org.encog.engine.util.Format;
 import org.encog.ml.MLError;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.som.SOM;
 import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
@@ -46,11 +45,9 @@ import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EvaluateDialog;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
 import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
-import org.encog.workbench.dialogs.population.NewPopulationDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
-import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.EncogAnalystWizard;
@@ -63,7 +60,6 @@ import org.slf4j.LoggerFactory;
 public class EncogDocumentOperations {
 
 	private EncogDocumentFrame owner;
-	private int browser = 0;
 
 	@SuppressWarnings("unused")
 	final private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -144,22 +140,6 @@ public class EncogDocumentOperations {
 		}
 	}
 
-
-	private void performCreatePopulation(String name, ProjectEGFile pef) {
-		NewPopulationDialog dialog = new NewPopulationDialog(owner);
-
-		if (dialog.process()) {
-			int populationSize = dialog.getPopulationSize().getValue();
-			int inputCount = dialog.getInputNeurons().getValue();
-			int outputCount = dialog.getOutputNeurons().getValue();
-			NEATPopulation pop = new NEATPopulation(inputCount,outputCount,populationSize);
-			pop.setNeatActivationFunction(dialog.getNeatActivationFunction());
-			pop.setOutputActivationFunction(dialog.getOutputActivationFunction());
-			pop.setDescription("Population");
-			EncogWorkBench.getInstance().getMainWindow().redraw();
-		}
-
-	}
 
 	public void performBrowse() {
 		BrowserFrame browse = new BrowserFrame();
