@@ -62,5 +62,9 @@ public class QueryThermalTab extends EncogCommonTab implements ActionListener {
 		}
 	}
 
+	@Override
+	public String getName() {
+		return "Thrm :" + this.getEncogObject().getName();
+	}
 
 }

@@ -267,4 +267,9 @@ public class StructureTab extends EncogCommonTab {
 		return result;
 
 	}
+
+	@Override
+	public String getName() {
+		return "Structure: " + this.getEncogObject().getName();
+	}
 }

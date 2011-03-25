@@ -39,9 +39,11 @@ import org.encog.ml.MLMethod;
 import org.encog.ml.genetic.population.BasicPopulation;
 import org.encog.ml.svm.SVM;
 import org.encog.neural.neat.NEATPopulation;
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
 import org.encog.workbench.frames.EncogCommonFrame;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectTree;
 import org.encog.workbench.tabs.AboutTab;
@@ -143,11 +145,11 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public void redraw() {
 
 		// set the title properly
-		if (EncogWorkBench.getInstance().getCurrentFileName() == null) {
+		if (EncogWorkBench.getInstance().getProjectDirectory() == null) {
 			setTitle(EncogDocumentFrame.WINDOW_TITLE + " : No Project");
 		} else {
 			setTitle(EncogDocumentFrame.WINDOW_TITLE + " : "
-					+ EncogWorkBench.getInstance().getCurrentFileName());
+					+ EncogWorkBench.getInstance().getProjectDirectory());
 		}
 		getMenus().updateMenus();
 		this.tree.refresh();
@@ -201,14 +203,9 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	public void openTab(EncogCommonTab tab) {
 
-		openTab(tab, null);
-	}
-
-	public void openTab(EncogCommonTab tab, String title) {
-
 		int i = this.documentTabs.getTabCount();
 
-		this.documentTabs.add(title, tab);
+		this.documentTabs.add(tab.getName(), tab);
 
 		if (!this.tabManager.contains(tab)) {
 			if (i < this.documentTabs.getTabCount())
@@ -263,7 +260,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void displayAboutTab() {
-		this.openTab(this.aboutTab, "About");
+		this.openTab(this.aboutTab);
 	}
 
 	public boolean isModalTabOpen() {
@@ -300,11 +297,32 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public ProjectTree getTree() {
 		return tree;
 	}
+	
+	public void openEGFile(ProjectEGFile file) {
+		Object obj = file.getObject();
+		EncogCommonTab tab = null;
+			
+		if( obj instanceof BasicNetwork ) {
+			tab = new MLMethodTab(file);
+		} else {
+			tab = new GenericFileTab(file);
+			this.openTab(tab);
+		}
+		
+		if(tab!=null)
+			openTab(tab);
+	}
 
 	public void openFile(ProjectFile file) {
 		try {
 			EncogWorkBench.getInstance().getMainWindow().beginWait();
 			EncogCommonTab tab = this.tabManager.find(file);
+			
+			if( file instanceof ProjectEGFile ) {
+				openEGFile((ProjectEGFile) file);
+				return;
+			}
+			
 			if (tab == null) {
 				String extension = FileUtil.getFileExt(file.getFile());
 				if (extension.equalsIgnoreCase("txt")
@@ -399,7 +417,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	}
 
-	public void changeDirectory(String path) {
+	public void changeDirectory(File path) {
 		if (this.tabManager.getTabs().size() > 0) {
 			if (!EncogWorkBench
 					.askQuestion(

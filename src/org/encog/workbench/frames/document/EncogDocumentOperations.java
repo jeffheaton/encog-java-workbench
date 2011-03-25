@@ -31,7 +31,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
 import org.encog.Encog;
-import org.encog.EncogError;
 import org.encog.engine.util.ErrorCalculation;
 import org.encog.engine.util.ErrorCalculationMode;
 import org.encog.engine.util.Format;
@@ -44,11 +43,8 @@ import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.BenchmarkDialog;
-import org.encog.workbench.dialogs.EditEncogObjectProperties;
 import org.encog.workbench.dialogs.EvaluateDialog;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
-import org.encog.workbench.dialogs.createobject.CreateObjectDialog;
-import org.encog.workbench.dialogs.createobject.ObjectType;
 import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
 import org.encog.workbench.dialogs.population.NewPopulationDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
@@ -56,10 +52,8 @@ import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectFile;
-import org.encog.workbench.process.CreateNeuralNetwork;
 import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.EncogAnalystWizard;
-import org.encog.workbench.process.validate.ResourceNameValidate;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
 import org.encog.workbench.util.FileUtil;
@@ -120,7 +114,7 @@ public class EncogDocumentOperations {
 			project.mkdir();
 
 			EncogWorkBench.getInstance().getMainWindow().getTree()
-					.refresh(project.toString());
+					.refresh(project);
 
 			if (EncogWorkBench
 					.askQuestion(
@@ -139,7 +133,7 @@ public class EncogDocumentOperations {
 					.getEncogFolders());
 			final int result = fc.showOpenDialog(owner);
 			if (result == JFileChooser.APPROVE_OPTION) {
-				String path = fc.getSelectedFile().getAbsolutePath();
+				File path = fc.getSelectedFile().getAbsoluteFile();
 				EncogWorkBench.getInstance().getMainWindow()
 						.changeDirectory(path);
 			}
@@ -169,12 +163,12 @@ public class EncogDocumentOperations {
 
 	public void performBrowse() {
 		BrowserFrame browse = new BrowserFrame();
-		this.owner.openTab(browse, "Browser" + (browser++));
+		this.owner.openTab(browse);
 	}
 
 	public void performRBF() {
 		RadialBasisFunctionsTab rbf = new RadialBasisFunctionsTab();
-		this.owner.openTab(rbf, "RBF");
+		this.owner.openTab(rbf);
 	}
 
 	public void performHelpAbout() {

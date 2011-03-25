@@ -205,4 +205,9 @@ public class ResultValidationChart extends EncogCommonTab {
 		charts.add(chart);
 		chartPanels.add(chartPanel);
 	}
+
+	@Override
+	public String getName() {
+		return "Validation";
+	}
 }

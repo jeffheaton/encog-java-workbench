@@ -144,7 +144,11 @@ public class OCRQueryTab extends EncogCommonTab implements ActionListener {
 		if (e.getSource() == this.buttonQuery) {
 			performQuery();
 		}
-
+	}
+	
+	@Override
+	public String getName() {
+		return "OCR :" + this.getEncogObject().getName();
 	}
 
 }

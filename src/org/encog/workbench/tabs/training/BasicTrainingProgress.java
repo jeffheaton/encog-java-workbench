@@ -600,4 +600,9 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	public void setDevice(EncogCLDevice device) {
 		this.device = device;
 	}
+
+	@Override
+	public String getName() {
+		return "Training Progress";
+	}
 }

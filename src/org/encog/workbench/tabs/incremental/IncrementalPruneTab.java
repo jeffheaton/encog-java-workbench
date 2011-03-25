@@ -423,4 +423,9 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 		
 	}
 
+	@Override
+	public String getName() {
+		return "Prune Progress";
+	}
+
 }

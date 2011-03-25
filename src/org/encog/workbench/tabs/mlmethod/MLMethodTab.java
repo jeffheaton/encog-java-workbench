@@ -317,14 +317,6 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 	}
 
-	public boolean close() {
-		if (EncogWorkBench.askQuestion("Save",
-				"Would you like to save your changes?")) {
-			getEncogObject().save();
-		}  
-		return true;
-	}
-
 	public void performProperties() {
 		if (this.getEncogObject() instanceof MLProperties) {
 			MapDataFrame frame = new MapDataFrame(
@@ -573,6 +565,11 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			EncogWorkBench.displayError("Error",
 					"This Machine Learning Method cannot be restructured.");
 		}
+	}
+
+	@Override
+	public String getName() {
+		return this.getEncogObject().getName();
 	}
 
 }

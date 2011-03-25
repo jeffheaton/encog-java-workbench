@@ -101,6 +101,9 @@ public class AboutTab extends HTMLTab {
 		this.display(report.toString());
 	}
 	
-
+	@Override
+	public String getName() {
+		return "About";
+	}
 
 }

@@ -27,7 +27,7 @@ public class CreateNewFile {
 				return;
 			}
 			
-			String basePath = EncogWorkBench.getInstance().getMainWindow()
+			File basePath = EncogWorkBench.getInstance().getMainWindow()
 			.getTree().getPath();
 			
 			if (dialog.getType() == CreateFileType.MachineLearningMethod) {

@@ -33,30 +33,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
-import org.encog.engine.util.Format;
-import org.encog.ml.MLMethod;
-import org.encog.ml.genetic.genome.Genome;
-import org.encog.ml.genetic.population.BasicPopulation;
-import org.encog.ml.genetic.population.Population;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATTraining;
-import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.ExtractGenomes;
 import org.encog.workbench.dialogs.population.EditNEATPopulationDialog;
-import org.encog.workbench.dialogs.population.EditPopulationDialog;
 import org.encog.workbench.dialogs.training.methods.InputNEAT;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.GeneralPopulationModel;
 import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.SpeciesModel;
-import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.training.BasicTrainingProgress;
 
 public class NEATPopulationTab  extends EncogCommonTab implements ActionListener {
 
@@ -211,6 +202,11 @@ public class NEATPopulationTab  extends EncogCommonTab implements ActionListener
 			EncogWorkBench.getInstance().getMainWindow().openTab(tab, "Training");*/
 
 		}		
+	}
+
+	@Override
+	public String getName() {
+		return "Population: " + this.getEncogObject().getName();
 	}
 
 

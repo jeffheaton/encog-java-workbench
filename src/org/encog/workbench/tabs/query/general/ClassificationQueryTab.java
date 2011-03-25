@@ -113,4 +113,9 @@ public class ClassificationQueryTab extends EncogCommonTab implements ActionList
 
 	}
 
+	@Override
+	public String getName() {
+		return "Cls :" + this.getEncogObject().getName();
+	}
+
 }

@@ -159,13 +159,6 @@ public class EncogWorkBench implements Runnable {
 	}
 
 	/**
-	 * @return the currentFileName
-	 */
-	public String getCurrentFileName() {
-		return this.getMainWindow().getTree().getPath();
-	}
-
-	/**
 	 * @return the mainWindow
 	 */
 	public EncogDocumentFrame getMainWindow() {
@@ -348,11 +341,7 @@ public class EncogWorkBench implements Runnable {
 
 
 	public File getProjectDirectory() {
-		String str = this.getMainWindow().getTree().getModel().getPath();
-		if( str==null )
-			return null;
-		else
-		return new File(str);
+		return this.getMainWindow().getTree().getModel().getPath();
 	}
 
 	public void refresh() {
@@ -365,4 +354,9 @@ public class EncogWorkBench implements Runnable {
 		EncogDirectoryPersistence.saveObject(file, network);
 		refresh();
 	}
+
+	public EncogDirectoryPersistence getProject() {
+		return this.getMainWindow().getTree().getModel().getProjectDirectory();
+	}
+
 }

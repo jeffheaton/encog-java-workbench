@@ -31,7 +31,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 
-public class EncogCommonTab extends JPanel {
+public abstract class EncogCommonTab extends JPanel {
 
 	private ProjectFile encogObject;
 	private EncogDocumentFrame owner;
@@ -47,6 +47,12 @@ public class EncogCommonTab extends JPanel {
 	}
 
 	public boolean close() throws IOException {
+		if( this.getEncogObject()!=null ) {
+			if (EncogWorkBench.askQuestion("Save",
+					"Would you like to save your changes?")) {
+				getEncogObject().save();
+			}  			
+		}
 		return true;
 	}
 
@@ -73,5 +79,7 @@ public class EncogCommonTab extends JPanel {
 	public void setEncogObject(ProjectFile encogObject) {
 		this.encogObject = encogObject;
 	}
+	
+	public abstract String getName();
 
 }

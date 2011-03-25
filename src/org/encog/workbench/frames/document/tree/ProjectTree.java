@@ -102,16 +102,15 @@ public class ProjectTree extends JPanel implements MouseListener,
 					this.doc.openFile(pf);
 				}
 			} else if (obj instanceof ProjectParent && e.getClickCount() == 2) {
-				File p = new File(this.collectionModel.getPath())
-						.getParentFile();
+				File p = this.collectionModel.getPath().getParentFile();
 				EncogWorkBench.getInstance().getMainWindow()
-						.changeDirectory(p.toString());
+						.changeDirectory(p);
 			} else if (obj instanceof ProjectDirectory
 					&& e.getClickCount() == 2) {
-				File p = new File(new File(this.collectionModel.getPath()),
+				File p = new File(this.collectionModel.getPath(),
 						obj.toString());
 				EncogWorkBench.getInstance().getMainWindow()
-						.changeDirectory(p.toString());
+						.changeDirectory(p);
 			} else {
 				if (MouseUtil.isRightClick(e)) {
 					rightMouseClicked(e, obj);
@@ -145,12 +144,12 @@ public class ProjectTree extends JPanel implements MouseListener,
 
 	}
 
-	public void refresh(String path) {
+	public void refresh(File path) {
 		this.collectionModel.invalidate(path);
 		EncogWorkBench.getInstance().getMainWindow().redraw();
 	}
 
-	public String getPath() {
+	public File getPath() {
 		return this.collectionModel.getPath();
 
 	}

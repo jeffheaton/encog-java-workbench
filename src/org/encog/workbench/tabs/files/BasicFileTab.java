@@ -9,6 +9,13 @@ public class BasicFileTab extends EncogCommonTab {
 
 	public BasicFileTab(ProjectFile encogObject) {
 		super(encogObject);
-	}	
+	}
+
+	@Override
+	public String getName() {
+		return this.getEncogObject().getFile().getName();
+	}
+	
+	
 
 }

@@ -24,5 +24,10 @@ public class ThermalGridTab extends EncogCommonTab {
 		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		add(new JScrollPane(this.table), BorderLayout.CENTER);		
 	}
+	
+	@Override
+	public String getName() {
+		return "Visualize :" + this.getEncogObject().getName();
+	}
 
 }

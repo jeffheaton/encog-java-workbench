@@ -120,4 +120,9 @@ public class NEATTab extends EncogCommonTab  {
 					10, 10);
 		}		
 	}
+	
+	@Override
+	public String getName() {
+		return "Visualize :" + this.getEncogObject().getName();
+	}
 }

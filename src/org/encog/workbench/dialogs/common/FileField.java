@@ -97,8 +97,8 @@ public class FileField extends PropertiesField implements ActionListener {
 		if (e.getSource() == this.button) {
 			if (this.save) {;
 				final JFileChooser fc = new JFileChooser();
-				if(EncogWorkBench.getInstance().getCurrentFileName()!=null )
-					fc.setCurrentDirectory(new File(EncogWorkBench.getInstance().getCurrentFileName()));
+				if(EncogWorkBench.getInstance().getProjectDirectory()!=null )
+					fc.setCurrentDirectory(EncogWorkBench.getInstance().getProjectDirectory());
 				fc.setFileFilter(this.filter);
 				final int result = fc.showSaveDialog(this.getOwner());
 				if (result == JFileChooser.APPROVE_OPTION) {
@@ -107,8 +107,8 @@ public class FileField extends PropertiesField implements ActionListener {
 				}
 			} else {
 				final JFileChooser fc = new JFileChooser();
-				if(EncogWorkBench.getInstance().getCurrentFileName()!=null )
-					fc.setCurrentDirectory(new File(EncogWorkBench.getInstance().getCurrentFileName()));
+				if(EncogWorkBench.getInstance().getProjectDirectory()!=null )
+					fc.setCurrentDirectory(EncogWorkBench.getInstance().getProjectDirectory());
 				fc.addChoosableFileFilter(this.filter);
 				final int result = fc.showOpenDialog(this.getOwner());
 				if (result == JFileChooser.APPROVE_OPTION) {

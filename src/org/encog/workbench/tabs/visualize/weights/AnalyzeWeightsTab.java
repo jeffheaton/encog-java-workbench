@@ -148,4 +148,9 @@ public class AnalyzeWeightsTab extends EncogCommonTab implements ActionListener 
 		
 	}
 	
+	@Override
+	public String getName() {
+		return "Visualize :" + this.getEncogObject().getName();
+	}
+	
 }

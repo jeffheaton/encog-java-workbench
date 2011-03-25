@@ -53,5 +53,9 @@ public class SVMTab extends HTMLTab {
 		this.display(report.toString());
 	}
 	
+	@Override
+	public String getName() {
+		return "SVM :" + this.getEncogObject().getName();
+	}
 
 }

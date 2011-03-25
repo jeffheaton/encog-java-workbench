@@ -447,4 +447,9 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		return this.cancelCommand;
 	}
 
+	@Override
+	public String getName() {
+		return "Analyst Progress";
+	}
+
 }

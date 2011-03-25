@@ -154,9 +154,8 @@ public class CreateTrainingData {
 
 	public static void copyCSV(String name) {
 		final JFileChooser fc = new JFileChooser();
-		if (EncogWorkBench.getInstance().getCurrentFileName() != null)
-			fc.setCurrentDirectory(new File(EncogWorkBench.getInstance()
-					.getCurrentFileName()));
+		if (EncogWorkBench.getInstance().getProjectDirectory() != null)
+			fc.setCurrentDirectory(EncogWorkBench.getInstance().getProjectDirectory());
 		fc.addChoosableFileFilter(EncogDocumentFrame.CSV_FILTER);
 		final int result = fc.showOpenDialog(EncogWorkBench.getInstance()
 				.getMainWindow());

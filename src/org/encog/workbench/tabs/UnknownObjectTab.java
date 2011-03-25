@@ -19,5 +19,10 @@ public class UnknownObjectTab extends HTMLTab {
 		this.display(report.toString());
 		
 	}
+	
+	@Override
+	public String getName() {
+		return "Unknown :" + this.getEncogObject().getName();
+	}
 
 }

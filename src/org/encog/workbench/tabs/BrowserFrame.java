@@ -164,6 +164,11 @@ public class BrowserFrame extends EncogCommonTab implements TreeSelectionListene
 		}
 		
 	}
+	
+	@Override
+	public String getName() {
+		return "Browse";
+	}
 
 
 }

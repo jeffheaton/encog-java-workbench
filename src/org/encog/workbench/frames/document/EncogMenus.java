@@ -147,7 +147,7 @@ public class EncogMenus {
 	{
 		boolean modal = this.owner.isModalTabOpen();
 		boolean supportsClipboard = false;
-		boolean documentOpen = EncogWorkBench.getInstance().getCurrentFileName()!=null;
+		boolean documentOpen = EncogWorkBench.getInstance().getProjectDirectory()!=null;
 		
 		JTabbedPane tabs = EncogWorkBench.getInstance().getMainWindow().getDocumentTabs();
 

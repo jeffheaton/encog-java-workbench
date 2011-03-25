@@ -7,7 +7,7 @@ import javax.swing.JScrollPane;
 
 import org.encog.workbench.frames.document.tree.ProjectFile;
 
-public class HTMLTab extends EncogCommonTab {
+public abstract class HTMLTab extends EncogCommonTab {
 
 	private final JScrollPane scroll;
 	private final JEditorPane editor;

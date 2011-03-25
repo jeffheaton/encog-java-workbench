@@ -113,7 +113,11 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 
 	public void mouseClicked(final MouseEvent e) {
 		// TODO Auto-generated method stub
-
+	}
+	
+	@Override
+	public String getName() {
+		return "Reg :" + this.getEncogObject().getName();
 	}
 
 }

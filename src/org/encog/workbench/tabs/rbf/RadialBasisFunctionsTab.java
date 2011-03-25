@@ -180,4 +180,9 @@ public class RadialBasisFunctionsTab extends EncogCommonTab implements ActionLis
 		
 	}
 	
+	@Override
+	public String getName() {
+		return "RBF";
+	}
+	
 }

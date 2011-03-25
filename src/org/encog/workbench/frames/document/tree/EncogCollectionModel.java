@@ -33,16 +33,17 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.FileUtil;
 
 public class EncogCollectionModel implements TreeModel {
 
-	private String path;
+	private EncogDirectoryPersistence projectDirectory;
 	private List<ProjectItem> files = new ArrayList<ProjectItem>();
 	private List<TreeModelListener> listeners = new ArrayList<TreeModelListener>();
 
-	public EncogCollectionModel(String path) {
+	public EncogCollectionModel(File path) {
 		invalidate(path);
 	}
 
@@ -50,11 +51,14 @@ public class EncogCollectionModel implements TreeModel {
 	}
 
 	public Object getRoot() {
-		return path;
+		if( projectDirectory==null)
+			return null;
+		else
+			return projectDirectory.getParent();
 	}
 
 	public Object getChild(Object parent, int index) {
-		if (parent == path) {
+		if (parent == projectDirectory.getParent()) {
 			return this.files.get(index);
 		} else {
 			return null;
@@ -62,7 +66,7 @@ public class EncogCollectionModel implements TreeModel {
 	}
 
 	public int getChildCount(Object parent) {
-		if (parent == path) {
+		if (parent == projectDirectory.getParent()) {
 			return this.files.size();
 		} else {
 			return 0;			
@@ -70,13 +74,13 @@ public class EncogCollectionModel implements TreeModel {
 	}
 
 	public boolean isLeaf(Object node) {
-		if (node == path) {
+		if (node == projectDirectory.getParent()) {
 			return false;
 		} else {
 			if (node instanceof ProjectDirectory) {
 				return false;
 			} else if (node instanceof ProjectEGFile) {
-				return false;
+				return true;
 			} else if (node instanceof ProjectFile) {
 				return true;
 			}
@@ -90,7 +94,7 @@ public class EncogCollectionModel implements TreeModel {
 	}
 
 	public int getIndexOfChild(Object parent, Object child) {
-		if (parent == path) {
+		if (parent == projectDirectory.getParent()) {
 			return this.files.indexOf(child);
 		} else {
 			return -1;
@@ -105,7 +109,7 @@ public class EncogCollectionModel implements TreeModel {
 		this.listeners.remove(l);
 	}
 
-	public void invalidate(String path) {
+	public void invalidate(File path) {
 
 		EncogWorkBench.getInstance().getMainWindow().beginWait();
 		this.files.clear();
@@ -113,14 +117,13 @@ public class EncogCollectionModel implements TreeModel {
 		if (path == null)
 			return;
 
-		this.path = path;
+		this.projectDirectory = new EncogDirectoryPersistence(path);
 
 		// sort
 		TreeSet<File> folderList = new TreeSet<File>();
 		TreeSet<File> fileList = new TreeSet<File>();
 
-		File file = new File(path);
-		for (File entry : file.listFiles()) {
+		for (File entry : path.listFiles()) {
 			if (!entry.isHidden()) {
 				if (entry.isDirectory())
 					folderList.add(entry);
@@ -133,8 +136,8 @@ public class EncogCollectionModel implements TreeModel {
 		// build list
 		this.files.clear();
 
-		if (file.getParent() != null) {
-			this.files.add(new ProjectParent(file.getParentFile()));
+		if (path.getParent() != null) {
+			this.files.add(new ProjectParent(path.getParentFile()));
 		}
 
 		for (File entry : folderList) {
@@ -159,7 +162,7 @@ public class EncogCollectionModel implements TreeModel {
 
 		// notify
 		Object[] p = new Object[1];
-		p[0] = this.path;
+		p[0] = this.projectDirectory.getParent();
 		TreeModelEvent e = new TreeModelEvent(this, p);
 		for (TreeModelListener l : this.listeners) {
 			l.treeStructureChanged(e);
@@ -169,11 +172,14 @@ public class EncogCollectionModel implements TreeModel {
 	}
 
 	public void invalidate() {
-		invalidate(this.path);
+		invalidate(getPath());
 	}
 
-	public String getPath() {
-		return this.path;
+	public File getPath() {
+		if( this.projectDirectory==null)
+			return null;
+		else
+		return this.projectDirectory.getParent();
 	}
 
 	public String[] listEGFiles() {
@@ -213,5 +219,14 @@ public class EncogCollectionModel implements TreeModel {
 		return this.files;
 		
 	}
+
+	/**
+	 * @return the projectDirectory
+	 */
+	public EncogDirectoryPersistence getProjectDirectory() {
+		return projectDirectory;
+	}
+	
+	
 
 }

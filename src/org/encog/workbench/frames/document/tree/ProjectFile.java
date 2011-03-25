@@ -49,4 +49,8 @@ public class ProjectFile extends ProjectItem {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public String getName() {
+		return this.file.getName();
+	}
 }

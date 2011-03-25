@@ -106,6 +106,10 @@ public class VisualizeGridTab extends EncogCommonTab implements ListSelectionLis
 		if( e.getSource()==this.btnUpdate) {
 			refresh();
 		}
-		
+	}
+	
+	@Override
+	public String getName() {
+		return "Visualize :" + this.getEncogObject().getName();
 	}
 }
