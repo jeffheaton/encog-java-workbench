@@ -37,6 +37,7 @@ import org.encog.engine.util.ErrorCalculation;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.neat.NEATPopulation;
+import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.logging.Logging;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
@@ -357,5 +358,11 @@ public class EncogWorkBench implements Runnable {
 	public void refresh() {
 		this.getMainWindow().getTree().refresh();
 		
+	}
+
+	public void save(String name, MLMethod network) {
+		File file = new File(getProjectDirectory(),name);
+		EncogDirectoryPersistence.saveObject(file, network);
+		refresh();
 	}
 }

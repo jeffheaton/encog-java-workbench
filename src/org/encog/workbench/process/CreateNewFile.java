@@ -16,7 +16,7 @@ public class CreateNewFile {
 	public static void performCreateFile() throws IOException {
 		CreateFileDialog dialog = new CreateFileDialog(EncogWorkBench
 				.getInstance().getMainWindow());
-		dialog.setType(CreateFileType.EGFile);
+		dialog.setType(CreateFileType.MachineLearningMethod);
 		
 		
 		if (dialog.process()) {
@@ -30,12 +30,12 @@ public class CreateNewFile {
 			String basePath = EncogWorkBench.getInstance().getMainWindow()
 			.getTree().getPath();
 			
-			if (dialog.getType() == CreateFileType.EGFile) {
+			if (dialog.getType() == CreateFileType.MachineLearningMethod) {
 				
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
-
+					CreateNeuralNetwork.process(name);
 				}
 			} else if (dialog.getType() == CreateFileType.TextFile) {
 				

@@ -74,10 +74,7 @@ public class EncogPopupMenus {
 			else if (source == this.popupFileNewFile) {
 				CreateNewFile.performCreateFile();
 
-			} else if (source == this.popupFileNewObject) {
-				EncogWorkBench.getInstance().getMainWindow().getOperations()
-						.performObjectsCreate();
-			}
+			} 
 
 			boolean first = true;
 			List<ProjectItem> list = this.owner.getTree().getSelectedValue();

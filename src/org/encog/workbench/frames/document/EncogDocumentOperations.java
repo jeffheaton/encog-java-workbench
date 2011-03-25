@@ -150,45 +150,6 @@ public class EncogDocumentOperations {
 		}
 	}
 
-	public void performObjectsCreate() throws IOException {
-
-		try {
-			if (EncogWorkBench.getInstance().getMainWindow().getTree()
-					.listEGFiles().length < 1) {
-				EncogWorkBench.displayError("Can't Create an Object",
-						"There are no EG files in the current directory tree.");
-				return;
-			}
-
-			CreateObjectDialog dialog = new CreateObjectDialog(EncogWorkBench
-					.getInstance().getMainWindow());
-
-			dialog.setType(ObjectType.NeuralNetwork);
-
-			if (!dialog.process())
-				return;
-
-			String name = dialog.getResourceName();
-			String filename = dialog.getFilename();
-
-			ProjectEGFile pef = (ProjectEGFile) EncogWorkBench.getInstance()
-					.getMainWindow().getTree().findTreeFile(filename);
-
-			switch (dialog.getType()) {
-			case NeuralNetwork:
-				CreateNeuralNetwork.process(name, pef);
-				break;
-			case NEATPopulation:
-				performCreatePopulation(name, pef);
-				break;
-
-			}
-
-		} catch (EncogError t) {
-			EncogWorkBench.displayError("Error creating object", t);
-			logger.error("Error creating object", t);
-		}
-	}
 
 	private void performCreatePopulation(String name, ProjectEGFile pef) {
 		NewPopulationDialog dialog = new NewPopulationDialog(owner);

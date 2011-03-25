@@ -95,7 +95,7 @@ ListSelectionListener {
 		
 		//this.model.addElement("Data Normalization");
 		this.model.addElement("Text File (*.txt)");
-		this.model.addElement("Encog EG File (*.eg)");
+		this.model.addElement("Machine Learning Method (*.eg)");
 		this.model.addElement("CSV File (*.csv)");
 		this.model.addElement("Training File (*.egb)");
 		
@@ -119,7 +119,7 @@ ListSelectionListener {
 			this.type = CreateFileType.TextFile;
 			break;
 		case 1:
-			this.type = CreateFileType.EGFile;
+			this.type = CreateFileType.MachineLearningMethod;
 			break;
 		case 2:
 			this.type = CreateFileType.CSVFile;
@@ -138,7 +138,7 @@ ListSelectionListener {
 		case TextFile:
 			this.list.setSelectedIndex(0);
 			break;
-		case EGFile:
+		case MachineLearningMethod:
 			this.list.setSelectedIndex(1);
 			break;			
 		case CSVFile:
@@ -166,7 +166,7 @@ ListSelectionListener {
 			break;
 		case 1:
 			this.text
-					.setText("A Encog EG file usually ends with the extension .eg.  These files hold neural networks and other machine learning data.");
+					.setText("A machine learning method learns to recognize patterns in your data.  Machine learning methods include neural networks, support vector machines, and others.");
 			break;
 		case 2:
 			this.text

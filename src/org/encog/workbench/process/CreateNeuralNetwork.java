@@ -23,6 +23,8 @@
  */
 package org.encog.workbench.process;
 
+import java.io.File;
+
 import org.encog.bot.BotUtil;
 import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.ml.MLMethod;
@@ -42,6 +44,7 @@ import org.encog.neural.pattern.JordanPattern;
 import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.pattern.SOMPattern;
 import org.encog.neural.pattern.SVMPattern;
+import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createnetwork.CreateADALINEDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateART1;
@@ -58,12 +61,11 @@ import org.encog.workbench.dialogs.createnetwork.CreateRBFDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateSVMDialog;
 import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
-import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.tabs.incremental.IncrementalPruneTab;
 
 public class CreateNeuralNetwork {
 
-	public static void process(String name, ProjectEGFile pef) {
+	public static void process(String name) {
 		MLMethod network = null;
 		CreateNeuralNetworkDialog dialog = new CreateNeuralNetworkDialog(
 				EncogWorkBench.getInstance().getMainWindow());
@@ -112,8 +114,8 @@ public class CreateNeuralNetwork {
 				break;
 			}
 
-			if (network != null) {
-				
+			if (network != null) {				
+				EncogWorkBench.getInstance().save(name,network);
 			}
 		}
 	}
