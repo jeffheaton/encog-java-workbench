@@ -45,6 +45,7 @@ import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.frames.document.EncogOutputPanel;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 import org.encog.workbench.util.WorkbenchLogHandler;
@@ -350,9 +351,8 @@ public class EncogWorkBench implements Runnable {
 		
 	}
 
-	public void save(String name, Object network) {
-		File file = new File(getProjectDirectory(),name);
-		EncogDirectoryPersistence.saveObject(file, network);
+	public void save(File path, Object network) {
+		EncogDirectoryPersistence.saveObject(path, network);
 		refresh();
 	}
 
@@ -369,6 +369,23 @@ public class EncogWorkBench implements Runnable {
 				ProjectEGFile item2 = (ProjectEGFile)item;
 				Class<?> clazz = ReflectionUtil.resolveEncogClass(item2.getEncogType());
 				if( MLMethod.class.isAssignableFrom(clazz)) {
+					result.add(item2);	
+				}				
+			}
+		}
+		
+		return result;
+	}
+
+	public List<ProjectEGFile> getNEATPopulations() {
+		List<ProjectEGFile> result = new ArrayList<ProjectEGFile>();
+		
+		for( ProjectItem item : this.getMainWindow().getTree().getModel().getData() )
+		{
+			if( item instanceof ProjectEGFile ) {
+				ProjectEGFile item2 = (ProjectEGFile)item;
+				Class<?> clazz = ReflectionUtil.resolveEncogClass(item2.getEncogType());
+				if( NEATPopulation.class.isAssignableFrom(clazz)) {
 					result.add(item2);	
 				}				
 			}

@@ -30,6 +30,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -95,7 +96,6 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 
 	private int total;
 	private int current;
-	private String name;
 	private double low;
 	private double high;
 
@@ -124,14 +124,13 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 	private int windowSize;
 
 	public IncrementalPruneTab(int iterations, int weightTries, int windowSize, NeuralDataSet training,
-			FeedForwardPattern pattern, String name) {
+			FeedForwardPattern pattern) {
 		super(null);
 
 		this.weightTries = weightTries;
 		this.iterations = iterations;
 		this.training = training;
 		this.pattern = pattern;
-		this.name = name;
 		this.windowSize = windowSize;
 		
 		this.prune = new PruneIncremental(this.training, this.pattern,

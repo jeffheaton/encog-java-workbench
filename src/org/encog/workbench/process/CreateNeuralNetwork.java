@@ -65,7 +65,7 @@ import org.encog.workbench.tabs.incremental.IncrementalPruneTab;
 
 public class CreateNeuralNetwork {
 
-	public static void process(String name) {
+	public static void process(File path) {
 		MLMethod network = null;
 		CreateNeuralNetworkDialog dialog = new CreateNeuralNetworkDialog(
 				EncogWorkBench.getInstance().getMainWindow());
@@ -73,54 +73,54 @@ public class CreateNeuralNetwork {
 		if (dialog.process()) {
 			switch (dialog.getType()) {
 			case Automatic:
-				createAutomatic(name);
+				createAutomatic();
 				network=null;
 				break;
 			case Feedforward:
-				network = createFeedForward(name);
+				network = createFeedForward();
 				break;
 			case SOM:
-				network = createSOM(name);
+				network = createSOM();
 				break;
 			case Hopfield:
-				network = createHopfield(name);
+				network = createHopfield();
 				break;
 			case Elman:
-				network = createElman(name);
+				network = createElman();
 				break;
 			case Jordan:
-				network = createJordan(name);
+				network = createJordan();
 				break;
 			case RBF:
-				network = createRBF(name);
+				network = createRBF();
 				break;
 			case BAM:
-				network = createBAM(name);
+				network = createBAM();
 				break;
 			case CPN:
-				network = createCPN(name);
+				network = createCPN();
 				break;
 			case Boltzmann:
-				network = createBoltzmann(name);
+				network = createBoltzmann();
 				break;
 			case ADALINE:
-				network = createADALINE(name);
+				network = createADALINE();
 				break;
 			case ART1:
-				network = createART1(name);
+				network = createART1();
 				break;		
 			case SVM:
-				network = createSVM(name);
+				network = createSVM();
 				break;
 			}
 
 			if (network != null) {				
-				EncogWorkBench.getInstance().save(name,network);
+				EncogWorkBench.getInstance().save(path,network);
 			}
 		}
 	}
 
-	private static MLMethod createSVM(String name) {
+	private static MLMethod createSVM() {
 		CreateSVMDialog dialog = new CreateSVMDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.setSVMType(SVMType.EpsilonSupportVectorRegression);
@@ -137,7 +137,7 @@ public class CreateNeuralNetwork {
 	}
 
 	
-	private static MLMethod createRBF(String name) {
+	private static MLMethod createRBF() {
 		CreateRBFDialog dialog = new CreateRBFDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -151,7 +151,7 @@ public class CreateNeuralNetwork {
 
 	}
 
-	private static MLMethod createJordan(String name) {
+	private static MLMethod createJordan() {
 		CreateJordanDialog dialog = new CreateJordanDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -166,7 +166,7 @@ public class CreateNeuralNetwork {
 
 	}
 
-	private static MLMethod createElman(String name) {
+	private static MLMethod createElman() {
 		CreateElmanDialog dialog = new CreateElmanDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -181,7 +181,7 @@ public class CreateNeuralNetwork {
 
 	}
 
-	private static MLMethod createHopfield(String name) {
+	private static MLMethod createHopfield() {
 		CreateHopfieldDialog dialog = new CreateHopfieldDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -192,7 +192,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 
-	private static MLMethod createSOM(String name) {
+	private static MLMethod createSOM() {
 		CreateSOMDialog dialog = new CreateSOMDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -204,7 +204,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 
-	private static MLMethod createFeedForward(String name) {
+	private static MLMethod createFeedForward() {
 		CreateFeedforward dialog = new CreateFeedforward(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.setActivationFunctionHidden(new ActivationTANH());
@@ -234,7 +234,7 @@ public class CreateNeuralNetwork {
 
 	}
 
-	private static BasicNetwork createAutomatic(String name) {
+	private static BasicNetwork createAutomatic() {
 		CreateAutomatic dialog = new CreateAutomatic(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.setActivationFunction(new ActivationTANH());
@@ -262,8 +262,7 @@ public class CreateNeuralNetwork {
 					dialog.getWeightTries().getValue(),
 					dialog.getWindowSize().getValue(),
 					training,
-					pattern,
-					name);
+					pattern);
 			
 			for (int i = 0; i < dialog.getHidden().getModel().size(); i++) {
 				String str = (String) dialog.getHidden().getModel()
@@ -286,7 +285,7 @@ public class CreateNeuralNetwork {
 
 	}
 	
-	private static MLMethod createADALINE(String name) {
+	private static MLMethod createADALINE() {
 		CreateADALINEDialog dialog = new CreateADALINEDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -298,7 +297,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 	
-	private static MLMethod createBAM(String name) {
+	private static MLMethod createBAM() {
 		CreateBAMDialog dialog = new CreateBAMDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -310,7 +309,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 	
-	private static MLMethod createBoltzmann(String name) {
+	private static MLMethod createBoltzmann() {
 		CreateBlotzmannDialog dialog = new CreateBlotzmannDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -321,7 +320,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 	
-	private static MLMethod createCPN(String name) {
+	private static MLMethod createCPN() {
 		CreateCPNDialog dialog = new CreateCPNDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
@@ -334,7 +333,7 @@ public class CreateNeuralNetwork {
 			return null;
 	}
 	
-	private static MLMethod createART1(String name) {
+	private static MLMethod createART1() {
 		CreateART1 dialog = new CreateART1(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {

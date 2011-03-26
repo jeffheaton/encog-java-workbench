@@ -57,7 +57,7 @@ public class InputNEAT extends EncogPropertiesDialog {
 	/**
 	 * All available networks to display in the combo box.
 	 */
-	private List<ProjectFile> populations;
+	private List<ProjectEGFile> populations;
 	
 	private final DoubleField maxError;
 	
@@ -95,17 +95,17 @@ public class InputNEAT extends EncogPropertiesDialog {
 	 */
 	private void findData() {
 		this.trainingSets = EncogWorkBench.getInstance().getTrainingData();
-		//this.populations = EncogWorkBench.getInstance().getNEATPopulations();
+		this.populations = EncogWorkBench.getInstance().getNEATPopulations();
 	}
 
 	/**
 	 * @return The network that the user chose.
 	 */
-	public NEATPopulation getPopulation() {
+	public ProjectEGFile getPopulation() {
 		if( this.comboPopulation.getSelectedValue()==null )
 			return null;
 		
-		return null;// (NEATPopulation)(((ProjectEGItem)this.comboPopulation.getSelectedValue()).getObj());
+		return ((ProjectEGFile)this.comboPopulation.getSelectedValue());
 	}
 	
 

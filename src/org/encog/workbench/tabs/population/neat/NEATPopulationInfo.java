@@ -67,9 +67,11 @@ public class NEATPopulationInfo extends JPanel {
 		y+=fm.getHeight();
 		g.drawString("Species Count:", 20, y);
 		g.drawString("Youth Age Threshold:", 300, y);
+		g.drawString("Input Count:", 580, y);
 		y+=fm.getHeight();
 		g.drawString("Innovation Count:", 20, y);
 		g.drawString("Youth Bonus:", 300, y);
+		g.drawString("Output Count:", 580, y);
 		y+=fm.getHeight();
 		g.drawString("Population Type:", 20, y);
 		g.drawString("Survival Rate:", 300, y);
@@ -120,9 +122,11 @@ public class NEATPopulationInfo extends JPanel {
 		y+=fm.getHeight();
 		g.drawString(Format.formatInteger(speciesSize), 200, y);
 		g.drawString(Format.formatInteger(population.getYoungBonusAgeThreshold()), 450, y);
+		g.drawString(Format.formatInteger(population.getInputCount()), 730, y);
 		y+=fm.getHeight();
 		g.drawString(Format.formatInteger(innovationsSize), 200, y);
 		g.drawString(Format.formatPercent(population.getYoungScoreBonus()), 450, y);
+		g.drawString(Format.formatInteger(population.getOutputCount()), 730, y);
 		y+=fm.getHeight();
 		g.drawString(type, 200, y);
 		g.drawString(Format.formatPercent(population.getSurvivalRate()), 450, y);

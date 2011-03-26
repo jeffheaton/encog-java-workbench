@@ -37,7 +37,7 @@ public class CreateNewFile {
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
-					CreateNeuralNetwork.process(name);
+					CreateNeuralNetwork.process(new File(name));
 				}
 			} else if (dialog.getType() == CreateFileType.TextFile) {
 				
@@ -100,7 +100,7 @@ public class CreateNewFile {
 			NEATPopulation pop = new NEATPopulation(inputCount,outputCount,populationSize);
 			pop.setNeatActivationFunction(dialog.getNeatActivationFunction());
 			pop.setOutputActivationFunction(dialog.getOutputActivationFunction());
-			EncogWorkBench.getInstance().save(path.toString(),pop);
+			EncogWorkBench.getInstance().save(path,pop);
 			EncogWorkBench.getInstance().refresh();
 		}
 	}

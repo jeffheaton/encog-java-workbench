@@ -36,6 +36,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
 import org.encog.ml.MLMethod;
+import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
@@ -53,6 +54,7 @@ import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.tabs.files.ImageFileTab;
 import org.encog.workbench.tabs.files.TextFileTab;
 import org.encog.workbench.tabs.mlmethod.MLMethodTab;
+import org.encog.workbench.tabs.population.neat.NEATPopulationTab;
 import org.encog.workbench.util.ExtensionFilter;
 import org.encog.workbench.util.FileUtil;
 
@@ -298,6 +300,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			
 		if( obj instanceof MLMethod ) {
 			tab = new MLMethodTab(file);
+		} else if( obj instanceof NEATPopulation ) {
+			tab = new NEATPopulationTab(file);
 		} else {
 			tab = new GenericFileTab(file);
 			this.openTab(tab);
@@ -343,6 +347,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 				this.documentTabs.setSelectedComponent(tab);
 				this.menus.updateMenus();
 			}
+		} catch(Throwable t) {
+			EncogWorkBench.displayError("Error Reading File", t);
 		} finally {
 			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
@@ -362,53 +368,6 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		} finally {
 			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
-	}
-
-	public void open(Object obj) {
-		/*if (obj instanceof SVM) {
-			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
-					.getTabManager().find(obj);
-
-			if (tab == null) {
-				tab = new SVMTab((SVM)obj);
-				this.openTab(tab, "svm");
-			} else {
-				this.documentTabs.setSelectedComponent(tab);
-			}
-		} else if (obj instanceof MLMethod) {
-			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
-					.getTabManager().find(obj);
-
-			if (tab == null) {
-				tab = new MLMethodTab((MLMethod)obj);
-				this.openTab(tab, "mlmethod");
-			} else {
-				this.documentTabs.setSelectedComponent(tab);
-			}
-		} else if (obj instanceof BasicPopulation ) {
-
-			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
-			.getTabManager().find(obj);
-
-			if (tab == null) {				
-					tab = new NEATPopulationTab((NEATPopulation)obj);
-					this.openTab(tab, "mlmethod");
-			} else {
-				this.documentTabs.setSelectedComponent(tab);
-			}
-					
-		} else {
-			EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
-					.getTabManager().find(obj);
-
-			if (tab == null) {
-				tab = new UnknownObjectTab(obj);
-				this.openTab(tab, "name");
-			} else {
-				this.documentTabs.setSelectedComponent(tab);
-			}
-		}*/
-
 	}
 
 	public void changeDirectory(File path) {
