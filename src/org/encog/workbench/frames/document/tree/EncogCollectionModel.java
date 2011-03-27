@@ -51,7 +51,7 @@ public class EncogCollectionModel implements TreeModel {
 	}
 
 	public Object getRoot() {
-		if( projectDirectory==null)
+		if (projectDirectory == null)
 			return null;
 		else
 			return projectDirectory.getParent();
@@ -69,7 +69,7 @@ public class EncogCollectionModel implements TreeModel {
 		if (parent == projectDirectory.getParent()) {
 			return this.files.size();
 		} else {
-			return 0;			
+			return 0;
 		}
 	}
 
@@ -111,64 +111,67 @@ public class EncogCollectionModel implements TreeModel {
 
 	public void invalidate(File path) {
 
-		EncogWorkBench.getInstance().getMainWindow().beginWait();
-		this.files.clear();
+		try {
+			EncogWorkBench.getInstance().getMainWindow().beginWait();
+			this.files.clear();
 
-		if (path == null)
-			return;
+			if (path == null)
+				return;
 
-		this.projectDirectory = new EncogDirectoryPersistence(path);
+			this.projectDirectory = new EncogDirectoryPersistence(path);
 
-		// sort
-		TreeSet<File> folderList = new TreeSet<File>();
-		TreeSet<File> fileList = new TreeSet<File>();
+			// sort
+			TreeSet<File> folderList = new TreeSet<File>();
+			TreeSet<File> fileList = new TreeSet<File>();
 
-		for (File entry : path.listFiles()) {
-			if (!entry.isHidden()) {
-				if (entry.isDirectory())
-					folderList.add(entry);
-				else
-					fileList.add(entry);
-			}
-
-		}
-
-		// build list
-		this.files.clear();
-
-		if (path.getParent() != null) {
-			this.files.add(new ProjectParent(path.getParentFile()));
-		}
-
-		for (File entry : folderList) {
-			this.files.add(new ProjectDirectory(entry));
-		}
-
-		for (File entry : fileList) {
-			String ext = FileUtil.getFileExt(entry);
-			
-			if ( ext.equalsIgnoreCase("egb") ) {
-				this.files.add(new ProjectTraining(entry));
-			} else if (ext.equalsIgnoreCase("eg")) {
-				try {					
-					this.files.add(new ProjectEGFile(entry));
-				} catch (Throwable t) {
-					this.files.add(new ProjectFile(entry,true));
+			for (File entry : path.listFiles()) {
+				if (!entry.isHidden()) {
+					if (entry.isDirectory())
+						folderList.add(entry);
+					else
+						fileList.add(entry);
 				}
-			} else {
-				this.files.add(new ProjectFile(entry));
-			}
-		}
 
-		// notify
-		Object[] p = new Object[1];
-		p[0] = this.projectDirectory.getParent();
-		TreeModelEvent e = new TreeModelEvent(this, p);
-		for (TreeModelListener l : this.listeners) {
-			l.treeStructureChanged(e);
+			}
+
+			// build list
+			this.files.clear();
+
+			if (path.getParent() != null) {
+				this.files.add(new ProjectParent(path.getParentFile()));
+			}
+
+			for (File entry : folderList) {
+				this.files.add(new ProjectDirectory(entry));
+			}
+
+			for (File entry : fileList) {
+				String ext = FileUtil.getFileExt(entry);
+
+				if (ext.equalsIgnoreCase("egb")) {
+					this.files.add(new ProjectTraining(entry));
+				} else if (ext.equalsIgnoreCase("eg")) {
+					try {
+						this.files.add(new ProjectEGFile(entry));
+					} catch (Throwable t) {
+						this.files.add(new ProjectFile(entry, true));
+					}
+				} else {
+					this.files.add(new ProjectFile(entry));
+				}
+			}
+
+			// notify
+			Object[] p = new Object[1];
+			p[0] = this.projectDirectory.getParent();
+			TreeModelEvent e = new TreeModelEvent(this, p);
+			for (TreeModelListener l : this.listeners) {
+				l.treeStructureChanged(e);
+			}
+		} finally {
+
+			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
-		
-		EncogWorkBench.getInstance().getMainWindow().endWait();
 	}
 
 	public void invalidate() {
@@ -176,48 +179,44 @@ public class EncogCollectionModel implements TreeModel {
 	}
 
 	public File getPath() {
-		if( this.projectDirectory==null)
+		if (this.projectDirectory == null)
 			return null;
 		else
-		return this.projectDirectory.getParent();
+			return this.projectDirectory.getParent();
 	}
 
 	public String[] listEGFiles() {
 		List<String> files = new ArrayList<String>();
-		
-		for( ProjectItem item: this.files )
-		{
-			if( item instanceof ProjectEGFile )
-			{
-				files.add( ((ProjectEGFile)item).getFile().getName() );
+
+		for (ProjectItem item : this.files) {
+			if (item instanceof ProjectEGFile) {
+				files.add(((ProjectEGFile) item).getFile().getName());
 			}
 		}
-		
+
 		String[] result = new String[files.size()];
 		files.toArray(result);
-		
+
 		return result;
 	}
 
 	public ProjectFile findTreeFile(String filename) {
 
-		for( ProjectItem item: this.files )
-		{
-			if( item instanceof ProjectFile )
-			{
-				if( ((ProjectFile)item).getFile().getName().equalsIgnoreCase(filename) )
-				{
-					return (ProjectFile)item;
+		for (ProjectItem item : this.files) {
+			if (item instanceof ProjectFile) {
+				if (((ProjectFile) item).getFile().getName().equalsIgnoreCase(
+						filename)) {
+					return (ProjectFile) item;
 				}
 			}
 		}
-				
+
 		return null;
 	}
 
 	public List<ProjectItem> getData() {
 		return this.files;
-		
+
 	}
 
 	/**
@@ -226,7 +225,5 @@ public class EncogCollectionModel implements TreeModel {
 	public EncogDirectoryPersistence getProjectDirectory() {
 		return projectDirectory;
 	}
-	
-	
 
 }
