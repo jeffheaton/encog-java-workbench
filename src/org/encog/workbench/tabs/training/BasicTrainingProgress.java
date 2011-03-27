@@ -205,6 +205,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 
 	private AtomicInteger resetOption = new AtomicInteger(-1);
 	
+	private boolean error = false;
+	
 
 	/**
 	 * Construct the dialog box.
@@ -263,6 +265,9 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	}
 
 	private void performClose() {
+		
+		if( error )
+			return;
 
 		if (EncogWorkBench.askQuestion("Training", "Save the training?")) {
 
@@ -456,7 +461,13 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 				this.lastError = this.train.getError();
 
 				if (this.resetOption.get() != -1) {
-					if( !(getEncogObject() instanceof MLMethod) )
+					MLMethod method = null;
+					
+					if( getEncogObject() instanceof ProjectEGFile ) {
+						method = (MLMethod)((ProjectEGFile)getEncogObject()).getObject();
+					}
+					
+					if( method==null )
 					{
 						EncogWorkBench.displayError("Error", "This machine learning method cannot be reset or randomized.");
 						return;
@@ -464,8 +475,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 					
 					switch (this.resetOption.get()) {
 					case 0:
-						if (this.getEncogObject() instanceof MLResettable) {
-							((MLResettable) this.getEncogObject()).reset();
+						if (method instanceof MLResettable) {
+							((MLResettable)method).reset();
 						} else {
 							EncogWorkBench
 									.displayError("Error",
@@ -473,22 +484,22 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 						}
 						break;
 					case 1:
-						(new Distort(0.01)).randomize((MLMethod)getEncogObject());
+						(new Distort(0.01)).randomize(method);
 						break;
 					case 2:
-						(new Distort(0.05)).randomize((MLMethod)getEncogObject());
+						(new Distort(0.05)).randomize(method);
 						break;
 					case 3:
-						(new Distort(0.1)).randomize((MLMethod)getEncogObject());
+						(new Distort(0.1)).randomize(method);
 						break;
 					case 4:
-						(new Distort(0.15)).randomize((MLMethod)getEncogObject());
+						(new Distort(0.15)).randomize(method);
 						break;
 					case 5:
-						(new Distort(0.20)).randomize((MLMethod)getEncogObject());
+						(new Distort(0.20)).randomize(method);
 						break;
 					case 6:
-						(new Distort(0.50)).randomize((MLMethod)getEncogObject());
+						(new Distort(0.50)).randomize(method);
 						break;
 
 					}
@@ -533,8 +544,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 				dispose();
 			}
 		} catch (Throwable t) {
-			// EncogWorkBench.displayError("Error", t, this.network,
-			// this.trainingData);
+			this.error = true;
+			EncogWorkBench.displayError("Error", t, this.getEncogObject(),this.trainingData);
 			shutdown();
 			stopped();
 			dispose();

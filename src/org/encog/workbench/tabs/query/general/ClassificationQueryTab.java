@@ -99,7 +99,7 @@ public class ClassificationQueryTab extends EncogCommonTab implements ActionList
 				EncogWorkBench.displayError("Query Error", ex.getMessage());
 			} catch (Throwable t) {
 				ErrorDialog.handleError(t,
-						(MLMethod) this.getEncogObject(), null);
+						this.getEncogObject(), null);
 			}
 		}
 

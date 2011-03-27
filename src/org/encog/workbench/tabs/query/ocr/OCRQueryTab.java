@@ -129,7 +129,7 @@ public class OCRQueryTab extends EncogCommonTab implements ActionListener {
 		} catch (EncogError ex) {
 			EncogWorkBench.displayError("Query Error", ex.getMessage());
 		} catch (Throwable t) {
-			ErrorDialog.handleError(t, method, null);
+			ErrorDialog.handleError(t, this.getEncogObject(), null);
 		}
 	}
 

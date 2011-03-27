@@ -29,14 +29,16 @@ import javax.swing.table.TableModel;
 import org.encog.engine.util.Format;
 import org.encog.ml.genetic.genome.Genome;
 import org.encog.ml.genetic.population.Population;
+import org.encog.neural.neat.NEATPopulation;
+import org.encog.neural.neat.training.NEATGenome;
 
 public class GeneralPopulationModel implements TableModel {
 
-	private Population population;
+	private NEATPopulation population;
 	
-	public static String[] COLUMNS = { "Genome ID", "Chromosomes", "Spawn Size", "Score" };
+	public static String[] COLUMNS = { "Genome ID", "Neurons", "Links", "Spawn Size", "Score" };
 	
-	public GeneralPopulationModel(Population population)
+	public GeneralPopulationModel(NEATPopulation population)
 	{
 		this.population = population;
 	}
@@ -64,17 +66,19 @@ public class GeneralPopulationModel implements TableModel {
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		Genome genome = this.population.getGenomes().get(rowIndex);
+		NEATGenome genome = (NEATGenome)this.population.getGenomes().get(rowIndex);
 		
 		switch(columnIndex)
 		{
 			case 0:
 				return Format.formatInteger((int)genome.getGenomeID());
 			case 1:
-				return Format.formatInteger(genome.getChromosomes().size());
+				return Format.formatInteger(genome.getNeurons().size());
 			case 2:
-				return Format.formatDouble(genome.getAmountToSpawn(),2);
+				return Format.formatInteger(genome.getLinks().size());
 			case 3:
+				return Format.formatDouble(genome.getAmountToSpawn(),2);
+			case 4:
 				return Format.formatDouble(genome.getScore(),4);
 			default:
 				return "";

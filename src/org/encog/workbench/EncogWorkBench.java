@@ -214,7 +214,7 @@ public class EncogWorkBench implements Runnable {
 	}
 
 	public static void displayError(String title, Throwable t,
-			MLMethod network, NeuralDataSet set) {
+			ProjectFile network, NeuralDataSet set) {
 		if (t instanceof EncogError) {
 			displayError(title,
 					"An error occured while performing this operation:\n"

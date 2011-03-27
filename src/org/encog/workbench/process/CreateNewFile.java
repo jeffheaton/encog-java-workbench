@@ -37,7 +37,7 @@ public class CreateNewFile {
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
-					CreateNeuralNetwork.process(new File(name));
+					CreateNeuralNetwork.process(path);
 				}
 			} else if (dialog.getType() == CreateFileType.TextFile) {
 				

@@ -35,6 +35,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.util.EncogFonts;
 
 public class ErrorDialog extends EncogCommonDialog {
@@ -43,7 +44,7 @@ public class ErrorDialog extends EncogCommonDialog {
 	private final JTextArea text;
 	private final JScrollPane scroll;
 	
-	public ErrorDialog(Frame owner, Throwable t, MLMethod network, NeuralDataSet dataset) {
+	public ErrorDialog(Frame owner, Throwable t, ProjectFile network, NeuralDataSet dataset) {
 		super(owner);
 		this.setSize(640, 480);
 		setTitle("An Unhandled Error Occured");
@@ -116,7 +117,7 @@ public class ErrorDialog extends EncogCommonDialog {
 		
 	}
 	
-	public static void handleError(Throwable t, MLMethod network, NeuralDataSet training)
+	public static void handleError(Throwable t, ProjectFile network, NeuralDataSet training)
 	{
 		t.printStackTrace();
 		ErrorDialog dialog = new ErrorDialog(EncogWorkBench.getInstance().getMainWindow(),t,network,training);
