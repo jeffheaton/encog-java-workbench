@@ -97,7 +97,9 @@ public class CreateNewFile {
 			int populationSize = dialog.getPopulationSize().getValue();
 			int inputCount = dialog.getInputNeurons().getValue();
 			int outputCount = dialog.getOutputNeurons().getValue();
+			boolean snapshot = dialog.getSnapshot().getValue();
 			NEATPopulation pop = new NEATPopulation(inputCount,outputCount,populationSize);
+			pop.setSnapshot(snapshot);
 			pop.setNeatActivationFunction(dialog.getNeatActivationFunction());
 			pop.setOutputActivationFunction(dialog.getOutputActivationFunction());
 			EncogWorkBench.getInstance().save(path,pop);

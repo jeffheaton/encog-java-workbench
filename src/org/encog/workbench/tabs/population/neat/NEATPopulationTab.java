@@ -26,6 +26,7 @@ package org.encog.workbench.tabs.population.neat;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -33,16 +34,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
+import org.encog.ml.genetic.genome.Genome;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATTraining;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.TrainingSetScore;
+import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.ExtractGenomes;
 import org.encog.workbench.dialogs.population.EditNEATPopulationDialog;
+import org.encog.workbench.dialogs.population.ExtractGenomes;
 import org.encog.workbench.dialogs.training.methods.InputNEAT;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.GeneralPopulationModel;
@@ -136,23 +140,19 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener 
 		if (dialog.process()) {
 			String prefix = dialog.getPrefix().getValue();
 			int count = dialog.getGenomesToExtract().getValue();
-
-			CalculateScore score = new TrainingSetScore(dialog.getTrainingSet());
-
-			/*final NEATTraining train = new NEATTraining(
-					score, dialog.getNetwork(),this.population);
 			
 			for(int i=0;i<count;i++)
 			{
 				Genome genome = this.population.getGenomes().get(i);
 				genome.decode();
-				BasicNetwork network = (BasicNetwork)genome.getOrganism();
-				network.setDescription("Top genetic neural network, score=" + Format.formatDouble(genome.getScore(),5) );
-				String name = prefix + i;
-				//EncogWorkBench.getInstance().getCurrentFile().add(name,network);
-				EncogWorkBench.getInstance().getMainWindow().redraw();
+				NEATNetwork network = (NEATNetwork)genome.getOrganism();
+				String name = FileUtil.forceExtension( prefix + i, "eg" );
+				File path = new File(EncogWorkBench.getInstance().getProjectDirectory(),name);
+				EncogWorkBench.getInstance().save(path, network);
+				
 			}
-			*/
+			EncogWorkBench.getInstance().getMainWindow().redraw();
+			
 		}
 
 	}

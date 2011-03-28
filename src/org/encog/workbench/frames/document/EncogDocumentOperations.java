@@ -112,12 +112,6 @@ public class EncogDocumentOperations {
 			EncogWorkBench.getInstance().getMainWindow().getTree()
 					.refresh(project);
 
-			if (EncogWorkBench
-					.askQuestion(
-							"Wizard",
-							"Would you like to use a wizard to generate files\nnecessary to work with a CSV data file?")) {
-				EncogAnalystWizard.createEncogAnalyst(null);
-			}
 		}
 	}
 

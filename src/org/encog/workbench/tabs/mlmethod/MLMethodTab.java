@@ -48,6 +48,7 @@ import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
 import org.encog.mathutil.randomize.Randomizer;
 import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.ml.MLClassification;
+import org.encog.ml.MLContext;
 import org.encog.ml.MLEncodable;
 import org.encog.ml.MLInput;
 import org.encog.ml.MLMethod;
@@ -415,6 +416,17 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 		report.tablePair("Resettable",
 				(method instanceof MLResettable) ? "true" : "false");
+		
+		report.tablePair("Context",
+				(method instanceof MLContext) ? "true" : "false");
+		
+		
+		if( method instanceof NEATNetwork ) {
+			NEATNetwork neat = (NEATNetwork)method;
+			report.tablePair("Output Activation Function", neat.getOutputActivationFunction().getClass().getSimpleName());
+			report.tablePair("NEAT Activation Function", neat.getActivationFunction().getClass().getSimpleName());
+		}
+		
 		report.endTable();
 
 		if (this.method instanceof BasicNetwork) {
@@ -454,6 +466,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			}
 			report.endTable();
 		}
+		
+
 
 		report.endBody();
 		report.endHTML();
