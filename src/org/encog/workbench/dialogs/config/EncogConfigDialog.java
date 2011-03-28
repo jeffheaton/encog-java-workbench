@@ -32,8 +32,6 @@ import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
-import org.encog.workbench.dialogs.common.PasswordField;
-import org.encog.workbench.dialogs.common.TextField;
 
 public class EncogConfigDialog extends EncogPropertiesDialog {
 

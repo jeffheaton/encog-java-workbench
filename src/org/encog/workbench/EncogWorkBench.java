@@ -270,7 +270,7 @@ public class EncogWorkBench implements Runnable {
 
 	public static void initCL() {
 		try {
-			Encog.getInstance().initCL();
+			//Encog.getInstance().initCL();
 		} catch (Throwable t) {
 			EncogWorkBench
 					.displayError(

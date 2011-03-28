@@ -270,7 +270,7 @@ public class TrainBasicNetwork {
 			final double initialUpdate = dialog.getInitialUpdate().getValue();
 			final double maxStep = dialog.getMaxStep().getValue();
 			Train train = new ResilientPropagation((BasicNetwork) file.getObject(),
-					trainingData, null, initialUpdate, maxStep);
+					trainingData, initialUpdate, maxStep);
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}
 	}

@@ -40,7 +40,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import org.encog.engine.opencl.EncogCLDevice;
 import org.encog.mathutil.randomize.Distort;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
@@ -116,8 +115,6 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 * The training method being used.
 	 */
 	private Train train;
-
-	private EncogCLDevice device;
 
 	/**
 	 * The training data.
@@ -598,21 +595,6 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		this.buttonStart.setEnabled(true);
 		this.buttonStop.setEnabled(false);
 		this.cancel = true;
-	}
-
-	/**
-	 * @return the device
-	 */
-	public EncogCLDevice getDevice() {
-		return device;
-	}
-
-	/**
-	 * @param device
-	 *            the device to set
-	 */
-	public void setDevice(EncogCLDevice device) {
-		this.device = device;
 	}
 
 	@Override

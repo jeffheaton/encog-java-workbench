@@ -193,7 +193,7 @@ public class EncogDocumentOperations {
 			ErrorCalculation.setMode(EncogWorkBench.getInstance().getConfig()
 					.getErrorCalculation());
 
-			if (config.isUseOpenCL() && Encog.getInstance().getCL() == null) {
+			/*if (config.isUseOpenCL() && Encog.getInstance().getCL() == null) {
 				EncogWorkBench.initCL();
 				if (Encog.getInstance().getCL() != null) {
 					EncogWorkBench
@@ -206,7 +206,7 @@ public class EncogDocumentOperations {
 						.displayMessage(
 								"OpenCL",
 								"Encog Workbench will stop using your GPU the next time\nthe workbench is restarted.");
-			}
+			}*/
 		}
 	}
 
