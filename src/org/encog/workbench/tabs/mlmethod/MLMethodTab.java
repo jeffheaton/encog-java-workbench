@@ -75,13 +75,13 @@ import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.mlmethod.structure.StructureTab;
 import org.encog.workbench.tabs.query.general.ClassificationQueryTab;
 import org.encog.workbench.tabs.query.general.RegressionQueryTab;
 import org.encog.workbench.tabs.query.ocr.OCRQueryTab;
 import org.encog.workbench.tabs.query.thermal.QueryThermalTab;
 import org.encog.workbench.tabs.visualize.ThermalGrid.ThermalGridTab;
 import org.encog.workbench.tabs.visualize.neat.NEATTab;
+import org.encog.workbench.tabs.visualize.structure.StructureTab;
 import org.encog.workbench.tabs.visualize.weights.AnalyzeWeightsTab;
 
 public class MLMethodTab extends EncogCommonTab implements ActionListener {
@@ -365,15 +365,11 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 	private void analyzeStructure() {
 
-		if (method instanceof BasicNetwork) {
+		if (method instanceof MLMethod) {
 			StructureTab tab = new StructureTab(
-					((BasicNetwork)this.method));
+					((MLMethod)this.method));
 			EncogWorkBench.getInstance().getMainWindow()
 					.openModalTab(tab, "Network Structure");
-		} else if (method instanceof NEATNetwork) {
-			NEATTab tab = new NEATTab((ProjectEGFile) this.getEncogObject());
-			EncogWorkBench.getInstance().getMainWindow()
-					.openModalTab(tab, "NEAT Structure");
 		} else {
 			throw new WorkBenchError("No analysis available for: "
 					+ this.method.getClass().getSimpleName());

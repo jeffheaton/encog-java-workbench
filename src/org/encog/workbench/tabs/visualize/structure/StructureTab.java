@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.tabs.mlmethod.structure;
+package org.encog.workbench.tabs.visualize.structure;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -33,7 +33,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -42,7 +44,12 @@ import javax.swing.border.Border;
 
 import org.apache.commons.collections15.Transformer;
 import org.encog.engine.network.flat.FlatNetwork;
+import org.encog.ml.MLMethod;
+import org.encog.neural.neat.NEATLink;
+import org.encog.neural.neat.NEATNetwork;
+import org.encog.neural.neat.NEATNeuron;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.tabs.EncogCommonTab;
 
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
@@ -61,17 +68,26 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 public class StructureTab extends EncogCommonTab {
 
-	private FlatNetwork flat;
 	private VisualizationViewer<DrawnNeuron, DrawnConnection> vv;
 	
-	public StructureTab(BasicNetwork basicNetwork) {
+	public StructureTab(MLMethod method) {
 		super(null);
 		
-		this.flat = basicNetwork.getStructure().getFlat();
-
 		// Graph<V, E> where V is the type of the vertices
 		// and E is the type of the edges
-		Graph<DrawnNeuron, DrawnConnection> g = buildGraph();
+		Graph<DrawnNeuron, DrawnConnection> g = null;
+		
+		if( method instanceof BasicNetwork ) {
+			BasicNetwork network = (BasicNetwork)method;
+			g = buildGraph(network.getStructure().getFlat());
+		} else if( method instanceof NEATNetwork ) {
+			NEATNetwork neat = (NEATNetwork)method;
+			g = buildGraph(neat);
+		}
+		
+		if( g==null ) {
+			throw new WorkBenchError("Can't visualize network: " + method.getClass().getSimpleName());
+		}
 
 		Transformer<DrawnNeuron, Point2D> staticTranformer = new Transformer<DrawnNeuron, Point2D>() {
 
@@ -177,7 +193,47 @@ public class StructureTab extends EncogCommonTab {
         
 	}
 
-	public Graph<DrawnNeuron, DrawnConnection> buildGraph() {
+	private Graph<DrawnNeuron, DrawnConnection> buildGraph(NEATNetwork neat) {
+
+		double width = this.getWidth();
+		double height = this.getHeight();
+		List<DrawnNeuron> neurons = new ArrayList<DrawnNeuron>();
+		Graph<DrawnNeuron, DrawnConnection> result = new SparseMultigraph<DrawnNeuron, DrawnConnection>();
+		List<DrawnNeuron> connections = new ArrayList<DrawnNeuron>();
+		Map<NEATNeuron,DrawnNeuron> neuronMap = new HashMap<NEATNeuron,DrawnNeuron>();
+		
+		// place all the neurons
+		for(NEATNeuron neatNeuron : neat.getNeurons() ) {
+			DrawnNeuron neuron = new DrawnNeuron(DrawnNeuronType.Input, "N", neatNeuron.getSplitX()*width, neatNeuron.getSplitY()*height);
+			neurons.add(neuron);
+			neuronMap.put(neatNeuron, neuron);
+		}
+		
+		// place all the connections
+		for(NEATNeuron neatNeuron : neat.getNeurons() ) {
+			for(NEATLink neatLink: neatNeuron.getOutputboundLinks() ) {
+				DrawnNeuron fromNeuron = neuronMap.get(neatLink.getFromNeuron());
+				DrawnNeuron toNeuron = neuronMap.get(neatLink.getToNeuron());
+				DrawnConnection connection = new DrawnConnection(fromNeuron,toNeuron,neatLink.getWeight());
+				fromNeuron.getOutbound().add(connection);
+				toNeuron.getInbound().add(connection);
+			}
+		}
+
+		
+		
+		for (DrawnNeuron neuron : neurons) {
+			result.addVertex(neuron);
+			for (DrawnConnection connection : neuron.getOutbound()) {
+				result.addEdge(connection, connection.getFrom(),
+						connection.getTo(), EdgeType.DIRECTED);
+			}
+		}
+
+		return result;
+	}
+
+	public Graph<DrawnNeuron, DrawnConnection> buildGraph(FlatNetwork flat) {
 		int inputCount = 1;
 		int outputCount = 1;
 		int hiddenCount = 1;

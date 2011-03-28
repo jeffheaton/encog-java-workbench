@@ -1,4 +1,4 @@
-package org.encog.workbench.tabs.mlmethod.structure;
+package org.encog.workbench.tabs.visualize.structure;
 
 
 public enum DrawnNeuronType {
