@@ -37,7 +37,6 @@ import org.encog.engine.util.Format;
 import org.encog.ml.MLError;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.som.SOM;
 import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
@@ -50,7 +49,6 @@ import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.process.CreateTrainingData;
-import org.encog.workbench.process.EncogAnalystWizard;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
 import org.encog.workbench.util.FileUtil;
@@ -150,20 +148,13 @@ public class EncogDocumentOperations {
 	}
 
 	public void performEditConfig() {
-		// ObjectEditorFrame config = new
-		// ObjectEditorFrame(EncogWorkBench.getInstance().getConfig());
-		// config.setVisible(true);
 
 		EncogConfigDialog dialog = new EncogConfigDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 
 		EncogWorkBenchConfig config = EncogWorkBench.getInstance().getConfig();
 
-		dialog.getUserID().setValue(config.getEncogCloudUserID());
-		dialog.getPassword().setValue(config.getEncogCloudPassword());
 		dialog.getDefaultError().setValue(config.getDefaultError());
-		dialog.getNetwork().setValue(config.getEncogCloudNetwork());
-		dialog.getAutoConnect().setValue(config.isAutoConnect());
 		dialog.getThreadCount().setValue(config.getThreadCount());
 		dialog.getUseOpenCL().setValue(config.isUseOpenCL());
 		switch (config.getErrorCalculation()) {
@@ -182,11 +173,7 @@ public class EncogDocumentOperations {
 		}
 
 		if (dialog.process()) {
-			config.setEncogCloudUserID(dialog.getUserID().getValue());
-			config.setEncogCloudPassword(dialog.getPassword().getValue());
 			config.setDefaultError(dialog.getDefaultError().getValue());
-			config.setAutoConnect(dialog.getAutoConnect().getValue());
-			config.setEncogCloudNetwork(dialog.getNetwork().getValue());
 			config.setThreadCount(dialog.getThreadCount().getValue());
 			config.setUseOpenCL(dialog.getUseOpenCL().getValue());
 			switch (((JComboBox) dialog.getErrorCalculation().getField())
@@ -201,7 +188,7 @@ public class EncogDocumentOperations {
 				config.setErrorCalculation(ErrorCalculationMode.ARCTAN);
 				break;
 			}
-			EncogWorkBench.saveConfig();
+			EncogWorkBench.getInstance().getConfig().saveConfig();
 
 			ErrorCalculation.setMode(EncogWorkBench.getInstance().getConfig()
 					.getErrorCalculation());
@@ -238,14 +225,14 @@ public class EncogDocumentOperations {
 					EncogWorkBench.displayMessage("Error For this Network", ""
 							+ Format.formatPercent(error));
 
-				} else if (method instanceof SOM) {
+				} else {
 					EncogWorkBench
 							.displayError(
 									"Error",
 									"The Machine Learning method "
 											+ method.getClass().getSimpleName()
 											+ " does not support error calculation.");
-				}
+				} 
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error Evaluating Network", t);

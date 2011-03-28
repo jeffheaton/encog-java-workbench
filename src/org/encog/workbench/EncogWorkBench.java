@@ -25,6 +25,9 @@ package org.encog.workbench;
 
 import java.awt.Frame;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -38,6 +41,7 @@ import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.persist.EncogDirectoryPersistence;
+import org.encog.persist.EncogWriteHelper;
 import org.encog.util.logging.Logging;
 import org.encog.util.obj.ReflectionUtil;
 import org.encog.workbench.config.EncogWorkBenchConfig;
@@ -79,7 +83,7 @@ public class EncogWorkBench implements Runnable {
 	private EncogWorkBenchConfig config;
 
 	private WorkbenchLogHandler logHandler;
-	
+
 	/**
 	 * The current filename being edited.
 	 */
@@ -183,20 +187,6 @@ public class EncogWorkBench implements Runnable {
 		this.mainWindow = mainWindow;
 	}
 
-	public static void saveConfig() {
-
-	}
-
-	public static void loadConfig() {
-		String home = System.getProperty("user.home");
-		File file = new File(home, CONFIG_FILENAME);
-
-		try {
-
-		} catch (Exception e) {
-			// ignore error reading config file, it probably exists already and just needs t obe created.
-		}
-	}
 
 	public static String displayInput(String prompt) {
 		return JOptionPane.showInputDialog(null, prompt, "");
@@ -216,7 +206,8 @@ public class EncogWorkBench implements Runnable {
 	public static void displayError(String title, Throwable t,
 			ProjectFile network, NeuralDataSet set) {
 		if (t instanceof EncogError) {
-			displayError(title,
+			displayError(
+					title,
 					"An error occured while performing this operation:\n"
 							+ t.toString());
 			t.printStackTrace();
@@ -225,7 +216,7 @@ public class EncogWorkBench implements Runnable {
 	}
 
 	public static void displayError(String title, Throwable t) {
-		displayError(title,t,null,null);
+		displayError(title, t, null, null);
 		EncogWorkBench.getInstance().getMainWindow().endWait();
 	}
 
@@ -236,19 +227,20 @@ public class EncogWorkBench implements Runnable {
 			} catch (InterruptedException e) {
 				return;
 			}
-			//background();
+			// background();
 		}
 	}
 
 	public void init() {
-		EncogWorkBench.loadConfig();
+		EncogWorkBench.getInstance().getConfig().loadConfig();
 
-		if( EncogWorkBench.getInstance().getConfig().isUseOpenCL()) {
+		if (EncogWorkBench.getInstance().getConfig().isUseOpenCL()) {
 			EncogWorkBench.initCL();
 		}
-		
-		ErrorCalculation.setMode(EncogWorkBench.getInstance().getConfig().getErrorCalculation());
-		
+
+		ErrorCalculation.setMode(EncogWorkBench.getInstance().getConfig()
+				.getErrorCalculation());
+
 		Thread thread = new Thread(this);
 		thread.setDaemon(true);
 		thread.start();
@@ -267,7 +259,7 @@ public class EncogWorkBench implements Runnable {
 		workBench.setMainWindow(new EncogDocumentFrame());
 
 		workBench.init();
-		
+
 		try {
 			workBench.getMainWindow().setVisible(true);
 		} catch (Throwable t) {
@@ -277,39 +269,34 @@ public class EncogWorkBench implements Runnable {
 	}
 
 	public static void initCL() {
-		try
-		{
+		try {
 			Encog.getInstance().initCL();
-		}
-		catch(Throwable t)
-		{
-			EncogWorkBench.displayError("Error", "Can't init OpenCL.\n  Make sure you have a compatible graphics card,\n and the drivers have  been installed.");
+		} catch (Throwable t) {
+			EncogWorkBench
+					.displayError(
+							"Error",
+							"Can't init OpenCL.\n  Make sure you have a compatible graphics card,\n and the drivers have  been installed.");
 			EncogWorkBench.displayError("Error", t);
 			EncogWorkBench.getInstance().getConfig().setUseOpenCL(false);
-			EncogWorkBench.saveConfig();
+			EncogWorkBench.getInstance().getConfig().saveConfig();
 		}
-		
+
 	}
-	
-	public void clearOutput()
-	{
+
+	public void clearOutput() {
 		this.getMainWindow().getOutputPane().clear();
 	}
-	
-	public void output(String str)
-	{
+
+	public void output(String str) {
 		EncogOutputPanel pane = this.getMainWindow().getOutputPane();
-		if( pane!=null )
-		{
+		if (pane != null) {
 			pane.output(str);
 		}
 	}
-	
-	public void outputLine(String str)
-	{
+
+	public void outputLine(String str) {
 		EncogOutputPanel pane = this.getMainWindow().getOutputPane();
-		if( pane!=null )
-		{
+		if (pane != null) {
 			pane.outputLine(str);
 		}
 	}
@@ -320,27 +307,26 @@ public class EncogWorkBench implements Runnable {
 	public WorkbenchLogHandler getLogHandler() {
 		return logHandler;
 	}
-	
+
 	public File getEncogFolders() {
 		String home = System.getProperty("user.home");
-		File encogFolders =  new File(home,"EncogProjects");
+		File encogFolders = new File(home, "EncogProjects");
 		encogFolders.mkdir();
 		return encogFolders;
 	}
 
 	public List<ProjectTraining> getTrainingData() {
-		
+
 		List<ProjectTraining> result = new ArrayList<ProjectTraining>();
-		
-		for( ProjectItem item : this.getMainWindow().getTree().getModel().getData() )
-		{
-			if( item instanceof ProjectTraining )
-				result.add((ProjectTraining)item);
+
+		for (ProjectItem item : this.getMainWindow().getTree().getModel()
+				.getData()) {
+			if (item instanceof ProjectTraining)
+				result.add((ProjectTraining) item);
 		}
-		
+
 		return result;
 	}
-
 
 	public File getProjectDirectory() {
 		return this.getMainWindow().getTree().getModel().getPath();
@@ -348,7 +334,7 @@ public class EncogWorkBench implements Runnable {
 
 	public void refresh() {
 		this.getMainWindow().getTree().refresh();
-		
+
 	}
 
 	public void save(File path, Object network) {
@@ -362,35 +348,37 @@ public class EncogWorkBench implements Runnable {
 
 	public List<ProjectEGFile> getMLMethods() {
 		List<ProjectEGFile> result = new ArrayList<ProjectEGFile>();
-		
-		for( ProjectItem item : this.getMainWindow().getTree().getModel().getData() )
-		{
-			if( item instanceof ProjectEGFile ) {
-				ProjectEGFile item2 = (ProjectEGFile)item;
-				Class<?> clazz = ReflectionUtil.resolveEncogClass(item2.getEncogType());
-				if( MLMethod.class.isAssignableFrom(clazz)) {
-					result.add(item2);	
-				}				
+
+		for (ProjectItem item : this.getMainWindow().getTree().getModel()
+				.getData()) {
+			if (item instanceof ProjectEGFile) {
+				ProjectEGFile item2 = (ProjectEGFile) item;
+				Class<?> clazz = ReflectionUtil.resolveEncogClass(item2
+						.getEncogType());
+				if (MLMethod.class.isAssignableFrom(clazz)) {
+					result.add(item2);
+				}
 			}
 		}
-		
+
 		return result;
 	}
 
 	public List<ProjectEGFile> getNEATPopulations() {
 		List<ProjectEGFile> result = new ArrayList<ProjectEGFile>();
-		
-		for( ProjectItem item : this.getMainWindow().getTree().getModel().getData() )
-		{
-			if( item instanceof ProjectEGFile ) {
-				ProjectEGFile item2 = (ProjectEGFile)item;
-				Class<?> clazz = ReflectionUtil.resolveEncogClass(item2.getEncogType());
-				if( NEATPopulation.class.isAssignableFrom(clazz)) {
-					result.add(item2);	
-				}				
+
+		for (ProjectItem item : this.getMainWindow().getTree().getModel()
+				.getData()) {
+			if (item instanceof ProjectEGFile) {
+				ProjectEGFile item2 = (ProjectEGFile) item;
+				Class<?> clazz = ReflectionUtil.resolveEncogClass(item2
+						.getEncogType());
+				if (NEATPopulation.class.isAssignableFrom(clazz)) {
+					result.add(item2);
+				}
 			}
 		}
-		
+
 		return result;
 	}
 

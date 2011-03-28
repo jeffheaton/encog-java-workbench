@@ -173,7 +173,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			this.closed = true;
 		}
 		super.windowClosing(e);
-		EncogWorkBench.saveConfig();
+		EncogWorkBench.getInstance().getConfig().saveConfig();
 	}
 
 	/**

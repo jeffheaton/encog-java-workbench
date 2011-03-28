@@ -25,6 +25,7 @@ package org.encog.workbench.tabs;
 
 import java.awt.Frame;
 
+import org.encog.ml.MLContext;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
@@ -45,6 +46,9 @@ public class ValidationChart {
 			method = dialog.getNetwork();
 			training = dialog.getTrainingSet();
 
+			if( method instanceof MLContext )
+				((MLContext)method).clearContext();
+			
 			ResultValidationChart chart = new ResultValidationChart();
 			chart.setData(training, method);
 			EncogWorkBench.getInstance().getMainWindow().openModalTab(chart, "Validation");
