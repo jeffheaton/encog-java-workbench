@@ -194,9 +194,13 @@ public class StructureTab extends EncogCommonTab {
 	}
 
 	private Graph<DrawnNeuron, DrawnConnection> buildGraph(NEATNetwork neat) {
+		
+		int inputCount = 1;
+		int outputCount = 1;
+		int hiddenCount = 1;
+		int biasCount = 1;
 
-		double width = this.getWidth();
-		double height = this.getHeight();
+
 		List<DrawnNeuron> neurons = new ArrayList<DrawnNeuron>();
 		Graph<DrawnNeuron, DrawnConnection> result = new SparseMultigraph<DrawnNeuron, DrawnConnection>();
 		List<DrawnNeuron> connections = new ArrayList<DrawnNeuron>();
@@ -204,7 +208,30 @@ public class StructureTab extends EncogCommonTab {
 		
 		// place all the neurons
 		for(NEATNeuron neatNeuron : neat.getNeurons() ) {
-			DrawnNeuron neuron = new DrawnNeuron(DrawnNeuronType.Input, "N", neatNeuron.getSplitX()*width, neatNeuron.getSplitY()*height);
+			String name="";
+			DrawnNeuronType t = DrawnNeuronType.Hidden;
+			
+			switch(neatNeuron.getNeuronType()) {
+				case Bias:
+					t = DrawnNeuronType.Bias;
+					name="B"+(biasCount++);
+					break;
+				case Input:
+					t = DrawnNeuronType.Input;
+					name="I"+(inputCount++);
+					break;
+				case Output:
+					t = DrawnNeuronType.Output;
+					name="O"+(outputCount++);
+					break;
+				case Hidden:
+					t = DrawnNeuronType.Hidden;
+					name="H"+(hiddenCount++);
+					break;
+			}
+			
+			
+			DrawnNeuron neuron = new DrawnNeuron(t, name, neatNeuron.getSplitX(), neatNeuron.getSplitY());
 			neurons.add(neuron);
 			neuronMap.put(neatNeuron, neuron);
 		}
