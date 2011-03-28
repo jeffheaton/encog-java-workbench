@@ -80,7 +80,6 @@ import org.encog.workbench.tabs.query.general.RegressionQueryTab;
 import org.encog.workbench.tabs.query.ocr.OCRQueryTab;
 import org.encog.workbench.tabs.query.thermal.QueryThermalTab;
 import org.encog.workbench.tabs.visualize.ThermalGrid.ThermalGridTab;
-import org.encog.workbench.tabs.visualize.neat.NEATTab;
 import org.encog.workbench.tabs.visualize.structure.StructureTab;
 import org.encog.workbench.tabs.visualize.weights.AnalyzeWeightsTab;
 
