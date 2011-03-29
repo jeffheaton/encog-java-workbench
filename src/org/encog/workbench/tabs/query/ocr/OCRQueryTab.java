@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import org.encog.EncogError;
 import org.encog.ml.BasicML;
 import org.encog.ml.MLClassification;
+import org.encog.ml.MLMethod;
 import org.encog.ml.MLOutput;
 import org.encog.ml.MLRegression;
 import org.encog.neural.data.NeuralData;
@@ -36,12 +37,12 @@ public class OCRQueryTab extends EncogCommonTab implements ActionListener {
 	private JTable outputTable;
 	private boolean classification;
 
-	public OCRQueryTab(ProjectEGFile method) {
-		super(method);
+	public OCRQueryTab(ProjectEGFile file) {
+		super(file);
 
 		this.classification = method instanceof MLClassification;
 
-		this.method = (BasicML) method.getObject();
+		this.method = (BasicML) file.getObject();
 
 		this.setLayout(new BorderLayout());
 		JPanel body = new JPanel();

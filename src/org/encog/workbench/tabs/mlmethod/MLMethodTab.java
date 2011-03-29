@@ -296,7 +296,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 							.openModalTab(tab, "Query Regression");					
 				}  else if( sel.getSelected()==selectOCR ) {
 					OCRQueryTab tab = new OCRQueryTab(
-							((ProjectEGFile) this.method));
+							((ProjectEGFile) this.getEncogObject()));
 					EncogWorkBench.getInstance().getMainWindow()
 							.openModalTab(tab, "Query OCR");					
 				}
