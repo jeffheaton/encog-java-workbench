@@ -33,6 +33,7 @@ import javax.swing.JTabbedPane;
 
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.structure.AnalyzeNetwork;
+import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -61,6 +62,10 @@ public class AnalyzeWeightsTab extends EncogCommonTab implements ActionListener 
 	
 	public AnalyzeWeightsTab(ProjectEGFile encogObject) {
 		super(encogObject);
+		
+		if( !(encogObject.getObject() instanceof BasicNetwork) ) {
+			throw new WorkBenchError("Can't visualize weights of " + encogObject.getObject().getClass().getSimpleName());
+		}
 		
 		this.network = (BasicNetwork)encogObject.getObject();
 		this.analyze = new AnalyzeNetwork(this.network);

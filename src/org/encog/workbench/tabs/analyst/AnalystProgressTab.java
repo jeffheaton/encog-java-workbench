@@ -328,6 +328,7 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			
 			this.status = "Done.";
 			update(true);
+			EncogWorkBench.getInstance().refresh();
 
 			if (this.shouldExit) {
 				dispose();

@@ -3,11 +3,16 @@ package org.encog.workbench.process;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.encog.engine.util.Format;
 import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.ml.MLMethod;
+import org.encog.ml.svm.SVM;
+import org.encog.ml.svm.training.SVMSearchTrain;
+import org.encog.ml.svm.training.SVMTrain;
 import org.encog.neural.art.ART1;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.Train;
@@ -38,8 +43,9 @@ import org.encog.workbench.dialogs.training.methods.InputManhattan;
 import org.encog.workbench.dialogs.training.methods.InputResilient;
 import org.encog.workbench.dialogs.training.methods.InputSCG;
 import org.encog.workbench.dialogs.training.methods.InputSOM;
+import org.encog.workbench.dialogs.training.methods.InputSVM;
+import org.encog.workbench.dialogs.training.methods.InputSearchSVM;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
-import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.training.BasicTrainingProgress;
 
@@ -84,16 +90,20 @@ public class TrainBasicNetwork {
 
 			if (method instanceof HopfieldNetwork) {
 				HopfieldNetwork hp = (HopfieldNetwork) method;
+				ProjectEGFile file = (ProjectEGFile)dialog.getComboNetwork().getSelectedValue();
 				for (NeuralDataPair pair : trainingData) {
 					hp.addPattern(pair.getInput());
 				}
 				if (EncogWorkBench.askQuestion("Hopfield",
 						"Training done, save?")) {
-
+					file.save();
 				}
 			} else if (method instanceof SOM) {
 				ProjectEGFile file = (ProjectEGFile)dialog.getComboNetwork().getSelectedValue();
 				performSOM(file, trainingData);
+			} else if( method instanceof SVM ) {
+				ProjectEGFile file = (ProjectEGFile)dialog.getComboNetwork().getSelectedValue();
+				performSVM(file, trainingData);
 			} else if (method instanceof BasicNetwork) {
 
 				ChooseBasicNetworkTrainingMethod choose = new ChooseBasicNetworkTrainingMethod(
@@ -162,7 +172,7 @@ public class TrainBasicNetwork {
 						.getLearningRate().getValue(), trainingData,
 						somDialog.getNeighborhoodFunction());
 				train.setForceWinner(somDialog.getForceWinner().getValue());
-				startup(file,train, somDialog.getMaxError().getValue());
+				startup(file,train, somDialog.getMaxError().getValue()/100.0);
 			}
 		} else if (sel.getSelected() == selectSOMClusterCopy) {
 			SOMClusterCopyTraining train = new SOMClusterCopyTraining((SOM)file.getObject(),
@@ -284,7 +294,74 @@ public class TrainBasicNetwork {
 			startup(file ,train, dialog.getMaxError().getValue() / 100.0);
 		}
 	}
+	
+	private void performSVM(ProjectEGFile file, NeuralDataSet trainingData) {
+		SelectItem selectBasicSVM;
+		SelectItem selectSearchSVM;
 
+		List<SelectItem> list = new ArrayList<SelectItem>();
+		list.add(selectBasicSVM = new SelectItem(
+				"Basic SVM Training",
+				"Train the SVM using a fixed gamma and constant.  Very fast training, but will not result in the lowest possable error for your SVM."));
+		list.add(selectSearchSVM = new SelectItem(
+				"Search SVM Training",
+				"Works similar to SimpleSVM training, but tries many different gamma and constant values."));
+		SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
+				.getMainWindow(), list);
+		sel.setVisible(true);
+
+		if (sel.getSelected() == selectBasicSVM) {
+			performSVMSimple(file, trainingData);
+		} else if (sel.getSelected() == selectSearchSVM) {
+			performSVMSearch(file, trainingData);
+		}		
+	}
+
+	private void performSVMSimple(ProjectEGFile file, NeuralDataSet trainingData) {
+		InputSVM dialog = new InputSVM((SVM)file.getObject());
+		
+		if( dialog.process()) {
+			double c = dialog.getC().getValue();
+			double g = dialog.getGamma().getValue();
+			SVM method = (SVM)file.getObject();
+			SVMTrain train = new SVMTrain((SVM) method, trainingData);
+			train.setC(c);
+			train.setGamma(g);
+			train.iteration();
+			double error = method.calculateError(trainingData);
+			if( EncogWorkBench.askQuestion("Training Done", "Error: " + Format.formatPercent(error)+ "\nSave training?"))
+			{
+				file.save();
+			}
+		}
+		
+	}
+
+	private void performSVMSearch(ProjectEGFile file, NeuralDataSet trainingData) {
+		InputSearchSVM dialog = new InputSearchSVM();
+		SVM method = (SVM)file.getObject();
+		
+		dialog.getBeginningGamma().setValue(SVMTrain.DEFAULT_GAMMA_BEGIN);
+		dialog.getEndingGamma().setValue(SVMTrain.DEFAULT_GAMMA_END);
+		dialog.getStepGamma().setValue(SVMTrain.DEFAULT_GAMMA_STEP);
+		dialog.getBeginningC().setValue(SVMTrain.DEFAULT_CONST_BEGIN);
+		dialog.getEndingC().setValue(SVMTrain.DEFAULT_CONST_END);
+		dialog.getStepC().setValue(SVMTrain.DEFAULT_CONST_STEP);
+		
+		if( dialog.process() )
+		{
+			double maxError = dialog.getMaxError().getValue()/100.0;
+			SVMSearchTrain train = new SVMSearchTrain(method,trainingData);
+			train.setGammaBegin(dialog.getBeginningGamma().getValue());
+			train.setGammaEnd(dialog.getEndingGamma().getValue());
+			train.setGammaStep(dialog.getStepGamma().getValue());			
+			train.setConstBegin(dialog.getBeginningC().getValue());
+			train.setConstEnd(dialog.getEndingC().getValue());
+			train.setConstStep(dialog.getStepC().getValue());
+			startup(file,train,maxError);
+		}		
+	}
+	
 	private void startup(ProjectEGFile file, Train train, double maxError) {
 		BasicTrainingProgress tab = new BasicTrainingProgress(train,
 				file, train.getTraining());
@@ -293,7 +370,5 @@ public class TrainBasicNetwork {
 		}
 		tab.setMaxError(maxError);
 		EncogWorkBench.getInstance().getMainWindow().openTab(tab);
-
 	}
-
 }
