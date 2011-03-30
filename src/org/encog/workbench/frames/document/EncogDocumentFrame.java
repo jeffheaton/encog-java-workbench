@@ -51,6 +51,7 @@ import org.encog.workbench.tabs.EncogTabManager;
 import org.encog.workbench.tabs.analyst.EncogAnalystTab;
 import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.files.GenericFileTab;
+import org.encog.workbench.tabs.files.HTMLFileTab;
 import org.encog.workbench.tabs.files.ImageFileTab;
 import org.encog.workbench.tabs.files.TextFileTab;
 import org.encog.workbench.tabs.mlmethod.MLMethodTab;
@@ -330,6 +331,9 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 				} else if (extension.equals("ega")) {
 					tab = new EncogAnalystTab(file);
 					this.openTab(tab);
+				} else if (extension.equalsIgnoreCase("html")) {
+					tab = new HTMLFileTab(file);
+					openTab(tab);
 				} else if (extension.equalsIgnoreCase("egb")) {
 					tab = new BinaryDataTab(file);
 					this.openTab(tab);
