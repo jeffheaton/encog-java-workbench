@@ -70,10 +70,12 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 		this.model.addElement("Feedforward - Radial Basis");
 		this.model.addElement("Self Organizing Map (SOM)");
 		this.model.addElement("Hopfield Neural Network");
+		this.model.addElement("PNN/GRNN - Probabilistic/General Regression Neural Network");
 		this.model.addElement("Recurrent - Elman");
 		this.model.addElement("Recurrent - Jordan");
 		this.model.addElement("NeuroEvolution of Augmenting Topologies (NEAT)");
 		this.model.addElement("Support Vector Machine (SVM)");
+		
 
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -122,12 +124,15 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			this.type = NeuralNetworkType.Hopfield;
 			break;
 		case 10:
-			this.type = NeuralNetworkType.Elman;
+			this.type = NeuralNetworkType.PNN;
 			break;
 		case 11:
-			this.type = NeuralNetworkType.Jordan;
+			this.type = NeuralNetworkType.Elman;
 			break;
 		case 12:
+			this.type = NeuralNetworkType.Jordan;
+			break;
+		case 13:
 			this.type = NeuralNetworkType.SVM;
 			break;
 		}
@@ -166,14 +171,17 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 		case Hopfield:
 			this.list.setSelectedIndex(9);
 			break;
-		case Elman:
+		case PNN:
 			this.list.setSelectedIndex(10);
 			break;
-		case Jordan:
+		case Elman:
 			this.list.setSelectedIndex(11);
 			break;
-		case SVM:
+		case Jordan:
 			this.list.setSelectedIndex(12);
+			break;
+		case SVM:
+			this.list.setSelectedIndex(13);
 			break;
 		}
 
@@ -238,17 +246,20 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			this.text
 					.setText("Hopfield Neural Network - A simple single layer recurrent neural network.  The Hopfield neural network is trained with a special algorithm that teaches it to learn to recognize patterns.  The Hopfield network will indicate that the pattern is recognized by echoing it back.  Hopfield neural networks are typically used for pattern recognition.");
 			break;
-
+			
 		case 10:
+			this.text.setText("Probabilistic (PNN) and General Regression Neural Networks (GRNN) have similar architectures.  Encog represents both as the same object type.  The PNN is used for classification, the GRNN is used for regression.  ");
+
+		case 11:
 			this.text
 					.setText("Simple Recurrent Network (SRN) Elman Style - A recurrent neural network that has a context layer.  The context layer holds the previous output from the hidden layer and then echos that value back to the hidden layer's input.  The hidden layer then always receives input from its previous iteration's output.  Elman neural networks are generally trained using genetic, simulated annealing, or one of the propagation techniques.  Elman neural networks are typically used for prediction.");
 			break;
 
-		case 11:
+		case 12:
 			this.text
 					.setText("Simple Recurrent Network (SRN) Jordan Style - A recurrent neural network that has a context layer.  The context layer holds the previous output from the output layer and then echos that value back to the hidden layer's input.  The hidden layer then always receives input from the previous iteration's output layer.  Jordan neural networks are generally trained using genetic, simulated annealing, or one of the propagation techniques.  Jordan neural networks are typically used for prediction.");
 			break;
-		case 12:
+		case 13:
 			this.text.setText("A Support Vector Machine (SVM) is not really a neural network.  However, SVM�s work very similar in terms of their input and output.  SVM�s can often be trained faster and with better accuracy than neural networks.");
 		}
 

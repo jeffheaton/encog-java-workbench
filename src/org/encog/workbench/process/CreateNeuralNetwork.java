@@ -57,6 +57,7 @@ import org.encog.workbench.dialogs.createnetwork.CreateFeedforward;
 import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateJordanDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateNeuralNetworkDialog;
+import org.encog.workbench.dialogs.createnetwork.CreatePNN;
 import org.encog.workbench.dialogs.createnetwork.CreateRBFDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateSOMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateSVMDialog;
@@ -112,12 +113,23 @@ public class CreateNeuralNetwork {
 			case SVM:
 				network = createSVM();
 				break;
+			case PNN:
+				network = createPNN();
+				break;
 			}
 
 			if (network != null) {				
 				EncogWorkBench.getInstance().save(path,network);
 			}
 		}
+	}
+
+	private static MLMethod createPNN() {
+		CreatePNN dialog = new CreatePNN();
+		if( dialog.process() ) {
+//			PNNPattern pattern = new PNNPattern();
+		}
+		return null;
 	}
 
 	private static MLMethod createSVM() {
