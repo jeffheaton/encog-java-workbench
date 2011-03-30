@@ -249,7 +249,7 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 			
 		case 10:
 			this.text.setText("Probabilistic (PNN) and General Regression Neural Networks (GRNN) have similar architectures.  Encog represents both as the same object type.  The PNN is used for classification, the GRNN is used for regression.  ");
-
+			break;
 		case 11:
 			this.text
 					.setText("Simple Recurrent Network (SRN) Elman Style - A recurrent neural network that has a context layer.  The context layer holds the previous output from the hidden layer and then echos that value back to the hidden layer's input.  The hidden layer then always receives input from its previous iteration's output.  Elman neural networks are generally trained using genetic, simulated annealing, or one of the propagation techniques.  Elman neural networks are typically used for prediction.");

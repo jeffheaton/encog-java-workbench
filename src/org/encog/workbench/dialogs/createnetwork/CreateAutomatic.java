@@ -175,7 +175,7 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 	 */
 	public NeuralDataSet getTraining() {
 		ProjectTraining training = (ProjectTraining) this.comboTraining.getSelectedValue();
-		return EncogUtility.loadEGB2Memory(training.getFile().toString());
+		return EncogUtility.loadEGB2Memory(training.getFile());
 	}
 
 	public IntegerField getWeightTries() {

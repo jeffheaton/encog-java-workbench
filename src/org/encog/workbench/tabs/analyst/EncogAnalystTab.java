@@ -82,6 +82,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 		
 			byte[] b = this.getText().getBytes();
 			ByteArrayInputStream ms = new ByteArrayInputStream(b);
+			this.analyst.getScript().setBasePath(EncogWorkBench.getInstance().getProjectDirectory().toString());
 			this.analyst.load(ms);
 			ms.close();
 

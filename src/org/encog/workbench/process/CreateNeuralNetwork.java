@@ -41,6 +41,7 @@ import org.encog.neural.pattern.ElmanPattern;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.pattern.HopfieldPattern;
 import org.encog.neural.pattern.JordanPattern;
+import org.encog.neural.pattern.PNNPattern;
 import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.pattern.SOMPattern;
 import org.encog.neural.pattern.SVMPattern;
@@ -120,6 +121,7 @@ public class CreateNeuralNetwork {
 
 			if (network != null) {				
 				EncogWorkBench.getInstance().save(path,network);
+				EncogWorkBench.getInstance().refresh();
 			}
 		}
 	}
@@ -127,7 +129,12 @@ public class CreateNeuralNetwork {
 	private static MLMethod createPNN() {
 		CreatePNN dialog = new CreatePNN();
 		if( dialog.process() ) {
-//			PNNPattern pattern = new PNNPattern();
+			PNNPattern pattern = new PNNPattern();
+			pattern.setInputNeurons(dialog.getInputCount().getValue());
+			pattern.setOutputNeurons(dialog.getOutputCount().getValue());
+			pattern.setKernel(dialog.getKernelType());
+			pattern.setOutmodel(dialog.getOutputModel());
+			return pattern.generate();
 		}
 		return null;
 	}
