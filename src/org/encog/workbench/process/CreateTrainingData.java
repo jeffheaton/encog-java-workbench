@@ -93,7 +93,7 @@ public class CreateTrainingData {
 
 				EncogWorkBench.getInstance().getMainWindow().beginWait();
 				loader.loadAllData(dialog.getTicker().getValue(),
-						targetFile.toString(), CSVFormat.ENGLISH,
+						targetFile, CSVFormat.ENGLISH,
 						begin.getTime(), end.getTime());
 
 			} catch (QuantError e) {
