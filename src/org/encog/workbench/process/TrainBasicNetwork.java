@@ -16,6 +16,7 @@ import org.encog.neural.cpn.training.TrainOutstar;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.ContainsFlat;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.TrainingSetScore;
@@ -27,6 +28,7 @@ import org.encog.neural.networks.training.propagation.manhattan.ManhattanPropaga
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.networks.training.propagation.scg.ScaledConjugateGradient;
 import org.encog.neural.networks.training.simple.TrainAdaline;
+import org.encog.neural.rbf.RBFNetwork;
 import org.encog.neural.som.SOM;
 import org.encog.neural.som.training.basic.BasicTrainSOM;
 import org.encog.neural.som.training.clustercopy.SOMClusterCopyTraining;
@@ -116,11 +118,10 @@ public class TrainBasicNetwork {
 				ProjectEGFile file = (ProjectEGFile) dialog.getComboNetwork()
 						.getSelectedValue();
 				performCPN(file, trainingData);
-			} else if (method instanceof BasicNetwork) {
+			} else if (method instanceof BasicNetwork || method instanceof RBFNetwork ) {
 
 				ChooseBasicNetworkTrainingMethod choose = new ChooseBasicNetworkTrainingMethod(
-						EncogWorkBench.getInstance().getMainWindow(),
-						(BasicNetwork) method);
+						EncogWorkBench.getInstance().getMainWindow(),method);
 				if (choose.process()) {
 					ProjectEGFile file = (ProjectEGFile) dialog
 							.getComboNetwork().getSelectedValue();
@@ -321,7 +322,7 @@ public class TrainBasicNetwork {
 			final double initialUpdate = dialog.getInitialUpdate().getValue();
 			final double maxStep = dialog.getMaxStep().getValue();
 			Train train = new ResilientPropagation(
-					(BasicNetwork) file.getObject(), trainingData,
+					(ContainsFlat) file.getObject(), trainingData,
 					initialUpdate, maxStep);
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}

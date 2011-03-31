@@ -38,6 +38,7 @@ import javax.swing.JToolBar;
 import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.engine.network.flat.FlatNetwork;
+import org.encog.engine.network.rbf.RadialBasisFunction;
 import org.encog.engine.util.Format;
 import org.encog.mathutil.randomize.ConsistentRandomizer;
 import org.encog.mathutil.randomize.ConstRandomizer;
@@ -62,6 +63,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.pattern.HopfieldPattern;
 import org.encog.neural.prune.PruneSelective;
+import org.encog.neural.rbf.RBFNetwork;
 import org.encog.neural.thermal.HopfieldNetwork;
 import org.encog.neural.thermal.ThermalNetwork;
 import org.encog.util.HTMLReport;
@@ -430,6 +432,33 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		}
 		
 		report.endTable();
+		
+		if (this.method instanceof RBFNetwork) {
+			RBFNetwork rbfNetwork = (RBFNetwork)this.method;
+			
+			report.h3("RBF Centers");
+			report.beginTable();
+			report.beginRow();
+			report.header("RBF");
+			report.header("Peak");
+			report.header("Width");
+			for(int i=1;i<=rbfNetwork.getInputCount();i++) {
+				report.header("Center " + i);
+			}
+			report.endRow();
+			
+			
+			for( RadialBasisFunction rbf : rbfNetwork.getRBF() ) {
+				report.beginRow();
+				report.cell(rbf.getClass().getSimpleName());
+				report.cell(Format.formatDouble(rbf.getPeak(), 5));
+				report.cell(Format.formatDouble(rbf.getWidth(), 5));
+				for(int i=0;i<rbfNetwork.getInputCount();i++) {
+					report.cell(Format.formatDouble(rbf.getCenter(i), 5));
+				}
+				report.endRow();
+			}
+		}
 
 		if (this.method instanceof BasicNetwork) {
 			report.h3("Layers");

@@ -38,6 +38,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.encog.ml.MLMethod;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
@@ -53,7 +54,7 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 	private JScrollPane scroll2 = new JScrollPane(text);
 	private BasicNetworkTrainingType type;
 
-	public ChooseBasicNetworkTrainingMethod(Frame owner, BasicNetwork network) {
+	public ChooseBasicNetworkTrainingMethod(Frame owner, MLMethod network) {
 		super(owner);
 		setTitle("Choose a Training Method");
 
