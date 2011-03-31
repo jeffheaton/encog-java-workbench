@@ -110,8 +110,12 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void actionPerformed(final ActionEvent event) {
+		try {
 		this.menus.actionPerformed(event);
 		this.popupMenus.actionPerformed(event);
+		} catch(Throwable t) {
+			EncogWorkBench.displayError("Error", t);
+		}
 	}
 
 	private void initContents() {
