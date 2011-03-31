@@ -50,7 +50,7 @@ public class InputOutstar  extends DialogMaxError {
 	 * Construct the dialog box.
 	 * @param owner
 	 */
-	public InputOutstar(final Frame owner) {
+	public InputOutstar() {
 		super(EncogWorkBench.getInstance().getMainWindow());
 		setTitle("Train Outstar");
 

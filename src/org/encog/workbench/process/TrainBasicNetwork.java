@@ -11,9 +11,10 @@ import org.encog.ml.svm.training.SVMSearchTrain;
 import org.encog.ml.svm.training.SVMTrain;
 import org.encog.neural.art.ART1;
 import org.encog.neural.cpn.CPN;
+import org.encog.neural.cpn.training.TrainInstar;
+import org.encog.neural.cpn.training.TrainOutstar;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.basic.BasicNeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.Train;
@@ -42,6 +43,7 @@ import org.encog.workbench.dialogs.training.methods.InputGenetic;
 import org.encog.workbench.dialogs.training.methods.InputInstar;
 import org.encog.workbench.dialogs.training.methods.InputLMA;
 import org.encog.workbench.dialogs.training.methods.InputManhattan;
+import org.encog.workbench.dialogs.training.methods.InputOutstar;
 import org.encog.workbench.dialogs.training.methods.InputResilient;
 import org.encog.workbench.dialogs.training.methods.InputSCG;
 import org.encog.workbench.dialogs.training.methods.InputSOM;
@@ -176,10 +178,19 @@ public class TrainBasicNetwork {
 			InputInstar dialog = new InputInstar();
 
 			if (dialog.process()) {
-				//startup(file,train, somDialog.getMaxError().getValue()/100.0);
+				double learnRate = dialog.getLearningRate().getValue();
+				boolean init = dialog.getInitWeights().getValue();
+				TrainInstar train = new TrainInstar((CPN)file.getObject(),trainingData,learnRate,init);
+				startup(file,train, dialog.getMaxError().getValue()/100.0);
 			}
 		} else if (sel.getSelected() == selectOutstar) {
+			InputOutstar dialog = new InputOutstar();
 
+			if (dialog.process()) {
+				double learnRate = dialog.getLearningRate().getValue();
+				TrainOutstar train = new TrainOutstar((CPN)file.getObject(),trainingData,learnRate);
+				startup(file,train, dialog.getMaxError().getValue()/100.0);
+			}
 		}
 	}
 

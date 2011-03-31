@@ -517,9 +517,14 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 					this.status = "Training Complete";
 					this.cancel = true;
 				}
-
+				
 				this.errorImprovement = (this.lastError - this.currentError)
 						/ this.lastError;
+				if( Double.isInfinite(this.errorImprovement) || Double.isNaN(this.errorImprovement)) {
+					this.errorImprovement = 100.0;
+				}
+				
+				
 				if (System.currentTimeMillis() - this.lastUpdate > 1000
 						|| this.cancel) {
 					redraw();

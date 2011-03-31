@@ -26,6 +26,7 @@ package org.encog.workbench.dialogs.training.methods;
 import java.awt.Frame;
 
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.training.DialogMaxError;
 
@@ -44,6 +45,7 @@ public class InputInstar extends DialogMaxError {
 	private static final long serialVersionUID = 1L;
 
 	private DoubleField learningRate;
+	private CheckField initWeights;
 
 
 	/**
@@ -55,15 +57,24 @@ public class InputInstar extends DialogMaxError {
 		setTitle("Train Instar");
 
 		addProperty(this.learningRate = new DoubleField("learning rate","Learning Rate",true,-1,-1));
+		addProperty(this.initWeights = new CheckField("init weights","Init Weights from Training Data"));
 
 		render();
 		this.learningRate.setValue(0.7);
 
 		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
+		this.getInitWeights().setValue(true);
 	}
 
 
 	public DoubleField getLearningRate() {
 		return learningRate;
 	}
+
+
+	public CheckField getInitWeights() {
+		return initWeights;
+	}
+
+	
 }

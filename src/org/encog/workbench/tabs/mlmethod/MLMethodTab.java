@@ -56,6 +56,7 @@ import org.encog.ml.MLOutput;
 import org.encog.ml.MLProperties;
 import org.encog.ml.MLRegression;
 import org.encog.ml.MLResettable;
+import org.encog.neural.cpn.CPN;
 import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.FeedForwardPattern;
@@ -420,6 +421,12 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			NEATNetwork neat = (NEATNetwork)method;
 			report.tablePair("Output Activation Function", neat.getOutputActivationFunction().getClass().getSimpleName());
 			report.tablePair("NEAT Activation Function", neat.getActivationFunction().getClass().getSimpleName());
+		}
+		
+		if( method instanceof CPN ) {
+			CPN cpn = (CPN)method;
+			report.tablePair("Instar Count", Format.formatInteger(cpn.getInstarCount()));
+			report.tablePair("Outstar Count", Format.formatInteger(cpn.getOutstarCount()));			
 		}
 		
 		report.endTable();
