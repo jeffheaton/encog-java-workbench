@@ -37,7 +37,6 @@ import javax.swing.JTabbedPane;
 
 import org.encog.ml.MLMethod;
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
 import org.encog.workbench.frames.EncogCommonFrame;

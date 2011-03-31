@@ -30,7 +30,6 @@ import java.io.IOException;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
-import org.encog.Encog;
 import org.encog.engine.util.ErrorCalculation;
 import org.encog.engine.util.ErrorCalculationMode;
 import org.encog.engine.util.Format;
