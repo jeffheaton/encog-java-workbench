@@ -27,6 +27,7 @@ import java.io.File;
 
 import org.encog.bot.BotUtil;
 import org.encog.engine.network.activation.ActivationTANH;
+import org.encog.mathutil.rbf.RBFEnum;
 import org.encog.ml.MLMethod;
 import org.encog.ml.svm.KernelType;
 import org.encog.ml.svm.SVMType;
@@ -160,10 +161,12 @@ public class CreateNeuralNetwork {
 		CreateRBFDialog dialog = new CreateRBFDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		if (dialog.process()) {
+			RBFEnum type = dialog.getRBFType();
 			RadialBasisPattern rbf = new RadialBasisPattern();
 			rbf.setInputNeurons(dialog.getInputCount().getValue());
 			rbf.addHiddenLayer(dialog.getHiddenCount().getValue());
 			rbf.setOutputNeurons(dialog.getOutputCount().getValue());
+			rbf.setRBF(type);
 			return rbf.generate();
 		} else
 			return null;
