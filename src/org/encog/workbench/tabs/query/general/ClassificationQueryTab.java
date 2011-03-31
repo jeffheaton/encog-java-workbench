@@ -18,6 +18,7 @@ import org.encog.neural.data.basic.BasicNeuralData;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.models.NetworkQueryModel;
 import org.encog.workbench.tabs.EncogCommonTab;
 
@@ -106,7 +107,7 @@ public class ClassificationQueryTab extends EncogCommonTab implements ActionList
 	}
 
 	public MLClassification getData() {
-		return (MLClassification) getEncogObject();
+		return (MLClassification) ((ProjectEGFile)getEncogObject()).getObject();
 	}
 
 	public void mouseClicked(final MouseEvent e) {

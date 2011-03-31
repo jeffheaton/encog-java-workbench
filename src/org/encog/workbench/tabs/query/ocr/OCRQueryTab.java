@@ -40,9 +40,8 @@ public class OCRQueryTab extends EncogCommonTab implements ActionListener {
 	public OCRQueryTab(ProjectEGFile file) {
 		super(file);
 
-		this.classification = method instanceof MLClassification;
-
 		this.method = (BasicML) file.getObject();
+		this.classification = method instanceof MLClassification;
 
 		this.setLayout(new BorderLayout());
 		JPanel body = new JPanel();
