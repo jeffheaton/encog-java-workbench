@@ -39,6 +39,7 @@ public class ProjectTree extends JPanel implements MouseListener,
 		this.tree = new JTree(this.collectionModel);
 		// this.tree.setRootVisible(false);
 		this.tree.addMouseListener(this);
+		this.tree.setCellRenderer(new ProjectTreeRenderer());
 
 		final JScrollPane scrollPane = new JScrollPane(this.tree);
 		this.setLayout(new BorderLayout());
