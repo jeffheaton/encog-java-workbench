@@ -25,6 +25,7 @@ package org.encog.workbench.dialogs.training;
 
 import java.awt.Frame;
 
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 
@@ -51,6 +52,12 @@ public class DialogMaxError extends EncogPropertiesDialog {
 		
 		addProperty(this.maxError = new DoubleField("max error",
 				"Maximum Error Percent(0-100)", true, 0, 100));
+	}
+	
+	
+	public void render() {
+		super.render();
+		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	}
 
 	public DoubleField getMaxError() {
