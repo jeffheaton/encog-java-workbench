@@ -111,6 +111,9 @@ public class EncogTabManager {
 	public EncogCommonTab find(File file) {
 		for (final EncogCommonTab tab : this.tabs) {
 			ProjectFile pf = (ProjectFile)tab.getEncogObject();
+			if( pf==null )
+				continue;
+			
 			if( file.equals(pf.getFile()))
 				return tab;
 						
