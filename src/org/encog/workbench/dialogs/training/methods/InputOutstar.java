@@ -58,8 +58,6 @@ public class InputOutstar  extends DialogMaxError {
 
 		render();
 		this.learningRate.setValue(0.7);
-
-		this.getMaxError().setValue(0.01);
 	}
 
 

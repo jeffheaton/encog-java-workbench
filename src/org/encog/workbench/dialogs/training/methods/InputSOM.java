@@ -23,7 +23,6 @@
  */
 package org.encog.workbench.dialogs.training.methods;
 
-import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,7 +92,6 @@ public class InputSOM extends DialogMaxError {
 		addProperty(this.forceWinner = new CheckField("force winner","Force Winner"));
 		render();
 		this.learningRate.setValue(0.25);
-		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 		this.getRBFWidth().setValue(2);
 		this.getCols().setValue(1);
 		this.getRows().setValue(1);

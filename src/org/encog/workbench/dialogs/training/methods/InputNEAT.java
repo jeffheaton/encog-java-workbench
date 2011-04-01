@@ -83,7 +83,6 @@ public class InputNEAT extends EncogPropertiesDialog {
 
 		
 		render();
-		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 		this.getLoadToMemory().setValue(true);
 	}
 

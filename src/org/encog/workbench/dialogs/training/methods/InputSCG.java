@@ -23,8 +23,6 @@
  */
 package org.encog.workbench.dialogs.training.methods;
 
-import java.awt.Frame;
-
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.training.DialogMaxError;
 
@@ -38,7 +36,6 @@ public class InputSCG  extends DialogMaxError {
 		super(EncogWorkBench.getInstance().getMainWindow());
 		setTitle("Scaled Conjugate Gradient (SCG)");
 		render();	
-		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	}
 	
 }

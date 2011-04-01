@@ -60,9 +60,7 @@ public class InputInstar extends DialogMaxError {
 		addProperty(this.initWeights = new CheckField("init weights","Init Weights from Training Data"));
 
 		render();
-		this.learningRate.setValue(0.7);
-
-		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
+		this.learningRate.setValue(0.7);		
 		this.getInitWeights().setValue(true);
 	}
 

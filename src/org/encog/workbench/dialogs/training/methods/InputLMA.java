@@ -42,7 +42,6 @@ public class InputLMA  extends DialogMaxError {
 		setTitle("Levenberg Marquardt Training");
 		addProperty(this.useBayesian = new CheckField("baysean","Bayesian Regularization"));
 		render();	
-		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	}
 
 	public CheckField getUseBayesian() {

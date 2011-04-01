@@ -56,7 +56,6 @@ public class InputManhattan extends DialogMaxError {
 		addProperty(this.fixedDelta = new DoubleField("fixed delta","Fixed Delta",true,0,-1));
 		render();
 		this.fixedDelta.setValue(0.000001);
-		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 
 	}
 

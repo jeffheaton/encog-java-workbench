@@ -23,8 +23,6 @@
  */
 package org.encog.workbench.dialogs.training.methods;
 
-import java.awt.Frame;
-
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.training.DialogMaxError;
@@ -53,7 +51,6 @@ public class InputSearchSVM  extends DialogMaxError {
 		addProperty(this.endingC = new DoubleField("gamma","C End",true,-1,-1));
 		addProperty(this.stepC = new DoubleField("gamma","C Step",true,-1,-1));
 		render();	
-		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	}
 
 	public DoubleField getBeginningGamma() {
