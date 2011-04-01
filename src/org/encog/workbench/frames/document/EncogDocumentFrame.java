@@ -213,8 +213,12 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 						tab));
 			this.tabManager.add(tab);
 		}
-		this.documentTabs.setSelectedComponent(tab);
+		selectTab(tab);
 		this.menus.updateMenus();
+	}
+	
+	public void selectTab(EncogCommonTab tab) {
+		this.documentTabs.setSelectedComponent(tab);
 	}
 
 	public void openModalTab(EncogCommonTab tab, String title) {
@@ -318,7 +322,12 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public void openFile(ProjectFile file) {
 		try {
 			EncogWorkBench.getInstance().getMainWindow().beginWait();
-			EncogCommonTab tab = this.tabManager.find(file);
+			EncogCommonTab tab = this.tabManager.find(file.getFile());
+			
+			if( tab!=null ) {
+				selectTab(tab);
+				return;
+			}
 			
 			if( file instanceof ProjectEGFile ) {
 				openEGFile((ProjectEGFile) file);
@@ -364,7 +373,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public void openTextFile(ProjectFile file) {
 		try {
 			EncogWorkBench.getInstance().getMainWindow().beginWait();
-			EncogCommonTab tab = this.tabManager.find(file);
+			EncogCommonTab tab = this.tabManager.find(file.getFile());
 			if (tab == null) {
 				tab = new TextFileTab(file);
 				this.openTab(tab);

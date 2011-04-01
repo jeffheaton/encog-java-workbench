@@ -32,6 +32,7 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.tabs.files.BasicFileTab;
 
 public class EncogTabManager {
@@ -49,19 +50,6 @@ public class EncogTabManager {
 
 	public boolean contains(EncogCommonTab tab) {
 		return this.tabs.contains(tab);
-	}
-	
-	public EncogCommonTab find(final Object obj) {
-		for (final EncogCommonTab tab : this.tabs) {
-			
-			if( tab.getEncogObject()==null )
-				continue;
-			
-			if ( obj==tab.getEncogObject() ) {
-				return tab;
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -121,14 +109,12 @@ public class EncogTabManager {
 	}
 
 	public EncogCommonTab find(File file) {
-		/*for (final EncogCommonTab tab : this.tabs) {
-		
-			if( tab instanceof BasicFileTab ) {
-				BasicFileTab gft = (BasicFileTab)tab;
-				if( gft.getFile().equals(file) )
-					return tab;
-			}			
-		}*/
+		for (final EncogCommonTab tab : this.tabs) {
+			ProjectFile pf = (ProjectFile)tab.getEncogObject();
+			if( file.equals(pf.getFile()))
+				return tab;
+						
+		}
 		return null;
 		
 	}
