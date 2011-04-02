@@ -29,7 +29,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -135,7 +134,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 					.askQuestion(
 							"Save",
 							"To perform this operation, you must save your script.\nWould you like to save this script?")) {
-				this.saveFile();
+				this.save();
 				return true;
 			}
 			return false;

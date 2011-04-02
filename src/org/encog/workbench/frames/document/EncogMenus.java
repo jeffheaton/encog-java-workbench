@@ -41,6 +41,7 @@ public class EncogMenus {
 	public static final String FILE_CHANGE_DIR = "Change Directory/Open Project";
 	public static final String FILE_NEW_PROJECT = "New Project...";
 	public static final String FILE_NEW_FILE = "New File...";
+	public static final String FILE_SAVE = "Save";
 	public static final String FILE_QUIT = "Quit...";
 
 	public static final String EDIT_CUT = "Cut";
@@ -69,6 +70,7 @@ public class EncogMenus {
 	private JMenu menuTools;
 	
 	private JMenuItem menuFileNew;
+	private JMenuItem menuFileSeve;
 	private JMenuItem menuFileQuit;
 
 	private JMenuItem menuEditCut;
@@ -104,6 +106,8 @@ public class EncogMenus {
 				.addItem(this.menuFile, EncogMenus.FILE_CHANGE_DIR, 'c'));
 		this.menuFileNew = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_NEW_FILE, 'f'));
+		this.menuFileSeve = this.menuFile.add(owner
+				.addItem(this.menuFile, EncogMenus.FILE_SAVE, 's'));
 		this.menuFile.addSeparator();
 		this.menuFileQuit = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_QUIT,
 				'q'));
@@ -156,7 +160,7 @@ public class EncogMenus {
 		
 		this.menuFileNew.setEnabled(!modal && documentOpen);	
 		this.menuFileQuit.setEnabled(true);
-
+		this.menuFileSeve.setEnabled(!modal && documentOpen && currentTab!=null);
 		this.menuEditCut.setEnabled(!modal && supportsClipboard && documentOpen);
 		this.menuEditCopy.setEnabled(!modal && supportsClipboard && documentOpen);
 		this.menuEditPaste.setEnabled(!modal && supportsClipboard && documentOpen);
@@ -183,6 +187,8 @@ public class EncogMenus {
 			owner.getOperations().performFileNewProject();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW_FILE)) {
 			CreateNewFile.performCreateFile();
+		} else if (event.getActionCommand().equals(EncogMenus.FILE_SAVE)) {
+			owner.getOperations().performSave();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_QUIT)) {
 			owner.getOperations().performQuit();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_CUT)) {

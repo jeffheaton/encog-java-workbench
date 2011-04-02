@@ -121,4 +121,10 @@ public abstract class EncogCommonTab extends JPanel {
 	public void setParentTab(EncogCommonTab parentTab) {
 		this.parentTab = parentTab;
 	}
+
+	public void save() {
+		if( this.getEncogObject()!=null) {
+			this.getEncogObject().save();
+		}
+	}
 }

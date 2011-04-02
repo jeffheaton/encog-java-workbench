@@ -200,6 +200,12 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	public EncogPopupMenus getPopupMenus() {
 		return popupMenus;
 	}
+	
+	public EncogCommonTab getCurrentTab() {
+		JTabbedPane tabs = EncogWorkBench.getInstance().getMainWindow().getDocumentTabs();		
+		EncogCommonTab currentTab = (EncogCommonTab)tabs.getSelectedComponent();
+		return currentTab;
+	}
 
 	public void openTab(EncogCommonTab tab) {
 

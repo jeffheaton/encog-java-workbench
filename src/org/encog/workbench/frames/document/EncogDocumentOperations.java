@@ -49,6 +49,7 @@ import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.tabs.BrowserFrame;
+import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
 import org.encog.workbench.util.FileUtil;
 import org.slf4j.Logger;
@@ -323,5 +324,13 @@ public class EncogDocumentOperations {
 			EncogWorkBench.getInstance().refresh();
 		}
 
+	}
+
+	public void performSave() {
+		EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow().getCurrentTab();
+		if( tab!=null ) {
+			tab.save();
+		}
+		
 	}
 }

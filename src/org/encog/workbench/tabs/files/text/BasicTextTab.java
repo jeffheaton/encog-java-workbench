@@ -51,7 +51,8 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 		}
 	}
 
-	public void saveFile() {
+	@Override
+	public void save() {
 		try {
 			FileWriter out = new FileWriter(this.getEncogObject().getFile());
 			this.editor.write(out);
@@ -70,11 +71,12 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 		return this.editor.getText();
 	}
 
+	@Override
 	public boolean close() throws IOException {
 		if (this.dirty.isDirty()) {
 			if (EncogWorkBench.askQuestion("Save",
 					"Would you like to save this text file?")) {
-				this.saveFile();
+				this.save();
 			}
 		}
 		return true;
@@ -84,6 +86,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 		return this.editor.getSelectionEnd() > this.editor.getSelectionStart();
 	}
 
+	
 	public void componentResized(ComponentEvent e) {
 		// TODO Auto-generated method stub
 		
