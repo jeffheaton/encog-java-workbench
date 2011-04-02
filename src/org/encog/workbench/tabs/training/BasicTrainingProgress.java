@@ -48,6 +48,7 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
@@ -445,16 +446,19 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 			// this.method = (MLMethod) method.clone();
 
 			// see if we need to continue training.
-			if (this.train instanceof ResilientPropagation) {
-				ResilientPropagation rprop = (ResilientPropagation) this.train;
-				/*
-				 * TrainingContinuation state = (TrainingContinuation)
-				 * EncogWorkBench .getInstance().getCurrentFile().find(
-				 * this.network.getName() + "-rprop"); if (state != null) { if
-				 * (rprop.isValidResume(state)) rprop.resume(state); }
-				 * EncogWorkBench.getInstance().getCurrentFile().delete(
-				 * this.network.getName() + "-rprop");
-				 */
+			if( this.train.canContinue() ) {
+				String name = FileUtil.getFileName( getEncogObject().getFile() );
+				name+="-cont.eg";
+				File path = new File(name);
+				if( path.exists() ) {
+					try {
+						TrainingContinuation cont = (TrainingContinuation)EncogDirectoryPersistence.loadObject(path);
+						train.resume(cont);
+					} catch(Exception ex) {
+						EncogWorkBench.displayError("Trainning Resume Incompatible", "Cannot use previous training data, training will begin as best it can.");
+						path.delete();
+					}
+				}
 			}
 
 			while (!this.cancel) {
