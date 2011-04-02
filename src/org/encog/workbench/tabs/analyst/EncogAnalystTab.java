@@ -148,6 +148,9 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 				EncogWorkBench.displayError("Error", "No tasks to execute.");
 				return;
 			}
+			
+			compile();
+			
 			EncogWorkBench.getInstance().clearOutput();
 			String name = (String) this.tasks.getSelectedItem();
 			AnalystProgressTab tab = new AnalystProgressTab(this.analyst, name);
