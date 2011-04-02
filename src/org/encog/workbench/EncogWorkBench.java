@@ -356,7 +356,7 @@ public class EncogWorkBench implements Runnable {
 				Class<?> clazz = ReflectionUtil.resolveEncogClass(item2
 						.getEncogType());
 				if( clazz == null) {
-					throw new WorkBenchError("Undefined class: " + item2.getEncogType());
+					continue;
 				}
 				if (MLMethod.class.isAssignableFrom(clazz)) {
 					result.add(item2);

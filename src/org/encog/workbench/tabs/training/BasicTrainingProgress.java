@@ -30,6 +30,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +48,7 @@ import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -275,13 +277,15 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 				}
 			} 
 			
-			if (this.train instanceof ResilientPropagation) {
-				ResilientPropagation rprop = (ResilientPropagation) this.train;
-				TrainingContinuation cont = rprop.pause();
-				// EncogWorkBench.getInstance().getCurrentFile().add(
-				// this.network.getName() + "-rprop", cont);
-				EncogWorkBench.getInstance().getMainWindow().redraw();
+			if( this.train.canContinue() ) {
+				TrainingContinuation cont = train.pause();	
+				String name = FileUtil.getFileName(this.getEncogObject().getFile());
+				name = FileUtil.forceExtension(name + "-cont", "eg");
+				File path = new File(name);
+				EncogWorkBench.getInstance().save(path, cont);
+				EncogWorkBench.getInstance().refresh();
 			}
+						
 			EncogWorkBench.getInstance().refresh();
 		} else {
 			if( this.getEncogObject()!=null) {
