@@ -263,10 +263,6 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	 */
 	private void performStart() {
 
-		if (!EncogWorkBench.getInstance().getMainWindow().getTabManager()
-				.checkTrainingOrNetworkOpen())
-			return;
-
 		this.buttonStart.setEnabled(false);
 		this.buttonStopAll.setEnabled(true);
 		this.buttonStopCurrent.setEnabled(true);

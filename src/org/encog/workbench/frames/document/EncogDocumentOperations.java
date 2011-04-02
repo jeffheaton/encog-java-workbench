@@ -267,6 +267,12 @@ public class EncogDocumentOperations {
 			}
 
 			name = FileUtil.forceExtension(name, "csv");
+			File targetFile = new File(EncogWorkBench.getInstance()
+					.getProjectDirectory(), name);
+			
+			if( !EncogWorkBench.getInstance().getMainWindow().getTabManager().queryViews(targetFile)) {
+				return;
+			}
 
 			switch (dialog.getType()) {
 			case CopyCSV:

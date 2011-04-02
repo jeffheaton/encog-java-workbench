@@ -76,33 +76,6 @@ public class EncogTabManager {
 		return false;
 	}
 	
-	public void closeTrainingOrNetwork()
-	{
-		Object[] list = this.tabs.toArray();
-		for(int i=0;i<list.length;i++) {
-			EncogCommonTab tab = (EncogCommonTab)list[i];
-			
-			/*if( tab.getEncogObject() instanceof BasicNetwork 
-					|| tab.getEncogObject() instanceof NeuralDataSet )
-			{				
-				tab.dispose();
-			}*/
-		}
-	}
-	
-	public boolean checkTrainingOrNetworkOpen()
-	{
-		if( isTrainingOrNetworkOpen() )
-		{
-			if( !EncogWorkBench.askQuestion("Windows Open", "There are training and/or network windows open.\nBefore training can begin, these must be closed.  Do you wish to close them now?"))
-			{
-				return false;
-			}
-			closeTrainingOrNetwork();
-		}
-		
-		return true;
-	}
 
 	public boolean alreadyOpen(EncogCommonTab tab) {
 		return this.tabs.contains(tab);
@@ -144,5 +117,34 @@ public class EncogTabManager {
 			}
 		}
 		
+	}
+	
+	public boolean queryViews(File f) {
+		if( !checkViews(f))
+			return true;
+		
+		if( !EncogWorkBench.askQuestion("Views Open", "There are view(s) open to the file:\n"+f.toString()+"\nClose any views first?")) {
+			return false;
+		}
+		
+		closeAll(f);
+		
+		return true;
+	}
+	
+	
+	public boolean checkViews(File f) {
+		Object[] list = this.tabs.toArray();
+		for(int i=0;i<list.length;i++) {
+			EncogCommonTab tab = (EncogCommonTab)list[i];
+			if( tab.getEncogObject()!=null ) {
+				if( tab.getEncogObject().getFile() !=null ) {
+					if( tab.getEncogObject().getFile().equals(f)) {
+						return true;					
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

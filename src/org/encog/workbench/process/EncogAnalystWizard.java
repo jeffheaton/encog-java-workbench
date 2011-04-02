@@ -12,6 +12,11 @@ import org.encog.workbench.util.FileUtil;
 
 public class EncogAnalystWizard {
 	public static void createEncogAnalyst(File csvFile) {
+		
+		if( !EncogWorkBench.getInstance().getMainWindow().getTabManager().queryViews(csvFile) )
+			return;
+		
+		
 		AnalystWizardDialog dialog = new AnalystWizardDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		

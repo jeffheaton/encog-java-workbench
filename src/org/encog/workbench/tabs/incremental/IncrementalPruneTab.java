@@ -187,11 +187,6 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 	 * Start the training.
 	 */
 	private void performStart() {
-
-		if (!EncogWorkBench.getInstance().getMainWindow().getTabManager()
-				.checkTrainingOrNetworkOpen())
-			return;
-
 		this.started = new Date();
 
 		this.buttonStart.setEnabled(false);
