@@ -29,6 +29,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.process.CreateNewFile;
@@ -145,6 +146,18 @@ public class EncogMenus {
 		this.menuBar.add(this.menuHelp);
 
 		owner.setJMenuBar(this.menuBar);
+		
+		this.menuFileQuit.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q,
+                java.awt.Event.CTRL_MASK));
+		
+		this.menuFileNew.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N,
+                java.awt.Event.CTRL_MASK));
+		
+		this.menuFileSeve.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S,
+		                                           java.awt.Event.CTRL_MASK));
+		
+		this.menuToolsTrain.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T,
+                java.awt.Event.CTRL_MASK));
 	}
 	
 	public void updateMenus()
