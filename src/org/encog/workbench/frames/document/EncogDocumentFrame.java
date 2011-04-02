@@ -37,6 +37,7 @@ import javax.swing.JTabbedPane;
 
 import org.encog.ml.MLMethod;
 import org.encog.neural.neat.NEATPopulation;
+import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.splash.EncogWorkbenchSplash;
 import org.encog.workbench.frames.EncogCommonFrame;
@@ -47,6 +48,8 @@ import org.encog.workbench.tabs.AboutTab;
 import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.EncogTabManager;
+import org.encog.workbench.tabs.TrainingContTab;
+import org.encog.workbench.tabs.UnknownObjectTab;
 import org.encog.workbench.tabs.analyst.EncogAnalystTab;
 import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.files.GenericFileTab;
@@ -316,9 +319,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			tab = new MLMethodTab(file);
 		} else if( obj instanceof NEATPopulation ) {
 			tab = new NEATPopulationTab(file);
+		} else if( obj instanceof TrainingContinuation ){ 
+			tab = new TrainingContTab(file);
 		} else {
-			tab = new GenericFileTab(file);
-			this.openTab(tab);
+			tab = new UnknownObjectTab(file);
 		}
 		
 		if(tab!=null)

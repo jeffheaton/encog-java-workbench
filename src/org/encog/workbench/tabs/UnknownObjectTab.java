@@ -9,11 +9,11 @@ public class UnknownObjectTab extends HTMLTab {
 		super(encogObject);
 		HTMLReport report = new HTMLReport();
 		report.beginHTML();
-		String title = "Unknown Object Type";
+		String title = "Unknown Encog Object Type";
 		report.title(title);
 		report.beginBody();
 		report.h1(title);
-		report.para("Unknown object: " + encogObject.getClass().getSimpleName());
+		report.para("Unknown Object: " + encogObject.getEncogType());
 		report.endBody();
 		report.endHTML();
 		this.display(report.toString());
