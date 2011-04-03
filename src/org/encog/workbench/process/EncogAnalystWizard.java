@@ -41,6 +41,10 @@ public class EncogAnalystWizard {
 				egaFile = new File(FileUtil.forceExtension(
 						targetCSVFile.toString(), "ega"));
 				
+				if( !EncogWorkBench.getInstance().getMainWindow().getTabManager().queryViews(egaFile) )
+					return;
+				
+				
 				File egFile = new File(FileUtil.forceExtension(
 						targetCSVFile.toString(), "eg"));
 

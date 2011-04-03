@@ -311,9 +311,8 @@ public class EncogDocumentOperations {
 	}
 
 	public void performQuit() {
-
+		EncogWorkBench.getInstance().getMainWindow().getTabManager().closeAll();
 		System.exit(0);
-
 	}
 
 

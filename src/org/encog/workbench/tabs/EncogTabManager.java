@@ -110,7 +110,6 @@ public class EncogTabManager {
 			if( tab.getEncogObject()!=null ) {
 				if( tab.getEncogObject().getFile() !=null ) {
 					if( tab.getEncogObject().getFile().equals(f)) {
-						tab.setDirty(false);
 						tab.dispose();						
 					}
 				}

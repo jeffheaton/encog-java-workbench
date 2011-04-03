@@ -103,7 +103,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 		addWindowListener(this);
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		this.aboutTab = new AboutTab();
 
@@ -159,8 +159,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 
 	public void windowClosed(final WindowEvent e) {
-		System.exit(0);
-
+		getOperations().performQuit();
 	}
 
 	public void windowOpened(final WindowEvent e) {
