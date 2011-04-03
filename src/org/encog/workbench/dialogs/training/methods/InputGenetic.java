@@ -50,7 +50,7 @@ public class InputGenetic extends DialogMaxError {
 	 * @param owner The owner.
 	 */
 	public InputGenetic() {
-		super(EncogWorkBench.getInstance().getMainWindow());
+		super(false);
 		setTitle("Train Simulated Annealing");
 		
 		addProperty(this.populationSize = new IntegerField("population size","Learning Rate",true,1,-1));

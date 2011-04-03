@@ -53,7 +53,7 @@ public class InputInstar extends DialogMaxError {
 	 * @param owner
 	 */
 	public InputInstar() {
-		super(EncogWorkBench.getInstance().getMainWindow());
+		super(false);
 		setTitle("Train Instar");
 
 		addProperty(this.learningRate = new DoubleField("learning rate","Learning Rate",true,-1,-1));

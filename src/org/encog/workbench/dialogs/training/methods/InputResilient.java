@@ -52,7 +52,7 @@ public class InputResilient extends DialogMaxError {
 	 * @param owner
 	 */
 	public InputResilient() {
-		super(EncogWorkBench.getInstance().getMainWindow());
+		super(true);
 		setTitle("Train Resilient Propagation");
 		addProperty(this.maxStep = new DoubleField("max step","Max Step",true,0,-1));
 		addProperty(this.initialUpdate = new DoubleField("initial update","Initial Update",true,0,-1));

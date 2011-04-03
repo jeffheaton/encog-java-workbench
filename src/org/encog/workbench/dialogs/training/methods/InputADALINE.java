@@ -19,7 +19,7 @@ public class InputADALINE extends DialogMaxError {
 	 * @param owner
 	 */
 	public InputADALINE() {
-		super(EncogWorkBench.getInstance().getMainWindow());
+		super(false);
 		setTitle("Train ADALINE");
 		
 		addProperty(this.learningRate = new DoubleField("learning rate","Learning Rate",true,0,-1));

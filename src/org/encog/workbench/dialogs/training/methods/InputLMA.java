@@ -38,7 +38,7 @@ public class InputLMA  extends DialogMaxError {
 	 * @param owner
 	 */
 	public InputLMA() {
-		super(EncogWorkBench.getInstance().getMainWindow());
+		super(false);
 		setTitle("Levenberg Marquardt Training");
 		addProperty(this.useBayesian = new CheckField("baysean","Bayesian Regularization"));
 		render();	

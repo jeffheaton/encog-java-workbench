@@ -51,7 +51,7 @@ public class InputBackpropagation extends DialogMaxError {
 	 * @param owner
 	 */
 	public InputBackpropagation() {
-		super(EncogWorkBench.getInstance().getMainWindow());
+		super(true);
 		setTitle("Train Backpropagation");
 		addProperty(this.learningRate = new DoubleField("learning rate","Learning Rate",true,-1,-1));
 		addProperty(this.momentum = new DoubleField("momentum","Momentum",true,-1,-1));

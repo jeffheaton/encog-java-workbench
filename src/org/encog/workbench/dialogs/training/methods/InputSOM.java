@@ -69,7 +69,7 @@ public class InputSOM extends DialogMaxError {
 	 * @param owner The owner.
 	 */
 	public InputSOM() {
-		super(EncogWorkBench.getInstance().getMainWindow());
+		super(false);
 		
 		List<String> list = new ArrayList<String>();		
 		list.add("1D RBF - Gaussian");

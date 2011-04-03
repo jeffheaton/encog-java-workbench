@@ -15,12 +15,14 @@ import org.encog.neural.cpn.training.TrainInstar;
 import org.encog.neural.cpn.training.TrainOutstar;
 import org.encog.neural.data.NeuralDataPair;
 import org.encog.neural.data.NeuralDataSet;
+import org.encog.neural.data.folded.FoldedDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.ContainsFlat;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
+import org.encog.neural.networks.training.cross.CrossValidationKFold;
 import org.encog.neural.networks.training.genetic.NeuralGeneticAlgorithm;
 import org.encog.neural.networks.training.lma.LevenbergMarquardtTraining;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
@@ -59,6 +61,16 @@ public class TrainBasicNetwork {
 
 	private ProjectEGFile mlMethod;
 	private EncogCommonTab parentTab;
+	
+	private NeuralDataSet wrapTrainingData(NeuralDataSet trainingData) {
+		final FoldedDataSet folded = new FoldedDataSet(trainingData);
+		return folded;
+	}
+	
+	private Train wrapTrainer(NeuralDataSet folded, Train train, int foldCount) { 
+		final CrossValidationKFold trainFolded = new CrossValidationKFold(train,foldCount);
+		return trainFolded;
+	}
 
 	public TrainBasicNetwork(ProjectEGFile mlMethod, EncogCommonTab parentTab) {
 		this.mlMethod = mlMethod;
@@ -321,9 +333,21 @@ public class TrainBasicNetwork {
 		if (dialog.process()) {
 			final double initialUpdate = dialog.getInitialUpdate().getValue();
 			final double maxStep = dialog.getMaxStep().getValue();
+			
+			int kFold = dialog.getKfold().getValue();
+			
+			if( kFold>0 ) {
+				trainingData = this.wrapTrainingData(trainingData);
+			}
+			
 			Train train = new ResilientPropagation(
 					(ContainsFlat) file.getObject(), trainingData,
 					initialUpdate, maxStep);
+			
+			if( kFold>0 ) {
+				train = this.wrapTrainer(trainingData,train,kFold);
+			}
+			
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}
 	}

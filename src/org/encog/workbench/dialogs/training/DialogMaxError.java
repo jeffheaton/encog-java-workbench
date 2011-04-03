@@ -28,6 +28,7 @@ import java.awt.Frame;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
+import org.encog.workbench.dialogs.common.IntegerField;
 
 /**
  * Basic dialog box that displays two combo boxes used to select
@@ -39,29 +40,46 @@ import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 public class DialogMaxError extends EncogPropertiesDialog {
 
 	private final DoubleField maxError;
+	private final IntegerField kfold;
 
 	/**
 	 * Construct the dialog box.
 	 * @param owner The owner of the dialog box.
 	 */
-	public DialogMaxError(final Frame owner) {
+	public DialogMaxError(boolean allowKFold) {
 		
-		super(owner);
+		super(EncogWorkBench.getInstance().getMainWindow());
 		setSize(400,400);
 		setLocation(200,200);
 		
 		addProperty(this.maxError = new DoubleField("max error",
 				"Maximum Error Percent(0-100)", true, 0, 100));
+		if( allowKFold ) {
+			addProperty(this.kfold = new IntegerField("kfold","Cross Validation KFold (0=none)",true,0,50));
+		} else {
+			kfold = null;
+		}
 	}
 	
 	
 	public void render() {
 		super.render();
 		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
+		this.getKfold().setValue(0);
 	}
 
 	public DoubleField getMaxError() {
 		return maxError;
 	}
+
+
+	/**
+	 * @return the kfold
+	 */
+	public IntegerField getKfold() {
+		return kfold;
+	}
+	
+	
 
 }

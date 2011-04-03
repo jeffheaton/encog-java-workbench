@@ -41,7 +41,7 @@ public class InputSearchSVM  extends DialogMaxError {
 	 * @param owner
 	 */
 	public InputSearchSVM() {
-		super(EncogWorkBench.getInstance().getMainWindow());
+		super(false);
 		setSize(400,400);
 		setTitle("Support Vector Machine (SVM) Cross Validation");
 		addProperty(this.beginningGamma = new DoubleField("gamma","Gamma Begin",true,-1,-1));

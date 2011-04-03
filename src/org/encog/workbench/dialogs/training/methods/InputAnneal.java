@@ -49,7 +49,7 @@ public class InputAnneal extends DialogMaxError {
 	 * @param owner The owner of the dialog box.
 	 */
 	public InputAnneal() {
-		super(EncogWorkBench.getInstance().getMainWindow());
+		super(false);
 		setTitle("Train Simulated Annealing");
 
 		addProperty(this.startTemp = new DoubleField("starting temperature","Starting Temperature",true,-1,-1));

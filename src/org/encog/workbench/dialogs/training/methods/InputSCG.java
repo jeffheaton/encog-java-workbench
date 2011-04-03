@@ -33,7 +33,7 @@ public class InputSCG  extends DialogMaxError {
 	 * @param owner
 	 */
 	public InputSCG() {
-		super(EncogWorkBench.getInstance().getMainWindow());
+		super(false);
 		setTitle("Scaled Conjugate Gradient (SCG)");
 		render();	
 	}
