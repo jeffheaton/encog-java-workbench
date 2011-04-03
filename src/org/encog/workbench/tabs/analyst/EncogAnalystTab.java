@@ -42,11 +42,13 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.tabs.files.text.BasicTextTab;
+import org.encog.workbench.tabs.visualize.datareport.DataReportTab;
 
 public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
 	private final JButton buttonExecute;
 	private final JButton buttonAnalyzeData;
+	private final JButton buttonVisualize;
 	private final EncogAnalyst analyst;
 	private final JComboBox tasks;
 	private final TasksModel model;
@@ -63,6 +65,8 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
 		this.buttonAnalyzeData = new JButton("Analyze Ranges");
 		this.buttonAnalyzeData.addActionListener(this);
+		this.buttonVisualize = new JButton("Visualize");
+		this.buttonVisualize.addActionListener(this);
 
 		this.buttonExecute.addActionListener(this);
 		this.tasks = new JComboBox(model = new TasksModel(this.analyst));
@@ -70,6 +74,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 		buttonPanel.add(tasks);
 		buttonPanel.add(this.buttonExecute);
 		buttonPanel.add(this.buttonAnalyzeData);
+		buttonPanel.add(this.buttonVisualize);
 
 		add(buttonPanel, BorderLayout.NORTH);
 
@@ -120,11 +125,26 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 			if (e.getSource() == this.buttonExecute) {
 				execute();
 			}
-			if (e.getSource() == this.buttonAnalyzeData) {
+			else if (e.getSource() == this.buttonAnalyzeData) {
 				analyzeData();
+			} else if( e.getSource() == this.buttonVisualize) {
+				visualizeData();
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
+		}
+	}
+
+	private void visualizeData() {
+		if( compile() )
+		{
+			try {
+				EncogWorkBench.getInstance().getMainWindow().beginWait();
+				DataReportTab tab = new DataReportTab(this.analyst);
+				EncogWorkBench.getInstance().getMainWindow().openTab(tab);
+			} finally {
+				EncogWorkBench.getInstance().getMainWindow().endWait();
+			}
 		}
 	}
 
