@@ -106,7 +106,6 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	public MLMethodTab(final ProjectEGFile data) {
 		super(data);
 
-		setDirty(true);
 		this.method = (MLMethod)data.getObject();
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
@@ -212,6 +211,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		double value = dialog.getConstantValue().getValue();
 		ConstRandomizer r = new ConstRandomizer(value);
 		r.randomize((BasicNetwork)this.method);
+		setDirty(true);
 	}
 
 	private void optionConsistent(RandomizeNetworkDialog dialog) {
@@ -220,6 +220,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		double max = dialog.getConstHigh().getValue();
 		ConsistentRandomizer c = new ConsistentRandomizer(min, max, seed);
 		c.randomize(this.method);
+		setDirty(true);
 	}
 
 	private void optionPerturb(RandomizeNetworkDialog dialog) {
@@ -227,6 +228,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 		Distort distort = new Distort(percent);
 		distort.randomize((BasicNetwork) this.method);
+		setDirty(true);
 	}
 
 	private void optionGaussian(RandomizeNetworkDialog dialog) {
@@ -235,6 +237,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 		GaussianRandomizer g = new GaussianRandomizer(mean, dev);
 		g.randomize((BasicNetwork) this.method);
+		setDirty(true);
 	}
 
 	private void optionRandomize(RandomizeNetworkDialog dialog) {
@@ -255,8 +258,10 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			break;
 		}
 
-		if (r != null)
+		if (r != null) {
 			r.randomize((BasicNetwork) this.method);
+			setDirty(true);
+		}
 	}
 
 	private void performQuery() {
@@ -327,6 +332,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 					((MLProperties)method).getProperties(),
 					"Properties");
 			frame.setVisible(true);
+			setDirty(true);
 		} else {
 			EncogWorkBench
 					.displayError("Error",
@@ -515,7 +521,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				&& (hopfield.getNeuronCount() != dialog.getNeuronCount()
 						.getValue())) {
 			HopfieldPattern pattern = new HopfieldPattern();
-			pattern.setInputNeurons(dialog.getNeuronCount().getValue());		
+			pattern.setInputNeurons(dialog.getNeuronCount().getValue());
+			setDirty(true);
 			produceReport();
 		}
 	}
@@ -598,6 +605,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 					}
 				}
 			}
+			setDirty(true);
 			produceReport();
 		}
 	}

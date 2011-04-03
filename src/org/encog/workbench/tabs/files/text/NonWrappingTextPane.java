@@ -1,12 +1,8 @@
 package org.encog.workbench.tabs.files.text;
 
 import java.awt.Component;
-import java.awt.GridLayout;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.text.StyledDocument;
 

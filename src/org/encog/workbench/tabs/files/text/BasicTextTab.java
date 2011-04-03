@@ -3,14 +3,12 @@ package org.encog.workbench.tabs.files.text;
 import java.awt.BorderLayout;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
