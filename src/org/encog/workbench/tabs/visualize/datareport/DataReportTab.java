@@ -54,7 +54,7 @@ public class DataReportTab extends HTMLTab {
 	
 	@Override
 	public String getName() {
-		return "About";
+		return "Data Report";
 	}
 
 }
