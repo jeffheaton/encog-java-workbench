@@ -12,39 +12,42 @@ import org.encog.workbench.util.FileUtil;
 
 public class EncogAnalystWizard {
 	public static void createEncogAnalyst(File csvFile) {
-		
-		if( !EncogWorkBench.getInstance().getMainWindow().getTabManager().queryViews(csvFile) )
+
+		if (!EncogWorkBench.getInstance().getMainWindow().getTabManager()
+				.queryViews(csvFile))
 			return;
-		
-		
+
 		AnalystWizardDialog dialog = new AnalystWizardDialog(EncogWorkBench
 				.getInstance().getMainWindow());
-		
-		if( csvFile!=null ) {
+
+		if (csvFile != null) {
 			dialog.getRawFile().setValue(csvFile.toString());
 		}
-		
+
 		if (dialog.process()) {
 			EncogAnalyst analyst = null;
-			File projectFolder = EncogWorkBench.getInstance().getProjectDirectory();
+			File projectFolder = EncogWorkBench.getInstance()
+					.getProjectDirectory();
 			File egaFile = null;
-			
+
 			try {
+				EncogWorkBench.getInstance().getMainWindow().beginWait();
 				File sourceCSVFile = new File(dialog.getRawFile().getValue());
 				File targetCSVFile = new File(projectFolder,
 						sourceCSVFile.getName());
 
-				if( !sourceCSVFile.toString().equals(targetCSVFile.toString())) {
-					org.encog.util.file.FileUtil.copy(sourceCSVFile, targetCSVFile);
+				if (!sourceCSVFile.toString().equals(targetCSVFile.toString())) {
+					org.encog.util.file.FileUtil.copy(sourceCSVFile,
+							targetCSVFile);
 				}
-				
+
 				egaFile = new File(FileUtil.forceExtension(
 						targetCSVFile.toString(), "ega"));
-				
-				if( !EncogWorkBench.getInstance().getMainWindow().getTabManager().queryViews(egaFile) )
+
+				if (!EncogWorkBench.getInstance().getMainWindow()
+						.getTabManager().queryViews(egaFile))
 					return;
-				
-				
+
 				File egFile = new File(FileUtil.forceExtension(
 						targetCSVFile.toString(), "eg"));
 
@@ -58,7 +61,8 @@ public class EncogAnalystWizard {
 				wizard.setGoal(dialog.getGoal());
 				wizard.setLagWindowSize(dialog.getLagCount().getValue());
 				wizard.setLeadWindowSize(dialog.getLeadCount().getValue());
-				wizard.setIncludeTargetField(dialog.getIncludeTarget().getValue());
+				wizard.setIncludeTargetField(dialog.getIncludeTarget()
+						.getValue());
 				wizard.setEGName(egFile);
 				wizard.setRange(dialog.getRange());
 				wizard.setTaskNormalize(dialog.getNormalize().getValue());
@@ -68,15 +72,15 @@ public class EncogAnalystWizard {
 
 				wizard.wizard(targetCSVFile, headers, format);
 
-				
-				
 			} catch (EncogError e) {
-				EncogWorkBench.displayError("Error Generating Analyst Script", e);
+				EncogWorkBench.displayError("Error Generating Analyst Script",
+						e);
 			} finally {
-				if( analyst!=null)
+				EncogWorkBench.getInstance().getMainWindow().endWait();
+				if (analyst != null)
 					analyst.save(egaFile);
 				EncogWorkBench.getInstance().getMainWindow().getTree()
-				.refresh();
+						.refresh();
 			}
 		}
 	}
