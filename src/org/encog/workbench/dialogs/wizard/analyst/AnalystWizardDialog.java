@@ -54,6 +54,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	private final CheckField normalize;
 	private final CheckField segregate;
 	private final CheckField randomize;
+	private final CheckField balance;
 	
 	private final List<String> methods = new ArrayList<String>();
 	
@@ -103,7 +104,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		addProperty(this.normalize = new CheckField("normalize","Normalize"));
 		addProperty(this.randomize = new CheckField("randomize","Randomize"));
 		addProperty(this.segregate = new CheckField("segregate","Segregate"));
-		
+		addProperty(this.balance = new CheckField("balance","Balance"));
 		
 		render();
 		
@@ -113,6 +114,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		this.randomize.setValue(true);
 		this.segregate.setValue(true);
 		this.normalize.setValue(true);
+		this.balance.setValue(false);
 	
 	}
 
@@ -233,7 +235,16 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	 */
 	public CheckField getNormalize() {
 		return normalize;
+	}
+
+	/**
+	 * @return the balance
+	 */
+	public CheckField getBalance() {
+		return balance;
 	}	
+	
+	
 	
 	
 }

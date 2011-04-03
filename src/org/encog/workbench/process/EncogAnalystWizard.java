@@ -64,6 +64,7 @@ public class EncogAnalystWizard {
 				wizard.setTaskNormalize(dialog.getNormalize().getValue());
 				wizard.setTaskRandomize(dialog.getRandomize().getValue());
 				wizard.setTaskSegregate(dialog.getSegregate().getValue());
+				wizard.setTaskBalance(dialog.getBalance().getValue());
 
 				wizard.wizard(targetCSVFile, headers, format);
 
