@@ -263,9 +263,19 @@ public class TrainBasicNetwork {
 		if (dialog.process()) {
 			double learningRate = dialog.getLearningRate().getValue();
 			double momentum = dialog.getMomentum().getValue();
+			int kFold = dialog.getKfold().getValue();
+			
+			if( kFold>0 ) {
+				trainingData = this.wrapTrainingData(trainingData);
+			}
 
 			Train train = new Backpropagation((BasicNetwork) file.getObject(),
 					trainingData, learningRate, momentum);
+			
+			if( kFold>0 ) {
+				train = this.wrapTrainer(trainingData,train,kFold);
+			}
+			
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}
 
@@ -321,9 +331,19 @@ public class TrainBasicNetwork {
 		InputManhattan dialog = new InputManhattan();
 		if (dialog.process()) {
 			double learningRate = dialog.getFixedDelta().getValue();
+			int kFold = dialog.getKfold().getValue();
 
+			if( kFold>0 ) {
+				trainingData = this.wrapTrainingData(trainingData);
+			}
+			
 			Train train = new ManhattanPropagation(
 					(BasicNetwork) file.getObject(), trainingData, learningRate);
+			
+			if( kFold>0 ) {
+				train = this.wrapTrainer(trainingData,train,kFold);
+			}			
+			
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}
 	}
@@ -355,8 +375,19 @@ public class TrainBasicNetwork {
 	private void performSCG(ProjectEGFile file, NeuralDataSet trainingData) {
 		InputSCG dialog = new InputSCG();
 		if (dialog.process()) {
+			int kFold = dialog.getKfold().getValue();
+			
+			if( kFold>0 ) {
+				trainingData = this.wrapTrainingData(trainingData);
+			}
+			
 			Train train = new ScaledConjugateGradient(
 					(BasicNetwork) file.getObject(), trainingData);
+			
+			if( kFold>0 ) {
+				train = this.wrapTrainer(trainingData,train,kFold);
+			}
+			
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}
 	}

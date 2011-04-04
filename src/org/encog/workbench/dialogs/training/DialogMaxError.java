@@ -65,7 +65,9 @@ public class DialogMaxError extends EncogPropertiesDialog {
 	public void render() {
 		super.render();
 		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
-		this.getKfold().setValue(0);
+		if( this.getKfold()!=null ) {
+			this.getKfold().setValue(0);
+		}
 	}
 
 	public DoubleField getMaxError() {

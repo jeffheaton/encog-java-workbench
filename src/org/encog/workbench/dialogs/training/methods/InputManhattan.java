@@ -50,7 +50,7 @@ public class InputManhattan extends DialogMaxError {
 	 * @param owner
 	 */
 	public InputManhattan() {
-		super(false);
+		super(true);
 		setTitle("Train Manhattan Update Rule");
 		
 		addProperty(this.fixedDelta = new DoubleField("fixed delta","Fixed Delta",true,0,-1));
