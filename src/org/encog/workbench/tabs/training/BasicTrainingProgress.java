@@ -50,6 +50,7 @@ import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.file.FileUtil;
+import org.encog.util.validate.ValidateNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -217,7 +218,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	public BasicTrainingProgress(Train train, ProjectEGFile method,
 			NeuralDataSet trainingData) {
 		super(method);
-
+		ValidateNetwork.validateMethodToData((MLMethod)method.getObject(), trainingData);
 		List<String> list = new ArrayList<String>();
 		list.add("<Select Option>");
 		list.add("Reset");
