@@ -83,7 +83,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
 	public boolean compile() {
 		try {
-		
+			int selected = this.tasks.getSelectedIndex();
 			byte[] b = this.getText().getBytes();
 			ByteArrayInputStream ms = new ByteArrayInputStream(b);
 			this.analyst.getScript().setBasePath(EncogWorkBench.getInstance().getProjectDirectory().toString());
@@ -99,6 +99,9 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 				if (this.model.getSize() > 0)
 					this.tasks.setSelectedIndex(0);
 			}
+			
+			if( selected!=-1 )
+				this.tasks.setSelectedIndex(selected);
 			return true;
 		} catch (AnalystError ex) {
 			EncogWorkBench.getInstance().clearOutput();
