@@ -187,6 +187,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 			if (!compile())
 				return;
 
+			EncogWorkBench.getInstance().getMainWindow().beginWait();
 			AnalystWizard wizard = new AnalystWizard(this.analyst);
 			wizard.reanalyze();
 
@@ -197,6 +198,8 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 			this.setText(os.toString());
 		} catch (IOException ex) {
 			throw new WorkBenchError(ex);
+		} finally {
+			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
 
 	}

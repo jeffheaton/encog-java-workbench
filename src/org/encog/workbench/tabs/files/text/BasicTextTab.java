@@ -63,6 +63,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 
 	public void setText(final String t) {
 		this.editor.setText(t);
+		this.editor.setCaretPosition(0);
 	}
 
 	public String getText() {
