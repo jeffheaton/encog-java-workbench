@@ -316,8 +316,10 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
-			shutdown();
-			stopped();
+			EncogWorkBench.getInstance().outputLine("***Encog Analyst Exception");
+			EncogWorkBench.getInstance().outputLine(t.getMessage());
+			this.status = "Exception encountered.";
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 			dispose();
 		} finally {
 			shutdown();
