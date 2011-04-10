@@ -26,6 +26,7 @@ package org.encog.workbench.frames.document;
 import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -47,6 +48,7 @@ import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectFile;
+import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -131,7 +133,6 @@ public class EncogDocumentOperations {
 			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
 	}
-
 
 	public void performBrowse() {
 		BrowserFrame browse = new BrowserFrame();
@@ -226,13 +227,11 @@ public class EncogDocumentOperations {
 							+ Format.formatPercent(error));
 
 				} else {
-					EncogWorkBench
-							.displayError(
-									"Error",
-									"The Machine Learning method "
-											+ method.getClass().getSimpleName()
-											+ " does not support error calculation.");
-				} 
+					EncogWorkBench.displayError("Error",
+							"The Machine Learning method "
+									+ method.getClass().getSimpleName()
+									+ " does not support error calculation.");
+				}
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error Evaluating Network", t);
@@ -269,8 +268,9 @@ public class EncogDocumentOperations {
 			name = FileUtil.forceExtension(name, "csv");
 			File targetFile = new File(EncogWorkBench.getInstance()
 					.getProjectDirectory(), name);
-			
-			if( !EncogWorkBench.getInstance().getMainWindow().getTabManager().queryViews(targetFile)) {
+
+			if (!EncogWorkBench.getInstance().getMainWindow().getTabManager()
+					.queryViews(targetFile)) {
 				return;
 			}
 
@@ -315,7 +315,6 @@ public class EncogDocumentOperations {
 		System.exit(0);
 	}
 
-
 	public void performFileProperties(ProjectFile selected) {
 		String name = selected.getFile().getName();
 		String newName = EncogWorkBench
@@ -332,10 +331,46 @@ public class EncogDocumentOperations {
 	}
 
 	public void performSave() {
-		EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow().getCurrentTab();
-		if( tab!=null ) {
+		EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
+				.getCurrentTab();
+		if (tab != null) {
 			tab.save();
 		}
-		
+
+	}
+
+	public void performDelete() {
+
+		boolean first = true;
+		List<ProjectItem> list = this.owner.getTree().getSelectedValue();
+
+		for (ProjectItem selected : list) {
+			if (first
+					&& !EncogWorkBench.askQuestion("Warning",
+							"Are you sure you want to delete these file(s)?")) {
+				return;
+			}
+			first = false;
+			if (selected instanceof ProjectFile) {
+				File f = ((ProjectFile) selected).getFile();
+				if (!f.delete()) {
+					if (FileUtil.getFileExt(f).equalsIgnoreCase("egb")) {
+						EncogWorkBench
+								.displayError(
+										"Can't Delete:\n" + f.toString(),
+										f.toString()
+												+ "\nUnfortunatly, due to a limitation in Java, EGB files cannot be deleted once opened.\nRestart the workbench, and you will be able to delete this file.");
+					} else {
+						EncogWorkBench.displayError("Can't Delete",
+								f.toString());
+					}
+
+				} else {
+					EncogWorkBench.getInstance().getMainWindow()
+							.getTabManager().closeAll(f);
+				}
+			}
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+		}
 	}
 }

@@ -9,6 +9,8 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -25,7 +27,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.util.MouseUtil;
 
-public class ProjectTree extends JPanel implements MouseListener,
+public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 		DropTargetListener {
 	private JTree tree;
 	private final EncogCollectionModel collectionModel;
@@ -39,6 +41,7 @@ public class ProjectTree extends JPanel implements MouseListener,
 		this.tree = new JTree(this.collectionModel);
 		// this.tree.setRootVisible(false);
 		this.tree.addMouseListener(this);
+		this.tree.addKeyListener(this);
 		this.tree.setCellRenderer(new ProjectTreeRenderer());
 
 		final JScrollPane scrollPane = new JScrollPane(this.tree);
@@ -233,6 +236,19 @@ public class ProjectTree extends JPanel implements MouseListener,
 	public void dropActionChanged(DropTargetDragEvent arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void keyTyped(KeyEvent e) {
+		if( e.getKeyChar()==KeyEvent.VK_DELETE) {
+			EncogWorkBench.getInstance().getMainWindow().getOperations().performDelete();
+		}
+		
+	}
+
+	public void keyPressed(KeyEvent e) {
+	}
+
+	public void keyReleased(KeyEvent e) {
 	}
 
 }

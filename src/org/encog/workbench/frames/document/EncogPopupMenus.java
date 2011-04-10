@@ -69,11 +69,15 @@ public class EncogPopupMenus {
 			if (source == this.popupFileRefresh) {
 				EncogWorkBench.getInstance().getMainWindow().getTree()
 						.refresh();
+				return;
 			}
 
 			else if (source == this.popupFileNewFile) {
 				CreateNewFile.performCreateFile();
-
+				return;
+			} else if (source == this.popupFileDelete) {
+				EncogWorkBench.getInstance().getMainWindow().getOperations().performDelete();
+				return;
 			} 
 
 			boolean first = true;
@@ -83,35 +87,7 @@ public class EncogPopupMenus {
 				return;
 
 			for (ProjectItem selected : list) {
-				if (source == this.popupFileDelete) {
-					if (first
-							&& !EncogWorkBench
-									.askQuestion("Warning",
-											"Are you sure you want to delete these file(s)?")) {
-						return;
-					}
-					first = false;
-					if (selected instanceof ProjectFile) {
-						File f = ((ProjectFile) selected).getFile();
-						if (!f.delete()) {
-							if (FileUtil.getFileExt(f).equalsIgnoreCase("egb")) {
-								EncogWorkBench
-										.displayError(
-												"Can't Delete:\n" + f.toString(),
-												f.toString()
-														+ "\nUnfortunatly, due to a limitation in Java, EGB files cannot be deleted once opened.\nRestart the workbench, and you will be able to delete this file.");
-							} else {
-								EncogWorkBench.displayError("Can't Delete",
-										f.toString());
-							}
-
-						} else {
-							EncogWorkBench.getInstance().getMainWindow().getTabManager().closeAll(f);
-						}
-					} 
-					EncogWorkBench.getInstance().getMainWindow().getTree()
-							.refresh();
-				} else if (source == this.popupFileOpen) {
+				if (source == this.popupFileOpen) {
 					if (selected instanceof ProjectFile) {
 						EncogWorkBench.getInstance().getMainWindow()
 								.openFile((ProjectFile)selected);
