@@ -4,8 +4,10 @@ import java.io.File;
 
 import org.encog.EncogError;
 import org.encog.app.analyst.AnalystFileFormat;
+import org.encog.app.analyst.AnalystGoal;
 import org.encog.app.analyst.EncogAnalyst;
 import org.encog.app.analyst.wizard.AnalystWizard;
+import org.encog.app.analyst.wizard.WizardMethodType;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.wizard.analyst.AnalystWizardDialog;
 import org.encog.workbench.util.FileUtil;
@@ -29,6 +31,11 @@ public class EncogAnalystWizard {
 			File projectFolder = EncogWorkBench.getInstance()
 					.getProjectDirectory();
 			File egaFile = null;
+			
+			if( dialog.getMethodType()==WizardMethodType.SOM && dialog.getGoal()==AnalystGoal.Regression ) {
+				EncogWorkBench.displayError("Error", "Can't use a SOM with regression.");
+				return;
+			}
 
 			try {
 				EncogWorkBench.getInstance().getMainWindow().beginWait();

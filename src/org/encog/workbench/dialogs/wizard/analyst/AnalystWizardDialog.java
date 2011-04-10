@@ -84,6 +84,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		methods.add("RBF Network");
 		methods.add("Support Vector Machine");
 		methods.add("PNN/GRNN Network");
+		methods.add("Self Organizing Map (SOM)");
 		
 		this.setSize(640, 300);
 		this.setTitle("Setup Encog Analyst Wizard");
@@ -144,6 +145,8 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 				return WizardMethodType.SVM;
 			case 3:
 				return WizardMethodType.PNN;
+			case 4:
+				return WizardMethodType.SOM;
 			default:
 				return null;
 		}
