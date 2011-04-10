@@ -24,8 +24,11 @@
 package org.encog.workbench.tabs;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JTabbedPane;
 
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
@@ -38,9 +41,13 @@ import org.encog.workbench.tabs.files.BasicFileTab;
 public class EncogTabManager {
 	private final List<EncogCommonTab> tabs = new ArrayList<EncogCommonTab>();
 	private final EncogDocumentFrame owner;
+	private final JTabbedPane documentTabs;
+	private boolean modalTabOpen;
 
 	public EncogTabManager(final EncogDocumentFrame owner) {
 		this.owner = owner;
+		this.documentTabs = new JTabbedPane();
+		this.documentTabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
 	}
 
 	public void add(final EncogCommonTab tab) {
@@ -146,4 +153,79 @@ public class EncogTabManager {
 		}
 		return false;
 	}
+
+	/**
+	 * @return the documentTabs
+	 */
+	public JTabbedPane getDocumentTabs() {
+		return documentTabs;
+	}
+	
+	public EncogCommonTab getCurrentTab() {		
+		EncogCommonTab currentTab = (EncogCommonTab)this.documentTabs.getSelectedComponent();
+		return currentTab;
+	}
+
+	public void openTab(EncogCommonTab tab) {
+
+		int i = this.documentTabs.getTabCount();
+
+		this.documentTabs.add(tab.getName(), tab);
+
+		if (!this.contains(tab)) {
+			if (i < this.documentTabs.getTabCount())
+				documentTabs.setTabComponentAt(i, new ButtonTabComponent(this, tab));
+			add(tab);
+		}
+		selectTab(tab);
+		EncogWorkBench.getInstance().getMainWindow().getMenus().updateMenus();
+	}
+	
+	public void selectTab(EncogCommonTab tab) {
+		this.documentTabs.setSelectedComponent(tab);
+	}
+
+	public void openModalTab(EncogCommonTab tab, String title) {
+
+		if (alreadyOpen(tab))
+			return;
+
+		int i = this.documentTabs.getTabCount();
+
+		this.documentTabs.add(title, tab);
+		documentTabs.setTabComponentAt(i, new ButtonTabComponent(this, tab));
+		add(tab);
+		tab.setModal(true);
+		this.documentTabs.setSelectedComponent(tab);
+		this.documentTabs.setEnabled(false);
+		EncogWorkBench.getInstance().getMainWindow().getTree().setEnabled(false);
+		this.modalTabOpen = true;
+		EncogWorkBench.getInstance().getMainWindow().getMenus().updateMenus();
+
+	}
+
+	public void closeTab(EncogCommonTab tab) throws IOException {
+		if (tab.close()) {
+			remove(tab);
+			getDocumentTabs().remove(tab);
+
+			if (tab.isModal()) {
+				this.documentTabs.setEnabled(true);
+				EncogWorkBench.getInstance().getMainWindow().getTree().setEnabled(true);
+				this.modalTabOpen = false;
+			}
+			EncogWorkBench.getInstance().getMainWindow().getMenus().updateMenus();
+		}
+
+	}
+
+	/**
+	 * @return the modalTabOpen
+	 */
+	public boolean isModalTabOpen() {
+		return modalTabOpen;
+	}
+
+	
+	
 }

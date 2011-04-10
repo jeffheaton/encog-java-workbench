@@ -51,7 +51,7 @@ public class ValidationChart {
 			
 			ResultValidationChart chart = new ResultValidationChart();
 			chart.setData(training, method);
-			EncogWorkBench.getInstance().getMainWindow().openModalTab(chart, "Validation");
+			EncogWorkBench.getInstance().getMainWindow().getTabManager().openModalTab(chart, "Validation");
 		}
 		}
 		catch(Throwable t)

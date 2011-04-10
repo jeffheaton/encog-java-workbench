@@ -70,7 +70,7 @@ public abstract class EncogCommonTab extends JPanel {
 
 	public void dispose() {
 		try {
-			owner.closeTab(this);
+			owner.getTabManager().closeTab(this);
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
 		}

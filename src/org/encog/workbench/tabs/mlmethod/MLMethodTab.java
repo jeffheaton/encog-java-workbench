@@ -268,7 +268,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		try {
 			if (this.method instanceof ThermalNetwork) {
 				QueryThermalTab tab = new QueryThermalTab((ProjectEGFile)this.getEncogObject());
-				EncogWorkBench.getInstance().getMainWindow()
+				EncogWorkBench.getInstance().getMainWindow().getTabManager()
 						.openModalTab(tab, "Thermal Query");			
 			}
 			// only supports regression
@@ -295,17 +295,17 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				if( sel.getSelected()==selectClassification ) {
 					ClassificationQueryTab tab = new ClassificationQueryTab(
 							((ProjectEGFile) this.getEncogObject()));
-					EncogWorkBench.getInstance().getMainWindow()
+					EncogWorkBench.getInstance().getMainWindow().getTabManager()
 							.openModalTab(tab, "Query Classification");					
 				} else if( sel.getSelected()==selectRegression ) {
 					RegressionQueryTab tab = new RegressionQueryTab(
 							((ProjectEGFile) this.getEncogObject()));
-					EncogWorkBench.getInstance().getMainWindow()
+					EncogWorkBench.getInstance().getMainWindow().getTabManager()
 							.openModalTab(tab, "Query Regression");					
 				}  else if( sel.getSelected()==selectOCR ) {
 					OCRQueryTab tab = new OCRQueryTab(
 							((ProjectEGFile) this.getEncogObject()));
-					EncogWorkBench.getInstance().getMainWindow()
+					EncogWorkBench.getInstance().getMainWindow().getTabManager()
 							.openModalTab(tab, "Query OCR");					
 				}
 			}
@@ -367,7 +367,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 	private void analyzeThermal() {
 		ThermalGridTab tab = new ThermalGridTab((ProjectEGFile) this.getEncogObject());
-		EncogWorkBench.getInstance().getMainWindow()
+		EncogWorkBench.getInstance().getMainWindow().getTabManager()
 				.openModalTab(tab, "Thermal Grid");
 	}
 
@@ -376,7 +376,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		if (method instanceof MLMethod) {
 			StructureTab tab = new StructureTab(
 					((MLMethod)this.method));
-			EncogWorkBench.getInstance().getMainWindow()
+			EncogWorkBench.getInstance().getMainWindow().getTabManager()
 					.openModalTab(tab, "Network Structure");
 		} else {
 			throw new WorkBenchError("No analysis available for: "
@@ -387,7 +387,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 
 	public void analyzeWeights() {
 		AnalyzeWeightsTab tab = new AnalyzeWeightsTab((ProjectEGFile)this.getEncogObject());
-		EncogWorkBench.getInstance().getMainWindow()
+		EncogWorkBench.getInstance().getMainWindow().getTabManager()
 				.openModalTab(tab, "Analyze Weights");
 	}
 

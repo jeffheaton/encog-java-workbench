@@ -144,7 +144,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 			try {
 				EncogWorkBench.getInstance().getMainWindow().beginWait();
 				DataReportTab tab = new DataReportTab(this.analyst);
-				EncogWorkBench.getInstance().getMainWindow().openTab(tab);
+				EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
 			} finally {
 				EncogWorkBench.getInstance().getMainWindow().endWait();
 			}
@@ -177,7 +177,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 			EncogWorkBench.getInstance().clearOutput();
 			String name = (String) this.tasks.getSelectedItem();
 			AnalystProgressTab tab = new AnalystProgressTab(this.analyst, name);
-			EncogWorkBench.getInstance().getMainWindow()
+			EncogWorkBench.getInstance().getMainWindow().getTabManager()
 					.openModalTab(tab, "Analyst");
 		}
 	}

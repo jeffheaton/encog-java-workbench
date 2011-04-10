@@ -136,12 +136,12 @@ public class EncogDocumentOperations {
 
 	public void performBrowse() {
 		BrowserFrame browse = new BrowserFrame();
-		this.owner.openTab(browse);
+		this.owner.getTabManager().openTab(browse);
 	}
 
 	public void performRBF() {
 		RadialBasisFunctionsTab rbf = new RadialBasisFunctionsTab();
-		this.owner.openTab(rbf);
+		this.owner.getTabManager().openTab(rbf);
 	}
 
 	public void performHelpAbout() {
@@ -331,7 +331,7 @@ public class EncogDocumentOperations {
 	}
 
 	public void performSave() {
-		EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
+		EncogCommonTab tab = this.owner.getTabManager()
 				.getCurrentTab();
 		if (tab != null) {
 			tab.save();

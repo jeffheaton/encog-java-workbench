@@ -466,6 +466,6 @@ public class TrainBasicNetwork {
 			tab.setParentTab(tab);
 		}
 		tab.setMaxError(maxError);
-		EncogWorkBench.getInstance().getMainWindow().openTab(tab);
+		EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
 	}
 }

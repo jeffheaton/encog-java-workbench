@@ -39,10 +39,10 @@ import java.awt.event.*;
  * a JButton to close the tab it belongs to 
  */ 
 public class ButtonTabComponent extends JPanel {
-    private final EncogDocumentFrame owner;
+    private final EncogTabManager owner;
     private final EncogCommonTab tab;
 
-    public ButtonTabComponent(final EncogDocumentFrame owner, final EncogCommonTab tab) {
+    public ButtonTabComponent(final EncogTabManager owner, final EncogCommonTab tab) {
         //unset default FlowLayout' gaps
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.owner = owner;

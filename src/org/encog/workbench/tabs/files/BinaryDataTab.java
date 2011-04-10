@@ -144,7 +144,7 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 	
 	public void performVisualize() {
 		EncogCommonTab tab = new VisualizeGridTab(data);
-		EncogWorkBench.getInstance().getMainWindow().openTab(tab);
+		EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
 	}
 
 }

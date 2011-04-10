@@ -300,7 +300,7 @@ public class CreateNeuralNetwork {
 			
 			
 
-			EncogWorkBench.getInstance().getMainWindow().openModalTab(tab, "Incremental Prune");
+			EncogWorkBench.getInstance().getMainWindow().getTabManager().openModalTab(tab, "Incremental Prune");
 			return null;
 		}
 		return null;

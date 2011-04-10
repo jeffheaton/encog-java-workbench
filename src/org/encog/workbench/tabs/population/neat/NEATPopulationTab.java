@@ -216,7 +216,7 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener 
 			BasicTrainingProgress tab = new BasicTrainingProgress(train,
 					popFile, train.getTraining());
 			tab.setMaxError(dialog.getMaxError().getValue() / 100);
-			EncogWorkBench.getInstance().getMainWindow().openTab(tab);
+			EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
 
 		}
 	}

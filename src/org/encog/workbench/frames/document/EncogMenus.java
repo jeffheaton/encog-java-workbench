@@ -162,11 +162,11 @@ public class EncogMenus {
 	
 	public void updateMenus()
 	{
-		boolean modal = this.owner.isModalTabOpen();
+		boolean modal = this.owner.getTabManager().isModalTabOpen();
 		boolean supportsClipboard = false;
 		boolean documentOpen = EncogWorkBench.getInstance().getProjectDirectory()!=null;
 		
-		JTabbedPane tabs = EncogWorkBench.getInstance().getMainWindow().getDocumentTabs();
+		JTabbedPane tabs = this.owner.getTabManager().getDocumentTabs();
 
 		
 		EncogCommonTab currentTab = (EncogCommonTab)tabs.getSelectedComponent();
