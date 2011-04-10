@@ -71,6 +71,8 @@ public class EncogMenus {
 	private JMenu menuTools;
 	
 	private JMenuItem menuFileNew;
+	private JMenuItem menuFileNewProject;
+	private JMenuItem menuFileChangeDir;
 	private JMenuItem menuFileSeve;
 	private JMenuItem menuFileQuit;
 
@@ -101,9 +103,9 @@ public class EncogMenus {
 		// menu bar
 		this.menuBar = new JMenuBar();
 		this.menuFile = new JMenu("File");
-		this.menuFileNew = this.menuFile.add(owner
+		this.menuFileNewProject = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_NEW_PROJECT, 'n'));
-		this.menuFileNew = this.menuFile.add(owner
+		this.menuFileChangeDir = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_CHANGE_DIR, 'c'));
 		this.menuFileNew = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_NEW_FILE, 'f'));
@@ -171,7 +173,9 @@ public class EncogMenus {
 		
 		EncogCommonTab currentTab = (EncogCommonTab)tabs.getSelectedComponent();
 		
-		this.menuFileNew.setEnabled(!modal && documentOpen);	
+		this.menuFileNew.setEnabled(!modal && documentOpen);
+		this.menuFileChangeDir.setEnabled(!modal);
+		this.menuFileNewProject.setEnabled(!modal);
 		this.menuFileQuit.setEnabled(true);
 		this.menuFileSeve.setEnabled(!modal && documentOpen && currentTab!=null);
 		this.menuEditCut.setEnabled(!modal && supportsClipboard && documentOpen);
@@ -186,6 +190,9 @@ public class EncogMenus {
 		this.menuToolsBenchmark.setEnabled(!modal);
 		this.menuToolsBrowse.setEnabled(!modal);
 		this.menuToolsValidation.setEnabled(!modal && documentOpen);
+		this.menuToolsExt2Bin.setEnabled(!modal);
+		this.menuToolsRBF.setEnabled(!modal);
+		this.menuToolsBin2Ext.setEnabled(!modal);
 
 		this.menuHelpAbout.setEnabled(!modal);
 	}

@@ -71,10 +71,16 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 	}
 
 	public void rightMouseClicked(final MouseEvent e, final Object item) {
+		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().isModalTabOpen() )
+			return;
+		
 		this.doc.getPopupMenus().rightMouseClicked(e, item);
 	}
 
 	public void mouseClicked(MouseEvent e) {
+		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().isModalTabOpen() )
+			return;
+		
 		TreePath path = this.tree.getSelectionPath();
 
 		// see if something should be selected because of right-click
@@ -187,6 +193,9 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 	}
 
 	public void drop(DropTargetDropEvent dtde) {
+		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().isModalTabOpen() )
+			return;
+		
 		try {
 			if( EncogWorkBench.getInstance().getProjectDirectory()==null ) {
 				EncogWorkBench.displayError("Error", "Open a project before using drag and drop.");
@@ -239,6 +248,9 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 	}
 
 	public void keyTyped(KeyEvent e) {
+		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().isModalTabOpen() )
+			return;
+		
 		if( e.getKeyChar()==KeyEvent.VK_DELETE) {
 			EncogWorkBench.getInstance().getMainWindow().getOperations().performDelete();
 		}
