@@ -86,7 +86,9 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 			int selected = this.tasks.getSelectedIndex();
 			byte[] b = this.getText().getBytes();
 			ByteArrayInputStream ms = new ByteArrayInputStream(b);
-			this.analyst.getScript().setBasePath(EncogWorkBench.getInstance().getProjectDirectory().toString());
+			this.analyst.getScript().setBasePath(
+					EncogWorkBench.getInstance().getProjectDirectory()
+							.toString());
 			this.analyst.load(ms);
 			ms.close();
 
@@ -99,8 +101,8 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 				if (this.model.getSize() > 0)
 					this.tasks.setSelectedIndex(0);
 			}
-			
-			if( selected!=-1 )
+
+			if (selected != -1)
 				this.tasks.setSelectedIndex(selected);
 			return true;
 		} catch (AnalystError ex) {
@@ -117,7 +119,8 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
 	private void loadFromFile() {
 		try {
-			this.setText(org.encog.util.file.FileUtil.readFileAsString(this.getEncogObject().getFile()));
+			this.setText(org.encog.util.file.FileUtil.readFileAsString(this
+					.getEncogObject().getFile()));
 		} catch (IOException e) {
 			throw new WorkBenchError(e);
 		}
@@ -127,10 +130,9 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 		try {
 			if (e.getSource() == this.buttonExecute) {
 				execute();
-			}
-			else if (e.getSource() == this.buttonAnalyzeData) {
+			} else if (e.getSource() == this.buttonAnalyzeData) {
 				analyzeData();
-			} else if( e.getSource() == this.buttonVisualize) {
+			} else if (e.getSource() == this.buttonVisualize) {
 				visualizeData();
 			}
 		} catch (Throwable t) {
@@ -139,12 +141,12 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 	}
 
 	private void visualizeData() {
-		if( compile() )
-		{
+		if (compile()) {
 			try {
 				EncogWorkBench.getInstance().getMainWindow().beginWait();
 				DataReportTab tab = new DataReportTab(this.analyst);
-				EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
+				EncogWorkBench.getInstance().getMainWindow().getTabManager()
+						.openTab(tab);
 			} finally {
 				EncogWorkBench.getInstance().getMainWindow().endWait();
 			}
@@ -167,18 +169,19 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
 	private void execute() {
 		if (forceSave()) {
-			if( this.tasks.getSelectedIndex()==-1) {
+			if (this.tasks.getSelectedIndex() == -1) {
 				EncogWorkBench.displayError("Error", "No tasks to execute.");
 				return;
 			}
-			
-			compile();
-			
-			EncogWorkBench.getInstance().clearOutput();
-			String name = (String) this.tasks.getSelectedItem();
-			AnalystProgressTab tab = new AnalystProgressTab(this.analyst, name);
-			EncogWorkBench.getInstance().getMainWindow().getTabManager()
-					.openModalTab(tab, "Analyst");
+
+			if (compile()) {
+				EncogWorkBench.getInstance().clearOutput();
+				String name = (String) this.tasks.getSelectedItem();
+				AnalystProgressTab tab = new AnalystProgressTab(this.analyst,
+						name);
+				EncogWorkBench.getInstance().getMainWindow().getTabManager()
+						.openModalTab(tab, "Analyst");
+			}
 		}
 	}
 
