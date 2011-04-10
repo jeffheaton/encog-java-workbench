@@ -20,7 +20,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 
 	private final NonWrappingTextPane editor;
 	private final JScrollPane scroll;
-	private final BasicTextDocListener dirty = new BasicTextDocListener();
+	private final BasicTextDocListener dirty = new BasicTextDocListener(this);
 
 	public BasicTextTab(ProjectFile file) {
 		super(file);
@@ -42,7 +42,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 			this.editor.read(is, null);
 			is.close();
 			this.editor.getDocument().addDocumentListener(this.dirty);
-			dirty.setDirty(false);
+			setDirty(false);
 
 		} catch (IOException ex) {
 			throw new WorkBenchError(ex);
@@ -55,7 +55,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 			FileWriter out = new FileWriter(this.getEncogObject().getFile());
 			this.editor.write(out);
 			out.close();
-			dirty.setDirty(false);
+			setDirty(false);
 		} catch (IOException ex) {
 			throw new WorkBenchError(ex);
 		}
@@ -72,7 +72,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 
 	@Override
 	public boolean close() throws IOException {
-		if (this.dirty.isDirty()) {
+		if (isDirty()) {
 			if (EncogWorkBench.askQuestion("Save",
 					"Would you like to save this text file?")) {
 				this.save();
@@ -97,7 +97,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener {
 	}
 
 	public void componentShown(ComponentEvent e) {
-		this.dirty.setDirty(false);
+		setDirty(false);
 		
 	}
 

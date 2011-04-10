@@ -226,6 +226,10 @@ public class EncogTabManager {
 		return modalTabOpen;
 	}
 
-	
+	public void renameTab(EncogCommonTab tab, String name) {
+		int index = this.documentTabs.indexOfComponent(tab);
+		if( index!=-1)
+			this.documentTabs.setTitleAt(index, name);
+	}
 	
 }

@@ -105,7 +105,10 @@ public abstract class EncogCommonTab extends JPanel {
 	 * @param dirty the dirty to set
 	 */
 	public void setDirty(boolean dirty) {
+		boolean needUpdate = this.dirty!=dirty;
 		this.dirty = dirty;
+		if( needUpdate )
+			updateTitle();
 	}
 
 	/**
@@ -126,5 +129,14 @@ public abstract class EncogCommonTab extends JPanel {
 		if( this.getEncogObject()!=null) {
 			this.getEncogObject().save();
 		}
+		this.setDirty(false);
+	}
+	
+	public void updateTitle() {
+		StringBuilder t = new StringBuilder();
+		if( this.isDirty() )
+			t.append("* ");
+		t.append(this.getName());
+		EncogWorkBench.getInstance().getMainWindow().getTabManager().renameTab(this, t.toString());
 	}
 }

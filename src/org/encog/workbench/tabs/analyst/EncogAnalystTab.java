@@ -152,7 +152,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 	}
 
 	private boolean forceSave() {
-		if (this.getDirty().isDirty()) {
+		if (isDirty()) {
 			if (EncogWorkBench
 					.askQuestion(
 							"Save",
