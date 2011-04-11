@@ -1,5 +1,6 @@
 package org.encog.workbench.tabs.visualize.scatter;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.List;
@@ -23,6 +24,7 @@ public class ScatterPlotTab extends EncogCommonTab {
 
 	private EncogAnalyst analyst;
 	private ScatterFile file;
+	private XYPlot samplePlot;
 	
 	public ScatterPlotTab(EncogAnalyst analyst, String className, List<String> axisList) {
 		super(null);
@@ -33,18 +35,24 @@ public class ScatterPlotTab extends EncogCommonTab {
 			this.add(createPanel(0,1));
 			return;
 		} else {
+			JPanel panel = new JPanel();
 			int count = axisList.size();
-			this.setLayout(new GridLayout(count,count));
+			panel.setLayout(new GridLayout(count,count));
 			
 			for(int col=0;col<count;col++) {
 				for(int row=0;row<count;row++) {
 					if( col==row ) {
-						this.add(new ScatterLabelPane(axisList.get(row)));
+						panel.add(new ScatterLabelPane(axisList.get(row)));
 					} else {
-						this.add(createPanel(row,col));			
+						panel.add(createPanel(row,col));			
 					}											
 				}				
 			}
+			
+			this.setLayout(new BorderLayout());
+			this.add(panel,BorderLayout.CENTER);
+			LegendPanel legend = new LegendPanel(this.samplePlot);
+			this.add(legend,BorderLayout.SOUTH);
 		}
 	}
 	
@@ -69,6 +77,10 @@ public class ScatterPlotTab extends EncogCommonTab {
 	        
 	        ChartPanel result = new ChartPanel(chart); 	
 	        result.setBorder(BorderFactory.createLineBorder(Color.black));
+	        
+	        // we need one to draw the legend off of
+	        if( this.samplePlot==null)
+	        	this.samplePlot = plot;
 	        return result;
 	}
 

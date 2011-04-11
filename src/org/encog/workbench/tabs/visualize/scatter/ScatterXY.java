@@ -103,7 +103,7 @@ public class ScatterXY extends AbstractXYDataset
      * @return The key for the series.
      */
     public Comparable getSeriesKey(int series) {
-        return "Sample " + series;
+        return this.scatterFile.getTargetField().getClassMembers().get(series).getName();
     }
 
     /**
