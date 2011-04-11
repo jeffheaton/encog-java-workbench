@@ -148,7 +148,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
 	private void visualizeData() {
 		if (compile()) {
-			
+
 			SelectItem dataReport;
 			SelectItem scatterPlot;
 
@@ -157,7 +157,7 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 					"See a report about the ranges adn columns."));
 			list.add(scatterPlot = new SelectItem("Scatter Plot",
 					"See basic relationships amoung the columns."));
-			
+
 			SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
 					.getMainWindow(), list);
 			sel.setVisible(true);
@@ -166,21 +166,30 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 				analyzeRanges();
 			} else if (sel.getSelected() == scatterPlot) {
 				analyzeScatterPlot();
-			}			
+			}
 		}
 	}
 
 	private void analyzeScatterPlot() {
 		ScatterChooseClass dialog = new ScatterChooseClass(this.analyst);
-		if( dialog.process() ) {
-			if( dialog.getAxis().size()<2 ) {
-				EncogWorkBench.displayError("Error", "Must select at least two axes.");
+		if (dialog.process()) {
+			if (dialog.getAxis().size() < 2) {
+				EncogWorkBench.displayError("Error",
+						"Must select at least two axes.");
 				return;
 			}
-			ScatterPlotTab tab = new ScatterPlotTab(this.analyst,dialog.getClassName(), dialog.getAxis());
-			EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
+
+			try {
+				EncogWorkBench.getInstance().getMainWindow().beginWait();
+				ScatterPlotTab tab = new ScatterPlotTab(this.analyst,
+						dialog.getClassName(), dialog.getAxis());
+				EncogWorkBench.getInstance().getMainWindow().getTabManager()
+						.openTab(tab);
+			} finally {
+				EncogWorkBench.getInstance().getMainWindow().endWait();
+			}
 		}
-		
+
 	}
 
 	private void analyzeRanges() {
