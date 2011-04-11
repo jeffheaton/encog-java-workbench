@@ -30,6 +30,8 @@ import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -40,9 +42,13 @@ import org.encog.app.analyst.EncogAnalyst;
 import org.encog.app.analyst.wizard.AnalystWizard;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
+import org.encog.workbench.dialogs.select.SelectDialog;
+import org.encog.workbench.dialogs.select.SelectItem;
+import org.encog.workbench.dialogs.visualize.scatter.ScatterChooseClass;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.tabs.files.text.BasicTextTab;
 import org.encog.workbench.tabs.visualize.datareport.DataReportTab;
+import org.encog.workbench.tabs.visualize.scatter.ScatterPlotTab;
 
 public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
@@ -142,14 +148,45 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
 	private void visualizeData() {
 		if (compile()) {
-			try {
-				EncogWorkBench.getInstance().getMainWindow().beginWait();
-				DataReportTab tab = new DataReportTab(this.analyst);
-				EncogWorkBench.getInstance().getMainWindow().getTabManager()
-						.openTab(tab);
-			} finally {
-				EncogWorkBench.getInstance().getMainWindow().endWait();
-			}
+			
+			SelectItem dataReport;
+			SelectItem scatterPlot;
+
+			List<SelectItem> list = new ArrayList<SelectItem>();
+			list.add(dataReport = new SelectItem("Range Report",
+					"See a report about the ranges adn columns."));
+			list.add(scatterPlot = new SelectItem("Scatter Plot",
+					"See basic relationships amoung the columns."));
+			
+			SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
+					.getMainWindow(), list);
+			sel.setVisible(true);
+
+			if (sel.getSelected() == dataReport) {
+				analyzeRanges();
+			} else if (sel.getSelected() == scatterPlot) {
+				analyzeScatterPlot();
+			}			
+		}
+	}
+
+	private void analyzeScatterPlot() {
+		ScatterChooseClass dialog = new ScatterChooseClass(this.analyst);
+		if( dialog.process() ) {
+			ScatterPlotTab tab = new ScatterPlotTab(this.analyst,dialog.getClassName(), dialog.getAxis());
+			EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
+		}
+		
+	}
+
+	private void analyzeRanges() {
+		try {
+			EncogWorkBench.getInstance().getMainWindow().beginWait();
+			DataReportTab tab = new DataReportTab(this.analyst);
+			EncogWorkBench.getInstance().getMainWindow().getTabManager()
+					.openTab(tab);
+		} finally {
+			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
 	}
 
