@@ -1,8 +1,11 @@
 package org.encog.workbench.tabs.visualize.scatter;
 
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.util.List;
 
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.encog.app.analyst.EncogAnalyst;
@@ -18,21 +21,41 @@ import org.jfree.data.xy.XYDataset;
 
 public class ScatterPlotTab extends EncogCommonTab {
 
+	private EncogAnalyst analyst;
+	private ScatterFile file;
+	
 	public ScatterPlotTab(EncogAnalyst analyst, String className, List<String> axisList) {
 		super(null);
-		this.add(createPanel());
+		this.analyst = analyst;
+		this.file = new ScatterFile(this.analyst,className,axisList);
+		
+		if( axisList.size()<=2 ) {
+			this.add(createPanel(0,1));
+			return;
+		} else {
+			int count = axisList.size();
+			this.setLayout(new GridLayout(count,count));
+			
+			for(int col=0;col<count;col++) {
+				for(int row=0;row<count;row++) {
+					if( col==row ) {
+						this.add(new ScatterLabelPane(axisList.get(row)));
+					} else {
+						this.add(createPanel(row,col));			
+					}											
+				}				
+			}
+		}
 	}
 	
-	private JPanel createPanel() {
+	private JPanel createPanel(int xIndex, int yIndex) {
 		
-		 XYDataset dataset = new ScatterXY();
-	        JFreeChart chart = ChartFactory.createScatterPlot("Scatter Plot Demo 4",
-	            "X", "Y", dataset, PlotOrientation.VERTICAL, true, true, false);
+		 XYDataset dataset = new ScatterXY(file,xIndex,yIndex);
+	        JFreeChart chart = ChartFactory.createScatterPlot(null,
+	            null, null, dataset, PlotOrientation.VERTICAL, false, true, false);
 
 	        XYPlot plot = (XYPlot) chart.getPlot();
 
-	        //plot.setDomainTickBandPaint(new Color(200, 200, 100, 100));
-	        plot.setRangeTickBandPaint(new Color(200, 200, 100, 100));
 	        XYDotRenderer renderer = new XYDotRenderer();
 	        renderer.setDotWidth(4);
 	        renderer.setDotHeight(4);
@@ -42,8 +65,11 @@ public class ScatterPlotTab extends EncogCommonTab {
 
 	        NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
 	        domainAxis.setAutoRangeIncludesZero(false);
-	        plot.getRangeAxis().setInverted(true);
-	        return new ChartPanel(chart);
+	        plot.getRangeAxis().setInverted(false);
+	        
+	        ChartPanel result = new ChartPanel(chart); 	
+	        result.setBorder(BorderFactory.createLineBorder(Color.black));
+	        return result;
 	}
 
 	@Override

@@ -11,26 +11,7 @@ import org.jfree.data.xy.XYDataset;
 public class ScatterXY extends AbstractXYDataset 
         implements XYDataset, DomainInfo, RangeInfo {
 
-    /** The series count. */
-    private static final int DEFAULT_SERIES_COUNT = 4;
-
-    /** The item count. */
-    private static final int DEFAULT_ITEM_COUNT = 40;
-
-    /** The range. */
-    private static final double DEFAULT_RANGE = 200;
-
-    /** The x values. */
-    private Double[][] xValues;
-
-    /** The y values. */
-    private Double[][] yValues;
-
-    /** The number of series. */
-    private int seriesCount;
-
-    /** The number of items. */
-    private int itemCount;
+	private ScatterFile scatterFile;
 
     /** The minimum domain value. */
     private Number domainMin;
@@ -49,14 +30,9 @@ public class ScatterXY extends AbstractXYDataset
 
     /** The range. */
     private Range range;
-
-    /**
-     * Creates a sample dataset using default settings (4 series, 100 data items per series,
-     * random data in the range 0 - 200).
-     */
-    public ScatterXY() {
-        this(DEFAULT_SERIES_COUNT, DEFAULT_ITEM_COUNT);
-    }
+    
+    private int xIndex;
+    private int yIndex;
 
     /**
      * Creates a sample dataset.
@@ -64,41 +40,17 @@ public class ScatterXY extends AbstractXYDataset
      * @param seriesCount  the number of series.
      * @param itemCount  the number of items.
      */
-    public ScatterXY(int seriesCount, int itemCount) {
+    public ScatterXY(ScatterFile scatterFile, int xIndex, int yIndex) {
 
-        this.xValues = new Double[seriesCount][itemCount];
-        this.yValues = new Double[seriesCount][itemCount];
-        this.seriesCount = seriesCount;
-        this.itemCount = itemCount;
-
-        double minX = Double.POSITIVE_INFINITY;
-        double maxX = Double.NEGATIVE_INFINITY;
-        double minY = Double.POSITIVE_INFINITY;
-        double maxY = Double.NEGATIVE_INFINITY;
-
-        for (int series = 0; series < seriesCount; series++) {
-            for (int item = 0; item < itemCount; item++) {
-
-                double x = (Math.random() - 0.5) * DEFAULT_RANGE;
-                this.xValues[series][item] = new Double(x);
-                if (x < minX) {
-                    minX = x;
-                }
-                if (x > maxX) {
-                    maxX = x;
-                }
-
-                double y = (Math.random() + 0.5) * 6 * x + x;
-                this.yValues[series][item] = new Double(y);
-                if (y < minY) {
-                    minY = y;
-                }
-                if (y > maxY) {
-                    maxY = y;
-                }
-
-            }
-        }
+    	this.scatterFile = scatterFile;
+    	
+    	this.xIndex = xIndex;
+    	this.yIndex = yIndex;
+    	
+        double minX = scatterFile.findMin(this.xIndex);
+        double maxX = scatterFile.findMax(this.xIndex);
+        double minY = scatterFile.findMin(this.yIndex);
+        double maxY = scatterFile.findMax(this.yIndex);        
 
         this.domainMin = new Double(minX);
         this.domainMax = new Double(maxX);
@@ -119,7 +71,7 @@ public class ScatterXY extends AbstractXYDataset
      * @return the x-value for the specified series and item.
      */
     public Number getX(int series, int item) {
-        return this.xValues[series][item];
+    	return this.scatterFile.getSeries(series).get(item)[this.xIndex];
     }
 
     /**
@@ -131,7 +83,7 @@ public class ScatterXY extends AbstractXYDataset
      * @return  the y-value for the specified series and item.
      */
     public Number getY(int series, int item) {
-        return this.yValues[series][item];
+    	return this.scatterFile.getSeries(series).get(item)[this.yIndex];
     }
 
     /**
@@ -140,7 +92,7 @@ public class ScatterXY extends AbstractXYDataset
      * @return the series count.
      */
     public int getSeriesCount() {
-        return this.seriesCount;
+        return this.scatterFile.getTargetField().getClassMembers().size();
     }
 
     /**
@@ -162,7 +114,7 @@ public class ScatterXY extends AbstractXYDataset
      * @return the number of items in the specified series.
      */
     public int getItemCount(int series) {
-        return this.itemCount;
+        return this.scatterFile.getSeries(series).size();
     }
 
     /**
