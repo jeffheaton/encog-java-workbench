@@ -71,14 +71,14 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 	}
 
 	public void rightMouseClicked(final MouseEvent e, final Object item) {
-		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().isModalTabOpen() )
+		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().notWithModalTabOpen() )
 			return;
 		
 		this.doc.getPopupMenus().rightMouseClicked(e, item);
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().isModalTabOpen() )
+		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().notWithModalTabOpen() )
 			return;
 		
 		TreePath path = this.tree.getSelectionPath();
@@ -193,7 +193,7 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 	}
 
 	public void drop(DropTargetDropEvent dtde) {
-		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().isModalTabOpen() )
+		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().notWithModalTabOpen() )
 			return;
 		
 		try {
@@ -248,7 +248,7 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 	}
 
 	public void keyTyped(KeyEvent e) {
-		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().isModalTabOpen() )
+		if( EncogWorkBench.getInstance().getMainWindow().getTabManager().notWithModalTabOpen() )
 			return;
 		
 		if( e.getKeyChar()==KeyEvent.VK_DELETE) {

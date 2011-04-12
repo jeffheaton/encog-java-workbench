@@ -225,6 +225,14 @@ public class EncogTabManager {
 	public boolean isModalTabOpen() {
 		return modalTabOpen;
 	}
+	
+	public boolean notWithModalTabOpen() {
+		if( this.modalTabOpen ) {
+			EncogWorkBench.displayError("Error", "Please close modal tab first.");
+		}
+		return modalTabOpen;
+	}
+	
 
 	public void renameTab(EncogCommonTab tab, String name) {
 		int index = this.documentTabs.indexOfComponent(tab);

@@ -55,7 +55,15 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	private final CheckField segregate;
 	private final CheckField randomize;
 	private final CheckField balance;
+	private final CheckField cluster;
 	
+	/**
+	 * @return the cluster
+	 */
+	public CheckField getCluster() {
+		return cluster;
+	}
+
 	private final List<String> methods = new ArrayList<String>();
 	
 	public AnalystWizardDialog(Frame owner) {
@@ -106,6 +114,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		addProperty(this.randomize = new CheckField("randomize","Randomize"));
 		addProperty(this.segregate = new CheckField("segregate","Segregate"));
 		addProperty(this.balance = new CheckField("balance","Balance"));
+		addProperty(this.cluster = new CheckField("cluster","Cluster"));
 		
 		render();
 		
@@ -116,6 +125,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		this.segregate.setValue(true);
 		this.normalize.setValue(true);
 		this.balance.setValue(false);
+		this.cluster.setValue(true);
 	
 	}
 
