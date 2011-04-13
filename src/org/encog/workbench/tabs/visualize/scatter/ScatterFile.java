@@ -61,7 +61,7 @@ public class ScatterFile {
 		
 		// get filenames, headers & format
 		String sourceID = prop.getPropertyString(
-				ScriptProperties.HEADER_DATASOURCE_rawFile);
+				ScriptProperties.HEADER_DATASOURCE_RAW_FILE);
 
 		File sourceFile = this.analyst.getScript().resolveFilename(sourceID);
 
