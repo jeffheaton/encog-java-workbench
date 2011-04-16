@@ -7,11 +7,11 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-import org.encog.engine.util.EngineArray;
 import org.encog.neural.data.bipolar.BiPolarNeuralData;
 import org.encog.neural.thermal.BoltzmannMachine;
 import org.encog.neural.thermal.HopfieldNetwork;
 import org.encog.neural.thermal.ThermalNetwork;
+import org.encog.util.EngineArray;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 

@@ -26,11 +26,9 @@ package org.encog.workbench.models;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.encog.engine.util.Format;
-import org.encog.ml.genetic.genome.Genome;
-import org.encog.ml.genetic.population.Population;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATGenome;
+import org.encog.util.Format;
 
 public class GeneralPopulationModel implements TableModel {
 

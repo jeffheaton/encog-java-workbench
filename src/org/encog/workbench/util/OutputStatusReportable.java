@@ -23,7 +23,7 @@
  */
 package org.encog.workbench.util;
 
-import org.encog.engine.StatusReportable;
+import org.encog.StatusReportable;
 import org.encog.workbench.EncogWorkBench;
 
 public class OutputStatusReportable implements StatusReportable {

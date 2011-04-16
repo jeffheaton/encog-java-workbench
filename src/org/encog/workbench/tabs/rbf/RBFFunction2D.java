@@ -23,7 +23,7 @@
  */
 package org.encog.workbench.tabs.rbf;
 
-import org.encog.engine.network.rbf.RadialBasisFunction;
+import org.encog.neural.flat.rbf.RadialBasisFunction;
 import org.jfree.data.function.Function2D;
 
 public class RBFFunction2D implements Function2D {

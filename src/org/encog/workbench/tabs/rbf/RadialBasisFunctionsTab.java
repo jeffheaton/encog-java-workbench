@@ -32,11 +32,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
-import org.encog.engine.network.rbf.RadialBasisFunction;
 import org.encog.mathutil.rbf.GaussianFunction;
 import org.encog.mathutil.rbf.InverseMultiquadricFunction;
 import org.encog.mathutil.rbf.MexicanHatFunction;
 import org.encog.mathutil.rbf.MultiquadricFunction;
+import org.encog.neural.flat.rbf.RadialBasisFunction;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;

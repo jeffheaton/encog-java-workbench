@@ -26,7 +26,7 @@ package org.encog.workbench.dialogs.createnetwork;
 import java.awt.Frame;
 import java.util.List;
 
-import org.encog.engine.network.activation.ActivationFunction;
+import org.encog.neural.activation.ActivationFunction;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;

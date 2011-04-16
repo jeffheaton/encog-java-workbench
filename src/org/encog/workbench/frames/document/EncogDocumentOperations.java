@@ -31,12 +31,12 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
-import org.encog.engine.util.ErrorCalculation;
-import org.encog.engine.util.ErrorCalculationMode;
-import org.encog.engine.util.Format;
+import org.encog.mathutil.error.ErrorCalculation;
+import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.ml.MLError;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
+import org.encog.util.Format;
 import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;

@@ -25,7 +25,7 @@ package org.encog.workbench.dialogs.training.methods;
 
 import java.awt.Frame;
 
-import org.encog.engine.network.train.prop.RPROPConst;
+import org.encog.neural.flat.train.prop.RPROPConst;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.training.DialogMaxError;

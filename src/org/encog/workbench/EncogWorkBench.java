@@ -25,23 +25,18 @@ package org.encog.workbench;
 
 import java.awt.Frame;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
-import org.encog.Encog;
 import org.encog.EncogError;
-import org.encog.engine.util.ErrorCalculation;
+import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.ml.MLMethod;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.persist.EncogDirectoryPersistence;
-import org.encog.persist.EncogWriteHelper;
 import org.encog.util.logging.Logging;
 import org.encog.util.obj.ReflectionUtil;
 import org.encog.workbench.config.EncogWorkBenchConfig;

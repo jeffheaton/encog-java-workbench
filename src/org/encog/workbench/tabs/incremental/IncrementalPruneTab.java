@@ -30,18 +30,17 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.encog.engine.StatusReportable;
-import org.encog.engine.util.Format;
+import org.encog.StatusReportable;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.prune.PruneIncremental;
+import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;

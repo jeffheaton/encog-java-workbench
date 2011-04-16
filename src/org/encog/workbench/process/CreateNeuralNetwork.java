@@ -26,11 +26,11 @@ package org.encog.workbench.process;
 import java.io.File;
 
 import org.encog.bot.BotUtil;
-import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.mathutil.rbf.RBFEnum;
 import org.encog.ml.MLMethod;
 import org.encog.ml.svm.KernelType;
 import org.encog.ml.svm.SVMType;
+import org.encog.neural.activation.ActivationTANH;
 import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.ADALINEPattern;

@@ -23,7 +23,7 @@
  */
 package org.encog.workbench.dialogs.activation;
 
-import org.encog.engine.network.activation.ActivationFunction;
+import org.encog.neural.activation.ActivationFunction;
 import org.jfree.data.function.Function2D;
 
 public class ActivationFunction2D implements Function2D {

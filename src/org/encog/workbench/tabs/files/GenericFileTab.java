@@ -1,22 +1,14 @@
 package org.encog.workbench.tabs.files;
 
 import java.awt.BorderLayout;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.io.File;
-import java.nio.ByteOrder;
 import java.util.Date;
 
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 
-import org.encog.Encog;
-import org.encog.engine.util.Format;
+import org.encog.util.Format;
 import org.encog.util.HTMLReport;
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.tree.ProjectFile;
-import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.util.EncogFonts;
 
 public class GenericFileTab extends BasicFileTab {
 	

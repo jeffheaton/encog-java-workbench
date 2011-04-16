@@ -43,8 +43,8 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import org.apache.commons.collections15.Transformer;
-import org.encog.engine.network.flat.FlatNetwork;
 import org.encog.ml.MLMethod;
+import org.encog.neural.flat.FlatNetwork;
 import org.encog.neural.neat.NEATLink;
 import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATNeuron;

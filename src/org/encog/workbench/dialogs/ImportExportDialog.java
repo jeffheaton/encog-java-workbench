@@ -31,10 +31,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
-import org.encog.engine.StatusReportable;
-import org.encog.engine.util.Format;
+import org.encog.StatusReportable;
 import org.encog.neural.data.buffer.BinaryDataLoader;
-import org.encog.util.benchmark.EncogBenchmark;
+import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.util.TaskComplete;
 

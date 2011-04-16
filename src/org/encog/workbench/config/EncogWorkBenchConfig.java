@@ -31,15 +31,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
-import org.encog.engine.util.ErrorCalculationMode;
+import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.persist.EncogFileSection;
 import org.encog.persist.EncogReadHelper;
 import org.encog.persist.EncogWriteHelper;
-import org.encog.persist.PersistConst;
-import org.encog.util.csv.CSVFormat;
-import org.encog.util.csv.NumberList;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.util.SimpleEncrypt;
 
 public class EncogWorkBenchConfig {
 

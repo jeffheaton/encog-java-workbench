@@ -1,10 +1,7 @@
 package org.encog.workbench.tabs.visualize.structure;
 
 
-import java.awt.Color;
-import java.awt.Graphics;
-
-import org.encog.engine.util.Format;
+import org.encog.util.Format;
 
 public class DrawnConnection {
 	private final DrawnNeuron from;

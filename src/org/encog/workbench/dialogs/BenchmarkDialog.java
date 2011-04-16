@@ -30,7 +30,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
-import org.encog.engine.StatusReportable;
+import org.encog.StatusReportable;
 import org.encog.util.benchmark.EncogBenchmark;
 import org.encog.workbench.EncogWorkBench;
 

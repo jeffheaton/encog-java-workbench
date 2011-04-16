@@ -3,8 +3,6 @@ package org.encog.workbench.models;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
-import org.encog.engine.util.Format;
-import org.encog.ml.genetic.genome.Genome;
 import org.encog.neural.thermal.ThermalNetwork;
 
 public class ThermalModel extends DefaultTableModel {

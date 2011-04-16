@@ -3,7 +3,6 @@ package org.encog.workbench.process;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.encog.engine.util.Format;
 import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.ml.MLMethod;
 import org.encog.ml.svm.SVM;
@@ -35,6 +34,7 @@ import org.encog.neural.som.SOM;
 import org.encog.neural.som.training.basic.BasicTrainSOM;
 import org.encog.neural.som.training.clustercopy.SOMClusterCopyTraining;
 import org.encog.neural.thermal.HopfieldNetwork;
+import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;

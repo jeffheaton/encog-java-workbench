@@ -30,8 +30,8 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import org.encog.engine.util.Format;
 import org.encog.neural.networks.structure.AnalyzeNetwork;
+import org.encog.util.Format;
 import org.encog.workbench.WorkbenchFonts;
 
 public class WeightInfo extends JPanel {

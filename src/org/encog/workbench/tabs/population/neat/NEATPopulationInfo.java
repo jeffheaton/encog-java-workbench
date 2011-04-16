@@ -30,12 +30,11 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import org.encog.engine.util.Format;
 import org.encog.ml.genetic.genome.Genome;
-import org.encog.ml.genetic.population.Population;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.training.genetic.NeuralGenome;
+import org.encog.util.Format;
 import org.encog.workbench.WorkbenchFonts;
 
 public class NEATPopulationInfo extends JPanel {

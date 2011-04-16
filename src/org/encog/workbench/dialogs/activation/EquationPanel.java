@@ -28,8 +28,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
-import org.encog.engine.network.activation.ActivationFunction;
-import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.neural.activation.ActivationFunction;
+import org.encog.neural.activation.ActivationSigmoid;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
