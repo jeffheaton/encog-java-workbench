@@ -23,8 +23,7 @@
  Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
-<!-- This POM makes Encog a Maven artifact, accessible from other programs 
-	using Maven. 
+<!-- This POM is used to create the Encog Workbench. 
 
 Authors of this POM file: iirekm, jheaton
 -->
@@ -118,9 +117,9 @@ Authors of this POM file: iirekm, jheaton
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.2.1</version>
 				<configuration>
-					<descriptorRefs>
+					<descriptors>
 						<descriptor>src/main/assembly/executable.xml</descriptor>
-					</descriptorRefs>
+					</descriptors>
 					<archive>
 						<manifest>
 							<mainClass>org.encog.workbench.EncogWorkBench</mainClass>
