@@ -45,7 +45,7 @@ import org.encog.mathutil.randomize.Distort;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
 import org.encog.ml.data.MLDataSet;
-import org.encog.neural.networks.training.Train;
+import org.encog.ml.train.MLTrain;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.file.FileUtil;
@@ -117,7 +117,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	/**
 	 * The training method being used.
 	 */
-	private Train train;
+	private MLTrain train;
 
 	/**
 	 * The training data.
@@ -214,7 +214,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 * @param owner
 	 *            The owner of the dialog box.
 	 */
-	public BasicTrainingProgress(Train train, ProjectEGFile method,
+	public BasicTrainingProgress(MLTrain train, ProjectEGFile method,
 			MLDataSet trainingData) {
 		super(method);
 		ValidateNetwork.validateMethodToData((MLMethod)method.getObject(), trainingData);
@@ -328,7 +328,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	/**
 	 * @return the train
 	 */
-	public Train getTrain() {
+	public MLTrain getTrain() {
 		return this.train;
 	}
 
@@ -574,7 +574,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 * @param train
 	 *            the train to set
 	 */
-	public void setTrain(final Train train) {
+	public void setTrain(final MLTrain train) {
 		this.train = train;
 	}
 

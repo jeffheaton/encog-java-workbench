@@ -37,7 +37,7 @@ import javax.swing.JPanel;
 import org.encog.app.analyst.AnalystError;
 import org.encog.app.analyst.AnalystListener;
 import org.encog.app.analyst.EncogAnalyst;
-import org.encog.ml.MLTrain;
+import org.encog.ml.train.MLTrain;
 import org.encog.util.Format;
 import org.encog.util.Stopwatch;
 import org.encog.workbench.EncogWorkBench;

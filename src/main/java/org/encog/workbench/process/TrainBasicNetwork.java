@@ -11,6 +11,7 @@ import org.encog.ml.data.folded.FoldedDataSet;
 import org.encog.ml.svm.SVM;
 import org.encog.ml.svm.training.SVMSearchTrain;
 import org.encog.ml.svm.training.SVMTrain;
+import org.encog.ml.train.MLTrain;
 import org.encog.neural.art.ART1;
 import org.encog.neural.cpn.CPN;
 import org.encog.neural.cpn.training.TrainInstar;
@@ -18,7 +19,6 @@ import org.encog.neural.cpn.training.TrainOutstar;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.ContainsFlat;
 import org.encog.neural.networks.training.CalculateScore;
-import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
 import org.encog.neural.networks.training.cross.CrossValidationKFold;
@@ -67,7 +67,7 @@ public class TrainBasicNetwork {
 		return folded;
 	}
 	
-	private Train wrapTrainer(MLDataSet folded, Train train, int foldCount) { 
+	private MLTrain wrapTrainer(MLDataSet folded, MLTrain train, int foldCount) { 
 		final CrossValidationKFold trainFolded = new CrossValidationKFold(train,foldCount);
 		return trainFolded;
 	}
@@ -251,7 +251,7 @@ public class TrainBasicNetwork {
 		if (dialog.process()) {
 			double learningRate = dialog.getLearningRate().getValue();
 
-			Train train = new TrainAdaline((BasicNetwork) file.getObject(),
+			MLTrain train = new TrainAdaline((BasicNetwork) file.getObject(),
 					trainingData, learningRate);
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}
@@ -269,7 +269,7 @@ public class TrainBasicNetwork {
 				trainingData = this.wrapTrainingData(trainingData);
 			}
 
-			Train train = new Backpropagation((BasicNetwork) file.getObject(),
+			MLTrain train = new Backpropagation((BasicNetwork) file.getObject(),
 					trainingData, learningRate, momentum);
 			
 			if( kFold>0 ) {
@@ -289,7 +289,7 @@ public class TrainBasicNetwork {
 			final int cycles = dialog.getCycles().getValue();
 
 			CalculateScore score = new TrainingSetScore(trainingData);
-			final Train train = new NeuralSimulatedAnnealing(
+			final MLTrain train = new NeuralSimulatedAnnealing(
 					(BasicNetwork) file.getObject(), score, startTemp,
 					stopTemp, cycles);
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
@@ -306,7 +306,7 @@ public class TrainBasicNetwork {
 			final double percentToMate = dialog.getPercentToMate().getValue();
 
 			CalculateScore score = new TrainingSetScore(trainingData);
-			final Train train = new NeuralGeneticAlgorithm(
+			final MLTrain train = new NeuralGeneticAlgorithm(
 					(BasicNetwork) file.getObject(),
 					new RangeRandomizer(-1, 1), score, populationSize,
 					mutationPercent, percentToMate);
@@ -337,7 +337,7 @@ public class TrainBasicNetwork {
 				trainingData = this.wrapTrainingData(trainingData);
 			}
 			
-			Train train = new ManhattanPropagation(
+			MLTrain train = new ManhattanPropagation(
 					(BasicNetwork) file.getObject(), trainingData, learningRate);
 			
 			if( kFold>0 ) {
@@ -360,7 +360,7 @@ public class TrainBasicNetwork {
 				trainingData = this.wrapTrainingData(trainingData);
 			}
 			
-			Train train = new ResilientPropagation(
+			MLTrain train = new ResilientPropagation(
 					(ContainsFlat) file.getObject(), trainingData,
 					initialUpdate, maxStep);
 			
@@ -381,7 +381,7 @@ public class TrainBasicNetwork {
 				trainingData = this.wrapTrainingData(trainingData);
 			}
 			
-			Train train = new ScaledConjugateGradient(
+			MLTrain train = new ScaledConjugateGradient(
 					(BasicNetwork) file.getObject(), trainingData);
 			
 			if( kFold>0 ) {
@@ -459,7 +459,7 @@ public class TrainBasicNetwork {
 		}
 	}
 
-	private void startup(ProjectEGFile file, Train train, double maxError) {
+	private void startup(ProjectEGFile file, MLTrain train, double maxError) {
 		BasicTrainingProgress tab = new BasicTrainingProgress(train, file,
 				train.getTraining());
 		if (this.parentTab != null) {
