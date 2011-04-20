@@ -30,13 +30,10 @@ import java.util.List;
 
 import javax.swing.JTabbedPane;
 
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.frames.document.tree.ProjectFile;
-import org.encog.workbench.tabs.files.BasicFileTab;
 
 public class EncogTabManager {
 	private final List<EncogCommonTab> tabs = new ArrayList<EncogCommonTab>();

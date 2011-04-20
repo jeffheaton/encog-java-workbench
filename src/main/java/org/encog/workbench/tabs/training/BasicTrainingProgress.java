@@ -44,10 +44,9 @@ import javax.swing.JPanel;
 import org.encog.mathutil.randomize.Distort;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
-import org.encog.neural.data.NeuralDataSet;
+import org.encog.ml.data.MLDataSet;
 import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.file.FileUtil;
 import org.encog.util.validate.ValidateNetwork;
@@ -123,7 +122,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	/**
 	 * The training data.
 	 */
-	private NeuralDataSet trainingData;
+	private MLDataSet trainingData;
 
 	/**
 	 * The max allowed error.
@@ -216,7 +215,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 *            The owner of the dialog box.
 	 */
 	public BasicTrainingProgress(Train train, ProjectEGFile method,
-			NeuralDataSet trainingData) {
+			MLDataSet trainingData) {
 		super(method);
 		ValidateNetwork.validateMethodToData((MLMethod)method.getObject(), trainingData);
 		List<String> list = new ArrayList<String>();
@@ -336,7 +335,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	/**
 	 * @return the trainingData
 	 */
-	public NeuralDataSet getTrainingData() {
+	public MLDataSet getTrainingData() {
 		return this.trainingData;
 	}
 
@@ -583,7 +582,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 * @param trainingData
 	 *            the trainingData to set
 	 */
-	public void setTrainingData(final NeuralDataSet trainingData) {
+	public void setTrainingData(final MLDataSet trainingData) {
 		this.trainingData = trainingData;
 	}
 

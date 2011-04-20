@@ -26,8 +26,8 @@ package org.encog.workbench.dialogs.createnetwork;
 import java.awt.Frame;
 import java.util.List;
 
+import org.encog.ml.data.MLDataSet;
 import org.encog.neural.activation.ActivationFunction;
-import org.encog.neural.data.NeuralDataSet;
 import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
@@ -173,7 +173,7 @@ public class CreateAutomatic extends EncogPropertiesDialog implements
 	/**
 	 * @return The training set that the user chose.
 	 */
-	public NeuralDataSet getTraining() {
+	public MLDataSet getTraining() {
 		ProjectTraining training = (ProjectTraining) this.comboTraining.getSelectedValue();
 		return EncogUtility.loadEGB2Memory(training.getFile());
 	}

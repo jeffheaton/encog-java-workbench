@@ -34,12 +34,8 @@ import javax.swing.JFileChooser;
 import org.encog.app.quant.QuantError;
 import org.encog.app.quant.loader.yahoo.YahooDownload;
 import org.encog.bot.BotUtil;
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.basic.BasicNeuralDataSet;
-import org.encog.neural.data.buffer.BinaryDataLoader;
-import org.encog.neural.data.buffer.BufferedNeuralDataSet;
-import org.encog.neural.data.buffer.codec.DataSetCODEC;
-import org.encog.neural.data.buffer.codec.NeuralDataSetCODEC;
+import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.util.benchmark.RandomTrainingFactory;
 import org.encog.util.csv.CSVFormat;
 import org.encog.util.file.FileUtil;
@@ -48,7 +44,6 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.trainingdata.CreateMarketTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.RandomTrainingDataDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
-import org.encog.workbench.util.NeuralConst;
 import org.encog.workbench.util.TemporalXOR;
 
 public class CreateTrainingData {
@@ -121,7 +116,7 @@ public class CreateTrainingData {
 						"Must enter a valid number.");
 			}
 			TemporalXOR temp = new TemporalXOR();
-			BasicNeuralDataSet trainingData = (BasicNeuralDataSet) temp
+			BasicMLDataSet trainingData = (BasicMLDataSet) temp
 					.generate(count);
 			File targetFile = new File(EncogWorkBench.getInstance()
 					.getProjectDirectory(), name);
@@ -145,7 +140,7 @@ public class CreateTrainingData {
 			File targetFile = new File(EncogWorkBench.getInstance()
 					.getProjectDirectory(), name);
 
-			NeuralDataSet trainingData = RandomTrainingFactory.generate(
+			MLDataSet trainingData = RandomTrainingFactory.generate(
 					System.currentTimeMillis(), elements, input, 0, low, high);
 
 			EncogUtility.saveCSV(targetFile, CSVFormat.ENGLISH, trainingData);

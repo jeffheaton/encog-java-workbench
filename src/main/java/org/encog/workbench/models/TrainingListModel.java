@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
-import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.buffer.BufferedNeuralDataSet;
 
 public class TrainingListModel implements ListModel {
 

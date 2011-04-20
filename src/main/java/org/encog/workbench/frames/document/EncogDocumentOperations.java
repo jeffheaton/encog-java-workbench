@@ -35,7 +35,7 @@ import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.ml.MLError;
 import org.encog.ml.MLMethod;
-import org.encog.neural.data.NeuralDataSet;
+import org.encog.ml.data.MLDataSet;
 import org.encog.util.Format;
 import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
@@ -212,7 +212,7 @@ public class EncogDocumentOperations {
 					.getInstance().getMainWindow());
 			if (dialog.process()) {
 				MLMethod method = dialog.getNetwork();
-				NeuralDataSet training = dialog.getTrainingSet();
+				MLDataSet training = dialog.getTrainingSet();
 
 				double error = 0;
 

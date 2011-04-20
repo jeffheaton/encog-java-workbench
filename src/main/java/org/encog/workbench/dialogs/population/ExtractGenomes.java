@@ -24,12 +24,7 @@
 package org.encog.workbench.dialogs.population;
 
 import java.awt.Frame;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.TextField;

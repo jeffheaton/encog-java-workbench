@@ -36,7 +36,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.encog.StatusReportable;
-import org.encog.neural.data.NeuralDataSet;
+import org.encog.ml.data.MLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.prune.PruneIncremental;
@@ -118,11 +118,11 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 
 	private int iterations;
 	private int weightTries;
-	private NeuralDataSet training;
+	private MLDataSet training;
 	private FeedForwardPattern pattern;
 	private int windowSize;
 
-	public IncrementalPruneTab(int iterations, int weightTries, int windowSize, NeuralDataSet training,
+	public IncrementalPruneTab(int iterations, int weightTries, int windowSize, MLDataSet training,
 			FeedForwardPattern pattern) {
 		super(null);
 
@@ -362,11 +362,11 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 		this.iterations = iterations;
 	}
 
-	public NeuralDataSet getTraining() {
+	public MLDataSet getTraining() {
 		return training;
 	}
 
-	public void setTraining(NeuralDataSet training) {
+	public void setTraining(MLDataSet training) {
 		this.training = training;
 	}
 

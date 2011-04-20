@@ -34,7 +34,7 @@ import javax.swing.JOptionPane;
 import org.encog.EncogError;
 import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.ml.MLMethod;
-import org.encog.neural.data.NeuralDataSet;
+import org.encog.ml.data.MLDataSet;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.logging.Logging;
@@ -199,7 +199,7 @@ public class EncogWorkBench implements Runnable {
 	}
 
 	public static void displayError(String title, Throwable t,
-			ProjectFile network, NeuralDataSet set) {
+			ProjectFile network, MLDataSet set) {
 		if (t instanceof EncogError) {
 			displayError(
 					title,

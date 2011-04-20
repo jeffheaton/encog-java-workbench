@@ -14,11 +14,10 @@ import javax.swing.JTable;
 import org.encog.EncogError;
 import org.encog.ml.BasicML;
 import org.encog.ml.MLClassification;
-import org.encog.ml.MLMethod;
 import org.encog.ml.MLOutput;
 import org.encog.ml.MLRegression;
-import org.encog.neural.data.NeuralData;
-import org.encog.neural.data.basic.BasicNeuralData;
+import org.encog.ml.data.MLData;
+import org.encog.ml.data.basic.BasicMLData;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
@@ -112,7 +111,7 @@ public class OCRQueryTab extends EncogCommonTab implements ActionListener {
 		try {
 			int outputCount = ((MLOutput) method).getOutputCount();
 			boolean[] grid = this.panel.getGrid();
-			NeuralData input = new BasicNeuralData(grid.length);
+			MLData input = new BasicMLData(grid.length);
 			for (int i = 0; i < grid.length; i++) {
 				input.setData(i, grid[i] ? 1 : -1);
 			}
@@ -121,7 +120,7 @@ public class OCRQueryTab extends EncogCommonTab implements ActionListener {
 				int output = ((MLClassification) this.method).classify(input);
 				this.outputTable.setValueAt(output, 0, 1);
 			} else {
-				NeuralData output = ((MLRegression) this.method).compute(input);
+				MLData output = ((MLRegression) this.method).compute(input);
 				for (int i = 0; i < outputCount; i++) {
 					this.outputTable.setValueAt(output.getData(i), i, 1);
 				}

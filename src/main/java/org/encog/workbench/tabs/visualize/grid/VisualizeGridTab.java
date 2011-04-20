@@ -15,9 +15,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.encog.neural.data.NeuralDataPair;
-import org.encog.neural.data.basic.BasicNeuralDataPair;
-import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.MLDataPair;
+import org.encog.ml.data.basic.BasicMLDataPair;
+import org.encog.ml.data.buffer.BufferedNeuralDataSet;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.models.TrainingListModel;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -76,7 +76,7 @@ public class VisualizeGridTab extends EncogCommonTab implements ListSelectionLis
 		if( selected==-1 )
 			return;
 		
-		NeuralDataPair pair = BasicNeuralDataPair.createPair(this.data.getInputSize(), this.data.getIdealSize());
+		MLDataPair pair = BasicMLDataPair.createPair(this.data.getInputSize(), this.data.getIdealSize());
 		this.data.getRecord(selected, pair);
 		int gridHeight;
 		int gridWidth;

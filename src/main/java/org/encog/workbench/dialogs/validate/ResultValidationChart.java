@@ -35,11 +35,10 @@ import javax.swing.JTable;
 import org.encog.ml.MLClassification;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLRegression;
-import org.encog.neural.data.NeuralData;
-import org.encog.neural.data.NeuralDataPair;
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.basic.BasicNeuralData;
-import org.encog.neural.networks.BasicNetwork;
+import org.encog.ml.data.MLData;
+import org.encog.ml.data.MLDataPair;
+import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.basic.BasicMLData;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.jfree.chart.ChartFactory;
@@ -66,7 +65,7 @@ public class ResultValidationChart extends EncogCommonTab {
 
 	}
 
-	public void setData(NeuralDataSet validationData, MLMethod method) {
+	public void setData(MLDataSet validationData, MLMethod method) {
 		ArrayList<XYSeries> validation = new ArrayList<XYSeries>();
 		ArrayList<XYSeries> computation = new ArrayList<XYSeries>();
 
@@ -75,10 +74,10 @@ public class ResultValidationChart extends EncogCommonTab {
 
 		int key = 0;
 		Vector<String> tableDataRow;
-		for (NeuralDataPair dataRow : validationData) {
-			NeuralData input = dataRow.getInput();
-			NeuralData validIdeal = dataRow.getIdeal();
-			NeuralData computatedIdeal = getCalculatedResult(dataRow, method);
+		for (MLDataPair dataRow : validationData) {
+			MLData input = dataRow.getInput();
+			MLData validIdeal = dataRow.getIdeal();
+			MLData computatedIdeal = getCalculatedResult(dataRow, method);
 			int inputCount = input.size();
 			int idealCount = validIdeal == null ? 0 : validIdeal.size();
 
@@ -169,14 +168,14 @@ public class ResultValidationChart extends EncogCommonTab {
 		tabs.addTab("Data", new JScrollPane(table));
 	}
 
-	private NeuralData getCalculatedResult(NeuralDataPair data, MLMethod method) {
+	private MLData getCalculatedResult(MLDataPair data, MLMethod method) {
 
-		NeuralData out;
+		MLData out;
 
 		if (method instanceof MLRegression) {
 			out = ((MLRegression) method).compute(data.getInput());
 		} else if (method instanceof MLClassification) {
-			out = new BasicNeuralData(1);
+			out = new BasicMLData(1);
 			out.setData(0,
 					((MLClassification) method).classify(data.getInput()));
 

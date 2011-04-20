@@ -30,8 +30,8 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 import org.encog.ml.MLMethod;
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.buffer.BufferedNeuralDataSet;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
@@ -110,7 +110,7 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	/**
 	 * @return The training set that the user chose.
 	 */
-	public NeuralDataSet getTrainingSet() {
+	public MLDataSet getTrainingSet() {
 		if( this.comboTraining.getSelectedValue()==null )			
 			return null;
 		File file = ((ProjectTraining)this.comboTraining.getSelectedValue()).getFile();

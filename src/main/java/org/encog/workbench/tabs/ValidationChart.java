@@ -27,15 +27,14 @@ import java.awt.Frame;
 
 import org.encog.ml.MLContext;
 import org.encog.ml.MLMethod;
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.networks.BasicNetwork;
+import org.encog.ml.data.MLDataSet;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.validate.InputValidationChart;
 import org.encog.workbench.dialogs.validate.ResultValidationChart;
 
 public class ValidationChart {
 	private MLMethod method;
-	private NeuralDataSet training;
+	private MLDataSet training;
 
 	public void perform(Frame owner) {
 		try {

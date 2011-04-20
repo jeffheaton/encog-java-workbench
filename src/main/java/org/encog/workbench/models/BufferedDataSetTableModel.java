@@ -30,12 +30,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.encog.neural.data.NeuralData;
-import org.encog.neural.data.NeuralDataPair;
-import org.encog.neural.data.basic.BasicNeuralData;
-import org.encog.neural.data.basic.BasicNeuralDataPair;
-import org.encog.neural.data.buffer.BufferedNeuralDataSet;
-import org.encog.neural.data.buffer.EncogEGBFile;
+import org.encog.ml.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.buffer.EncogEGBFile;
 import org.encog.workbench.EncogWorkBench;
 
 public class BufferedDataSetTableModel implements TableModel {

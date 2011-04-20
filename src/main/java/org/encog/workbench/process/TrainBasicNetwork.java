@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.ml.MLMethod;
+import org.encog.ml.data.MLDataPair;
+import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.folded.FoldedDataSet;
 import org.encog.ml.svm.SVM;
 import org.encog.ml.svm.training.SVMSearchTrain;
 import org.encog.ml.svm.training.SVMTrain;
@@ -12,9 +15,6 @@ import org.encog.neural.art.ART1;
 import org.encog.neural.cpn.CPN;
 import org.encog.neural.cpn.training.TrainInstar;
 import org.encog.neural.cpn.training.TrainOutstar;
-import org.encog.neural.data.NeuralDataPair;
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.folded.FoldedDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.ContainsFlat;
 import org.encog.neural.networks.training.CalculateScore;
@@ -62,12 +62,12 @@ public class TrainBasicNetwork {
 	private ProjectEGFile mlMethod;
 	private EncogCommonTab parentTab;
 	
-	private NeuralDataSet wrapTrainingData(NeuralDataSet trainingData) {
+	private MLDataSet wrapTrainingData(MLDataSet trainingData) {
 		final FoldedDataSet folded = new FoldedDataSet(trainingData);
 		return folded;
 	}
 	
-	private Train wrapTrainer(NeuralDataSet folded, Train train, int foldCount) { 
+	private Train wrapTrainer(MLDataSet folded, Train train, int foldCount) { 
 		final CrossValidationKFold trainFolded = new CrossValidationKFold(train,foldCount);
 		return trainFolded;
 	}
@@ -86,7 +86,7 @@ public class TrainBasicNetwork {
 
 		if (dialog.process()) {
 			MLMethod method = dialog.getNetwork();
-			NeuralDataSet trainingData = dialog.getTrainingSet();
+			MLDataSet trainingData = dialog.getTrainingSet();
 
 			if (method == null) {
 				EncogWorkBench.displayError("Error",
@@ -111,7 +111,7 @@ public class TrainBasicNetwork {
 				HopfieldNetwork hp = (HopfieldNetwork) method;
 				ProjectEGFile file = (ProjectEGFile) dialog.getComboNetwork()
 						.getSelectedValue();
-				for (NeuralDataPair pair : trainingData) {
+				for (MLDataPair pair : trainingData) {
 					hp.addPattern(pair.getInput());
 				}
 				if (EncogWorkBench.askQuestion("Hopfield",
@@ -173,7 +173,7 @@ public class TrainBasicNetwork {
 		}
 	}
 
-	private void performCPN(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performCPN(ProjectEGFile file, MLDataSet trainingData) {
 		SelectItem selectInstar;
 		SelectItem selectOutstar;
 
@@ -207,7 +207,7 @@ public class TrainBasicNetwork {
 		}
 	}
 
-	private void performSOM(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performSOM(ProjectEGFile file, MLDataSet trainingData) {
 
 		SelectItem selectBasicSOM;
 		SelectItem selectSOMClusterCopy;
@@ -246,7 +246,7 @@ public class TrainBasicNetwork {
 
 	}
 
-	private void performADALINE(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performADALINE(ProjectEGFile file, MLDataSet trainingData) {
 		InputADALINE dialog = new InputADALINE();
 		if (dialog.process()) {
 			double learningRate = dialog.getLearningRate().getValue();
@@ -258,7 +258,7 @@ public class TrainBasicNetwork {
 
 	}
 
-	private void performBPROP(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performBPROP(ProjectEGFile file, MLDataSet trainingData) {
 		InputBackpropagation dialog = new InputBackpropagation();
 		if (dialog.process()) {
 			double learningRate = dialog.getLearningRate().getValue();
@@ -281,7 +281,7 @@ public class TrainBasicNetwork {
 
 	}
 
-	private void performAnnealing(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performAnnealing(ProjectEGFile file, MLDataSet trainingData) {
 		InputAnneal dialog = new InputAnneal();
 		if (dialog.process()) {
 			final double startTemp = dialog.getStartTemp().getValue();
@@ -297,7 +297,7 @@ public class TrainBasicNetwork {
 
 	}
 
-	private void performGenetic(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performGenetic(ProjectEGFile file, MLDataSet trainingData) {
 		InputGenetic dialog = new InputGenetic();
 		if (dialog.process()) {
 			final int populationSize = dialog.getPopulationSize().getValue();
@@ -315,7 +315,7 @@ public class TrainBasicNetwork {
 
 	}
 
-	private void performLMA(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performLMA(ProjectEGFile file, MLDataSet trainingData) {
 		InputLMA dialog = new InputLMA();
 
 		if (dialog.process()) {
@@ -327,7 +327,7 @@ public class TrainBasicNetwork {
 		}
 	}
 
-	private void performManhattan(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performManhattan(ProjectEGFile file, MLDataSet trainingData) {
 		InputManhattan dialog = new InputManhattan();
 		if (dialog.process()) {
 			double learningRate = dialog.getFixedDelta().getValue();
@@ -348,7 +348,7 @@ public class TrainBasicNetwork {
 		}
 	}
 
-	private void performRPROP(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performRPROP(ProjectEGFile file, MLDataSet trainingData) {
 		InputResilient dialog = new InputResilient();
 		if (dialog.process()) {
 			final double initialUpdate = dialog.getInitialUpdate().getValue();
@@ -372,7 +372,7 @@ public class TrainBasicNetwork {
 		}
 	}
 
-	private void performSCG(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performSCG(ProjectEGFile file, MLDataSet trainingData) {
 		InputSCG dialog = new InputSCG();
 		if (dialog.process()) {
 			int kFold = dialog.getKfold().getValue();
@@ -392,7 +392,7 @@ public class TrainBasicNetwork {
 		}
 	}
 
-	private void performSVM(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performSVM(ProjectEGFile file, MLDataSet trainingData) {
 		SelectItem selectBasicSVM;
 		SelectItem selectSearchSVM;
 
@@ -414,7 +414,7 @@ public class TrainBasicNetwork {
 		}
 	}
 
-	private void performSVMSimple(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performSVMSimple(ProjectEGFile file, MLDataSet trainingData) {
 		InputSVM dialog = new InputSVM((SVM) file.getObject());
 
 		if (dialog.process()) {
@@ -435,7 +435,7 @@ public class TrainBasicNetwork {
 
 	}
 
-	private void performSVMSearch(ProjectEGFile file, NeuralDataSet trainingData) {
+	private void performSVMSearch(ProjectEGFile file, MLDataSet trainingData) {
 		InputSearchSVM dialog = new InputSearchSVM();
 		SVM method = (SVM) file.getObject();
 

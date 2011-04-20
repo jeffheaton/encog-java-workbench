@@ -26,7 +26,6 @@ package org.encog.workbench.tabs.files;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -34,10 +33,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 
-import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.buffer.BufferedNeuralDataSet;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.tree.ProjectFile;
-import org.encog.workbench.frames.document.tree.ProjectTraining;
 import org.encog.workbench.models.BufferedDataSetTableModel;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.tabs.EncogCommonTab;

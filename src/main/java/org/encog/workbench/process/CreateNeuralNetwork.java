@@ -28,10 +28,10 @@ import java.io.File;
 import org.encog.bot.BotUtil;
 import org.encog.mathutil.rbf.RBFEnum;
 import org.encog.ml.MLMethod;
+import org.encog.ml.data.MLDataSet;
 import org.encog.ml.svm.KernelType;
 import org.encog.ml.svm.SVMType;
 import org.encog.neural.activation.ActivationTANH;
-import org.encog.neural.data.NeuralDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.ADALINEPattern;
 import org.encog.neural.pattern.ART1Pattern;
@@ -46,7 +46,6 @@ import org.encog.neural.pattern.PNNPattern;
 import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.pattern.SOMPattern;
 import org.encog.neural.pattern.SVMPattern;
-import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createnetwork.CreateADALINEDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateART1;
@@ -266,7 +265,7 @@ public class CreateNeuralNetwork {
 		dialog.getWindowSize().setValue(10);
 
 		if (dialog.process()) {
-			NeuralDataSet training = dialog.getTraining();			
+			MLDataSet training = dialog.getTraining();			
 			
 			if( training == null ) {
 				return null;

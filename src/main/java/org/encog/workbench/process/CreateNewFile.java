@@ -3,9 +3,9 @@ package org.encog.workbench.process;
 import java.io.File;
 import java.io.IOException;
 
-import org.encog.neural.data.NeuralDataPair;
-import org.encog.neural.data.basic.BasicNeuralDataPair;
-import org.encog.neural.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.MLDataPair;
+import org.encog.ml.data.basic.BasicMLDataPair;
+import org.encog.ml.data.buffer.BufferedNeuralDataSet;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createfile.CreateFileDialog;
@@ -80,7 +80,7 @@ public class CreateNewFile {
 
 			BufferedNeuralDataSet trainingData = new BufferedNeuralDataSet(file);
 
-			NeuralDataPair pair = BasicNeuralDataPair.createPair(input,
+			MLDataPair pair = BasicMLDataPair.createPair(input,
 					output);
 			trainingData.beginLoad(input, output);
 			for (int i = 0; i < elements; i++) {

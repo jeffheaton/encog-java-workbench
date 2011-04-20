@@ -34,14 +34,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
+import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.buffer.BufferedNeuralDataSet;
 import org.encog.ml.genetic.genome.Genome;
-import org.encog.neural.data.NeuralDataSet;
-import org.encog.neural.data.buffer.BufferedNeuralDataSet;
 import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATTraining;
 import org.encog.neural.networks.training.CalculateScore;
-import org.encog.neural.networks.training.Train;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
@@ -204,7 +203,7 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener 
 
 			pop.setInputCount(2);
 			pop.setOutputCount(1);
-			NeuralDataSet training = dialog.getTrainingSet();
+			MLDataSet training = dialog.getTrainingSet();
 
 			if (dialog.getLoadToMemory().getValue()) {
 				training = ((BufferedNeuralDataSet) training).loadToMemory();

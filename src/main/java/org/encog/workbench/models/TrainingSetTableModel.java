@@ -30,24 +30,24 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.encog.neural.data.NeuralData;
-import org.encog.neural.data.NeuralDataPair;
-import org.encog.neural.data.basic.BasicNeuralData;
-import org.encog.neural.data.basic.BasicNeuralDataPair;
-import org.encog.neural.data.basic.BasicNeuralDataSet;
+import org.encog.ml.data.MLData;
+import org.encog.ml.data.MLDataPair;
+import org.encog.ml.data.basic.BasicMLData;
+import org.encog.ml.data.basic.BasicMLDataPair;
+import org.encog.ml.data.basic.BasicMLDataSet;
 
 public class TrainingSetTableModel implements TableModel {
 
-	private final BasicNeuralDataSet data;
+	private final BasicMLDataSet data;
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();
 
-	public TrainingSetTableModel(final BasicNeuralDataSet data) {
+	public TrainingSetTableModel(final BasicMLDataSet data) {
 		this.data = data;
 	}
 
 	public void addIdealColumn() {
-		for (final NeuralDataPair pair : this.data) {
-			final BasicNeuralData ideal = (BasicNeuralData) pair.getIdeal();
+		for (final MLDataPair pair : this.data) {
+			final BasicMLData ideal = (BasicMLData) pair.getIdeal();
 			final double[] d = new double[ideal.size() + 1];
 			for (int i = 0; i < ideal.size(); i++) {
 				d[i] = ideal.getData(i);
@@ -63,8 +63,8 @@ public class TrainingSetTableModel implements TableModel {
 	}
 
 	public void addInputColumn() {
-		for (final NeuralDataPair pair : this.data) {
-			final BasicNeuralData input = (BasicNeuralData) pair.getInput();
+		for (final MLDataPair pair : this.data) {
+			final BasicMLData input = (BasicMLData) pair.getInput();
 			final double[] d = new double[input.size() + 1];
 			for (int i = 0; i < input.size(); i++) {
 				d[i] = input.getData(i);
@@ -81,9 +81,9 @@ public class TrainingSetTableModel implements TableModel {
 	public void addRow(final int row) {
 		final int idealSize = this.data.getIdealSize();
 		final int inputSize = this.data.getInputSize();
-		final NeuralData idealData = new BasicNeuralData(idealSize);
-		final NeuralData inputData = new BasicNeuralData(inputSize);
-		final NeuralDataPair pair = new BasicNeuralDataPair(inputData,
+		final MLData idealData = new BasicMLData(idealSize);
+		final MLData inputData = new BasicMLData(inputSize);
+		final MLDataPair pair = new BasicMLDataPair(inputData,
 				idealData);
 		if (row == -1) {
 			this.data.getData().add(pair);
@@ -104,8 +104,8 @@ public class TrainingSetTableModel implements TableModel {
 
 		// does it fall inside of input or ideal?
 		if (col < inputSize) {
-			for (final NeuralDataPair pair : this.data) {
-				final NeuralData input = pair.getInput();
+			for (final MLDataPair pair : this.data) {
+				final MLData input = pair.getInput();
 				final double[] d = new double[input.size() - 1];
 				int t = 0;
 				for (int i = 0; i < input.size(); i++) {
@@ -117,8 +117,8 @@ public class TrainingSetTableModel implements TableModel {
 				input.setData(d);
 			}
 		} else {
-			for (final NeuralDataPair pair : this.data) {
-				final NeuralData ideal = pair.getIdeal();
+			for (final MLDataPair pair : this.data) {
+				final MLData ideal = pair.getIdeal();
 				final double[] d = new double[ideal.size() - 1];
 				int t = 0;
 				for (int i = 0; i < ideal.size(); i++) {
@@ -163,14 +163,14 @@ public class TrainingSetTableModel implements TableModel {
 	public int getRowCount() {
 		int i = 0;
 		for (@SuppressWarnings("unused")
-		final NeuralDataPair pair : this.data) {
+		final MLDataPair pair : this.data) {
 			i++;
 		}
 		return i;
 	}
 
 	public Object getValueAt(int rowIndex, final int columnIndex) {
-		for (final NeuralDataPair pair : this.data) {
+		for (final MLDataPair pair : this.data) {
 			if (rowIndex == 0) {
 				if (columnIndex >= pair.getInput().size()) {
 					return pair.getIdeal().getData(
@@ -206,7 +206,7 @@ public class TrainingSetTableModel implements TableModel {
 			value = Double.parseDouble(rawValue.toString());
 		}
 
-		for (final NeuralDataPair pair : this.data) {
+		for (final MLDataPair pair : this.data) {
 			if (rowIndex == 0) {
 				if (columnIndex >= pair.getInput().size()) {
 					pair.getIdeal().setData(

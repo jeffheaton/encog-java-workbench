@@ -12,10 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import org.encog.EncogError;
-import org.encog.ml.MLMethod;
 import org.encog.ml.MLRegression;
-import org.encog.neural.data.NeuralData;
-import org.encog.neural.data.basic.BasicNeuralData;
+import org.encog.ml.data.MLData;
+import org.encog.ml.data.basic.BasicMLData;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.error.ErrorDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
@@ -79,7 +78,7 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 		if (e.getSource() == this.calculateButton) {
 			try {
 				setDirty(true);
-				final BasicNeuralData input = new BasicNeuralData(
+				final BasicMLData input = new BasicMLData(
 						this.inputCount);
 				for (int i = 0; i < this.inputCount; i++) {
 					double value = 0;
@@ -94,7 +93,7 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 					input.setData(i, value);
 				}
 
-				final NeuralData output = getData().compute(input);
+				final MLData output = getData().compute(input);
 
 				for (int i = 0; i < this.outputCount; i++) {
 					this.outputTable.setValueAt(output.getData(i), i, 1);

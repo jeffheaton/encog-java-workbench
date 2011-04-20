@@ -25,10 +25,10 @@ package org.encog.workbench.process;
 
 import java.io.File;
 
-import org.encog.neural.data.buffer.BinaryDataLoader;
-import org.encog.neural.data.buffer.codec.CSVDataCODEC;
-import org.encog.neural.data.buffer.codec.DataSetCODEC;
-import org.encog.neural.data.buffer.codec.ExcelCODEC;
+import org.encog.ml.data.buffer.BinaryDataLoader;
+import org.encog.ml.data.buffer.codec.CSVDataCODEC;
+import org.encog.ml.data.buffer.codec.DataSetCODEC;
+import org.encog.ml.data.buffer.codec.ExcelCODEC;
 import org.encog.util.csv.CSVFormat;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.ImportExportDialog;
