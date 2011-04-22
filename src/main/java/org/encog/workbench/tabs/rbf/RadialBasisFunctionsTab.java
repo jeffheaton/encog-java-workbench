@@ -38,6 +38,7 @@ import org.encog.mathutil.rbf.MexicanHatFunction;
 import org.encog.mathutil.rbf.MultiquadricFunction;
 import org.encog.neural.flat.rbf.RadialBasisFunction;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.util.graph.EncogChartPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -85,7 +86,7 @@ public class RadialBasisFunctionsTab extends EncogCommonTab implements ActionLis
 		
 		XYDataset dataset = this.createDataset();
 		JFreeChart chart = this.createChart(dataset);
-		this.chartPanel = new ChartPanel(chart);
+		this.chartPanel = new EncogChartPanel(chart);
 		this.add(chartPanel,BorderLayout.CENTER);
 		
 		this.typeCombo = new JComboBox();
