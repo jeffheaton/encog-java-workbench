@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 
 import org.encog.neural.activation.ActivationFunction;
 import org.encog.neural.activation.ActivationSigmoid;
+import org.encog.workbench.util.graph.EncogChartPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -59,7 +60,7 @@ public class EquationPanel extends JPanel {
 		
 		if( this.panel==null)
 		{
-			this.panel = new ChartPanel(chart);
+			this.panel = new EncogChartPanel(chart);
         	panel.setMouseWheelEnabled(true);
         	this.add(panel,BorderLayout.CENTER);
 		}
