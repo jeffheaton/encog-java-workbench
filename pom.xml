@@ -270,6 +270,13 @@ Authors of this POM file: iirekm, jheaton
   			<artifactId>batik-xml</artifactId>
   			<version>1.6</version>
   		</dependency>
+  		
+  		<dependency>
+    		<groupId>com.lowagie</groupId>
+    		<artifactId>itext</artifactId>
+    		<version>2.1.7</version>
+		</dependency>
+  		
 		
 	</dependencies>
 </project>
