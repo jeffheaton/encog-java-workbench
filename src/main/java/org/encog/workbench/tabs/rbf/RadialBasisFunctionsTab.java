@@ -36,7 +36,7 @@ import org.encog.mathutil.rbf.GaussianFunction;
 import org.encog.mathutil.rbf.InverseMultiquadricFunction;
 import org.encog.mathutil.rbf.MexicanHatFunction;
 import org.encog.mathutil.rbf.MultiquadricFunction;
-import org.encog.neural.flat.rbf.RadialBasisFunction;
+import org.encog.mathutil.rbf.RadialBasisFunction;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.graph.EncogChartPanel;
 import org.jfree.chart.ChartFactory;
