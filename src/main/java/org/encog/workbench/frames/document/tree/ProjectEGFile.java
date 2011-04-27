@@ -2,6 +2,7 @@ package org.encog.workbench.frames.document.tree;
 
 import java.io.File;
 
+import org.encog.ml.MLMethod;
 import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.workbench.EncogWorkBench;
 
@@ -50,6 +51,10 @@ public class ProjectEGFile extends ProjectFile {
 	 */
 	public String getEncogType() {
 		return encogType;
+	}
+
+	public void save(MLMethod method) {
+		this.obj = method;
 	}
 
 }

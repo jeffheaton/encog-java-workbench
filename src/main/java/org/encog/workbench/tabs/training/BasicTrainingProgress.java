@@ -272,7 +272,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		if (EncogWorkBench.askQuestion("Training", "Save the training?")) {
 
 			if( this.getEncogObject()!=null ) {
-				this.getEncogObject().save();
+
+				((ProjectEGFile)this.getEncogObject()).save(train.getMethod());
 				if( this.getParentTab()!=null ) {
 					this.getParentTab().setEncogObject(this.getEncogObject());
 				}
