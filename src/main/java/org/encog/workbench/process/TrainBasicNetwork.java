@@ -289,9 +289,10 @@ public class TrainBasicNetwork {
 			final int cycles = dialog.getCycles().getValue();
 
 			CalculateScore score = new TrainingSetScore(trainingData);
-			final MLTrain train = new NeuralSimulatedAnnealing(
+			final NeuralSimulatedAnnealing train = new NeuralSimulatedAnnealing(
 					(BasicNetwork) file.getObject(), score, startTemp,
 					stopTemp, cycles);
+			train.setTraining(trainingData);
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}
 
@@ -306,10 +307,11 @@ public class TrainBasicNetwork {
 			final double percentToMate = dialog.getPercentToMate().getValue();
 
 			CalculateScore score = new TrainingSetScore(trainingData);
-			final MLTrain train = new NeuralGeneticAlgorithm(
+			final NeuralGeneticAlgorithm train = new NeuralGeneticAlgorithm(
 					(BasicNetwork) file.getObject(),
 					new RangeRandomizer(-1, 1), score, populationSize,
 					mutationPercent, percentToMate);
+			train.setTraining(trainingData);
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}
 
