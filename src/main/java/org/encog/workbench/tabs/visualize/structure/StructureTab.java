@@ -267,12 +267,14 @@ public class StructureTab extends EncogCommonTab {
 		int biasCount = 1;
 		int contextCount = 1;
 
+		int layerCount = flat.getLayerCounts().length;
 		List<DrawnNeuron> neurons = new ArrayList<DrawnNeuron>();
 		Graph<DrawnNeuron, DrawnConnection> result = new SparseMultigraph<DrawnNeuron, DrawnConnection>();
 		List<DrawnNeuron> lastFedNeurons;
 		List<DrawnNeuron> connections = new ArrayList<DrawnNeuron>();
+		double layerSize = 1.0/layerCount; 
 
-		int layerCount = flat.getLayerCounts().length;
+		
 		int neuronNumber = 1;
 
 		for (int currentLayer = 0; currentLayer < layerCount; currentLayer++) {
@@ -284,6 +286,7 @@ public class StructureTab extends EncogCommonTab {
 			int feedCount = flat.getLayerFeedCounts()[currentLayer];
 			for (int currentNeuron = 0; currentNeuron < neuronCount; currentNeuron++) {
 				DrawnNeuronType type;
+				double xOffset = 0;
 
 				String name = "?";
 				// not a bias or context
@@ -308,6 +311,7 @@ public class StructureTab extends EncogCommonTab {
 				else {
 					type = DrawnNeuronType.Context;
 					name = "C" + (contextCount++);
+					xOffset=layerSize/4;
 				}
 
 				double y = (double) currentNeuron / (double) neuronCount;
@@ -316,7 +320,7 @@ public class StructureTab extends EncogCommonTab {
 				margin = 1.0 - margin;
 				margin /= 2.0;
 
-				DrawnNeuron neuron = new DrawnNeuron(type, name, x, y + margin);
+				DrawnNeuron neuron = new DrawnNeuron(type, name, x+xOffset, y + margin);
 				neurons.add(neuron);
 
 				if (neuron.getType() == DrawnNeuronType.Hidden
@@ -344,6 +348,21 @@ public class StructureTab extends EncogCommonTab {
 			for (DrawnConnection connection : neuron.getOutbound()) {
 				result.addEdge(connection, connection.getFrom(),
 						connection.getTo(), EdgeType.DIRECTED);
+			}			
+		}
+		
+		for (int currentLayer = 0; currentLayer < layerCount; currentLayer++) {
+			if( flat.getContextTargetSize()[currentLayer]>0 ) {
+				int count = flat.getContextTargetSize()[currentLayer];
+				int offset = flat.getContextTargetOffset()[currentLayer];
+				int source = flat.getLayerIndex()[currentLayer];
+				for(int i=0;i<count;i++) {
+					DrawnNeuron n1 = neurons.get(source+i);
+					DrawnNeuron n2 = neurons.get(offset+i);
+					DrawnConnection connection = new DrawnConnection(n1, n2, 0);
+					result.addEdge(connection, connection.getFrom(),
+							connection.getTo(), EdgeType.DIRECTED);
+				}
 			}
 		}
 
