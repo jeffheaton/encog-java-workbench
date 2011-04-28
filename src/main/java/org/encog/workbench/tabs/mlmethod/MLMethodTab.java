@@ -475,14 +475,16 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			report.header("Neuron Count");
 			report.header("Activation Function");
 			report.header("Bias");
-			report.header("Context Size");
-			report.header("Context Offset");
+			report.header("Context Target Size");
+			report.header("Context Target Offset");
+			report.header("Context Count");
 			report.endRow();
 
 			BasicNetwork network = (BasicNetwork) method;
 			FlatNetwork flat = network.getStructure().getFlat();
+			int layerCount = network.getLayerCount();
 
-			for (int l = 0; l < network.getLayerCount(); l++) {
+			for (int l = 0; l < layerCount; l++) {
 				report.beginRow();
 				StringBuilder str = new StringBuilder();
 				str.append(Format.formatInteger(l + 1));
@@ -499,6 +501,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				report.cell(Format.formatDouble(flat.getBiasActivation()[l], 4));
 				report.cell(Format.formatInteger(flat.getContextTargetSize()[l]));
 				report.cell(Format.formatInteger(flat.getContextTargetOffset()[l]));
+				report.cell(Format.formatInteger(flat.getLayerContextCount()[l]));
 				report.endRow();
 			}
 			report.endTable();
