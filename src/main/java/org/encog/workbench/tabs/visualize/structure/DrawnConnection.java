@@ -7,12 +7,14 @@ public class DrawnConnection {
 	private final DrawnNeuron from;
 	private final DrawnNeuron to;
 	private final double weight;
+	private boolean context;
 	
 	public DrawnConnection(DrawnNeuron from, DrawnNeuron to, double weight) {
 		super();
 		this.from = from;
 		this.to = to;
 		this.weight = weight;
+		this.context = false;
 	}
 
 	/**
@@ -41,6 +43,20 @@ public class DrawnConnection {
 		builder.append(" : ");
 		builder.append(Format.formatDouble(this.weight, 4));
 		return builder.toString();
+	}
+
+	/**
+	 * @return the context
+	 */
+	public boolean isContext() {
+		return context;
+	}
+
+	/**
+	 * @param context the context to set
+	 */
+	public void setContext(boolean context) {
+		this.context = context;
 	}
 		
 }

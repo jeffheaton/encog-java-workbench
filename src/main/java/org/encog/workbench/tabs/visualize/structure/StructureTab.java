@@ -117,6 +117,16 @@ public class StructureTab extends EncogCommonTab {
 			}
 
 		};
+		
+		Transformer<DrawnConnection, Paint> edgePaint = new Transformer<DrawnConnection, Paint>() {
+			public Paint transform(DrawnConnection connection) {
+				if( connection.isContext() ) {
+					return Color.lightGray;
+				} else {
+					return Color.black;
+				}
+			}
+		};
 
 		// The Layout<V, E> is parameterized by the vertex and edge types
 		StaticLayout<DrawnNeuron, DrawnConnection> layout = new StaticLayout<DrawnNeuron, DrawnConnection>(
@@ -138,6 +148,10 @@ public class StructureTab extends EncogCommonTab {
 				.setPosition(Renderer.VertexLabel.Position.CNTR);
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
 		vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint);
+		vv.getRenderContext().setEdgeDrawPaintTransformer(edgePaint);
+		vv.getRenderContext().setArrowDrawPaintTransformer(edgePaint);
+		vv.getRenderContext().setArrowFillPaintTransformer(edgePaint);
+		
 		vv.setVertexToolTipTransformer(new ToStringLabeller());
 		
 		vv.setVertexToolTipTransformer(new Transformer<DrawnNeuron,String>() {
@@ -351,6 +365,8 @@ public class StructureTab extends EncogCommonTab {
 			}			
 		}
 		
+
+		// draw context links
 		for (int currentLayer = 0; currentLayer < layerCount; currentLayer++) {
 			if( flat.getContextTargetSize()[currentLayer]>0 ) {
 				int count = flat.getContextTargetSize()[currentLayer];
@@ -362,6 +378,7 @@ public class StructureTab extends EncogCommonTab {
 					DrawnConnection connection = new DrawnConnection(n1, n2, 0);
 					result.addEdge(connection, connection.getFrom(),
 							connection.getTo(), EdgeType.DIRECTED);
+					connection.setContext(true);
 				}
 			}
 		}
