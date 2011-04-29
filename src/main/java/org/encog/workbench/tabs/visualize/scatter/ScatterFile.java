@@ -165,4 +165,8 @@ public class ScatterFile {
 		return result;
 	}
 
+	public int getSeriesCount() {
+		return targetField.getClassMembers().size();
+	}
+
 }

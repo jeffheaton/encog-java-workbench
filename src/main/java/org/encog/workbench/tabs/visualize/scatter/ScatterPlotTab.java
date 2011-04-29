@@ -25,6 +25,7 @@ public class ScatterPlotTab extends EncogCommonTab {
 	private EncogAnalyst analyst;
 	private ScatterFile file;
 	private XYPlot samplePlot;
+	public static Color COLORS[] = { Color.red, Color.green, Color.blue, Color.black, Color.cyan, Color.magenta, Color.orange, Color.pink, Color.white, Color.yellow, Color.lightGray, Color.darkGray };
 	
 	public ScatterPlotTab(EncogAnalyst analyst, String className, List<String> axisList) {
 		super(null);
@@ -67,9 +68,15 @@ public class ScatterPlotTab extends EncogCommonTab {
 	        XYDotRenderer renderer = new XYDotRenderer();
 	        renderer.setDotWidth(4);
 	        renderer.setDotHeight(4);
+	        
+	        for(int i=0;i < file.getSeriesCount();i++) {
+	        	renderer.setSeriesPaint(i, COLORS[i%COLORS.length]);
+	        }
+	        
 	        plot.setRenderer(renderer);
 	        plot.setDomainCrosshairVisible(true);
 	        plot.setRangeCrosshairVisible(true);
+	        
 
 	        NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
 	        domainAxis.setAutoRangeIncludesZero(false);
@@ -81,6 +88,7 @@ public class ScatterPlotTab extends EncogCommonTab {
 	        // we need one to draw the legend off of
 	        if( this.samplePlot==null)
 	        	this.samplePlot = plot;
+	        //chart.removeLegend();
 	        return result;
 	}
 
