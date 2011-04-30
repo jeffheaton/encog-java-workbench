@@ -33,7 +33,7 @@ public class ScatterPlotTab extends EncogCommonTab {
 		this.file = new ScatterFile(this.analyst,className,axisList);
 		
 		if( axisList.size()<=2 ) {
-			this.add(createPanel(0,1));
+			this.add(createPanel(0,1,true));
 			return;
 		} else {
 			JPanel panel = new JPanel();
@@ -45,7 +45,7 @@ public class ScatterPlotTab extends EncogCommonTab {
 					if( col==row ) {
 						panel.add(new ScatterLabelPane(axisList.get(row)));
 					} else {
-						panel.add(createPanel(row,col));			
+						panel.add(createPanel(row,col,false));			
 					}											
 				}				
 			}
@@ -57,11 +57,11 @@ public class ScatterPlotTab extends EncogCommonTab {
 		}
 	}
 	
-	private JPanel createPanel(int xIndex, int yIndex) {
+	private JPanel createPanel(int xIndex, int yIndex, boolean legend) {
 		
 		 XYDataset dataset = new ScatterXY(file,xIndex,yIndex);
 	        JFreeChart chart = ChartFactory.createScatterPlot(null,
-	            null, null, dataset, PlotOrientation.VERTICAL, false, true, false);
+	            null, null, dataset, PlotOrientation.VERTICAL, legend, true, false);
 
 	        XYPlot plot = (XYPlot) chart.getPlot();
 
