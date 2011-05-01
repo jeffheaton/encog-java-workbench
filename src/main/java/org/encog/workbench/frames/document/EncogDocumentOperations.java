@@ -300,6 +300,9 @@ public class EncogDocumentOperations {
 			case Patterns2:
 				CreateTrainingData.copyPatterns2(name);
 				break;
+			case Download:
+				CreateTrainingData.downloadURL(name);
+				break;
 			}
 			EncogWorkBench.getInstance().refresh();
 		}

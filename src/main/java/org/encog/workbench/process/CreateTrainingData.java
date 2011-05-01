@@ -24,18 +24,25 @@
 package org.encog.workbench.process;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.zip.GZIPInputStream;
 
 import javax.swing.JFileChooser;
 
+import org.encog.app.analyst.AnalystError;
 import org.encog.app.quant.QuantError;
 import org.encog.app.quant.loader.yahoo.YahooDownload;
 import org.encog.bot.BotUtil;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLDataSet;
+import org.encog.util.Format;
 import org.encog.util.benchmark.RandomTrainingFactory;
 import org.encog.util.csv.CSVFormat;
 import org.encog.util.file.FileUtil;
@@ -47,6 +54,12 @@ import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.util.TemporalXOR;
 
 public class CreateTrainingData {
+	
+	/**
+	 * The update time for a download.
+	 */
+	public static final int UPDATE_TIME = 10;
+
 
 	public static void downloadMarketData(String name) {
 		CreateMarketTrainingDialog dialog = new CreateMarketTrainingDialog(
@@ -211,6 +224,97 @@ public class CreateTrainingData {
 				.getProjectDirectory(), name);
 		FileUtil.copyResource("org/encog/workbench/data/pattern2.csv", targetFile);
 
+		
+	}
+	
+	/**
+	 * Down load a file from the specified URL, uncompress if needed.
+	 * @param url THe URL.
+	 * @param file The file to down load into.
+	 */
+	private static void downloadPage(final URL url, final File file) {
+		try {
+			// download the URL
+			long size = 0;
+			final byte[] buffer = new byte[BotUtil.BUFFER_SIZE];
+
+			final File tempFile = new File(file.getParentFile(), "temp.tmp");
+
+			int length;
+			int lastUpdate = 0;
+
+			FileOutputStream fos = new FileOutputStream(tempFile);
+			final InputStream is = url.openStream();
+
+			do {
+				length = is.read(buffer);
+
+				if (length >= 0) {
+					fos.write(buffer, 0, length);
+					size += length;
+				}
+
+				if (lastUpdate > UPDATE_TIME) {
+					EncogWorkBench.getInstance().outputLine("Downloading..."+ Format.formatMemory(size));
+					lastUpdate = 0;
+				}
+				lastUpdate++;
+			} while (length >= 0);
+
+			fos.close();
+			// unzip if needed
+
+			if (url.toString().toLowerCase().endsWith(".gz")) {
+				final FileInputStream fis = new FileInputStream(tempFile);
+				final GZIPInputStream gis = new GZIPInputStream(fis);
+				fos = new FileOutputStream(file);
+
+				size = 0;
+				lastUpdate = 0;
+
+				do {
+					length = gis.read(buffer);
+
+					if (length >= 0) {
+						fos.write(buffer, 0, length);
+						size += length;
+					}
+
+					if (lastUpdate > UPDATE_TIME) {
+						EncogWorkBench.getInstance().outputLine("Downloading..."+ Format.formatMemory(size));
+						lastUpdate = 0;
+					}
+					lastUpdate++;
+				} while (length >= 0);
+
+				fos.close();
+				fis.close();
+				gis.close();
+				tempFile.delete();
+
+			} else {
+				// rename the temp file to the actual file
+				file.delete();
+				tempFile.renameTo(file);
+			}
+
+		} catch (final IOException e) {
+			throw new AnalystError(e);
+		}
+	}
+
+	public static void downloadURL(String name) {
+		String url = EncogWorkBench.displayInput("Enter a URL to download to a CSV.");
+		if( url!=null ) {
+			try {
+				File targetFile = new File(EncogWorkBench.getInstance()
+						.getProjectDirectory(), name);
+				downloadPage(new URL(url),targetFile);
+				EncogWorkBench.getInstance().refresh();
+			} catch (MalformedURLException e) {
+				EncogWorkBench.displayError("Invalid URL", url);
+			}
+		}
 		
 	}
 

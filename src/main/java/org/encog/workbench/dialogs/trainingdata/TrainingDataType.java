@@ -34,6 +34,7 @@ public enum TrainingDataType {
 	Sunspots,
 	Patterns1,
 	Patterns2,
-	Digits
+	Digits,
+	Download
 
 }

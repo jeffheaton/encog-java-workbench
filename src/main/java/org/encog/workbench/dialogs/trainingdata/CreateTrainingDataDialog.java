@@ -26,14 +26,12 @@ package org.encog.workbench.dialogs.trainingdata;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -44,11 +42,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
-import org.encog.workbench.dialogs.createfile.CreateFileType;
-import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
 
 public class CreateTrainingDataDialog extends EncogCommonDialog implements
 	ListSelectionListener {
@@ -106,6 +101,8 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		this.model.addElement("Digits");
 		this.model.addElement("Simple Pattern (part 1)");
 		this.model.addElement("Simple Pattern (part 2)");
+		this.model.addElement("Download from URL");
+		
 		
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -154,6 +151,9 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		case 9:
 			this.type = TrainingDataType.Patterns2;
 			break;		
+		case 10:
+			this.type = TrainingDataType.Download;
+			break;		
 			
 		}
 	}
@@ -190,6 +190,9 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			break;
 		case Patterns2:
 			this.list.setSelectedIndex(9);
+			break;
+		case Download:
+			this.list.setSelectedIndex(10);
 			break;
 		}
 
@@ -255,6 +258,10 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 					.setText("More simple patters, eimilar to part 1. Part 2 can be used to find the best match in part 1.  Width is 10, height is 10.");
 			break;
 
+		case 10:
+			this.text
+					.setText("Enter a URL and the contents will be downloaded to your project.");
+			break;
 			
 		}
 
