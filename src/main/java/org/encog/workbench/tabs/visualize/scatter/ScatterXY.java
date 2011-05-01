@@ -92,7 +92,7 @@ public class ScatterXY extends AbstractXYDataset
      * @return the series count.
      */
     public int getSeriesCount() {
-        return this.scatterFile.getTargetField().getClassMembers().size();
+        return this.scatterFile.getSeriesCount();
     }
 
     /**
@@ -103,7 +103,7 @@ public class ScatterXY extends AbstractXYDataset
      * @return The key for the series.
      */
     public Comparable getSeriesKey(int series) {
-        return this.scatterFile.getTargetField().getClassMembers().get(series).getName();
+        return this.scatterFile.getSeries().get(series);
     }
 
     /**

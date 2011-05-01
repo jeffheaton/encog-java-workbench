@@ -25,6 +25,7 @@ public class ScatterFile {
 	private List<String> axis;
 	private List<String> series = new ArrayList<String>();
 	private double regressionSeriesSize;
+	private double[] regressionSeriesPoint;
 	
 	
 	public ScatterFile(EncogAnalyst analyst, String target, List<String> axis) {
@@ -59,13 +60,16 @@ public class ScatterFile {
 				this.series.add(cls.getName());
 			}
 		} else {
+			this.regressionSeriesPoint = new double[10];
 			double totalWidth = targetField.getMax() - targetField.getMin();
-			this.regressionSeriesSize = totalWidth/10;
-			double current = targetField.getMin();
+			this.regressionSeriesSize = totalWidth/12;
+			double current = targetField.getMin()+this.regressionSeriesSize;
 			for(int i=0;i<10;i++) {
-				StringBuilder s = new StringBuilder();
+				StringBuilder s = new StringBuilder();				
 				s.append(Format.formatDouble(current, 1));
+				this.data.put(s.toString(), new ArrayList<double[]>());
 				this.series.add(s.toString());
+				this.regressionSeriesPoint[i] = current;
 				current+=this.regressionSeriesSize;
 			}
 		}
@@ -94,6 +98,8 @@ public class ScatterFile {
 	
 		int rowSize = this.axisMapping.size();
 		
+		boolean regression = !this.targetField.isClass();
+		
 		// read the file
 		ReadCSV csv = new ReadCSV(sourceFile.toString(),headers,inputFormat);
 		
@@ -102,7 +108,20 @@ public class ScatterFile {
 			List<double[]> dataList;
 			
 			// find a list for this class
-			String cls = csv.get(this.targetIndex).toLowerCase();
+			String cls = "?";
+			
+			if( regression ) {
+				double d = csv.getDouble(targetIndex);
+				for(int i=this.series.size()-1;i>=0;i--) {
+					if( d>this.regressionSeriesPoint[i] ) {
+						cls = this.series.get(i);
+						break;
+					}
+				}
+			} else {
+				cls = csv.get(this.targetIndex).toLowerCase(); 
+			}
+						
 			if( this.data.containsKey(cls) ) {
 				dataList = this.data.get(cls);
 			} else {
@@ -190,6 +209,14 @@ public class ScatterFile {
 
 	public int getSeriesCount() {
 		return this.series.size();
+	}
+
+	public List<String> getSeries() {
+		return this.series;
+	}
+
+	public boolean isRegression() {
+		return !this.targetField.isClass();
 	}
 
 }

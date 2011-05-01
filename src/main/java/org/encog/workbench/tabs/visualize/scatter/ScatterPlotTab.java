@@ -69,9 +69,20 @@ public class ScatterPlotTab extends EncogCommonTab {
 	        renderer.setDotWidth(4);
 	        renderer.setDotHeight(4);
 	        
-	        for(int i=0;i < file.getSeriesCount();i++) {
-	        	renderer.setSeriesPaint(i, COLORS[i%COLORS.length]);
-	        }
+		if (this.file.isRegression()) {
+			int per = 255 / 10;
+			int r = 0;
+			int b = 255;
+			for(int i=0;i<file.getSeriesCount();i++) {
+				renderer.setSeriesPaint(i, new Color(r,0,b));
+				r+=per;
+				b-=per;
+			}
+		} else {
+			for (int i = 0; i < file.getSeriesCount(); i++) {
+				renderer.setSeriesPaint(i, COLORS[i % COLORS.length]);
+			}
+		}
 	        
 	        plot.setRenderer(renderer);
 	        plot.setDomainCrosshairVisible(true);
