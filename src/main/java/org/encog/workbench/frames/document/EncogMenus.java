@@ -49,6 +49,7 @@ public class EncogMenus {
 	public static final String EDIT_COPY = "Copy";
 	public static final String EDIT_PASTE = "Paste";
 	public static final String EDIT_CONFIG = "Config...";
+	public static final String EDIT_FIND = "Find...";
 
 	//public static final String TOOLS_CLOUD = "Connect to an Encog Cloud...";
 	public static final String TOOLS_TRAIN = "Train...";
@@ -80,6 +81,7 @@ public class EncogMenus {
 	private JMenuItem menuEditCopy;
 	private JMenuItem menuEditPaste;
 	private JMenuItem menuEditConfig;
+	private JMenuItem menuEditFind;
 
 	private JMenuItem menuToolsTrain;
 	private JMenuItem menuToolsGenerate;
@@ -126,7 +128,9 @@ public class EncogMenus {
 				'v'));
 		this.menuEdit.addSeparator();
 		this.menuEditConfig = this.menuEdit.add(owner.addItem(this.menuEdit,
-				EncogMenus.EDIT_CONFIG, 'f'));
+				EncogMenus.EDIT_CONFIG, 'g'));
+		this.menuEditFind = this.menuEdit.add(owner.addItem(this.menuEdit,
+				EncogMenus.EDIT_FIND, 'f'));		
 		this.menuBar.add(this.menuEdit);
 
 		this.menuTools = new JMenu("Tools");
@@ -160,6 +164,9 @@ public class EncogMenus {
 		
 		this.menuToolsTrain.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T,
                 java.awt.Event.CTRL_MASK));
+		
+		this.menuEditFind.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.Event.CTRL_MASK));
+	
 	}
 	
 	public void updateMenus()
@@ -219,6 +226,8 @@ public class EncogMenus {
 			owner.getOperations().performEditPaste();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_CONFIG)) {
 			owner.getOperations().performEditConfig();
+		} else if (event.getActionCommand().equals(EncogMenus.EDIT_FIND)) {
+			owner.getOperations().performEditFind();
 		} else if (event.getActionCommand().equals(EncogMenus.HELP_ABOUT)) {
 			owner.getOperations().performHelpAbout();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BENCHMARK)) {

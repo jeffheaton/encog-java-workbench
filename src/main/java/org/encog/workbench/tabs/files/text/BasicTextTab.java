@@ -154,6 +154,22 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener, Car
 		this.status.setText(s.toString());
 		
 	}
+
+	public void find() {
+		String text = EncogWorkBench.displayInput("Search:");
+		if( text!=null ) {
+			int start = this.editor.getCaretPosition();
+			int idx = this.getText().indexOf(text,start);
+			if( idx==-1 ) {
+				EncogWorkBench.displayError("Not Found", "Could not find, searching from current position.");
+			} else {
+				this.editor.setSelectionStart(idx);
+				this.editor.setSelectionEnd(idx+text.length());
+			}
+			
+		}
+		
+	}
 	
 	
 }

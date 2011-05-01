@@ -52,6 +52,7 @@ import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.files.text.BasicTextTab;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
 import org.encog.workbench.util.FileUtil;
 
@@ -370,5 +371,14 @@ public class EncogDocumentOperations {
 			}
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
+	}
+
+	public void performEditFind() {
+		EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow().getTabManager().getCurrentTab();
+
+		if( tab instanceof BasicTextTab ) {
+			((BasicTextTab)tab).find();
+		}
+		
 	}
 }

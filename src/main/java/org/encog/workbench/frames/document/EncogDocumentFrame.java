@@ -29,11 +29,9 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 
 import org.encog.ml.MLMethod;
 import org.encog.neural.neat.NEATPopulation;
@@ -45,7 +43,6 @@ import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectTree;
 import org.encog.workbench.tabs.AboutTab;
-import org.encog.workbench.tabs.ButtonTabComponent;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.EncogTabManager;
 import org.encog.workbench.tabs.TrainingContTab;
