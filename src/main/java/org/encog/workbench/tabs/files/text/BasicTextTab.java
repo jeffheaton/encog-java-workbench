@@ -41,6 +41,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener, Car
 		this.scroll = new JScrollPane(this.editor);
 		add(this.scroll, BorderLayout.CENTER);
 		this.addComponentListener(this);
+		this.status.setText(" ");
 		add(this.status,BorderLayout.SOUTH);		
 		loadFile();
 	}

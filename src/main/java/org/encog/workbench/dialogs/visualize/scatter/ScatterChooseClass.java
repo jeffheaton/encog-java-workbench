@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.encog.app.analyst.EncogAnalyst;
 import org.encog.app.analyst.script.DataField;
+import org.encog.app.analyst.script.normalize.AnalystField;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
@@ -72,16 +73,18 @@ public class ScatterChooseClass extends EncogPropertiesDialog {
 		setSize(400,400);
 		setLocation(200,200);
 		
-		for(DataField field: analyst.getScript().getFields() ) {
-			if( field.isClass() ) {
+		
+		
+		for(AnalystField field: analyst.getScript().getNormalize().getNormalizedFields() ) {
+			if( !field.isIgnored() && field.isOutput() ) {
 				this.classNames.add(field.getName());
 			}
 		}
 		
 		addProperty(this.comboClass = new ComboBoxField("training set","Training Set",true,this.classNames));
 		
-		for(DataField field: analyst.getScript().getFields() ) {
-			if( !field.isClass() ) {
+		for(AnalystField field: analyst.getScript().getNormalize().getNormalizedFields() ) {
+			if( !field.isIgnored() && field.isInput() ) {
 				CheckField cf = new CheckField(field.getName(),field.getName());
 				addProperty(cf);
 				fields.add(cf);

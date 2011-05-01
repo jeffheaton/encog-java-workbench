@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.encog.app.analyst.EncogAnalyst;
+import org.encog.app.analyst.script.AnalystClassItem;
 import org.encog.app.analyst.script.DataField;
 import org.encog.app.analyst.script.prop.ScriptProperties;
+import org.encog.util.Format;
 import org.encog.util.csv.CSVFormat;
 import org.encog.util.csv.ReadCSV;
 import org.encog.workbench.WorkBenchError;
@@ -21,6 +23,9 @@ public class ScatterFile {
 	private Map<String,List<double[]>> data = new HashMap<String,List<double[]>>();
 	private DataField targetField;
 	private List<String> axis;
+	private List<String> series = new ArrayList<String>();
+	private double regressionSeriesSize;
+	
 	
 	public ScatterFile(EncogAnalyst analyst, String target, List<String> axis) {
 		this.analyst = analyst;
@@ -44,10 +49,28 @@ public class ScatterFile {
 		this.targetField = this.analyst.getScript().findDataField(target); 
 		
 		if( targetField==null ) {
-			throw new WorkBenchError("Can't find target class: " + target);
+			throw new WorkBenchError("Can't find target field: " + target);
 		}
 		this.targetIndex = this.analyst.getScript().findDataFieldIndex(targetField);
 		
+		// determine series names
+		if( targetField.isClass() ) {
+			for(AnalystClassItem cls : targetField.getClassMembers()) {
+				this.series.add(cls.getName());
+			}
+		} else {
+			double totalWidth = targetField.getMax() - targetField.getMin();
+			this.regressionSeriesSize = totalWidth/10;
+			double current = targetField.getMin();
+			for(int i=0;i<10;i++) {
+				StringBuilder s = new StringBuilder();
+				s.append(Format.formatDouble(current, 1));
+				this.series.add(s.toString());
+				current+=this.regressionSeriesSize;
+			}
+		}
+		
+		// build index to mappings
 		for(int index =0; index<fields.length;index++) {
 			DataField field = fields[index];
 			if( isAxis(field.getName(),axis)) {
@@ -135,7 +158,7 @@ public class ScatterFile {
 	}
 	
 	public List<double[]> getSeries(int index) {
-		String name = this.targetField.getClassMembers().get(index).getName();
+		String name = this.series.get(index);
 		return this.data.get(name.toLowerCase());
 	}
 
@@ -166,7 +189,7 @@ public class ScatterFile {
 	}
 
 	public int getSeriesCount() {
-		return targetField.getClassMembers().size();
+		return this.series.size();
 	}
 
 }
