@@ -171,6 +171,12 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 	}
 
 	private void analyzeScatterPlot() {
+		
+		if( this.analyst.isTimeSeries() ) {
+			EncogWorkBench.displayError("Error", "Can't use scatter plot for time-series.");
+			return;
+		}
+		
 		ScatterChooseClass dialog = new ScatterChooseClass(this.analyst);
 		if (dialog.process()) {
 			if (dialog.getAxis().size() < 2) {
