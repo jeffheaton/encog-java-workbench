@@ -73,7 +73,6 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 		this.model.addElement("PNN/GRNN - Probabilistic/General Regression Neural Network");
 		this.model.addElement("Recurrent - Elman");
 		this.model.addElement("Recurrent - Jordan");
-		this.model.addElement("NeuroEvolution of Augmenting Topologies (NEAT)");
 		this.model.addElement("Support Vector Machine (SVM)");
 		
 

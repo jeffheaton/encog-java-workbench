@@ -55,6 +55,7 @@ public class ProjectEGFile extends ProjectFile {
 
 	public void save(MLMethod method) {
 		this.obj = method;
+		this.save();
 	}
 
 }
