@@ -35,6 +35,8 @@ import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
+import org.encog.engine.network.activation.ActivationFunction;
+import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.mathutil.randomize.ConsistentRandomizer;
 import org.encog.mathutil.randomize.ConstRandomizer;
 import org.encog.mathutil.randomize.Distort;
@@ -53,8 +55,6 @@ import org.encog.ml.MLOutput;
 import org.encog.ml.MLProperties;
 import org.encog.ml.MLRegression;
 import org.encog.ml.MLResettable;
-import org.encog.neural.activation.ActivationFunction;
-import org.encog.neural.activation.ActivationTANH;
 import org.encog.neural.cpn.CPN;
 import org.encog.neural.flat.FlatNetwork;
 import org.encog.neural.neat.NEATNetwork;

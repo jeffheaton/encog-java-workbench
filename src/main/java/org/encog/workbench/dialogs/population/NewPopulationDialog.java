@@ -25,9 +25,9 @@ package org.encog.workbench.dialogs.population;
 
 import java.awt.Frame;
 
-import org.encog.neural.activation.ActivationFunction;
-import org.encog.neural.activation.ActivationLinear;
-import org.encog.neural.activation.ActivationSigmoid;
+import org.encog.engine.network.activation.ActivationFunction;
+import org.encog.engine.network.activation.ActivationLinear;
+import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
 import org.encog.workbench.dialogs.common.CheckField;

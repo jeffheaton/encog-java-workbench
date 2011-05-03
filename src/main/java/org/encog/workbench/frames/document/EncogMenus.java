@@ -54,7 +54,7 @@ public class EncogMenus {
 	//public static final String TOOLS_CLOUD = "Connect to an Encog Cloud...";
 	public static final String TOOLS_TRAIN = "Train...";
 	public static final String TOOLS_GENERATE_TRAINING = "Generate Training Data...";
-	public static final String TOOLS_EVALUATE = "Evaluate Network...";
+	public static final String TOOLS_EVALUATE = "Evaluate Method...";
 	public static final String TOOLS_BENCHMARK = "Benchmark Encog...";
 	public static final String TOOLS_BROWSE = "Browse Web Data...";
 	public static final String TOOLS_VALIDATION_CHART = "Validation Chart...";
