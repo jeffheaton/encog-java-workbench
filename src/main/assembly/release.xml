@@ -12,14 +12,9 @@
       <outputDirectory>/</outputDirectory>
       <useDefaultExcludes>true</useDefaultExcludes>
       <includes>
-      	<include>.settings/**</include>
-      	<include>src/**</include>
-      	<include>.classpath</include>
-      	<include>.project</include>
       	<include>LICENSE.txt</include>
       	<include>README.txt</include>
       	<include>NOTICE.txt</include>
-      	<include>pom.xml</include>
       </includes>
     </fileSet>
     <fileSet>
