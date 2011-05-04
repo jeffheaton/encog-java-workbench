@@ -25,15 +25,4 @@
       </includes>
     </fileSet>    
   </fileSets>
-  
-  <dependencySets>
-    <dependencySet>
-      <outputDirectory>/lib</outputDirectory>
-      <useProjectArtifact>true</useProjectArtifact>
-      <unpack>false</unpack>
-      <scope>runtime</scope>
-    </dependencySet>
-  </dependencySets>
-  
-  
 </assembly>
