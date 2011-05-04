@@ -24,7 +24,7 @@
     </fileSet>
     <fileSet>
       <directory>${project.build.directory}</directory>
-      <outputDirectory>/lib</outputDirectory>
+      <outputDirectory>/</outputDirectory>
       <includes>
         <include>*-executable*</include>
       </includes>
