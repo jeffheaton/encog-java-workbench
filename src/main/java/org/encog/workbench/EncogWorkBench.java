@@ -37,7 +37,6 @@ import org.encog.ml.MLMethod;
 import org.encog.ml.data.MLDataSet;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.persist.EncogDirectoryPersistence;
-import org.encog.util.logging.Logging;
 import org.encog.util.obj.ReflectionUtil;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
@@ -87,8 +86,8 @@ public class EncogWorkBench implements Runnable {
 	public EncogWorkBench() {
 		this.config = new EncogWorkBenchConfig();
 		this.logHandler = new WorkbenchLogHandler();
-		Logging.getRootLogger().addHandler(this.logHandler);
-		Logging.getRootLogger().setLevel(Level.OFF);
+		//Logging.getRootLogger().addHandler(this.logHandler);
+		//Logging.getRootLogger().setLevel(Level.OFF);
 	}
 
 	/**
@@ -249,7 +248,7 @@ public class EncogWorkBench implements Runnable {
 	 *            The first argument specifies an option file to open.
 	 */
 	public static void main(final String args[]) {
-		Logging.stopConsoleLogging();
+		//Logging.stopConsoleLogging();
 		final EncogWorkBench workBench = EncogWorkBench.getInstance();
 		workBench.setMainWindow(new EncogDocumentFrame());
 

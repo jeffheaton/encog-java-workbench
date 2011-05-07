@@ -36,7 +36,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import org.encog.util.logging.Logging;
 import org.encog.workbench.util.EncogFonts;
 
 public class EncogOutputPanel extends JPanel implements ActionListener {
@@ -113,7 +112,7 @@ public class EncogOutputPanel extends JPanel implements ActionListener {
 			{
 				l = Level.WARNING;	
 			}
-			Logging.getRootLogger().setLevel(l);
+			//Logging.getRootLogger().setLevel(l);
 		} 
 		
 	}
