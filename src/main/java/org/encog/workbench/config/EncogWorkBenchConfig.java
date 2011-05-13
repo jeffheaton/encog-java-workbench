@@ -79,8 +79,6 @@ public class EncogWorkBenchConfig {
 			return ErrorCalculationMode.RMS;
 		case 1:
 			return ErrorCalculationMode.MSE;
-		case 2:
-			return ErrorCalculationMode.ARCTAN;
 		default:
 			return ErrorCalculationMode.RMS;
 		}
@@ -94,9 +92,6 @@ public class EncogWorkBenchConfig {
 				break;
 			case MSE:
 				this.errorCalculation = 1;
-				break;
-			case ARCTAN:
-				this.errorCalculation = 2;
 				break;
 		}
 	}

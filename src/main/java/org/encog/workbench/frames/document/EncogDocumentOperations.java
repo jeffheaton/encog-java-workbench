@@ -163,10 +163,6 @@ public class EncogDocumentOperations {
 			((JComboBox) dialog.getErrorCalculation().getField())
 					.setSelectedIndex(1);
 			break;
-		case ARCTAN:
-			((JComboBox) dialog.getErrorCalculation().getField())
-					.setSelectedIndex(2);
-			break;
 		}
 
 		if (dialog.process()) {
@@ -180,9 +176,6 @@ public class EncogDocumentOperations {
 				break;
 			case 1:
 				config.setErrorCalculation(ErrorCalculationMode.MSE);
-				break;
-			case 2:
-				config.setErrorCalculation(ErrorCalculationMode.ARCTAN);
 				break;
 			}
 			EncogWorkBench.getInstance().getConfig().saveConfig();

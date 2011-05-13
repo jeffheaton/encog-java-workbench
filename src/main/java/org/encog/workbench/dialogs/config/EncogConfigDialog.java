@@ -46,7 +46,6 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		
 		errorMethods.add("Root Mean Square");
 		errorMethods.add("Mean Square Error");
-		errorMethods.add("Arc-Tan Error");
 		setTitle("Encog Configuration");
 		setSize(500,300);
 		beginTab("Training");
