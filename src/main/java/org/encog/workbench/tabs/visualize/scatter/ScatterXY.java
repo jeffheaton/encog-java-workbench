@@ -136,7 +136,8 @@ public class ScatterXY extends AbstractXYDataset
      * @return the number of items in the specified series.
      */
     public int getItemCount(int series) {
-        return this.scatterFile.getSeries(series).size();
+        int i = this.scatterFile.getSeries(series).size();
+        return i;
     }
 
     /**

@@ -80,7 +80,7 @@ public class ScatterFile {
 		// determine series names
 		if( targetField.isClass() ) {
 			for(AnalystClassItem cls : targetField.getClassMembers()) {
-				this.series.add(cls.getName());
+				this.series.add(cls.getName().toLowerCase());
 			}
 		} else {
 			this.regressionSeriesPoint = new double[10];
@@ -90,7 +90,7 @@ public class ScatterFile {
 			for(int i=0;i<10;i++) {
 				StringBuilder s = new StringBuilder();				
 				s.append(Format.formatDouble(current, 1));
-				this.data.put(s.toString(), new ArrayList<double[]>());
+				this.data.put(s.toString().toLowerCase(), new ArrayList<double[]>());
 				this.series.add(s.toString());
 				this.regressionSeriesPoint[i] = current;
 				current+=this.regressionSeriesSize;
@@ -142,7 +142,8 @@ public class ScatterFile {
 					}
 				}
 			} else {
-				cls = csv.get(this.targetIndex).toLowerCase(); 
+				cls = csv.get(this.targetIndex); 
+				cls = cls.toLowerCase();
 			}
 						
 			if( this.data.containsKey(cls) ) {
@@ -200,7 +201,7 @@ public class ScatterFile {
 	}
 	
 	public List<double[]> getSeries(int index) {
-		String name = this.series.get(index);
+		String name = this.series.get(index).toLowerCase();
 		return this.data.get(name.toLowerCase());
 	}
 

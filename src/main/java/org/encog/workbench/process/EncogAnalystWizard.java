@@ -29,6 +29,9 @@ import org.encog.EncogError;
 import org.encog.app.analyst.AnalystFileFormat;
 import org.encog.app.analyst.AnalystGoal;
 import org.encog.app.analyst.EncogAnalyst;
+import org.encog.app.analyst.missing.DiscardMissing;
+import org.encog.app.analyst.missing.MeanAndModeMissing;
+import org.encog.app.analyst.missing.NegateMissing;
 import org.encog.app.analyst.wizard.AnalystWizard;
 import org.encog.app.analyst.wizard.WizardMethodType;
 import org.encog.workbench.EncogWorkBench;
@@ -88,6 +91,18 @@ public class EncogAnalystWizard {
 
 				wizard.setMethodType(dialog.getMethodType());
 				wizard.setTargetField(dialog.getTargetField());
+				
+				String m = (String)dialog.getMissing().getSelectedValue(); 
+				if( m.equals("DiscardMissing") ) {
+					wizard.setMissing(new DiscardMissing());	
+				} else if( m.equals("MeanAndModeMissing") ) {
+					wizard.setMissing(new MeanAndModeMissing());	
+				} else if( m.equals("NegateMissing") ) {
+					wizard.setMissing(new NegateMissing());	
+				} else {
+					wizard.setMissing(new DiscardMissing());
+				}
+				
 				wizard.setGoal(dialog.getGoal());
 				wizard.setLagWindowSize(dialog.getLagCount().getValue());
 				wizard.setLeadWindowSize(dialog.getLeadCount().getValue());

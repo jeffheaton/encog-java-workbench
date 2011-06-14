@@ -46,6 +46,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	private final ComboBoxField format;
 	private final ComboBoxField range;
 	private final ComboBoxField goal;
+	private final ComboBoxField missing;
 	private final TextField targetField;
 	private final CheckField headers;
 	private final IntegerField lagCount;
@@ -86,6 +87,11 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		List<String> rangeList = new ArrayList<String>();
 		rangeList.add("-1 to 1");
 		rangeList.add("0 to 1");
+		
+		List<String> missingList = new ArrayList<String>();
+		missingList.add("DiscardMissing");
+		missingList.add("MeanAndModeMissing");
+		missingList.add("NegateMissing");
 
 		
 		methods.add("Feedforward Network");
@@ -94,7 +100,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		methods.add("PNN/GRNN Network");
 		methods.add("Self Organizing Map (SOM)");
 		
-		this.setSize(640, 300);
+		this.setSize(640, 330);
 		this.setTitle("Setup Encog Analyst Wizard");
 		
 		beginTab("General");
@@ -105,6 +111,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		addProperty(this.targetField = new TextField("target field", "Target Field(blank for auto)", false));
 		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
 		addProperty(this.range = new ComboBoxField("normalization range", "Normalization Range", true, rangeList));
+		addProperty(this.missing = new ComboBoxField("missing values", "Missing Values", true, missingList));
 		beginTab("Time Series");
 		addProperty(this.lagCount = new IntegerField("lag count","Lag Count",true,0,1000));
 		addProperty(this.leadCount = new IntegerField("lead count","Lead Count",true,0,1000));
@@ -255,9 +262,12 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	 */
 	public CheckField getBalance() {
 		return balance;
+	}
+
+	/**
+	 * @return the missing
+	 */
+	public ComboBoxField getMissing() {
+		return missing;
 	}	
-	
-	
-	
-	
 }
