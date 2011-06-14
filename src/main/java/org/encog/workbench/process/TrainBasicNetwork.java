@@ -32,8 +32,8 @@ import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.folded.FoldedDataSet;
 import org.encog.ml.svm.SVM;
-import org.encog.ml.svm.training.SVMSearchTrain;
 import org.encog.ml.svm.training.SVMTrain;
+import org.encog.ml.svm.training.search.SVMSearchJob;
 import org.encog.ml.train.MLTrain;
 import org.encog.neural.art.ART1;
 import org.encog.neural.cpn.CPN;
@@ -473,7 +473,7 @@ public class TrainBasicNetwork {
 
 		if (dialog.process()) {
 			double maxError = dialog.getMaxError().getValue() / 100.0;
-			SVMSearchTrain train = new SVMSearchTrain(method, trainingData);
+			SVMSearchJob train = new SVMSearchJob(method, trainingData, null);
 			train.setGammaBegin(dialog.getBeginningGamma().getValue());
 			train.setGammaEnd(dialog.getEndingGamma().getValue());
 			train.setGammaStep(dialog.getStepGamma().getValue());
