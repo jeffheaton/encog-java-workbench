@@ -64,8 +64,11 @@ public class BufferedDataSetTableModel implements TableModel {
 	}
 
 	public void addRow(final int row) {
-		
-		this.egb.addRow(row);
+		if( row<0 ) {
+			this.egb.addRow(0);
+		} else {
+			this.egb.addRow(row);
+		}
 
 		final TableModelEvent tce = new TableModelEvent(this);
 		notifyListeners(tce);
@@ -76,6 +79,11 @@ public class BufferedDataSetTableModel implements TableModel {
 	}
 
 	public void delColumn(final int col) {
+		
+		if( col==(this.getColumnCount()-1) ) {
+			EncogWorkBench.displayError("Error", "You can't delete the significance column.");
+			return;
+		}
 		
 		if( col==0 && this.egb.getInputCount()==1 )
 		{
@@ -118,8 +126,12 @@ public class BufferedDataSetTableModel implements TableModel {
 		if (columnIndex < this.data.getInputSize()) {
 			return "Input " + (columnIndex + 1);
 		}
-
-		return "Ideal " + (columnIndex + 1 - this.data.getInputSize());
+		
+		if( columnIndex <  (this.data.getInputSize()+ this.data.getIdealSize()) ) {
+			return "Ideal " + (columnIndex + 1 - this.data.getInputSize());
+		}
+		
+		return "Significance";
 	}
 
 	public int getRowCount() {
