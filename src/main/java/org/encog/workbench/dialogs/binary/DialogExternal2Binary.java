@@ -27,6 +27,7 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.FileField;
@@ -40,6 +41,7 @@ public class DialogExternal2Binary extends EncogPropertiesDialog {
 	private final FileField binaryFile;
 	private final FileField externalFile;
 	private final ComboBoxField fileType;
+	private final CheckField containsSignificance;
 
 	
 	public DialogExternal2Binary(Frame owner) {
@@ -57,6 +59,7 @@ public class DialogExternal2Binary extends EncogPropertiesDialog {
 		addProperty(this.fileType = new ComboBoxField("type type", "Export File Type",true,list));
 		addProperty(this.inputCount = new IntegerField("input count","Input Count",true,1,10000));
 		addProperty(this.idealCount = new IntegerField("ideal count","Ideal Count",true,0,10000));
+		addProperty(this.containsSignificance = new CheckField("contains significance column","Significance Column Present"));
 
 		render();
 	}
@@ -84,6 +87,14 @@ public class DialogExternal2Binary extends EncogPropertiesDialog {
 
 	public ComboBoxField getFileType() {
 		return fileType;
+	}
+
+
+	/**
+	 * @return the containsSignificance
+	 */
+	public final CheckField getContainsSignificance() {
+		return containsSignificance;
 	}
 
 	

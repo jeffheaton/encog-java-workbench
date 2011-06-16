@@ -38,6 +38,7 @@ public class DialogCSV extends EncogPropertiesDialog {
 	
 	private final CheckField headers;
 	private final CheckField decimalComma;
+	private final CheckField generateSignificance;
 	
 	public DialogCSV(Frame owner) {
 		super(owner);
@@ -50,6 +51,7 @@ public class DialogCSV extends EncogPropertiesDialog {
 		
 		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
 		addProperty(this.decimalComma = new CheckField("decimal comma","Decimal Comma (instead of decimal point)"));
+		addProperty(this.generateSignificance = new CheckField("generate significance column","Generate Significance Column"));
 		render();
 	}
 
@@ -59,6 +61,13 @@ public class DialogCSV extends EncogPropertiesDialog {
 
 	public CheckField getDecimalComma() {
 		return decimalComma;
+	}
+
+	/**
+	 * @return the generateSignificance
+	 */
+	public final CheckField getGenerateSignificance() {
+		return generateSignificance;
 	}
 	
 	

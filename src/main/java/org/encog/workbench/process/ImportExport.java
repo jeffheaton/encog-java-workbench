@@ -87,7 +87,7 @@ public class ImportExport {
 						format = CSVFormat.DECIMAL_POINT;
 
 					codec = new CSVDataCODEC(externFile, format, headers,
-							inputCount, idealCount);
+							inputCount, idealCount, dialog.getContainsSignificance().getValue());
 					loader = new BinaryDataLoader(codec);
 					ImportExportDialog dlg = new ImportExportDialog(loader,
 							binaryFile, true);
@@ -131,7 +131,8 @@ public class ImportExport {
 					else
 						format = CSVFormat.DECIMAL_POINT;
 
-					codec = new CSVDataCODEC(externFile, format);
+					codec = new CSVDataCODEC(externFile, format, 
+							dialog2.getGenerateSignificance().getValue());
 					loader = new BinaryDataLoader(codec);
 
 					ImportExportDialog dlg = new ImportExportDialog(loader,
