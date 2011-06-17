@@ -171,12 +171,13 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 	}
 
 	private void analyzeScatterPlot() {
-		
-		if( this.analyst.isTimeSeries() ) {
-			EncogWorkBench.displayError("Error", "Can't use scatter plot for time-series.");
+
+		if (this.analyst.isTimeSeries()) {
+			EncogWorkBench.displayError("Error",
+					"Can't use scatter plot for time-series.");
 			return;
 		}
-		
+
 		ScatterChooseClass dialog = new ScatterChooseClass(this.analyst);
 		if (dialog.process()) {
 			if (dialog.getAxis().size() < 2) {
@@ -226,8 +227,9 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 	private void execute() {
 		if (forceSave()) {
 			if (compile()) {
-				if (this.tasks.getSelectedIndex() == -1) {				
-					EncogWorkBench.displayError("Error", "No tasks to execute.");
+				if (this.tasks.getSelectedIndex() == -1) {
+					EncogWorkBench
+							.displayError("Error", "No tasks to execute.");
 					return;
 				}
 
@@ -243,18 +245,31 @@ public class EncogAnalystTab extends BasicTextTab implements ActionListener {
 
 	private void analyzeData() {
 		try {
-			if (!compile())
+			if( this.isDirty() ) {
+				EncogWorkBench.displayError("Unsaved File", "Please save your script before analyzing ranges.");
 				return;
+			}
+			
+			if (EncogWorkBench
+					.askQuestion(
+							"Analyze",
+							"Do you want to analyze the raw file and update ranges?\nThis can be useful when the contents of the raw file have changed.")) {
 
-			EncogWorkBench.getInstance().getMainWindow().beginWait();
-			AnalystWizard wizard = new AnalystWizard(this.analyst);
-			wizard.reanalyze();
+				if (!compile())
+					return;
 
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			analyst.save(os);
-			os.close();
+				EncogWorkBench.getInstance().getMainWindow().beginWait();
+				AnalystWizard wizard = new AnalystWizard(this.analyst);
+				wizard.reanalyze();
 
-			this.setText(os.toString());
+				ByteArrayOutputStream os = new ByteArrayOutputStream();
+				analyst.save(os);
+				os.close();
+
+				this.setText(os.toString());
+				
+				EncogWorkBench.displayMessage("Complete", "Ranges have been updated, save your file if changes are acceptable.");
+			}
 		} catch (IOException ex) {
 			throw new WorkBenchError(ex);
 		} finally {
