@@ -58,6 +58,7 @@ import org.encog.neural.som.training.basic.BasicTrainSOM;
 import org.encog.neural.som.training.clustercopy.SOMClusterCopyTraining;
 import org.encog.neural.thermal.HopfieldNetwork;
 import org.encog.util.Format;
+import org.encog.util.concurrency.EngineConcurrency;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
@@ -480,6 +481,7 @@ public class TrainBasicNetwork {
 			train.setConstBegin(dialog.getBeginningC().getValue());
 			train.setConstEnd(dialog.getEndingC().getValue());
 			train.setConstStep(dialog.getStepC().getValue());
+			EngineConcurrency.getInstance().setThreadCount(dialog.getThreadCount().getValue());
 			startup(file, train, maxError);
 		}
 	}

@@ -47,7 +47,7 @@ public class TrainingStatusPanel extends JPanel {
 	 */
 	public TrainingStatusPanel(final BasicTrainingProgress parent) {
 		this.parent = parent;
-		setPreferredSize(new Dimension(640, 65));
+		setPreferredSize(new Dimension(640, 85));
 	}
 
 	/**

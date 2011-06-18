@@ -23,8 +23,8 @@
  */
 package org.encog.workbench.dialogs.training.methods;
 
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
+import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.training.DialogMaxError;
 
 public class InputSearchSVM  extends DialogMaxError {
@@ -35,6 +35,7 @@ public class InputSearchSVM  extends DialogMaxError {
 	private final DoubleField beginningC;
 	private final DoubleField endingC;
 	private final DoubleField stepC;
+	private final IntegerField threadCount;
 
 	/**
 	 * Construct the dialog box.
@@ -44,13 +45,15 @@ public class InputSearchSVM  extends DialogMaxError {
 		super(false);
 		setSize(400,400);
 		setTitle("Support Vector Machine (SVM) Cross Validation");
-		addProperty(this.beginningGamma = new DoubleField("gamma","Gamma Begin",true,-1,-1));
-		addProperty(this.endingGamma = new DoubleField("gamma","Gamma End",true,-1,-1));
-		addProperty(this.stepGamma = new DoubleField("gamma","Gamma Step",true,-1,-1));
-		addProperty(this.beginningC = new DoubleField("gamma","C Begin",true,-1,-1));
-		addProperty(this.endingC = new DoubleField("gamma","C End",true,-1,-1));
-		addProperty(this.stepC = new DoubleField("gamma","C Step",true,-1,-1));
+		addProperty(this.beginningGamma = new DoubleField("gamma begin","Gamma Begin",true,-1,-1));
+		addProperty(this.endingGamma = new DoubleField("gamma end","Gamma End",true,-1,-1));
+		addProperty(this.stepGamma = new DoubleField("gamma step","Gamma Step",true,-1,-1));
+		addProperty(this.beginningC = new DoubleField("c begin","C Begin",true,-1,-1));
+		addProperty(this.endingC = new DoubleField("c end","C End",true,-1,-1));
+		addProperty(this.stepC = new DoubleField("c step","C Step",true,-1,-1));
+		addProperty(this.threadCount = new IntegerField("thread count","Threads",true,1,20));
 		render();	
+		this.threadCount.setValue(1);
 	}
 
 	public DoubleField getBeginningGamma() {
@@ -76,7 +79,11 @@ public class InputSearchSVM  extends DialogMaxError {
 	public DoubleField getStepC() {
 		return stepC;
 	}
-	
-	
-	
+
+	/**
+	 * @return the threadCount
+	 */
+	public IntegerField getThreadCount() {
+		return threadCount;
+	}
 }

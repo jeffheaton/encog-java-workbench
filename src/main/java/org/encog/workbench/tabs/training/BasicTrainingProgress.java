@@ -41,13 +41,16 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
+import org.encog.StatusReportable;
 import org.encog.mathutil.randomize.Distort;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
 import org.encog.ml.data.MLDataSet;
+import org.encog.ml.svm.training.search.SVMSearchJob;
 import org.encog.ml.train.MLTrain;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.persist.EncogDirectoryPersistence;
+import org.encog.util.Format;
 import org.encog.util.file.FileUtil;
 import org.encog.util.validate.ValidateNetwork;
 import org.encog.workbench.EncogWorkBench;
@@ -65,7 +68,7 @@ import org.encog.workbench.util.TimeSpanFormatter;
  * 
  */
 public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
-		ActionListener {
+		ActionListener, StatusReportable {
 
 	private final JComboBox comboReset;
 
@@ -207,6 +210,9 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	
 	private boolean error = false;
 	
+	
+	private String lastMessage = "";
+	
 
 	/**
 	 * Construct the dialog box.
@@ -262,6 +268,10 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		this.bodyFont = EncogFonts.getInstance().getBodyFont();
 		this.headFont = EncogFonts.getInstance().getHeadFont();
 		this.status = "Ready to Start";
+		
+		if( train instanceof SVMSearchJob ) {
+			((SVMSearchJob)train).setReport(this);
+		}
 	}
 
 	private void performClose() {
@@ -354,6 +364,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		g.drawString("Current Error:", 10, y);
 		y += fm.getHeight();
 		g.drawString("Error Improvement:", 10, y);
+		y += fm.getHeight();
+		g.drawString("Message:", 10, y);
 
 		y = fm.getHeight();
 		g.drawString("Elapsed Time:", 400, y);
@@ -368,11 +380,13 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 
 		g.drawString(str, 150, y);
 		y += fm.getHeight();
-		g.drawString("" + 100.0 * this.currentError + "%", 150, y);
+		g.drawString(Format.formatPercent(this.currentError), 150, y);
 		y += fm.getHeight();
-		g.drawString("" + 100.0 * this.errorImprovement + "%", 150, y);
-		y = fm.getHeight();
+		g.drawString(Format.formatPercent(this.errorImprovement), 150, y);
+		y += fm.getHeight();
+		g.drawString(this.lastMessage, 150, y);
 
+		y = fm.getHeight();
 		long seconds = 0;
 		if (this.started != null) {
 			final Date now = new Date();
@@ -388,6 +402,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 			final double d = this.performanceCount / 60.0;
 			str = "  (" + this.nfShort.format(d) + "/sec)";
 		}
+		
 
 		g.drawString(str, 500, y);
 
@@ -614,5 +629,11 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	@Override
 	public String getName() {
 		return "Training Progress";
+	}
+
+	@Override
+	public void report(int total, int current, String message) {
+		this.lastMessage = message;
+		redraw();		
 	}
 }
