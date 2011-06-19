@@ -30,17 +30,25 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 import org.encog.app.analyst.AnalystError;
 import org.encog.app.analyst.AnalystListener;
 import org.encog.app.analyst.EncogAnalyst;
+import org.encog.mathutil.randomize.Distort;
+import org.encog.ml.MLMethod;
+import org.encog.ml.MLResettable;
 import org.encog.ml.train.MLTrain;
 import org.encog.util.Format;
 import org.encog.util.Stopwatch;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.util.EncogFonts;
 
@@ -112,6 +120,8 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	private Stopwatch totalTime = new Stopwatch();
 	private Stopwatch commandTime = new Stopwatch();
 	private MLTrain train;
+	private AtomicInteger resetOption = new AtomicInteger(-1);
+	private final JComboBox comboReset;
 	
 	/**
 	 * Construct the dialog box.
@@ -135,6 +145,19 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		this.buttonStopAll.addActionListener(this);
 		this.buttonClose.addActionListener(this);
 		this.buttonStopCurrent.addActionListener(this);
+		
+		List<String> list = new ArrayList<String>();
+		list.add("<Select Option>");
+		list.add("Reset");
+		list.add("Perturb 1%");
+		list.add("Perturb 5%");
+		list.add("Perturb 10%");
+		list.add("Perturb 15%");
+		list.add("Perturb 20%");
+		list.add("Perturb 50%");
+
+		this.comboReset = new JComboBox(list.toArray());
+		this.comboReset.addActionListener(this);
 
 		setLayout(new BorderLayout());
 		this.panelBody = new AnalystStatusPanel(this);
@@ -142,7 +165,8 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		this.panelButtons.add(this.buttonStart);
 		this.panelButtons.add(this.buttonStopAll);
 		this.panelButtons.add(this.buttonStopCurrent);
-		this.panelButtons.add(this.buttonClose);		
+		this.panelButtons.add(this.buttonClose);
+		this.panelButtons.add(this.comboReset);
 		
 		add(this.panelBody, BorderLayout.CENTER);
 		add(this.panelButtons, BorderLayout.SOUTH);
@@ -152,6 +176,7 @@ public class AnalystProgressTab extends EncogCommonTab implements
 
 		this.bodyFont = EncogFonts.getInstance().getBodyFont();
 		this.headFont = EncogFonts.getInstance().getHeadFont();
+		this.comboReset.setEnabled(false);
 	}
 
 	private void performClose() {
@@ -173,6 +198,9 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			performStopAll();
 		} else if (e.getSource() == this.buttonStopCurrent) {
 			performStopCurrent();
+		} else if (e.getSource() == this.comboReset) {
+			this.resetOption.set(this.comboReset.getSelectedIndex() - 1);
+			this.comboReset.setSelectedIndex(0);
 		}
 	}
 	
@@ -399,16 +427,65 @@ public class AnalystProgressTab extends EncogCommonTab implements
 	}
 
 	public void reportTrainingBegin() {
+		this.comboReset.setEnabled(true);
 		update();
 	}
 
-	public void reportTrainingEnd() {
+	public void reportTrainingEnd() {		
+		this.comboReset.setEnabled(false);
 		this.commandStatus = "Training Done";
 		this.train = null;
 		update(true);
 	}
 
 	public void reportTraining(MLTrain train) {
+		// reset if needed
+		if (this.resetOption.get() != -1) {
+			MLMethod method = this.analyst.getMethod();
+						
+			if( method==null )
+			{
+				this.resetOption.set(-1);
+				EncogWorkBench.displayError("Error", "This machine learning method cannot be reset or randomized.");
+				return;
+			}
+			
+			switch (this.resetOption.get()) {
+			case 0:
+				if (method instanceof MLResettable) {
+					((MLResettable)method).reset();
+				} else {
+					EncogWorkBench
+							.displayError("Error",
+									"This Machine Learning method cannot be reset.");
+				}
+				break;
+			case 1:
+				(new Distort(0.01)).randomize(method);
+				break;
+			case 2:
+				(new Distort(0.05)).randomize(method);
+				break;
+			case 3:
+				(new Distort(0.1)).randomize(method);
+				break;
+			case 4:
+				(new Distort(0.15)).randomize(method);
+				break;
+			case 5:
+				(new Distort(0.20)).randomize(method);
+				break;
+			case 6:
+				(new Distort(0.50)).randomize(method);
+				break;
+
+			}
+
+			this.resetOption.set(-1);
+		}
+
+		
+		// update
 		this.train = train;
 		this.commandStatus = "Training";
 		this.trainingIterations = Format.formatInteger(train.getIteration());

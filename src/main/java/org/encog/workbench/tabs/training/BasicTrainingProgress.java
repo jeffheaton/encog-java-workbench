@@ -223,7 +223,10 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	public BasicTrainingProgress(MLTrain train, ProjectEGFile method,
 			MLDataSet trainingData) {
 		super(method);
-		ValidateNetwork.validateMethodToData((MLMethod)method.getObject(), trainingData);
+		
+		if( method instanceof MLMethod ) {
+			ValidateNetwork.validateMethodToData((MLMethod)method.getObject(), trainingData);
+		}
 		List<String> list = new ArrayList<String>();
 		list.add("<Select Option>");
 		list.add("Reset");
@@ -490,6 +493,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 					
 					if( method==null )
 					{
+						this.resetOption.set(-1);
 						EncogWorkBench.displayError("Error", "This machine learning method cannot be reset or randomized.");
 						return;
 					}
