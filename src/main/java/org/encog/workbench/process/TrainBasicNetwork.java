@@ -39,6 +39,7 @@ import org.encog.neural.art.ART1;
 import org.encog.neural.cpn.CPN;
 import org.encog.neural.cpn.training.TrainInstar;
 import org.encog.neural.cpn.training.TrainOutstar;
+import org.encog.neural.flat.train.prop.RPROPType;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.ContainsFlat;
 import org.encog.neural.networks.training.CalculateScore;
@@ -379,7 +380,7 @@ public class TrainBasicNetwork {
 		if (dialog.process()) {
 			final double initialUpdate = dialog.getInitialUpdate().getValue();
 			final double maxStep = dialog.getMaxStep().getValue();
-			
+						
 			int kFold = dialog.getKfold().getValue();
 			
 			if( kFold>0 ) {
@@ -389,6 +390,22 @@ public class TrainBasicNetwork {
 			MLTrain train = new ResilientPropagation(
 					(ContainsFlat) file.getObject(), trainingData,
 					initialUpdate, maxStep);
+			
+			switch( dialog.getRpropType().getSelectedIndex() )
+			{
+				case 0:
+					((ResilientPropagation)train).setRPROPType(RPROPType.RPROPp);
+					break;
+				case 1:
+					((ResilientPropagation)train).setRPROPType(RPROPType.RPROPm);
+					break;
+				case 2:
+					((ResilientPropagation)train).setRPROPType(RPROPType.iRPROPp);
+					break;
+				case 3:
+					((ResilientPropagation)train).setRPROPType(RPROPType.iRPROPm);
+					break;
+			}
 			
 			if( kFold>0 ) {
 				train = this.wrapTrainer(trainingData,train,kFold);
