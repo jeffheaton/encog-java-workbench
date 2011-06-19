@@ -23,13 +23,13 @@
  */
 package org.encog.workbench.dialogs.training.methods;
 
-import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.encog.neural.flat.train.prop.RPROPConst;
-import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.training.DialogMaxError;
-import org.encog.workbench.dialogs.training.NetworkAndTrainingDialog;
 
 /**
  * A dialog box that inputs for the parameters to use with
@@ -46,6 +46,7 @@ public class InputResilient extends DialogMaxError {
 
 	private final DoubleField maxStep;
 	private final DoubleField initialUpdate;
+	private final ComboBoxField rpropType;
 	
 	/**
 	 * Construct the dialog box.
@@ -53,7 +54,15 @@ public class InputResilient extends DialogMaxError {
 	 */
 	public InputResilient() {
 		super(true);
+		
+		List<String> list = new ArrayList<String>();
+		list.add("RPROP+ (classic)");
+		list.add("RPROP-");
+		list.add("iRPROP+");
+		list.add("iRPROP-");
+		
 		setTitle("Train Resilient Propagation");
+		addProperty(this.rpropType = new ComboBoxField("rprop type", "RPROP Type",true,list));
 		addProperty(this.maxStep = new DoubleField("max step","Max Step",true,0,-1));
 		addProperty(this.initialUpdate = new DoubleField("initial update","Initial Update",true,0,-1));
 		render();	
@@ -69,5 +78,13 @@ public class InputResilient extends DialogMaxError {
 		return initialUpdate;
 	}
 
+	/**
+	 * @return the rpropType
+	 */
+	public ComboBoxField getRpropType() {
+		return rpropType;
+	}
+
+	
 
 }
