@@ -346,10 +346,8 @@ public class TrainBasicNetwork {
 		InputLMA dialog = new InputLMA();
 
 		if (dialog.process()) {
-			boolean useBayse = dialog.getUseBayesian().getValue();
 			LevenbergMarquardtTraining train = new LevenbergMarquardtTraining(
 					(BasicNetwork) file.getObject(), trainingData);
-			train.setUseBayesianRegularization(useBayse);
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}
 	}

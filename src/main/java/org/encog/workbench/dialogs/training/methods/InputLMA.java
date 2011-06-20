@@ -31,8 +31,6 @@ import org.encog.workbench.dialogs.training.DialogMaxError;
 
 public class InputLMA  extends DialogMaxError {
 	
-	private CheckField useBayesian;
-	
 	/**
 	 * Construct the dialog box.
 	 * @param owner
@@ -40,13 +38,9 @@ public class InputLMA  extends DialogMaxError {
 	public InputLMA() {
 		super(false);
 		setTitle("Levenberg Marquardt Training");
-		addProperty(this.useBayesian = new CheckField("baysean","Bayesian Regularization"));
 		render();	
 	}
 
-	public CheckField getUseBayesian() {
-		return useBayesian;
-	}
 	
 	
 }
