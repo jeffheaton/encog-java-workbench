@@ -23,6 +23,8 @@
  */
 package org.encog.workbench.dialogs.common;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +34,7 @@ import java.util.Map;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 public class EncogPropertiesDialog extends EncogCommonDialog {
@@ -80,15 +83,14 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 		renderProperties(contents, this.nonTabbedproperties);
 	}
 	
-	public void renderProperties(JPanel target, List<PropertiesField> properties)
+	public void renderProperties(JPanel contents, List<PropertiesField> properties)
 	{
 		int y = 0;
 		int maxLabelWidth = 0;
 		int dialogWidth = getWidth();
 		int labelHeight=0;
 		
-		target.setLayout(null);
-		
+			
 		// create the labels
 		
 		for(PropertiesField field: properties)
@@ -98,12 +100,21 @@ public class EncogPropertiesDialog extends EncogCommonDialog {
 				maxLabelWidth = Math.max(maxLabelWidth, label.getWidth());
 		}
 		
+		// create a scroll view
+		contents.setLayout(new BorderLayout());		
+		JPanel view = new JPanel();
+		view.setLayout(null);
+		JScrollPane scroll = new JScrollPane(view);
+		contents.add(scroll,BorderLayout.CENTER);
+		
 		y=0;
 		// create the text fields
 		for(PropertiesField field: properties)
 		{
-			y = field.createField(target, maxLabelWidth+30, y, dialogWidth-maxLabelWidth-50 );
+			y = field.createField(view, maxLabelWidth+30, y, dialogWidth-maxLabelWidth-50 );
 		}
+		
+		view.setPreferredSize(new Dimension(view.getWidth(),y));
 	}
 	
 	public void beginTab(String tabName)
