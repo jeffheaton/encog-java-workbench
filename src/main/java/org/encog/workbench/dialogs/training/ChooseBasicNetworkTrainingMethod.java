@@ -69,6 +69,7 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 		this.model.addElement("Propagation - Scaled Conjugate Gradient (SCG)");
 		this.model.addElement("Propagation - Resilient");
 		this.model.addElement("Propagation - Backpropagation");
+		this.model.addElement("Propagation - QPROP");
 		this.model.addElement("Propagation - Manhattan");
 		this.model.addElement("Levenberg-Marquardt");
 		this.model.addElement("Genetic Algorithm");
@@ -97,18 +98,21 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 			this.type = BasicNetworkTrainingType.PropagationBack;
 			break;
 		case 3:
-			this.type = BasicNetworkTrainingType.PropagationManhattan;
+			this.type = BasicNetworkTrainingType.PropagationQuick;
 			break;
 		case 4:
+			this.type = BasicNetworkTrainingType.PropagationManhattan;
+			break;
+		case 5:
 			this.type = BasicNetworkTrainingType.LevenbergMarquardt;
 			break;	
-		case 5:
+		case 6:
 			this.type = BasicNetworkTrainingType.Genetic;
 			break;
-		case 6:
+		case 7:
 			this.type = BasicNetworkTrainingType.Annealing;
 			break;
-		case 7:
+		case 8:
 			this.type = BasicNetworkTrainingType.ADALINE;
 			break;
 		}
@@ -126,20 +130,23 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 		case PropagationBack:
 			this.list.setSelectedIndex(2);
 			break;
-		case PropagationManhattan:
+		case PropagationQuick:
 			this.list.setSelectedIndex(3);
 			break;
-		case LevenbergMarquardt:
+		case PropagationManhattan:
 			this.list.setSelectedIndex(4);
 			break;
-		case Genetic:
+		case LevenbergMarquardt:
 			this.list.setSelectedIndex(5);
 			break;
-		case Annealing:
+		case Genetic:
 			this.list.setSelectedIndex(6);
 			break;
-		case ADALINE:
+		case Annealing:
 			this.list.setSelectedIndex(7);
+			break;
+		case ADALINE:
+			this.list.setSelectedIndex(8);
 			break;
 		}
 	}
@@ -167,22 +174,26 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 			break;
 		case 3:
 			this.text
-					.setText("The Manhattan update rule works similarly to Backpropagation, except a single update delta is provided.  It is a supervised learning method.  This update value must be chosen correctly for the neural network to properly train.  The Manhattan update rule can be used with feedforward and simple recurrent neural networks.  For most cases where the Manhattan update rule could be applied, Resilient propagation is a better choice.");
+					.setText("QPROP is a training method based on Newton's  method.  It can be very quick to train, just like RPROP.  However, it has many of the same local minimum issues that other trainers have.");
 			break;
 		case 4:
 			this.text
-					.setText("The Levenberg Marquardt training algorithm is one of the fastest training algorithms available for Encog.  It is based on the LevenbergMarquardt method for minimizing a function.  This training algorithm can only be used for neural networks that contain a single output neuron.  This is a supervised training method.");
+					.setText("The Manhattan update rule works similarly to Backpropagation, except a single update delta is provided.  It is a supervised learning method.  This update value must be chosen correctly for the neural network to properly train.  The Manhattan update rule can be used with feedforward and simple recurrent neural networks.  For most cases where the Manhattan update rule could be applied, Resilient propagation is a better choice.");
 			break;
 		case 5:
 			this.text
-					.setText("A genetic algorithm trains a neural network with a process that emulates biological mutation and natural selection.  This is implemented as a supervised training method.  Many neural networks are created that will simulate different organisms.  These neural networks will compete to see which has the lowest error rate.  Those neural networks that have the lowest error rates will have elements of their weight matrix combined to produce offspring.  Some offspring will have random mutations introduced.  This cycle continues and hopefully produces lower error rates from the top neural networks with each iteration.");
+					.setText("The Levenberg Marquardt training algorithm is one of the fastest training algorithms available for Encog.  It is based on the LevenbergMarquardt method for minimizing a function.  This training algorithm can only be used for neural networks that contain a single output neuron.  This is a supervised training method.");
 			break;
 		case 6:
+			this.text
+					.setText("A genetic algorithm trains a neural network with a process that emulates biological mutation and natural selection.  This is implemented as a supervised training method.  Many neural networks are created that will simulate different organisms.  These neural networks will compete to see which has the lowest error rate.  Those neural networks that have the lowest error rates will have elements of their weight matrix combined to produce offspring.  Some offspring will have random mutations introduced.  This cycle continues and hopefully produces lower error rates from the top neural networks with each iteration.");
+			break;
+		case 7:
 			this.text
 					.setText("Simulated annealing is a process where the weights are randomized according to a temperature.  As this temperature decreases, the weights are kept if they improve the error rate of the neural network.  This training technique is implemented as supervised training.  This process simulates the metallurgical process of annealing where metals are slowly cooled to produce a more stable molecular structure.");
 			break;
 			
-		case 7:
+		case 8:
 			this.text
 					.setText("An ADALINE neural network is a very simple 2-layer network.  This training type should be used with ADALINE neural networks.");
 			break;

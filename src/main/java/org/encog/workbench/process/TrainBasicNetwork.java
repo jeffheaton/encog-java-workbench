@@ -50,6 +50,7 @@ import org.encog.neural.networks.training.genetic.NeuralGeneticAlgorithm;
 import org.encog.neural.networks.training.lma.LevenbergMarquardtTraining;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.neural.networks.training.propagation.manhattan.ManhattanPropagation;
+import org.encog.neural.networks.training.propagation.quick.QuickPropagation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.networks.training.propagation.scg.ScaledConjugateGradient;
 import org.encog.neural.networks.training.simple.TrainAdaline;
@@ -73,6 +74,7 @@ import org.encog.workbench.dialogs.training.methods.InputInstar;
 import org.encog.workbench.dialogs.training.methods.InputLMA;
 import org.encog.workbench.dialogs.training.methods.InputManhattan;
 import org.encog.workbench.dialogs.training.methods.InputOutstar;
+import org.encog.workbench.dialogs.training.methods.InputQPROP;
 import org.encog.workbench.dialogs.training.methods.InputResilient;
 import org.encog.workbench.dialogs.training.methods.InputSCG;
 import org.encog.workbench.dialogs.training.methods.InputSOM;
@@ -187,6 +189,9 @@ public class TrainBasicNetwork {
 						break;
 					case ADALINE:
 						performADALINE(file, trainingData);
+						break;
+					case PropagationQuick:
+						performQPROP(file, trainingData);
 						break;
 					}
 				}
@@ -500,6 +505,29 @@ public class TrainBasicNetwork {
 			startup(file, train, maxError);
 		}
 	}
+	
+	private void performQPROP(ProjectEGFile file, MLDataSet trainingData) {
+		InputQPROP dialog = new InputQPROP();
+		if (dialog.process()) {
+			double learningRate = dialog.getLearningRate().getValue();
+			
+			int kFold = dialog.getKfold().getValue();
+			
+			if( kFold>0 ) {
+				trainingData = this.wrapTrainingData(trainingData);
+			}
+
+			MLTrain train = new QuickPropagation((BasicNetwork) file.getObject(),
+					trainingData, learningRate);
+			
+			if( kFold>0 ) {
+				train = this.wrapTrainer(trainingData,train,kFold);
+			}
+			
+			startup(file, train, dialog.getMaxError().getValue() / 100.0);
+		}
+
+	}
 
 	private void startup(ProjectEGFile file, MLTrain train, double maxError) {
 		BasicTrainingProgress tab = new BasicTrainingProgress(train, file,
@@ -510,4 +538,6 @@ public class TrainBasicNetwork {
 		tab.setMaxError(maxError);
 		EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
 	}
+	
+	
 }
