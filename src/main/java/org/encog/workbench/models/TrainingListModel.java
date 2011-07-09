@@ -29,14 +29,14 @@ import java.util.List;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
-import org.encog.ml.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.buffer.BufferedMLDataSet;
 
 public class TrainingListModel implements ListModel {
 
-	private BufferedNeuralDataSet data;
+	private BufferedMLDataSet data;
 	private final List<ListDataListener> listeners = new ArrayList<ListDataListener>();
 	
-	public TrainingListModel(BufferedNeuralDataSet data) {
+	public TrainingListModel(BufferedMLDataSet data) {
 		this.data = data;
 	}
 	

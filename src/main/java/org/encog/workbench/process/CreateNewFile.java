@@ -28,7 +28,7 @@ import java.io.IOException;
 
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.basic.BasicMLDataPair;
-import org.encog.ml.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createfile.CreateFileDialog;
@@ -101,7 +101,7 @@ public class CreateNewFile {
 			int input = dialog.getInput().getValue();
 			int output = dialog.getIdeal().getValue();
 
-			BufferedNeuralDataSet trainingData = new BufferedNeuralDataSet(file);
+			BufferedMLDataSet trainingData = new BufferedMLDataSet(file);
 
 			MLDataPair pair = BasicMLDataPair.createPair(input,
 					output);

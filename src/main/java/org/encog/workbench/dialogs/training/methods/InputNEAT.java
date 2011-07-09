@@ -27,7 +27,7 @@ import java.io.File;
 import java.util.List;
 
 import org.encog.ml.data.MLDataSet;
-import org.encog.ml.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
@@ -113,7 +113,7 @@ public class InputNEAT extends EncogPropertiesDialog {
 		if( this.comboTraining.getSelectedValue()==null )			
 			return null;
 		File file = ((ProjectTraining)this.comboTraining.getSelectedValue()).getFile();
-		BufferedNeuralDataSet result = new BufferedNeuralDataSet(file);
+		BufferedMLDataSet result = new BufferedMLDataSet(file);
 		return result;
 	}
 	

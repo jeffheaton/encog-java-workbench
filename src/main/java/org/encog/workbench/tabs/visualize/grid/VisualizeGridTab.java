@@ -40,14 +40,14 @@ import javax.swing.event.ListSelectionListener;
 
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.basic.BasicMLDataPair;
-import org.encog.ml.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.models.TrainingListModel;
 import org.encog.workbench.tabs.EncogCommonTab;
 
 public class VisualizeGridTab extends EncogCommonTab implements ListSelectionListener, ActionListener {
 	
-	private BufferedNeuralDataSet data;
+	private BufferedMLDataSet data;
 	private JScrollPane scroll;
 	private JList list;
 	private TrainingListModel model;
@@ -56,7 +56,7 @@ public class VisualizeGridTab extends EncogCommonTab implements ListSelectionLis
 	private GridPanel grid;
 	private JButton btnUpdate;
 	
-	public VisualizeGridTab(BufferedNeuralDataSet data) {
+	public VisualizeGridTab(BufferedMLDataSet data) {
 		super(null);
 		this.data= data;
 		setLayout(new BorderLayout());

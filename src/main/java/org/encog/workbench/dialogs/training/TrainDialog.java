@@ -27,7 +27,7 @@ import java.awt.Frame;
 import java.io.File;
 
 import org.encog.ml.data.MLDataSet;
-import org.encog.ml.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 
@@ -59,7 +59,7 @@ public class TrainDialog extends NetworkAndTrainingDialog {
 		if( this.getComboTraining().getSelectedValue()==null )			
 			return null;
 		File file = ((ProjectTraining)this.getComboTraining().getSelectedValue()).getFile();
-		BufferedNeuralDataSet result = new BufferedNeuralDataSet(file);
+		BufferedMLDataSet result = new BufferedMLDataSet(file);
 		if( this.loadToMemory.getValue())
 			return result.loadToMemory();
 		else

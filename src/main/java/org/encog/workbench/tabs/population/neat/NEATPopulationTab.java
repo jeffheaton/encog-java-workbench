@@ -35,7 +35,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
 import org.encog.ml.data.MLDataSet;
-import org.encog.ml.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.ml.genetic.genome.Genome;
 import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATPopulation;
@@ -206,7 +206,7 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener 
 			MLDataSet training = dialog.getTrainingSet();
 
 			if (dialog.getLoadToMemory().getValue()) {
-				training = ((BufferedNeuralDataSet) training).loadToMemory();
+				training = ((BufferedMLDataSet) training).loadToMemory();
 			}
 
 			CalculateScore score = new TrainingSetScore(training);

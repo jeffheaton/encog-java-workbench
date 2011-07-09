@@ -33,7 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
 
-import org.encog.ml.data.buffer.BufferedNeuralDataSet;
+import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.models.BufferedDataSetTableModel;
@@ -55,12 +55,12 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 	private JButton export;
 	private JButton visualize;
 	
-	private BufferedNeuralDataSet data;
+	private BufferedMLDataSet data;
 	
 	public BinaryDataTab(ProjectFile file) {
 		super(file);
 		
-		this.data = new BufferedNeuralDataSet(file.getFile());
+		this.data = new BufferedMLDataSet(file.getFile());
 	
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
@@ -136,7 +136,7 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 		super.dispose();
 	}
 
-	public BufferedNeuralDataSet getData() {
+	public BufferedMLDataSet getData() {
 		return this.data;
 	}
 	
