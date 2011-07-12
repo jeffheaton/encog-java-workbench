@@ -535,20 +535,28 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				.getInstance().getMainWindow());
 		BasicNetwork network = (BasicNetwork)method;
 
-		ActivationFunction oldActivationOutput = network.getActivation(network
-				.getLayerCount() - 1);
+		int hiddenLayerCount = network.getLayerCount() - 2;
+		ActivationFunction oldActivationOutput = network.getActivation(network.getLayerCount() - 1);
+		ActivationFunction oldActivationHidden;
+		
+		if( hiddenLayerCount>0 ) {
+			oldActivationHidden = network.getActivation(1);
+		} else {
+			oldActivationHidden = new ActivationTANH();
+		}
+		
 		dialog.setActivationFunctionOutput(oldActivationOutput);
+		dialog.setActivationFunctionHidden(oldActivationHidden);
+		
 		dialog.getInputCount().setValue(network.getInputCount());
 		dialog.getOutputCount().setValue(network.getOutputCount());
-		int hiddenLayerCount = network.getLayerCount() - 2;
-
-		ActivationFunction oldActivationHidden = new ActivationTANH();
+		
 		for (int i = 0; i < hiddenLayerCount; i++) {
 			int num = network.getLayerNeuronCount(i + 1);
 			String str = "Hidden Layer " + (i + 1) + ": " + num + " neurons";
 			dialog.getHidden().getModel().addElement(str);
 		}
-		dialog.setActivationFunctionHidden(oldActivationHidden);
+		
 
 		if (dialog.process()) {
 			// decide if entire network is to be recreated
@@ -557,8 +565,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 					|| dialog.getHidden().getModel().size() != (network
 							.getLayerCount() - 2)) {
 				FeedForwardPattern feedforward = new FeedForwardPattern();
-				feedforward.setActivationFunction(dialog
-						.getActivationFunctionHidden());
+				feedforward.setActivationFunction(dialog.getActivationFunctionHidden());
+				feedforward.setActivationOutput(dialog.getActivationFunctionOutput());
 				feedforward.setInputNeurons(dialog.getInputCount().getValue());
 				for (int i = 0; i < dialog.getHidden().getModel().size(); i++) {
 					String str = (String) dialog.getHidden().getModel()
@@ -573,7 +581,9 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				}
 				feedforward.setInputNeurons(dialog.getInputCount().getValue());
 				feedforward.setOutputNeurons(dialog.getOutputCount().getValue());
-				BasicNetwork obj = (BasicNetwork) feedforward.generate();
+				this.method = (BasicNetwork) feedforward.generate();
+				((ProjectEGFile)getEncogObject()).setObject(this.method);
+				produceReport();
 			} else {
 				// try to prune it
 				PruneSelective prune = new PruneSelective(network);

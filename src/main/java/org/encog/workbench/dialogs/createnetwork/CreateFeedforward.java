@@ -127,12 +127,20 @@ public class CreateFeedforward extends EncogPropertiesDialog implements
 
 	public String popup(PopupField field) {
 		ActivationDialog dialog = new ActivationDialog(EncogWorkBench.getInstance().getMainWindow());
-		dialog.setActivation(this.activationFunctionHidden);
+		
+		if( field==this.activationFieldHidden )
+		{			
+			dialog.setActivation(this.activationFunctionHidden);
+		} else if( field==this.activationFieldOutput ) 
+		{
+			dialog.setActivation(this.activationFunctionOutput);
+		}
+				
 		if( !dialog.process()  )
 			return null;
 		else if( field==this.activationFieldHidden )
-		{
-			this.activationFunctionHidden = dialog.getActivation();
+		{			
+			this.activationFunctionHidden = dialog.getActivation();			
 			return dialog.getActivation().getClass().getSimpleName();
 		} else if( field==this.activationFieldOutput )
 		{

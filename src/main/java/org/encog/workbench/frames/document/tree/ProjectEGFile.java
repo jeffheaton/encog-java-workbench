@@ -75,6 +75,10 @@ public class ProjectEGFile extends ProjectFile {
 	public String getEncogType() {
 		return encogType;
 	}
+	
+	public void setObject(Object o) {
+		this.obj = o;
+	}
 
 	public void save(MLMethod method) {
 		this.obj = method;
