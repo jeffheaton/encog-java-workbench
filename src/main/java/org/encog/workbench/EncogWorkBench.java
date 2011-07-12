@@ -31,6 +31,7 @@ import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
+import org.encog.Encog;
 import org.encog.EncogError;
 import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.ml.MLMethod;
@@ -249,6 +250,7 @@ public class EncogWorkBench implements Runnable {
 	 */
 	public static void main(final String args[]) {
 		//Logging.stopConsoleLogging();
+		Encog.getInstance();
 		final EncogWorkBench workBench = EncogWorkBench.getInstance();
 		workBench.setMainWindow(new EncogDocumentFrame());
 

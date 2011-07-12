@@ -30,6 +30,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -40,6 +41,7 @@ import org.encog.ml.data.MLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.prune.PruneIncremental;
+import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -97,6 +99,7 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 	private int current;
 	private double low;
 	private double high;
+	private final File path;
 
 	/**
 	 * The font to use for headings.
@@ -123,7 +126,7 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 	private int windowSize;
 
 	public IncrementalPruneTab(int iterations, int weightTries, int windowSize, MLDataSet training,
-			FeedForwardPattern pattern) {
+			FeedForwardPattern pattern, File path) {
 		super(null);
 
 		this.weightTries = weightTries;
@@ -143,6 +146,8 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 		this.buttonStart.addActionListener(this);
 		this.buttonStop.addActionListener(this);
 		this.buttonClose.addActionListener(this);
+		
+		this.path = path;
 
 		setLayout(new BorderLayout());
 		this.panelBody = new JPanel();
@@ -397,7 +402,8 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 				if (EncogWorkBench.askQuestion("Network",
 						"Do you wish to save this network?")) {
 					if (network != null) {
-						this.getEncogObject().save();
+						 
+						EncogDirectoryPersistence.saveObject(this.path,network);					
 						EncogWorkBench.getInstance().refresh();
 					}
 				}

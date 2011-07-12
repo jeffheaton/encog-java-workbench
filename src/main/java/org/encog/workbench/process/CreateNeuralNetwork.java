@@ -75,7 +75,7 @@ public class CreateNeuralNetwork {
 		if (dialog.process()) {
 			switch (dialog.getType()) {
 			case Automatic:
-				createAutomatic();
+				createAutomatic(path);
 				network=null;
 				break;
 			case Feedforward:
@@ -255,7 +255,7 @@ public class CreateNeuralNetwork {
 
 	}
 
-	private static BasicNetwork createAutomatic() {
+	private static BasicNetwork createAutomatic(File path) {
 		CreateAutomatic dialog = new CreateAutomatic(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.setActivationFunction(new ActivationTANH());
@@ -275,7 +275,6 @@ public class CreateNeuralNetwork {
 			FeedForwardPattern pattern = new FeedForwardPattern();
 			pattern.setInputNeurons(training.getInputSize());
 			pattern.setOutputNeurons(training.getIdealSize());
-		
 			
 			pattern.setActivationFunction(dialog.getActivationFunction());			
 			IncrementalPruneTab tab = new IncrementalPruneTab(
@@ -283,7 +282,8 @@ public class CreateNeuralNetwork {
 					dialog.getWeightTries().getValue(),
 					dialog.getWindowSize().getValue(),
 					training,
-					pattern);
+					pattern,
+					path);
 			
 			for (int i = 0; i < dialog.getHidden().getModel().size(); i++) {
 				String str = (String) dialog.getHidden().getModel()
