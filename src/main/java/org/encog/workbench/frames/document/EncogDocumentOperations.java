@@ -153,7 +153,7 @@ public class EncogDocumentOperations {
 
 		dialog.getDefaultError().setValue(config.getDefaultError());
 		dialog.getThreadCount().setValue(config.getThreadCount());
-		dialog.getUseOpenCL().setValue(config.isUseOpenCL());
+		//dialog.getUseOpenCL().setValue(config.isUseOpenCL());
 		switch (config.getErrorCalculation()) {
 		case RMS:
 			((JComboBox) dialog.getErrorCalculation().getField())
@@ -168,7 +168,7 @@ public class EncogDocumentOperations {
 		if (dialog.process()) {
 			config.setDefaultError(dialog.getDefaultError().getValue());
 			config.setThreadCount(dialog.getThreadCount().getValue());
-			config.setUseOpenCL(dialog.getUseOpenCL().getValue());
+			//config.setUseOpenCL(dialog.getUseOpenCL().getValue());
 			switch (((JComboBox) dialog.getErrorCalculation().getField())
 					.getSelectedIndex()) {
 			case 0:

@@ -52,7 +52,7 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		addProperty(this.defaultError = new DoubleField("default error","Default Error Percent",true,0,100));
 		addProperty(this.errorCalculation = new ComboBoxField("error calculation", "Error Calculation", true, errorMethods));
 		addProperty(this.threadCount = new IntegerField("thread count","Thread Count (0=auto)",true,0,10000));
-		addProperty(this.useOpenCL = new CheckField("use opencl","Use Graphics Card(GPU)"));
+		//addProperty(this.useOpenCL = new CheckField("use opencl","Use Graphics Card(GPU)"));
 		render();
 	}
 
@@ -64,9 +64,9 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		return threadCount;
 	}
 
-	public CheckField getUseOpenCL() {
+	/*public CheckField getUseOpenCL() {
 		return useOpenCL;
-	}
+	}*/
 
 	public ComboBoxField getErrorCalculation() {
 		return errorCalculation;

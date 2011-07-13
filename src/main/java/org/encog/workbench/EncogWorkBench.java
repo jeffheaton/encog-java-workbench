@@ -38,6 +38,7 @@ import org.encog.ml.MLMethod;
 import org.encog.ml.data.MLDataSet;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.persist.EncogDirectoryPersistence;
+import org.encog.util.concurrency.MultiThreadable;
 import org.encog.util.obj.ReflectionUtil;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.error.ErrorDialog;
@@ -361,6 +362,14 @@ public class EncogWorkBench implements Runnable {
 		}
 
 		return result;
+	}
+	
+	public void setupThreads(Object obj) {
+		if( obj instanceof MultiThreadable ) {
+			MultiThreadable threadable = (MultiThreadable)obj;
+			int threads = this.config.getThreadCount();
+			threadable.setThreadCount(threads);
+		}
 	}
 
 	public List<ProjectEGFile> getNEATPopulations() {

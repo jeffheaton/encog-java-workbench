@@ -530,6 +530,7 @@ public class TrainBasicNetwork {
 	}
 
 	private void startup(ProjectEGFile file, MLTrain train, double maxError) {
+		EncogWorkBench.getInstance().setupThreads(train);
 		BasicTrainingProgress tab = new BasicTrainingProgress(train, file,
 				train.getTraining());
 		if (this.parentTab != null) {
