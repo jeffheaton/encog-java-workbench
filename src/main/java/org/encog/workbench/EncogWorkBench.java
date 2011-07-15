@@ -236,6 +236,8 @@ public class EncogWorkBench implements Runnable {
 
 		ErrorCalculation.setMode(EncogWorkBench.getInstance().getConfig()
 				.getErrorCalculation());
+		
+		Encog.getInstance().registerPlugin(new WorkbenchLogging());
 
 		Thread thread = new Thread(this);
 		thread.setDaemon(true);

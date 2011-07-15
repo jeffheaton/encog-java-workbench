@@ -27,7 +27,6 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -36,11 +35,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.encog.Encog;
+import org.encog.util.logging.EncogLogging;
+import org.encog.workbench.WorkbenchLogging;
 import org.encog.workbench.util.EncogFonts;
 
 public class EncogOutputPanel extends JPanel implements ActionListener {
 	
-	public static final String[] LEVELS = {"OFF","SEVERE","INFO","WARNING"};
+	public static final String[] LEVELS = {"OFF","CRITICAL","ERROR","INFO","DEBUG"};
 	
 	private final JTextArea text;
 	private final JScrollPane scroll;
@@ -94,25 +96,30 @@ public class EncogOutputPanel extends JPanel implements ActionListener {
 			String level = (String)this.comboLogLevel.getSelectedItem();
 			output("Logging level set to: " + level);
 			
-			Level l = Level.OFF;
+			int l = EncogLogging.LEVEL_DISABLE;
 			
 			if( level.equals("OFF") )
 			{
-				l = Level.OFF;
+				l = EncogLogging.LEVEL_DISABLE;
 			}
-			else if( level.equals("SEVERE") )
+			else if( level.equals("CRITICAL") )
 			{
-				l = Level.SEVERE;
+				l = EncogLogging.LEVEL_CRITICAL;
+			}
+			else if( level.equals("ERROR") )
+			{
+				l = EncogLogging.LEVEL_ERROR;
 			}
 			else if( level.equals("INFO") )
 			{
-				l = Level.INFO;
+				l = EncogLogging.LEVEL_INFO;	
 			}
-			else if( level.equals("WARNING") )
+			else if( level.equals("DEBUG") )
 			{
-				l = Level.WARNING;	
+				l = EncogLogging.LEVEL_DEBUG;	
 			}
-			//Logging.getRootLogger().setLevel(l);
+			
+			((WorkbenchLogging)Encog.getInstance().getLoggingPlugin()).setLogLevel(l);			
 		} 
 		
 	}
