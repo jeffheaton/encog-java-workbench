@@ -55,6 +55,7 @@ import org.encog.neural.networks.training.propagation.resilient.ResilientPropaga
 import org.encog.neural.networks.training.propagation.scg.ScaledConjugateGradient;
 import org.encog.neural.networks.training.simple.TrainAdaline;
 import org.encog.neural.rbf.RBFNetwork;
+import org.encog.neural.rbf.training.SVDTraining;
 import org.encog.neural.som.SOM;
 import org.encog.neural.som.training.basic.BasicTrainSOM;
 import org.encog.neural.som.training.clustercopy.SOMClusterCopyTraining;
@@ -62,6 +63,7 @@ import org.encog.neural.thermal.HopfieldNetwork;
 import org.encog.util.Format;
 import org.encog.util.concurrency.EngineConcurrency;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.dialogs.training.ChooseBasicNetworkTrainingMethod;
@@ -192,6 +194,9 @@ public class TrainBasicNetwork {
 						break;
 					case PropagationQuick:
 						performQPROP(file, trainingData);
+						break;
+					case SVD:
+						performSVD(file, trainingData);
 						break;
 					}
 				}
@@ -527,6 +532,23 @@ public class TrainBasicNetwork {
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}
 
+	}
+	
+	private void performSVD(ProjectEGFile file, MLDataSet trainingData) {
+		
+		if( !(file.getObject() instanceof RBFNetwork) ) {
+			throw new WorkBenchError("SVD training requires a RBF network.");
+		}
+		RBFNetwork network = (RBFNetwork)file.getObject();
+		if( network.getOutputCount()!=1 ) {
+			throw new WorkBenchError("SVD training requires a single output neuron.");
+		}
+		SVDTraining train = new SVDTraining(network, trainingData);
+		train.iteration();
+		
+		if( EncogWorkBench.askQuestion("Finished Training", "SVD trained to an error of " + Format.formatPercent(train.getError()) + "\nSave network?") ) {
+			file.save();
+		}
 	}
 
 	private void startup(ProjectEGFile file, MLTrain train, double maxError) {

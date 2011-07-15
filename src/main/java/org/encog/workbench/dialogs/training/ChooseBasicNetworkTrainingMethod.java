@@ -67,14 +67,15 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 		content.add(this.scroll2);
 
 		this.model.addElement("Propagation - Scaled Conjugate Gradient (SCG)");
-		this.model.addElement("Propagation - Resilient");
-		this.model.addElement("Propagation - Backpropagation");
-		this.model.addElement("Propagation - QPROP");
-		this.model.addElement("Propagation - Manhattan");
+		this.model.addElement("Propagation - Resilient (RPROP)");
+		this.model.addElement("Propagation - Backpropagation (BPROP)");
+		this.model.addElement("Propagation - Quick Propagation (QPROP)");
+		this.model.addElement("Propagation - Manhattan (MPROP)");
 		this.model.addElement("Levenberg-Marquardt");
 		this.model.addElement("Genetic Algorithm");
 		this.model.addElement("Simulated Annealing");
 		this.model.addElement("ADALINE Training");
+		this.model.addElement("Singular Value Decomposition (SVD)");
 
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -115,6 +116,9 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 		case 8:
 			this.type = BasicNetworkTrainingType.ADALINE;
 			break;
+		case 9:
+			this.type = BasicNetworkTrainingType.SVD;
+			break;
 		}
 	}
 
@@ -147,6 +151,9 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 			break;
 		case ADALINE:
 			this.list.setSelectedIndex(8);
+			break;
+		case SVD:
+			this.list.setSelectedIndex(9);
 			break;
 		}
 	}
@@ -197,12 +204,14 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 			this.text
 					.setText("An ADALINE neural network is a very simple 2-layer network.  This training type should be used with ADALINE neural networks.");
 			break;
+		case 9:
+			this.text
+					.setText("SVD training can only be used for RBF networks at this time.  Further, the RBF network must have a single output neuron.  SVD is very fast, and will accomplish training in a single iteration.");
+			break;
 
 		}
 
 		this.text.setSelectionStart(0);
 		this.text.setSelectionEnd(0);
-
 	}
-
 }

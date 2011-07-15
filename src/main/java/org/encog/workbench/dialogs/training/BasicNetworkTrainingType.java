@@ -32,5 +32,6 @@ public enum BasicNetworkTrainingType {
 	Genetic,
 	Annealing,
 	ADALINE,
-	PropagationQuick
+	PropagationQuick,
+	SVD
 }
