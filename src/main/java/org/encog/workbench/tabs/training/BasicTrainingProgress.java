@@ -46,7 +46,6 @@ import org.encog.mathutil.randomize.Distort;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
 import org.encog.ml.data.MLDataSet;
-import org.encog.ml.svm.training.search.SVMSearchJob;
 import org.encog.ml.train.MLTrain;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.persist.EncogDirectoryPersistence;
@@ -272,9 +271,6 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		this.headFont = EncogFonts.getInstance().getHeadFont();
 		this.status = "Ready to Start";
 		
-		if( train instanceof SVMSearchJob ) {
-			((SVMSearchJob)train).setReport(this);
-		}
 	}
 
 	private void performClose() {
