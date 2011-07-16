@@ -110,6 +110,9 @@ public class EncogCollectionModel implements TreeModel {
 	}
 
 	public void invalidate(File path) {
+		
+		if( path==null )
+			return;
 
 		try {
 			EncogWorkBench.getInstance().getMainWindow().beginWait();

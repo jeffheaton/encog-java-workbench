@@ -178,8 +178,10 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 	}
 
 	public void refresh(File path) {
-		this.collectionModel.invalidate(path);
-		EncogWorkBench.getInstance().getMainWindow().redraw();
+		if( path!=null ) {
+			this.collectionModel.invalidate(path);
+			EncogWorkBench.getInstance().getMainWindow().redraw();
+		}
 	}
 
 	public File getPath() {
