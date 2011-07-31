@@ -243,7 +243,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	private void optionRandomize(RandomizeNetworkDialog dialog) {
 		Randomizer r = null;
 
-		switch (dialog.getType().getSelectedIndex()) {
+		switch (dialog.getTheType().getSelectedIndex()) {
 		case 0: // Random
 			r = new RangeRandomizer(dialog.getLow().getValue(), dialog
 					.getHigh().getValue());

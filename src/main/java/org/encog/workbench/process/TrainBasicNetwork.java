@@ -167,7 +167,7 @@ public class TrainBasicNetwork {
 					ProjectEGFile file = (ProjectEGFile) dialog
 							.getComboNetwork().getSelectedValue();
 
-					switch (choose.getType()) {
+					switch (choose.getTheType()) {
 					case SCG:
 						performSCG(file, trainingData);
 						break;

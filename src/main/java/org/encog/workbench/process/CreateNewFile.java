@@ -41,7 +41,7 @@ public class CreateNewFile {
 	public static void performCreateFile() throws IOException {
 		CreateFileDialog dialog = new CreateFileDialog(EncogWorkBench
 				.getInstance().getMainWindow());
-		dialog.setType(CreateFileType.MachineLearningMethod);
+		dialog.setTheType(CreateFileType.MachineLearningMethod);
 		
 		
 		if (dialog.process()) {
@@ -55,32 +55,32 @@ public class CreateNewFile {
 			File basePath = EncogWorkBench.getInstance().getMainWindow()
 			.getTree().getPath();
 			
-			if (dialog.getType() == CreateFileType.MachineLearningMethod) {
+			if (dialog.getTheType() == CreateFileType.MachineLearningMethod) {
 				
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
 					CreateNeuralNetwork.process(path);
 				}
-			} else if (dialog.getType() == CreateFileType.TextFile) {
+			} else if (dialog.getTheType() == CreateFileType.TextFile) {
 				
 				name = FileUtil.forceExtension(new File(name).getName(), "txt");
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
 					FileUtil.writeFileAsString(path, "");					
 				}
-			} else if (dialog.getType() == CreateFileType.CSVFile) {
+			} else if (dialog.getTheType() == CreateFileType.CSVFile) {
 
 				name = FileUtil.forceExtension(new File(name).getName(), "csv");
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
 					FileUtil.writeFileAsString(path, "");
 				}
-			} else if (dialog.getType() == CreateFileType.TrainingFile) {
+			} else if (dialog.getTheType() == CreateFileType.TrainingFile) {
 				name = FileUtil.forceExtension(new File(name).getName(), "egb");
 				File path = new File(basePath, name);
 				createNewEGB(path);
-			} else if( dialog.getType() == CreateFileType.NEAT ) {
+			} else if( dialog.getTheType() == CreateFileType.NEAT ) {
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
 				File path = new File(basePath, name);
 				createNewPopulation(path);

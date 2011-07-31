@@ -198,11 +198,11 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 
 	}
 
-	public TrainingDataType getType() {
+	public TrainingDataType getTheType() {
 		return type;
 	}
 
-	public void setType(TrainingDataType type) {
+	public void setTheType(TrainingDataType type) {
 		this.type = type;
 	}
 

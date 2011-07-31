@@ -243,7 +243,7 @@ public class EncogDocumentOperations {
 		CreateTrainingDataDialog dialog = new CreateTrainingDataDialog(
 				EncogWorkBench.getInstance().getMainWindow());
 
-		dialog.setType(TrainingDataType.CopyCSV);
+		dialog.setTheType(TrainingDataType.CopyCSV);
 
 		if (dialog.process()) {
 			String name = dialog.getFilenameName();
@@ -263,7 +263,7 @@ public class EncogDocumentOperations {
 				return;
 			}
 
-			switch (dialog.getType()) {
+			switch (dialog.getTheType()) {
 			case CopyCSV:
 				CreateTrainingData.copyCSV(name);
 				break;

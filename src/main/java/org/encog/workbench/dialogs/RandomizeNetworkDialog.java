@@ -37,7 +37,7 @@ public class RandomizeNetworkDialog extends EncogPropertiesDialog  {
 	private final DoubleField low;
 	private final DoubleField mean;
 	private final DoubleField deviation;
-	private final ComboBoxField type;
+	private final ComboBoxField theType;
 	private final DoubleField perturbPercent;
 	private final IntegerField seedValue;
 	private final DoubleField constantValue;
@@ -72,7 +72,7 @@ public class RandomizeNetworkDialog extends EncogPropertiesDialog  {
 		this.beginTab("Randomize");
 		addProperty(this.high = new DoubleField("high","High Range",true,0,-1));
 		addProperty(this.low = new DoubleField("low","Low Range",true,0,-1));
-		addProperty(this.type = new ComboBoxField("type","Type",true,types));
+		addProperty(this.theType = new ComboBoxField("type","Type",true,types));
 		this.beginTab("Perturb");
 		addProperty(this.perturbPercent = new DoubleField("perturb percent","Perturb Percent",true,0,-1));
 		this.beginTab("Gaussian");
@@ -98,8 +98,8 @@ public class RandomizeNetworkDialog extends EncogPropertiesDialog  {
 	}
 
 
-	public ComboBoxField getType() {
-		return type;
+	public ComboBoxField getTheType() {
+		return theType;
 	}
 
 

@@ -46,7 +46,7 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 	private JTextArea text = new JTextArea();
 	private JScrollPane scroll1 = new JScrollPane(list);
 	private JScrollPane scroll2 = new JScrollPane(text);
-	private NeuralNetworkType type;
+	private NeuralNetworkType theType;
 
 	public CreateNeuralNetworkDialog(Frame owner) {
 		super(owner);
@@ -93,53 +93,53 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 	public void collectFields() throws ValidationException {
 		switch (list.getSelectedIndex()) {
 		case 0:
-			this.type = NeuralNetworkType.Automatic;
+			this.theType = NeuralNetworkType.Automatic;
 			break;			
 		case 1:
-			this.type = NeuralNetworkType.ADALINE;
+			this.theType = NeuralNetworkType.ADALINE;
 			break;
 		case 2:
-			this.type = NeuralNetworkType.ART1;
+			this.theType = NeuralNetworkType.ART1;
 			break;			
 		case 3:
-			this.type = NeuralNetworkType.BAM;
+			this.theType = NeuralNetworkType.BAM;
 			break;
 		case 4:
-			this.type = NeuralNetworkType.Boltzmann;
+			this.theType = NeuralNetworkType.Boltzmann;
 			break;
 		case 5:
-			this.type = NeuralNetworkType.CPN;
+			this.theType = NeuralNetworkType.CPN;
 			break;
 		case 6:
-			this.type = NeuralNetworkType.Feedforward;
+			this.theType = NeuralNetworkType.Feedforward;
 			break;
 		case 7:
-			this.type = NeuralNetworkType.RBF;
+			this.theType = NeuralNetworkType.RBF;
 			break;
 		case 8:
-			this.type = NeuralNetworkType.SOM;
+			this.theType = NeuralNetworkType.SOM;
 			break;
 		case 9:
-			this.type = NeuralNetworkType.Hopfield;
+			this.theType = NeuralNetworkType.Hopfield;
 			break;
 		case 10:
-			this.type = NeuralNetworkType.PNN;
+			this.theType = NeuralNetworkType.PNN;
 			break;
 		case 11:
-			this.type = NeuralNetworkType.Elman;
+			this.theType = NeuralNetworkType.Elman;
 			break;
 		case 12:
-			this.type = NeuralNetworkType.Jordan;
+			this.theType = NeuralNetworkType.Jordan;
 			break;
 		case 13:
-			this.type = NeuralNetworkType.SVM;
+			this.theType = NeuralNetworkType.SVM;
 			break;
 		}
 	}
 
 	@Override
 	public void setFields() {
-		switch (type) {
+		switch (theType) {
 		case Automatic:
 			this.list.setSelectedIndex(0);
 			break;			
@@ -186,12 +186,12 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 
 	}
 
-	public NeuralNetworkType getType() {
-		return type;
+	public NeuralNetworkType getTheType() {
+		return theType;
 	}
 
-	public void setType(NeuralNetworkType type) {
-		this.type = type;
+	public void setTheType(NeuralNetworkType t) {
+		this.theType = t;
 	}
 
 	public void valueChanged(ListSelectionEvent e) {

@@ -54,7 +54,7 @@ ListSelectionListener {
 	private JTextArea text = new JTextArea();
 	private JScrollPane scroll1 = new JScrollPane(list);
 	private JScrollPane scroll2 = new JScrollPane(text);
-	private CreateFileType type;
+	private CreateFileType theType;
 	private JTextField objectNameField;
 	private String filename;
 
@@ -116,19 +116,19 @@ ListSelectionListener {
 	public void collectFields() throws ValidationException {
 		switch (list.getSelectedIndex()) {
 		case 0:
-			this.type = CreateFileType.TextFile;
+			this.theType = CreateFileType.TextFile;
 			break;
 		case 1:
-			this.type = CreateFileType.MachineLearningMethod;
+			this.theType = CreateFileType.MachineLearningMethod;
 			break;
 		case 2:
-			this.type = CreateFileType.CSVFile;
+			this.theType = CreateFileType.CSVFile;
 			break;
 		case 3:
-			this.type = CreateFileType.TrainingFile;
+			this.theType = CreateFileType.TrainingFile;
 			break;
 		case 4:
-			this.type = CreateFileType.NEAT;
+			this.theType = CreateFileType.NEAT;
 			break;
 		}
 		
@@ -137,7 +137,7 @@ ListSelectionListener {
 
 	@Override
 	public void setFields() {
-		switch (type) {
+		switch (theType) {
 		case TextFile:
 			this.list.setSelectedIndex(0);
 			break;
@@ -156,12 +156,12 @@ ListSelectionListener {
 		}
 	}
 
-	public CreateFileType getType() {
-		return type;
+	public CreateFileType getTheType() {
+		return theType;
 	}
 
-	public void setType(CreateFileType type) {
-		this.type = type;
+	public void setTheType(CreateFileType t) {
+		this.theType = t;
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
