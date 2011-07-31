@@ -71,9 +71,9 @@ public class CreateNeuralNetwork {
 		MLMethod network = null;
 		CreateNeuralNetworkDialog dialog = new CreateNeuralNetworkDialog(
 				EncogWorkBench.getInstance().getMainWindow());
-		dialog.setType(NeuralNetworkType.Feedforward);
+		dialog.setTheType(NeuralNetworkType.Feedforward);
 		if (dialog.process()) {
-			switch (dialog.getType()) {
+			switch (dialog.getTheType()) {
 			case Automatic:
 				createAutomatic(path);
 				network=null;

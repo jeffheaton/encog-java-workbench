@@ -158,7 +158,7 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 		}
 	}
 
-	public BasicNetworkTrainingType getType() {
+	public BasicNetworkTrainingType getTheType() {
 		return type;
 	}
 

@@ -214,7 +214,7 @@ public class ObjectEditorFrame extends EncogCommonFrame implements
 			if (fieldObject instanceof Collection) {
 				ParameterizedType gtype = (ParameterizedType) field
 						.getGenericType();
-				Type[] types = gtype.getActualTypeArguments();
+				java.lang.reflect.Type[] types = gtype.getActualTypeArguments();
 
 				Object item = ((Class) types[0]).newInstance();
 				((Collection) fieldObject).add(item);
