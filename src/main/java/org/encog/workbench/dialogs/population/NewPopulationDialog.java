@@ -45,7 +45,7 @@ public class NewPopulationDialog extends EncogPropertiesDialog implements PopupL
 	private PopupField neatActivationField;
 	private ActivationFunction outputActivationFunction;
 	private ActivationFunction neatActivationFunction;
-	private CheckField snapshot;
+	private IntegerField activationCycles;
 	
 	public NewPopulationDialog() {
 		super(EncogWorkBench.getInstance().getMainWindow());
@@ -55,7 +55,7 @@ public class NewPopulationDialog extends EncogPropertiesDialog implements PopupL
 		addProperty(this.populationSize = new IntegerField("population size","Population Size",true,1,-1));
 		addProperty(this.inputNeurons = new IntegerField("input size","Input Neurons",true,1,-1));
 		addProperty(this.outputNeurons = new IntegerField("output size","output Neurons",true,1,-1));
-		addProperty(this.snapshot = new CheckField("snapshot","Snapshot"));
+		addProperty(this.activationCycles = new IntegerField("snapshot","Snapshot",true,0,5000));
 		
 		addProperty(this.outputActivationField = new PopupField("output activation",
 				"Output Activation Function", true));
@@ -135,17 +135,13 @@ public class NewPopulationDialog extends EncogPropertiesDialog implements PopupL
 		
 	}
 
-	/**
-	 * @return the snapshot
-	 */
-	public CheckField getSnapshot() {
-		return snapshot;
+	public IntegerField getActivationCycles() {
+		return activationCycles;
 	}
 
-	/**
-	 * @param snapshot the snapshot to set
-	 */
-	public void setSnapshot(CheckField snapshot) {
-		this.snapshot = snapshot;
+	public void setActivationCycles(IntegerField activationCycles) {
+		this.activationCycles = activationCycles;
 	}
+
+
 }
