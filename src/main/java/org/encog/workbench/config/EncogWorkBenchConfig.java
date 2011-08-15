@@ -75,12 +75,12 @@ public class EncogWorkBenchConfig {
 
 	public ErrorCalculationMode getErrorCalculation() {
 		switch (this.errorCalculation) {
-		case 0:
-			return ErrorCalculationMode.RMS;
 		case 1:
+			return ErrorCalculationMode.RMS;
+		case 0:
 			return ErrorCalculationMode.MSE;
 		default:
-			return ErrorCalculationMode.RMS;
+			return ErrorCalculationMode.MSE;
 		}
 	}
 
@@ -88,10 +88,10 @@ public class EncogWorkBenchConfig {
 		switch(errorCalculation)
 		{
 			case RMS:
-				this.errorCalculation = 0;
+				this.errorCalculation = 1;
 				break;
 			case MSE:
-				this.errorCalculation = 1;
+				this.errorCalculation = 0;
 				break;
 		}
 	}
