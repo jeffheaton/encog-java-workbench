@@ -26,7 +26,7 @@ package org.encog.workbench.dialogs.training.methods;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.encog.neural.flat.train.prop.RPROPConst;
+import org.encog.neural.networks.training.propagation.resilient.RPROPConst;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.training.DialogMaxError;
