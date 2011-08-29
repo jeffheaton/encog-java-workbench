@@ -58,7 +58,7 @@ public class AnalyzeWeightsTab extends EncogCommonTab implements ActionListener 
 	private BasicNetwork network;
 	private HistogramDataset dataAll;
 	private HistogramDataset dataWeights;
-	private HistogramDataset dataThresholds;
+	private HistogramDataset dataBiases;
 	
 	public AnalyzeWeightsTab(ProjectEGFile encogObject) {
 		super(encogObject);
@@ -86,14 +86,14 @@ public class AnalyzeWeightsTab extends EncogCommonTab implements ActionListener 
 		createAllDataset();
         ChartPanel allChart = new ChartPanel(createChart(this.dataAll));
         ChartPanel weightChart = new ChartPanel(createChart(this.dataWeights));
-        ChartPanel thresholdChart = new ChartPanel(createChart(this.dataThresholds));
+        ChartPanel biasesChart = new ChartPanel(createChart(this.dataBiases));
         
 		
 		this.tabs = new JTabbedPane();
 		this.add(tabs,BorderLayout.CENTER);
-		this.tabs.addTab("Weights & Thresholds", allChart);
-		this.tabs.addTab("Thresholds", weightChart);
-		this.tabs.addTab("Weights", thresholdChart);
+		this.tabs.addTab("Weights & Biases", allChart);
+		this.tabs.addTab("Weights", weightChart);
+		this.tabs.addTab("Biases", biasesChart);
 		
 
 		
@@ -104,17 +104,17 @@ public class AnalyzeWeightsTab extends EncogCommonTab implements ActionListener 
     	// all values
         this.dataAll = new HistogramDataset();
         double[] values = this.analyze.getAllValues();
-        this.dataAll.addSeries("Weights & Thresholds", values, 50);
+        this.dataAll.addSeries("Weights & Biases", values, 50);
         
         // weight values
-        this.dataThresholds = new HistogramDataset();
+        this.dataBiases = new HistogramDataset();
         double[] values2 = this.analyze.getWeightValues();
-        this.dataThresholds.addSeries("Weights", values2, 50);
+        this.dataBiases.addSeries("Biases", values2, 50);
         
         // threshold values
         this.dataWeights = new HistogramDataset();
         double[] values3 = this.analyze.getBiasValues();
-        this.dataWeights.addSeries("Thresholds", values3, 50);
+        this.dataWeights.addSeries("Weights", values3, 50);
             
     }
     
