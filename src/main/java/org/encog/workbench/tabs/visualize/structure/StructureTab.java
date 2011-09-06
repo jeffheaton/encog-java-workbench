@@ -33,7 +33,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -43,7 +45,9 @@ import javax.swing.border.Border;
 import org.apache.commons.collections15.Transformer;
 import org.encog.ml.MLMethod;
 import org.encog.neural.flat.FlatNetwork;
+import org.encog.neural.neat.NEATLink;
 import org.encog.neural.neat.NEATNetwork;
+import org.encog.neural.neat.NEATNeuron;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -205,7 +209,7 @@ public class StructureTab extends EncogCommonTab {
 
 	private Graph<DrawnNeuron, DrawnConnection> buildGraph(NEATNetwork neat) {
 		
-		/*int inputCount = 1;
+		int inputCount = 1;
 		int outputCount = 1;
 		int hiddenCount = 1;
 		int biasCount = 1;
@@ -267,8 +271,7 @@ public class StructureTab extends EncogCommonTab {
 			}
 		}
 
-		return result;*/
-		return null;
+		return result;
 	}
 
 	public Graph<DrawnNeuron, DrawnConnection> buildGraph(FlatNetwork flat) {
