@@ -74,6 +74,7 @@ public class NEATPopulationInfo extends JPanel {
 		y+=fm.getHeight();
 		g.drawString("Population Type:", 20, y);
 		g.drawString("Survival Rate:", 300, y);
+		g.drawString("Cycles:", 580, y);
 		y+=fm.getHeight();
 		g.drawString("Best Genome Score:", 20, y);
 		
@@ -129,6 +130,7 @@ public class NEATPopulationInfo extends JPanel {
 		y+=fm.getHeight();
 		g.drawString(type, 200, y);
 		g.drawString(Format.formatPercent(population.getSurvivalRate()), 450, y);
+		g.drawString(Format.formatInteger(population.getActivationCycles()), 730, y);
 		y+=fm.getHeight();
 		g.drawString(Format.formatDouble(bestScore,2), 200, y);		
 	}

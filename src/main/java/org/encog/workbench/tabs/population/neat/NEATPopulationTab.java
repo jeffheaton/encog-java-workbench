@@ -173,6 +173,7 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener 
 				.getNeatActivationFunction());
 		dialog.setOutputActivationFunction(this.population
 				.getOutputActivationFunction());
+		dialog.getActivationCycles().setValue(population.getActivationCycles());
 
 		if (dialog.process()) {
 			this.population.setOldAgePenalty(dialog.getOldAgePenalty()
@@ -191,6 +192,7 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener 
 					.getNeatActivationFunction());
 			this.population.setOutputActivationFunction(dialog
 					.getOutputActivationFunction());
+			this.population.setActivationCycles(dialog.getActivationCycles().getValue());
 			this.pi.repaint();
 		}
 	}

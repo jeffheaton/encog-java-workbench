@@ -26,6 +26,7 @@ package org.encog.workbench.dialogs.population;
 import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
+import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.PopupField;
 import org.encog.workbench.dialogs.common.PopupListener;
 
@@ -33,12 +34,14 @@ public class EditNEATPopulationDialog extends EditPopulationDialog implements Po
 
 	private PopupField outputActivationField;
 	private PopupField neatActivationField;
+	private IntegerField activationCycles;
 	private ActivationFunction outputActivationFunction;
 	private ActivationFunction neatActivationFunction;
 	
 	public EditNEATPopulationDialog() {
 		super(EncogWorkBench.getInstance().getMainWindow());
 				
+		addProperty(this.activationCycles = new IntegerField("cycles","Cycles",true,0,5000));
 		addProperty(this.outputActivationField = new PopupField("output activation",
 				"Output Activation Function", true));
 		addProperty(this.neatActivationField = new PopupField("NEAT activation",
@@ -99,6 +102,16 @@ public class EditNEATPopulationDialog extends EditPopulationDialog implements Po
 		this.neatActivationFunction = activationFunction;
 		this.neatActivationField.setValue(activationFunction.getClass()
 				.getSimpleName());
-		
+	}
+
+	/**
+	 * @return the activationCycles
+	 */
+	public IntegerField getActivationCycles() {
+		return activationCycles;
 	}	
+	
+	
+	
+	
 }
