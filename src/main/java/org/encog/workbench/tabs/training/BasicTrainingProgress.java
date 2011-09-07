@@ -47,6 +47,7 @@ import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.train.MLTrain;
+import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.Format;
@@ -272,6 +273,29 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		this.status = "Ready to Start";
 		
 	}
+	
+	private void saveMLMethod() {
+		if( this.getEncogObject()!=null ) {
+
+			((ProjectEGFile)this.getEncogObject()).save(train.getMethod());
+			if( this.getParentTab()!=null ) {
+				this.getParentTab().setEncogObject(this.getEncogObject());
+			}
+		} 
+		
+		if( this.train.canContinue() ) {
+			TrainingContinuation cont = train.pause();	
+			String name = FileUtil.getFileName(this.getEncogObject().getFile());
+			name = FileUtil.forceExtension(name + "-cont", "eg");
+			File path = new File(name);
+			EncogWorkBench.getInstance().save(path, cont);
+			EncogWorkBench.getInstance().refresh();
+		}
+	}
+	
+	private void saveNEATPopulation() {
+		((ProjectEGFile)this.getEncogObject()).save();
+	}
 
 	private void performClose() {
 		
@@ -281,20 +305,13 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		if (EncogWorkBench.askQuestion("Training", "Save the training?")) {
 
 			if( this.getEncogObject()!=null ) {
-
-				((ProjectEGFile)this.getEncogObject()).save(train.getMethod());
-				if( this.getParentTab()!=null ) {
-					this.getParentTab().setEncogObject(this.getEncogObject());
+				Object obj = ((ProjectEGFile)this.getEncogObject()).getObject();
+				
+				if( obj instanceof NEATPopulation ) {
+					saveNEATPopulation();
+				} else {
+					saveMLMethod();
 				}
-			} 
-			
-			if( this.train.canContinue() ) {
-				TrainingContinuation cont = train.pause();	
-				String name = FileUtil.getFileName(this.getEncogObject().getFile());
-				name = FileUtil.forceExtension(name + "-cont", "eg");
-				File path = new File(name);
-				EncogWorkBench.getInstance().save(path, cont);
-				EncogWorkBench.getInstance().refresh();
 			}
 						
 			EncogWorkBench.getInstance().refresh();
