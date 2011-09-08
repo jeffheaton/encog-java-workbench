@@ -35,6 +35,7 @@ public enum TrainingDataType {
 	Patterns1,
 	Patterns2,
 	Digits,
-	Download
+	Download,
+	Encoder
 
 }

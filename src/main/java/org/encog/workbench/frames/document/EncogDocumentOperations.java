@@ -297,6 +297,9 @@ public class EncogDocumentOperations {
 			case Download:
 				CreateTrainingData.downloadURL(name);
 				break;
+			case Encoder:
+				CreateTrainingData.generateEncoder(name);
+				break;
 			}
 			EncogWorkBench.getInstance().refresh();
 		}

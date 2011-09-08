@@ -43,11 +43,13 @@ import org.encog.bot.BotUtil;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.util.Format;
+import org.encog.util.benchmark.EncoderTrainingFactory;
 import org.encog.util.benchmark.RandomTrainingFactory;
 import org.encog.util.csv.CSVFormat;
 import org.encog.util.file.FileUtil;
 import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.trainingdata.CreateEncoderDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateMarketTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.RandomTrainingDataDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
@@ -300,6 +302,32 @@ public class CreateTrainingData {
 
 		} catch (final IOException e) {
 			throw new AnalystError(e);
+		}
+	}
+	
+	public static void generateEncoder(String name) throws IOException {
+		CreateEncoderDialog dialog = new CreateEncoderDialog(
+				EncogWorkBench.getInstance().getMainWindow());
+
+		dialog.getInputOutputCount().setValue(10);
+		dialog.getInputHigh().setValue(1);
+		dialog.getInputLow().setValue(0);
+		dialog.getIdealHigh().setValue(1);
+		dialog.getIdealLow().setValue(0);
+
+		if (dialog.process()) {
+			int inputCount = dialog.getInputOutputCount().getValue();
+			double inputHigh = dialog.getInputHigh().getValue();
+			double inputLow = dialog.getInputLow().getValue();
+			double outputHigh = dialog.getIdealHigh().getValue();
+			double outputLow = dialog.getIdealLow().getValue();
+			boolean complement = dialog.getComplement().getValue();
+
+			MLDataSet trainingData = EncoderTrainingFactory.generateTraining(inputCount, complement, inputLow, inputHigh, outputLow, outputHigh);
+
+			File targetFile = new File(EncogWorkBench.getInstance()
+					.getProjectDirectory(), name);
+			EncogUtility.saveCSV(targetFile, CSVFormat.ENGLISH, trainingData);
 		}
 	}
 
