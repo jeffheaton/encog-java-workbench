@@ -38,6 +38,8 @@ import javax.swing.JPanel;
 
 import org.encog.engine.network.activation.ActivationBiPolar;
 import org.encog.engine.network.activation.ActivationCompetitive;
+import org.encog.engine.network.activation.ActivationElliott;
+import org.encog.engine.network.activation.ActivationElliottSymmetric;
 import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.engine.network.activation.ActivationGaussian;
 import org.encog.engine.network.activation.ActivationLOG;
@@ -56,7 +58,8 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 	public static final String[] ACTIVATION_FUNCTION = { "ActivationBiPolar", "ActivationCompetitive",
 			"ActivationGaussian", "ActivationLinear", "ActivationLOG",
 			"ActivationSigmoid", "ActivationSIN", "ActivationSoftMax",
-			"ActivationStep", "ActivationTANH", "ActivationRamp" };
+			"ActivationStep", "ActivationTANH", "ActivationRamp", 
+			"ActivationElliott", "ActivationElliottSymmetric" };
 
 	private JComboBox select = new JComboBox(ACTIVATION_FUNCTION);
 	private EquationPanel equation;
@@ -147,7 +150,13 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 			break;
 		case 10:
 			newActivation = new ActivationRamp();
-			break;			
+			break;	
+		case 11:
+			newActivation = new ActivationElliott();
+			break;
+		case 12:
+			newActivation = new ActivationElliottSymmetric();
+			break;
 
 		}
 		
