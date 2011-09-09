@@ -26,6 +26,8 @@ package org.encog.workbench.tabs.population.neat;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -37,8 +39,10 @@ import javax.swing.JTable;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.ml.genetic.genome.Genome;
+import org.encog.ml.genetic.species.Species;
 import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATPopulation;
+import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.neat.training.NEATTraining;
 import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.TrainingSetScore;
@@ -53,8 +57,9 @@ import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.SpeciesModel;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.training.BasicTrainingProgress;
+import org.encog.workbench.tabs.visualize.structure.GenomeStructureTab;
 
-public class NEATPopulationTab extends EncogCommonTab implements ActionListener {
+public class NEATPopulationTab extends EncogCommonTab implements ActionListener, MouseListener {
 
 	private JButton btnTrain;
 	private JButton btnEdit;
@@ -102,11 +107,13 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener 
 
 		this.populationModel = new GeneralPopulationModel(population);
 		this.populationTable = new JTable(this.populationModel);
-		this.populationScroll = new JScrollPane(this.populationTable);
+		this.populationTable.addMouseListener(this);
+		this.populationScroll = new JScrollPane(this.populationTable);		
 
 		this.speciesModel = new SpeciesModel(population);
 		this.speciesTable = new JTable(this.speciesModel);
 		this.speciesScroll = new JScrollPane(this.speciesTable);
+		this.speciesTable.addMouseListener(this);
 
 		this.innovationModel = new InnovationModel(population);
 		this.innovationTable = new JTable(this.innovationModel);
@@ -173,6 +180,7 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener 
 				.getNeatActivationFunction());
 		dialog.setOutputActivationFunction(this.population
 				.getOutputActivationFunction());
+		dialog.getActivationCycles().setValue(population.getActivationCycles());
 
 		if (dialog.process()) {
 			this.population.setOldAgePenalty(dialog.getOldAgePenalty()
@@ -191,18 +199,18 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener 
 					.getNeatActivationFunction());
 			this.population.setOutputActivationFunction(dialog
 					.getOutputActivationFunction());
+			this.population.setActivationCycles(dialog.getActivationCycles().getValue());
 			this.pi.repaint();
 		}
 	}
 
 	private void performTrain() {
 		InputNEAT dialog = new InputNEAT();
+		dialog.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 		if (dialog.process()) {
 			ProjectEGFile popFile = dialog.getPopulation();
 			NEATPopulation pop = (NEATPopulation) popFile.getObject();
 
-			pop.setInputCount(2);
-			pop.setOutputCount(1);
 			MLDataSet training = dialog.getTrainingSet();
 
 			if (dialog.getLoadToMemory().getValue()) {
@@ -223,6 +231,51 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener 
 	@Override
 	public String getName() {
 		return "Population: " + this.getEncogObject().getName();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (e.getClickCount() == 2) {
+	         JTable target = (JTable)e.getSource();
+	         int row = target.getSelectedRow();
+	         if( target==this.populationTable) {
+	        	 NEATGenome genome = (NEATGenome)this.population.get(row);
+	        	 GenomeStructureTab tab = new GenomeStructureTab(genome);
+	        	 EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
+	         } else if( target==this.speciesTable ) {
+	        	 Species species = (Species)this.population.getSpecies().get(row);
+	        	 NEATGenome genome = (NEATGenome)species.getLeader();
+	        	 if(genome!=null) {
+	        		 GenomeStructureTab tab = new GenomeStructureTab(genome);
+	        		 EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
+	        	 }
+	         }
+	   }
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

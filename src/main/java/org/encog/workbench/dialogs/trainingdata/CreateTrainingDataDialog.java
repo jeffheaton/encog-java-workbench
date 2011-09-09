@@ -102,6 +102,7 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		this.model.addElement("Simple Pattern (part 1)");
 		this.model.addElement("Simple Pattern (part 2)");
 		this.model.addElement("Download from URL");
+		this.model.addElement("Fahlman Encoder");
 		
 		
 		this.list.addListSelectionListener(this);
@@ -154,7 +155,9 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		case 10:
 			this.type = TrainingDataType.Download;
 			break;		
-			
+		case 11:
+			this.type = TrainingDataType.Encoder;
+			break;
 		}
 	}
 
@@ -193,6 +196,9 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			break;
 		case Download:
 			this.list.setSelectedIndex(10);
+			break;
+		case Encoder:
+			this.list.setSelectedIndex(11);
 			break;
 		}
 
@@ -261,6 +267,9 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		case 10:
 			this.text
 					.setText("Enter a URL and the contents will be downloaded to your project.");
+			break;
+		case 11:
+			this.text.setText("A very simple data set that has the same number of inputs as ideals. Usually a smaller number of hidden neurons is placed between the input and output layers of a neural network trained with this data. The neural network must learn to encode the input to the smaller hidden layer.");
 			break;
 			
 		}

@@ -55,7 +55,7 @@ public class NewPopulationDialog extends EncogPropertiesDialog implements PopupL
 		addProperty(this.populationSize = new IntegerField("population size","Population Size",true,1,-1));
 		addProperty(this.inputNeurons = new IntegerField("input size","Input Neurons",true,1,-1));
 		addProperty(this.outputNeurons = new IntegerField("output size","output Neurons",true,1,-1));
-		addProperty(this.activationCycles = new IntegerField("snapshot","Snapshot",true,0,5000));
+		addProperty(this.activationCycles = new IntegerField("cycles","Cycles",true,0,5000));
 		
 		addProperty(this.outputActivationField = new PopupField("output activation",
 				"Output Activation Function", true));
