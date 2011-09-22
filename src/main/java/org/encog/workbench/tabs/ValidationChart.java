@@ -38,8 +38,7 @@ public class ValidationChart {
 
 	public void perform(Frame owner) {
 		try {
-		final InputValidationChart dialog = new InputValidationChart(
-				EncogWorkBench.getInstance().getMainWindow());
+		final InputValidationChart dialog = new InputValidationChart();
 
 		if (dialog.process()) {
 			method = dialog.getNetwork();

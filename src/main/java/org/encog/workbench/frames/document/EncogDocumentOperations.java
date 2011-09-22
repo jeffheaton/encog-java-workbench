@@ -202,8 +202,7 @@ public class EncogDocumentOperations {
 
 	public void performEvaluate() {
 		try {
-			EvaluateDialog dialog = new EvaluateDialog(EncogWorkBench
-					.getInstance().getMainWindow());
+			EvaluateDialog dialog = new EvaluateDialog();
 			if (dialog.process()) {
 				MLMethod method = dialog.getNetwork();
 				MLDataSet training = dialog.getTrainingSet();

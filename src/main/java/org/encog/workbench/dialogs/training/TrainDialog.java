@@ -35,8 +35,8 @@ public class TrainDialog extends NetworkAndTrainingDialog {
 
 	private final CheckField loadToMemory;
 	
-	public TrainDialog(Frame owner) {
-		super(owner);
+	public TrainDialog(boolean includePop) {
+		super(includePop);
 		setSize(600,250);
 		addProperty(this.loadToMemory = new CheckField("load to memory",
 				"Load to Memory (better performance)"));

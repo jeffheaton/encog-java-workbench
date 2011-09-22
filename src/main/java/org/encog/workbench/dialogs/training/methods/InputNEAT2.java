@@ -21,35 +21,26 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.dialogs.training;
+package org.encog.workbench.dialogs.training.methods;
 
 import java.io.File;
 import java.util.List;
 
-import javax.swing.JComboBox;
-
-import org.encog.ml.MLMethod;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.WorkBenchError;
+import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
+import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
-import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 
-/**
- * Basic dialog box that displays two combo boxes used to select
- * the training set and network to be used.  Subclasses can
- * add additional fields.  This class is based on the Encog
- * common dialog box.
- * @author jheaton
- */
-public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
+
+public class InputNEAT2 extends EncogPropertiesDialog {
 
 	private ComboBoxField comboTraining;
-	private ComboBoxField comboNetwork;
+	private ComboBoxField comboPopulation;
 	
 	/**
 	 * The serial id.
@@ -64,21 +55,33 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	/**
 	 * All available networks to display in the combo box.
 	 */
-	private List<ProjectEGFile> networks;
+	private List<ProjectEGFile> populations;
+	
+	private final DoubleField maxError;
+	
+	private final CheckField loadToMemory;
 
 	/**
 	 * Construct the dialog box.
 	 * @param owner The owner of the dialog box.
 	 */
-	public NetworkAndTrainingDialog(boolean includePop) {
+	public InputNEAT2() {
 		
 		super(EncogWorkBench.getInstance().getMainWindow());
-		findData(includePop);
-		setTitle("Network and Training Set");
-		setSize(400,400);
+		findData();
+		setTitle("Train NEAT Population");
+		setSize(500,400);
 		setLocation(200,200);
 		addProperty(this.comboTraining = new ComboBoxField("training set","Training Set",true,this.trainingSets));
-		addProperty(this.comboNetwork = new ComboBoxField("network","Neural Network",true,this.networks));
+		addProperty(this.comboPopulation = new ComboBoxField("population","NEAT Population",true,this.populations));
+		addProperty(this.loadToMemory = new CheckField("load to memory",
+			"Load to Memory (better performance)"));
+		addProperty(this.maxError = new DoubleField("max error",
+				"Maximum Error Percent(0-100)", true, 0, 100));
+
+		
+		render();
+		this.getLoadToMemory().setValue(true);
 	}
 
 
@@ -87,35 +90,21 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	 * Obtain the data needed to fill in the network and training set
 	 * combo boxes.
 	 */
-	private void findData(boolean includePop) {
+	private void findData() {
 		this.trainingSets = EncogWorkBench.getInstance().getTrainingData();
-		this.networks = EncogWorkBench.getInstance().getMLMethods(includePop);
-	}
-	
-	public Object getMethodOrPopulation() {
-		if( this.comboNetwork.getSelectedValue()==null )
-			return null;
-		
-		return (((ProjectEGFile)this.comboNetwork.getSelectedValue()).getObject());
+		this.populations = EncogWorkBench.getInstance().getNEATPopulations();
 	}
 
 	/**
 	 * @return The network that the user chose.
 	 */
-	public MLMethod getNetwork() {
-		Object obj = getMethodOrPopulation();
+	public ProjectEGFile getPopulation() {
+		if( this.comboPopulation.getSelectedValue()==null )
+			return null;
 		
-		if( !(obj instanceof MLMethod) ) {
-			throw new WorkBenchError("This operation requires a MLMethod, not a \n" + obj.getClass().getName());
-		}
-		
-		return (MLMethod)obj;
+		return ((ProjectEGFile)this.comboPopulation.getSelectedValue());
 	}
 	
-
-	public void setMethod(ProjectFile method) {
-		((JComboBox)this.comboNetwork.getField()).setSelectedItem(method);
-	}
 
 	/**
 	 * @return The training set that the user chose.
@@ -131,10 +120,30 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	public ComboBoxField getComboTraining() {
 		return this.comboTraining;
 	}
-	
-	public ComboBoxField getComboNetwork() {
-		return this.comboNetwork;
+
+	public ComboBoxField getComboPopulation() {
+		return comboPopulation;
 	}
+
+	public List<ProjectTraining> getTrainingSets() {
+		return trainingSets;
+	}
+
+	public List<ProjectEGFile> getPopulations() {
+		return null;
+	}
+
+
+	public DoubleField getMaxError() {
+		return maxError;
+	}
+
+
+
+	public CheckField getLoadToMemory() {
+		return loadToMemory;
+	}
+
 
 
 }

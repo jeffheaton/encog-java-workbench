@@ -29,8 +29,8 @@ import org.encog.workbench.dialogs.training.NetworkAndTrainingDialog;
 
 public class EvaluateDialog extends NetworkAndTrainingDialog {
 
-	public EvaluateDialog(Frame owner) {
-		super(owner);
+	public EvaluateDialog() {
+		super(false);
 		setTitle("Evaluate Training Set");
 		render();
 	}

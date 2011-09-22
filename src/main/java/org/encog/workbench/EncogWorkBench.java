@@ -345,7 +345,7 @@ public class EncogWorkBench implements Runnable {
 		return this.getMainWindow().getTree().getModel().getProjectDirectory();
 	}
 
-	public List<ProjectEGFile> getMLMethods() {
+	public List<ProjectEGFile> getMLMethods(boolean includePop) {
 		List<ProjectEGFile> result = new ArrayList<ProjectEGFile>();
 
 		for (ProjectItem item : this.getMainWindow().getTree().getModel()
@@ -358,6 +358,8 @@ public class EncogWorkBench implements Runnable {
 					continue;
 				}
 				if (MLMethod.class.isAssignableFrom(clazz)) {
+					result.add(item2);
+				} else if (NEATPopulation.class.isAssignableFrom(clazz) && includePop) {
 					result.add(item2);
 				}
 			}

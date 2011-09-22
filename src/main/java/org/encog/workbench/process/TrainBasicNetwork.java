@@ -39,6 +39,8 @@ import org.encog.neural.art.ART1;
 import org.encog.neural.cpn.CPN;
 import org.encog.neural.cpn.training.TrainInstar;
 import org.encog.neural.cpn.training.TrainOutstar;
+import org.encog.neural.neat.NEATPopulation;
+import org.encog.neural.neat.training.NEATTraining;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.ContainsFlat;
 import org.encog.neural.networks.training.CalculateScore;
@@ -75,6 +77,7 @@ import org.encog.workbench.dialogs.training.methods.InputGenetic;
 import org.encog.workbench.dialogs.training.methods.InputInstar;
 import org.encog.workbench.dialogs.training.methods.InputLMA;
 import org.encog.workbench.dialogs.training.methods.InputManhattan;
+import org.encog.workbench.dialogs.training.methods.InputNEAT;
 import org.encog.workbench.dialogs.training.methods.InputOutstar;
 import org.encog.workbench.dialogs.training.methods.InputQPROP;
 import org.encog.workbench.dialogs.training.methods.InputResilient;
@@ -105,106 +108,138 @@ public class TrainBasicNetwork {
 		this.mlMethod = mlMethod;
 		this.parentTab = parentTab;
 	}
+	
+	private void performNEATTrain(NEATPopulation population, MLDataSet trainingData, ProjectEGFile file) {
+		
+		InputNEAT dialog = new InputNEAT();
+
+		if (dialog.process()) {
+			CalculateScore score = new TrainingSetScore(trainingData);
+			
+			int kFold = dialog.getKfold().getValue();
+			
+			if( kFold>0 ) {
+				trainingData = this.wrapTrainingData(trainingData);
+			}
+
+			MLTrain train = new NEATTraining(score, population);
+			
+			if( kFold>0 ) {
+				train = this.wrapTrainer(trainingData,train,kFold);
+			}
+			
+
+			startup(file, train, dialog.getMaxError().getValue() / 100.0);
+		}
+	}
+	
+	private void performMethodTrain(MLMethod method, MLDataSet trainingData, ProjectEGFile file) {
+	
+		if (method == null) {
+			EncogWorkBench.displayError("Error",
+					"Machine language method is required to train.");
+			return;
+		}
+
+		if (method instanceof ART1) {
+			EncogWorkBench
+					.displayError("Error",
+							"ART1 Networks are not trained, they learn as they are queried.");
+			return;
+		}
+
+		if (trainingData == null) {
+			EncogWorkBench.displayError("Error",
+					"Training set is required to train.");
+			return;
+		}
+
+		if (method instanceof HopfieldNetwork) {
+			HopfieldNetwork hp = (HopfieldNetwork) method;
+			for (MLDataPair pair : trainingData) {
+				hp.addPattern(pair.getInput());
+			}
+			if (EncogWorkBench.askQuestion("Hopfield",
+					"Training done, save?")) {
+				file.save();
+			}
+		} else if (method instanceof SOM) {
+			performSOM(file, trainingData);
+		} else if (method instanceof SVM) {
+			performSVM(file, trainingData);
+		} else if (method instanceof CPN) {
+			performCPN(file, trainingData);
+		} else if (method instanceof BasicNetwork || method instanceof RBFNetwork ) {
+
+			ChooseBasicNetworkTrainingMethod choose = new ChooseBasicNetworkTrainingMethod(
+					EncogWorkBench.getInstance().getMainWindow(),method);
+			if (choose.process()) {
+				switch (choose.getTheType()) {
+				case SCG:
+					performSCG(file, trainingData);
+					break;
+				case PropagationResilient:
+					performRPROP(file, trainingData);
+					break;
+				case PropagationBack:
+					performBPROP(file, trainingData);
+					break;
+				case PropagationManhattan:
+					performManhattan(file, trainingData);
+					break;
+				case LevenbergMarquardt:
+					performLMA(file, trainingData);
+					break;
+				case Genetic:
+					performGenetic(file, trainingData);
+					break;
+				case Annealing:
+					performAnnealing(file, trainingData);
+					break;
+				case ADALINE:
+					performADALINE(file, trainingData);
+					break;
+				case PropagationQuick:
+					performQPROP(file, trainingData);
+					break;
+				case SVD:
+					performSVD(file, trainingData);
+					break;
+				}
+			}
+		} else {
+			EncogWorkBench.displayError("Unknown Method",
+					"No training method is available for: "
+							+ method.getClass().getName());
+		}
+
+	}
 
 	public void performTrain() {
 
-		TrainDialog dialog = new TrainDialog(EncogWorkBench.getInstance()
-				.getMainWindow());
+		TrainDialog dialog = new TrainDialog(true);
 		if (mlMethod != null)
 			dialog.setMethod(mlMethod);
 
 		if (dialog.process()) {
-			MLMethod method = dialog.getNetwork();
-			MLDataSet trainingData = dialog.getTrainingSet();
-
-			if (method == null) {
-				EncogWorkBench.displayError("Error",
-						"Machine language method is required to train.");
-				return;
-			}
-
-			if (method instanceof ART1) {
-				EncogWorkBench
-						.displayError("Error",
-								"ART1 Networks are not trained, they learn as they are queried.");
-				return;
-			}
-
-			if (trainingData == null) {
-				EncogWorkBench.displayError("Error",
-						"Training set is required to train.");
-				return;
-			}
-
-			if (method instanceof HopfieldNetwork) {
-				HopfieldNetwork hp = (HopfieldNetwork) method;
-				ProjectEGFile file = (ProjectEGFile) dialog.getComboNetwork()
-						.getSelectedValue();
-				for (MLDataPair pair : trainingData) {
-					hp.addPattern(pair.getInput());
-				}
-				if (EncogWorkBench.askQuestion("Hopfield",
-						"Training done, save?")) {
-					file.save();
-				}
-			} else if (method instanceof SOM) {
-				ProjectEGFile file = (ProjectEGFile) dialog.getComboNetwork()
-						.getSelectedValue();
-				performSOM(file, trainingData);
-			} else if (method instanceof SVM) {
-				ProjectEGFile file = (ProjectEGFile) dialog.getComboNetwork()
-						.getSelectedValue();
-				performSVM(file, trainingData);
-			} else if (method instanceof CPN) {
-				ProjectEGFile file = (ProjectEGFile) dialog.getComboNetwork()
-						.getSelectedValue();
-				performCPN(file, trainingData);
-			} else if (method instanceof BasicNetwork || method instanceof RBFNetwork ) {
-
-				ChooseBasicNetworkTrainingMethod choose = new ChooseBasicNetworkTrainingMethod(
-						EncogWorkBench.getInstance().getMainWindow(),method);
-				if (choose.process()) {
-					ProjectEGFile file = (ProjectEGFile) dialog
-							.getComboNetwork().getSelectedValue();
-
-					switch (choose.getTheType()) {
-					case SCG:
-						performSCG(file, trainingData);
-						break;
-					case PropagationResilient:
-						performRPROP(file, trainingData);
-						break;
-					case PropagationBack:
-						performBPROP(file, trainingData);
-						break;
-					case PropagationManhattan:
-						performManhattan(file, trainingData);
-						break;
-					case LevenbergMarquardt:
-						performLMA(file, trainingData);
-						break;
-					case Genetic:
-						performGenetic(file, trainingData);
-						break;
-					case Annealing:
-						performAnnealing(file, trainingData);
-						break;
-					case ADALINE:
-						performADALINE(file, trainingData);
-						break;
-					case PropagationQuick:
-						performQPROP(file, trainingData);
-						break;
-					case SVD:
-						performSVD(file, trainingData);
-						break;
-					}
-				}
+						
+			Object obj = dialog.getMethodOrPopulation();
+			
+			if( obj instanceof MLMethod ) {
+				MLMethod method = (MLMethod)obj;
+				MLDataSet trainingData = dialog.getTrainingSet();
+				ProjectEGFile file = (ProjectEGFile) dialog
+					.getComboNetwork().getSelectedValue();
+				performMethodTrain(method, trainingData, file);
 			} else {
-				EncogWorkBench.displayError("Unknown Method",
-						"No training method is available for: "
-								+ method.getClass().getName());
+				NEATPopulation population = (NEATPopulation)obj;
+				MLDataSet trainingData = dialog.getTrainingSet();
+				ProjectEGFile file = (ProjectEGFile) dialog
+					.getComboNetwork().getSelectedValue();
+				performNEATTrain(population, trainingData, file);
 			}
+
+			
 		}
 	}
 

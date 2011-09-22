@@ -50,7 +50,7 @@ import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.population.EditNEATPopulationDialog;
 import org.encog.workbench.dialogs.population.ExtractGenomes;
-import org.encog.workbench.dialogs.training.methods.InputNEAT;
+import org.encog.workbench.dialogs.training.methods.InputNEAT2;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.GeneralPopulationModel;
 import org.encog.workbench.models.InnovationModel;
@@ -210,7 +210,7 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 	}
 
 	private void performTrain() {
-		InputNEAT dialog = new InputNEAT();
+		InputNEAT2 dialog = new InputNEAT2();
 		dialog.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 		if (dialog.process()) {
 			ProjectEGFile popFile = dialog.getPopulation();

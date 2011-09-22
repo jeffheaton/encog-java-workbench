@@ -47,8 +47,8 @@ public class InputValidationChart extends NetworkAndTrainingDialog {
 	 * 
 	 * @param owner
 	 */
-	public InputValidationChart(final Frame owner) {
-		super(owner);
+	public InputValidationChart() {
+		super(false);
 		setTitle("Validation Chart");
 		setSize(400, 400);
 		setLocation(200, 200);
