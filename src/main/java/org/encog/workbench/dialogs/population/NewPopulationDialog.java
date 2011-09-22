@@ -23,14 +23,11 @@
  */
 package org.encog.workbench.dialogs.population;
 
-import java.awt.Frame;
-
 import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.engine.network.activation.ActivationLinear;
-import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.engine.network.activation.ActivationSteepenedSigmoid;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.activation.ActivationDialog;
-import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.PopupField;
@@ -64,7 +61,7 @@ public class NewPopulationDialog extends EncogPropertiesDialog implements PopupL
 
 
 		render();
-		this.setNeatActivationFunction(new ActivationSigmoid());
+		this.setNeatActivationFunction(new ActivationSteepenedSigmoid());
 		this.setOutputActivationFunction(new ActivationLinear());
 	}
 

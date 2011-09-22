@@ -48,6 +48,7 @@ import org.encog.engine.network.activation.ActivationRamp;
 import org.encog.engine.network.activation.ActivationSIN;
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.engine.network.activation.ActivationSoftMax;
+import org.encog.engine.network.activation.ActivationSteepenedSigmoid;
 import org.encog.engine.network.activation.ActivationStep;
 import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
@@ -59,7 +60,7 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 			"ActivationGaussian", "ActivationLinear", "ActivationLOG",
 			"ActivationSigmoid", "ActivationSIN", "ActivationSoftMax",
 			"ActivationStep", "ActivationTANH", "ActivationRamp", 
-			"ActivationElliott", "ActivationElliottSymmetric" };
+			"ActivationElliott", "ActivationElliottSymmetric", "ActivationSteepenedSigmoid" };
 
 	private JComboBox select = new JComboBox(ACTIVATION_FUNCTION);
 	private EquationPanel equation;
@@ -156,6 +157,9 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 			break;
 		case 12:
 			newActivation = new ActivationElliottSymmetric();
+			break;
+		case 13:
+			newActivation = new ActivationSteepenedSigmoid();
 			break;
 
 		}
