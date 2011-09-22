@@ -36,27 +36,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
-import org.encog.ml.data.MLDataSet;
-import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.ml.genetic.genome.Genome;
 import org.encog.ml.genetic.species.Species;
 import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATGenome;
-import org.encog.neural.neat.training.NEATTraining;
-import org.encog.neural.networks.training.CalculateScore;
-import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.population.EditNEATPopulationDialog;
 import org.encog.workbench.dialogs.population.ExtractGenomes;
-import org.encog.workbench.dialogs.training.methods.InputNEAT2;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.GeneralPopulationModel;
 import org.encog.workbench.models.InnovationModel;
 import org.encog.workbench.models.SpeciesModel;
+import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.training.BasicTrainingProgress;
 import org.encog.workbench.tabs.visualize.structure.GenomeStructureTab;
 
 public class NEATPopulationTab extends EncogCommonTab implements ActionListener, MouseListener {
@@ -210,27 +204,9 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 	}
 
 	private void performTrain() {
-		InputNEAT2 dialog = new InputNEAT2();
-		dialog.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
-		if (dialog.process()) {
-			ProjectEGFile popFile = dialog.getPopulation();
-			NEATPopulation pop = (NEATPopulation) popFile.getObject();
-
-			MLDataSet training = dialog.getTrainingSet();
-
-			if (dialog.getLoadToMemory().getValue()) {
-				training = ((BufferedMLDataSet) training).loadToMemory();
-			}
-
-			CalculateScore score = new TrainingSetScore(training);
-			NEATTraining train = new NEATTraining(score, pop);
-
-			BasicTrainingProgress tab = new BasicTrainingProgress(train,
-					popFile, train.getTraining());
-			tab.setMaxError(dialog.getMaxError().getValue() / 100);
-			EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
-
-		}
+		
+		TrainBasicNetwork t = new TrainBasicNetwork((ProjectEGFile)this.getEncogObject(),this);
+		t.performTrain();
 	}
 
 	@Override
