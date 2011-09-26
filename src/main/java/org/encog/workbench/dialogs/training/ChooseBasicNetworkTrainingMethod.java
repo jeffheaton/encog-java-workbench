@@ -23,7 +23,6 @@
  */
 package org.encog.workbench.dialogs.training;
 
-import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -32,17 +31,13 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.encog.ml.MLMethod;
-import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
-import org.encog.workbench.dialogs.createnetwork.NeuralNetworkType;
 
 public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implements
 		ListSelectionListener {
@@ -76,6 +71,7 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 		this.model.addElement("Simulated Annealing");
 		this.model.addElement("ADALINE Training");
 		this.model.addElement("Singular Value Decomposition (SVD)");
+		this.model.addElement("Particle Swarm Optimization (PSO)");
 
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -118,6 +114,9 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 			break;
 		case 9:
 			this.type = BasicNetworkTrainingType.SVD;
+			break;		
+		case 10:
+			this.type = BasicNetworkTrainingType.PSO;
 			break;
 		}
 	}
@@ -154,6 +153,9 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 			break;
 		case SVD:
 			this.list.setSelectedIndex(9);
+			break;
+		case PSO:
+			this.list.setSelectedIndex(10);
 			break;
 		}
 	}
@@ -208,7 +210,10 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 			this.text
 					.setText("SVD training can only be used for RBF networks at this time.  Further, the RBF network must have a single output neuron.  SVD is very fast, and will accomplish training in a single iteration.");
 			break;
-
+			
+		case 10:
+			this.text.setText("PSO can be a very effective training algorithm.  PSO performs global search, and is nearly as susceptible to local minima as propagation training.");
+			break;
 		}
 
 		this.text.setSelectionStart(0);
