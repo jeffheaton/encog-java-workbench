@@ -26,6 +26,7 @@ package org.encog.workbench.process;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
 import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.ml.MLMethod;
 import org.encog.ml.data.MLDataPair;
@@ -55,6 +56,7 @@ import org.encog.neural.networks.training.propagation.quick.QuickPropagation;
 import org.encog.neural.networks.training.propagation.resilient.RPROPType;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.networks.training.propagation.scg.ScaledConjugateGradient;
+import org.encog.neural.networks.training.pso.NeuralPSO;
 import org.encog.neural.networks.training.simple.TrainAdaline;
 import org.encog.neural.rbf.RBFNetwork;
 import org.encog.neural.rbf.training.SVDTraining;
@@ -79,6 +81,7 @@ import org.encog.workbench.dialogs.training.methods.InputLMA;
 import org.encog.workbench.dialogs.training.methods.InputManhattan;
 import org.encog.workbench.dialogs.training.methods.InputNEAT;
 import org.encog.workbench.dialogs.training.methods.InputOutstar;
+import org.encog.workbench.dialogs.training.methods.InputPSO;
 import org.encog.workbench.dialogs.training.methods.InputQPROP;
 import org.encog.workbench.dialogs.training.methods.InputResilient;
 import org.encog.workbench.dialogs.training.methods.InputSCG;
@@ -204,6 +207,9 @@ public class TrainBasicNetwork {
 					break;
 				case SVD:
 					performSVD(file, trainingData);
+					break;
+				case PSO:
+					performPSO(file, trainingData);
 					break;
 				}
 			}
@@ -381,6 +387,25 @@ public class TrainBasicNetwork {
 					(BasicNetwork) file.getObject(),
 					new RangeRandomizer(-1, 1), score, populationSize,
 					mutationPercent, percentToMate);
+			train.setTraining(trainingData);
+			startup(file, train, dialog.getMaxError().getValue() / 100.0);
+		}
+
+	}
+	
+	private void performPSO(ProjectEGFile file, MLDataSet trainingData) {
+		InputPSO dialog = new InputPSO();
+		if (dialog.process()) {
+			final int particleCount = dialog.getParticleCount().getValue();
+			final double c1 = dialog.getC1().getValue();
+			final double c2 = dialog.getC2().getValue();
+
+			CalculateScore score = new TrainingSetScore(trainingData);
+			final NeuralPSO train = new NeuralPSO(
+					(BasicNetwork) file.getObject(),
+					new NguyenWidrowRandomizer(), score, particleCount);
+			train.setC1(c1);
+			train.setC2(c2);
 			train.setTraining(trainingData);
 			startup(file, train, dialog.getMaxError().getValue() / 100.0);
 		}

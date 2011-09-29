@@ -33,5 +33,6 @@ public enum BasicNetworkTrainingType {
 	Annealing,
 	ADALINE,
 	PropagationQuick,
-	SVD
+	SVD,
+	PSO
 }
