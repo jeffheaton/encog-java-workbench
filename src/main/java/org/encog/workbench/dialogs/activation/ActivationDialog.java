@@ -126,7 +126,7 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 			newActivation = new ActivationCompetitive();
 			break;
 		case 2:
-			newActivation = new ActivationGaussian(0, 1, 1);
+			newActivation = new ActivationGaussian(0, 1);
 			break;
 		case 3:
 			newActivation = new ActivationLinear();
