@@ -29,6 +29,7 @@ import org.encog.bot.BotUtil;
 import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.mathutil.rbf.RBFEnum;
 import org.encog.ml.MLMethod;
+import org.encog.ml.bayesian.BayesianNetwork;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.svm.KernelType;
 import org.encog.ml.svm.SVMType;
@@ -116,6 +117,9 @@ public class CreateNeuralNetwork {
 				break;
 			case PNN:
 				network = createPNN();
+				break;
+			case BayesianNetwork:
+				network = createBayesian();
 				break;
 			}
 
@@ -364,5 +368,9 @@ public class CreateNeuralNetwork {
 			return art1.generate();
 		} else
 			return null;
+	}
+	
+	private static MLMethod createBayesian() {
+		return new BayesianNetwork();
 	}	
 }

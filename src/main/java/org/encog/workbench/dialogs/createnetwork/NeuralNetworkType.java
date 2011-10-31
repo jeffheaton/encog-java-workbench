@@ -37,6 +37,7 @@ public enum NeuralNetworkType {
 	Elman,
 	Jordan,
 	SVM,
-	PNN
+	PNN,
+	BayesianNetwork
 	
 }

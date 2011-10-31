@@ -34,6 +34,7 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
 import org.encog.ml.MLMethod;
+import org.encog.ml.bayesian.BayesianNetwork;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.workbench.EncogWorkBench;
@@ -48,6 +49,7 @@ import org.encog.workbench.tabs.EncogTabManager;
 import org.encog.workbench.tabs.TrainingContTab;
 import org.encog.workbench.tabs.UnknownObjectTab;
 import org.encog.workbench.tabs.analyst.EncogAnalystTab;
+import org.encog.workbench.tabs.bayesian.BayesianNetworkTab;
 import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.tabs.files.HTMLFileTab;
@@ -238,7 +240,9 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 		Object obj = file.getObject();
 		EncogCommonTab tab = null;
 			
-		if( obj instanceof MLMethod ) {
+		if( obj instanceof BayesianNetwork ) {
+			tab = new BayesianNetworkTab(file);
+		} else if( obj instanceof MLMethod ) {
 			tab = new MLMethodTab(file);
 		} else if( obj instanceof NEATPopulation ) {
 			tab = new NEATPopulationTab(file);
