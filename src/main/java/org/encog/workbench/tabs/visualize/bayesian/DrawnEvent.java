@@ -1,0 +1,72 @@
+/*
+ * Encog(tm) Workbench v3.0
+ * http://www.heatonresearch.com/encog/
+ * http://code.google.com/p/encog-java/
+ 
+ * Copyright 2008-2011 Heaton Research, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *   
+ * For more information on Heaton Research copyrights, licenses 
+ * and trademarks visit:
+ * http://www.heatonresearch.com/copyright
+ */
+package org.encog.workbench.tabs.visualize.bayesian;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.encog.ml.bayesian.BayesianEvent;
+
+public class DrawnEvent {
+
+	private final List<DrawnEventConnection> outbound = new ArrayList<DrawnEventConnection>();
+	private final List<DrawnEventConnection> inbound = new ArrayList<DrawnEventConnection>();
+	private final BayesianEvent event;
+
+	public DrawnEvent(BayesianEvent event) {
+		super();
+		this.event = event;
+	}
+
+	public String toString() {
+		return "" + event.getLabel().charAt(0);
+	}
+
+	/**
+	 * @return the outbound connections
+	 */
+	public List<DrawnEventConnection> getOutbound() {
+		return outbound;
+	}
+
+	/**
+	 * @return the inbound connections
+	 */
+	public List<DrawnEventConnection> getInbound() {
+		return outbound;
+	}
+
+	public String getToolTip() {
+		return event.getLabel();
+	}
+
+	public BayesianEvent getEvent() {
+		return event;
+	}
+	
+	public String getName() {
+		return event.getLabel();
+	}
+
+}

@@ -27,8 +27,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -36,13 +34,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
 import org.encog.Encog;
-import org.encog.ml.MLClassification;
-import org.encog.ml.MLEncodable;
 import org.encog.ml.MLInput;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLOutput;
 import org.encog.ml.MLProperties;
-import org.encog.ml.MLRegression;
 import org.encog.ml.bayesian.BayesianEvent;
 import org.encog.ml.bayesian.BayesianNetwork;
 import org.encog.ml.bayesian.table.TableLine;
@@ -50,18 +45,12 @@ import org.encog.util.Format;
 import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
-import org.encog.workbench.dialogs.select.SelectDialog;
-import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.query.general.ClassificationQueryTab;
-import org.encog.workbench.tabs.query.general.RegressionQueryTab;
-import org.encog.workbench.tabs.query.ocr.OCRQueryTab;
-import org.encog.workbench.tabs.visualize.ThermalGrid.ThermalGridTab;
+import org.encog.workbench.tabs.visualize.bayesian.BayesianStructureTab;
 import org.encog.workbench.tabs.visualize.structure.StructureTab;
-import org.encog.workbench.tabs.visualize.weights.AnalyzeWeightsTab;
 
 public class BayesianNetworkTab extends EncogCommonTab implements
 		ActionListener {
@@ -207,55 +196,9 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 	}
 
 	public void handleVisualize() {
-		SelectItem selectWeights;
-		SelectItem selectStructure;
-		SelectItem selectThermal;
-		List<SelectItem> list = new ArrayList<SelectItem>();
-		list.add(selectWeights = new SelectItem("Weights Histogram",
-				"A histogram of the weights."));
-		list.add(selectStructure = new SelectItem("Network Structure",
-				"The structure of the neural network."));
-		list.add(selectThermal = new SelectItem("Thermal Matrix",
-				"Shows the matrix of a Hopfield or Boltzmann Machine."));
-		SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
-				.getMainWindow(), list);
-		sel.setVisible(true);
-
-		if (sel.getSelected() == selectWeights) {
-			analyzeWeights();
-		} else if (sel.getSelected() == selectStructure) {
-			analyzeStructure();
-		} else if (sel.getSelected() == selectThermal) {
-			analyzeThermal();
-		}
-
-	}
-
-	private void analyzeThermal() {
-		ThermalGridTab tab = new ThermalGridTab(
-				(ProjectEGFile) this.getEncogObject());
-		EncogWorkBench.getInstance().getMainWindow().getTabManager()
-				.openModalTab(tab, "Thermal Grid");
-	}
-
-	private void analyzeStructure() {
-
-		if (method instanceof MLMethod) {
-			StructureTab tab = new StructureTab(((MLMethod) this.method));
-			EncogWorkBench.getInstance().getMainWindow().getTabManager()
-					.openModalTab(tab, "Network Structure");
-		} else {
-			throw new WorkBenchError("No analysis available for: "
-					+ this.method.getClass().getSimpleName());
-		}
-
-	}
-
-	public void analyzeWeights() {
-		AnalyzeWeightsTab tab = new AnalyzeWeightsTab(
-				(ProjectEGFile) this.getEncogObject());
-		EncogWorkBench.getInstance().getMainWindow().getTabManager()
-				.openModalTab(tab, "Analyze Weights");
+		BayesianStructureTab tab = new BayesianStructureTab(this.method);
+		
+		EncogWorkBench.getInstance().getMainWindow().getTabManager().openModalTab(tab, "Network Structure");
 	}
 
 	public void produceReport() {
