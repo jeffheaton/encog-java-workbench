@@ -72,6 +72,7 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 	private static final long serialVersionUID = 1L;
 	private JToolBar toolbar;
 	private JButton buttonRandomize;
+	private JButton buttonDefineQuery;
 	private JButton buttonQuery;
 	private JButton buttonTrain;
 	private JButton buttonRestructure;
@@ -89,6 +90,7 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);
 		this.toolbar.add(this.buttonRandomize = new JButton("Randomize/Reset"));
+		this.toolbar.add(this.buttonDefineQuery = new JButton("Define Query"));
 		this.toolbar.add(this.buttonQuery = new JButton("Query"));
 		this.toolbar.add(this.buttonTrain = new JButton("Train"));
 		this.toolbar.add(this.buttonRestructure = new JButton("Restructure"));
@@ -97,6 +99,7 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 
 		this.buttonRandomize.addActionListener(this);
 		this.buttonQuery.addActionListener(this);
+		this.buttonDefineQuery.addActionListener(this);
 		this.buttonTrain.addActionListener(this);
 		this.buttonRestructure.addActionListener(this);
 		this.buttonProperties.addActionListener(this);
@@ -115,6 +118,8 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 		try {
 			if (action.getSource() == this.buttonQuery) {
 				performQuery();
+			} else if (action.getSource() == this.buttonDefineQuery) {
+				performDefineQuery();
 			} else if (action.getSource() == this.buttonRandomize) {
 				performRandomize();
 			} else if (action.getSource() == this.buttonTrain) {
@@ -140,49 +145,39 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 	private void performRandomize() {
 
 	}
-
-	private void performQuery() {
+	
+	private void performDefineQuery() {
 		try {
-
-			SelectItem selectClassification = null;
-			SelectItem selectRegression = null;
-			SelectItem selectOCR;
-
-			List<SelectItem> list = new ArrayList<SelectItem>();
-			if (this.method instanceof MLClassification) {
-				list.add(selectClassification = new SelectItem(
-						"Query Classification",
-						"Machine Learning output is a class."));
+			String query = EncogWorkBench.displayInput("Enter query (i.e. P(+x,-y)?", this.method.getQuery().getProblem());
+			if( query!=null) {
+				this.method.defineQuery(query);
+				EncogWorkBench.displayMessage("Query", "Query successfully updated.");
+				this.produceReport();
+				this.setDirty(true);
 			}
-			if (this.method instanceof MLRegression) {
-				list.add(selectRegression = new SelectItem("Query Regression",
-						"Machine Learning output is a number(s)."));
-			}
-			list.add(selectOCR = new SelectItem("Query OCR",
-					"Query using drawn chars.  Supports regression or classification."));
-			SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
-					.getMainWindow(), list);
-			sel.setVisible(true);
-
-			if (sel.getSelected() == selectClassification) {
-				ClassificationQueryTab tab = new ClassificationQueryTab(
-						((ProjectEGFile) this.getEncogObject()));
-				EncogWorkBench.getInstance().getMainWindow().getTabManager()
-						.openModalTab(tab, "Query Classification");
-			} else if (sel.getSelected() == selectRegression) {
-				RegressionQueryTab tab = new RegressionQueryTab(
-						((ProjectEGFile) this.getEncogObject()));
-				EncogWorkBench.getInstance().getMainWindow().getTabManager()
-						.openModalTab(tab, "Query Regression");
-			} else if (sel.getSelected() == selectOCR) {
-				OCRQueryTab tab = new OCRQueryTab(
-						((ProjectEGFile) this.getEncogObject()));
-				EncogWorkBench.getInstance().getMainWindow().getTabManager()
-						.openModalTab(tab, "Query OCR");
-			}
-
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
+		}
+	}
+
+	private void performQuery() {
+		boolean success = false;
+		double p = 0;
+		
+		try {
+			EncogWorkBench.getInstance().getMainWindow().beginWait();
+			this.method.getQuery().execute();
+			p = this.method.getQuery().getProbability();
+			success = true;
+		} catch (Throwable t) {
+			EncogWorkBench.displayError("Error", t);
+		} finally {
+			EncogWorkBench.getInstance().getMainWindow().endWait();
+		}
+		
+		EncogWorkBench.getInstance().outputLine(this.method.getQuery().getProblem() + " = " + Format.formatPercent(p));
+		if( success ) {
+			EncogWorkBench.displayMessage("Probability", Format.formatPercent(p));
 		}
 	}
 

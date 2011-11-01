@@ -394,4 +394,8 @@ public class EncogWorkBench implements Runnable {
 		return result;
 	}
 
+	public static String displayInput(String prompt, String str) {
+		return JOptionPane.showInputDialog(null, prompt, str);
+	}
+
 }
