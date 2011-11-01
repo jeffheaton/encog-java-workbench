@@ -35,44 +35,21 @@ import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
-import org.encog.engine.network.activation.ActivationFunction;
-import org.encog.engine.network.activation.ActivationTANH;
-import org.encog.mathutil.randomize.ConsistentRandomizer;
-import org.encog.mathutil.randomize.ConstRandomizer;
-import org.encog.mathutil.randomize.Distort;
-import org.encog.mathutil.randomize.FanInRandomizer;
-import org.encog.mathutil.randomize.GaussianRandomizer;
-import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
-import org.encog.mathutil.randomize.Randomizer;
-import org.encog.mathutil.randomize.RangeRandomizer;
-import org.encog.mathutil.rbf.RadialBasisFunction;
+import org.encog.Encog;
 import org.encog.ml.MLClassification;
-import org.encog.ml.MLContext;
 import org.encog.ml.MLEncodable;
 import org.encog.ml.MLInput;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLOutput;
 import org.encog.ml.MLProperties;
 import org.encog.ml.MLRegression;
-import org.encog.ml.MLResettable;
+import org.encog.ml.bayesian.BayesianEvent;
 import org.encog.ml.bayesian.BayesianNetwork;
-import org.encog.neural.cpn.CPN;
-import org.encog.neural.flat.FlatNetwork;
-import org.encog.neural.neat.NEATNetwork;
-import org.encog.neural.networks.BasicNetwork;
-import org.encog.neural.pattern.FeedForwardPattern;
-import org.encog.neural.pattern.HopfieldPattern;
-import org.encog.neural.prune.PruneSelective;
-import org.encog.neural.rbf.RBFNetwork;
-import org.encog.neural.thermal.HopfieldNetwork;
-import org.encog.neural.thermal.ThermalNetwork;
+import org.encog.ml.bayesian.table.TableLine;
 import org.encog.util.Format;
 import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
-import org.encog.workbench.dialogs.RandomizeNetworkDialog;
-import org.encog.workbench.dialogs.createnetwork.CreateFeedforward;
-import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.MapDataFrame;
@@ -82,12 +59,12 @@ import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.query.general.ClassificationQueryTab;
 import org.encog.workbench.tabs.query.general.RegressionQueryTab;
 import org.encog.workbench.tabs.query.ocr.OCRQueryTab;
-import org.encog.workbench.tabs.query.thermal.QueryThermalTab;
 import org.encog.workbench.tabs.visualize.ThermalGrid.ThermalGridTab;
 import org.encog.workbench.tabs.visualize.structure.StructureTab;
 import org.encog.workbench.tabs.visualize.weights.AnalyzeWeightsTab;
 
-public class BayesianNetworkTab extends EncogCommonTab implements ActionListener {
+public class BayesianNetworkTab extends EncogCommonTab implements
+		ActionListener {
 
 	/**
 	 * 
@@ -107,7 +84,7 @@ public class BayesianNetworkTab extends EncogCommonTab implements ActionListener
 	public BayesianNetworkTab(final ProjectEGFile data) {
 		super(data);
 
-		this.method = (BayesianNetwork)data.getObject();
+		this.method = (BayesianNetwork) data.getObject();
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);
@@ -155,58 +132,55 @@ public class BayesianNetworkTab extends EncogCommonTab implements ActionListener
 	}
 
 	private void performTrain() {
-		TrainBasicNetwork t = new TrainBasicNetwork((ProjectEGFile)this.getEncogObject(),this);
+		TrainBasicNetwork t = new TrainBasicNetwork(
+				(ProjectEGFile) this.getEncogObject(), this);
 		t.performTrain();
 	}
 
-
 	private void performRandomize() {
-
-
 
 	}
 
-	
-
 	private void performQuery() {
 		try {
-			
-				SelectItem selectClassification = null;
-				SelectItem selectRegression = null;
-				SelectItem selectOCR;
-				
-				List<SelectItem> list = new ArrayList<SelectItem>();
-				if( this.method instanceof MLClassification ) {
-				list.add(selectClassification = new SelectItem("Query Classification",
+
+			SelectItem selectClassification = null;
+			SelectItem selectRegression = null;
+			SelectItem selectOCR;
+
+			List<SelectItem> list = new ArrayList<SelectItem>();
+			if (this.method instanceof MLClassification) {
+				list.add(selectClassification = new SelectItem(
+						"Query Classification",
 						"Machine Learning output is a class."));
-				}
-				if( this.method instanceof MLRegression ) {
+			}
+			if (this.method instanceof MLRegression) {
 				list.add(selectRegression = new SelectItem("Query Regression",
 						"Machine Learning output is a number(s)."));
-				}
-				list.add(selectOCR = new SelectItem("Query OCR",
+			}
+			list.add(selectOCR = new SelectItem("Query OCR",
 					"Query using drawn chars.  Supports regression or classification."));
-				SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
-						.getMainWindow(), list);
-				sel.setVisible(true);
-				
-				if( sel.getSelected()==selectClassification ) {
-					ClassificationQueryTab tab = new ClassificationQueryTab(
-							((ProjectEGFile) this.getEncogObject()));
-					EncogWorkBench.getInstance().getMainWindow().getTabManager()
-							.openModalTab(tab, "Query Classification");					
-				} else if( sel.getSelected()==selectRegression ) {
-					RegressionQueryTab tab = new RegressionQueryTab(
-							((ProjectEGFile) this.getEncogObject()));
-					EncogWorkBench.getInstance().getMainWindow().getTabManager()
-							.openModalTab(tab, "Query Regression");					
-				}  else if( sel.getSelected()==selectOCR ) {
-					OCRQueryTab tab = new OCRQueryTab(
-							((ProjectEGFile) this.getEncogObject()));
-					EncogWorkBench.getInstance().getMainWindow().getTabManager()
-							.openModalTab(tab, "Query OCR");					
-				}
-			
+			SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
+					.getMainWindow(), list);
+			sel.setVisible(true);
+
+			if (sel.getSelected() == selectClassification) {
+				ClassificationQueryTab tab = new ClassificationQueryTab(
+						((ProjectEGFile) this.getEncogObject()));
+				EncogWorkBench.getInstance().getMainWindow().getTabManager()
+						.openModalTab(tab, "Query Classification");
+			} else if (sel.getSelected() == selectRegression) {
+				RegressionQueryTab tab = new RegressionQueryTab(
+						((ProjectEGFile) this.getEncogObject()));
+				EncogWorkBench.getInstance().getMainWindow().getTabManager()
+						.openModalTab(tab, "Query Regression");
+			} else if (sel.getSelected() == selectOCR) {
+				OCRQueryTab tab = new OCRQueryTab(
+						((ProjectEGFile) this.getEncogObject()));
+				EncogWorkBench.getInstance().getMainWindow().getTabManager()
+						.openModalTab(tab, "Query OCR");
+			}
+
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
 		}
@@ -225,10 +199,9 @@ public class BayesianNetworkTab extends EncogCommonTab implements ActionListener
 	}
 
 	public void performProperties() {
-		if ( this.method instanceof MLProperties) {
+		if (this.method instanceof MLProperties) {
 			MapDataFrame frame = new MapDataFrame(
-					((MLProperties)method).getProperties(),
-					"Properties");
+					((MLProperties) method).getProperties(), "Properties");
 			frame.setVisible(true);
 			setDirty(true);
 		} else {
@@ -264,7 +237,8 @@ public class BayesianNetworkTab extends EncogCommonTab implements ActionListener
 	}
 
 	private void analyzeThermal() {
-		ThermalGridTab tab = new ThermalGridTab((ProjectEGFile) this.getEncogObject());
+		ThermalGridTab tab = new ThermalGridTab(
+				(ProjectEGFile) this.getEncogObject());
 		EncogWorkBench.getInstance().getMainWindow().getTabManager()
 				.openModalTab(tab, "Thermal Grid");
 	}
@@ -272,8 +246,7 @@ public class BayesianNetworkTab extends EncogCommonTab implements ActionListener
 	private void analyzeStructure() {
 
 		if (method instanceof MLMethod) {
-			StructureTab tab = new StructureTab(
-					((MLMethod)this.method));
+			StructureTab tab = new StructureTab(((MLMethod) this.method));
 			EncogWorkBench.getInstance().getMainWindow().getTabManager()
 					.openModalTab(tab, "Network Structure");
 		} else {
@@ -284,7 +257,8 @@ public class BayesianNetworkTab extends EncogCommonTab implements ActionListener
 	}
 
 	public void analyzeWeights() {
-		AnalyzeWeightsTab tab = new AnalyzeWeightsTab((ProjectEGFile)this.getEncogObject());
+		AnalyzeWeightsTab tab = new AnalyzeWeightsTab(
+				(ProjectEGFile) this.getEncogObject());
 		EncogWorkBench.getInstance().getMainWindow().getTabManager()
 				.openModalTab(tab, "Analyze Weights");
 	}
@@ -310,28 +284,113 @@ public class BayesianNetworkTab extends EncogCommonTab implements ActionListener
 					Format.formatInteger(reg.getOutputCount()));
 		}
 
-		if (method instanceof MLEncodable) {
-			MLEncodable encode = (MLEncodable)method;
-			report.tablePair("Encoded Length",
-					Format.formatInteger(encode.encodedArrayLength()));
+		report.tablePair("Parameter Count",
+				Format.formatInteger(this.method.calculateParameterCount()));
+		report.tablePair("Expression", this.method.toString());
+		
+		String queryType = "";
+		String queryStr = "";
+		
+		if( method.getQuery()!=null) {
+			queryType = method.getQuery().getClass().getSimpleName();
+			queryStr = method.getQuery().getProblem();
+		}
+		
+		report.tablePair("Query Type", queryType);
+		report.tablePair("Query", queryStr);
+
+		report.endTable();
+
+		report.h3("Events");
+		report.beginTable();
+		report.beginRow();
+		report.header("Event");
+		report.header("Choices");
+		report.header("Probability");
+		report.endRow();
+
+		for (BayesianEvent event : this.method.getEvents()) {
+			report.beginRow();
+			report.cell(event.getLabel());
+			StringBuilder l = new StringBuilder();
+			boolean first = true;
+			for (String str : event.getChoices()) {
+				if (!first) {
+					l.append(", ");
+				}
+				first = false;
+				l.append(str);
+			}
+			report.cell(l.toString());
+			report.cell(event.toString());
+			report.endRow();
 		}
 
-		report.tablePair("Resettable",
-				(method instanceof MLResettable) ? "true" : "false");
-		
-		report.tablePair("Context",
-				(method instanceof MLContext) ? "true" : "false");
-		
-				
 		report.endTable();
-		
-		
+
+		report.h3("Probability Tables");
+		report.beginTable();
+
+		for (BayesianEvent event : this.method.getEvents()) {
+			report.beginRow();
+			report.header(event.getLabel(), 2);
+			report.endRow();
+			for (TableLine line : event.getTable().getLines()) {
+				report.beginRow();
+				StringBuilder str = new StringBuilder();
+				str.append("P(");
+
+				if (event.isBoolean()) {
+					if (Math.abs(line.getResult()) < Encog.DEFAULT_DOUBLE_EQUAL) {
+						str.append("-");
+					} else {
+						str.append("+");
+					}
+				}
+				str.append(event.getLabel());
+				if (!event.isBoolean()) {
+					str.append("=");
+					str.append(line.getResult());
+				}
+
+				if (event.getParents().size() > 0) {
+					str.append("|");
+				}
+
+				int index = 0;
+				boolean first = true;
+				for (BayesianEvent parentEvent : event.getParents()) {
+					if (!first) {
+						str.append(",");
+					}
+					first = false;
+					double arg = line.getArguments()[index];
+					if (parentEvent.isBoolean()) {
+						if (Math.abs(arg) < Encog.DEFAULT_DOUBLE_EQUAL) {
+							str.append("-");
+						} else {
+							str.append("+");
+						}
+					}
+					str.append(parentEvent.getLabel());
+					if (!parentEvent.isBoolean()) {
+						str.append("=");
+						str.append(arg);
+					}
+				}
+				str.append(")");
+				report.cell(str.toString());
+				report.cell(Format.formatPercent(line.getProbability()));
+				report.endRow();
+			}
+		}
+
+		report.endTable();
 
 		report.endBody();
 		report.endHTML();
 		this.editor.setText(report.toString());
 	}
-
 
 	private void performRestructure() {
 
