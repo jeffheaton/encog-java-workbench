@@ -427,7 +427,6 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		
 		if( method instanceof NEATNetwork ) {
 			NEATNetwork neat = (NEATNetwork)method;
-			report.tablePair("Output Activation Function", neat.getOutputActivationFunction().getClass().getSimpleName());
 			report.tablePair("NEAT Activation Function", neat.getActivationFunction().getClass().getSimpleName());
 		}
 		

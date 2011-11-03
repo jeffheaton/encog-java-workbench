@@ -118,7 +118,7 @@ public class NEATPopulationInfo extends JPanel {
 		y+=fm.getHeight();
 		g.drawString(Format.formatInteger(populationSize), 200, y);
 		g.drawString(Format.formatPercent(population.getOldAgePenalty()), 450, y);
-		g.drawString(population.getOutputActivationFunction().getClass().getSimpleName(), 730, y);		
+		
 		y+=fm.getHeight();
 		g.drawString(Format.formatInteger(speciesSize), 200, y);
 		g.drawString(Format.formatInteger(population.getYoungBonusAgeThreshold()), 450, y);

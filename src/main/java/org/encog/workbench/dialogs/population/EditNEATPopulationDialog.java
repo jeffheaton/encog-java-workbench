@@ -35,7 +35,6 @@ public class EditNEATPopulationDialog extends EditPopulationDialog implements Po
 	private PopupField outputActivationField;
 	private PopupField neatActivationField;
 	private IntegerField activationCycles;
-	private ActivationFunction outputActivationFunction;
 	private ActivationFunction neatActivationFunction;
 	
 	public EditNEATPopulationDialog() {
@@ -54,11 +53,10 @@ public class EditNEATPopulationDialog extends EditPopulationDialog implements Po
 		if (field == this.outputActivationField) {
 			ActivationDialog dialog = new ActivationDialog(EncogWorkBench
 					.getInstance().getMainWindow());
-			dialog.setActivation(this.outputActivationFunction);
+
 			if (!dialog.process())
 				return null;
 			else {
-				this.outputActivationFunction = dialog.getActivation();
 				return dialog.getActivation().getClass().getSimpleName();
 			}
 		} else if (field == this.neatActivationField) {
@@ -83,16 +81,6 @@ public class EditNEATPopulationDialog extends EditPopulationDialog implements Po
 		return neatActivationField;
 	}
 
-	public void setOutputActivationFunction(
-			ActivationFunction activationFunction) {
-		this.outputActivationFunction = activationFunction;
-		this.outputActivationField.setValue(activationFunction.getClass()
-				.getSimpleName());
-	}
-
-	public ActivationFunction getOutputActivationFunction() {
-		return outputActivationFunction;
-	}
 
 	public ActivationFunction getNeatActivationFunction() {
 		return neatActivationFunction;
