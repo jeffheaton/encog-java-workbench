@@ -24,6 +24,8 @@
 package org.encog.workbench.dialogs.error;
 
 import java.awt.Frame;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -80,6 +82,14 @@ public class ErrorDialog extends EncogCommonDialog {
 		message.append("OS Arch: " + System.getProperty("os.arch")+NEW_LINE );
 		message.append("OS Version: " + System.getProperty("os.version")+NEW_LINE );
 		message.append("Core Count: " + Runtime.getRuntime().availableProcessors() + NEW_LINE);
+		
+		Locale defaultLocale = Locale.getDefault();
+	    message.append("ISO3 Country: " + defaultLocale.getISO3Country()+ NEW_LINE);
+	    message.append("Display Country: " + defaultLocale.getDisplayCountry() + NEW_LINE);
+		message.append("Radix: " + DecimalFormatSymbols.getInstance().getDecimalSeparator() + NEW_LINE);
+		message.append("Grouping: " + DecimalFormatSymbols.getInstance().getGroupingSeparator() + NEW_LINE);
+
+		
 		message.append("----------------------------------------------------------------------"+NEW_LINE);
 		message.append(getCustomStackTrace(t));
 		
