@@ -74,9 +74,11 @@ public class BayesianStructureTab extends EncogCommonTab {
 		Graph<DrawnEvent, DrawnEventConnection> g = buildGraph(method);
 				
 		Layout<DrawnEvent, DrawnEventConnection> layout = new KKLayout(g);
-	
 
-		layout.setSize(new Dimension(600,600)); // sets the initial size of the space
+		int size = method.calculateParameterCount() * 15;
+		size = Math.min(size, 600);
+
+		layout.setSize(new Dimension(size,size)); // sets the initial size of the space
 		// The BasicVisualizationServer<V,E> is parameterized by the edge types
 		//BasicVisualizationServer<DrawnNeuron, DrawnConnection> vv = new BasicVisualizationServer<DrawnNeuron, DrawnConnection>(
 		//		layout);
@@ -112,7 +114,7 @@ public class BayesianStructureTab extends EncogCommonTab {
         
         vv.addKeyListener(graphMouse.getModeKeyListener());
         vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint);
-        
+
         final ScalingControl scaler = new CrossoverScalingControl();        
 
         JButton plus = new JButton("+");

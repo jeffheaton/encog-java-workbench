@@ -40,7 +40,8 @@ public class DrawnEvent {
 	}
 
 	public String toString() {
-		return "" + event.getLabel().charAt(0);
+		return event.getLabel();
+		//return "" + event.getLabel().charAt(0);
 	}
 
 	/**
