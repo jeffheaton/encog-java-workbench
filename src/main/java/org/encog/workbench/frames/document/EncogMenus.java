@@ -42,6 +42,7 @@ public class EncogMenus {
 	public static final String FILE_CHANGE_DIR = "Change Directory/Open Project";
 	public static final String FILE_NEW_PROJECT = "New Project...";
 	public static final String FILE_NEW_FILE = "New File...";
+	public static final String FILE_IMPORT = "Import File...";
 	public static final String FILE_SAVE = "Save";
 	public static final String FILE_QUIT = "Quit...";
 
@@ -73,6 +74,7 @@ public class EncogMenus {
 	
 	private JMenuItem menuFileNew;
 	private JMenuItem menuFileNewProject;
+	private JMenuItem menuFileImport;
 	private JMenuItem menuFileChangeDir;
 	private JMenuItem menuFileSeve;
 	private JMenuItem menuFileQuit;
@@ -111,6 +113,7 @@ public class EncogMenus {
 				.addItem(this.menuFile, EncogMenus.FILE_CHANGE_DIR, 'c'));
 		this.menuFileNew = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_NEW_FILE, 'f'));
+		this.menuFileImport = this.menuFile.add(owner.addItem(this.menuFile,EncogMenus.FILE_IMPORT,'i'));
 		this.menuFileSeve = this.menuFile.add(owner
 				.addItem(this.menuFile, EncogMenus.FILE_SAVE, 's'));
 		this.menuFile.addSeparator();
@@ -184,6 +187,7 @@ public class EncogMenus {
 		this.menuFileChangeDir.setEnabled(!modal);
 		this.menuFileNewProject.setEnabled(!modal);
 		this.menuFileQuit.setEnabled(true);
+		this.menuFileImport.setEnabled(!modal && documentOpen);
 		this.menuFileSeve.setEnabled(!modal && documentOpen && currentTab!=null);
 		this.menuEditCut.setEnabled(!modal && supportsClipboard && documentOpen);
 		this.menuEditCopy.setEnabled(!modal && supportsClipboard && documentOpen);
@@ -214,6 +218,8 @@ public class EncogMenus {
 			owner.getOperations().performFileNewProject();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_NEW_FILE)) {
 			CreateNewFile.performCreateFile();
+		} else if (event.getActionCommand().equals(EncogMenus.FILE_IMPORT)) {
+			owner.getOperations().importFile();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_SAVE)) {
 			owner.getOperations().performSave();
 		} else if (event.getActionCommand().equals(EncogMenus.FILE_QUIT)) {

@@ -26,6 +26,7 @@ package org.encog.workbench.frames.document;
 import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -35,6 +36,8 @@ import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.ml.MLError;
 import org.encog.ml.MLMethod;
+import org.encog.ml.bayesian.BayesianNetwork;
+import org.encog.ml.bayesian.bif.BIFUtil;
 import org.encog.ml.data.MLDataSet;
 import org.encog.util.Format;
 import org.encog.util.file.Directory;
@@ -44,6 +47,8 @@ import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EvaluateDialog;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
 import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
+import org.encog.workbench.dialogs.select.SelectDialog;
+import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
@@ -325,8 +330,7 @@ public class EncogDocumentOperations {
 	}
 
 	public void performSave() {
-		EncogCommonTab tab = this.owner.getTabManager()
-				.getCurrentTab();
+		EncogCommonTab tab = this.owner.getTabManager().getCurrentTab();
 		if (tab != null) {
 			tab.save();
 		}
@@ -369,11 +373,49 @@ public class EncogDocumentOperations {
 	}
 
 	public void performEditFind() {
-		EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow().getTabManager().getCurrentTab();
+		EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow()
+				.getTabManager().getCurrentTab();
 
-		if( tab instanceof BasicTextTab ) {
-			((BasicTextTab)tab).find();
+		if (tab instanceof BasicTextTab) {
+			((BasicTextTab) tab).find();
 		}
-		
+
+	}
+
+	public void importFile() {
+		SelectItem selectBIF;
+
+		List<SelectItem> list = new ArrayList<SelectItem>();
+		list.add(selectBIF = new SelectItem("Bayesian Network",
+				"Bayesian Network contained in XML-BIF."));
+
+		SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
+				.getMainWindow(), list);
+		sel.setVisible(true);
+
+		if (sel.getSelected() == selectBIF) {
+			importBIF();
+		}
+	}
+
+	public void importBIF() {
+		try {
+			final JFileChooser fc = new JFileChooser();
+			fc.setCurrentDirectory(EncogWorkBench.getInstance()
+					.getEncogFolders());
+			final int result = fc.showOpenDialog(owner);
+			if (result == JFileChooser.APPROVE_OPTION) {
+				BayesianNetwork net = BIFUtil.readBIF(fc.getSelectedFile());
+				File path = new File(EncogWorkBench.getInstance()
+						.getProjectDirectory(), FileUtil.forceExtension(fc
+						.getSelectedFile().getName(), "eg"));
+				EncogWorkBench.getInstance().save(path, net);
+				EncogWorkBench.getInstance().refresh();
+			}
+		} catch (final Throwable e) {
+			EncogWorkBench.displayError("Can't Change Directory", e);
+			e.printStackTrace();
+			EncogWorkBench.getInstance().getMainWindow().endWait();
+		}
 	}
 }
