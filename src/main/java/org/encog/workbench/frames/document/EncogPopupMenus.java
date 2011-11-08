@@ -52,6 +52,7 @@ public class EncogPopupMenus {
 	private JMenuItem popupFileCSVWizard;
 	private JMenuItem popupFileNewFile;
 	private JMenuItem popupFileNewObject;
+	private JMenuItem popupFileCopy;
 
 	private EncogDocumentFrame owner;
 
@@ -115,12 +116,37 @@ public class EncogPopupMenus {
 								.getOperations()
 								.performFileProperties((ProjectFile) selected);
 					}
+				} else if( source==this.popupFileCopy ) {
+					performCopy((ProjectFile) selected);
 				}
 				first = false;
 			}
 		} catch (IOException e) {
 			EncogWorkBench.displayError("Error", e);
 		}
+	}
+
+	private void performCopy(ProjectFile selected) {
+		
+		try {
+			File t = FileUtil.addFilenameBase(selected.getFile(), "-copy");
+			String targetStr;
+
+			if ((targetStr = EncogWorkBench.displayInput(
+					"Name to copy file to", t.getName())) != null) {
+				File targetFile = new File(EncogWorkBench.getInstance()
+						.getProjectDirectory(), new File(targetStr).getName());
+				if( targetFile.exists() ) {
+					if( EncogWorkBench.askQuestion("File Exists", "Do you wish to overwrite the file of the same name?") ) {
+						FileUtil.copy(selected.getFile(), targetFile);
+					}
+				}
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+			}
+			
+		} catch (Exception ex) {
+			EncogWorkBench.displayError("Error", ex);
+		}		
 	}
 
 	public void rightMouseClicked(final MouseEvent e, final Object item) {
@@ -145,6 +171,7 @@ public class EncogPopupMenus {
 
 		if (file != null ) {
 			this.popupFileDelete = owner.addItem(this.popupFile, "Delete", 'd');
+			this.popupFileCopy = owner.addItem(this.popupFile, "Copy", 'c');
 			this.popupFileProperties = owner.addItem(this.popupFile,
 					"Properties", 'p');
 		} else {
