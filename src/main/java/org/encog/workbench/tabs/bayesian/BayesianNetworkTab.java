@@ -35,7 +35,6 @@ import javax.swing.JToolBar;
 
 import org.encog.Encog;
 import org.encog.ml.MLInput;
-import org.encog.ml.MLMethod;
 import org.encog.ml.MLOutput;
 import org.encog.ml.MLProperties;
 import org.encog.ml.bayesian.BayesianEvent;
@@ -44,13 +43,12 @@ import org.encog.ml.bayesian.table.TableLine;
 import org.encog.util.Format;
 import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.WorkBenchError;
+import org.encog.workbench.dialogs.createnetwork.CreateBayesian;
 import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.visualize.bayesian.BayesianStructureTab;
-import org.encog.workbench.tabs.visualize.structure.StructureTab;
 
 public class BayesianNetworkTab extends EncogCommonTab implements
 		ActionListener {
@@ -274,22 +272,13 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 			report.header(event.getLabel(), 2);
 			report.endRow();
 			for (TableLine line : event.getTable().getLines()) {
+				if( line==null )
+					continue;
+				
 				report.beginRow();
 				StringBuilder str = new StringBuilder();
 				str.append("P(");
-
-				if (event.isBoolean()) {
-					if (Math.abs(line.getResult()) < Encog.DEFAULT_DOUBLE_EQUAL) {
-						str.append("-");
-					} else {
-						str.append("+");
-					}
-				}
-				str.append(event.getLabel());
-				if (!event.isBoolean()) {
-					str.append("=");
-					str.append(line.getResult());
-				}
+				str.append(BayesianEvent.formatEventName(event, line.getResult()));
 
 				if (event.getParents().size() > 0) {
 					str.append("|");
@@ -331,7 +320,33 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 	}
 
 	private void performRestructure() {
-
+		String priorQuery = this.method.getQuery().getProblem();
+		String priorContents = this.method.getContents();
+		
+		CreateBayesian d = new CreateBayesian();
+		d.getQuery().setValue(priorQuery);
+		d.getContents().setValue(priorContents);
+		if( d.process() ) {
+			String currentQuery = d.getQuery().getValue();
+			String currentContents = d.getContents().getValue();
+			
+			boolean changed = false;
+			if( !priorQuery.equals(currentQuery)) {
+				this.method.defineQuery(currentQuery);
+				changed = true;
+			}
+			
+			if( !priorContents.equals(currentContents)) {
+				this.method.setContents(currentContents);
+				changed = true;
+			}
+			
+			if( changed ) {
+				produceReport();
+				EncogWorkBench.getInstance().getMainWindow().redraw();
+				this.setDirty(true);
+			}
+		}
 	}
 
 	@Override

@@ -174,6 +174,8 @@ public class BayesianStructureTab extends EncogCommonTab {
 			for(BayesianEvent childEvent: event.getChildren() ) {
 				DrawnEvent fromEvent = eventMap.get(event);
 				DrawnEvent toEvent = eventMap.get(childEvent);
+				if( fromEvent==null || toEvent==null ) 
+					continue;
 				DrawnEventConnection connection = new DrawnEventConnection(fromEvent,toEvent);
 				fromEvent.getOutbound().add(connection);
 				toEvent.getInbound().add(connection);
