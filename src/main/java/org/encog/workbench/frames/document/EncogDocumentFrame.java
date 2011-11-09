@@ -237,6 +237,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	}
 	
 	public void openEGFile(ProjectEGFile file) {
+		file.refresh();
 		Object obj = file.getObject();
 		EncogCommonTab tab = null;
 			

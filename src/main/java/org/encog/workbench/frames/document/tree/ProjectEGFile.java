@@ -48,6 +48,12 @@ public class ProjectEGFile extends ProjectFile {
 	public String toString() {
 		return this.getFile().getName() + " (" + encogType + ")";
 	}
+	
+	public void refresh() {
+		if( this.obj!=null ) {
+			this.obj = EncogWorkBench.getInstance().getProject().loadFromDirectory(getName());
+		}
+	}
 
 	public Object getObject() {
 		if( this.obj == null ) {
