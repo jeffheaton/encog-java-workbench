@@ -323,7 +323,7 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 		String priorQuery = this.method.getQuery().getProblem();
 		String priorContents = this.method.getContents();
 		
-		CreateBayesian d = new CreateBayesian();
+		CreateBayesian d = new CreateBayesian(this.method);
 		d.getQuery().setValue(priorQuery);
 		d.getContents().setValue(priorContents);
 		if( d.process() ) {

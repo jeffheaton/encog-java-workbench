@@ -23,6 +23,8 @@
  */
 package org.encog.workbench.dialogs.createnetwork;
 
+import org.encog.ml.bayesian.BayesianNetwork;
+import org.encog.ml.bayesian.parse.ParseProbability;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.TextAreaField;
@@ -30,17 +32,31 @@ import org.encog.workbench.dialogs.common.TextField;
 
 public class CreateBayesian extends EncogPropertiesDialog {
 
+	private BayesianNetwork network;
 	private TextAreaField contents;
 	private TextField query;
 	
-	public CreateBayesian() {
+	public CreateBayesian(BayesianNetwork theNetwork) {
 		super(EncogWorkBench.getInstance().getMainWindow());
+		this.network = theNetwork;
 		setTitle("Create Bayesian Network");
 		setSize(400,400);
 		setLocation(200,200);
 		addProperty(this.query = new TextField("query","Query",false));
 		addProperty(this.contents = new TextAreaField("Bayesian Contents", "contents", true));
 		render();
+	}
+	
+	@Override
+	public boolean passesValidation() {
+		try {
+				BayesianNetwork temp = new BayesianNetwork();
+				temp.setContents(this.contents.getValue());
+		} catch (Throwable t) {
+			EncogWorkBench.displayError("Error Parsing Contents", t);
+			return false;
+		}
+		return true;
 	}
 
 	public TextAreaField getContents() {
