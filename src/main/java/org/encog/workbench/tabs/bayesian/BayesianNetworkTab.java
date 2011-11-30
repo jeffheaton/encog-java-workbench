@@ -37,9 +37,11 @@ import org.encog.Encog;
 import org.encog.ml.MLInput;
 import org.encog.ml.MLOutput;
 import org.encog.ml.MLProperties;
+import org.encog.ml.MLResettable;
 import org.encog.ml.bayesian.BayesianEvent;
 import org.encog.ml.bayesian.BayesianNetwork;
 import org.encog.ml.bayesian.table.TableLine;
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.util.Format;
 import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
@@ -130,6 +132,16 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 	}
 
 	private void performRandomize() {
+		if (EncogWorkBench.askQuestion("Are you sure?",
+				"Clear probability tables and lose all training?")) {
+			if (method instanceof MLResettable) {
+				((MLResettable) method).reset();
+			}
+			
+			produceReport();
+			EncogWorkBench.getInstance().getMainWindow().redraw();
+			this.setDirty(true);
+		}
 
 	}
 	
