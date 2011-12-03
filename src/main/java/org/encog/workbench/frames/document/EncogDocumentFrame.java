@@ -80,6 +80,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			"Encog Files (*.eg)", ".eg");
 	public static final ExtensionFilter CSV_FILTER = new ExtensionFilter(
 			"External Files (*.xlsx,*.csv)", B);
+	public static final ExtensionFilter XML_FILTER = new ExtensionFilter(
+			"BIF Files (*.xml)", ".xml");
 	public static final ExtensionFilter ENCOG_BINARY = new ExtensionFilter(
 			"Binary Encog Training Files (*.egb)", ".egb");
 

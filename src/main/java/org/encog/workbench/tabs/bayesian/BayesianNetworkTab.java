@@ -27,9 +27,11 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
@@ -40,13 +42,16 @@ import org.encog.ml.MLProperties;
 import org.encog.ml.MLResettable;
 import org.encog.ml.bayesian.BayesianEvent;
 import org.encog.ml.bayesian.BayesianNetwork;
+import org.encog.ml.bayesian.bif.BIFUtil;
 import org.encog.ml.bayesian.table.TableLine;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.util.Format;
 import org.encog.util.HTMLReport;
+import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createnetwork.CreateBayesian;
 import org.encog.workbench.frames.MapDataFrame;
+import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -67,6 +72,8 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 	private JButton buttonRestructure;
 	private JButton buttonProperties;
 	private JButton buttonVisualize;
+	private JButton buttonImportBIF;
+	private JButton buttonExportBIF;
 	private final JScrollPane scroll;
 	private final JEditorPane editor;
 	private BayesianNetwork method;
@@ -83,6 +90,8 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 		this.toolbar.add(this.buttonQuery = new JButton("Query"));
 		this.toolbar.add(this.buttonTrain = new JButton("Train"));
 		this.toolbar.add(this.buttonRestructure = new JButton("Restructure"));
+		this.toolbar.add(this.buttonImportBIF = new JButton("Import BIF"));
+		this.toolbar.add(this.buttonExportBIF = new JButton("Export BIF"));
 		this.toolbar.add(this.buttonProperties = new JButton("Properties"));
 		this.toolbar.add(this.buttonVisualize = new JButton("Visualize"));
 
@@ -93,6 +102,8 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 		this.buttonRestructure.addActionListener(this);
 		this.buttonProperties.addActionListener(this);
 		this.buttonVisualize.addActionListener(this);
+		this.buttonExportBIF.addActionListener(this);
+		this.buttonImportBIF.addActionListener(this);
 
 		add(this.toolbar, BorderLayout.PAGE_START);
 
@@ -119,9 +130,58 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 				performProperties();
 			} else if (action.getSource() == this.buttonVisualize) {
 				this.handleVisualize();
+			} else if (action.getSource() == this.buttonExportBIF) {
+				this.handleExportBIF();
+			}  else if (action.getSource() == this.buttonImportBIF) {
+				this.handleImportBIF();
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
+		}
+	}
+
+	private void handleExportBIF() {
+		final JFileChooser fc = new JFileChooser();
+		if (EncogWorkBench.getInstance().getProjectDirectory() != null)
+			fc.setCurrentDirectory(EncogWorkBench.getInstance().getProjectDirectory());
+		fc.addChoosableFileFilter(EncogDocumentFrame.XML_FILTER);
+		final int result = fc.showSaveDialog(EncogWorkBench.getInstance()
+				.getMainWindow());
+		if (result == JFileChooser.APPROVE_OPTION) {
+			try {
+				EncogWorkBench.getInstance().getMainWindow().beginWait();
+				String file = fc.getSelectedFile().getAbsolutePath();
+				File targetFile = new File(file);
+				BIFUtil.writeBIF(targetFile, this.method);
+			} catch(Throwable t) {
+				EncogWorkBench.displayError("Error", t);
+			} finally {
+				EncogWorkBench.getInstance().getMainWindow().endWait();
+			}
+		}
+	}
+	
+	private void handleImportBIF() {
+		final JFileChooser fc = new JFileChooser();
+		if (EncogWorkBench.getInstance().getProjectDirectory() != null)
+			fc.setCurrentDirectory(EncogWorkBench.getInstance()
+					.getProjectDirectory());
+		fc.addChoosableFileFilter(EncogDocumentFrame.XML_FILTER);
+		final int result = fc.showOpenDialog(EncogWorkBench.getInstance()
+				.getMainWindow());
+		if (result == JFileChooser.APPROVE_OPTION) {
+			try {
+				EncogWorkBench.getInstance().getMainWindow().beginWait();
+				String file = fc.getSelectedFile().getAbsolutePath();
+				File sourceFile = new File(file);
+				this.method = BIFUtil.readBIF(sourceFile);
+				this.produceReport();
+				this.setDirty(true);
+			} catch(Throwable t) {
+				EncogWorkBench.displayError("Error", t);
+			} finally {
+				EncogWorkBench.getInstance().getMainWindow().endWait();
+			}
 		}
 	}
 
