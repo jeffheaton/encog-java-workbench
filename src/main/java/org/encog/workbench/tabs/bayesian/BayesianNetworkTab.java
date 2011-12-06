@@ -44,10 +44,8 @@ import org.encog.ml.bayesian.BayesianEvent;
 import org.encog.ml.bayesian.BayesianNetwork;
 import org.encog.ml.bayesian.bif.BIFUtil;
 import org.encog.ml.bayesian.table.TableLine;
-import org.encog.neural.networks.BasicNetwork;
 import org.encog.util.Format;
 import org.encog.util.HTMLReport;
-import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createnetwork.CreateBayesian;
 import org.encog.workbench.frames.MapDataFrame;
@@ -153,6 +151,7 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 				String file = fc.getSelectedFile().getAbsolutePath();
 				File targetFile = new File(file);
 				BIFUtil.writeBIF(targetFile, this.method);
+				EncogWorkBench.getInstance().getMainWindow().redraw();
 			} catch(Throwable t) {
 				EncogWorkBench.displayError("Error", t);
 			} finally {
@@ -175,6 +174,7 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 				String file = fc.getSelectedFile().getAbsolutePath();
 				File sourceFile = new File(file);
 				this.method = BIFUtil.readBIF(sourceFile);
+				((ProjectEGFile)this.getEncogObject()).setObject(this.method);
 				this.produceReport();
 				this.setDirty(true);
 			} catch(Throwable t) {
