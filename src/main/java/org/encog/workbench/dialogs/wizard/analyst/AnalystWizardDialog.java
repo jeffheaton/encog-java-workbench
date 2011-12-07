@@ -27,6 +27,8 @@ import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComboBox;
+
 import org.encog.app.analyst.AnalystFileFormat;
 import org.encog.app.analyst.AnalystGoal;
 import org.encog.app.analyst.wizard.NormalizeRange;
@@ -93,13 +95,13 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		missingList.add("MeanAndModeMissing");
 		missingList.add("NegateMissing");
 
-		
+		methods.add("Bayesian Network");
 		methods.add("Feedforward Network");
 		methods.add("RBF Network");
-		methods.add("Support Vector Machine");
 		methods.add("PNN/GRNN Network");
 		methods.add("Self Organizing Map (SOM)");
-		
+		methods.add("Support Vector Machine");		
+				
 		this.setSize(640, 330);
 		this.setTitle("Setup Encog Analyst Wizard");
 		
@@ -133,6 +135,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		this.normalize.setValue(true);
 		this.balance.setValue(false);
 		this.cluster.setValue(true);
+		((JComboBox)this.method.getField()).setSelectedIndex(1);
 	
 	}
 
@@ -155,15 +158,17 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	{
 		switch(this.method.getSelectedIndex()) {
 			case 0:
-				return WizardMethodType.FeedForward;
+				return WizardMethodType.BayesianNetwork;
 			case 1:
-				return WizardMethodType.RBF;
+				return WizardMethodType.FeedForward;
 			case 2:
-				return WizardMethodType.SVM;
+				return WizardMethodType.RBF;
 			case 3:
 				return WizardMethodType.PNN;
 			case 4:
 				return WizardMethodType.SOM;
+			case 5:
+				return WizardMethodType.SVM;
 			default:
 				return null;
 		}
