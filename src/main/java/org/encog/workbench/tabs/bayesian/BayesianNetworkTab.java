@@ -40,6 +40,7 @@ import org.encog.ml.MLInput;
 import org.encog.ml.MLOutput;
 import org.encog.ml.MLProperties;
 import org.encog.ml.MLResettable;
+import org.encog.ml.bayesian.BayesianChoice;
 import org.encog.ml.bayesian.BayesianEvent;
 import org.encog.ml.bayesian.BayesianNetwork;
 import org.encog.ml.bayesian.bif.BIFUtil;
@@ -322,7 +323,7 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 			report.cell(event.getLabel());
 			StringBuilder l = new StringBuilder();
 			boolean first = true;
-			for (String str : event.getChoices()) {
+			for (BayesianChoice str : event.getChoices()) {
 				if (!first) {
 					l.append(", ");
 				}
