@@ -210,7 +210,7 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 		try {
 			String query = EncogWorkBench.displayInput("Enter query (i.e. P(+x,-y)?", this.method.getQuery().getProblem());
 			if( query!=null) {
-				this.method.defineQuery(query);
+				//this.method.defineQuery(query);
 				EncogWorkBench.displayMessage("Query", "Query successfully updated.");
 				this.produceReport();
 				this.setDirty(true);
@@ -405,7 +405,7 @@ public class BayesianNetworkTab extends EncogCommonTab implements
 			
 			boolean changed = false;
 			if( !priorQuery.equals(currentQuery)) {
-				this.method.defineQuery(currentQuery);
+				//this.method.defineQuery(currentQuery);
 				changed = true;
 			}
 			
