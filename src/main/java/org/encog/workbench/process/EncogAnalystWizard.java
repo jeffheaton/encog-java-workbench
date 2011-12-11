@@ -36,6 +36,7 @@ import org.encog.app.analyst.wizard.AnalystWizard;
 import org.encog.app.analyst.wizard.WizardMethodType;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.wizard.analyst.AnalystWizardDialog;
+import org.encog.workbench.dialogs.wizard.specific.BayesianWizardDialog;
 import org.encog.workbench.util.FileUtil;
 
 public class EncogAnalystWizard {
@@ -114,6 +115,8 @@ public class EncogAnalystWizard {
 				wizard.setTaskSegregate(dialog.getSegregate().getValue());
 				wizard.setTaskBalance(dialog.getBalance().getValue());
 				wizard.setTaskCluster(dialog.getCluster().getValue());
+				
+				setSpecific(wizard);
 
 				wizard.wizard(targetCSVFile, headers, format);
 
@@ -128,5 +131,16 @@ public class EncogAnalystWizard {
 						.refresh();
 			}
 		}
+	}
+
+	private static void setSpecific(AnalystWizard wizard) {
+		if( wizard.getMethodType() == WizardMethodType.BayesianNetwork  ) {
+			BayesianWizardDialog dialog = new BayesianWizardDialog();
+			if( dialog.process() ) {
+				wizard.setNaiveBayes(dialog.getNaiveBayesian().getValue());
+				wizard.setEvidenceSegements(dialog.getEvidenceSegments().getValue());
+			}
+		}
+		
 	}
 }
