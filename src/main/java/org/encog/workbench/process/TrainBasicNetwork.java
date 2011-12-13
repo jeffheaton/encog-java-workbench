@@ -26,9 +26,20 @@ package org.encog.workbench.process;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComboBox;
+
 import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
 import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.ml.MLMethod;
+import org.encog.ml.bayesian.BayesianNetwork;
+import org.encog.ml.bayesian.training.BayesianInit;
+import org.encog.ml.bayesian.training.TrainBayesian;
+import org.encog.ml.bayesian.training.estimator.BayesEstimator;
+import org.encog.ml.bayesian.training.estimator.EstimatorNone;
+import org.encog.ml.bayesian.training.estimator.SimpleEstimator;
+import org.encog.ml.bayesian.training.search.SearchNone;
+import org.encog.ml.bayesian.training.search.k2.BayesSearch;
+import org.encog.ml.bayesian.training.search.k2.SearchK2;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.folded.FoldedDataSet;
@@ -75,6 +86,7 @@ import org.encog.workbench.dialogs.training.TrainDialog;
 import org.encog.workbench.dialogs.training.methods.InputADALINE;
 import org.encog.workbench.dialogs.training.methods.InputAnneal;
 import org.encog.workbench.dialogs.training.methods.InputBackpropagation;
+import org.encog.workbench.dialogs.training.methods.InputBayesian;
 import org.encog.workbench.dialogs.training.methods.InputGenetic;
 import org.encog.workbench.dialogs.training.methods.InputInstar;
 import org.encog.workbench.dialogs.training.methods.InputLMA;
@@ -172,6 +184,8 @@ public class TrainBasicNetwork {
 			performSVM(file, trainingData);
 		} else if (method instanceof CPN) {
 			performCPN(file, trainingData);
+		} else if (method instanceof BayesianNetwork) {
+			performBayesian(file, trainingData);
 		} else if (method instanceof BasicNetwork || method instanceof RBFNetwork ) {
 
 			ChooseBasicNetworkTrainingMethod choose = new ChooseBasicNetworkTrainingMethod(
@@ -319,7 +333,6 @@ public class TrainBasicNetwork {
 				file.revert();
 			}
 		}
-
 	}
 
 	private void performADALINE(ProjectEGFile file, MLDataSet trainingData) {
@@ -609,6 +622,44 @@ public class TrainBasicNetwork {
 		if( EncogWorkBench.askQuestion("Finished Training", "SVD trained to an error of " + Format.formatPercent(train.getError()) + "\nSave network?") ) {
 			file.save();
 		}
+	}
+	
+	private void performBayesian(ProjectEGFile file, MLDataSet trainingData) {
+
+		InputBayesian d = new InputBayesian();
+
+		if (d.process()) {
+			BayesianInit theInit =  null;
+			BayesSearch theSearch =  null;
+			BayesEstimator theEstimator =  null;
+			
+			if( ((JComboBox)d.getInitOptions().getField()).getSelectedItem().equals("Empty") ) {
+				theInit = BayesianInit.InitEmpty;
+			} else if( ((JComboBox)d.getInitOptions().getField()).getSelectedItem().equals("Naive Bayes") ) {
+				theInit = BayesianInit.InitNaiveBayes;
+			} else if( ((JComboBox)d.getInitOptions().getField()).getSelectedItem().equals("No Change") ) {
+				theInit = BayesianInit.InitNoChange;
+			}
+			
+			if( ((JComboBox)d.getSearchMethod().getField()).getSelectedItem().equals("K2") ) {
+				theSearch = new SearchK2();
+			} else if( ((JComboBox)d.getSearchMethod().getField()).getSelectedItem().equals("None") ) {
+				theSearch = new SearchNone();
+			}
+			
+			if( ((JComboBox)d.getEstimateMethod().getField()).getSelectedItem().equals("Simple") ) {
+				theEstimator = new SimpleEstimator();
+			} else if( ((JComboBox)d.getEstimateMethod().getField()).getSelectedItem().equals("None") ) {
+				theEstimator = new EstimatorNone();
+			}
+			
+			TrainBayesian train = new TrainBayesian((BayesianNetwork) file.getObject(),
+					 trainingData, d.getMaxParents().getValue(), theInit,
+						theSearch, theEstimator);
+			
+			startup(file, train, 0.0);
+		}
+
 	}
 
 	private void startup(ProjectEGFile file, MLTrain train, double maxError) {

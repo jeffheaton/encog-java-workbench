@@ -37,7 +37,7 @@ public class BayesianWizardDialog extends EncogPropertiesDialog {
 	
 	public BayesianWizardDialog() {
 		super(EncogWorkBench.getInstance().getMainWindow());
-		setTitle("Create Elman Network");
+		setTitle("Bayesian Parameters");
 		setSize(400,400);
 		setLocation(200,200);
 		addProperty(this.evidenceSegments = new IntegerField("evidence segments","Evidence Segments",true,1,10000));
