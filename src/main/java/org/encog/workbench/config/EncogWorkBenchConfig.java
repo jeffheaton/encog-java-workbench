@@ -32,6 +32,7 @@ import java.io.OutputStream;
 import java.util.Map;
 
 import org.encog.mathutil.error.ErrorCalculationMode;
+import org.encog.persist.EncogFileLine;
 import org.encog.persist.EncogFileSection;
 import org.encog.persist.EncogReadHelper;
 import org.encog.persist.EncogWriteHelper;
@@ -134,7 +135,7 @@ public class EncogWorkBenchConfig {
 			
 			while( (section = in.readNextSection()) != null ) {
 				if( section.getSectionName().equals("ENCOG") && section.getSubSectionName().equals("TRAINING") ) {
-					Map<String,String> params = section.parseParams();
+					Map<String, EncogFileLine> params = section.parseParams();
 					this.defaultError = EncogFileSection.parseDouble(params, EncogWorkBenchConfig.PROPERTY_DEFAULT_ERROR);
 					this.threadCount = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_THREAD_COUNT);
 					this.useOpenCL = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_THREAD_COUNT)>0;
