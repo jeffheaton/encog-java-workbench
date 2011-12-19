@@ -135,7 +135,7 @@ public class EncogWorkBenchConfig {
 			
 			while( (section = in.readNextSection()) != null ) {
 				if( section.getSectionName().equals("ENCOG") && section.getSubSectionName().equals("TRAINING") ) {
-					Map<String, EncogFileLine> params = section.parseParams();
+					Map<String, String> params = section.parseParams();
 					this.defaultError = EncogFileSection.parseDouble(params, EncogWorkBenchConfig.PROPERTY_DEFAULT_ERROR);
 					this.threadCount = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_THREAD_COUNT);
 					this.useOpenCL = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_THREAD_COUNT)>0;
