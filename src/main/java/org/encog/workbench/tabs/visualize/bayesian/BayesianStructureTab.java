@@ -25,19 +25,22 @@ package org.encog.workbench.tabs.visualize.bayesian;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
@@ -45,10 +48,14 @@ import org.apache.commons.collections15.Transformer;
 import org.encog.ml.bayesian.BayesianEvent;
 import org.encog.ml.bayesian.BayesianNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.visualize.structure.DrawnNeuron;
 
+import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout2;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
@@ -60,38 +67,89 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.layout.LayoutTransition;
+import edu.uci.ics.jung.visualization.renderers.BasicVertexLabelRenderer.InsidePositioner;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
+import edu.uci.ics.jung.visualization.util.Animator;
 
 public class BayesianStructureTab extends EncogCommonTab {
 
 	private VisualizationViewer<DrawnEvent, DrawnEventConnection> vv;
+	private Graph<DrawnEvent, DrawnEventConnection> graph;
+	
+	private final class LayoutChooser implements ActionListener
+    {
+        private final JComboBox jcb;
+        private final VisualizationViewer<DrawnEvent,DrawnEventConnection> vv;
+
+        private LayoutChooser(JComboBox jcb, VisualizationViewer<DrawnEvent,DrawnEventConnection> vv)
+        {
+            super();
+            this.jcb = jcb;
+            this.vv = vv;
+        }
+
+        public void actionPerformed(ActionEvent arg0)
+        {
+            Object[] constructorArgs =
+                { graph };
+
+            Class<? extends Layout<Integer,Number>> layoutC = 
+                (Class<? extends Layout<Integer,Number>>) jcb.getSelectedItem();
+//            Class lay = layoutC;
+            try
+            {
+                Constructor<? extends Layout<Integer, Number>> constructor = layoutC
+                        .getConstructor(new Class[] {Graph.class});
+                Object o = constructor.newInstance(constructorArgs);
+                Layout<DrawnEvent,DrawnEventConnection> l = (Layout<DrawnEvent,DrawnEventConnection>) o;
+                l.setInitializer(vv.getGraphLayout());
+                l.setSize(vv.getSize());
+                
+				LayoutTransition<DrawnEvent,DrawnEventConnection> lt =
+					new LayoutTransition<DrawnEvent,DrawnEventConnection>(vv, vv.getGraphLayout(), l);
+				Animator animator = new Animator(lt);
+				animator.start();
+				vv.getRenderContext().getMultiLayerTransformer().setToIdentity();
+				vv.repaint();
+                
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+	
+    private static Class<? extends Layout>[] getCombos()
+    {
+        List<Class<? extends Layout>> layouts = new ArrayList<Class<? extends Layout>>();
+        layouts.add(KKLayout.class);
+        layouts.add(FRLayout.class);
+        layouts.add(CircleLayout.class);
+        layouts.add(SpringLayout.class);
+        layouts.add(SpringLayout2.class);
+        layouts.add(ISOMLayout.class);
+        return layouts.toArray(new Class[0]);
+    }
+
 	
 	public BayesianStructureTab(BayesianNetwork method) {
 		super(null);
 		
 		// Graph<V, E> where V is the type of the vertices
 		// and E is the type of the edges
-		Graph<DrawnEvent, DrawnEventConnection> g = buildGraph(method);
+		this.graph = buildGraph(method);
 				
-		Layout<DrawnEvent, DrawnEventConnection> layout = new KKLayout(g);
-
-		int size = method.calculateParameterCount() * 15;
-		size = Math.min(size, 600);
-
-		layout.setSize(new Dimension(size,size)); // sets the initial size of the space
-		// The BasicVisualizationServer<V,E> is parameterized by the edge types
-		//BasicVisualizationServer<DrawnNeuron, DrawnConnection> vv = new BasicVisualizationServer<DrawnNeuron, DrawnConnection>(
-		//		layout);
-		
-		//Dimension d = new Dimension(600,600);
+		Layout<DrawnEvent, DrawnEventConnection> layout = new KKLayout(graph);
 		
 		vv =  new VisualizationViewer<DrawnEvent, DrawnEventConnection>(layout);
 		
-		//vv.setPreferredSize(d); //Sets the viewing area size
-
 		vv.getRenderer().getVertexLabelRenderer()
 				.setPosition(Renderer.VertexLabel.Position.CNTR);
-		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<DrawnEvent>());
+        vv.getRenderer().getVertexLabelRenderer().setPositioner(new InsidePositioner());
+        vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.N);
 		
 		vv.setVertexToolTipTransformer(new Transformer<DrawnEvent,String>() {
 			public String transform(DrawnEvent edge) {
@@ -115,7 +173,22 @@ public class BayesianStructureTab extends EncogCommonTab {
         vv.addKeyListener(graphMouse.getModeKeyListener());
         vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint);
 
-        final ScalingControl scaler = new CrossoverScalingControl();        
+        final ScalingControl scaler = new CrossoverScalingControl();     
+        
+        Class[] combos = getCombos();
+        final JComboBox jcb = new JComboBox(combos);
+        // use a renderer to shorten the layout name presentation
+        jcb.setRenderer(new DefaultListCellRenderer() {
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                String valueString = value.toString();
+                valueString = valueString.substring(valueString.lastIndexOf('.')+1);
+                return super.getListCellRendererComponent(list, valueString, index, isSelected,
+                        cellHasFocus);
+            }
+        });
+        jcb.addActionListener(new LayoutChooser(jcb, vv));
+        jcb.setSelectedItem(FRLayout.class);
+        
 
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
@@ -142,11 +215,12 @@ public class BayesianStructureTab extends EncogCommonTab {
         	modeBox.addItemListener(((DefaultModalGraphMouse<Integer,Number>)vv.getGraphMouse()).getModeListener());
 
         JPanel controls = new JPanel();
-        controls.setLayout(new FlowLayout(FlowLayout.LEFT));
+        controls.setLayout(new FlowLayout(FlowLayout.LEFT));        
         controls.add(plus);
         controls.add(minus);
         controls.add(reset);
         controls.add(modeBox);
+        controls.add(jcb);
         Border border = BorderFactory.createEtchedBorder();
         controls.setBorder(border);
         add(controls, BorderLayout.NORTH);

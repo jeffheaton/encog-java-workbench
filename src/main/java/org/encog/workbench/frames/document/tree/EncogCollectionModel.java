@@ -126,15 +126,17 @@ public class EncogCollectionModel implements TreeModel {
 			// sort
 			TreeSet<File> folderList = new TreeSet<File>();
 			TreeSet<File> fileList = new TreeSet<File>();
+			
+			if (path.listFiles() != null) {
+				for (File entry : path.listFiles()) {
+					if (!entry.isHidden()) {
+						if (entry.isDirectory())
+							folderList.add(entry);
+						else
+							fileList.add(entry);
+					}
 
-			for (File entry : path.listFiles()) {
-				if (!entry.isHidden()) {
-					if (entry.isDirectory())
-						folderList.add(entry);
-					else
-						fileList.add(entry);
 				}
-
 			}
 
 			// build list
