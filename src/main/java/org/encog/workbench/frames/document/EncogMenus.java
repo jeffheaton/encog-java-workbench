@@ -62,6 +62,7 @@ public class EncogMenus {
 	public static final String TOOLS_BIN2EXTERNAL = "Convert Encog Binary to Other File...";
 	public static final String TOOLS_EXTERNAL2BIN = "Convert Other File to Encog Binary...";
 	public static final String TOOLS_RBF = "Chart RBF...";
+	public static final String TOOLS_PROBEN = "Proben1...";
 	
 		
 	public static final String HELP_ABOUT = "About Encog Workbench...";
@@ -94,6 +95,7 @@ public class EncogMenus {
 	private JMenuItem menuToolsBin2Ext;
 	private JMenuItem menuToolsExt2Bin;
 	private JMenuItem menuToolsRBF;	
+	private JMenuItem menuToolsProben;	
 	
 	private JMenuItem menuHelpAbout;
 
@@ -147,6 +149,7 @@ public class EncogMenus {
 		this.menuToolsBin2Ext = owner.addItem(this.menuTools, EncogMenus.TOOLS_BIN2EXTERNAL, 'x');
 		this.menuToolsExt2Bin = owner.addItem(this.menuTools, EncogMenus.TOOLS_EXTERNAL2BIN, 'y');
 		this.menuToolsRBF = owner.addItem(this.menuTools, EncogMenus.TOOLS_RBF, 'r');
+		this.menuToolsProben = owner.addItem(this.menuTools, EncogMenus.TOOLS_PROBEN, 'r');
 		this.menuBar.add(this.menuTools);		
 
 		this.menuHelp = new JMenu("Help");
@@ -238,9 +241,9 @@ public class EncogMenus {
 			owner.getOperations().performHelpAbout();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BENCHMARK)) {
 			owner.getOperations().performBenchmark();
-		} /*else if (event.getActionCommand().equals(EncogMenus.TOOLS_CLOUD)) {
-			owner.getOperations().performCloudLogin();
-		}*/ else if (event.getActionCommand().equals(EncogMenus.TOOLS_BROWSE)) {
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_PROBEN)) {
+			owner.getOperations().performProben();
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_BROWSE)) {
 			owner.getOperations().performBrowse();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EVALUATE)) {
 			owner.getOperations().performEvaluate();

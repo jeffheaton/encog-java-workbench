@@ -49,6 +49,7 @@ import org.encog.workbench.dialogs.config.EncogConfigDialog;
 import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
+import org.encog.workbench.dialogs.training.ProbenDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.frames.EncogCommonFrame;
@@ -417,5 +418,13 @@ public class EncogDocumentOperations {
 			e.printStackTrace();
 			EncogWorkBench.getInstance().getMainWindow().endWait();
 		}
+	}
+
+	public void performProben() {
+		ProbenDialog dialog = new ProbenDialog();
+		if( dialog.process() ) {
+			
+		}
+		
 	}
 }
