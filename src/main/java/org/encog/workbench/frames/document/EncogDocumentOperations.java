@@ -59,6 +59,7 @@ import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.files.text.BasicTextTab;
+import org.encog.workbench.tabs.proben.ProbenStatusTab;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
 import org.encog.workbench.util.FileUtil;
 
@@ -423,7 +424,12 @@ public class EncogDocumentOperations {
 	public void performProben() {
 		ProbenDialog dialog = new ProbenDialog();
 		if( dialog.process() ) {
-			
+			ProbenStatusTab tab = new ProbenStatusTab(
+					dialog.getMethodName(), 
+					dialog.getMethodArchitecture(), 
+					dialog.getTrainingName(), 
+					dialog.getTrainingArgs());
+			EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
 		}
 		
 	}

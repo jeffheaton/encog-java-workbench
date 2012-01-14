@@ -56,7 +56,7 @@ public class TextAreaField extends PropertiesField {
 		
 		setField(scroll);
 		
-		return y+this.textArea.getHeight();
+		return y+scroll.getHeight();
 	}
 
 	public String getValue() {

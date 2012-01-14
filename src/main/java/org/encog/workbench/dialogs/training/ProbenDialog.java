@@ -23,12 +23,15 @@
  */
 package org.encog.workbench.dialogs.training;
 
-import java.awt.Frame;
+import java.awt.TextArea;
 
+import org.encog.ml.factory.MLMethodFactory;
+import org.encog.ml.factory.MLTrainFactory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
-import org.encog.workbench.dialogs.common.IntegerField;
+import org.encog.workbench.dialogs.common.TextAreaField;
+import org.encog.workbench.dialogs.common.TextField;
 
 /**
  * Basic dialog box that displays two combo boxes used to select
@@ -38,8 +41,11 @@ import org.encog.workbench.dialogs.common.IntegerField;
  * @author jheaton
  */
 public class ProbenDialog extends EncogPropertiesDialog {
-
-	private final DoubleField maxError;
+	
+	private TextField methodName;
+	private TextAreaField methodArchitecture;
+	private TextField trainingName;
+	private TextAreaField trainingArgs;
 
 	/**
 	 * Construct the dialog box.
@@ -51,22 +57,47 @@ public class ProbenDialog extends EncogPropertiesDialog {
 		setSize(400,400);
 		setLocation(200,200);
 		
-		addProperty(this.maxError = new DoubleField("max error",
-				"Maximum Error Percent(0-100)", true, 0, 100));
+		addProperty(this.methodName = new TextField("method name", "Method Name", true));
+		addProperty(this.methodArchitecture = new TextAreaField("architecture", "Method Architecture", false));
+		addProperty(this.trainingName = new TextField("training name", "Method Name", true));
+		addProperty(this.trainingArgs = new TextAreaField("training args", "Training Args", false));
+		render();
+		
+		this.methodName.setValue(MLMethodFactory.TYPE_FEEDFORWARD);
+		this.trainingName.setValue(MLTrainFactory.TYPE_RPROP);
+		this.methodArchitecture.setValue("?:B->SIGMOID->40:B->SIGMOID->?");		
 
 	}
 	
+
+	/**
+	 * @return the methodName
+	 */
+	public String getMethodName() {
+		return methodName.getValue();
+	}
+
+	/**
+	 * @return the methodArchitecture
+	 */
+	public String getMethodArchitecture() {
+		return methodArchitecture.getValue();
+	}
+
+	/**
+	 * @return the trainingName
+	 */
+	public String getTrainingName() {
+		return trainingName.getValue();
+	}
+
+	/**
+	 * @return the trainingArgs
+	 */
+	public String getTrainingArgs() {
+		return trainingArgs.getValue();
+	}
 	
-	public void render() {
-		super.render();
-		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
-
-	}
-
-	public DoubleField getMaxError() {
-		return maxError;
-	}
-
 	
 
 }
