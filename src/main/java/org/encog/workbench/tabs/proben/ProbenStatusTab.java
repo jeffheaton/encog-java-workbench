@@ -106,6 +106,7 @@ public class ProbenStatusTab extends EncogCommonTab implements
 	private int currentDataset = 0;
 	private String commandStatus = "";
 	private String trainingError = "";
+	private String testError = "";
 	private String trainingIterations = "";
 	private boolean shouldExit;
 	private long lastUpdate;
@@ -233,6 +234,8 @@ public class ProbenStatusTab extends EncogCommonTab implements
 		y += fm.getHeight();
 		g.drawString("Training Error:", 350, y);
 		y += fm.getHeight();
+		g.drawString("Test Error:", 350, y);
+		y += fm.getHeight();
 		g.drawString("Training Type:", 350, y);
 
 
@@ -263,6 +266,8 @@ public class ProbenStatusTab extends EncogCommonTab implements
 		g.drawString(this.trainingIterations, 500, y);
 		y += fm.getHeight();
 		g.drawString(this.trainingError, 500, y);
+		y += fm.getHeight();
+		g.drawString(this.testError, 500, y);
 		y += fm.getHeight();
 		if( train!=null ) {
 			g.drawString(train.getClass().getSimpleName(), 500, y);
@@ -301,6 +306,7 @@ public class ProbenStatusTab extends EncogCommonTab implements
 
 	private void evaluate() {
 		this.cancelCommand = false;
+		this.commandTime.reset();
 		MLMethodFactory methodFactory = new MLMethodFactory();		
 		MLMethod method = methodFactory.create(methodName, methodArchitecture, 
 				data.getInputCount(), data.getIdealCount());
@@ -315,20 +321,23 @@ public class ProbenStatusTab extends EncogCommonTab implements
 		
 		Stopwatch sw = new Stopwatch();
 		sw.start();
-	int iterations = 0;
+	
+		MLError calc = (MLError)train.getMethod();
+		int iterations = 0;
 	do {		
 		train.iteration();
 		iterations++;
 		
 		if(sw.getElapsedMilliseconds()>1000) {
 			this.trainingError = Format.formatPercent(train.getError());
+			this.testError = Format.formatPercent(calc.calculateError(data.getTestDataSet()));
 			this.trainingIterations = Format.formatInteger(iterations);
 			update();
 			sw.reset();
 		}
 	} while (train.getError() > 0.01 && !this.shouldExit && !this.cancelCommand && !this.cancelAll);
 	
-	MLError calc = (MLError)train.getMethod();
+	
 	double trainError = calc.calculateError(data.getTrainingDataSet());
 	double testError = calc.calculateError(data.getTestDataSet());
 	double validationError = calc.calculateError(data.getValidationDataSet());
@@ -450,7 +459,7 @@ public class ProbenStatusTab extends EncogCommonTab implements
 
 	@Override
 	public String getName() {
-		return "Analyst Progress";
+		return "Proben1 Progress";
 	}
 
 	/**
