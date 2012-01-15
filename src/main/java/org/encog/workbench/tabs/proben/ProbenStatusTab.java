@@ -30,19 +30,22 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.encog.app.analyst.AnalystError;
+import org.encog.mathutil.NumericRange;
+import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.ml.MLError;
 import org.encog.ml.MLMethod;
-import org.encog.ml.MLResettable;
 import org.encog.ml.factory.MLMethodFactory;
 import org.encog.ml.factory.MLTrainFactory;
 import org.encog.ml.train.MLTrain;
-import org.encog.ml.train.strategy.RequiredImprovementStrategy;
-import org.encog.neural.networks.training.propagation.manhattan.ManhattanPropagation;
+import org.encog.ml.train.strategy.end.EarlyStoppingStrategy;
+import org.encog.ml.train.strategy.end.EndIterationsStrategy;
 import org.encog.util.Format;
 import org.encog.util.Stopwatch;
 import org.encog.workbench.EncogWorkBench;
@@ -104,10 +107,11 @@ public class ProbenStatusTab extends EncogCommonTab implements
 
 	private String status;
 	private int currentDataset = 0;
-	private String commandStatus = "";
 	private String trainingError = "";
+	private String validationError = "";
 	private String testError = "";
 	private String trainingIterations = "";
+	private String currentTrainingRun = "";
 	private boolean shouldExit;
 	private long lastUpdate;
 	private Stopwatch totalTime = new Stopwatch();
@@ -119,6 +123,12 @@ public class ProbenStatusTab extends EncogCommonTab implements
 	private String trainingName;
 	private String trainingArgs;
 	private ProBenData data;
+	private int trainingRuns;
+	private int maxIterations;
+	private List<Double> listTrainingError = new ArrayList<Double>();
+	private List<Double> listValidationError = new ArrayList<Double>();
+	private List<Double> listTestError = new ArrayList<Double>();
+	private List<Double> listIterations = new ArrayList<Double>();
 	
 	/**
 	 * Construct the dialog box.
@@ -127,12 +137,16 @@ public class ProbenStatusTab extends EncogCommonTab implements
 	 *            The owner of the dialog box.
 	 */
 	public ProbenStatusTab(
+			int theTrainingRuns,
+			int theMaxIterations,
 			String theMethodName,
 			String theMethodArchitecture,
 			String theTrainingName,
 			String theTrainingArgs) {
 		super(null);
 		
+		this.trainingRuns = theTrainingRuns;
+		this.maxIterations = theMaxIterations;
 		this.methodName = theMethodName;
 		this.methodArchitecture = theMethodArchitecture;
 		this.trainingName = theTrainingName;
@@ -222,21 +236,28 @@ public class ProbenStatusTab extends EncogCommonTab implements
 		y += fm.getHeight();
 		g.drawString("Current Dataset Number:", 10, y);
 		y += fm.getHeight();
-		g.drawString("Current Command Status:", 10, y);
+		g.drawString("Max Iterations:", 10, y);
+		y += fm.getHeight();
+		g.drawString("Training run:", 10, y);
 		
 
 		y = fm.getHeight();
 		g.drawString("Elapsed Time:", 350, y);
 		y += fm.getHeight();
 		g.drawString("Command Elapsed Time:", 350, y);
+		y += fm.getHeight();		
+		g.drawString("Training Type:", 350, y);
 		y += fm.getHeight();
-		g.drawString("Training Iterations:", 350, y);
+		g.drawString("Error Calc Type:", 350, y);
+		y += fm.getHeight();
+		g.drawString("Training Iterations:", 350, y);		
 		y += fm.getHeight();
 		g.drawString("Training Error:", 350, y);
 		y += fm.getHeight();
-		g.drawString("Test Error:", 350, y);
+		g.drawString("Validation Error:", 350, y);
 		y += fm.getHeight();
-		g.drawString("Training Type:", 350, y);
+		g.drawString("Test Error:", 350, y);
+		
 
 
 		y = fm.getHeight();
@@ -244,13 +265,15 @@ public class ProbenStatusTab extends EncogCommonTab implements
 
 		g.drawString(this.status, 175, y);
 		y += fm.getHeight();
-		g.drawString("", 175, y);
+		g.drawString("" + this.files.getList().size(), 175, y);
 		y += fm.getHeight();
 		g.drawString( this.currentDataset==0?"N/A":this.files.getList().get(this.currentDataset-1), 175, y);
 		y += fm.getHeight();
 		g.drawString(this.currentDataset + " / " + this.files.getList().size(), 175, y);
 		y += fm.getHeight();
-		g.drawString(this.commandStatus, 175, y);
+		g.drawString(Format.formatInteger(this.maxIterations), 175, y);
+		y += fm.getHeight();
+		g.drawString(this.currentTrainingRun, 175, y);
 		y += fm.getHeight();
 		
 		String time1 = Format.formatTimeSpan((int)(this.totalTime.getElapsedMilliseconds()/1000));
@@ -263,15 +286,20 @@ public class ProbenStatusTab extends EncogCommonTab implements
 		y += fm.getHeight();
 		g.drawString(time2, 500, y);
 		y += fm.getHeight();
+		if( train!=null ) {			
+			g.drawString(train.getClass().getSimpleName(), 500, y);
+		}
+		y += fm.getHeight();
+		g.drawString(ErrorCalculation.getMode().toString(), 500, y);
+		y += fm.getHeight();
 		g.drawString(this.trainingIterations, 500, y);
 		y += fm.getHeight();
 		g.drawString(this.trainingError, 500, y);
 		y += fm.getHeight();
-		g.drawString(this.testError, 500, y);
+		g.drawString(this.validationError, 500, y);
 		y += fm.getHeight();
-		if( train!=null ) {
-			g.drawString(train.getClass().getSimpleName(), 500, y);
-		}
+		g.drawString(this.testError, 500, y);
+
 
 
 	}
@@ -307,45 +335,48 @@ public class ProbenStatusTab extends EncogCommonTab implements
 	private void evaluate() {
 		this.cancelCommand = false;
 		this.commandTime.reset();
-		MLMethodFactory methodFactory = new MLMethodFactory();		
-		MLMethod method = methodFactory.create(methodName, methodArchitecture, 
+		MLMethodFactory methodFactory = new MLMethodFactory();
+		MLMethod method = methodFactory.create(methodName, methodArchitecture,
 				data.getInputCount(), data.getIdealCount());
-		
-		MLTrainFactory trainFactory = new MLTrainFactory();	
-		this.train = trainFactory.create(method,data.getTrainingDataSet(),trainingName,trainingArgs);
-		
-		// reset if improve is less than 1% over 5 cycles
-		if( method instanceof MLResettable && !(train instanceof ManhattanPropagation) ) {
-			train.addStrategy(new RequiredImprovementStrategy(5000));
-		}
-		
+
+		MLTrainFactory trainFactory = new MLTrainFactory();
+		this.train = trainFactory.create(method, data.getTrainingDataSet(),
+				trainingName, trainingArgs);
+
+		train.addStrategy(new EndIterationsStrategy(this.maxIterations));
+		train.addStrategy(new EarlyStoppingStrategy(data.getValidationDataSet(),data.getTestDataSet()));
 		Stopwatch sw = new Stopwatch();
 		sw.start();
-	
-		MLError calc = (MLError)train.getMethod();
-		int iterations = 0;
-	do {		
-		train.iteration();
-		iterations++;
-		
-		if(sw.getElapsedMilliseconds()>1000) {
-			this.trainingError = Format.formatPercent(train.getError());
-			this.testError = Format.formatPercent(calc.calculateError(data.getTestDataSet()));
-			this.trainingIterations = Format.formatInteger(iterations);
-			update();
-			sw.reset();
-		}
-	} while (train.getError() > 0.01 && !this.shouldExit && !this.cancelCommand && !this.cancelAll);
-	
-	
-	double trainError = calc.calculateError(data.getTrainingDataSet());
-	double testError = calc.calculateError(data.getTestDataSet());
-	double validationError = calc.calculateError(data.getValidationDataSet());
-	
-	String str = data.getName() + "; Iterations=" + iterations + "; Data Size=" + Format.formatInteger((int)data.getTrainingDataSet().getRecordCount()) 
-	+ "; Training Error=" + Format.formatPercent(trainError) + "; Validation Error=" + Format.formatPercent(validationError);
-	EncogWorkBench.getInstance().outputLine(str);
 
+		MLError calc = (MLError) train.getMethod();	
+		
+		int iterations = 0;
+		do {
+			train.iteration();
+			iterations++;
+
+			if (sw.getElapsedMilliseconds() > 1000) {
+				this.trainingError = Format.formatPercent(train.getError());
+				this.testError = Format.formatPercent(calc.calculateError(data
+						.getTestDataSet()));
+				this.validationError = Format.formatPercent(calc
+						.calculateError(data.getValidationDataSet()));
+				this.trainingIterations = Format.formatInteger(iterations);
+				update();
+				sw.reset();
+			}
+		} while (train.getError() > 0.01 && !this.shouldExit
+				&& !this.cancelCommand && !this.cancelAll && !train.isTrainingDone());
+
+		double trainError = calc.calculateError(data.getTrainingDataSet());
+		double testError = calc.calculateError(data.getTestDataSet());
+		double validationError = calc.calculateError(data
+				.getValidationDataSet());
+		
+		this.listTrainingError.add(trainError);
+		this.listValidationError.add(validationError);
+		this.listTestError.add(testError);
+		this.listIterations.add((double)iterations);
 	}
 	
 
@@ -362,10 +393,19 @@ public class ProbenStatusTab extends EncogCommonTab implements
 			this.totalTime.start();
 			update();
 			for(int i=0;i<this.files.getList().size()&&!this.shouldExit&&!this.cancelAll;i++) {
+				this.listIterations.clear();
+				this.listTestError.clear();
+				this.listTrainingError.clear();
+				this.listValidationError.clear();
+				
 				this.currentDataset = i+1;
 				this.data = new ProBenData(this.files.getList().get(i));
 				this.data.load();
-				evaluate();
+				for(int r=0;r<this.trainingRuns;r++) {
+					this.currentTrainingRun = (r+1) + "/" + this.trainingRuns;
+					evaluate();
+				}
+				writeResult();
 				update();
 				
 			}
@@ -396,6 +436,41 @@ public class ProbenStatusTab extends EncogCommonTab implements
 				dispose();
 			}
 		}
+	}
+	
+	private String formatRange(NumericRange r) {
+		StringBuilder result = new StringBuilder();
+		result.append(Format.formatDouble(r.getMean(), 2));
+		result.append(" (sdev=");
+		result.append(Format.formatDouble(r.getStandardDeviation(),2));
+		result.append(")");
+		return result.toString();
+	}
+	
+	private String formatPercentRange(NumericRange r) {
+		StringBuilder result = new StringBuilder();
+		result.append(Format.formatPercent(r.getMean()));
+		result.append(" (sdev=");
+		result.append(Format.formatPercent(r.getStandardDeviation()));
+		result.append(")");
+		return result.toString();
+	}
+	
+	private void writeResult() {
+		NumericRange rangeIterations = new NumericRange(this.listIterations);
+		NumericRange rangeTest = new NumericRange(this.listTestError);
+		NumericRange rangeValidation = new NumericRange(this.listValidationError);
+		NumericRange rangeTraining = new NumericRange(this.listTrainingError);
+		
+		String str = data.getName()
+		+ "; Iterations="
+		+ formatRange(rangeIterations)
+		+ "; Data Size="
+		+ Format.formatInteger((int) data.getTrainingDataSet()
+				.getRecordCount()) + "; Training Error="
+		+ formatPercentRange(rangeTraining) + "; Validation Error="
+		+ formatPercentRange(rangeValidation);
+		EncogWorkBench.getInstance().outputLine(str);
 	}
 
 

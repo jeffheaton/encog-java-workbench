@@ -23,13 +23,11 @@
  */
 package org.encog.workbench.dialogs.training;
 
-import java.awt.TextArea;
-
 import org.encog.ml.factory.MLMethodFactory;
 import org.encog.ml.factory.MLTrainFactory;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
+import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.TextAreaField;
 import org.encog.workbench.dialogs.common.TextField;
 
@@ -41,7 +39,9 @@ import org.encog.workbench.dialogs.common.TextField;
  * @author jheaton
  */
 public class ProbenDialog extends EncogPropertiesDialog {
-	
+
+	private IntegerField trainingRuns;
+	private IntegerField maxInterations;
 	private TextField methodName;
 	private TextAreaField methodArchitecture;
 	private TextField trainingName;
@@ -56,7 +56,8 @@ public class ProbenDialog extends EncogPropertiesDialog {
 		super(EncogWorkBench.getInstance().getMainWindow());
 		setSize(400,400);
 		setLocation(200,200);
-		
+		addProperty(this.trainingRuns = new IntegerField("training runs","Training Runs",true,1,10000));
+		addProperty(this.maxInterations = new IntegerField("max iterations","Max Iterations",true,1,10000));
 		addProperty(this.methodName = new TextField("method name", "Method Name", true));
 		addProperty(this.methodArchitecture = new TextAreaField("architecture", "Method Architecture", false));
 		addProperty(this.trainingName = new TextField("training name", "Method Name", true));
@@ -66,6 +67,8 @@ public class ProbenDialog extends EncogPropertiesDialog {
 		this.methodName.setValue(MLMethodFactory.TYPE_FEEDFORWARD);
 		this.trainingName.setValue(MLTrainFactory.TYPE_RPROP);
 		this.methodArchitecture.setValue("?:B->SIGMOID->40:B->SIGMOID->?");		
+		this.trainingRuns.setValue(10);
+		this.maxInterations.setValue(3000);
 
 	}
 	
@@ -98,6 +101,12 @@ public class ProbenDialog extends EncogPropertiesDialog {
 		return trainingArgs.getValue();
 	}
 	
+	public int getMaxIterations() {
+		return this.maxInterations.getValue();
+	}
 	
+	public int getTrainingRuns() {
+		return this.trainingRuns.getValue();
+	}
 
 }

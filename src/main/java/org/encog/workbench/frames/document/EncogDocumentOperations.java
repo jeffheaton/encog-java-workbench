@@ -425,6 +425,8 @@ public class EncogDocumentOperations {
 		ProbenDialog dialog = new ProbenDialog();
 		if( dialog.process() ) {
 			ProbenStatusTab tab = new ProbenStatusTab(
+					dialog.getTrainingRuns(),
+					dialog.getMaxIterations(),
 					dialog.getMethodName(), 
 					dialog.getMethodArchitecture(), 
 					dialog.getTrainingName(), 
