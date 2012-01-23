@@ -43,6 +43,7 @@ import javax.swing.JPanel;
 
 import org.encog.StatusReportable;
 import org.encog.mathutil.randomize.Distort;
+import org.encog.ml.MLError;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
 import org.encog.ml.data.MLDataSet;
@@ -86,6 +87,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 * The close button.
 	 */
 	private final JButton buttonClose;
+	
+	private final JButton buttonIteration;
 
 	/**
 	 * The body of the dialog box is stored in this panel.
@@ -213,6 +216,10 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	
 	private String lastMessage = "";
 	
+	private MLDataSet validationData;
+	
+	private double validationError;
+	
 
 	/**
 	 * Construct the dialog box.
@@ -221,7 +228,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 *            The owner of the dialog box.
 	 */
 	public BasicTrainingProgress(MLTrain train, ProjectEGFile method,
-			MLDataSet trainingData) {
+			MLDataSet trainingData, MLDataSet validationData) {
 		super(method);
 		
 		if( method instanceof MLMethod ) {
@@ -238,6 +245,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		list.add("Perturb 50%");
 
 		this.comboReset = new JComboBox(list.toArray());
+		this.validationData = validationData;
 
 		this.train = train;
 		this.trainingData = trainingData;
@@ -245,11 +253,13 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		this.buttonStart = new JButton("Start");
 		this.buttonStop = new JButton("Stop");
 		this.buttonClose = new JButton("Close");
+		this.buttonIteration = new JButton("Iteration");
 
 		this.buttonStart.addActionListener(this);
 		this.buttonStop.addActionListener(this);
 		this.buttonClose.addActionListener(this);
 		this.comboReset.addActionListener(this);
+		this.buttonIteration.addActionListener(this);
 
 		setLayout(new BorderLayout());
 		this.panelBody = new JPanel();
@@ -257,13 +267,14 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		this.panelButtons.add(this.buttonStart);
 		this.panelButtons.add(this.buttonStop);
 		this.panelButtons.add(this.buttonClose);
+		this.panelButtons.add(this.buttonIteration);
 		this.panelButtons.add(this.comboReset);
 		add(this.panelBody, BorderLayout.CENTER);
 		add(this.panelButtons, BorderLayout.SOUTH);
 		this.panelBody.setLayout(new BorderLayout());
 		this.panelBody.add(this.statusPanel = new TrainingStatusPanel(this),
 				BorderLayout.NORTH);
-		this.panelBody.add(this.chartPanel = new ChartPane(),
+		this.panelBody.add(this.chartPanel = new ChartPane(this.validationData!=null),
 				BorderLayout.CENTER);
 		this.buttonStop.setEnabled(false);
 
@@ -335,6 +346,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 			performStart();
 		} else if (e.getSource() == this.buttonStop) {
 			performStop();
+		} else if (e.getSource() == this.buttonIteration) {
+			performIteration();
 		} else if (e.getSource() == this.comboReset) {
 			this.resetOption.set(this.comboReset.getSelectedIndex() - 1);
 			this.comboReset.setSelectedIndex(0);
@@ -379,6 +392,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		y += fm.getHeight();
 		g.drawString("Current Error:", 10, y);
 		y += fm.getHeight();
+		g.drawString("Validation Error:", 10, y);
+		y += fm.getHeight();		
 		g.drawString("Error Improvement:", 10, y);
 		y += fm.getHeight();
 		g.drawString("Message:", 10, y);
@@ -397,6 +412,12 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		g.drawString(str, 150, y);
 		y += fm.getHeight();
 		g.drawString(Format.formatPercent(this.currentError), 150, y);
+		y += fm.getHeight();
+		if( this.validationData!=null ) {
+			g.drawString(Format.formatPercent(this.validationError), 150, y);
+		} else {
+			g.drawString("n/a", 150, y);
+		}
 		y += fm.getHeight();
 		g.drawString(Format.formatPercent(this.errorImprovement), 150, y);
 		y += fm.getHeight();
@@ -441,6 +462,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 
 		this.buttonStart.setEnabled(false);
 		this.buttonStop.setEnabled(true);
+		this.buttonIteration.setEnabled(false);
 		this.cancel = false;
 		this.status = "Started";
 		this.thread = new Thread(this);
@@ -460,9 +482,9 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 */
 	public void redraw() {
 		this.statusPanel.repaint();
-		this.lastUpdate = System.currentTimeMillis();
+		this.lastUpdate = System.currentTimeMillis();		
 		this.chartPanel.addData(this.iteration, this.train.getError(),
-				this.errorImprovement);
+				this.errorImprovement, this.validationError);
 	}
 
 	/**
@@ -561,6 +583,13 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 				
 				this.errorImprovement = (this.lastError - this.currentError)
 						/ this.lastError;
+				if( this.validationData!=null ) {
+					MLMethod m = train.getMethod();
+					if( m instanceof MLError ) {
+						MLError error = (MLError)m;
+						this.validationError = error.calculateError(this.validationData);
+					}
+				}
 				if( Double.isInfinite(this.errorImprovement) || Double.isNaN(this.errorImprovement)) {
 					this.errorImprovement = 100.0;
 				}
@@ -638,6 +667,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 */
 	private void stopped() {
 		this.thread = null;
+		this.buttonIteration.setEnabled(true);
 		this.buttonStart.setEnabled(true);
 		this.buttonStop.setEnabled(false);
 		this.cancel = true;
@@ -651,6 +681,36 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	@Override
 	public void report(int total, int current, String message) {
 		this.lastMessage = message;
+		redraw();		
+	}
+	
+	public void performIteration() {
+		
+		for (int i = 0; i < EncogWorkBench.getInstance().getConfig()
+				.getIterationStepCount(); i++) {
+			this.iteration++;
+			this.lastError = this.train.getError();
+
+			this.train.iteration();
+			this.currentError = this.train.getError();
+
+			this.errorImprovement = (this.lastError - this.currentError)
+					/ this.lastError;
+
+			if (this.validationData != null) {
+				MLMethod m = train.getMethod();
+				if (m instanceof MLError) {
+					MLError error = (MLError) m;
+					this.validationError = error
+							.calculateError(this.validationData);
+				}
+			}
+			if (Double.isInfinite(this.errorImprovement)
+					|| Double.isNaN(this.errorImprovement)) {
+				this.errorImprovement = 100.0;
+			}
+		}
+		
 		redraw();		
 	}
 }

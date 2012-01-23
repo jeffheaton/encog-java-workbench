@@ -28,6 +28,7 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
+import org.encog.workbench.EncogWorkBench;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
@@ -63,6 +64,8 @@ public class ChartPane extends JPanel {
 	 */
 	XYSeries series2;
 	
+	XYSeries series3;
+	
 	/**
 	 * The data set for the current error.
 	 */
@@ -72,6 +75,8 @@ public class ChartPane extends JPanel {
 	 * The 
 	 */
 	XYSeriesCollection dataset2;
+	
+	XYSeriesCollection dataset3;
 	
 	/**
 	 * The chart.
@@ -87,20 +92,39 @@ public class ChartPane extends JPanel {
 	 * How many data points have been displayed.
 	 */
 	int count;
+	
+	private boolean trackValidation;
+	
+	private boolean trackImprovement;
 
 	/**
 	 * Construct the pane.
 	 */
-	public ChartPane() {
+	public ChartPane(boolean trackValidation) {
+		int historySize = EncogWorkBench.getInstance().getConfig()
+				.getTrainingHistory();
+
+		this.trackValidation = trackValidation;
+		this.trackImprovement = EncogWorkBench.getInstance().getConfig()
+				.isShowTrainingImprovement();
 		this.series1 = new XYSeries("Current Error");
 		this.dataset1 = new XYSeriesCollection();
 		this.dataset1.addSeries(this.series1);
-		this.series1.setMaximumItemCount(50);
+		this.series1.setMaximumItemCount(historySize);
 
-		this.series2 = new XYSeries("Error Improvement");
-		this.dataset2 = new XYSeriesCollection();
-		this.dataset2.addSeries(this.series2);
-		this.series2.setMaximumItemCount(50);
+		if (trackImprovement) {
+			this.series2 = new XYSeries("Error Improvement");
+			this.dataset2 = new XYSeriesCollection();
+			this.dataset2.addSeries(this.series2);
+			this.series2.setMaximumItemCount(historySize);
+		}
+
+		if (trackValidation) {
+			this.series3 = new XYSeries("Validation Error");
+			this.dataset3 = new XYSeriesCollection();
+			this.dataset3.addSeries(this.series3);
+			this.series3.setMaximumItemCount(historySize);
+		}
 
 		// addData(1,1,0.01);
 
@@ -109,6 +133,7 @@ public class ChartPane extends JPanel {
 		this.chartPanel.setPreferredSize(new java.awt.Dimension(600, 270));
 		this.chartPanel.setDomainZoomable(true);
 		this.chartPanel.setRangeZoomable(true);
+
 		setLayout(new BorderLayout());
 		add(this.chartPanel, BorderLayout.CENTER);
 
@@ -122,12 +147,15 @@ public class ChartPane extends JPanel {
 	 * iteration.
 	 */
 	public void addData(final int iteration, final double error,
-			final double improvement) {
-		if (iteration > 10) {
-			this.series1.add(iteration, error * 100.0);
-			this.series2.add(iteration, improvement * 100.0);
-		}
+			final double improvement, final double val) {
 
+			this.series1.add(iteration, error * 100.0);
+			if( trackImprovement ) {
+				this.series2.add(iteration, improvement * 100.0);
+			}
+			if( trackValidation) {
+				this.series3.add(iteration, val * 100.0);
+			}
 	}
 
 	/**
@@ -144,21 +172,50 @@ public class ChartPane extends JPanel {
 		plot.setOrientation(PlotOrientation.VERTICAL);
 
 		plot.getRangeAxis().setFixedDimension(15.0);
+		
+		/*final NumberAxis axis1 = (NumberAxis)plot.getRangeAxis(0);
+		axis1.setFixedDimension(10.0);
+		axis1.setLabelPaint(Color.red);
+		axis1.setTickLabelPaint(Color.red);
+		axis1.setUpperBound(100.0);
+		axis1.setLowerBound(0.0);
+		axis1.setAutoRange(false);*/
 
 		// AXIS 2
-		final NumberAxis axis2 = new NumberAxis("Error Improvement");
-		axis2.setFixedDimension(10.0);
-		axis2.setAutoRangeIncludesZero(false);
-		axis2.setLabelPaint(Color.red);
-		axis2.setTickLabelPaint(Color.red);
-		plot.setRangeAxis(1, axis2);
-		plot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
-
-		plot.setDataset(1, this.dataset2);
-		plot.mapDatasetToRangeAxis(1, 1);
-		final XYItemRenderer renderer2 = new StandardXYItemRenderer();
-		renderer2.setSeriesPaint(0, Color.red);
-		plot.setRenderer(1, renderer2);
+		if( this.trackImprovement ) {
+			final NumberAxis axis2 = new NumberAxis("Error Improvement");
+			axis2.setFixedDimension(10.0);
+			axis2.setAutoRangeIncludesZero(false);
+			axis2.setLabelPaint(Color.red);
+			axis2.setTickLabelPaint(Color.red);
+			plot.setRangeAxis(1, axis2);
+			plot.setRangeAxisLocation(1, AxisLocation.BOTTOM_OR_RIGHT);
+			plot.mapDatasetToRangeAxis(1, 1);		
+			plot.setDataset(1, this.dataset2);
+			
+			final XYItemRenderer renderer2 = new StandardXYItemRenderer();
+			renderer2.setSeriesPaint(0, Color.red);
+			plot.setRenderer(1, renderer2);
+		}
+		
+		if( trackValidation ) {			
+			/*final NumberAxis axis3 = new NumberAxis("zzzz");
+			axis3.setFixedDimension(10.0);
+			axis3.setAutoRangeIncludesZero(false);
+			axis3.setLabelPaint(Color.magenta);
+			axis3.setTickLabelPaint(Color.magenta);*/
+			plot.setRangeAxisLocation(2, AxisLocation.BOTTOM_OR_RIGHT);
+			plot.mapDatasetToRangeAxis(2, 0);
+			
+			
+			plot.setDataset(2, this.dataset3);
+			
+			final XYItemRenderer renderer3 = new StandardXYItemRenderer();
+			renderer3.setSeriesPaint(0, Color.magenta);
+			plot.setRenderer(2, renderer3);
+		}
+		
+		
 
 		ChartUtilities.applyCurrentTheme(this.chart);
 

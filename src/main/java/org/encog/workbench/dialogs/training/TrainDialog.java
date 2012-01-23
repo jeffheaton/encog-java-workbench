@@ -23,26 +23,36 @@
  */
 package org.encog.workbench.dialogs.training;
 
-import java.awt.Frame;
 import java.io.File;
+import java.util.List;
+
+import javax.swing.JComboBox;
 
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.CheckField;
+import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 
 public class TrainDialog extends NetworkAndTrainingDialog {
 
 	private final CheckField loadToMemory;
+	private ComboBoxField comboValidation;
 	
 	public TrainDialog(boolean includePop) {
 		super(includePop);
 		setSize(600,250);
+		List<ProjectTraining> list = EncogWorkBench.getInstance().getTrainingData();
+		
+		addProperty(this.comboValidation = new ComboBoxField("validation set","Validation Set (optional)",false,list));
 		addProperty(this.loadToMemory = new CheckField("load to memory",
 				"Load to Memory (better performance)"));
 		
+		
 		render();
 		this.loadToMemory.setValue(true);
+		((JComboBox)this.comboValidation.getField()).setSelectedIndex(-1);
 	}
 
 	/**
@@ -59,6 +69,17 @@ public class TrainDialog extends NetworkAndTrainingDialog {
 		if( this.getComboTraining().getSelectedValue()==null )			
 			return null;
 		File file = ((ProjectTraining)this.getComboTraining().getSelectedValue()).getFile();
+		BufferedMLDataSet result = new BufferedMLDataSet(file);
+		if( this.loadToMemory.getValue())
+			return result.loadToMemory();
+		else
+			return result;
+	}
+
+	public MLDataSet getValidationSet() {
+		if( this.comboValidation.getSelectedValue()==null )			
+			return null;
+		File file = ((ProjectTraining)this.comboValidation.getSelectedValue()).getFile();
 		BufferedMLDataSet result = new BufferedMLDataSet(file);
 		if( this.loadToMemory.getValue())
 			return result.loadToMemory();

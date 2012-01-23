@@ -39,6 +39,9 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 	private IntegerField threadCount;
 	private CheckField useOpenCL;
 	private ComboBoxField errorCalculation;
+	private IntegerField trainingChartHistory;
+	private IntegerField iterationStepCount;
+	private CheckField displayTrainingImprovement;
 	
 	public EncogConfigDialog(Frame owner) {
 		super(owner);
@@ -52,6 +55,9 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		addProperty(this.defaultError = new DoubleField("default error","Default Error Percent",true,0,100));
 		addProperty(this.errorCalculation = new ComboBoxField("error calculation", "Error Calculation", true, errorMethods));
 		addProperty(this.threadCount = new IntegerField("thread count","Thread Count (0=auto)",true,0,10000));
+		addProperty(this.trainingChartHistory = new IntegerField("training historycount","Training Chart History",true,100,100000));
+		addProperty(this.iterationStepCount = new IntegerField("step count","Iteration Step Count",true,1,1000));
+		addProperty(this.displayTrainingImprovement = new CheckField("show improvement","Show Training Improvement"));
 		//addProperty(this.useOpenCL = new CheckField("use opencl","Use Graphics Card(GPU)"));
 		render();
 	}
@@ -71,6 +77,20 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 	public ComboBoxField getErrorCalculation() {
 		return errorCalculation;
 	}
+
+	public IntegerField getTrainingChartHistory() {
+		return trainingChartHistory;
+	}
+
+	public IntegerField getIterationStepCount() {
+		return iterationStepCount;
+	}
+
+	public CheckField getDisplayTrainingImprovement() {
+		return displayTrainingImprovement;
+	}
+	
+	
 	
 	
 

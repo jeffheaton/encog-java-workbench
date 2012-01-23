@@ -35,6 +35,7 @@ import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.persist.EncogFileSection;
 import org.encog.persist.EncogReadHelper;
 import org.encog.persist.EncogWriteHelper;
+import org.encog.persist.PersistError;
 import org.encog.workbench.EncogWorkBench;
 
 public class EncogWorkBenchConfig {
@@ -43,11 +44,21 @@ public class EncogWorkBenchConfig {
 	public static final String PROPERTY_THREAD_COUNT = "threadCount";
 	public static final String PROPERTY_USE_GPU = "useGPU";
 	public static final String PROPERTY_ERROR_CALC = "errorCalculation";
+	private static final String PROPERTY_STEP_COUNT = "stepCount";
+	private static final String PROPERTY_TRAINING_HISTORY = "trainingHistory";
+	private static final String PROPERTY_TRAINING_IMPROVEMENT = "trainingImprovement";
 	
-	private double defaultError = 1;
-	private int threadCount = 0;
+	private double defaultError;
+	private int threadCount;
 	private boolean useOpenCL;
 	private int errorCalculation;
+	private int iterationStepCount;
+	private int trainingHistory;
+	private boolean showTrainingImprovement;
+	
+	public EncogWorkBenchConfig() {
+		resetDefaults();
+	}
 
 	public double getDefaultError() {
 		return defaultError;
@@ -96,6 +107,32 @@ public class EncogWorkBenchConfig {
 		}
 	}
 	
+	
+	
+	public int getIterationStepCount() {
+		return iterationStepCount;
+	}
+
+	public void setIterationStepCount(int iterationStepCount) {
+		this.iterationStepCount = iterationStepCount;
+	}
+
+	public int getTrainingHistory() {
+		return trainingHistory;
+	}
+
+	public void setTrainingHistory(int trainingHistory) {
+		this.trainingHistory = trainingHistory;
+	}
+
+	public boolean isShowTrainingImprovement() {
+		return showTrainingImprovement;
+	}
+
+	public void setShowTrainingImprovement(boolean showTrainingImprovement) {
+		this.showTrainingImprovement = showTrainingImprovement;
+	}
+
 	public void saveConfig() {
 		File file = null;
 		try {
@@ -111,6 +148,9 @@ public class EncogWorkBenchConfig {
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_THREAD_COUNT, this.threadCount);
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_USE_GPU, this.useOpenCL);
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_ERROR_CALC, this.errorCalculation);
+			out.writeProperty(EncogWorkBenchConfig.PROPERTY_STEP_COUNT, this.iterationStepCount);
+			out.writeProperty(EncogWorkBenchConfig.PROPERTY_TRAINING_HISTORY, this.trainingHistory);
+			out.writeProperty(EncogWorkBenchConfig.PROPERTY_TRAINING_IMPROVEMENT,this.showTrainingImprovement);
 						
 			out.flush();
 			os.close();
@@ -135,10 +175,17 @@ public class EncogWorkBenchConfig {
 			while( (section = in.readNextSection()) != null ) {
 				if( section.getSectionName().equals("ENCOG") && section.getSubSectionName().equals("TRAINING") ) {
 					Map<String, String> params = section.parseParams();
+					try {
 					this.defaultError = EncogFileSection.parseDouble(params, EncogWorkBenchConfig.PROPERTY_DEFAULT_ERROR);
 					this.threadCount = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_THREAD_COUNT);
 					this.useOpenCL = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_THREAD_COUNT)>0;
 					this.errorCalculation = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_ERROR_CALC);
+					this.iterationStepCount = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_STEP_COUNT);
+					this.trainingHistory = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_TRAINING_HISTORY);
+					this.showTrainingImprovement = EncogFileSection.parseBoolean(params, EncogWorkBenchConfig.PROPERTY_TRAINING_IMPROVEMENT);
+					} catch(PersistError e) {
+						resetDefaults();
+					}
 				}
 			}
 						
@@ -148,6 +195,16 @@ public class EncogWorkBenchConfig {
 		}
 	}
 
-
+	public void resetDefaults() {
+		this.defaultError = 1;
+		this.threadCount = 0;
+		this.useOpenCL = false;
+		this.errorCalculation = 0;
+		this.iterationStepCount = 1;
+		this.trainingHistory = 100;
+		this.showTrainingImprovement = true;	
+	}
+	
+	
 
 }

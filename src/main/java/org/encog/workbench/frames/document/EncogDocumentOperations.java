@@ -160,6 +160,9 @@ public class EncogDocumentOperations {
 
 		dialog.getDefaultError().setValue(config.getDefaultError());
 		dialog.getThreadCount().setValue(config.getThreadCount());
+		dialog.getTrainingChartHistory().setValue(config.getTrainingHistory());
+		dialog.getDisplayTrainingImprovement().setValue(config.isShowTrainingImprovement());
+		dialog.getIterationStepCount().setValue(config.getIterationStepCount());
 		//dialog.getUseOpenCL().setValue(config.isUseOpenCL());
 		switch (config.getErrorCalculation()) {
 		case RMS:
@@ -189,6 +192,10 @@ public class EncogDocumentOperations {
 
 			ErrorCalculation.setMode(EncogWorkBench.getInstance().getConfig()
 					.getErrorCalculation());
+			
+			config.setTrainingHistory(dialog.getTrainingChartHistory().getValue());
+			config.setShowTrainingImprovement(dialog.getDisplayTrainingImprovement().getValue());
+			config.setIterationStepCount(dialog.getIterationStepCount().getValue());
 
 			/*if (config.isUseOpenCL() && Encog.getInstance().getCL() == null) {
 				EncogWorkBench.initCL();
