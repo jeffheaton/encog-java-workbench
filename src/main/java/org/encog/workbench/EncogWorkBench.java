@@ -326,6 +326,24 @@ public class EncogWorkBench implements Runnable {
 
 		return result;
 	}
+	
+	public List<ProjectFile> getAnalystFiles() {
+
+		List<ProjectFile> result = new ArrayList<ProjectFile>();
+
+		for (ProjectItem item : this.getMainWindow().getTree().getModel()
+				.getData()) {
+			
+			if (item instanceof ProjectFile) {
+				ProjectFile pf = (ProjectFile)item;
+				if( pf.getExtension().equalsIgnoreCase("ega")) {
+					result.add((ProjectFile) item);
+				}
+			}
+		}
+
+		return result;
+	}
 
 	public File getProjectDirectory() {
 		return this.getMainWindow().getTree().getModel().getPath();

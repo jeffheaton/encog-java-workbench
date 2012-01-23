@@ -49,6 +49,7 @@ public class EncogPopupMenus {
 	private JMenuItem popupFileProperties;
 	private JMenuItem popupFileOpenText;
 	private JMenuItem popupFileCSVExport;
+	private JMenuItem popupFileCSVNormalize;
 	private JMenuItem popupFileCSVWizard;
 	private JMenuItem popupFileNewFile;
 	private JMenuItem popupFileNewObject;
@@ -106,6 +107,13 @@ public class EncogPopupMenus {
 					String targetFile = FileUtil.forceExtension(sourceFile,
 							"egb");
 					ImportExport.performExternal2Bin(new File(sourceFile),
+							new File(targetFile), null);
+				} else if (source == this.popupFileCSVNormalize) {
+					String sourceFile = ((ProjectFile) selected).getFile()
+							.toString();
+					String targetFile = FileUtil.forceExtension(sourceFile,
+							"egb");
+					ImportExport.performNormalize2Bin(new File(sourceFile),
 							new File(targetFile), null);
 				} else if (source == this.popupFileCSVWizard) {
 					File sourceFile = ((ProjectFile) selected).getFile();
@@ -188,10 +196,9 @@ public class EncogPopupMenus {
 		}
 
 		if (ext != null && "csv".equalsIgnoreCase(ext)) {
-			this.popupFileCSVExport = owner.addItem(this.popupFile,
-					"Export to Training(EGB)", 'x');
-			this.popupFileCSVWizard = owner.addItem(this.popupFile,
-					"Analyst Wizard...", 'w');
+			this.popupFileCSVExport = owner.addItem(this.popupFile,"Export to Training(EGB)", 'x');
+			this.popupFileCSVNormalize = owner.addItem(this.popupFile,"Normalize to Training(EGB)", 'n');
+			this.popupFileCSVWizard = owner.addItem(this.popupFile,"Analyst Wizard...", 'w');
 		} else {
 			this.popupFileCSVExport = null;
 			this.popupFileCSVWizard = null;
