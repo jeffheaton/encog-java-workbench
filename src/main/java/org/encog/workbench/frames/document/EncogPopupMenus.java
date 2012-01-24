@@ -115,6 +115,7 @@ public class EncogPopupMenus {
 							"egb");
 					ImportExport.performNormalize2Bin(new File(sourceFile),
 							new File(targetFile), null);
+					EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 				} else if (source == this.popupFileCSVWizard) {
 					File sourceFile = ((ProjectFile) selected).getFile();
 					EncogAnalystWizard.createEncogAnalyst(sourceFile);

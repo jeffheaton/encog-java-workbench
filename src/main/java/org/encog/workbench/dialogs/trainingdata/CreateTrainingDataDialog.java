@@ -103,6 +103,8 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		this.model.addElement("Simple Pattern (part 2)");
 		this.model.addElement("Download from URL");
 		this.model.addElement("Fahlman Encoder");
+		this.model.addElement("Linear");
+		this.model.addElement("Sine Wave");
 		
 		
 		this.list.addListSelectionListener(this);
@@ -158,6 +160,12 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		case 11:
 			this.type = TrainingDataType.Encoder;
 			break;
+		case 12:
+			this.type = TrainingDataType.Linear;
+			break;
+		case 13:
+			this.type = TrainingDataType.SineWave;
+			break;
 		}
 	}
 
@@ -199,6 +207,12 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			break;
 		case Encoder:
 			this.list.setSelectedIndex(11);
+			break;
+		case Linear:
+			this.list.setSelectedIndex(12);
+			break;
+		case SineWave:
+			this.list.setSelectedIndex(13);
 			break;
 		}
 
@@ -271,6 +285,12 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		case 11:
 			this.text.setText("A very simple data set that has the same number of inputs as ideals. Usually a smaller number of hidden neurons is placed between the input and output layers of a neural network trained with this data. The neural network must learn to encode the input to the smaller hidden layer.");
 			break;
+		case 12:
+			this.text.setText("Generate linear data in slope-intercept (y=mx+b) form.");
+			break;
+		case 13:
+			this.text.setText("Generate one or more cycles of the sine wave.");
+			break;
 			
 		}
 
@@ -283,3 +303,4 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		return this.objectNameField.getText();
 	}
 }
+

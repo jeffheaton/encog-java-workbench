@@ -40,7 +40,10 @@ import org.encog.app.analyst.AnalystError;
 import org.encog.app.quant.QuantError;
 import org.encog.app.quant.loader.yahoo.YahooDownload;
 import org.encog.bot.BotUtil;
+import org.encog.mathutil.EncogMath;
+import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.util.Format;
 import org.encog.util.benchmark.EncoderTrainingFactory;
@@ -50,7 +53,9 @@ import org.encog.util.file.FileUtil;
 import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.trainingdata.CreateEncoderDialog;
+import org.encog.workbench.dialogs.trainingdata.CreateLinearTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateMarketTrainingDialog;
+import org.encog.workbench.dialogs.trainingdata.CreateSineTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.RandomTrainingDataDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.util.TemporalXOR;
@@ -344,6 +349,64 @@ public class CreateTrainingData {
 			}
 		}
 		
+	}
+
+	public static void generateLinear(String name) {
+		CreateLinearTrainingDialog dialog = new CreateLinearTrainingDialog(
+				EncogWorkBench.getInstance().getMainWindow());
+
+		if (dialog.process()) {
+			double xBegin = dialog.getxBegin().getValue();
+			double xEnd = dialog.getxEnd().getValue();
+			int elements = dialog.getElements().getValue();
+			double b = dialog.getIntercept().getValue();
+			double m = dialog.getSlope().getValue();
+			double range = xEnd - xBegin;
+			double incr = range/elements;
+
+			File targetFile = new File(EncogWorkBench.getInstance()
+					.getProjectDirectory(), name);
+			
+			MLDataSet trainingData = new BasicMLDataSet();
+			
+			for(int i=0;i<elements;i++) {
+				double x = xBegin + (i*incr);
+				double y = (m*x) + b;
+				MLData inputData = new BasicMLData(new double[] {x});
+				MLData idealData = new BasicMLData(new double[] {y});
+				trainingData.add(inputData,idealData);
+			}
+
+			EncogUtility.saveCSV(targetFile, CSVFormat.ENGLISH, trainingData);
+		}
+	}
+
+	public static void generateSineWave(String name) {
+		CreateSineTrainingDialog dialog = new CreateSineTrainingDialog(
+				EncogWorkBench.getInstance().getMainWindow());
+
+		if (dialog.process()) {
+			double cycles = dialog.getCycles().getValue();
+			int elements = dialog.getElements().getValue();
+			
+			double totalDegrees = 360.0*cycles;
+			double degIncr = totalDegrees/elements;
+			
+			File targetFile = new File(EncogWorkBench.getInstance()
+					.getProjectDirectory(), name);
+			
+			MLDataSet trainingData = new BasicMLDataSet();
+			
+			for(int i=0;i<elements;i++) {
+				double x = EncogMath.deg2rad(i*degIncr);
+				double y = Math.sin(x);
+				MLData inputData = new BasicMLData(new double[] {x});
+				MLData idealData = new BasicMLData(new double[] {y});
+				trainingData.add(inputData,idealData);
+			}
+
+			EncogUtility.saveCSV(targetFile, CSVFormat.ENGLISH, trainingData);
+		}
 	}
 
 }

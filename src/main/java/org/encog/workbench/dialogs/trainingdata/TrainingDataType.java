@@ -36,6 +36,8 @@ public enum TrainingDataType {
 	Patterns2,
 	Digits,
 	Download,
-	Encoder
+	Encoder,
+	Linear,
+	SineWave
 
 }

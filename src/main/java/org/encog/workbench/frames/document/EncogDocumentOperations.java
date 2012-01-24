@@ -32,19 +32,24 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
+import org.encog.Encog;
 import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.mathutil.error.ErrorCalculationMode;
+import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.ml.MLError;
 import org.encog.ml.MLMethod;
 import org.encog.ml.bayesian.BayesianNetwork;
 import org.encog.ml.bayesian.bif.BIFUtil;
+import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.util.Format;
 import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.BenchmarkDialog;
 import org.encog.workbench.dialogs.EvaluateDialog;
+import org.encog.workbench.dialogs.binary.DialogNoise;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
 import org.encog.workbench.dialogs.newdoc.CreateNewDocument;
 import org.encog.workbench.dialogs.select.SelectDialog;
@@ -313,6 +318,12 @@ public class EncogDocumentOperations {
 			case Encoder:
 				CreateTrainingData.generateEncoder(name);
 				break;
+			case Linear:
+				CreateTrainingData.generateLinear(name);
+				break;
+			case SineWave:
+				CreateTrainingData.generateSineWave(name);
+				break;
 			}
 			EncogWorkBench.getInstance().refresh();
 		}
@@ -439,6 +450,49 @@ public class EncogDocumentOperations {
 					dialog.getTrainingName(), 
 					dialog.getTrainingArgs());
 			EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
+		}
+		
+	}
+
+	public void performNoise() {
+		DialogNoise dialog = new DialogNoise();
+		
+		if( dialog.process() ) {
+			File sourceFile = dialog.getSourceFile();
+			File targetFile = new File(sourceFile.getParent(),dialog.getTargetFile().getValue());
+			
+			double inputPercent = dialog.getInputNoise().getValue();
+			double idealPercent = dialog.getIdealNoise().getValue();
+			
+			BufferedMLDataSet sourceData = new BufferedMLDataSet(sourceFile);
+			BufferedMLDataSet targetData = new BufferedMLDataSet(targetFile);
+			targetData.beginLoad(sourceData.getInputSize(), sourceData.getIdealSize());
+			for(MLDataPair pair : sourceData) {
+				// add noise to the input
+				if (inputPercent > Encog.DEFAULT_DOUBLE_EQUAL) {
+					for (int i = 0; i < pair.getInput().size(); i++) {
+						double d = pair.getInput().getData(i);
+						double r = d * inputPercent;
+						d += RangeRandomizer.randomize(-r, r);
+						pair.getInput().setData(i, d);
+					}
+				}
+				// add noise to the ideal
+				if (idealPercent > Encog.DEFAULT_DOUBLE_EQUAL) {
+					for (int i = 0; i < pair.getIdeal().size(); i++) {
+						double d = pair.getIdeal().getData(i);
+						double r = d * idealPercent;
+						d += RangeRandomizer.randomize(-r, r);
+						pair.getIdeal().setData(i, d);
+					}
+				}
+				
+				// write it
+				targetData.add(pair);
+			}
+			sourceData.close();
+			targetData.close();
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
 		
 	}
