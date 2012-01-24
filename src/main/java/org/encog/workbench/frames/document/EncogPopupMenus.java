@@ -149,6 +149,8 @@ public class EncogPopupMenus {
 					if( EncogWorkBench.askQuestion("File Exists", "Do you wish to overwrite the file of the same name?") ) {
 						FileUtil.copy(selected.getFile(), targetFile);
 					}
+				} else {
+					FileUtil.copy(selected.getFile(), targetFile);
 				}
 				EncogWorkBench.getInstance().getMainWindow().redraw();
 			}
