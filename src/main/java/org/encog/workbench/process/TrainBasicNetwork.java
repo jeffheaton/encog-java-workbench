@@ -61,6 +61,7 @@ import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
 import org.encog.neural.networks.training.cross.CrossValidationKFold;
 import org.encog.neural.networks.training.genetic.NeuralGeneticAlgorithm;
 import org.encog.neural.networks.training.lma.LevenbergMarquardtTraining;
+import org.encog.neural.networks.training.pnn.TrainBasicPNN;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.neural.networks.training.propagation.manhattan.ManhattanPropagation;
 import org.encog.neural.networks.training.propagation.quick.QuickPropagation;
@@ -69,6 +70,7 @@ import org.encog.neural.networks.training.propagation.resilient.ResilientPropaga
 import org.encog.neural.networks.training.propagation.scg.ScaledConjugateGradient;
 import org.encog.neural.networks.training.pso.NeuralPSO;
 import org.encog.neural.networks.training.simple.TrainAdaline;
+import org.encog.neural.pnn.BasicPNN;
 import org.encog.neural.rbf.RBFNetwork;
 import org.encog.neural.rbf.training.SVDTraining;
 import org.encog.neural.som.SOM;
@@ -186,6 +188,8 @@ public class TrainBasicNetwork {
 			performCPN(file, trainingData,validationData);
 		} else if (method instanceof BayesianNetwork) {
 			performBayesian(file, trainingData,validationData);
+		} else if (method instanceof BasicPNN ) {
+			performPNN(file,trainingData, validationData);
 		} else if (method instanceof BasicNetwork || method instanceof RBFNetwork ) {
 
 			ChooseBasicNetworkTrainingMethod choose = new ChooseBasicNetworkTrainingMethod(
@@ -659,6 +663,15 @@ public class TrainBasicNetwork {
 			
 			startup(file, train, 0.0, validationData);
 		}
+
+	}
+	
+	private void performPNN(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+
+		BasicPNN network = (BasicPNN) file.getObject();		
+		TrainBasicPNN train = new TrainBasicPNN(network,trainingData);
+		train.iteration();
+		EncogWorkBench.displayMessage("Training Complete", "Final error: " + train.getError());
 
 	}
 
