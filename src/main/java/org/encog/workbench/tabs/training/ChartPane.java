@@ -110,7 +110,9 @@ public class ChartPane extends JPanel {
 		this.series1 = new XYSeries("Current Error");
 		this.dataset1 = new XYSeriesCollection();
 		this.dataset1.addSeries(this.series1);
-		this.series1.setMaximumItemCount(historySize);
+		if( historySize >0 ) {
+			this.series1.setMaximumItemCount(Math.min(historySize,100));
+		}
 
 		if (trackImprovement) {
 			this.series2 = new XYSeries("Error Improvement");
@@ -123,7 +125,9 @@ public class ChartPane extends JPanel {
 			this.series3 = new XYSeries("Validation Error");
 			this.dataset3 = new XYSeriesCollection();
 			this.dataset3.addSeries(this.series3);
-			this.series3.setMaximumItemCount(historySize);
+			if( historySize >0 ) {
+				this.series3.setMaximumItemCount(Math.min(historySize,100));
+			}
 		}
 
 		// addData(1,1,0.01);
