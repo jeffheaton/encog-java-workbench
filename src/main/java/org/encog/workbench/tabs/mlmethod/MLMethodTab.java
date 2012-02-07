@@ -249,8 +249,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 					.getHigh().getValue());
 			break;
 		case 1: // Nguyen-Widrow
-			r = new NguyenWidrowRandomizer(dialog.getLow().getValue(), dialog
-					.getHigh().getValue());
+			r = new NguyenWidrowRandomizer();
 			break;
 		case 2: // Fan in
 			r = new FanInRandomizer(dialog.getLow().getValue(), dialog
