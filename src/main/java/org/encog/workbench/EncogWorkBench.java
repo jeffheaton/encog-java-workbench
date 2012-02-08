@@ -61,7 +61,7 @@ public class EncogWorkBench implements Runnable {
 
 	public final static String CONFIG_FILENAME = ".EncogWorkbench.conf";
 	public final static String VERSION = "3.1";
-	public static final String COPYRIGHT = "Copyright 2011 by Heaton Research, Inc.";
+	public static final String COPYRIGHT = "Copyright 2012 by Heaton Research, Inc.";
 
 	/**
 	 * The singleton instance.
