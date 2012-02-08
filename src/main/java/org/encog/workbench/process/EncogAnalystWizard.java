@@ -41,7 +41,7 @@ import org.encog.workbench.util.FileUtil;
 
 public class EncogAnalystWizard {
 	public static void createEncogAnalyst(File csvFile) {
-
+		boolean refresh = true;
 		if (!EncogWorkBench.getInstance().getMainWindow().getTabManager()
 				.queryViews(csvFile))
 			return;
@@ -119,6 +119,10 @@ public class EncogAnalystWizard {
 				setSpecific(wizard);
 
 				wizard.wizard(targetCSVFile, headers, format);
+				
+				EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+				refresh = false;
+				EncogWorkBench.getInstance().getMainWindow().openFile(egaFile);
 
 			} catch (EncogError e) {
 				EncogWorkBench.displayError("Error Generating Analyst Script",
@@ -127,8 +131,6 @@ public class EncogAnalystWizard {
 				EncogWorkBench.getInstance().getMainWindow().endWait();
 				if (analyst != null)
 					analyst.save(egaFile);
-				EncogWorkBench.getInstance().getMainWindow().getTree()
-						.refresh();
 			}
 		}
 	}

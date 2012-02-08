@@ -288,4 +288,8 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 	public void keyReleased(KeyEvent e) {
 	}
 
+	public ProjectFile findTreeFile(File egaFile) {
+		return this.collectionModel.findTreeFile(egaFile.getName());
+	}
+
 }

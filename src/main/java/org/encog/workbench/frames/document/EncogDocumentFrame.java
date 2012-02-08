@@ -336,5 +336,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 		EncogWorkBench.getInstance().getMainWindow().getTree().refresh(path);
 	}
+
+	public void openFile(File egaFile) {		
+		ProjectFile tf = this.getTree().findTreeFile(egaFile);
+		openFile(tf);
+	}
 	
 }
