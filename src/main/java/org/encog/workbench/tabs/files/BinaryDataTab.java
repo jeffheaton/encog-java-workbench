@@ -88,45 +88,49 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 	}	
 	
 	public void actionPerformed(final ActionEvent action) {
-		final int row = this.table.getSelectedRow();
-		final int col = this.table.getSelectedColumn();
+		try {
+			final int row = this.table.getSelectedRow();
+			final int col = this.table.getSelectedColumn();
 
-		if (action.getSource() == this.addInputColumn) {
-			this.model.addInputColumn();
-		} else if (action.getSource() == this.delColumn) {
-			if (col == -1) {
-				JOptionPane.showMessageDialog(this,
-						"Please move to the column you wish to delete.",
-						"Error", JOptionPane.ERROR_MESSAGE);
-			} else if (col < getData().getInputSize()
-					&& getData().getInputSize() <= 1) {
-				JOptionPane.showMessageDialog(this,
-						"There must be at least one input column.", "Error",
-						JOptionPane.ERROR_MESSAGE);
-			} else {
-				this.model.delColumn(col);
+			if (action.getSource() == this.addInputColumn) {
+				this.model.addInputColumn();
+			} else if (action.getSource() == this.delColumn) {
+				if (col == -1) {
+					JOptionPane.showMessageDialog(this,
+							"Please move to the column you wish to delete.",
+							"Error", JOptionPane.ERROR_MESSAGE);
+				} else if (col < getData().getInputSize()
+						&& getData().getInputSize() <= 1) {
+					JOptionPane.showMessageDialog(this,
+							"There must be at least one input column.",
+							"Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					this.model.delColumn(col);
+				}
+			} else if (action.getSource() == this.addIdealColumn) {
+				this.model.addIdealColumn();
+			} else if (action.getSource() == this.addRow) {
+				this.model.addRow(row);
+			} else if (action.getSource() == this.delRow) {
+				if (row == -1) {
+					JOptionPane.showMessageDialog(this,
+							"Please move to the row you wish to delete.",
+							"Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					this.model.delRow(row);
+				}
+			} else if (action.getSource() == this.export) {
+				Object[] list = new Object[2];
+				list[0] = this.getData().getFile();
+				list[1] = null;
+
+				ImportExport
+						.performBin2External(this.getData().getFile(), null);
+			} else if (action.getSource() == this.visualize) {
+				performVisualize();
 			}
-		} else if (action.getSource() == this.addIdealColumn) {
-			this.model.addIdealColumn();
-		} else if (action.getSource() == this.addRow) {
-			this.model.addRow(row);
-		} else if (action.getSource() == this.delRow) {
-			if (row == -1) {
-				JOptionPane.showMessageDialog(this,
-						"Please move to the row you wish to delete.", "Error",
-						JOptionPane.ERROR_MESSAGE);
-			} else {
-				this.model.delRow(row);
-			}
-		} else if(action.getSource()==this.export)
-		{			
-			Object[] list = new Object[2];
-			list[0] = this.getData().getFile();
-			list[1] = null;
-			
-			ImportExport.performBin2External(this.getData().getFile(), null);
-		} else if( action.getSource()==this.visualize) {
-			performVisualize();
+		} catch (Throwable t) {
+			EncogWorkBench.displayError("Error", t);
 		}
 
 	}

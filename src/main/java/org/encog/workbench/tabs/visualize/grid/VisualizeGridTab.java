@@ -133,6 +133,10 @@ public class VisualizeGridTab extends EncogCommonTab implements ListSelectionLis
 	
 	@Override
 	public String getName() {
-		return "Visualize :" + this.getEncogObject().getName();
+		if( this.getEncogObject() == null ) {
+			return "Visualize";
+		} else {
+			return "Visualize :" + this.getEncogObject().getName();
+		}
 	}
 }
