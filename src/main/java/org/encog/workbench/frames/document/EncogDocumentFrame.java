@@ -261,6 +261,8 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	public void openFile(ProjectFile file) {
 		try {
+			if( file==null )
+				return;
 			EncogWorkBench.getInstance().getMainWindow().beginWait();
 			EncogCommonTab tab = this.tabManager.find(file.getFile());
 			

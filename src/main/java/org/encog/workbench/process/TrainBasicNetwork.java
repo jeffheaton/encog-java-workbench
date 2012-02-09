@@ -567,12 +567,12 @@ public class TrainBasicNetwork {
 		InputSearchSVM dialog = new InputSearchSVM();
 		SVM method = (SVM) file.getObject();
 
-		dialog.getBeginningGamma().setValue(SVMTrain.DEFAULT_GAMMA_BEGIN);
-		dialog.getEndingGamma().setValue(SVMTrain.DEFAULT_GAMMA_END);
-		dialog.getStepGamma().setValue(SVMTrain.DEFAULT_GAMMA_STEP);
-		dialog.getBeginningC().setValue(SVMTrain.DEFAULT_CONST_BEGIN);
-		dialog.getEndingC().setValue(SVMTrain.DEFAULT_CONST_END);
-		dialog.getStepC().setValue(SVMTrain.DEFAULT_CONST_STEP);
+		dialog.getBeginningGamma().setValue(SVMSearchTrain.DEFAULT_GAMMA_BEGIN);
+		dialog.getEndingGamma().setValue(SVMSearchTrain.DEFAULT_GAMMA_END);
+		dialog.getStepGamma().setValue(SVMSearchTrain.DEFAULT_GAMMA_STEP);
+		dialog.getBeginningC().setValue(SVMSearchTrain.DEFAULT_CONST_BEGIN);
+		dialog.getEndingC().setValue(SVMSearchTrain.DEFAULT_CONST_END);
+		dialog.getStepC().setValue(SVMSearchTrain.DEFAULT_CONST_STEP);
 
 		if (dialog.process()) {
 			double maxError = dialog.getMaxError().getValue() / 100.0;
