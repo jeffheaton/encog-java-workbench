@@ -385,6 +385,9 @@ public class EncogDocumentOperations {
 			first = false;
 			if (selected instanceof ProjectFile) {
 				File f = ((ProjectFile) selected).getFile();
+				
+				EncogWorkBench.getInstance().getMainWindow().getTabManager().closeAll(f);
+				
 				if (!f.delete()) {
 					if (FileUtil.getFileExt(f).equalsIgnoreCase("egb")) {
 						displayBugWarning();
@@ -393,10 +396,7 @@ public class EncogDocumentOperations {
 								f.toString());
 					}
 
-				} else {
-					EncogWorkBench.getInstance().getMainWindow()
-							.getTabManager().closeAll(f);
-				}
+				} 
 			}
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}

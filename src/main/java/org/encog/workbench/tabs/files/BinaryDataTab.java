@@ -26,6 +26,7 @@ package org.encog.workbench.tabs.files;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -135,8 +136,21 @@ public class BinaryDataTab extends BasicFileTab implements ActionListener {
 
 	}
 	
+	public boolean close() throws IOException {
+		boolean result = super.close();
+		if( this.data!=null ) {
+			this.data.close();
+			this.data = null;
+		}
+		return result;
+	}
+	
 	public void dispose()
 	{
+		if( this.data!=null ) {
+			this.data.close();
+			this.data = null;
+		}
 		super.dispose();
 	}
 
