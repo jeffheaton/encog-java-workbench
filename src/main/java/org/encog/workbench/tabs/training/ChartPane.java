@@ -117,8 +117,10 @@ public class ChartPane extends JPanel {
 		if (trackImprovement) {
 			this.series2 = new XYSeries("Error Improvement");
 			this.dataset2 = new XYSeriesCollection();
-			this.dataset2.addSeries(this.series2);
-			this.series2.setMaximumItemCount(historySize);
+				this.dataset2.addSeries(this.series2);
+			if( historySize >0 ) {
+				this.series2.setMaximumItemCount(Math.min(historySize,100));
+			}
 		}
 
 		if (trackValidation) {
