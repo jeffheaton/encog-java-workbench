@@ -348,6 +348,9 @@ public class EncogDocumentOperations {
 				.displayInput("What would you like to rename the file \""
 						+ name + "\" to?");
 		if (newName != null) {
+			// maybe clean out any file channels that were not cleaned out before
+			System.gc();
+			
 			File oldFile = selected.getFile();
 			File dir = oldFile.getParentFile();
 			File newFile = new File(dir, newName);
@@ -375,6 +378,9 @@ public class EncogDocumentOperations {
 
 		boolean first = true;
 		List<ProjectItem> list = this.owner.getTree().getSelectedValue();
+		
+		// maybe clean out any file channels that were not cleaned out before
+		System.gc();
 
 		for (ProjectItem selected : list) {
 			if (first
