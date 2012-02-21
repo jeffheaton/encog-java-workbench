@@ -178,6 +178,7 @@ public class ChartPane extends JPanel {
 		plot.setOrientation(PlotOrientation.VERTICAL);
 
 		plot.getRangeAxis().setFixedDimension(15.0);
+		plot.getDomainAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		
 		/*final NumberAxis axis1 = (NumberAxis)plot.getRangeAxis(0);
 		axis1.setFixedDimension(10.0);
