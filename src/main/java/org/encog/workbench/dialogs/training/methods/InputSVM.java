@@ -43,8 +43,8 @@ public class InputSVM  extends EncogPropertiesDialog {
 		super(EncogWorkBench.getInstance().getMainWindow());
 		setSize(320,200);
 		setTitle("Support Vector Machine (SVM)");
-		addProperty(this.gamma = new DoubleField("gamma","Gamma (0 for 1/#input)",true,-1,-1));
-		addProperty(this.c = new DoubleField("c","C",true,-1,-1));
+		addProperty(this.gamma = new DoubleField("gamma","Gamma (0 for 1/#input)",true,0,Integer.MAX_VALUE));
+		addProperty(this.c = new DoubleField("c","C",true,0,Integer.MAX_VALUE));
 		render();	
 		this.c.setValue(1);
 		this.gamma.setValue(1.0/svm.getInputCount());
