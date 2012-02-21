@@ -75,6 +75,14 @@ public class EncogDocumentOperations {
 	public EncogDocumentOperations(EncogDocumentFrame owner) {
 		this.owner = owner;
 	}
+	
+	private void displayBugWarning() {
+		EncogWorkBench
+		.displayError(
+				"Can't Delete/Modify",
+				"Unfortunatly, due to a limitation in Java, EGB files cannot be deleted/changed once opened.\nRestart the workbench, and you will be able to delete this file.");
+
+	}
 
 	public void performEditCopy() {
 		final Frame frame = EncogWorkBench.getCurrentFocus();
@@ -343,7 +351,13 @@ public class EncogDocumentOperations {
 			File oldFile = selected.getFile();
 			File dir = oldFile.getParentFile();
 			File newFile = new File(dir, newName);
-			oldFile.renameTo(newFile);
+			if( !oldFile.renameTo(newFile) ) {
+				if( oldFile.getName().toLowerCase().endsWith(".egb")) {
+					displayBugWarning();
+				} else {
+					EncogWorkBench.displayError("Error", "Rename failed.");
+				}
+			}
 			EncogWorkBench.getInstance().refresh();
 		}
 
@@ -373,11 +387,7 @@ public class EncogDocumentOperations {
 				File f = ((ProjectFile) selected).getFile();
 				if (!f.delete()) {
 					if (FileUtil.getFileExt(f).equalsIgnoreCase("egb")) {
-						EncogWorkBench
-								.displayError(
-										"Can't Delete:\n" + f.toString(),
-										f.toString()
-												+ "\nUnfortunatly, due to a limitation in Java, EGB files cannot be deleted once opened.\nRestart the workbench, and you will be able to delete this file.");
+						displayBugWarning();
 					} else {
 						EncogWorkBench.displayError("Can't Delete",
 								f.toString());
