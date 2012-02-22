@@ -341,7 +341,9 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 
 	public void openFile(File egaFile) {		
 		ProjectFile tf = this.getTree().findTreeFile(egaFile);
-		openFile(tf);
+		if( tf!=null ) {
+			openFile(tf);
+		}
 	}
 	
 }
