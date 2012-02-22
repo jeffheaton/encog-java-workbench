@@ -241,7 +241,7 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 							.getTransferData(flavors[i]);
 										
 					for (int j = 0; j < list.size(); j++) {
-						File sourceFile = new File(list.get(i).toString());
+						File sourceFile = new File(list.get(j).toString());
 						
 						if( sourceFile.isDirectory() ) {
 							EncogWorkBench.displayError("Drag and Drop", "Can't drop folder.");
