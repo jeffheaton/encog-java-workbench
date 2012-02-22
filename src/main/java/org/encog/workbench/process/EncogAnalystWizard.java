@@ -120,6 +120,11 @@ public class EncogAnalystWizard {
 
 				wizard.wizard(targetCSVFile, headers, format);
 				
+				if (analyst != null) {
+					analyst.save(egaFile);
+					analyst = null;
+				}
+				
 				EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 				refresh = false;
 				EncogWorkBench.getInstance().getMainWindow().openFile(egaFile);
