@@ -536,13 +536,13 @@ public class TrainBasicNetwork {
 		sel.setVisible(true);
 
 		if (sel.getSelected() == selectBasicSVM) {
-			performSVMSimple(file, trainingData);
+			performSVMSimple(file, trainingData, validationData);
 		} else if (sel.getSelected() == selectSearchSVM) {
 			performSVMSearch(file, trainingData, validationData);
 		}
 	}
 
-	private void performSVMSimple(ProjectEGFile file, MLDataSet trainingData) {
+	private void performSVMSimple(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
 		InputSVM dialog = new InputSVM((SVM) file.getObject());
 
 		if (dialog.process()) {
@@ -554,9 +554,20 @@ public class TrainBasicNetwork {
 			train.setGamma(g);
 			train.iteration();
 			double error = method.calculateError(trainingData);
+			StringBuilder str = new StringBuilder();
+			str.append("Training Error: ");
+			str.append(Format.formatPercent(error));
+			str.append("\n");
+			
+			if( validationData!=null ) {
+				str.append("Validation Error: ");
+				str.append(Format.formatPercent(method.calculateError(validationData)));
+			}
+			str.append("\nSave training?");
+			
+			
 			if (EncogWorkBench.askQuestion("Training Done",
-					"Error: " + Format.formatPercent(error)
-							+ "\nSave training?")) {
+					str.toString())) {
 				file.save();
 			}
 		}
