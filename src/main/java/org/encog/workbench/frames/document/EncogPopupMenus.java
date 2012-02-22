@@ -184,7 +184,7 @@ public class EncogPopupMenus {
 			this.popupFileDelete = owner.addItem(this.popupFile, "Delete", 'd');
 			this.popupFileCopy = owner.addItem(this.popupFile, "Copy", 'c');
 			this.popupFileProperties = owner.addItem(this.popupFile,
-					"Properties", 'p');
+					"Rename...", 'p');
 		} else {
 			this.popupFileDelete = null;
 			this.popupFileOpen = null;
