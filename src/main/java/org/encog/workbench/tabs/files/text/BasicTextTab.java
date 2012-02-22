@@ -36,6 +36,8 @@ import javax.swing.JScrollPane;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Utilities;
 
@@ -45,7 +47,8 @@ import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.tabs.files.BasicFileTab;
 import org.encog.workbench.util.EncogFonts;
 
-public class BasicTextTab extends BasicFileTab implements ComponentListener, CaretListener {
+public class BasicTextTab extends BasicFileTab implements ComponentListener,
+		CaretListener {
 
 	private final NonWrappingTextPane editor;
 	private final JScrollPane scroll;
@@ -55,7 +58,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener, Car
 	public BasicTextTab(ProjectFile file) {
 		super(file);
 
-		this.editor = new NonWrappingTextPane();				
+		this.editor = new NonWrappingTextPane();
 		this.editor.setFont(EncogFonts.getInstance().getCodeFont());
 		this.editor.setEditable(true);
 		this.editor.addCaretListener(this);
@@ -65,13 +68,14 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener, Car
 		add(this.scroll, BorderLayout.CENTER);
 		this.addComponentListener(this);
 		this.status.setText(" ");
-		add(this.status,BorderLayout.SOUTH);		
+		add(this.status, BorderLayout.SOUTH);
 		loadFile();
 	}
 
 	public void loadFile() {
 		try {
-			InputStream is = new FileInputStream(this.getEncogObject().getFile());
+			InputStream is = new FileInputStream(this.getEncogObject()
+					.getFile());
 			this.editor.read(is, null);
 			is.close();
 			this.editor.getDocument().addDocumentListener(this.dirty);
@@ -118,82 +122,87 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener, Car
 		return this.editor.getSelectionEnd() > this.editor.getSelectionStart();
 	}
 
-	
 	public void componentResized(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void componentMoved(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void componentShown(ComponentEvent e) {
 		setDirty(false);
-		
+
 	}
 
 	public void componentHidden(ComponentEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public BasicTextDocListener getDirty() {
 		return dirty;
 	}
-	
+
 	public static int getRow(int pos, JTextComponent editor) {
-        int rn = (pos==0) ? 1 : 0;
-        try {
-            int offs=pos;
-            while( offs>0) {
-                offs=Utilities.getRowStart(editor, offs)-1;
-                rn++;
-            }
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }
-        return rn;
-    }
+		int rn = (pos == 0) ? 1 : 0;
+		try {
+			int offs = pos;
+			while (offs > 0) {
+				offs = Utilities.getRowStart(editor, offs) - 1;
+				rn++;
+			}
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
+		return rn;
+	}
 
-    public static int getColumn(int pos, JTextComponent editor) {
-        try {
-            return pos-Utilities.getRowStart(editor, pos)+1;
-        } catch (BadLocationException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
+	public static int getColumn(int pos, JTextComponent editor) {
+		try {
+			return pos - Utilities.getRowStart(editor, pos) + 1;
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
 
 	@Override
 	public void caretUpdate(CaretEvent e) {
 		StringBuilder s = new StringBuilder();
 		s.append("Row: ");
 		int pos = this.editor.getCaretPosition();
-		s.append(getRow(pos,this.editor));
+		s.append(getRow(pos, this.editor));
 		s.append(", Col: ");
-		s.append(getColumn(pos,this.editor));
+		s.append(getColumn(pos, this.editor));
 		this.status.setText(s.toString());
-		
+
 	}
 
 	public void find() {
-		String text = EncogWorkBench.displayInput("Search:");
-		if( text!=null ) {
-			int start = this.editor.getCaretPosition();
-			int idx = this.getText().indexOf(text,start);
-			if( idx==-1 ) {
-				EncogWorkBench.displayError("Not Found", "Could not find, searching from current position.");
-			} else {
-				this.editor.setSelectionStart(idx);
-				this.editor.setSelectionEnd(idx+text.length());
+		try {
+			String editorText = this.editor.getDocument().getText(0,
+					this.editor.getDocument().getLength());
+
+			String text = EncogWorkBench.displayInput("Search:");
+			if (text != null) {
+				int start = this.editor.getCaretPosition();
+				int idx = editorText.indexOf(text, start);
+				if (idx == -1) {
+					EncogWorkBench.displayError("Not Found",
+							"Could not find, searching from current position.");
+				} else {
+					this.editor.setSelectionStart(idx);
+					this.editor.setSelectionEnd(idx + text.length());
+				}
+
 			}
-			
+		} catch (BadLocationException ex) {
+			// ignroe
 		}
-		
+
 	}
-	
-	
+
 }
