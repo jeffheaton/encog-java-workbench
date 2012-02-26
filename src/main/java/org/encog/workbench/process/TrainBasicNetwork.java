@@ -61,6 +61,7 @@ import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
 import org.encog.neural.networks.training.cross.CrossValidationKFold;
 import org.encog.neural.networks.training.genetic.NeuralGeneticAlgorithm;
 import org.encog.neural.networks.training.lma.LevenbergMarquardtTraining;
+import org.encog.neural.networks.training.nm.NelderMeadTraining;
 import org.encog.neural.networks.training.pnn.TrainBasicPNN;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.encog.neural.networks.training.propagation.manhattan.ManhattanPropagation;
@@ -94,6 +95,7 @@ import org.encog.workbench.dialogs.training.methods.InputInstar;
 import org.encog.workbench.dialogs.training.methods.InputLMA;
 import org.encog.workbench.dialogs.training.methods.InputManhattan;
 import org.encog.workbench.dialogs.training.methods.InputNEAT;
+import org.encog.workbench.dialogs.training.methods.InputNelderMead;
 import org.encog.workbench.dialogs.training.methods.InputOutstar;
 import org.encog.workbench.dialogs.training.methods.InputPSO;
 import org.encog.workbench.dialogs.training.methods.InputQPROP;
@@ -229,6 +231,9 @@ public class TrainBasicNetwork {
 				case PSO:
 					performPSO(file, trainingData,validationData);
 					break;
+				case NelderMead:
+					performNelderMead(file, trainingData,validationData);
+					break;					
 				}
 			}
 		} else {
@@ -695,6 +700,16 @@ public class TrainBasicNetwork {
 		}
 		tab.setMaxError(maxError);
 		EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
+	}
+	
+	private void performNelderMead(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+		InputNelderMead dialog = new InputNelderMead();
+
+		if (dialog.process()) {
+			NelderMeadTraining train = new NelderMeadTraining(
+					(BasicNetwork) file.getObject(), trainingData);
+			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+		}
 	}
 	
 	

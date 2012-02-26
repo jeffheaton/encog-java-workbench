@@ -72,6 +72,7 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 		this.model.addElement("ADALINE Training");
 		this.model.addElement("Singular Value Decomposition (SVD)");
 		this.model.addElement("Particle Swarm Optimization (PSO)");
+		this.model.addElement("Nelder Mead");
 
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -118,6 +119,9 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 		case 10:
 			this.type = BasicNetworkTrainingType.PSO;
 			break;
+		case 11:
+			this.type = BasicNetworkTrainingType.NelderMead;
+			break;
 		}
 	}
 
@@ -156,6 +160,9 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 			break;
 		case PSO:
 			this.list.setSelectedIndex(10);
+			break;
+		case NelderMead:
+			this.list.setSelectedIndex(11);
 			break;
 		}
 	}
@@ -213,6 +220,9 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 			
 		case 10:
 			this.text.setText("PSO can be a very effective training algorithm.  PSO performs global search, and is nearly as susceptible to local minima as propagation training.");
+			break;
+		case 11:
+			this.text.setText("Nelder Mead");
 			break;
 		}
 

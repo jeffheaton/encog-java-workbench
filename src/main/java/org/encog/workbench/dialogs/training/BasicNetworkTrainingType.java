@@ -34,5 +34,6 @@ public enum BasicNetworkTrainingType {
 	ADALINE,
 	PropagationQuick,
 	SVD,
-	PSO
+	PSO,
+	NelderMead
 }
