@@ -222,7 +222,7 @@ public class ChooseBasicNetworkTrainingMethod extends EncogCommonDialog implemen
 			this.text.setText("PSO can be a very effective training algorithm.  PSO performs global search, and is nearly as susceptible to local minima as propagation training.");
 			break;
 		case 11:
-			this.text.setText("Nelder Mead");
+			this.text.setText("Nelder Mead is an optimization method that typically provides good results for neural network.  Nelder Mead does require considerable memory, as it must allocate a grid equal to approximately the square of the number of weights in your neural network.");
 			break;
 		}
 
