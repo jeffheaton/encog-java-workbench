@@ -27,7 +27,6 @@ import java.awt.Frame;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
@@ -206,6 +205,9 @@ public class EncogWorkBench implements Runnable {
 					title,
 					"An error occured while performing this operation:\n"
 							+ t.toString());
+			t.printStackTrace();
+		} if (t instanceof OutOfMemoryError ) {
+			displayError(title,"Not enough memory to do that.");
 			t.printStackTrace();
 		} else
 			ErrorDialog.handleError(t, network, set);
