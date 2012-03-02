@@ -33,8 +33,10 @@ import org.encog.app.analyst.AnalystFileFormat;
 import org.encog.app.analyst.AnalystGoal;
 import org.encog.app.analyst.wizard.NormalizeRange;
 import org.encog.app.analyst.wizard.WizardMethodType;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
+import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.FileField;
 import org.encog.workbench.dialogs.common.IntegerField;
@@ -59,6 +61,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	private final CheckField randomize;
 	private final CheckField balance;
 	private final CheckField cluster;
+	private final DoubleField maxError;
 	
 	/**
 	 * @return the cluster
@@ -102,7 +105,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		methods.add("Self Organizing Map (SOM)");
 		methods.add("Support Vector Machine");		
 				
-		this.setSize(640, 330);
+		this.setSize(640, 360);
 		this.setTitle("Setup Encog Analyst Wizard");
 		
 		beginTab("General");
@@ -114,6 +117,8 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
 		addProperty(this.range = new ComboBoxField("normalization range", "Normalization Range", true, rangeList));
 		addProperty(this.missing = new ComboBoxField("missing values", "Missing Values", true, missingList));
+		addProperty(this.maxError = new DoubleField("max error",
+				"Maximum Error Percent(0-100)", true, 0, 100));
 		beginTab("Time Series");
 		addProperty(this.lagCount = new IntegerField("lag count","Lag Count",true,0,1000));
 		addProperty(this.leadCount = new IntegerField("lead count","Lead Count",true,0,1000));
@@ -136,6 +141,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		this.balance.setValue(false);
 		this.cluster.setValue(true);
 		((JComboBox)this.method.getField()).setSelectedIndex(1);
+		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	
 	}
 
@@ -275,4 +281,8 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	public ComboBoxField getMissing() {
 		return missing;
 	}	
+	
+	public DoubleField getMaxError() {
+		return this.maxError;
+	}
 }
