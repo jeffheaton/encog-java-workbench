@@ -206,7 +206,7 @@ public class EncogWorkBench implements Runnable {
 					"An error occured while performing this operation:\n"
 							+ t.toString());
 			t.printStackTrace();
-		} if (t instanceof OutOfMemoryError ) {
+		} else if (t instanceof OutOfMemoryError ) {
 			displayError(title,"Not enough memory to do that.");
 			t.printStackTrace();
 		} else
