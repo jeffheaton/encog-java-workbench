@@ -117,7 +117,8 @@ public class EncogAnalystWizard {
 				wizard.setTaskCluster(dialog.getCluster().getValue());
 				wizard.setMaxError(dialog.getMaxError().getValue()/100.0);
 				
-				setSpecific(wizard);
+				if( !setSpecific(wizard) )
+					return;
 
 				wizard.wizard(targetCSVFile, headers, format);
 				
@@ -141,14 +142,19 @@ public class EncogAnalystWizard {
 		}
 	}
 
-	private static void setSpecific(AnalystWizard wizard) {
+	private static boolean setSpecific(AnalystWizard wizard) {
 		if( wizard.getMethodType() == WizardMethodType.BayesianNetwork  ) {
 			BayesianWizardDialog dialog = new BayesianWizardDialog();
 			if( dialog.process() ) {
 				wizard.setNaiveBayes(dialog.getNaiveBayesian().getValue());
 				wizard.setEvidenceSegements(dialog.getEvidenceSegments().getValue());
+				return true;
+			} else {
+				return false;
 			}
 		}
+		
+		return true;
 		
 	}
 }
