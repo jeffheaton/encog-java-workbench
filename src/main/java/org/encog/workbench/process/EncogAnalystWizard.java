@@ -115,6 +115,7 @@ public class EncogAnalystWizard {
 				wizard.setTaskSegregate(dialog.getSegregate().getValue());
 				wizard.setTaskBalance(dialog.getBalance().getValue());
 				wizard.setTaskCluster(dialog.getCluster().getValue());
+				wizard.setMaxError(dialog.getMaxError().getValue()/100.0);
 				
 				setSpecific(wizard);
 
