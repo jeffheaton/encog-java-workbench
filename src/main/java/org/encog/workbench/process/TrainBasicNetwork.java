@@ -317,7 +317,7 @@ public class TrainBasicNetwork {
 				"Train the nerual network using the classic neighborhood based SOM training."));
 		list.add(selectSOMClusterCopy = new SelectItem(
 				"SOM Cluster Copy Training",
-				"Train the SOM using the cluser copy method."));
+				"Train the SOM using the cluser copy method.  This is a very limited type of training that copies the training set to the SOM.  Because of this copy, the training set must have the same (or fewer) count of elements as the SOM has output neurons.  Cluster copy training is typically used to provide the SOM with an initial set of weights to be used with more advanced training."));
 		SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
 				.getMainWindow(), list);
 		sel.setVisible(true);
