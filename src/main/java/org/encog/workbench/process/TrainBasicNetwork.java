@@ -421,6 +421,9 @@ public class TrainBasicNetwork {
 			final int particleCount = dialog.getParticleCount().getValue();
 			final double c1 = dialog.getC1().getValue();
 			final double c2 = dialog.getC2().getValue();
+			final double particleInertia = dialog.getParticleInertia().getValue();
+			final double maxVelocity = dialog.getMaxVelocity().getValue();
+			final double maxWeight = dialog.getMaxWeight().getValue();
 
 			CalculateScore score = new TrainingSetScore(trainingData);
 			final NeuralPSO train = new NeuralPSO(
@@ -428,6 +431,9 @@ public class TrainBasicNetwork {
 					new NguyenWidrowRandomizer(), score, particleCount);
 			train.setC1(c1);
 			train.setC2(c2);
+			train.setInertiaWeight(particleInertia);
+			train.setMaxVelocity(maxVelocity);
+			train.setMaxPosition(maxWeight);
 			train.setTraining(trainingData);
 			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
 		}

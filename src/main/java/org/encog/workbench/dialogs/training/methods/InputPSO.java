@@ -23,9 +23,6 @@
  */
 package org.encog.workbench.dialogs.training.methods;
 
-import java.awt.Frame;
-
-import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.training.DialogMaxError;
@@ -41,8 +38,11 @@ public class InputPSO extends DialogMaxError {
 	private static final long serialVersionUID = 1L;
 
 	private final IntegerField particleCount;
+	private final DoubleField particleInertia;
 	private final DoubleField c1;
 	private final DoubleField c2;
+	private final DoubleField maxWeight;
+	private final DoubleField maxVelocity;
 	
 
 	/**
@@ -53,13 +53,19 @@ public class InputPSO extends DialogMaxError {
 		super(false);
 		setTitle("Particle Swarm Optimization Training");
 		
-		addProperty(this.particleCount = new IntegerField("particle count","Particle Count",true,5,100));
-		addProperty(this.c1 = new DoubleField("cognitive lr","Cognitive Learning Rate",true,0,1000));
-		addProperty(this.c2 = new DoubleField("social lr","Social Learning Rate",true,0,1000));
+		addProperty(this.particleCount = new IntegerField("particle count","Particle Count",true,5,1000));
+		addProperty(this.particleInertia = new DoubleField("inertia","Particle Inertia",true,0,1000));
+		addProperty(this.c1 = new DoubleField("cognitive lr","Cognitive Learning Rate (C1)",true,0,1000));
+		addProperty(this.c2 = new DoubleField("social lr","Social Learning Rate (C2)",true,0,1000));
+		addProperty(this.maxVelocity = new DoubleField("max velocity","Max Velocity(-1 none)",true,-2,1000));
+		addProperty(this.maxWeight = new DoubleField("max weight","Max Weight(-1 none)",true,-2,1000));
 		render();
 		this.particleCount.setValue(30);
 		this.c1.setValue(2.0);
 		this.c2.setValue(2.0);
+		this.particleInertia.setValue(0.4);
+		this.maxVelocity.setValue(2.0);
+		this.maxWeight.setValue(-1);
 	}
 
 
@@ -86,6 +92,31 @@ public class InputPSO extends DialogMaxError {
 		return c2;
 	}
 
+
+	/**
+	 * @return the particleInertia
+	 */
+	public DoubleField getParticleInertia() {
+		return particleInertia;
+	}
+
+
+	/**
+	 * @return the maxWeight
+	 */
+	public DoubleField getMaxWeight() {
+		return maxWeight;
+	}
+
+
+	/**
+	 * @return the maxVelocity
+	 */
+	public DoubleField getMaxVelocity() {
+		return maxVelocity;
+	}
+
+	
 
 	
 }
