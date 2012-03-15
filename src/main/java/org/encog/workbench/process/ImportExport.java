@@ -179,7 +179,7 @@ public class ImportExport {
 				EncogWorkBench
 						.displayError(
 								"Error",
-								"Must have an alayst script file.\nThis file provides the ranges needed for normalization.");
+								"Must have an analyst script file.\nThis file provides the ranges needed for normalization.");
 				return null;
 			}
 

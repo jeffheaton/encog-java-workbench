@@ -94,7 +94,7 @@ public class EncogOutputPanel extends JPanel implements ActionListener {
 		}
 		else if( e.getSource()==this.comboLogLevel ) {
 			String level = (String)this.comboLogLevel.getSelectedItem();
-			output("Logging level set to: " + level);
+			outputLine("Logging level set to: " + level);
 			
 			int l = EncogLogging.LEVEL_DISABLE;
 			

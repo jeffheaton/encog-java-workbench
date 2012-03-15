@@ -85,10 +85,7 @@ public class ImportExportDialog extends JDialog implements Runnable,
 
 			dispose();
 
-			if (performImport)
-				EncogWorkBench.displayMessage("Done", "Import Complete");
-			else
-				EncogWorkBench.displayMessage("Done", "Export Complete");
+			EncogWorkBench.displayMessage("Done", "Done");
 
 			if (this.done != null) {
 				done.complete();
