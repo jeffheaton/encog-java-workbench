@@ -59,7 +59,7 @@ import org.encog.workbench.util.WorkbenchLogHandler;
 public class EncogWorkBench implements Runnable {
 
 	public final static String CONFIG_FILENAME = ".EncogWorkbench.conf";
-	public final static String VERSION = "3.1";
+	public final static String VERSION = "3.2";
 	public static final String COPYRIGHT = "Copyright 2012 by Heaton Research, Inc.";
 
 	/**
