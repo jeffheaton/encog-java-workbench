@@ -32,6 +32,7 @@ import javax.swing.JOptionPane;
 
 import org.encog.Encog;
 import org.encog.EncogError;
+import org.encog.cloud.node.CloudNode;
 import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.ml.MLMethod;
 import org.encog.ml.data.MLDataSet;
@@ -66,6 +67,8 @@ public class EncogWorkBench implements Runnable {
 	 * The singleton instance.
 	 */
 	private static EncogWorkBench instance;
+	
+	private CloudNode cloudNode;
 
 	/**
 	 * The main window.
@@ -244,6 +247,8 @@ public class EncogWorkBench implements Runnable {
 		Thread thread = new Thread(this);
 		thread.setDaemon(true);
 		thread.start();
+		
+		setupServer();
 	}
 
 	/**
@@ -417,5 +422,41 @@ public class EncogWorkBench implements Runnable {
 	public static String displayInput(String prompt, String str) {
 		return JOptionPane.showInputDialog(null, prompt, str);
 	}
+	
+	public void setupServer() {
+		if( this.config.isAllowConnections() ) {
+			// we should be allowing connections, are we?
+			if( this.cloudNode!=null ) {
+				// we are already accepting, is the port right?
+				if( this.cloudNode.getPort() != config.getPort() ) {
+					// wrong port, bounce!
+					stopAccepting();
+					beginAccepting();
+				}
+			} else {
+				// we are not accepting, start accepting
+				beginAccepting();
+			}
+		} else {
+			// we should not be allowing connections, are we?
+			if( this.cloudNode!=null ) {
+				stopAccepting();
+			}
+		}
+	}
 
+	public void beginAccepting() {
+		if( this.cloudNode!=null ) {
+			stopAccepting();
+		}
+		this.cloudNode = new CloudNode(this.config.getPort());
+		this.cloudNode.start();
+		this.outputLine("Now accepting connections on port: " + this.config.getPort());
+	}
+	
+	public void stopAccepting() {
+		this.cloudNode.shutdown();
+		this.cloudNode = null;
+		this.outputLine("Stopped accepting connections");
+	}
 }

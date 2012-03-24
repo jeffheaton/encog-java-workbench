@@ -42,6 +42,8 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 	private IntegerField trainingChartHistory;
 	private IntegerField iterationStepCount;
 	private CheckField displayTrainingImprovement;
+	private CheckField allowConnections;
+	private IntegerField port;
 	
 	public EncogConfigDialog(Frame owner) {
 		super(owner);
@@ -59,6 +61,10 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		addProperty(this.iterationStepCount = new IntegerField("step count","Iteration Step Count",true,1,1000));
 		addProperty(this.displayTrainingImprovement = new CheckField("show improvement","Show Training Improvement"));
 		//addProperty(this.useOpenCL = new CheckField("use opencl","Use Graphics Card(GPU)"));
+		beginTab("Cloud");
+		addProperty(this.allowConnections = new CheckField("open server", "Allow Connections"));
+		addProperty(this.port = new IntegerField("server port", "Server Port",true,1,60000));
+		
 		render();
 	}
 
@@ -89,9 +95,18 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 	public CheckField getDisplayTrainingImprovement() {
 		return displayTrainingImprovement;
 	}
-	
-	
-	
-	
 
+	/**
+	 * @return the allowConnections
+	 */
+	public CheckField getAllowConnections() {
+		return allowConnections;
+	}
+
+	/**
+	 * @return the port
+	 */
+	public IntegerField getPort() {
+		return port;
+	}
 }
