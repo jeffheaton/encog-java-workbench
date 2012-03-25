@@ -16,10 +16,9 @@ import org.encog.workbench.EncogWorkBench;
 public class ConnectionsModel implements TableModel, CloudListener {
 	
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();
-	private final CloudNode cloud;
 	
 	public ConnectionsModel() {
-		this.cloud = EncogWorkBench.getInstance().getCloud();
+		
 	}
 
 	private void notifyListeners(final TableModelEvent tce) {
@@ -30,7 +29,8 @@ public class ConnectionsModel implements TableModel, CloudListener {
 	
 	@Override
 	public int getRowCount() {
-		return this.cloud.getConnections().size();
+		CloudNode cloud = EncogWorkBench.getInstance().getCloud();
+		return cloud.getConnections().size();
 	}
 
 	@Override
@@ -63,7 +63,8 @@ public class ConnectionsModel implements TableModel, CloudListener {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		HandleClient hc = this.cloud.getConnections().get(rowIndex);
+		CloudNode cloud = EncogWorkBench.getInstance().getCloud();
+		HandleClient hc = cloud.getConnections().get(rowIndex);
 		switch(columnIndex) {
 			case 0:
 				return hc.getLink().getSocket().getRemoteSocketAddress().toString();

@@ -64,7 +64,7 @@ public class EncogMenus {
 	public static final String TOOLS_EXTERNAL2BIN = "Convert Other File to Encog Binary...";
 	public static final String TOOLS_PROBEN = "Proben1...";
 	public static final String TOOLS_NOISE = "Generate Noise...";
-	
+	public static final String TOOLS_WIZARD = "Wizards...";
 	
 		
 	public static final String HELP_ABOUT = "About Encog Workbench...";
@@ -92,7 +92,6 @@ public class EncogMenus {
 	private JMenuItem menuViewConnections;
 	private JMenuItem menuViewRBF;
 	
-
 	private JMenuItem menuToolsTrain;
 	private JMenuItem menuToolsGenerate;
 	private JMenuItem menuToolsEvaluate;
@@ -103,6 +102,7 @@ public class EncogMenus {
 	private JMenuItem menuToolsExt2Bin;	
 	private JMenuItem menuToolsProben;
 	private JMenuItem menuToolsNoise;
+	private JMenuItem menuToolsWizard;
 	
 	private JMenuItem menuHelpAbout;
 
@@ -161,6 +161,7 @@ public class EncogMenus {
 		this.menuToolsExt2Bin = owner.addItem(this.menuTools, EncogMenus.TOOLS_EXTERNAL2BIN, 'y');
 		this.menuToolsProben = owner.addItem(this.menuTools, EncogMenus.TOOLS_PROBEN, 'r');
 		this.menuToolsNoise = owner.addItem(this.menuTools, EncogMenus.TOOLS_NOISE, 'n');
+		this.menuToolsWizard = owner.addItem(this.menuTools, EncogMenus.TOOLS_WIZARD, 'w');
 		this.menuBar.add(this.menuTools);		
 
 		this.menuHelp = new JMenu("Help");
@@ -218,6 +219,7 @@ public class EncogMenus {
 		this.menuToolsValidation.setEnabled(!modal && documentOpen);
 		this.menuToolsExt2Bin.setEnabled(!modal);		
 		this.menuToolsBin2Ext.setEnabled(!modal);
+		this.menuToolsWizard.setEnabled(!modal && documentOpen);
 
 		this.menuHelpAbout.setEnabled(!modal);
 	}
@@ -275,6 +277,8 @@ public class EncogMenus {
 			owner.getOperations().performCreateTrainingData();
 		} else if (event.getActionCommand().equals(EncogMenus.VIEW_CONNECTIONS)) {
 			owner.getOperations().performConnections();
+		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_WIZARD)) {
+			owner.getOperations().performWizard();
 		}
 	
 		

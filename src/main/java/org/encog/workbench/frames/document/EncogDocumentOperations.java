@@ -57,10 +57,13 @@ import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.dialogs.training.ProbenDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
+import org.encog.workbench.dialogs.wizard.ChooseWizardDialog;
+import org.encog.workbench.dialogs.wizard.WizardType;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.process.CreateTrainingData;
+import org.encog.workbench.process.EncogAnalystWizard;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.cloud.CloudConnectionsTab;
@@ -523,6 +526,21 @@ public class EncogDocumentOperations {
 	public void performConnections() {
 		CloudConnectionsTab tab = EncogWorkBench.getInstance().getMainWindow().getConnectionsTab();
 		this.owner.getTabManager().openTab(tab);
+		
+	}
+	
+	public void performWizard() {
+		ChooseWizardDialog choose = new ChooseWizardDialog();
+		if( choose.process() ) {
+			switch(choose.getTheType()) {
+				case AnalystWizard:
+					EncogAnalystWizard.createEncogAnalyst(null);
+					break;
+				case RealTimeAnalystWizard:
+					EncogAnalystWizard.createRealtimeEncogAnalyst();
+					break;
+			}
+		}
 		
 	}
 }
