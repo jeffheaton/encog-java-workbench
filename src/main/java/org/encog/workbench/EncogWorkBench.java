@@ -451,6 +451,7 @@ public class EncogWorkBench implements Runnable {
 		}
 		this.cloudNode = new CloudNode(this.config.getPort());
 		this.cloudNode.start();
+		this.cloudNode.addListener(EncogWorkBench.getInstance().getMainWindow().getConnectionsTab().getModel());
 		this.outputLine("Now accepting connections on port: " + this.config.getPort());
 	}
 	

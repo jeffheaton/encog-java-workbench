@@ -20,7 +20,6 @@ public class ConnectionsModel implements TableModel, CloudListener {
 	
 	public ConnectionsModel() {
 		this.cloud = EncogWorkBench.getInstance().getCloud();
-		this.cloud.addListener(this);
 	}
 
 	private void notifyListeners(final TableModelEvent tce) {
