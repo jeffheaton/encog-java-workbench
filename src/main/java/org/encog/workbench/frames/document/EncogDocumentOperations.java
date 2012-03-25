@@ -63,6 +63,7 @@ import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.cloud.CloudConnectionsTab;
 import org.encog.workbench.tabs.files.text.BasicTextTab;
 import org.encog.workbench.tabs.proben.ProbenStatusTab;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
@@ -516,6 +517,12 @@ public class EncogDocumentOperations {
 			targetData.close();
 			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
+		
+	}
+
+	public void performConnections() {
+		CloudConnectionsTab tab = EncogWorkBench.getInstance().getMainWindow().getConnectionsTab();
+		this.owner.getTabManager().openTab(tab);
 		
 	}
 }

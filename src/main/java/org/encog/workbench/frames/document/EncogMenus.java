@@ -52,7 +52,9 @@ public class EncogMenus {
 	public static final String EDIT_CONFIG = "Config...";
 	public static final String EDIT_FIND = "Find...";
 
-	//public static final String TOOLS_CLOUD = "Connect to an Encog Cloud...";
+	public static final String VIEW_CONNECTIONS = "Connections...";
+	public static final String VIEW_RBF = "Chart RBF...";
+	
 	public static final String TOOLS_TRAIN = "Train...";
 	public static final String TOOLS_GENERATE_TRAINING = "Generate Training Data...";
 	public static final String TOOLS_EVALUATE = "Evaluate Method...";
@@ -60,7 +62,6 @@ public class EncogMenus {
 	public static final String TOOLS_VALIDATION_CHART = "Validation Chart...";
 	public static final String TOOLS_BIN2EXTERNAL = "Convert Encog Binary to Other File...";
 	public static final String TOOLS_EXTERNAL2BIN = "Convert Other File to Encog Binary...";
-	public static final String TOOLS_RBF = "Chart RBF...";
 	public static final String TOOLS_PROBEN = "Proben1...";
 	public static final String TOOLS_NOISE = "Generate Noise...";
 	
@@ -73,6 +74,7 @@ public class EncogMenus {
 	private JMenu menuEdit;
 	private JMenu menuHelp;
 	private JMenu menuTools;
+	private JMenu menuView;
 	
 	private JMenuItem menuFileNew;
 	private JMenuItem menuFileNewProject;
@@ -86,6 +88,10 @@ public class EncogMenus {
 	private JMenuItem menuEditPaste;
 	private JMenuItem menuEditConfig;
 	private JMenuItem menuEditFind;
+	
+	private JMenuItem menuViewConnections;
+	private JMenuItem menuViewRBF;
+	
 
 	private JMenuItem menuToolsTrain;
 	private JMenuItem menuToolsGenerate;
@@ -94,8 +100,7 @@ public class EncogMenus {
 	private JMenuItem menuToolsBrowse;
 	private JMenuItem menuToolsValidation;
 	private JMenuItem menuToolsBin2Ext;
-	private JMenuItem menuToolsExt2Bin;
-	private JMenuItem menuToolsRBF;	
+	private JMenuItem menuToolsExt2Bin;	
 	private JMenuItem menuToolsProben;
 	private JMenuItem menuToolsNoise;
 	
@@ -139,9 +144,14 @@ public class EncogMenus {
 		this.menuEditFind = this.menuEdit.add(owner.addItem(this.menuEdit,
 				EncogMenus.EDIT_FIND, 'f'));		
 		this.menuBar.add(this.menuEdit);
+		
+		this.menuView = new JMenu("View");
+		this.menuViewConnections = owner.addItem(this.menuView, VIEW_CONNECTIONS, 'c');
+		this.menuViewRBF = owner.addItem(this.menuView, EncogMenus.VIEW_RBF, 'r');
+		this.menuBar.add(this.menuView);
 
 		this.menuTools = new JMenu("Tools");
-		//this.menuToolsCloud = owner.addItem(this.menuTools, EncogMenus.TOOLS_CLOUD, 'c');
+		//
 		this.menuToolsGenerate = owner.addItem(this.menuTools, EncogMenus.TOOLS_GENERATE_TRAINING, 'g');
 		this.menuToolsTrain = owner.addItem(this.menuTools, EncogMenus.TOOLS_TRAIN, 't');
 		this.menuToolsBenchmark = owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 'k');
@@ -149,7 +159,6 @@ public class EncogMenus {
 		this.menuToolsValidation = owner.addItem(this.menuTools, EncogMenus.TOOLS_VALIDATION_CHART, 'v');
 		this.menuToolsBin2Ext = owner.addItem(this.menuTools, EncogMenus.TOOLS_BIN2EXTERNAL, 'x');
 		this.menuToolsExt2Bin = owner.addItem(this.menuTools, EncogMenus.TOOLS_EXTERNAL2BIN, 'y');
-		this.menuToolsRBF = owner.addItem(this.menuTools, EncogMenus.TOOLS_RBF, 'r');
 		this.menuToolsProben = owner.addItem(this.menuTools, EncogMenus.TOOLS_PROBEN, 'r');
 		this.menuToolsNoise = owner.addItem(this.menuTools, EncogMenus.TOOLS_NOISE, 'n');
 		this.menuBar.add(this.menuTools);		
@@ -199,14 +208,15 @@ public class EncogMenus {
 		this.menuEditPaste.setEnabled(!modal && supportsClipboard && documentOpen);
 		this.menuEditConfig.setEnabled(!modal);
 
-		//this.menuToolsCloud.setEnabled(!modal);
+		this.menuViewRBF.setEnabled(!modal);
+		this.menuViewConnections.setEnabled(!modal);
+		
 		this.menuToolsTrain.setEnabled(!modal && documentOpen);
 		this.menuToolsGenerate.setEnabled(!modal && documentOpen);
 		this.menuToolsEvaluate.setEnabled(!modal && documentOpen);
 		this.menuToolsBenchmark.setEnabled(!modal);
 		this.menuToolsValidation.setEnabled(!modal && documentOpen);
-		this.menuToolsExt2Bin.setEnabled(!modal);
-		this.menuToolsRBF.setEnabled(!modal);
+		this.menuToolsExt2Bin.setEnabled(!modal);		
 		this.menuToolsBin2Ext.setEnabled(!modal);
 
 		this.menuHelpAbout.setEnabled(!modal);
@@ -259,10 +269,12 @@ public class EncogMenus {
 			ImportExport.performBin2External();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_EXTERNAL2BIN)) {
 			ImportExport.performExternal2Bin(null,null,null);
-		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_RBF)) {
+		} else if (event.getActionCommand().equals(EncogMenus.VIEW_RBF)) {
 			owner.getOperations().performRBF();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_GENERATE_TRAINING)) {
 			owner.getOperations().performCreateTrainingData();
+		} else if (event.getActionCommand().equals(EncogMenus.VIEW_CONNECTIONS)) {
+			owner.getOperations().performConnections();
 		}
 	
 		

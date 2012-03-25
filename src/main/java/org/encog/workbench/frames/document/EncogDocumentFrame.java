@@ -50,6 +50,7 @@ import org.encog.workbench.tabs.TrainingContTab;
 import org.encog.workbench.tabs.UnknownObjectTab;
 import org.encog.workbench.tabs.analyst.EncogAnalystTab;
 import org.encog.workbench.tabs.bayesian.BayesianNetworkTab;
+import org.encog.workbench.tabs.cloud.CloudConnectionsTab;
 import org.encog.workbench.tabs.files.BinaryDataTab;
 import org.encog.workbench.tabs.files.GenericFileTab;
 import org.encog.workbench.tabs.files.HTMLFileTab;
@@ -74,6 +75,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 	private JSplitPane documentSplit;
 	private EncogOutputPanel outputPanel;
 	private ProjectTree tree;
+	private final CloudConnectionsTab connectionsTab = new CloudConnectionsTab();
 
 	private final static String[] B = { ".csv", ".xlsx" };
 	public static final ExtensionFilter ENCOG_FILTER = new ExtensionFilter(
@@ -345,5 +347,14 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			openFile(tf);
 		}
 	}
+
+	/**
+	 * @return the connectionsTab
+	 */
+	public CloudConnectionsTab getConnectionsTab() {
+		return connectionsTab;
+	}
+	
+	
 	
 }

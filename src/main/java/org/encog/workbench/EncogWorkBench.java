@@ -459,4 +459,8 @@ public class EncogWorkBench implements Runnable {
 		this.cloudNode = null;
 		this.outputLine("Stopped accepting connections");
 	}
+	
+	public CloudNode getCloud() {
+		return this.cloudNode;
+	}
 }
