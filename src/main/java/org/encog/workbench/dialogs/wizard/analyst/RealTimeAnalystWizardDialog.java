@@ -34,6 +34,7 @@ import org.encog.app.analyst.AnalystGoal;
 import org.encog.app.analyst.wizard.NormalizeRange;
 import org.encog.app.analyst.wizard.WizardMethodType;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.common.BuildingListField;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
@@ -45,14 +46,12 @@ import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 	
-	private final FileField rawFile;
+	private BuildingListField sourceData;
+	private final TextField egaFile;
 	private final ComboBoxField method;
-	private final ComboBoxField format;
 	private final ComboBoxField range;
 	private final ComboBoxField goal;
 	private final ComboBoxField missing;
-	private final TextField targetField;
-	private final CheckField headers;
 	private final IntegerField lagCount;
 	private final IntegerField leadCount;
 	private final CheckField includeTarget;
@@ -109,16 +108,16 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 		this.setTitle("Realtime Encog Analyst Wizard");
 		
 		beginTab("General");
-		addProperty(this.rawFile = new FileField("source file","Source CSV File(*.csv)",true,false,EncogDocumentFrame.CSV_FILTER));
-		addProperty(this.format = new ComboBoxField("format", "File Format", true, csvFormat));
+		addProperty(this.egaFile = new TextField("ega file","EGA File Name",true));
+		addProperty(this.sourceData = new BuildingListField("source fields","Source Fields"));
 		addProperty(this.method = new ComboBoxField("method", "Machine Learning", true, methods));
 		addProperty(this.goal = new ComboBoxField("goal", "Goal", true, goalList));
-		addProperty(this.targetField = new TextField("target field", "Target Field(blank for auto)", false));
-		addProperty(this.headers = new CheckField("headers","CSV File Headers"));
+
 		addProperty(this.range = new ComboBoxField("normalization range", "Normalization Range", true, rangeList));
 		addProperty(this.missing = new ComboBoxField("missing values", "Missing Values", true, missingList));
 		addProperty(this.maxError = new DoubleField("max error",
 				"Maximum Error Percent(0-100)", true, 0, 100));
+
 		beginTab("Time Series");
 		addProperty(this.lagCount = new IntegerField("lag count","Lag Count",true,0,1000));
 		addProperty(this.leadCount = new IntegerField("lead count","Lead Count",true,0,1000));
@@ -129,7 +128,7 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 		addProperty(this.segregate = new CheckField("segregate","Segregate"));
 		addProperty(this.balance = new CheckField("balance","Balance"));
 		addProperty(this.cluster = new CheckField("cluster","Cluster"));
-		
+				
 		render();
 		
 		this.lagCount.setValue(0);
@@ -140,25 +139,15 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 		this.normalize.setValue(true);
 		this.balance.setValue(false);
 		this.cluster.setValue(true);
+		this.sourceData.getModel().addElement("HIGH");
+		this.sourceData.getModel().addElement("LOW");
+		this.sourceData.getModel().addElement("OPEN");
+		this.sourceData.getModel().addElement("CLOSE");
+		this.sourceData.getModel().addElement("VOL");
 		((JComboBox)this.method.getField()).setSelectedIndex(1);
 		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	
 	}
-
-	/**
-	 * @return the rawFile
-	 */
-	public FileField getRawFile() {
-		return rawFile;
-	}
-
-	/**
-	 * @return the headers
-	 */
-	public CheckField getHeaders() {
-		return headers;
-	}
-
 	
 	public WizardMethodType getMethodType()
 	{
@@ -179,25 +168,7 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 				return null;
 		}
 	}
-	
-	public AnalystFileFormat getFormat() {
-		int idx = this.format.getSelectedIndex(); 
-		switch( idx ) {
-			case 0:
-				return AnalystFileFormat.DECPNT_COMMA;
-			case 1:
-				return AnalystFileFormat.DECPNT_SPACE;
-			case 2:
-				return AnalystFileFormat.DECPNT_SEMI;
-			case 3:
-				return AnalystFileFormat.DECCOMMA_SPACE;
-			case 4:
-				return AnalystFileFormat.DECCOMMA_SEMI;
-			default:
-				return null;
-		}
-	}
-	
+		
 	public AnalystGoal getGoal() {
 		int idx = this.goal.getSelectedIndex();
 		switch(idx) {
@@ -222,10 +193,6 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 		}
 	}
 	
-	public String getTargetField() {
-		return this.targetField.getValue();
-	}
-
 	/**
 	 * @return the lagCount
 	 */
@@ -285,4 +252,14 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 	public DoubleField getMaxError() {
 		return this.maxError;
 	}
+
+
+	/**
+	 * @return the egaFile
+	 */
+	public TextField getEgaFile() {
+		return egaFile;
+	}
+	
+	
 }

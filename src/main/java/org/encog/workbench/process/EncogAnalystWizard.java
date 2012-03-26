@@ -153,6 +153,7 @@ public class EncogAnalystWizard {
 			EncogAnalyst analyst = null;
 			File projectFolder = EncogWorkBench.getInstance()
 					.getProjectDirectory();
+			File targetCSVFile = null;
 			File egaFile = null;
 			
 			if( dialog.getMethodType()==WizardMethodType.SOM && dialog.getGoal()==AnalystGoal.Regression ) {
@@ -162,32 +163,24 @@ public class EncogAnalystWizard {
 
 			try {
 				EncogWorkBench.getInstance().getMainWindow().beginWait();
-				File sourceCSVFile = new File(dialog.getRawFile().getValue());
-				File targetCSVFile = new File(projectFolder,
-						sourceCSVFile.getName());
-
-				if (!sourceCSVFile.toString().equals(targetCSVFile.toString())) {
-					org.encog.util.file.FileUtil.copy(sourceCSVFile,
-							targetCSVFile);
-				}
-
+							
 				egaFile = new File(FileUtil.forceExtension(
-						targetCSVFile.toString(), "ega"));
+						dialog.getEgaFile().getValue(), "ega") );
 
 				if (!EncogWorkBench.getInstance().getMainWindow()
 						.getTabManager().queryViews(egaFile))
 					return;
 
 				File egFile = new File(FileUtil.forceExtension(
-						targetCSVFile.toString(), "eg"));
+						dialog.getEgaFile().getValue(), "eg"));
 
 				analyst = new EncogAnalyst();
 				AnalystWizard wizard = new AnalystWizard(analyst);
-				boolean headers = dialog.getHeaders().getValue();
-				AnalystFileFormat format = dialog.getFormat();
+				boolean headers = true;
+				AnalystFileFormat format = AnalystFileFormat.DECPNT_COMMA;
 
 				wizard.setMethodType(dialog.getMethodType());
-				wizard.setTargetField(dialog.getTargetField());
+				wizard.setTargetField("");
 				
 				String m = (String)dialog.getMissing().getSelectedValue(); 
 				if( m.equals("DiscardMissing") ) {
