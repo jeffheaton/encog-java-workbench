@@ -136,8 +136,6 @@ public class EncogAnalystWizard {
 						e);
 			} finally {
 				EncogWorkBench.getInstance().getMainWindow().endWait();
-				if (analyst != null)
-					analyst.save(egaFile);
 			}
 		}
 	}
