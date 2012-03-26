@@ -52,6 +52,7 @@ public class EncogWorkBenchConfig {
 	private static final String PROPERTY_TRAINING_IMPROVEMENT = "trainingImprovement";
 	private static final String PROPERTY_CLOUD_SERVER_PORT = "serverPort";
 	private static final String PROPERTY_CLOUD_ALLOW_CONNECTIONS = "allowConnections";
+	private static final String PROPERTY_PROJECT_ROOT = "allowConnections";
 	
 	private double defaultError;
 	private int threadCount;
@@ -63,6 +64,7 @@ public class EncogWorkBenchConfig {
 	private int port = CloudNode.STANDARD_ENCOG_PORT;
 	private boolean allowConnections;
 	private List<String> nodes = new ArrayList<String>();
+	private String projectRoot;
 	
 	public EncogWorkBenchConfig() {
 		resetDefaults();
@@ -164,6 +166,9 @@ public class EncogWorkBenchConfig {
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_CLOUD_ALLOW_CONNECTIONS, this.allowConnections);
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_CLOUD_SERVER_PORT, this.port);
 			
+			out.addSubSection("PATHS");
+			out.writeProperty(EncogWorkBenchConfig.PROPERTY_PROJECT_ROOT, this.projectRoot);
+			
 			out.flush();
 			os.close();
 		} catch (IOException ex) {
@@ -203,6 +208,18 @@ public class EncogWorkBenchConfig {
 					Map<String, String> params = section.parseParams();
 					this.allowConnections  = EncogFileSection.parseBoolean(params, EncogWorkBenchConfig.PROPERTY_CLOUD_ALLOW_CONNECTIONS);
 					this.port  = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_CLOUD_SERVER_PORT);
+					
+				}
+				else if( section.getSectionName().equals("ENCOG") && section.getSubSectionName().equals("PATHS") ) {
+					Map<String, String> params = section.parseParams();
+					if( params.containsKey(EncogWorkBenchConfig.PROPERTY_PROJECT_ROOT) ) {
+						this.projectRoot  = params.get(EncogWorkBenchConfig.PROPERTY_CLOUD_ALLOW_CONNECTIONS);
+					} 
+					
+					if( this.projectRoot==null || this.projectRoot.trim().length()==0 ) {
+						this.projectRoot = EncogWorkBenchConfig.getDefaultProjectRoot().toString();
+					}
+					
 					
 				}
 			}
@@ -253,6 +270,22 @@ public class EncogWorkBenchConfig {
 		this.showTrainingImprovement = true;
 		this.allowConnections = false;
 		this.port = 5128;
+		this.projectRoot = EncogWorkBenchConfig.getDefaultProjectRoot().toString();
+	}
+
+	public String getProjectRoot() {
+		return projectRoot;
+	}
+
+	public void setProjectRoot(String projectRoot) {
+		this.projectRoot = projectRoot;
+	}
+
+	public static File getDefaultProjectRoot() {
+		String home = System.getProperty("user.home");
+		File encogFolders = new File(home, "EncogProjects");
+		encogFolders.mkdir();
+		return encogFolders;
 	}
 	
 	

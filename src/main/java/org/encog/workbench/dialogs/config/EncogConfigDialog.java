@@ -31,6 +31,7 @@ import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
+import org.encog.workbench.dialogs.common.FolderField;
 import org.encog.workbench.dialogs.common.IntegerField;
 
 public class EncogConfigDialog extends EncogPropertiesDialog {
@@ -44,6 +45,7 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 	private CheckField displayTrainingImprovement;
 	private CheckField allowConnections;
 	private IntegerField port;
+	private FolderField rootDirectory;
 	
 	public EncogConfigDialog(Frame owner) {
 		super(owner);
@@ -64,7 +66,8 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		beginTab("Cloud");
 		addProperty(this.allowConnections = new CheckField("open server", "Allow Connections"));
 		addProperty(this.port = new IntegerField("server port", "Server Port",true,1,60000));
-		
+		beginTab("Paths");
+		addProperty(this.rootDirectory = new FolderField("root dir","Root Project Path",true));
 		render();
 	}
 
@@ -94,6 +97,12 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 
 	public CheckField getDisplayTrainingImprovement() {
 		return displayTrainingImprovement;
+	}
+	
+	
+
+	public FolderField getRootDirectory() {
+		return rootDirectory;
 	}
 
 	/**

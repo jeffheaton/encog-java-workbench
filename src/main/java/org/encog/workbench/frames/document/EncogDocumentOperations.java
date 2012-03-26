@@ -182,6 +182,7 @@ public class EncogDocumentOperations {
 		dialog.getIterationStepCount().setValue(config.getIterationStepCount());
 		dialog.getAllowConnections().setValue(config.isAllowConnections());
 		dialog.getPort().setValue(config.getPort());
+		dialog.getRootDirectory().setValue(config.getProjectRoot());
 		//dialog.getUseOpenCL().setValue(config.isUseOpenCL());
 		switch (config.getErrorCalculation()) {
 		case RMS:
@@ -217,6 +218,7 @@ public class EncogDocumentOperations {
 			config.setIterationStepCount(dialog.getIterationStepCount().getValue());
 			config.setAllowConnections(dialog.getAllowConnections().getValue());
 			config.setPort(dialog.getPort().getValue());
+			config.setProjectRoot(dialog.getRootDirectory().getValue());
 			
 			EncogWorkBench.getInstance().setupServer();
 			

@@ -315,10 +315,12 @@ public class EncogWorkBench implements Runnable {
 	}
 
 	public File getEncogFolders() {
-		String home = System.getProperty("user.home");
-		File encogFolders = new File(home, "EncogProjects");
-		encogFolders.mkdir();
-		return encogFolders;
+		if (config.getProjectRoot() == null
+				|| config.getProjectRoot().trim().length() == 0) {
+			return EncogWorkBenchConfig.getDefaultProjectRoot();
+		} else {
+			return new File(config.getProjectRoot());
+		}
 	}
 
 	public List<ProjectTraining> getTrainingData() {
