@@ -196,14 +196,13 @@ public class EncogAnalystWizard {
 				wizard.setGoal(dialog.getGoal());
 				wizard.setLagWindowSize(dialog.getLagCount().getValue());
 				wizard.setLeadWindowSize(dialog.getLeadCount().getValue());
-				wizard.setIncludeTargetField(dialog.getIncludeTarget()
-						.getValue());
+				wizard.setIncludeTargetField(false);
 				wizard.setRange(dialog.getRange());
 				wizard.setTaskNormalize(dialog.getNormalize().getValue());
-				wizard.setTaskRandomize(dialog.getRandomize().getValue());
+				wizard.setTaskRandomize(false);
 				wizard.setTaskSegregate(dialog.getSegregate().getValue());
-				wizard.setTaskBalance(dialog.getBalance().getValue());
-				wizard.setTaskCluster(dialog.getCluster().getValue());
+				wizard.setTaskBalance(false);
+				wizard.setTaskCluster(false);
 				wizard.setMaxError(dialog.getMaxError().getValue()/100.0);
 				
 				if( !setSpecific(wizard) )

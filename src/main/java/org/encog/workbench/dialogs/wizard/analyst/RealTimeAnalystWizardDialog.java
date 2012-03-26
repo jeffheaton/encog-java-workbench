@@ -54,21 +54,10 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 	private final ComboBoxField missing;
 	private final IntegerField lagCount;
 	private final IntegerField leadCount;
-	private final CheckField includeTarget;
 	private final CheckField normalize;
 	private final CheckField segregate;
-	private final CheckField randomize;
-	private final CheckField balance;
-	private final CheckField cluster;
 	private final DoubleField maxError;
 	
-	/**
-	 * @return the cluster
-	 */
-	public CheckField getCluster() {
-		return cluster;
-	}
-
 	private final List<String> methods = new ArrayList<String>();
 	
 	public RealTimeAnalystWizardDialog() {
@@ -76,14 +65,7 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 		
 		List<String> list = new ArrayList<String>();
 		list.add("CSV");
-		
-		List<String> csvFormat = new ArrayList<String>();
-		csvFormat.add("Decimal Point (USA/English) & Comma Separator");
-		csvFormat.add("Decimal Point (USA/English) & Space Separator");
-		csvFormat.add("Decimal Point (USA/English) & Semicolon Separator");
-		csvFormat.add("Decimal Comma (Non-USA/English) & Space Separator");
-		csvFormat.add("Decimal Comma (Non-USA/English) & Semicolon Separator");
-		
+				
 		List<String> goalList = new ArrayList<String>();
 		goalList.add("Classification");
 		goalList.add("Regression");
@@ -107,38 +89,32 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 		this.setSize(640, 360);
 		this.setTitle("Realtime Encog Analyst Wizard");
 		
-		beginTab("General");
+		beginTab("Data");
 		addProperty(this.egaFile = new TextField("ega file","EGA File Name",true));
 		addProperty(this.sourceData = new BuildingListField("source fields","Source Fields"));
+		
+		beginTab("Machine Learning");
 		addProperty(this.method = new ComboBoxField("method", "Machine Learning", true, methods));
-		addProperty(this.goal = new ComboBoxField("goal", "Goal", true, goalList));
-
 		addProperty(this.range = new ComboBoxField("normalization range", "Normalization Range", true, rangeList));
 		addProperty(this.missing = new ComboBoxField("missing values", "Missing Values", true, missingList));
-		addProperty(this.maxError = new DoubleField("max error",
-				"Maximum Error Percent(0-100)", true, 0, 100));
+		addProperty(this.maxError = new DoubleField("max error","Maximum Error Percent(0-100)", true, 0, 100));
 
-		beginTab("Time Series");
+		beginTab("Goal");
+		addProperty(this.goal = new ComboBoxField("goal", "Goal", true, goalList));
 		addProperty(this.lagCount = new IntegerField("lag count","Lag Count",true,0,1000));
 		addProperty(this.leadCount = new IntegerField("lead count","Lead Count",true,0,1000));
-		addProperty(this.includeTarget = new CheckField("include target","Include Target in Input"));
+
 		beginTab("Tasks");
 		addProperty(this.normalize = new CheckField("normalize","Normalize"));
-		addProperty(this.randomize = new CheckField("randomize","Randomize"));
 		addProperty(this.segregate = new CheckField("segregate","Segregate"));
-		addProperty(this.balance = new CheckField("balance","Balance"));
-		addProperty(this.cluster = new CheckField("cluster","Cluster"));
 				
 		render();
 		
 		this.lagCount.setValue(0);
 		this.leadCount.setValue(0);
 		
-		this.randomize.setValue(true);
 		this.segregate.setValue(true);
 		this.normalize.setValue(true);
-		this.balance.setValue(false);
-		this.cluster.setValue(true);
 		this.sourceData.getModel().addElement("HIGH");
 		this.sourceData.getModel().addElement("LOW");
 		this.sourceData.getModel().addElement("OPEN");
@@ -208,13 +184,6 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 	}
 
 	/**
-	 * @return the includeTarget
-	 */
-	public CheckField getIncludeTarget() {
-		return includeTarget;
-	}
-
-	/**
 	 * @return the segregate
 	 */
 	public CheckField getSegregate() {
@@ -222,24 +191,10 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 	}
 
 	/**
-	 * @return the randomize
-	 */
-	public CheckField getRandomize() {
-		return randomize;
-	}
-
-	/**
 	 * @return the normalize
 	 */
 	public CheckField getNormalize() {
 		return normalize;
-	}
-
-	/**
-	 * @return the balance
-	 */
-	public CheckField getBalance() {
-		return balance;
 	}
 
 	/**
