@@ -300,7 +300,6 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 			name = FileUtil.forceExtension(name + "-cont", "eg");
 			File path = new File(name);
 			EncogWorkBench.getInstance().save(path, cont);
-			EncogWorkBench.getInstance().refresh();
 		}
 	}
 	
@@ -323,9 +322,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 				} else {
 					saveMLMethod();
 				}
-			}
-						
-			EncogWorkBench.getInstance().refresh();
+			}						
 		} else {
 			if( this.getEncogObject()!=null) {
 				((ProjectEGFile)this.getEncogObject()).revert();

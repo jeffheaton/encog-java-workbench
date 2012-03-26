@@ -338,7 +338,7 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			this.tabManager.closeAll();
 		}
 
-		EncogWorkBench.getInstance().getMainWindow().getTree().refresh(path);
+		EncogWorkBench.getInstance().getMainWindow().getTree().refresh(path.toPath());
 	}
 
 	public void openFile(File egaFile) {		

@@ -343,7 +343,6 @@ public class CreateTrainingData {
 				File targetFile = new File(EncogWorkBench.getInstance()
 						.getProjectDirectory(), name);
 				downloadPage(new URL(url),targetFile);
-				EncogWorkBench.getInstance().refresh();
 			} catch (MalformedURLException e) {
 				EncogWorkBench.displayError("Invalid URL", url);
 			}

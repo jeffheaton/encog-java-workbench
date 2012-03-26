@@ -130,7 +130,7 @@ public class EncogDocumentOperations {
 			project.mkdir();
 
 			EncogWorkBench.getInstance().getMainWindow().getTree()
-					.refresh(project);
+					.refresh(project.toPath());
 
 		}
 	}
@@ -345,7 +345,6 @@ public class EncogDocumentOperations {
 				CreateTrainingData.generateSineWave(name);
 				break;
 			}
-			EncogWorkBench.getInstance().refresh();
 		}
 	}
 
@@ -373,9 +372,7 @@ public class EncogDocumentOperations {
 					EncogWorkBench.displayError("Error", "Rename failed.");
 				}
 			}
-			EncogWorkBench.getInstance().refresh();
 		}
-
 	}
 
 	public void performSave() {
@@ -416,7 +413,6 @@ public class EncogDocumentOperations {
 
 				} 
 			}
-			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
 	}
 
@@ -458,7 +454,6 @@ public class EncogDocumentOperations {
 						.getProjectDirectory(), FileUtil.forceExtension(fc
 						.getSelectedFile().getName(), "eg"));
 				EncogWorkBench.getInstance().save(path, net);
-				EncogWorkBench.getInstance().refresh();
 			}
 		} catch (final Throwable e) {
 			EncogWorkBench.displayError("Can't Change Directory", e);
@@ -520,7 +515,6 @@ public class EncogDocumentOperations {
 			}
 			sourceData.close();
 			targetData.close();
-			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
 		
 	}

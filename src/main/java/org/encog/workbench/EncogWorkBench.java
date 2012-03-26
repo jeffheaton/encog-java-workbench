@@ -224,7 +224,11 @@ public class EncogWorkBench implements Runnable {
 	public void run() {
 		for (;;) {
 			try {
-				Thread.sleep(300000);
+				EncogDocumentFrame mw = EncogWorkBench.getInstance().getMainWindow();
+				if( mw!=null ) {
+					mw.getTree().background();
+				}
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				return;
 			}
@@ -358,14 +362,8 @@ public class EncogWorkBench implements Runnable {
 		return this.getMainWindow().getTree().getModel().getPath();
 	}
 
-	public void refresh() {
-		this.getMainWindow().getTree().refresh();
-
-	}
-
 	public void save(File path, Object network) {
 		EncogDirectoryPersistence.saveObject(path, network);
-		refresh();
 	}
 
 	public EncogDirectoryPersistence getProject() {
