@@ -24,6 +24,7 @@
 package org.encog.workbench.process;
 
 import java.io.File;
+import java.util.List;
 
 import org.encog.EncogError;
 import org.encog.app.analyst.AnalystFileFormat;
@@ -147,11 +148,14 @@ public class EncogAnalystWizard {
 
 
 		if (dialog.process()) {
+			List<String> sourceData = dialog.getSourceData();
+			String baseName = dialog.getBaseName().getValue();
 			EncogAnalyst analyst = null;
 			File projectFolder = EncogWorkBench.getInstance()
 					.getProjectDirectory();
 			File targetCSVFile = null;
 			File egaFile = null;
+			File csvFile = null;
 			
 			if( dialog.getMethodType()==WizardMethodType.SOM && dialog.getGoal()==AnalystGoal.Regression ) {
 				EncogWorkBench.displayError("Error", "Can't use a SOM with regression.");
@@ -161,15 +165,14 @@ public class EncogAnalystWizard {
 			try {
 				EncogWorkBench.getInstance().getMainWindow().beginWait();
 							
-				egaFile = new File(FileUtil.forceExtension(
-						dialog.getEgaFile().getValue(), "ega") );
+				egaFile = new File(projectFolder,FileUtil.forceExtension(baseName, "ega") );
+				csvFile = new File(projectFolder,FileUtil.forceExtension(baseName, "csv") );
 
 				if (!EncogWorkBench.getInstance().getMainWindow()
 						.getTabManager().queryViews(egaFile))
 					return;
 
-				File egFile = new File(FileUtil.forceExtension(
-						dialog.getEgaFile().getValue(), "eg"));
+				File egFile = new File(FileUtil.forceExtension(baseName, "eg"));
 
 				analyst = new EncogAnalyst();
 				AnalystWizard wizard = new AnalystWizard(analyst);
@@ -205,7 +208,7 @@ public class EncogAnalystWizard {
 				if( !setSpecific(wizard) )
 					return;
 
-				wizard.wizard(targetCSVFile, headers, format);
+				wizard.wizardRealTime(sourceData, csvFile);
 				
 				if (analyst != null) {
 					analyst.save(egaFile);

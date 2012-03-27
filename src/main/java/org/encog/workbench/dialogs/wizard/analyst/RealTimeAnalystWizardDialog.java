@@ -23,13 +23,12 @@
  */
 package org.encog.workbench.dialogs.wizard.analyst;
 
-import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 
-import org.encog.app.analyst.AnalystFileFormat;
 import org.encog.app.analyst.AnalystGoal;
 import org.encog.app.analyst.wizard.NormalizeRange;
 import org.encog.app.analyst.wizard.WizardMethodType;
@@ -39,15 +38,13 @@ import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
-import org.encog.workbench.dialogs.common.FileField;
 import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.TextField;
-import org.encog.workbench.frames.document.EncogDocumentFrame;
 
 public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 	
 	private BuildingListField sourceData;
-	private final TextField egaFile;
+	private final TextField baseName;
 	private final ComboBoxField method;
 	private final ComboBoxField range;
 	private final ComboBoxField goal;
@@ -90,7 +87,7 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 		this.setTitle("Realtime Encog Analyst Wizard");
 		
 		beginTab("Data");
-		addProperty(this.egaFile = new TextField("ega file","EGA File Name",true));
+		addProperty(this.baseName = new TextField("ega file","EGA File Name",true));
 		addProperty(this.sourceData = new BuildingListField("source fields","Source Fields"));
 		
 		beginTab("Machine Learning");
@@ -212,8 +209,18 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 	/**
 	 * @return the egaFile
 	 */
-	public TextField getEgaFile() {
-		return egaFile;
+	public TextField getBaseName() {
+		return baseName;
+	}
+	
+	public List<String> getSourceData() {
+		DefaultListModel<String> ctrl = this.sourceData.getModel();
+		List<String> result = new ArrayList<String>();
+		for(int i=0; i<ctrl.getSize();i++)
+		{
+			result.add(ctrl.get(i));
+		}
+		return result;
 	}
 	
 	
