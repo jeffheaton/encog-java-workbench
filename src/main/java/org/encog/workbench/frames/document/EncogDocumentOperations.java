@@ -58,7 +58,6 @@ import org.encog.workbench.dialogs.training.ProbenDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.dialogs.wizard.ChooseWizardDialog;
-import org.encog.workbench.dialogs.wizard.WizardType;
 import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
@@ -343,6 +342,9 @@ public class EncogDocumentOperations {
 				break;
 			case SineWave:
 				CreateTrainingData.generateSineWave(name);
+				break;
+			case Indicator:
+				CreateTrainingData.generateIndicator(name);
 				break;
 			}
 		}

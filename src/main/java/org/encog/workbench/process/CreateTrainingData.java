@@ -52,12 +52,14 @@ import org.encog.util.csv.CSVFormat;
 import org.encog.util.file.FileUtil;
 import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.cloud.CloudIndicatorDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateEncoderDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateLinearTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateMarketTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateSineTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.RandomTrainingDataDialog;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
+import org.encog.workbench.tabs.cloud.IndicatorDownloadTab;
 import org.encog.workbench.util.TemporalXOR;
 
 public class CreateTrainingData {
@@ -406,6 +408,23 @@ public class CreateTrainingData {
 
 			EncogUtility.saveCSV(targetFile, CSVFormat.ENGLISH, trainingData);
 		}
+	}
+
+	public static void generateIndicator(String name) {
+		if( EncogWorkBench.getInstance().getCloud()==null ) {			
+			EncogWorkBench.displayError("Encog Cloud", "Encog Workbench is not configured to accept external connections.");
+			return;
+		}
+		
+		CloudIndicatorDialog dialog = new CloudIndicatorDialog();
+		if( dialog.process() ) {
+			File targetFile = new File(EncogWorkBench.getInstance()
+					.getProjectDirectory(), name);
+			
+			IndicatorDownloadTab tab = new IndicatorDownloadTab(targetFile, dialog.getSourceData());
+			EncogWorkBench.getInstance().getMainWindow().getTabManager().openModalTab(tab, "Download");
+		}
+		
 	}
 
 }

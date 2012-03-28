@@ -47,10 +47,15 @@ public class BuildingListField extends PropertiesField implements ActionListener
 	private JButton btnDelete;
 	private JButton btnEdit; 
 	private DefaultListModel model;
+	private int height;
+	
+	public BuildingListField(String name, String label, int height) {
+		super(name, label, true);
+		this.height = height;
+	}
 	
 	public BuildingListField(String name, String label) {
-		super(name, label, true);
-		// TODO Auto-generated constructor stub
+		this(name, label, 100);
 	}
 
 	@Override
@@ -66,7 +71,7 @@ public class BuildingListField extends PropertiesField implements ActionListener
 		label.setLocation(label.getX(), y);
 		this.setField(new JPanel());
 		this.getField().setLocation(x,y);
-		this.getField().setSize(width,100);
+		this.getField().setSize(width,this.height);
 		panel.add(createLabel());
 		panel.add(this.getField());
 		

@@ -8,6 +8,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.encog.cloud.CloudListener;
+import org.encog.cloud.basic.CloudPacket;
+import org.encog.cloud.basic.CommunicationLink;
 import org.encog.cloud.node.CloudNode;
 import org.encog.cloud.node.HandleClient;
 import org.encog.util.Format;
@@ -93,18 +95,18 @@ public class ConnectionsModel implements TableModel, CloudListener {
 	}
 
 	@Override
-	public void notifyPacket() {
-		refresh();		
-	}
-
-	@Override
-	public void notifyConnections() {
+	public void notifyConnections(CommunicationLink link, boolean opened) {
 		refresh();
 	}
 
 	private void refresh() {
 		final TableModelEvent tce = new TableModelEvent(this);
 		notifyListeners(tce);
+	}
+
+	@Override
+	public void notifyPacket(CloudPacket packet) {
+		refresh();
 	}
 
 }

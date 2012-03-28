@@ -105,6 +105,7 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		this.model.addElement("Fahlman Encoder");
 		this.model.addElement("Linear");
 		this.model.addElement("Sine Wave");
+		this.model.addElement("Import from Indicator");
 		
 		
 		this.list.addListSelectionListener(this);
@@ -166,6 +167,9 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		case 13:
 			this.type = TrainingDataType.SineWave;
 			break;
+		case 14:
+			this.type = TrainingDataType.Indicator;
+			break;
 		}
 	}
 
@@ -213,6 +217,9 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			break;
 		case SineWave:
 			this.list.setSelectedIndex(13);
+			break;
+		case Indicator:
+			this.list.setSelectedIndex(14);
 			break;
 		}
 
@@ -291,7 +298,8 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		case 13:
 			this.text.setText("Generate one or more cycles of the sine wave.");
 			break;
-			
+		case 14:
+			this.text.setText("This option allows you to import data from an external indicator.  An indicator is a script that is typically embedded in a financial application, such as NinjaTrader.  To use this you need the Encog Framework indicator installed in NinjaTrader.");
 		}
 
 		this.text.setSelectionStart(0);
