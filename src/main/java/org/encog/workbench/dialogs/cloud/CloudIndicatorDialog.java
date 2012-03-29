@@ -30,9 +30,10 @@ import javax.swing.DefaultListModel;
 
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.BuildingListField;
+import org.encog.workbench.dialogs.common.BuildingListListener;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 
-public class CloudIndicatorDialog extends EncogPropertiesDialog {
+public class CloudIndicatorDialog extends EncogPropertiesDialog implements BuildingListListener {
 	
 	private BuildingListField sourceData;
 		
@@ -61,6 +62,36 @@ public class CloudIndicatorDialog extends EncogPropertiesDialog {
 			result.add(ctrl.get(i));
 		}
 		return result;
+	}
+	
+	private String askIndicator() {
+		String str = EncogWorkBench.displayInput("Indicator or fundamental?");
+		return str;
+	}	
+
+	public void add(BuildingListField list, int index) {
+
+		String str = askIndicator();
+		if (str != null) {
+			list.getModel().addElement(str);
+		}
+
+	}
+
+	public void del(BuildingListField list, int index) {
+		if (index != -1) {
+			list.getModel().remove(index);
+		}
+	}
+
+	public void edit(BuildingListField list, int index) {
+		if (index != -1) {
+			String str = askIndicator();
+			if (str != null) {
+				list.getModel().remove(index);
+				list.getModel().add(index, str);
+			}
+		}
 	}
 	
 	

@@ -160,6 +160,13 @@ public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
 			FileWriter outFile = new FileWriter(this.targetFile);
 			PrintWriter out = new PrintWriter(outFile);
 
+			out.print("\"INSTRUMENT\",\"WHEN\"");
+			for( String str: this.dataSource ) {
+				out.print(",\""+str+"\"");
+			}
+			out.println();
+			
+			
 			for (String ins : this.data.keySet()) {
 				InstrumentHolder holder = this.data.get(ins);
 				for (Long key : holder.getSorted()) {
