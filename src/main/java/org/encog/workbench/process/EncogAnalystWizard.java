@@ -129,6 +129,7 @@ public class EncogAnalystWizard {
 					analyst = null;
 				}
 				
+				EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 				refresh = false;
 				EncogWorkBench.getInstance().getMainWindow().openFile(egaFile);
 
@@ -215,6 +216,7 @@ public class EncogAnalystWizard {
 					analyst = null;
 				}
 				
+				EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 				refresh = false;
 				EncogWorkBench.getInstance().getMainWindow().openFile(egaFile);
 

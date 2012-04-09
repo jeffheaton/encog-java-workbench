@@ -37,13 +37,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +47,6 @@ import javax.swing.tree.TreePath;
 
 import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.frames.document.EncogDocumentFrame;
 import org.encog.workbench.util.MouseUtil;
 
@@ -64,9 +56,6 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 	private final EncogCollectionModel collectionModel;
 	private EncogDocumentFrame doc;
 	private DropTarget dt;
-	private final WatchService watcher;
-	private Path currentPath;
-	private WatchKey currentKey;
 
 	public ProjectTree(EncogDocumentFrame doc) {
 		this.doc = doc;
@@ -84,15 +73,6 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 
 		this.tree.updateUI();
 		dt = new DropTarget(this, this);
-		
-		try
-		{
-			this.watcher = FileSystems.getDefault().newWatchService();
-		}
-		catch(IOException ex) 
-		{
-			throw new WorkBenchError(ex);
-		}
 
 	}
 
@@ -197,25 +177,10 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 
 	}
 
-	public void refresh(Path path) {
+	public void refresh(File path) {
 		if( path!=null ) {
-			try {
-			this.currentPath = path;
-			if( this.currentKey!=null ) {
-				this.currentKey.reset();
-				this.currentKey = null;
-			}
-			
-			this.currentKey = currentPath.register(watcher,
-					StandardWatchEventKinds.ENTRY_CREATE,
-					StandardWatchEventKinds.ENTRY_DELETE,
-					StandardWatchEventKinds.ENTRY_MODIFY);
-			
-			this.collectionModel.invalidate(path.toFile());
+			this.collectionModel.invalidate(path);
 			EncogWorkBench.getInstance().getMainWindow().redraw();
-			} catch(IOException ex) {
-				throw new WorkBenchError(ex);
-			}
 		}
 	}
 
@@ -290,6 +255,7 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 
 					// If we made it this far, everything worked.
 					dtde.dropComplete(true);
+					EncogWorkBench.getInstance().refresh();
 					return;
 				}
 			}
@@ -324,15 +290,6 @@ public class ProjectTree extends JPanel implements MouseListener, KeyListener,
 
 	public ProjectFile findTreeFile(File egaFile) {
 		return this.collectionModel.findTreeFile(egaFile.getName());
-	}
-	
-	public void background() {
-		if( this.currentKey!=null ) {
-			List<WatchEvent<?>> list = this.currentKey.pollEvents();
-			if( list.size()>0 ) {
-				refresh();
-			}
-		}
 	}
 
 }

@@ -84,7 +84,10 @@ public class CreateNewFile {
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
 				File path = new File(basePath, name);
 				createNewPopulation(path);
-			}			
+			}
+			
+			EncogWorkBench.getInstance().getMainWindow().getTree()
+			.refresh();
 		}
 	}
 	
@@ -122,6 +125,7 @@ public class CreateNewFile {
 			pop.setActivationCycles(cycles);
 			pop.setNeatActivationFunction(dialog.getNeatActivationFunction());
 			EncogWorkBench.getInstance().save(path,pop);
+			EncogWorkBench.getInstance().refresh();
 		}
 	}
 }

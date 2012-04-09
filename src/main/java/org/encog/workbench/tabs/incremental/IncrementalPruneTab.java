@@ -401,8 +401,10 @@ public class IncrementalPruneTab extends EncogCommonTab implements
 			if (network != null) {
 				if (EncogWorkBench.askQuestion("Network",
 						"Do you wish to save this network?")) {
-					if (network != null) {						 
+					if (network != null) {
+						 
 						EncogDirectoryPersistence.saveObject(this.path,network);					
+						EncogWorkBench.getInstance().refresh();
 					}
 				}
 			}

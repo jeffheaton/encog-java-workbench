@@ -409,6 +409,7 @@ public class ProbenStatusTab extends EncogCommonTab implements
 				update();
 				
 			}
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 			
 		} catch (AnalystError ex) {
 			ex.printStackTrace();
@@ -429,6 +430,7 @@ public class ProbenStatusTab extends EncogCommonTab implements
 			
 			this.status = "Done.";
 			update(true);
+			EncogWorkBench.getInstance().refresh();
 
 			if (this.shouldExit) {
 				dispose();

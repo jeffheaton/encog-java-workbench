@@ -332,7 +332,9 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			analyst.getListeners().clear();
 			analyst.addAnalystListener(this);
 			analyst.executeTask(this.targetTask);		
-			analyst.removeAnalystListener(this);			
+			analyst.removeAnalystListener(this);
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+			
 		} catch (AnalystError ex) {
 			ex.printStackTrace();
 			EncogWorkBench.getInstance().outputLine("***Encog Analyst Error");
@@ -352,6 +354,7 @@ public class AnalystProgressTab extends EncogCommonTab implements
 			
 			this.status = "Done.";
 			update(true);
+			EncogWorkBench.getInstance().refresh();
 
 			if (this.shouldExit) {
 				dispose();

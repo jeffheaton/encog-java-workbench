@@ -92,6 +92,8 @@ public class ImportExportDialog extends JDialog implements Runnable,
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
+		} finally {
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
 	}
 

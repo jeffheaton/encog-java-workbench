@@ -125,6 +125,7 @@ public class CreateNeuralNetwork {
 
 			if (network != null) {				
 				EncogWorkBench.getInstance().save(path,network);
+				EncogWorkBench.getInstance().refresh();
 			}
 		}
 	}
