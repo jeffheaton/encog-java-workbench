@@ -214,11 +214,11 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 	}
 	
 	public List<String> getSourceData() {
-		DefaultListModel<String> ctrl = this.sourceData.getModel();
+		DefaultListModel ctrl = this.sourceData.getModel();
 		List<String> result = new ArrayList<String>();
 		for(int i=0; i<ctrl.getSize();i++)
 		{
-			result.add(ctrl.get(i));
+			result.add(ctrl.get(i).toString());
 		}
 		return result;
 	}
