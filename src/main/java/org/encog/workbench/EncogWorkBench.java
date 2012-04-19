@@ -32,6 +32,7 @@ import javax.swing.JOptionPane;
 
 import org.encog.Encog;
 import org.encog.EncogError;
+import org.encog.cloud.basic.CloudError;
 import org.encog.cloud.node.CloudNode;
 import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.ml.MLMethod;
@@ -426,6 +427,7 @@ public class EncogWorkBench implements Runnable {
 	}
 	
 	public void setupServer() {
+		try {
 		if( this.config.isAllowConnections() ) {
 			// we should be allowing connections, are we?
 			if( this.cloudNode!=null ) {
@@ -444,6 +446,12 @@ public class EncogWorkBench implements Runnable {
 			if( this.cloudNode!=null ) {
 				stopAccepting();
 			}
+		}
+		} catch(CloudError e) {
+			this.outputLine("Error starting server: " + e.getMessage());
+			e.printStackTrace();
+		} catch(Throwable t) {
+			EncogWorkBench.displayError("Error Starting Server", t);
 		}
 	}
 
