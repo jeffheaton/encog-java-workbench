@@ -7,8 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import org.encog.cloud.CloudListener;
-import org.encog.workbench.models.BufferedDataSetTableModel;
+import org.encog.cloud.indicator.IndicatorListener;
 import org.encog.workbench.models.ConnectionsModel;
 import org.encog.workbench.tabs.EncogCommonTab;
 
@@ -43,7 +42,7 @@ public class CloudConnectionsTab extends EncogCommonTab implements ActionListene
 		return "Cloud Connections";
 	}
 
-	public CloudListener getModel() {
+	public IndicatorListener getModel() {
 		// TODO Auto-generated method stub
 		return this.model;
 	}

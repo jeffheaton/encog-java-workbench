@@ -74,6 +74,7 @@ import org.encog.workbench.dialogs.createnetwork.CreateFeedforward;
 import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
+import org.encog.workbench.dialogs.training.NetworkDialog;
 import org.encog.workbench.frames.MapDataFrame;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.process.TrainBasicNetwork;
@@ -83,6 +84,7 @@ import org.encog.workbench.tabs.query.general.RegressionQueryTab;
 import org.encog.workbench.tabs.query.ocr.OCRQueryTab;
 import org.encog.workbench.tabs.query.thermal.QueryThermalTab;
 import org.encog.workbench.tabs.visualize.ThermalGrid.ThermalGridTab;
+import org.encog.workbench.tabs.visualize.compare.NetCompareTab;
 import org.encog.workbench.tabs.visualize.structure.StructureTab;
 import org.encog.workbench.tabs.visualize.weights.AnalyzeWeightsTab;
 
@@ -343,6 +345,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		SelectItem selectWeights;
 		SelectItem selectStructure;
 		SelectItem selectThermal;
+		SelectItem selectCompare;
+		
 		List<SelectItem> list = new ArrayList<SelectItem>();
 		list.add(selectWeights = new SelectItem("Weights Histogram",
 				"A histogram of the weights."));
@@ -350,6 +354,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				"The structure of the neural network."));
 		list.add(selectThermal = new SelectItem("Thermal Matrix",
 				"Shows the matrix of a Hopfield or Boltzmann Machine."));
+		list.add(selectCompare = new SelectItem("Compare Network",
+				"Compare this neural network to another neural network with the same weight count."));
 		SelectDialog sel = new SelectDialog(EncogWorkBench.getInstance()
 				.getMainWindow(), list);
 		sel.setVisible(true);
@@ -360,6 +366,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			analyzeStructure();
 		} else if (sel.getSelected() == selectThermal) {
 			analyzeThermal();
+		}  else if (sel.getSelected() == selectCompare) {
+			compareNetworks();
 		}
 
 	}
@@ -630,6 +638,16 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			EncogWorkBench.displayError("Error",
 					"This Machine Learning Method cannot be restructured.");
 		}
+	}
+	
+	public void compareNetworks() {
+		NetworkDialog dialog = new NetworkDialog(false);
+		if( dialog.process()) {
+			NetCompareTab tab = new NetCompareTab(this.method,(MLMethod)dialog.getMethodOrPopulation());
+			EncogWorkBench.getInstance().getMainWindow().getTabManager()
+			.openModalTab(tab, "Compare");
+		}
+		
 	}
 
 	@Override

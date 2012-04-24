@@ -7,15 +7,15 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.encog.cloud.CloudListener;
 import org.encog.cloud.basic.CloudPacket;
-import org.encog.cloud.basic.CommunicationLink;
-import org.encog.cloud.node.CloudNode;
-import org.encog.cloud.node.HandleClient;
+import org.encog.cloud.indicator.HandleClient;
+import org.encog.cloud.indicator.IndicatorLink;
+import org.encog.cloud.indicator.IndicatorListener;
+import org.encog.cloud.indicator.IndicatorServer;
 import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 
-public class ConnectionsModel implements TableModel, CloudListener {
+public class ConnectionsModel implements TableModel, IndicatorListener {
 	
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();
 	
@@ -31,7 +31,7 @@ public class ConnectionsModel implements TableModel, CloudListener {
 	
 	@Override
 	public int getRowCount() {
-		CloudNode cloud = EncogWorkBench.getInstance().getCloud();
+		IndicatorServer cloud = EncogWorkBench.getInstance().getCloud();
 		return cloud.getConnections().size();
 	}
 
@@ -65,7 +65,7 @@ public class ConnectionsModel implements TableModel, CloudListener {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		CloudNode cloud = EncogWorkBench.getInstance().getCloud();
+		IndicatorServer cloud = EncogWorkBench.getInstance().getCloud();
 		HandleClient hc = cloud.getConnections().get(rowIndex);
 		switch(columnIndex) {
 			case 0:
@@ -95,7 +95,7 @@ public class ConnectionsModel implements TableModel, CloudListener {
 	}
 
 	@Override
-	public void notifyConnections(CommunicationLink link, boolean opened) {
+	public void notifyConnections(IndicatorLink link, boolean opened) {
 		refresh();
 	}
 

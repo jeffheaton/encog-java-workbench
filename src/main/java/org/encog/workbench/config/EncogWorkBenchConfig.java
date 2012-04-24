@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.encog.cloud.node.CloudNode;
+import org.encog.cloud.indicator.IndicatorServer;
 import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.persist.EncogFileSection;
 import org.encog.persist.EncogReadHelper;
@@ -61,7 +61,7 @@ public class EncogWorkBenchConfig {
 	private int iterationStepCount;
 	private int trainingHistory;
 	private boolean showTrainingImprovement;
-	private int port = CloudNode.STANDARD_ENCOG_PORT;
+	private int port = IndicatorServer.STANDARD_ENCOG_PORT;
 	private boolean allowConnections;
 	private List<String> nodes = new ArrayList<String>();
 	private String projectRoot;

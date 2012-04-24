@@ -33,7 +33,7 @@ import javax.swing.JOptionPane;
 import org.encog.Encog;
 import org.encog.EncogError;
 import org.encog.cloud.basic.CloudError;
-import org.encog.cloud.node.CloudNode;
+import org.encog.cloud.indicator.IndicatorServer;
 import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.ml.MLMethod;
 import org.encog.ml.data.MLDataSet;
@@ -69,7 +69,7 @@ public class EncogWorkBench implements Runnable {
 	 */
 	private static EncogWorkBench instance;
 	
-	private CloudNode cloudNode;
+	private IndicatorServer cloudNode;
 
 	/**
 	 * The main window.
@@ -459,7 +459,7 @@ public class EncogWorkBench implements Runnable {
 		if( this.cloudNode!=null ) {
 			stopAccepting();
 		}
-		this.cloudNode = new CloudNode(this.config.getPort());
+		this.cloudNode = new IndicatorServer(this.config.getPort());
 		this.cloudNode.start();
 		this.cloudNode.addListener(EncogWorkBench.getInstance().getMainWindow().getConnectionsTab().getModel());
 		this.outputLine("Now accepting connections on port: " + this.config.getPort());
@@ -471,7 +471,7 @@ public class EncogWorkBench implements Runnable {
 		this.outputLine("Stopped accepting connections");
 	}
 	
-	public CloudNode getCloud() {
+	public IndicatorServer getCloud() {
 		return this.cloudNode;
 	}
 }

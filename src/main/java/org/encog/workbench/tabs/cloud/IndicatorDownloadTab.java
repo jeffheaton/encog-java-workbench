@@ -14,16 +14,16 @@ import java.util.Map;
 import javax.swing.JButton;
 
 import org.encog.EncogError;
-import org.encog.cloud.CloudListener;
 import org.encog.cloud.basic.CloudPacket;
-import org.encog.cloud.basic.CommunicationLink;
+import org.encog.cloud.indicator.IndicatorLink;
+import org.encog.cloud.indicator.IndicatorListener;
 import org.encog.util.HTMLReport;
 import org.encog.util.logging.EncogLogging;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.HTMLTab;
 
 public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
-		CloudListener, Runnable {
+		IndicatorListener, Runnable {
 
 	private int rowsDownloaded;
 	private JButton button;
@@ -31,7 +31,7 @@ public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
 	private Map<String, InstrumentHolder> data = new HashMap<String, InstrumentHolder>();
 	private File targetFile;
 	private List<String> dataSource;
-	private CommunicationLink mylink;
+	private IndicatorLink mylink;
 
 	public IndicatorDownloadTab(File theTargetFile, List<String> list) {
 		super(null);
@@ -130,7 +130,7 @@ public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
 	}
 
 	@Override
-	public void notifyConnections(CommunicationLink link, boolean hasOpened) {
+	public void notifyConnections(IndicatorLink link, boolean hasOpened) {
 		if( hasOpened && mylink==null) {
 			this.mylink = link;
 			this.mylink.requestSignal(this.dataSource);
