@@ -14,9 +14,9 @@ import java.util.Map;
 import javax.swing.JButton;
 
 import org.encog.EncogError;
-import org.encog.cloud.basic.CloudPacket;
 import org.encog.cloud.indicator.IndicatorLink;
 import org.encog.cloud.indicator.IndicatorListener;
+import org.encog.cloud.indicator.IndicatorPacket;
 import org.encog.util.HTMLReport;
 import org.encog.util.logging.EncogLogging;
 import org.encog.workbench.EncogWorkBench;
@@ -104,7 +104,7 @@ public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
 	}
 
 	@Override
-	public void notifyPacket(CloudPacket packet) {
+	public void notifyPacket(IndicatorPacket packet) {
 		if (packet.getCommand().equalsIgnoreCase("bar")) {
 			try {
 				String security = packet.getArgs()[1];

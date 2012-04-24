@@ -32,7 +32,7 @@ import javax.swing.JOptionPane;
 
 import org.encog.Encog;
 import org.encog.EncogError;
-import org.encog.cloud.basic.CloudError;
+import org.encog.cloud.indicator.IndicatorError;
 import org.encog.cloud.indicator.IndicatorServer;
 import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.ml.MLMethod;
@@ -447,7 +447,7 @@ public class EncogWorkBench implements Runnable {
 				stopAccepting();
 			}
 		}
-		} catch(CloudError e) {
+		} catch(IndicatorError e) {
 			this.outputLine("Error starting server: " + e.getMessage());
 			e.printStackTrace();
 		} catch(Throwable t) {

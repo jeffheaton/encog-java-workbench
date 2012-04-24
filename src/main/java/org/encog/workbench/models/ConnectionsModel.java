@@ -7,10 +7,10 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.encog.cloud.basic.CloudPacket;
 import org.encog.cloud.indicator.HandleClient;
 import org.encog.cloud.indicator.IndicatorLink;
 import org.encog.cloud.indicator.IndicatorListener;
+import org.encog.cloud.indicator.IndicatorPacket;
 import org.encog.cloud.indicator.IndicatorServer;
 import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
@@ -105,7 +105,7 @@ public class ConnectionsModel implements TableModel, IndicatorListener {
 	}
 
 	@Override
-	public void notifyPacket(CloudPacket packet) {
+	public void notifyPacket(IndicatorPacket packet) {
 		refresh();
 	}
 
