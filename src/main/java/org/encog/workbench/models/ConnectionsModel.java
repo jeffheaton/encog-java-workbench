@@ -7,6 +7,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import org.encog.cloud.indicator.IndicatorConnectionListener;
 import org.encog.cloud.indicator.IndicatorListener;
 import org.encog.cloud.indicator.server.HandleClient;
 import org.encog.cloud.indicator.server.IndicatorLink;
@@ -15,7 +16,8 @@ import org.encog.cloud.indicator.server.IndicatorServer;
 import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 
-public class ConnectionsModel implements TableModel, IndicatorListener {
+public class ConnectionsModel 
+	implements TableModel, IndicatorListener, IndicatorConnectionListener {
 	
 	private final List<TableModelListener> listeners = new ArrayList<TableModelListener>();
 	
@@ -107,6 +109,18 @@ public class ConnectionsModel implements TableModel, IndicatorListener {
 	@Override
 	public void notifyPacket(IndicatorPacket packet) {
 		refresh();
+	}
+
+	@Override
+	public void notifyConnect(IndicatorLink theLink) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyTermination() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

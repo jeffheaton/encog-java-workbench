@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.swing.JButton;
 
 import org.encog.EncogError;
+import org.encog.cloud.indicator.IndicatorConnectionListener;
 import org.encog.cloud.indicator.IndicatorListener;
 import org.encog.cloud.indicator.server.IndicatorLink;
 import org.encog.cloud.indicator.server.IndicatorPacket;
@@ -23,7 +24,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.HTMLTab;
 
 public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
-		IndicatorListener, Runnable {
+		IndicatorListener, IndicatorConnectionListener, Runnable {
 
 	private int rowsDownloaded;
 	private JButton button;
@@ -180,6 +181,18 @@ public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
 			throw new EncogError(ex);
 		}
 
+	}
+
+	@Override
+	public void notifyConnect(IndicatorLink theLink) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyTermination() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

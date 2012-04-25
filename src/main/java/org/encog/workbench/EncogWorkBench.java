@@ -32,6 +32,7 @@ import javax.swing.JOptionPane;
 
 import org.encog.Encog;
 import org.encog.EncogError;
+import org.encog.cloud.indicator.IndicatorConnectionListener;
 import org.encog.cloud.indicator.IndicatorError;
 import org.encog.cloud.indicator.server.IndicatorServer;
 import org.encog.mathutil.error.ErrorCalculation;
@@ -461,7 +462,7 @@ public class EncogWorkBench implements Runnable {
 		}
 		this.cloudNode = new IndicatorServer(this.config.getPort());
 		this.cloudNode.start();
-		this.cloudNode.addListener(EncogWorkBench.getInstance().getMainWindow().getConnectionsTab().getModel());
+		this.cloudNode.addListener((IndicatorConnectionListener) EncogWorkBench.getInstance().getMainWindow().getConnectionsTab().getModel());
 		this.outputLine("Now accepting connections on port: " + this.config.getPort());
 	}
 	
