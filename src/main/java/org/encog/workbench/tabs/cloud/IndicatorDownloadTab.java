@@ -14,9 +14,9 @@ import java.util.Map;
 import javax.swing.JButton;
 
 import org.encog.EncogError;
-import org.encog.cloud.indicator.IndicatorLink;
 import org.encog.cloud.indicator.IndicatorListener;
-import org.encog.cloud.indicator.IndicatorPacket;
+import org.encog.cloud.indicator.server.IndicatorLink;
+import org.encog.cloud.indicator.server.IndicatorPacket;
 import org.encog.util.HTMLReport;
 import org.encog.util.logging.EncogLogging;
 import org.encog.workbench.EncogWorkBench;

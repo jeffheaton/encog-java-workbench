@@ -7,11 +7,11 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.encog.cloud.indicator.HandleClient;
-import org.encog.cloud.indicator.IndicatorLink;
 import org.encog.cloud.indicator.IndicatorListener;
-import org.encog.cloud.indicator.IndicatorPacket;
-import org.encog.cloud.indicator.IndicatorServer;
+import org.encog.cloud.indicator.server.HandleClient;
+import org.encog.cloud.indicator.server.IndicatorLink;
+import org.encog.cloud.indicator.server.IndicatorPacket;
+import org.encog.cloud.indicator.server.IndicatorServer;
 import org.encog.util.Format;
 import org.encog.workbench.EncogWorkBench;
 

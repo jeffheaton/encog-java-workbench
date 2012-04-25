@@ -33,7 +33,7 @@ import javax.swing.JOptionPane;
 import org.encog.Encog;
 import org.encog.EncogError;
 import org.encog.cloud.indicator.IndicatorError;
-import org.encog.cloud.indicator.IndicatorServer;
+import org.encog.cloud.indicator.server.IndicatorServer;
 import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.ml.MLMethod;
 import org.encog.ml.data.MLDataSet;

@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.encog.cloud.indicator.IndicatorServer;
+import org.encog.cloud.indicator.server.IndicatorServer;
 import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.persist.EncogFileSection;
 import org.encog.persist.EncogReadHelper;
