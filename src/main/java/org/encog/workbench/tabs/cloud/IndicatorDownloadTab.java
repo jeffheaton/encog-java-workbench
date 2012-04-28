@@ -134,7 +134,7 @@ public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
 	public void notifyConnections(IndicatorLink link, boolean hasOpened) {
 		if( hasOpened && mylink==null) {
 			this.mylink = link;
-			this.mylink.requestSignal(this.dataSource);
+			this.mylink.initConnection(this.dataSource, false);
 		} else if( !hasOpened && link==this.mylink ) {
 			this.close();
 			this.dispose();
