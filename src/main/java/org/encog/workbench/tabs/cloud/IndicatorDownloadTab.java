@@ -4,45 +4,27 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 
-import org.encog.EncogError;
-import org.encog.cloud.indicator.IndicatorConnectionListener;
-import org.encog.cloud.indicator.IndicatorListener;
-import org.encog.cloud.indicator.server.IndicatorLink;
-import org.encog.cloud.indicator.server.IndicatorPacket;
+import org.encog.cloud.indicator.basic.DownloadIndicator;
 import org.encog.util.HTMLReport;
-import org.encog.util.logging.EncogLogging;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.HTMLTab;
 
-public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
-		IndicatorListener, IndicatorConnectionListener, Runnable {
+public class IndicatorDownloadTab extends HTMLTab implements ActionListener, Runnable {
 
-	private int rowsDownloaded;
 	private JButton button;
 	private boolean done = false;
-	private Map<String, InstrumentHolder> data = new HashMap<String, InstrumentHolder>();
-	private File targetFile;
-	private List<String> dataSource;
-	private IndicatorLink mylink;
+	private DownloadIndicator downloadInd; 
 
 	public IndicatorDownloadTab(File theTargetFile, List<String> list) {
 		super(null);
-		this.rowsDownloaded = 0;
-		this.targetFile = theTargetFile;
 		add(button = new JButton("Stop Download"), BorderLayout.NORTH);
 		this.button.addActionListener(this);
-		EncogWorkBench.getInstance().getCloud().addListener(this);
+		downloadInd = EncogWorkBench.getInstance().getIndicatorFactory().prepareDownload(theTargetFile, list);
 		generate();
-		this.dataSource = list;
 		new Thread(this).start();
 	}
 
@@ -58,7 +40,7 @@ public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
 	@Override
 	public void dispose() {
 		super.dispose();
-		EncogWorkBench.getInstance().getCloud().removeListener(this);
+		EncogWorkBench.getInstance().getIndicatorFactory().clear();
 	}
 
 	@Override
@@ -70,14 +52,15 @@ public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
 		if (!this.done) {
 			try {
 				EncogWorkBench.getInstance().getMainWindow().beginWait();
-				if (this.rowsDownloaded > 0) {
-					saveFile();
+				if (this.downloadInd.getRowsDownloaded() > 0) {
+					this.downloadInd.save();
 				}
 			} finally {
 				EncogWorkBench.getInstance().getMainWindow().endWait();
 			}
 			EncogWorkBench.displayMessage("Download Complete",
-					"Rows downloaded: " + this.rowsDownloaded);
+					"Rows downloaded: " + this.downloadInd.getRowsDownloaded());
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 
 		}
 		this.done = true;
@@ -94,7 +77,7 @@ public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
 		report.para("A download is in progress.  To terminate the download select \"Stop Download\" above.  You may now begin using your indicator in another application.");
 
 		report.beginTable();
-		report.tablePair("Rows Downloaded", "" + this.rowsDownloaded);
+		report.tablePair("Rows Downloaded", "" + this.downloadInd.getRowsDownloaded());
 		report.endTable();
 
 		report.endList();
@@ -105,94 +88,16 @@ public class IndicatorDownloadTab extends HTMLTab implements ActionListener,
 	}
 
 	@Override
-	public void notifyPacket(IndicatorPacket packet) {
-		if (packet.getCommand().equalsIgnoreCase("bar")) {
-			try {
-				String security = packet.getArgs()[1];
-				long when = Long.parseLong(packet.getArgs()[0]);
-				String key = security.toLowerCase();
-				InstrumentHolder holder = null;
-
-				if (this.data.containsKey(key)) {
-					holder = this.data.get(key);
-				} else {
-					holder = new InstrumentHolder();
-					this.data.put(key, holder);
-				}
-
-				if (holder.record(when, 2, packet.getArgs())) {
-					this.rowsDownloaded++;
-				}
-			} catch (Exception ex) {
-				EncogLogging.log(ex);
-			}
-
-		}
-	}
-
-	@Override
-	public void notifyConnections(IndicatorLink link, boolean hasOpened) {
-		if( hasOpened && mylink==null) {
-			this.mylink = link;
-			this.mylink.initConnection(this.dataSource, false);
-		} else if( !hasOpened && link==this.mylink ) {
-			this.close();
-			this.dispose();
-		}
-
-	}
-
-	@Override
 	public void run() {
 		while (!done) {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			generate();
 		}
 
-	}
-
-	public void saveFile() {
-		try {
-			FileWriter outFile = new FileWriter(this.targetFile);
-			PrintWriter out = new PrintWriter(outFile);
-
-			out.print("\"INSTRUMENT\",\"WHEN\"");
-			for( String str: this.dataSource ) {
-				out.print(",\""+str+"\"");
-			}
-			out.println();
-			
-			
-			for (String ins : this.data.keySet()) {
-				InstrumentHolder holder = this.data.get(ins);
-				for (Long key : holder.getSorted()) {
-					String str = holder.getData().get(key);
-					out.println("\"" + ins + "\"," + key + "," + str);
-				}
-			}
-
-			out.close();
-		} catch (IOException ex) {
-			throw new EncogError(ex);
-		}
-
-	}
-
-	@Override
-	public void notifyConnect(IndicatorLink theLink) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyTermination() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
