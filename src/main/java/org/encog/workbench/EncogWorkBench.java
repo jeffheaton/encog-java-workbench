@@ -50,6 +50,7 @@ import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
+import org.encog.workbench.process.indicator.WorkbenchIndicatorFactory;
 import org.encog.workbench.util.WorkbenchLogHandler;
 
 /**
@@ -83,6 +84,8 @@ public class EncogWorkBench implements Runnable {
 	private EncogWorkBenchConfig config;
 
 	private WorkbenchLogHandler logHandler;
+	
+	private WorkbenchIndicatorFactory indicatorFactory;
 
 	/**
 	 * The current filename being edited.
@@ -92,6 +95,7 @@ public class EncogWorkBench implements Runnable {
 	public EncogWorkBench() {
 		this.config = new EncogWorkBenchConfig();
 		this.logHandler = new WorkbenchLogHandler();
+		this.indicatorFactory = new WorkbenchIndicatorFactory();
 		//Logging.getRootLogger().addHandler(this.logHandler);
 		//Logging.getRootLogger().setLevel(Level.OFF);
 	}
@@ -462,6 +466,7 @@ public class EncogWorkBench implements Runnable {
 		}
 		this.cloudNode = new IndicatorServer(this.config.getPort());
 		this.cloudNode.start();
+		this.cloudNode.addIndicatorFactory(this.indicatorFactory);
 		this.cloudNode.addListener((IndicatorConnectionListener) EncogWorkBench.getInstance().getMainWindow().getConnectionsTab().getModel());
 		this.outputLine("Now accepting connections on port: " + this.config.getPort());
 	}
@@ -475,4 +480,13 @@ public class EncogWorkBench implements Runnable {
 	public IndicatorServer getCloud() {
 		return this.cloudNode;
 	}
+
+	/**
+	 * @return the indicatorFactory
+	 */
+	public WorkbenchIndicatorFactory getIndicatorFactory() {
+		return indicatorFactory;
+	}
+	
+	
 }
