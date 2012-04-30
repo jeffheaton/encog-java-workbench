@@ -4,17 +4,16 @@ import org.encog.cloud.indicator.basic.BasicIndicator;
 import org.encog.cloud.indicator.server.IndicatorLink;
 import org.encog.cloud.indicator.server.IndicatorPacket;
 
-public class WorkbenchErrorIndicator extends BasicIndicator {
-
-	private String errorMessage;
+public class WorkbenchErrorIndicator extends BasicIndicator {	
 	
 	public WorkbenchErrorIndicator(String theErrorMessage) {
 		super(false);
+		this.setErrorMessage(theErrorMessage);
 	}
 
 	@Override
 	public void notifyPacket(IndicatorPacket packet) {
-		String[] args = { this.errorMessage };
+		String[] args = { getErrorMessage() };
 		this.getLink().writePacket(IndicatorLink.PACKET_ERROR, args);
 		
 	}
