@@ -63,7 +63,7 @@ public class EncogConfigDialog extends EncogPropertiesDialog {
 		addProperty(this.iterationStepCount = new IntegerField("step count","Iteration Step Count",true,1,1000));
 		addProperty(this.displayTrainingImprovement = new CheckField("show improvement","Show Training Improvement"));
 		//addProperty(this.useOpenCL = new CheckField("use opencl","Use Graphics Card(GPU)"));
-		beginTab("Cloud");
+		beginTab("Indicator");
 		addProperty(this.allowConnections = new CheckField("open server", "Allow Connections"));
 		addProperty(this.port = new IntegerField("server port", "Server Port",true,1,60000));
 		beginTab("Paths");
