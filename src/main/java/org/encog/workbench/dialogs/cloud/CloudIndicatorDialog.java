@@ -52,7 +52,7 @@ public class CloudIndicatorDialog extends EncogPropertiesDialog implements Build
 		this.sourceData.getModel().addElement("OPEN");
 		this.sourceData.getModel().addElement("CLOSE");
 		this.sourceData.getModel().addElement("VOL");	
-		this.sourceData.getModel().addElement("MACD(12,26,9).Avg[0]");
+		//this.sourceData.getModel().addElement("MACD(12,26,9).Avg[1]");
 	}
 		
 	public List<String> getSourceData() {
