@@ -39,6 +39,7 @@ import org.encog.persist.EncogFileSection;
 import org.encog.persist.EncogReadHelper;
 import org.encog.persist.EncogWriteHelper;
 import org.encog.persist.PersistError;
+import org.encog.util.logging.EncogLogging;
 import org.encog.workbench.EncogWorkBench;
 
 public class EncogWorkBenchConfig {
@@ -53,6 +54,7 @@ public class EncogWorkBenchConfig {
 	private static final String PROPERTY_CLOUD_SERVER_PORT = "serverPort";
 	private static final String PROPERTY_CLOUD_ALLOW_CONNECTIONS = "allowConnections";
 	private static final String PROPERTY_PROJECT_ROOT = "allowConnections";
+	private static final String PROPERTY_LOG_LEVEL = "logLevel";
 	
 	private double defaultError;
 	private int threadCount;
@@ -161,6 +163,7 @@ public class EncogWorkBenchConfig {
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_STEP_COUNT, this.iterationStepCount);
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_TRAINING_HISTORY, this.trainingHistory);
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_TRAINING_IMPROVEMENT,this.showTrainingImprovement);
+			out.writeProperty(EncogWorkBenchConfig.PROPERTY_LOG_LEVEL, getLogLevel());
 			
 			out.addSubSection("CLOUD");
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_CLOUD_ALLOW_CONNECTIONS, this.allowConnections);
@@ -199,6 +202,7 @@ public class EncogWorkBenchConfig {
 					this.errorCalculation = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_ERROR_CALC);
 					this.iterationStepCount = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_STEP_COUNT);
 					this.trainingHistory = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_TRAINING_HISTORY);
+					setLogLevel(EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_LOG_LEVEL));
 					this.showTrainingImprovement = EncogFileSection.parseBoolean(params, EncogWorkBenchConfig.PROPERTY_TRAINING_IMPROVEMENT);
 					} catch(PersistError e) {
 						resetDefaults();
@@ -271,6 +275,7 @@ public class EncogWorkBenchConfig {
 		this.allowConnections = false;
 		this.port = 5128;
 		this.projectRoot = EncogWorkBenchConfig.getDefaultProjectRoot().toString();
+		
 	}
 
 	public String getProjectRoot() {
@@ -286,6 +291,15 @@ public class EncogWorkBenchConfig {
 		File encogFolders = new File(home, "EncogProjects");
 		encogFolders.mkdir();
 		return encogFolders;
+	}
+
+	public int getLogLevel() {
+		int index = EncogWorkBench.getInstance().getMainWindow().getOutputPane().getComboLogLevel().getSelectedIndex();
+		return index;
+	}
+
+	public void setLogLevel(int logLevel) {
+		EncogWorkBench.getInstance().getMainWindow().getOutputPane().getComboLogLevel().setSelectedIndex(logLevel);
 	}
 	
 	

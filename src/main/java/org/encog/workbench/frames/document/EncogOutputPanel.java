@@ -121,7 +121,12 @@ public class EncogOutputPanel extends JPanel implements ActionListener {
 			
 			((WorkbenchLogging)Encog.getInstance().getLoggingPlugin()).setLogLevel(l);			
 		} 
-		
+	}
+	
+	
+
+	public JComboBox getComboLogLevel() {
+		return comboLogLevel;
 	}
 
 	public void clear() {

@@ -239,6 +239,7 @@ public class EncogWorkBench implements Runnable {
 	}
 
 	public void init() {
+		Encog.getInstance().registerPlugin(new WorkbenchLogging());
 		EncogWorkBench.getInstance().getConfig().loadConfig();
 
 		if (EncogWorkBench.getInstance().getConfig().isUseOpenCL()) {
@@ -248,8 +249,6 @@ public class EncogWorkBench implements Runnable {
 		ErrorCalculation.setMode(EncogWorkBench.getInstance().getConfig()
 				.getErrorCalculation());
 		
-		Encog.getInstance().registerPlugin(new WorkbenchLogging());
-
 		Thread thread = new Thread(this);
 		thread.setDaemon(true);
 		thread.start();
