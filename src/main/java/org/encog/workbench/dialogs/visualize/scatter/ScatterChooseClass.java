@@ -27,10 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.encog.app.analyst.EncogAnalyst;
-import org.encog.app.analyst.script.DataField;
 import org.encog.app.analyst.script.normalize.AnalystField;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.CheckField;
+import org.encog.workbench.dialogs.common.CheckListener;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
@@ -42,7 +42,7 @@ import org.encog.workbench.frames.document.tree.ProjectTraining;
  * common dialog box.
  * @author jheaton
  */
-public class ScatterChooseClass extends EncogPropertiesDialog {
+public class ScatterChooseClass extends EncogPropertiesDialog implements CheckListener {
 
 	private ComboBoxField comboClass;
 	private List<CheckField> fields = new ArrayList<CheckField>();
@@ -61,6 +61,8 @@ public class ScatterChooseClass extends EncogPropertiesDialog {
 	 * All available networks to display in the combo box.
 	 */
 	private List<String> classNames = new ArrayList<String>();
+	
+	private CheckField selectAllField;
 
 	/**
 	 * Construct the dialog box.
@@ -84,12 +86,16 @@ public class ScatterChooseClass extends EncogPropertiesDialog {
 		addProperty(this.comboClass = new ComboBoxField("training set","Training Set",true,this.classNames));
 		
 		for(AnalystField field: analyst.getScript().getNormalize().getNormalizedFields() ) {
-			if( !field.isIgnored() && field.isInput() ) {
+			if( !field.isIgnored() && field.isInput() ) {			
 				CheckField cf = new CheckField(field.getName(),field.getName());
 				addProperty(cf);
 				fields.add(cf);
+				cf.setListener(this);
 			}
 		}
+		
+		addProperty(selectAllField = new CheckField("all", "Select All"));
+		this.selectAllField.setListener(this);
 		
 		render();
 		
@@ -108,6 +114,26 @@ public class ScatterChooseClass extends EncogPropertiesDialog {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public void check(CheckField check) {
+		if( check==this.selectAllField ) {
+			boolean v = this.selectAllField.getValue();
+			for(CheckField field : this.fields ) {
+				field.setValue(v);
+			}
+		} else {
+			boolean v = true;
+			for(CheckField field : this.fields ) {
+				if( !field.getValue() ) {
+					v = false;
+					break;
+				}
+			}
+			this.selectAllField.setValue(v);
+		}
+		
 	}
 
 }
