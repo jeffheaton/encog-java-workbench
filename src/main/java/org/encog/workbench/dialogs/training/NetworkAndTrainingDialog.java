@@ -137,4 +137,12 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	}
 
 
+
+	public List<ProjectTraining> getTrainingSets() {
+		return trainingSets;
+	}
+	
+	
+
+
 }

@@ -244,16 +244,30 @@ public class EncogDocumentOperations {
 			if (dialog.process()) {
 				MLMethod method = dialog.getNetwork();
 				MLDataSet training = dialog.getTrainingSet();
+				MLDataSet validation = dialog.getValidationSet();
 
-				double error = 0;
+				double errorTraining = 0;
+				double errorValidation = 0;
 
 				if (method instanceof MLError) {
-					error = ((MLError) method).calculateError(training);
+					errorTraining = ((MLError) method).calculateError(training);
+					errorValidation = ((MLError) method).calculateError(training);
+					
+					if( validation==null ) {
 					EncogWorkBench.displayMessage("Error For this Network", ""
-							+ Format.formatPercent(error));
+							+ Format.formatPercent(errorTraining));
+					} else {
+						StringBuilder str = new StringBuilder();
+						str.append("Training Error: ");
+						str.append(Format.formatPercent(errorTraining));
+						str.append("\n");
+						str.append("Validation Error: ");
+						str.append(Format.formatPercent(errorValidation));
+						EncogWorkBench.displayMessage("Result",str.toString());
+					}
 
 				} else {
-					EncogWorkBench.displayError("Error",
+					EncogWorkBench.displayMessage("Result",
 							"The Machine Learning method "
 									+ method.getClass().getSimpleName()
 									+ " does not support error calculation.");

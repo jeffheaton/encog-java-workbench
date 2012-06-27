@@ -24,15 +24,34 @@
 package org.encog.workbench.dialogs;
 
 import java.awt.Frame;
+import java.io.File;
 
+import javax.swing.JComboBox;
+
+import org.encog.ml.data.MLDataSet;
+import org.encog.ml.data.buffer.BufferedMLDataSet;
+import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.training.NetworkAndTrainingDialog;
+import org.encog.workbench.frames.document.tree.ProjectTraining;
 
 public class EvaluateDialog extends NetworkAndTrainingDialog {
 
+	private ComboBoxField comboValidation;
+	
 	public EvaluateDialog() {
 		super(false);
 		setTitle("Evaluate Training Set");
+		addProperty(this.comboValidation = new ComboBoxField("validation set","Validation Set",false,this.getTrainingSets()));
 		render();
+		((JComboBox)this.comboValidation.getField()).setSelectedIndex(-1);
+	}
+
+	public MLDataSet getValidationSet() {
+		if( this.comboValidation.getSelectedValue()==null )			
+			return null;
+		File file = ((ProjectTraining)this.comboValidation.getSelectedValue()).getFile();
+		BufferedMLDataSet result = new BufferedMLDataSet(file);
+		return result;
 	}
 
 }
