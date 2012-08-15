@@ -49,6 +49,7 @@ import org.encog.mathutil.rbf.RadialBasisFunction;
 import org.encog.ml.MLClassification;
 import org.encog.ml.MLContext;
 import org.encog.ml.MLEncodable;
+import org.encog.ml.MLFactory;
 import org.encog.ml.MLInput;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLOutput;
@@ -442,8 +443,27 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 			report.tablePair("Instar Count", Format.formatInteger(cpn.getInstarCount()));
 			report.tablePair("Outstar Count", Format.formatInteger(cpn.getOutstarCount()));			
 		}
-		
+				
 		report.endTable();
+		
+		
+		if( method instanceof MLFactory ) {
+			MLFactory factory = ((MLFactory)method);
+			
+			String factoryType = factory.getFactoryType();
+			String factoryArchitecture = factory.getFactoryArchitecture();
+			
+			if( factoryType!=null ) {			
+				report.h3("Encog Factory Code");
+				report.beginTable();
+	
+				report.tablePair("Type", factoryType);
+				report.tablePair("Architecture", factoryArchitecture);
+				report.endTable();
+			}
+		}
+
+		
 		
 		if (this.method instanceof RBFNetwork) {
 			RBFNetwork rbfNetwork = (RBFNetwork)this.method;
