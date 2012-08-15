@@ -23,6 +23,7 @@
  */
 package org.encog.workbench.process;
 
+import java.awt.Dialog;
 import java.io.File;
 
 import org.encog.bot.BotUtil;
@@ -31,6 +32,7 @@ import org.encog.mathutil.rbf.RBFEnum;
 import org.encog.ml.MLMethod;
 import org.encog.ml.bayesian.BayesianNetwork;
 import org.encog.ml.data.MLDataSet;
+import org.encog.ml.factory.MLMethodFactory;
 import org.encog.ml.svm.KernelType;
 import org.encog.ml.svm.SVMType;
 import org.encog.neural.networks.BasicNetwork;
@@ -55,6 +57,7 @@ import org.encog.workbench.dialogs.createnetwork.CreateBAMDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateBlotzmannDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateCPNDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateElmanDialog;
+import org.encog.workbench.dialogs.createnetwork.CreateEncogFactoryCode;
 import org.encog.workbench.dialogs.createnetwork.CreateFeedforward;
 import org.encog.workbench.dialogs.createnetwork.CreateHopfieldDialog;
 import org.encog.workbench.dialogs.createnetwork.CreateJordanDialog;
@@ -75,6 +78,9 @@ public class CreateNeuralNetwork {
 		dialog.setTheType(NeuralNetworkType.Feedforward);
 		if (dialog.process()) {
 			switch (dialog.getTheType()) {
+			case EncogFactoryCode:
+				network = createEncogFactoryCode();
+				break;
 			case Automatic:
 				createAutomatic(path);
 				network=null;
@@ -128,6 +134,18 @@ public class CreateNeuralNetwork {
 				EncogWorkBench.getInstance().refresh();
 			}
 		}
+	}
+
+	private static MLMethod createEncogFactoryCode() {
+		MLMethod method = null;
+		CreateEncogFactoryCode dialog = new CreateEncogFactoryCode();
+		if( dialog.process() ) {
+			String typeCode = dialog.getTypeCode().getValue();
+			String architectureCode = dialog.getArchitectureCode().getValue();
+			MLMethodFactory factory = new MLMethodFactory();
+			method = factory.create(typeCode, architectureCode, 1, 1);
+		}
+		return method;
 	}
 
 	private static MLMethod createPNN() {

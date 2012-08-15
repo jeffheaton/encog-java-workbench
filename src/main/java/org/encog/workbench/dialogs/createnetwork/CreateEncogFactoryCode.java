@@ -23,22 +23,34 @@
  */
 package org.encog.workbench.dialogs.createnetwork;
 
-public enum NeuralNetworkType {
-	EncogFactoryCode,
-	Automatic,
-	ADALINE,
-	ART1,
-	BAM,
-	Boltzmann,
-	CPN,
-	Feedforward,
-	RBF,
-	SOM,
-	Hopfield,
-	Elman,
-	Jordan,
-	SVM,
-	PNN,
-	BayesianNetwork
+import java.awt.Frame;
+
+import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
+import org.encog.workbench.dialogs.common.TextField;
+
+public class CreateEncogFactoryCode extends EncogPropertiesDialog {
+
+	private TextField typeCode;
+	private TextField architectureCode;
+	
+	public CreateEncogFactoryCode() {
+		super(EncogWorkBench.getInstance().getMainWindow());
+		setTitle("Create from Factory Code");
+		setSize(400,400);
+		setLocation(200,200);
+		addProperty(this.typeCode = new TextField("type","Type Code",true));
+		addProperty(this.architectureCode = new TextField("architecture","Architecture Code",true));
+		render();
+	}
+
+	public TextField getTypeCode() {
+		return typeCode;
+	}
+
+	public TextField getArchitectureCode() {
+		return architectureCode;
+	}
+
 	
 }
