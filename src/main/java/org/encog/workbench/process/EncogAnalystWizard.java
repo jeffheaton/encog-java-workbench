@@ -48,8 +48,7 @@ public class EncogAnalystWizard {
 				.queryViews(csvFile))
 			return;
 
-		AnalystWizardDialog dialog = new AnalystWizardDialog(EncogWorkBench
-				.getInstance().getMainWindow());
+		AnalystWizardDialog dialog = new AnalystWizardDialog();
 
 		if (csvFile != null) {
 			dialog.getRawFile().setValue(csvFile.toString());
@@ -118,6 +117,9 @@ public class EncogAnalystWizard {
 				wizard.setTaskBalance(dialog.getBalance().getValue());
 				wizard.setTaskCluster(dialog.getCluster().getValue());
 				wizard.setMaxError(dialog.getMaxError().getValue()/100.0);
+				
+				wizard.setCodeTargetLanguage(dialog.getGenerationTargetLanguage());
+				wizard.setCodeEmbedData(dialog.getEmbedData().getValue());
 				
 				if( !setSpecific(wizard) )
 					return;
