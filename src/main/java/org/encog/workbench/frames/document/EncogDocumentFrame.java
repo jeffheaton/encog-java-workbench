@@ -281,7 +281,10 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			if (tab == null) {
 				String extension = FileUtil.getFileExt(file.getFile());
 				if (extension.equalsIgnoreCase("txt")
-						|| extension.equalsIgnoreCase("csv")) {
+						|| extension.equalsIgnoreCase("csv")
+						|| extension.equalsIgnoreCase("cs")
+						|| extension.equalsIgnoreCase("java")
+						|| extension.equalsIgnoreCase("mql4")) {
 					tab = new TextFileTab(file);
 					this.tabManager.openTab(tab);
 				} else if (extension.equals("ega")) {
