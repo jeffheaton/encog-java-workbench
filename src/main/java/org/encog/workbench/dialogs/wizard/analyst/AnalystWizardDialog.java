@@ -23,7 +23,6 @@
  */
 package org.encog.workbench.dialogs.wizard.analyst;
 
-import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,7 @@ import org.encog.app.analyst.AnalystFileFormat;
 import org.encog.app.analyst.AnalystGoal;
 import org.encog.app.analyst.wizard.NormalizeRange;
 import org.encog.app.analyst.wizard.WizardMethodType;
+import org.encog.app.generate.TargetLanguage;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
@@ -62,6 +62,8 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	private final CheckField balance;
 	private final CheckField cluster;
 	private final DoubleField maxError;
+	private final ComboBoxField generationTarget;
+	private final CheckField embedData;
 	
 	/**
 	 * @return the cluster
@@ -72,8 +74,8 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 
 	private final List<String> methods = new ArrayList<String>();
 	
-	public AnalystWizardDialog(Frame owner) {
-		super(owner);
+	public AnalystWizardDialog() {
+		super(EncogWorkBench.getInstance().getMainWindow());
 		
 		List<String> list = new ArrayList<String>();
 		list.add("CSV");
@@ -97,6 +99,14 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		missingList.add("DiscardMissing");
 		missingList.add("MeanAndModeMissing");
 		missingList.add("NegateMissing");
+		
+		List<String> targetLanguages = new ArrayList<String>();
+		targetLanguages.add("No Generation");				
+		targetLanguages.add("Java");
+		targetLanguages.add("JavaScript");
+		targetLanguages.add("CSharp");
+		targetLanguages.add("MQL4");
+		targetLanguages.add("NinjaScript");
 
 		methods.add("Bayesian Network");
 		methods.add("Feedforward Network");
@@ -129,6 +139,9 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		addProperty(this.segregate = new CheckField("segregate","Segregate"));
 		addProperty(this.balance = new CheckField("balance","Balance"));
 		addProperty(this.cluster = new CheckField("cluster","Cluster"));
+		beginTab("Code Generation");
+		addProperty(this.generationTarget = new ComboBoxField("language", "Generation Language", true, targetLanguages));
+		addProperty(this.embedData = new CheckField("embed","Embed Data"));
 		
 		render();
 		
@@ -285,4 +298,33 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 	public DoubleField getMaxError() {
 		return this.maxError;
 	}
+
+	public ComboBoxField getGenerationTarget() {
+		return generationTarget;
+	}
+
+	public CheckField getEmbedData() {
+		return embedData;
+	}
+	
+	public TargetLanguage getGenerationTargetLanguage() {
+		switch(this.generationTarget.getSelectedIndex()) {
+			case 0:
+				return TargetLanguage.NoGeneration;
+			case 1:
+				return TargetLanguage.Java;
+			case 2:
+				return TargetLanguage.JavaScript;
+			case 3:
+				return TargetLanguage.CSharp;
+			case 4:
+				return TargetLanguage.MQL4;
+			case 5:
+				return TargetLanguage.NinjaScript;
+			default:
+				return TargetLanguage.NoGeneration;
+		}
+	}
+	
+	
 }
