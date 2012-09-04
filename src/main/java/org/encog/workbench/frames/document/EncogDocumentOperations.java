@@ -555,7 +555,7 @@ public class EncogDocumentOperations {
 					EncogAnalystWizard.createEncogAnalyst(null);
 					break;
 				case RealTimeAnalystWizard:
-					EncogAnalystWizard.createRealtimeEncogAnalyst();
+					EncogAnalystWizard.createRealtimeEncogAnalyst(null);
 					break;
 			}
 		}

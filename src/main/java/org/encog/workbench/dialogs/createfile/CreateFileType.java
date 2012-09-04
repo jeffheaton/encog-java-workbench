@@ -28,5 +28,6 @@ public enum CreateFileType {
 	MachineLearningMethod,
 	CSVFile,
 	TrainingFile,
-	NEAT
+	NEAT,
+	AnalystIndicator
 }
