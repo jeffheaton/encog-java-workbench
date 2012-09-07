@@ -171,17 +171,18 @@ public class EncogAnalystWizard {
 
 				wizard.wizardRealTime(sourceData, csvFile);
 
-				EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
-				refresh = false;
-				EncogWorkBench.getInstance().getMainWindow().openFile(egaFile);
-
 			} catch (EncogError e) {
 				EncogWorkBench.displayError("Error Generating Analyst Script",
 						e);
 			} finally {
 				EncogWorkBench.getInstance().getMainWindow().endWait();
-				if (analyst != null)
+				if (analyst != null) {
 					analyst.save(egaFile);
+					EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+					refresh = false;
+					EncogWorkBench.getInstance().getMainWindow().openFile(egaFile);
+
+				}
 			}
 		}
 	}
