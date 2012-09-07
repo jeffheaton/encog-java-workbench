@@ -34,7 +34,9 @@ import org.encog.app.analyst.missing.DiscardMissing;
 import org.encog.app.analyst.missing.MeanAndModeMissing;
 import org.encog.app.analyst.missing.NegateMissing;
 import org.encog.app.analyst.wizard.AnalystWizard;
+import org.encog.app.analyst.wizard.SourceElement;
 import org.encog.app.analyst.wizard.WizardMethodType;
+import org.encog.neural.networks.structure.AnalyzeNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.wizard.analyst.AnalystWizardDialog;
 import org.encog.workbench.dialogs.wizard.analyst.RealTimeAnalystWizardDialog;
@@ -144,22 +146,31 @@ public class EncogAnalystWizard {
 		}
 	}
 	
-	public static void createRealtimeEncogAnalyst(File path) {
+	public static void createRealtimeEncogAnalyst(File egaFile) {
 		boolean refresh = true;
 
 		RealTimeAnalystWizardDialog dialog = new RealTimeAnalystWizardDialog();
-		dialog.getBaseName().setValue(path.toString());
+		dialog.getBaseName().setValue(egaFile.toString());
 
 		if (dialog.process()) {
 			EncogAnalyst analyst = null;
 			File projectFolder = EncogWorkBench.getInstance()
 					.getProjectDirectory();
-			File targetCSVFile = null;
-			File egaFile = null;
-			File csvFile = null;
+			File csvFile = new File(FileUtil.forceExtension(egaFile.toString(), "csv"));
+			List<SourceElement> sourceData = dialog.getSourceData();
 			
 			try {
-				
+				File egFile = new File(FileUtil.forceExtension(
+						csvFile.toString(), "eg"));
+
+				analyst = new EncogAnalyst();
+				AnalystWizard wizard = new AnalystWizard(analyst);
+			
+				if( !setSpecific(wizard) )
+					return;
+
+				wizard.wizardRealTime(sourceData, csvFile);
+
 				EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 				refresh = false;
 				EncogWorkBench.getInstance().getMainWindow().openFile(egaFile);

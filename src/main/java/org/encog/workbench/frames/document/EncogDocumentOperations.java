@@ -549,13 +549,22 @@ public class EncogDocumentOperations {
 	
 	public void performWizard() {
 		ChooseWizardDialog choose = new ChooseWizardDialog();
+		
 		if( choose.process() ) {
 			switch(choose.getTheType()) {
 				case AnalystWizard:
 					EncogAnalystWizard.createEncogAnalyst(null);
 					break;
 				case RealTimeAnalystWizard:
-					EncogAnalystWizard.createRealtimeEncogAnalyst(null);
+					
+					String name = EncogWorkBench.displayInput("Choose a name for this file (*.ega)", "indicator.ega");
+					if( name!=null ) {
+						File basePath = EncogWorkBench.getInstance().getMainWindow()
+								.getTree().getPath();
+						name = FileUtil.forceExtension(new File(name).getName(), "ega");
+						File path = new File(basePath, name);
+						EncogAnalystWizard.createRealtimeEncogAnalyst(path);
+					}
 					break;
 			}
 		}
