@@ -79,7 +79,7 @@ public class StructureTab extends EncogCommonTab {
 		
 		if( method instanceof BasicNetwork ) {
 			BasicNetwork network = (BasicNetwork)method;
-			g = buildGraph(network.getStructure().getFlat());
+			g = buildGraph(network);
 		} else if( method instanceof NEATNetwork ) {
 			NEATNetwork neat = (NEATNetwork)method;
 			g = buildGraph(neat);
@@ -273,8 +273,9 @@ public class StructureTab extends EncogCommonTab {
 
 		return result;
 	}
-
-	public Graph<DrawnNeuron, DrawnConnection> buildGraph(FlatNetwork flat) {
+	
+	public Graph<DrawnNeuron, DrawnConnection> buildGraph(BasicNetwork network) {
+		FlatNetwork flat = network.getStructure().getFlat();
 		int inputCount = 1;
 		int outputCount = 1;
 		int hiddenCount = 1;
@@ -335,6 +336,8 @@ public class StructureTab extends EncogCommonTab {
 				margin /= 2.0;
 
 				DrawnNeuron neuron = new DrawnNeuron(type, name, x+xOffset, y + margin);
+				neuron.setLayerIndex(currentLayer);
+				neuron.setNeuronIndex(currentNeuron);
 				neurons.add(neuron);
 
 				if (neuron.getType() == DrawnNeuronType.Hidden
@@ -345,11 +348,14 @@ public class StructureTab extends EncogCommonTab {
 				int toNeuron = 0;
 				int count = connections.size();				
 				for (DrawnNeuron connectTo : connections) {					
-					int weightIndex = flat.getLayerIndex()[currentLayer]+(toNeuron*count)+currentNeuron;
-					double w = 0;// this.flat.getWeights()[weightIndex];
-					DrawnConnection connection = new DrawnConnection(neuron, connectTo, w);
-					neuron.getOutbound().add(connection);
-					neuron.getInbound().add(connection);
+					double w = network.getWeight(network.getLayerCount()-currentLayer-1, currentNeuron, connectTo.getNeuronIndex());
+					if (!network.getStructure().isConnectionLimited() ||
+							Math.abs(w) > network.getStructure().getConnectionLimit())
+					{
+						DrawnConnection connection = new DrawnConnection(neuron, connectTo, w);
+						neuron.getOutbound().add(connection);
+						neuron.getInbound().add(connection);
+					}
 					toNeuron++;
 				}
 			}
