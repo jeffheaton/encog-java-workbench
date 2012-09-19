@@ -37,6 +37,9 @@ public class DrawnNeuron {
 	private final double x;
 	private final double y;
 
+	private int layerIndex;
+	private int neuronIndex;
+	
 	public DrawnNeuron(DrawnNeuronType type, String name, double x, double y) {
 		super();
 		this.type = type;
@@ -110,6 +113,22 @@ public class DrawnNeuron {
 
 	public Object getName() {
 		return name;
+	}
+
+	public int getNeuronIndex() {
+		return neuronIndex;
+	}
+
+	public void setNeuronIndex(int neuronIndex) {
+		this.neuronIndex = neuronIndex;
+	}
+
+	public int getLayerIndex() {
+		return layerIndex;
+	}
+
+	public void setLayerIndex(int layerIndex) {
+		this.layerIndex = layerIndex;
 	}
 
 }
