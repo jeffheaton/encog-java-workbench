@@ -34,7 +34,9 @@ import org.encog.app.analyst.missing.DiscardMissing;
 import org.encog.app.analyst.missing.MeanAndModeMissing;
 import org.encog.app.analyst.missing.NegateMissing;
 import org.encog.app.analyst.wizard.AnalystWizard;
+import org.encog.app.analyst.wizard.SourceElement;
 import org.encog.app.analyst.wizard.WizardMethodType;
+import org.encog.neural.networks.structure.AnalyzeNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.wizard.analyst.AnalystWizardDialog;
 import org.encog.workbench.dialogs.wizard.analyst.RealTimeAnalystWizardDialog;
@@ -144,91 +146,43 @@ public class EncogAnalystWizard {
 		}
 	}
 	
-	public static void createRealtimeEncogAnalyst() {
+	public static void createRealtimeEncogAnalyst(File egaFile) {
 		boolean refresh = true;
 
 		RealTimeAnalystWizardDialog dialog = new RealTimeAnalystWizardDialog();
-
+		dialog.getBaseName().setValue(egaFile.toString());
 
 		if (dialog.process()) {
-			List<String> sourceData = dialog.getSourceData();
-			String baseName = dialog.getBaseName().getValue();
 			EncogAnalyst analyst = null;
 			File projectFolder = EncogWorkBench.getInstance()
 					.getProjectDirectory();
-			File targetCSVFile = null;
-			File egaFile = null;
-			File csvFile = null;
+			File csvFile = new File(FileUtil.forceExtension(egaFile.toString(), "csv"));
+			List<SourceElement> sourceData = dialog.getSourceData();
 			
-			if( dialog.getMethodType()==WizardMethodType.SOM && dialog.getGoal()==AnalystGoal.Regression ) {
-				EncogWorkBench.displayError("Error", "Can't use a SOM with regression.");
-				return;
-			}
-
 			try {
-				EncogWorkBench.getInstance().getMainWindow().beginWait();
-							
-				egaFile = new File(projectFolder,FileUtil.forceExtension(baseName, "ega") );
-				csvFile = new File(projectFolder,FileUtil.forceExtension(baseName, "csv") );
-
-				if (!EncogWorkBench.getInstance().getMainWindow()
-						.getTabManager().queryViews(egaFile))
-					return;
-
-				File egFile = new File(FileUtil.forceExtension(baseName, "eg"));
+				File egFile = new File(FileUtil.forceExtension(
+						csvFile.toString(), "eg"));
 
 				analyst = new EncogAnalyst();
 				AnalystWizard wizard = new AnalystWizard(analyst);
-				boolean headers = true;
-				AnalystFileFormat format = AnalystFileFormat.DECPNT_COMMA;
-
-				wizard.setMethodType(dialog.getMethodType());
-				wizard.setTargetField("");
-				
-				String m = (String)dialog.getMissing().getSelectedValue(); 
-				if( m.equals("DiscardMissing") ) {
-					wizard.setMissing(new DiscardMissing());	
-				} else if( m.equals("MeanAndModeMissing") ) {
-					wizard.setMissing(new MeanAndModeMissing());	
-				} else if( m.equals("NegateMissing") ) {
-					wizard.setMissing(new NegateMissing());	
-				} else {
-					wizard.setMissing(new DiscardMissing());
-				}
-				
-				wizard.setGoal(dialog.getGoal());
-				wizard.setLagWindowSize(dialog.getLagCount().getValue());
-				wizard.setLeadWindowSize(dialog.getLeadCount().getValue());
-				wizard.setIncludeTargetField(false);
-				wizard.setRange(dialog.getRange());
-				wizard.setTaskNormalize(dialog.getNormalize().getValue());
-				wizard.setTaskRandomize(false);
-				wizard.setTaskSegregate(dialog.getSegregate().getValue());
-				wizard.setTaskBalance(false);
-				wizard.setTaskCluster(false);
-				wizard.setMaxError(dialog.getMaxError().getValue()/100.0);
-				
+			
 				if( !setSpecific(wizard) )
 					return;
 
 				wizard.wizardRealTime(sourceData, csvFile);
-				
-				if (analyst != null) {
-					analyst.save(egaFile);
-					analyst = null;
-				}
-				
-				EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
-				refresh = false;
-				EncogWorkBench.getInstance().getMainWindow().openFile(egaFile);
 
 			} catch (EncogError e) {
 				EncogWorkBench.displayError("Error Generating Analyst Script",
 						e);
 			} finally {
 				EncogWorkBench.getInstance().getMainWindow().endWait();
-				if (analyst != null)
+				if (analyst != null) {
 					analyst.save(egaFile);
+					EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
+					refresh = false;
+					EncogWorkBench.getInstance().getMainWindow().openFile(egaFile);
+
+				}
 			}
 		}
 	}

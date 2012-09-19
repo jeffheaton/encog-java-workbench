@@ -98,6 +98,7 @@ ListSelectionListener {
 		this.model.addElement("CSV File (*.csv)");
 		this.model.addElement("Training File (*.egb)");
 		this.model.addElement("NEAT Population (*.eg)");
+		this.model.addElement("Encog Analyst Financial Indicator (*.ega)");
 		
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
@@ -130,6 +131,9 @@ ListSelectionListener {
 		case 4:
 			this.theType = CreateFileType.NEAT;
 			break;
+		case 5:
+			this.theType = CreateFileType.AnalystIndicator;
+			break;
 		}
 		
 		this.filename = this.objectNameField.getText();
@@ -152,6 +156,9 @@ ListSelectionListener {
 			break;
 		case NEAT:
 			this.list.setSelectedIndex(4);
+			break;
+		case AnalystIndicator:
+			this.list.setSelectedIndex(5);
 			break;
 		}
 	}
@@ -185,6 +192,10 @@ ListSelectionListener {
 		case 4:
 			this.text
 					.setText("Create NeuroEvolution of Augmenting Topologies (NEAT) population.  This will create a population of genomes that can be used to create NEAT neural networks.  NEAT networks are trained using a genetic algorithm both to vary weights and structures.");
+			break;
+		case 5:
+			this.text
+					.setText("Create an Encog Analyst file to generate a Ninjatrader or MetaTrader indicator.  Note: To create a regular Encog Analst script, right-click a .CSV file and choose the Analyst Wizard.");
 			break;
 
 			

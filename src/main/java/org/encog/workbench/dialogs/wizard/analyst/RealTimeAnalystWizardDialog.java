@@ -29,182 +29,45 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 
-import org.encog.app.analyst.AnalystGoal;
-import org.encog.app.analyst.wizard.NormalizeRange;
-import org.encog.app.analyst.wizard.WizardMethodType;
+import org.encog.app.analyst.wizard.SourceElement;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.BuildingListField;
-import org.encog.workbench.dialogs.common.CheckField;
+import org.encog.workbench.dialogs.common.BuildingListListener;
 import org.encog.workbench.dialogs.common.ComboBoxField;
-import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
-import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.dialogs.common.TextField;
 
-public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
+public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog implements BuildingListListener {
 	
 	private BuildingListField sourceData;
 	private final TextField baseName;
-	private final ComboBoxField method;
-	private final ComboBoxField range;
-	private final ComboBoxField goal;
-	private final ComboBoxField missing;
-	private final IntegerField lagCount;
-	private final IntegerField leadCount;
-	private final CheckField normalize;
-	private final CheckField segregate;
-	private final DoubleField maxError;
+	private final ComboBoxField target;
 	
 	private final List<String> methods = new ArrayList<String>();
 	
 	public RealTimeAnalystWizardDialog() {
 		super(EncogWorkBench.getInstance().getMainWindow());
 		
-		List<String> list = new ArrayList<String>();
-		list.add("CSV");
+		List<String> targets = new ArrayList<String>();
+		targets.add("Ninjatrader 7");
+		targets.add("Metatrader 4 (MQL4)");
 				
-		List<String> goalList = new ArrayList<String>();
-		goalList.add("Classification");
-		goalList.add("Regression");
-		
-		List<String> rangeList = new ArrayList<String>();
-		rangeList.add("-1 to 1");
-		rangeList.add("0 to 1");
-		
-		List<String> missingList = new ArrayList<String>();
-		missingList.add("DiscardMissing");
-		missingList.add("MeanAndModeMissing");
-		missingList.add("NegateMissing");
-
-		methods.add("Bayesian Network");
-		methods.add("Feedforward Network");
-		methods.add("RBF Network");
-		methods.add("PNN/GRNN Network");
-		methods.add("Self Organizing Map (SOM)");
-		methods.add("Support Vector Machine");		
 				
 		this.setSize(640, 360);
 		this.setTitle("Realtime Encog Analyst Wizard");
 		
 		beginTab("Data");
 		addProperty(this.baseName = new TextField("ega file","EGA File Name",true));
+		addProperty(this.target = new ComboBoxField("target","Target Platform",true,targets));
 		addProperty(this.sourceData = new BuildingListField("source fields","Source Fields"));
+		this.sourceData.setOwner(this);				
 		
-		beginTab("Machine Learning");
-		addProperty(this.method = new ComboBoxField("method", "Machine Learning", true, methods));
-		addProperty(this.range = new ComboBoxField("normalization range", "Normalization Range", true, rangeList));
-		addProperty(this.missing = new ComboBoxField("missing values", "Missing Values", true, missingList));
-		addProperty(this.maxError = new DoubleField("max error","Maximum Error Percent(0-100)", true, 0, 100));
-
-		beginTab("Goal");
-		addProperty(this.goal = new ComboBoxField("goal", "Goal", true, goalList));
-		addProperty(this.lagCount = new IntegerField("lag count","Lag Count",true,0,1000));
-		addProperty(this.leadCount = new IntegerField("lead count","Lead Count",true,0,1000));
-
-		beginTab("Tasks");
-		addProperty(this.normalize = new CheckField("normalize","Normalize"));
-		addProperty(this.segregate = new CheckField("segregate","Segregate"));
-				
 		render();
 		
-		this.lagCount.setValue(0);
-		this.leadCount.setValue(0);
-		
-		this.segregate.setValue(true);
-		this.normalize.setValue(true);
-		this.sourceData.getModel().addElement("HIGH");
-		this.sourceData.getModel().addElement("LOW");
-		this.sourceData.getModel().addElement("OPEN");
-		this.sourceData.getModel().addElement("CLOSE");
-		this.sourceData.getModel().addElement("VOL");
-		((JComboBox)this.method.getField()).setSelectedIndex(1);
-		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
-	
+		this.sourceData.getModel().addElement("Name: close, Source: close");
+		((JComboBox)this.target.getField()).setSelectedIndex(0);
 	}
 	
-	public WizardMethodType getMethodType()
-	{
-		switch(this.method.getSelectedIndex()) {
-			case 0:
-				return WizardMethodType.BayesianNetwork;
-			case 1:
-				return WizardMethodType.FeedForward;
-			case 2:
-				return WizardMethodType.RBF;
-			case 3:
-				return WizardMethodType.PNN;
-			case 4:
-				return WizardMethodType.SOM;
-			case 5:
-				return WizardMethodType.SVM;
-			default:
-				return null;
-		}
-	}
-		
-	public AnalystGoal getGoal() {
-		int idx = this.goal.getSelectedIndex();
-		switch(idx) {
-			case 0:
-				return AnalystGoal.Classification;
-			case 1:
-				return AnalystGoal.Regression;
-			default:
-				return null;
-		}
-	}
-	
-	public NormalizeRange getRange() {
-		int idx = this.range.getSelectedIndex();
-		switch(idx) {
-			case 0:
-				return NormalizeRange.NegOne2One;
-			case 1:
-				return NormalizeRange.Zero2One;
-			default:
-				return null;
-		}
-	}
-	
-	/**
-	 * @return the lagCount
-	 */
-	public IntegerField getLagCount() {
-		return lagCount;
-	}
-
-	/**
-	 * @return the leadCount
-	 */
-	public IntegerField getLeadCount() {
-		return leadCount;
-	}
-
-	/**
-	 * @return the segregate
-	 */
-	public CheckField getSegregate() {
-		return segregate;
-	}
-
-	/**
-	 * @return the normalize
-	 */
-	public CheckField getNormalize() {
-		return normalize;
-	}
-
-	/**
-	 * @return the missing
-	 */
-	public ComboBoxField getMissing() {
-		return missing;
-	}	
-	
-	public DoubleField getMaxError() {
-		return this.maxError;
-	}
-
 
 	/**
 	 * @return the egaFile
@@ -213,14 +76,71 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog {
 		return baseName;
 	}
 	
-	public List<String> getSourceData() {
+	public List<SourceElement> getSourceData() {
 		DefaultListModel ctrl = this.sourceData.getModel();
-		List<String> result = new ArrayList<String>();
+		List<SourceElement> result = new ArrayList<SourceElement>();
 		for(int i=0; i<ctrl.getSize();i++)
 		{
-			result.add(ctrl.get(i).toString());
+			String current = this.sourceData.getModel().get(i).toString();
+			int idx = current.indexOf(',');
+			String currentName = current.substring(5,idx).trim();
+			idx = current.indexOf("Source:");
+			String currentSource = current.substring(idx+7).trim();
+			
+			result.add(new SourceElement(currentName,currentSource));
 		}
 		return result;
+	}
+	
+	private String askSource(int index) {
+		IndicatorSourceDialog dialog = new IndicatorSourceDialog();
+		
+		if( index!=-1 ) {
+			String current = this.sourceData.getModel().get(index).toString();
+			int idx = current.indexOf(',');
+			String currentName = current.substring(5,idx).trim();
+			idx = current.indexOf("Source:");
+			String currentSource = current.substring(idx+7).trim();
+			dialog.getSourceName().setValue(currentName);
+			dialog.getSource().setValue(currentSource);
+		}
+		
+		if( dialog.process() ) {
+			
+			
+			return "Name: " + dialog.getSourceName().getValue() + ", Source: " + dialog.getSource().getValue();
+		} else {
+			return null;
+		}
+	}
+
+
+	@Override
+	public void add(BuildingListField list, int index) {
+
+		String str = askSource(-1);
+		if (str != null) {
+			list.getModel().addElement(str);
+		}
+
+	}
+
+	@Override
+	public void del(BuildingListField list, int index) {
+		if (index != -1) {
+			list.getModel().remove(index);
+		}
+	}
+
+	@Override
+	public void edit(BuildingListField list, int index) {
+		if (index != -1) {
+			String str = askSource(index);
+			if (str != null) {
+				list.getModel().remove(index);
+				list.getModel().add(index, str);
+			}
+		}
 	}
 	
 	

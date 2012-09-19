@@ -21,13 +21,33 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.dialogs.createfile;
+package org.encog.workbench.dialogs.wizard.analyst;
 
-public enum CreateFileType {
-	TextFile,
-	MachineLearningMethod,
-	CSVFile,
-	TrainingFile,
-	NEAT,
-	AnalystIndicator
+import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
+import org.encog.workbench.dialogs.common.TextField;
+
+public class IndicatorSourceDialog extends EncogPropertiesDialog {
+
+	private final TextField sourceName;
+	private final TextField source;
+	
+	public IndicatorSourceDialog() {
+		super(EncogWorkBench.getInstance().getMainWindow());
+		setTitle("Define Data Source");
+		setSize(400,200);
+		addProperty(this.sourceName = new TextField("name","Simple Field Name",true));
+		addProperty(this.source = new TextField("source","NinjaTrader/MT Source",true));
+		render();
+	}
+
+	public TextField getSourceName() {
+		return this.sourceName;
+	}
+
+	public TextField getSource() {
+		return this.source;
+	}
+
+	
 }

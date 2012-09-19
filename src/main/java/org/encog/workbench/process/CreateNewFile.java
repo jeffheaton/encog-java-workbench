@@ -84,6 +84,10 @@ public class CreateNewFile {
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
 				File path = new File(basePath, name);
 				createNewPopulation(path);
+			} else if( dialog.getTheType() == CreateFileType.AnalystIndicator ) {
+				name = FileUtil.forceExtension(new File(name).getName(), "ega");
+				File path = new File(basePath, name);
+				createNewAnalystIndicator(path);
 			}
 			
 			EncogWorkBench.getInstance().getMainWindow().getTree()
@@ -91,6 +95,11 @@ public class CreateNewFile {
 		}
 	}
 	
+	private static void createNewAnalystIndicator(File path) {
+		EncogAnalystWizard.createRealtimeEncogAnalyst(path);
+		
+	}
+
 	private static void createNewEGB(File file)
 	{
 		CreateEmptyTrainingDialog dialog = new CreateEmptyTrainingDialog(
