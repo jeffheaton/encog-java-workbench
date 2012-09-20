@@ -109,37 +109,37 @@ public class CreateNeuralNetworkDialog extends EncogCommonDialog implements
 		case 4:
 			this.theType = NeuralNetworkType.BayesianNetwork;
 			break;	
-		case 6:
+		case 5:
 			this.theType = NeuralNetworkType.BAM;
 			break;
-		case 7:
+		case 6:
 			this.theType = NeuralNetworkType.Boltzmann;
 			break;
-		case 8:
+		case 7:
 			this.theType = NeuralNetworkType.CPN;
 			break;
-		case 9:
+		case 8:
 			this.theType = NeuralNetworkType.Feedforward;
 			break;
-		case 10:
+		case 9:
 			this.theType = NeuralNetworkType.RBF;
 			break;
-		case 11:
+		case 10:
 			this.theType = NeuralNetworkType.SOM;
 			break;
-		case 12:
+		case 11:
 			this.theType = NeuralNetworkType.Hopfield;
 			break;
-		case 13:
+		case 12:
 			this.theType = NeuralNetworkType.PNN;
 			break;
-		case 14:
+		case 13:
 			this.theType = NeuralNetworkType.Elman;
 			break;
-		case 15:
+		case 14:
 			this.theType = NeuralNetworkType.Jordan;
 			break;
-		case 16:
+		case 15:
 			this.theType = NeuralNetworkType.SVM;
 			break;
 		}
