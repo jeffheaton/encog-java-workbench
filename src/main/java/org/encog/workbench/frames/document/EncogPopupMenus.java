@@ -32,13 +32,19 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.encog.app.generate.EncogCodeGeneration;
+import org.encog.app.generate.TargetLanguage;
+import org.encog.ml.MLMethod;
 import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.wizard.generate.CodeGenerateDialog;
+import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.process.CreateNewFile;
 import org.encog.workbench.process.EncogAnalystWizard;
 import org.encog.workbench.process.ImportExport;
+import org.encog.workbench.tabs.files.TextDisplayTab;
 
 public class EncogPopupMenus {
 
@@ -52,7 +58,7 @@ public class EncogPopupMenus {
 	private JMenuItem popupFileCSVNormalize;
 	private JMenuItem popupFileCSVWizard;
 	private JMenuItem popupFileNewFile;
-	private JMenuItem popupFileNewObject;
+	private JMenuItem popupFileGenerate;
 	private JMenuItem popupFileCopy;
 
 	private EncogDocumentFrame owner;
@@ -127,12 +133,35 @@ public class EncogPopupMenus {
 					}
 				} else if( source==this.popupFileCopy ) {
 					performCopy((ProjectFile) selected);
+				} else if( source==this.popupFileGenerate) {
+					performGenerate((ProjectFile) selected);
 				}
 				first = false;
 			}
 		} catch (IOException e) {
 			EncogWorkBench.displayError("Error", e);
 		}
+	}
+
+	private void performGenerate(ProjectFile selected) {
+		MLMethod method = (MLMethod)((ProjectEGFile)selected).getObject();
+		
+		if( !EncogCodeGeneration.isSupported(method) ) {
+			EncogWorkBench.displayError("Error", "Code generation for " + method.getClass().getSimpleName() + " is not currently supported.");
+			return;
+		}
+		
+		CodeGenerateDialog dialog = new CodeGenerateDialog();
+		if( dialog.process() ) {
+			TargetLanguage targetLang = dialog.getTargetLanguage();
+			EncogCodeGeneration gen = new EncogCodeGeneration(targetLang);
+			gen.generate(method);
+			String code = gen.save();
+			TextDisplayTab tab = new TextDisplayTab(targetLang.toString());
+			tab.setText(code);
+			EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
+		}
+		
 	}
 
 	private void performCopy(ProjectFile selected) {
@@ -208,10 +237,10 @@ public class EncogPopupMenus {
 		}
 
 		if (ext != null && "eg".equalsIgnoreCase(ext)) {
-			this.popupFileNewObject = owner.addItem(this.popupFile,
-					"New Object", 'n');
+			this.popupFileGenerate = owner.addItem(this.popupFile,
+					"Generate Code...", 'n');
 		} else {
-			this.popupFileNewObject = null;
+			this.popupFileGenerate = null;
 		}
 
 		if (file == null ) {
