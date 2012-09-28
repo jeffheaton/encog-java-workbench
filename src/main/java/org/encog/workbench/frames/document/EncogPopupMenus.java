@@ -35,7 +35,9 @@ import javax.swing.JPopupMenu;
 import org.encog.app.generate.EncogCodeGeneration;
 import org.encog.app.generate.TargetLanguage;
 import org.encog.ml.MLMethod;
+import org.encog.ml.data.MLDataSet;
 import org.encog.util.file.FileUtil;
+import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.wizard.generate.CodeGenerateDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
@@ -143,7 +145,33 @@ public class EncogPopupMenus {
 		}
 	}
 
-	private void performGenerate(ProjectFile selected) {
+	private void performGenerate(ProjectFile selected) {		
+		if( selected.getExtension().equalsIgnoreCase("eg") ) {
+			performGenerateMethod(selected);
+		} else {
+			performGenerateData(selected);
+		}				
+	}
+	
+	private void performGenerateData(ProjectFile selected) {		
+		
+		CodeGenerateDialog dialog = new CodeGenerateDialog();
+		if( dialog.process() ) {
+			TargetLanguage targetLang = dialog.getTargetLanguage();
+			EncogCodeGeneration gen = new EncogCodeGeneration(targetLang);
+			
+			MLDataSet data = EncogUtility.loadEGB2Memory(selected.getFile());
+			
+			gen.generate(null, data);
+			String code = gen.save();
+			TextDisplayTab tab = new TextDisplayTab(targetLang.toString());
+			tab.setText(code);
+			EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
+		}
+		
+	}
+	
+	private void performGenerateMethod(ProjectFile selected) {
 		MLMethod method = (MLMethod)((ProjectEGFile)selected).getObject();
 		
 		if( !EncogCodeGeneration.isSupported(method) ) {
@@ -155,7 +183,7 @@ public class EncogPopupMenus {
 		if( dialog.process() ) {
 			TargetLanguage targetLang = dialog.getTargetLanguage();
 			EncogCodeGeneration gen = new EncogCodeGeneration(targetLang);
-			gen.generate(method);
+			gen.generate(method, null);
 			String code = gen.save();
 			TextDisplayTab tab = new TextDisplayTab(targetLang.toString());
 			tab.setText(code);
@@ -234,9 +262,9 @@ public class EncogPopupMenus {
 		} else {
 			this.popupFileCSVExport = null;
 			this.popupFileCSVWizard = null;
-		}
+		}		
 
-		if (ext != null && "eg".equalsIgnoreCase(ext)) {
+		if (ext != null && ("eg".equalsIgnoreCase(ext) || "egb".equalsIgnoreCase(ext)) ) {
 			this.popupFileGenerate = owner.addItem(this.popupFile,
 					"Generate Code...", 'n');
 		} else {
