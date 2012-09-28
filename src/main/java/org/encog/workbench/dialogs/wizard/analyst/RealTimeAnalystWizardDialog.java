@@ -64,6 +64,7 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog implement
 		
 		render();
 		
+		this.sourceData.getModel().addElement("Name: time, Source: time");
 		this.sourceData.getModel().addElement("Name: close, Source: close");
 		((JComboBox)this.target.getField()).setSelectedIndex(0);
 	}
