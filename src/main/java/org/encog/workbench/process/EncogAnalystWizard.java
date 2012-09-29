@@ -34,9 +34,10 @@ import org.encog.app.analyst.missing.DiscardMissing;
 import org.encog.app.analyst.missing.MeanAndModeMissing;
 import org.encog.app.analyst.missing.NegateMissing;
 import org.encog.app.analyst.wizard.AnalystWizard;
+import org.encog.app.analyst.wizard.PredictionType;
+import org.encog.app.analyst.wizard.RealTimeAnalystWizard;
 import org.encog.app.analyst.wizard.SourceElement;
 import org.encog.app.analyst.wizard.WizardMethodType;
-import org.encog.neural.networks.structure.AnalyzeNetwork;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.wizard.analyst.AnalystWizardDialog;
 import org.encog.workbench.dialogs.wizard.analyst.RealTimeAnalystWizardDialog;
@@ -159,17 +160,19 @@ public class EncogAnalystWizard {
 			File csvFile = new File(FileUtil.forceExtension(egaFile.toString(), "csv"));
 			List<SourceElement> sourceData = dialog.getSourceData();
 			
+			int backwardWindow = dialog.getBackwardWindow().getValue();
+			int forwardWindow = dialog.getForwardWindow().getValue();
+			PredictionType prediction = dialog.getPrediction();
+			String predictField = dialog.getPredictionField().getValue();
+			
 			try {
 				File egFile = new File(FileUtil.forceExtension(
 						csvFile.toString(), "eg"));
 
 				analyst = new EncogAnalyst();
-				AnalystWizard wizard = new AnalystWizard(analyst);
-			
-				if( !setSpecific(wizard) )
-					return;
-
-				wizard.wizardRealTime(sourceData, csvFile);
+				RealTimeAnalystWizard wizard = new RealTimeAnalystWizard(analyst);
+		
+				wizard.wizardRealTime(sourceData, csvFile, backwardWindow, forwardWindow, prediction, predictField);
 
 			} catch (EncogError e) {
 				EncogWorkBench.displayError("Error Generating Analyst Script",
