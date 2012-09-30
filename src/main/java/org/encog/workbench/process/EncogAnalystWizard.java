@@ -35,7 +35,6 @@ import org.encog.app.analyst.missing.MeanAndModeMissing;
 import org.encog.app.analyst.missing.NegateMissing;
 import org.encog.app.analyst.wizard.AnalystWizard;
 import org.encog.app.analyst.wizard.PredictionType;
-import org.encog.app.analyst.wizard.RealTimeAnalystWizard;
 import org.encog.app.analyst.wizard.SourceElement;
 import org.encog.app.analyst.wizard.WizardMethodType;
 import org.encog.workbench.EncogWorkBench;
@@ -170,9 +169,9 @@ public class EncogAnalystWizard {
 						csvFile.toString(), "eg"));
 
 				analyst = new EncogAnalyst();
-				RealTimeAnalystWizard wizard = new RealTimeAnalystWizard(analyst);
+				AnalystWizard wizard = new AnalystWizard(analyst);
 		
-				wizard.wizardRealTime(sourceData, csvFile, backwardWindow, forwardWindow, prediction, predictField);
+				wizard.wizardRealTime(sourceData, csvFile);
 
 			} catch (EncogError e) {
 				EncogWorkBench.displayError("Error Generating Analyst Script",
