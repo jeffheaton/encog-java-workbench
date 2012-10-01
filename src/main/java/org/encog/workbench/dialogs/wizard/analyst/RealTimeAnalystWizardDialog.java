@@ -80,8 +80,8 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog
 				"Prediction Type", true, predictionList));
 		addProperty(this.forwardWindow = new IntegerField("forward window",
 				"Forward Window", true, 0, 10000));
-		addProperty(this.backwardWindow = new IntegerField("forward window",
-				"Forward Window", true, 0, 10000));
+		addProperty(this.backwardWindow = new IntegerField("backward window",
+				"Backward Window", true, 0, 10000));
 
 		this.sourceData.setOwner(this);
 

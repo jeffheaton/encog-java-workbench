@@ -171,7 +171,12 @@ public class EncogAnalystWizard {
 				analyst = new EncogAnalyst();
 				AnalystWizard wizard = new AnalystWizard(analyst);
 		
-				wizard.wizardRealTime(sourceData, csvFile);
+				wizard.wizardRealTime(sourceData, 
+						csvFile, 
+						backwardWindow, 
+						forwardWindow, 
+						prediction,
+						predictField);
 
 			} catch (EncogError e) {
 				EncogWorkBench.displayError("Error Generating Analyst Script",
