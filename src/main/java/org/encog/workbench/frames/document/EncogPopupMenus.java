@@ -159,17 +159,15 @@ public class EncogPopupMenus {
 		if( dialog.process() ) {
 			TargetLanguage targetLang = dialog.getTargetLanguage();
 			EncogCodeGeneration gen = new EncogCodeGeneration(targetLang);
-			
-			MLDataSet data = EncogUtility.loadEGB2Memory(selected.getFile());
-			
-			gen.generate(null, data);
+			gen.setEmbedData(dialog.getEmbed());
+			gen.generate(null, selected.getFile());
 			String code = gen.save();
 			TextDisplayTab tab = new TextDisplayTab(targetLang.toString());
 			tab.setText(code);
 			EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
 		}
-		
 	}
+	
 	
 	private void performGenerateMethod(ProjectFile selected) {
 		MLMethod method = (MLMethod)((ProjectEGFile)selected).getObject();
@@ -183,7 +181,8 @@ public class EncogPopupMenus {
 		if( dialog.process() ) {
 			TargetLanguage targetLang = dialog.getTargetLanguage();
 			EncogCodeGeneration gen = new EncogCodeGeneration(targetLang);
-			gen.generate(method, null);
+			gen.setEmbedData(dialog.getEmbed());
+			gen.generate(selected.getFile(), null);
 			String code = gen.save();
 			TextDisplayTab tab = new TextDisplayTab(targetLang.toString());
 			tab.setText(code);

@@ -33,13 +33,11 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
-import org.encog.workbench.dialogs.common.TextField;
 
 public class CodeGenerateDialog extends EncogPropertiesDialog {
 	
-	private final ComboBoxField target;
-	
-	private final List<String> methods = new ArrayList<String>();
+	private final CheckField embed;
+	private final ComboBoxField target;	
 	
 	public CodeGenerateDialog() {
 		super(EncogWorkBench.getInstance().getMainWindow());
@@ -56,12 +54,21 @@ public class CodeGenerateDialog extends EncogPropertiesDialog {
 		this.setTitle("Code Generation");
 		
 		beginTab("Data");
+		addProperty(this.embed = new CheckField("embed", "Embed data in code"));
 		addProperty(this.target = new ComboBoxField("target","Target Platform",true,targets));
 		
 		render();
-	
+		this.embed.setValue(true);
 		((JComboBox)this.target.getField()).setSelectedIndex(0);
 	}
+	
+	
+
+	public boolean getEmbed() {
+		return embed.getValue();
+	}
+
+
 
 	public TargetLanguage getTargetLanguage() {
 		switch( this.target.getSelectedIndex() ) {
