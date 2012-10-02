@@ -60,8 +60,8 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog
 		targets.add("Metatrader 4 (MQL4)");
 
 		List<String> predictionList = new ArrayList<String>();
-		predictionList.add("Max Value");
-		predictionList.add("Max PIPs");
+		predictionList.add("Max Value (fieldmax)");
+		predictionList.add("Max PIPs (fieldmaxpip)");
 
 		this.setSize(640, 450);
 		this.setTitle("Realtime Encog Analyst Wizard");
@@ -179,12 +179,12 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog
 	public PredictionType getPrediction() {
 		switch (this.prediction.getSelectedIndex()) {
 		case 0:
-			return PredictionType.MaxValue;
+			return PredictionType.fieldmax;
 		case 1:
-			return PredictionType.MaxPIPs;
+			return PredictionType.fieldmaxpip;
 
 		default:
-			return PredictionType.MaxPIPs;
+			return PredictionType.fieldmaxpip;
 		}
 	}
 
