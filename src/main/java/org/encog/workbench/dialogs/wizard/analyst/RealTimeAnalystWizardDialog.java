@@ -88,7 +88,7 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog
 		render();
 
 		this.sourceData.getModel().addElement("Name: time, Source: time");
-		this.sourceData.getModel().addElement("Name: close, Source: close");
+		this.sourceData.getModel().addElement("Name: close, Source: Close");
 		this.predictionField.setValue("close");
 		this.forwardWindow.setValue(60);
 		this.backwardWindow.setValue(30);

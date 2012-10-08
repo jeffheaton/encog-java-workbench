@@ -24,10 +24,7 @@
 package org.encog.workbench.dialogs.trainingdata;
 
 import java.awt.Frame;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.DoubleField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.dialogs.common.IntegerField;
