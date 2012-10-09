@@ -31,6 +31,7 @@ import javax.swing.JComboBox;
 
 import org.encog.app.analyst.wizard.PredictionType;
 import org.encog.app.analyst.wizard.SourceElement;
+import org.encog.app.generate.TargetLanguage;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.BuildingListField;
 import org.encog.workbench.dialogs.common.BuildingListListener;
@@ -202,6 +203,14 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog
 
 	public void setSourceData(BuildingListField sourceData) {
 		this.sourceData = sourceData;
+	}
+
+	public TargetLanguage getTargetLanguage() {
+		if( this.target.getSelectedIndex()==0) {
+			return TargetLanguage.NinjaScript;
+		} else {
+			return TargetLanguage.MQL4;
+		}
 	}
 
 }

@@ -147,15 +147,13 @@ public class EncogAnalystWizard {
 	}
 	
 	public static void createRealtimeEncogAnalyst(File egaFile) {
-		boolean refresh = true;
 
 		RealTimeAnalystWizardDialog dialog = new RealTimeAnalystWizardDialog();
 		dialog.getBaseName().setValue(egaFile.toString());
 
 		if (dialog.process()) {
 			EncogAnalyst analyst = null;
-			File projectFolder = EncogWorkBench.getInstance()
-					.getProjectDirectory();
+
 			File csvFile = new File(FileUtil.forceExtension(egaFile.toString(), "csv"));
 			List<SourceElement> sourceData = dialog.getSourceData();
 			
@@ -170,7 +168,7 @@ public class EncogAnalystWizard {
 
 				analyst = new EncogAnalyst();
 				AnalystWizard wizard = new AnalystWizard(analyst);
-		
+				wizard.setCodeTargetLanguage(dialog.getTargetLanguage());
 				wizard.wizardRealTime(sourceData, 
 						csvFile, 
 						backwardWindow, 
@@ -186,7 +184,6 @@ public class EncogAnalystWizard {
 				if (analyst != null) {
 					analyst.save(egaFile);
 					EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
-					refresh = false;
 					EncogWorkBench.getInstance().getMainWindow().openFile(egaFile);
 
 				}
