@@ -36,6 +36,7 @@ import org.encog.workbench.process.CreateNewFile;
 import org.encog.workbench.process.ImportExport;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.SupportsClipboard;
 import org.encog.workbench.tabs.ValidationChart;
 
 public class EncogMenus {
@@ -190,14 +191,12 @@ public class EncogMenus {
 	public void updateMenus()
 	{
 		boolean modal = this.owner.getTabManager().isModalTabOpen();
-		boolean supportsClipboard = false;
 		boolean documentOpen = EncogWorkBench.getInstance().getProjectDirectory()!=null;
-		
 		JTabbedPane tabs = this.owner.getTabManager().getDocumentTabs();
-
-		
 		EncogCommonTab currentTab = (EncogCommonTab)tabs.getSelectedComponent();
 		
+		boolean supportsClipboard = currentTab instanceof SupportsClipboard;
+			
 		this.menuFileNew.setEnabled(!modal && documentOpen);
 		this.menuFileChangeDir.setEnabled(!modal);
 		this.menuFileNewProject.setEnabled(!modal);

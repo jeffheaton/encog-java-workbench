@@ -65,6 +65,7 @@ import org.encog.workbench.process.CreateTrainingData;
 import org.encog.workbench.process.EncogAnalystWizard;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.EncogCommonTab;
+import org.encog.workbench.tabs.SupportsClipboard;
 import org.encog.workbench.tabs.cloud.CloudConnectionsTab;
 import org.encog.workbench.tabs.files.text.BasicTextTab;
 import org.encog.workbench.tabs.proben.ProbenStatusTab;
@@ -88,29 +89,24 @@ public class EncogDocumentOperations {
 	}
 
 	public void performEditCopy() {
-		final Frame frame = EncogWorkBench.getCurrentFocus();
-		if (frame instanceof EncogCommonFrame) {
-			final EncogCommonFrame ecf = (EncogCommonFrame) frame;
-			ecf.copy();
+		EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow().getTabManager().getCurrentTab();
+		if( tab instanceof SupportsClipboard ) {
+			((SupportsClipboard)tab).clipboardCopy();
 		}
-
 	}
 
 	public void performEditCut() {
-		final Frame frame = EncogWorkBench.getCurrentFocus();
-		if (frame instanceof EncogCommonFrame) {
-			final EncogCommonFrame ecf = (EncogCommonFrame) frame;
-			ecf.cut();
+		EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow().getTabManager().getCurrentTab();
+		if( tab instanceof SupportsClipboard ) {
+			((SupportsClipboard)tab).clipboardCut();
 		}
 	}
 
 	public void performEditPaste() {
-		final Frame frame = EncogWorkBench.getCurrentFocus();
-		if (frame instanceof EncogCommonFrame) {
-			final EncogCommonFrame ecf = (EncogCommonFrame) frame;
-			ecf.paste();
+		EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow().getTabManager().getCurrentTab();
+		if( tab instanceof SupportsClipboard ) {
+			((SupportsClipboard)tab).clipboardPaste();
 		}
-
 	}
 
 	public void performFileNewProject() {

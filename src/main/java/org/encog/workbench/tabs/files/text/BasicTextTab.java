@@ -36,19 +36,18 @@ import javax.swing.JScrollPane;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Utilities;
 
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.frames.document.tree.ProjectFile;
+import org.encog.workbench.tabs.SupportsClipboard;
 import org.encog.workbench.tabs.files.BasicFileTab;
 import org.encog.workbench.util.EncogFonts;
 
 public class BasicTextTab extends BasicFileTab implements ComponentListener,
-		CaretListener {
+		CaretListener, SupportsClipboard {
 
 	private final NonWrappingTextPane editor;
 	private final JScrollPane scroll;
@@ -203,6 +202,21 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener,
 			// ignroe
 		}
 
+	}
+
+	@Override
+	public void clipboardCopy() {
+		this.editor.copy();
+	}
+
+	@Override
+	public void clipboardPaste() {
+		this.editor.paste();
+	}
+
+	@Override
+	public void clipboardCut() {
+		this.editor.cut();
 	}
 
 }
