@@ -29,17 +29,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import org.encog.cloud.indicator.server.IndicatorServer;
 import org.encog.mathutil.error.ErrorCalculationMode;
 import org.encog.persist.EncogFileSection;
 import org.encog.persist.EncogReadHelper;
 import org.encog.persist.EncogWriteHelper;
 import org.encog.persist.PersistError;
-import org.encog.util.logging.EncogLogging;
 import org.encog.workbench.EncogWorkBench;
 
 public class EncogWorkBenchConfig {
@@ -63,9 +59,6 @@ public class EncogWorkBenchConfig {
 	private int iterationStepCount;
 	private int trainingHistory;
 	private boolean showTrainingImprovement;
-	private int port = IndicatorServer.STANDARD_ENCOG_PORT;
-	private boolean allowConnections;
-	private List<String> nodes = new ArrayList<String>();
 	private String projectRoot;
 	
 	public EncogWorkBenchConfig() {
@@ -164,11 +157,7 @@ public class EncogWorkBenchConfig {
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_TRAINING_HISTORY, this.trainingHistory);
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_TRAINING_IMPROVEMENT,this.showTrainingImprovement);
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_LOG_LEVEL, getLogLevel());
-			
-			out.addSubSection("CLOUD");
-			out.writeProperty(EncogWorkBenchConfig.PROPERTY_CLOUD_ALLOW_CONNECTIONS, this.allowConnections);
-			out.writeProperty(EncogWorkBenchConfig.PROPERTY_CLOUD_SERVER_PORT, this.port);
-			
+
 			out.addSubSection("PATHS");
 			out.writeProperty(EncogWorkBenchConfig.PROPERTY_PROJECT_ROOT, this.projectRoot);
 			
@@ -208,12 +197,6 @@ public class EncogWorkBenchConfig {
 						resetDefaults();
 					}
 				}
-				else if( section.getSectionName().equals("ENCOG") && section.getSubSectionName().equals("CLOUD") ) {
-					Map<String, String> params = section.parseParams();
-					this.allowConnections  = EncogFileSection.parseBoolean(params, EncogWorkBenchConfig.PROPERTY_CLOUD_ALLOW_CONNECTIONS);
-					this.port  = EncogFileSection.parseInt(params, EncogWorkBenchConfig.PROPERTY_CLOUD_SERVER_PORT);
-					
-				}
 				else if( section.getSectionName().equals("ENCOG") && section.getSubSectionName().equals("PATHS") ) {
 					Map<String, String> params = section.parseParams();
 					if( params.containsKey(EncogWorkBenchConfig.PROPERTY_PROJECT_ROOT) ) {
@@ -234,35 +217,6 @@ public class EncogWorkBenchConfig {
 		}
 	}
 	
-	
-
-	/**
-	 * @return the port
-	 */
-	public int getPort() {
-		return port;
-	}
-
-	/**
-	 * @param port the port to set
-	 */
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	/**
-	 * @return the allowConnections
-	 */
-	public boolean isAllowConnections() {
-		return allowConnections;
-	}
-
-	/**
-	 * @param allowConnections the allowConnections to set
-	 */
-	public void setAllowConnections(boolean allowConnections) {
-		this.allowConnections = allowConnections;
-	}
 
 	public void resetDefaults() {
 		this.defaultError = 1;
@@ -272,8 +226,6 @@ public class EncogWorkBenchConfig {
 		this.iterationStepCount = 1;
 		this.trainingHistory = 100;
 		this.showTrainingImprovement = true;
-		this.allowConnections = false;
-		this.port = 5128;
 		this.projectRoot = EncogWorkBenchConfig.getDefaultProjectRoot().toString();
 		
 	}

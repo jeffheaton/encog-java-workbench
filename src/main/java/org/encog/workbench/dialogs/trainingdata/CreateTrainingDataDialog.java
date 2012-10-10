@@ -105,7 +105,6 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		this.model.addElement("Fahlman Encoder");
 		this.model.addElement("Linear");
 		this.model.addElement("Sine Wave");
-		this.model.addElement("Import from Indicator");
 		
 		
 		this.list.addListSelectionListener(this);
@@ -167,9 +166,6 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		case 13:
 			this.type = TrainingDataType.SineWave;
 			break;
-		case 14:
-			this.type = TrainingDataType.Indicator;
-			break;
 		}
 	}
 
@@ -217,9 +213,6 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			break;
 		case SineWave:
 			this.list.setSelectedIndex(13);
-			break;
-		case Indicator:
-			this.list.setSelectedIndex(14);
 			break;
 		}
 

@@ -53,7 +53,6 @@ public class EncogMenus {
 	public static final String EDIT_CONFIG = "Config...";
 	public static final String EDIT_FIND = "Find...";
 
-	public static final String VIEW_CONNECTIONS = "Connections...";
 	public static final String VIEW_RBF = "Chart RBF...";
 	
 	public static final String TOOLS_TRAIN = "Train...";
@@ -147,7 +146,6 @@ public class EncogMenus {
 		this.menuBar.add(this.menuEdit);
 		
 		this.menuView = new JMenu("View");
-		this.menuViewConnections = owner.addItem(this.menuView, VIEW_CONNECTIONS, 'c');
 		this.menuViewRBF = owner.addItem(this.menuView, EncogMenus.VIEW_RBF, 'r');
 		this.menuBar.add(this.menuView);
 
@@ -274,8 +272,6 @@ public class EncogMenus {
 			owner.getOperations().performRBF();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_GENERATE_TRAINING)) {
 			owner.getOperations().performCreateTrainingData();
-		} else if (event.getActionCommand().equals(EncogMenus.VIEW_CONNECTIONS)) {
-			owner.getOperations().performConnections();
 		} else if (event.getActionCommand().equals(EncogMenus.TOOLS_WIZARD)) {
 			owner.getOperations().performWizard();
 		}

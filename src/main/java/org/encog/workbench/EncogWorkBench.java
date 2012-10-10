@@ -32,9 +32,6 @@ import javax.swing.JOptionPane;
 
 import org.encog.Encog;
 import org.encog.EncogError;
-import org.encog.cloud.indicator.IndicatorConnectionListener;
-import org.encog.cloud.indicator.IndicatorError;
-import org.encog.cloud.indicator.server.IndicatorServer;
 import org.encog.mathutil.error.ErrorCalculation;
 import org.encog.ml.MLMethod;
 import org.encog.ml.data.MLDataSet;
@@ -50,7 +47,6 @@ import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
-import org.encog.workbench.process.indicator.WorkbenchIndicatorFactory;
 import org.encog.workbench.util.WorkbenchLogHandler;
 
 /**
@@ -70,9 +66,7 @@ public class EncogWorkBench implements Runnable {
 	 * The singleton instance.
 	 */
 	private static EncogWorkBench instance;
-
-	private IndicatorServer cloudNode;
-
+	
 	/**
 	 * The main window.
 	 */
@@ -85,8 +79,6 @@ public class EncogWorkBench implements Runnable {
 
 	private WorkbenchLogHandler logHandler;
 
-	private WorkbenchIndicatorFactory indicatorFactory;
-
 	/**
 	 * The current filename being edited.
 	 */
@@ -95,9 +87,6 @@ public class EncogWorkBench implements Runnable {
 	public EncogWorkBench() {
 		this.config = new EncogWorkBenchConfig();
 		this.logHandler = new WorkbenchLogHandler();
-		this.indicatorFactory = new WorkbenchIndicatorFactory();
-		// Logging.getRootLogger().addHandler(this.logHandler);
-		// Logging.getRootLogger().setLevel(Level.OFF);
 	}
 
 	/**
@@ -251,8 +240,6 @@ public class EncogWorkBench implements Runnable {
 		Thread thread = new Thread(this);
 		thread.setDaemon(true);
 		thread.start();
-
-		setupServer();
 	}
 
 	/**
@@ -437,64 +424,4 @@ public class EncogWorkBench implements Runnable {
 	public static String displayInput(String prompt, String str) {
 		return JOptionPane.showInputDialog(null, prompt, str);
 	}
-
-	public void setupServer() {
-		try {
-			if (this.config.isAllowConnections()) {
-				// we should be allowing connections, are we?
-				if (this.cloudNode != null) {
-					// we are already accepting, is the port right?
-					if (this.cloudNode.getPort() != config.getPort()) {
-						// wrong port, bounce!
-						stopAccepting();
-						beginAccepting();
-					}
-				} else {
-					// we are not accepting, start accepting
-					beginAccepting();
-				}
-			} else {
-				// we should not be allowing connections, are we?
-				if (this.cloudNode != null) {
-					stopAccepting();
-				}
-			}
-		} catch (IndicatorError e) {
-			this.outputLine("Error starting server: " + e.getMessage());
-			e.printStackTrace();
-		} catch (Throwable t) {
-			EncogWorkBench.displayError("Error Starting Server", t);
-		}
-	}
-
-	public void beginAccepting() {
-		if (this.cloudNode != null) {
-			stopAccepting();
-		}
-		this.cloudNode = new IndicatorServer(this.config.getPort());
-		this.cloudNode.start();
-		this.cloudNode.addIndicatorFactory(this.indicatorFactory);
-		this.cloudNode.addListener((IndicatorConnectionListener) EncogWorkBench
-				.getInstance().getMainWindow().getConnectionsTab().getModel());
-		this.outputLine("Now accepting connections on port: "
-				+ this.config.getPort());
-	}
-
-	public void stopAccepting() {
-		this.cloudNode.shutdown();
-		this.cloudNode = null;
-		this.outputLine("Stopped accepting connections");
-	}
-
-	public IndicatorServer getCloud() {
-		return this.cloudNode;
-	}
-
-	/**
-	 * @return the indicatorFactory
-	 */
-	public WorkbenchIndicatorFactory getIndicatorFactory() {
-		return indicatorFactory;
-	}
-
 }

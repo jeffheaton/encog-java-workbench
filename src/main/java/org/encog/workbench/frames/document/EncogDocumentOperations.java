@@ -65,7 +65,6 @@ import org.encog.workbench.process.EncogAnalystWizard;
 import org.encog.workbench.tabs.BrowserFrame;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.SupportsClipboard;
-import org.encog.workbench.tabs.cloud.CloudConnectionsTab;
 import org.encog.workbench.tabs.files.text.BasicTextTab;
 import org.encog.workbench.tabs.proben.ProbenStatusTab;
 import org.encog.workbench.tabs.rbf.RadialBasisFunctionsTab;
@@ -175,8 +174,6 @@ public class EncogDocumentOperations {
 		dialog.getTrainingChartHistory().setValue(config.getTrainingHistory());
 		dialog.getDisplayTrainingImprovement().setValue(config.isShowTrainingImprovement());
 		dialog.getIterationStepCount().setValue(config.getIterationStepCount());
-		dialog.getAllowConnections().setValue(config.isAllowConnections());
-		dialog.getPort().setValue(config.getPort());
 		dialog.getRootDirectory().setValue(config.getProjectRoot());
 		//dialog.getUseOpenCL().setValue(config.isUseOpenCL());
 		switch (config.getErrorCalculation()) {
@@ -211,26 +208,7 @@ public class EncogDocumentOperations {
 			config.setTrainingHistory(dialog.getTrainingChartHistory().getValue());
 			config.setShowTrainingImprovement(dialog.getDisplayTrainingImprovement().getValue());
 			config.setIterationStepCount(dialog.getIterationStepCount().getValue());
-			config.setAllowConnections(dialog.getAllowConnections().getValue());
-			config.setPort(dialog.getPort().getValue());
 			config.setProjectRoot(dialog.getRootDirectory().getValue());
-			
-			EncogWorkBench.getInstance().setupServer();
-			
-			/*if (config.isUseOpenCL() && Encog.getInstance().getCL() == null) {
-				EncogWorkBench.initCL();
-				if (Encog.getInstance().getCL() != null) {
-					EncogWorkBench
-							.displayMessage("OpenCL",
-									"Success, your graphics card(s) are now ready to help train neural networks.");
-				}
-			} else if (!EncogWorkBench.getInstance().getConfig().isUseOpenCL()
-					&& Encog.getInstance().getCL() != null) {
-				EncogWorkBench
-						.displayMessage(
-								"OpenCL",
-								"Encog Workbench will stop using your GPU the next time\nthe workbench is restarted.");
-			}*/
 		}
 	}
 
@@ -352,9 +330,6 @@ public class EncogDocumentOperations {
 				break;
 			case SineWave:
 				CreateTrainingData.generateSineWave(name);
-				break;
-			case Indicator:
-				CreateTrainingData.generateIndicator(name);
 				break;
 			}
 			EncogWorkBench.getInstance().refresh();
@@ -537,12 +512,6 @@ public class EncogDocumentOperations {
 		
 	}
 
-	public void performConnections() {
-		CloudConnectionsTab tab = EncogWorkBench.getInstance().getMainWindow().getConnectionsTab();
-		this.owner.getTabManager().openTab(tab);
-		
-	}
-	
 	public void performWizard() {
 		ChooseWizardDialog choose = new ChooseWizardDialog();
 		

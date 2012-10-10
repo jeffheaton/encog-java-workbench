@@ -38,7 +38,5 @@ public enum TrainingDataType {
 	Download,
 	Encoder,
 	Linear,
-	SineWave,
-	Indicator
-
+	SineWave
 }
