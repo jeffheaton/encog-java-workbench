@@ -132,6 +132,7 @@ public class EncogDocumentOperations {
 
 	public void performFileChooseDirectory() {
 		try {
+			
 			final JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			fc.setCurrentDirectory(EncogWorkBench.getInstance()

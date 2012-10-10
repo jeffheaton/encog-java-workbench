@@ -70,7 +70,7 @@ public class EncogWorkBench implements Runnable {
 	 * The singleton instance.
 	 */
 	private static EncogWorkBench instance;
-	
+
 	private IndicatorServer cloudNode;
 
 	/**
@@ -84,7 +84,7 @@ public class EncogWorkBench implements Runnable {
 	private EncogWorkBenchConfig config;
 
 	private WorkbenchLogHandler logHandler;
-	
+
 	private WorkbenchIndicatorFactory indicatorFactory;
 
 	/**
@@ -96,8 +96,8 @@ public class EncogWorkBench implements Runnable {
 		this.config = new EncogWorkBenchConfig();
 		this.logHandler = new WorkbenchLogHandler();
 		this.indicatorFactory = new WorkbenchIndicatorFactory();
-		//Logging.getRootLogger().addHandler(this.logHandler);
-		//Logging.getRootLogger().setLevel(Level.OFF);
+		// Logging.getRootLogger().addHandler(this.logHandler);
+		// Logging.getRootLogger().setLevel(Level.OFF);
 	}
 
 	/**
@@ -191,7 +191,6 @@ public class EncogWorkBench implements Runnable {
 		this.mainWindow = mainWindow;
 	}
 
-
 	public static String displayInput(String prompt) {
 		return JOptionPane.showInputDialog(null, prompt, "");
 	}
@@ -215,8 +214,8 @@ public class EncogWorkBench implements Runnable {
 					"An error occured while performing this operation:\n"
 							+ t.toString());
 			t.printStackTrace();
-		} else if (t instanceof OutOfMemoryError ) {
-			displayError(title,"Not enough memory to do that.");
+		} else if (t instanceof OutOfMemoryError) {
+			displayError(title, "Not enough memory to do that.");
 			t.printStackTrace();
 		} else
 			ErrorDialog.handleError(t, network, set);
@@ -248,11 +247,11 @@ public class EncogWorkBench implements Runnable {
 
 		ErrorCalculation.setMode(EncogWorkBench.getInstance().getConfig()
 				.getErrorCalculation());
-		
+
 		Thread thread = new Thread(this);
 		thread.setDaemon(true);
 		thread.start();
-		
+
 		setupServer();
 	}
 
@@ -264,8 +263,16 @@ public class EncogWorkBench implements Runnable {
 	 *            The first argument specifies an option file to open.
 	 */
 	public static void main(final String args[]) {
-		//Logging.stopConsoleLogging();
 		Encog.getInstance();
+
+		if (Encog.isOSX()) {
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+			System.setProperty("apple.awt.brushMetalLook", "true");
+			System.setProperty(
+					"com.apple.mrj.application.apple.menu.about.name",
+					"Encog Workbench");
+		}
+
 		final EncogWorkBench workBench = EncogWorkBench.getInstance();
 		workBench.setMainWindow(new EncogDocumentFrame());
 
@@ -281,7 +288,7 @@ public class EncogWorkBench implements Runnable {
 
 	public static void initCL() {
 		try {
-			//Encog.getInstance().initCL();
+			// Encog.getInstance().initCL();
 		} catch (Throwable t) {
 			EncogWorkBench
 					.displayError(
@@ -340,17 +347,17 @@ public class EncogWorkBench implements Runnable {
 
 		return result;
 	}
-	
+
 	public List<ProjectFile> getAnalystFiles() {
 
 		List<ProjectFile> result = new ArrayList<ProjectFile>();
 
 		for (ProjectItem item : this.getMainWindow().getTree().getModel()
 				.getData()) {
-			
+
 			if (item instanceof ProjectFile) {
-				ProjectFile pf = (ProjectFile)item;
-				if( pf.getExtension().equalsIgnoreCase("ega")) {
+				ProjectFile pf = (ProjectFile) item;
+				if (pf.getExtension().equalsIgnoreCase("ega")) {
 					result.add((ProjectFile) item);
 				}
 			}
@@ -386,12 +393,13 @@ public class EncogWorkBench implements Runnable {
 				ProjectEGFile item2 = (ProjectEGFile) item;
 				Class<?> clazz = ReflectionUtil.resolveEncogClass(item2
 						.getEncogType());
-				if( clazz == null) {
+				if (clazz == null) {
 					continue;
 				}
 				if (MLMethod.class.isAssignableFrom(clazz)) {
 					result.add(item2);
-				} else if (NEATPopulation.class.isAssignableFrom(clazz) && includePop) {
+				} else if (NEATPopulation.class.isAssignableFrom(clazz)
+						&& includePop) {
 					result.add(item2);
 				}
 			}
@@ -399,10 +407,10 @@ public class EncogWorkBench implements Runnable {
 
 		return result;
 	}
-	
+
 	public void setupThreads(Object obj) {
-		if( obj instanceof MultiThreadable ) {
-			MultiThreadable threadable = (MultiThreadable)obj;
+		if (obj instanceof MultiThreadable) {
+			MultiThreadable threadable = (MultiThreadable) obj;
 			int threads = this.config.getThreadCount();
 			threadable.setThreadCount(threads);
 		}
@@ -429,53 +437,55 @@ public class EncogWorkBench implements Runnable {
 	public static String displayInput(String prompt, String str) {
 		return JOptionPane.showInputDialog(null, prompt, str);
 	}
-	
+
 	public void setupServer() {
 		try {
-		if( this.config.isAllowConnections() ) {
-			// we should be allowing connections, are we?
-			if( this.cloudNode!=null ) {
-				// we are already accepting, is the port right?
-				if( this.cloudNode.getPort() != config.getPort() ) {
-					// wrong port, bounce!
-					stopAccepting();
+			if (this.config.isAllowConnections()) {
+				// we should be allowing connections, are we?
+				if (this.cloudNode != null) {
+					// we are already accepting, is the port right?
+					if (this.cloudNode.getPort() != config.getPort()) {
+						// wrong port, bounce!
+						stopAccepting();
+						beginAccepting();
+					}
+				} else {
+					// we are not accepting, start accepting
 					beginAccepting();
 				}
 			} else {
-				// we are not accepting, start accepting
-				beginAccepting();
+				// we should not be allowing connections, are we?
+				if (this.cloudNode != null) {
+					stopAccepting();
+				}
 			}
-		} else {
-			// we should not be allowing connections, are we?
-			if( this.cloudNode!=null ) {
-				stopAccepting();
-			}
-		}
-		} catch(IndicatorError e) {
+		} catch (IndicatorError e) {
 			this.outputLine("Error starting server: " + e.getMessage());
 			e.printStackTrace();
-		} catch(Throwable t) {
+		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error Starting Server", t);
 		}
 	}
 
 	public void beginAccepting() {
-		if( this.cloudNode!=null ) {
+		if (this.cloudNode != null) {
 			stopAccepting();
 		}
 		this.cloudNode = new IndicatorServer(this.config.getPort());
 		this.cloudNode.start();
 		this.cloudNode.addIndicatorFactory(this.indicatorFactory);
-		this.cloudNode.addListener((IndicatorConnectionListener) EncogWorkBench.getInstance().getMainWindow().getConnectionsTab().getModel());
-		this.outputLine("Now accepting connections on port: " + this.config.getPort());
+		this.cloudNode.addListener((IndicatorConnectionListener) EncogWorkBench
+				.getInstance().getMainWindow().getConnectionsTab().getModel());
+		this.outputLine("Now accepting connections on port: "
+				+ this.config.getPort());
 	}
-	
+
 	public void stopAccepting() {
 		this.cloudNode.shutdown();
 		this.cloudNode = null;
 		this.outputLine("Stopped accepting connections");
 	}
-	
+
 	public IndicatorServer getCloud() {
 		return this.cloudNode;
 	}
@@ -486,6 +496,5 @@ public class EncogWorkBench implements Runnable {
 	public WorkbenchIndicatorFactory getIndicatorFactory() {
 		return indicatorFactory;
 	}
-	
-	
+
 }
