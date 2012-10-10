@@ -23,7 +23,6 @@
  */
 package org.encog.workbench.frames.document;
 
-import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,6 +47,7 @@ import org.encog.util.file.Directory;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.config.EncogWorkBenchConfig;
 import org.encog.workbench.dialogs.BenchmarkDialog;
+import org.encog.workbench.dialogs.DirChooser;
 import org.encog.workbench.dialogs.EvaluateDialog;
 import org.encog.workbench.dialogs.binary.DialogNoise;
 import org.encog.workbench.dialogs.config.EncogConfigDialog;
@@ -58,7 +58,6 @@ import org.encog.workbench.dialogs.training.ProbenDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateTrainingDataDialog;
 import org.encog.workbench.dialogs.trainingdata.TrainingDataType;
 import org.encog.workbench.dialogs.wizard.ChooseWizardDialog;
-import org.encog.workbench.frames.EncogCommonFrame;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.process.CreateTrainingData;
@@ -132,17 +131,17 @@ public class EncogDocumentOperations {
 
 	public void performFileChooseDirectory() {
 		try {
-			
-			final JFileChooser fc = new JFileChooser();
-			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			fc.setCurrentDirectory(EncogWorkBench.getInstance()
+			String path = DirChooser.showDialog(
+					EncogWorkBench.getInstance().getMainWindow(),
+					"Choose Folder",
+					EncogWorkBench.getInstance()
 					.getEncogFolders());
-			final int result = fc.showOpenDialog(owner);
-			if (result == JFileChooser.APPROVE_OPTION) {
-				File path = fc.getSelectedFile().getAbsoluteFile();
+
+			if( path!=null ) {
 				EncogWorkBench.getInstance().getMainWindow()
-						.changeDirectory(path);
+				.changeDirectory(new File(path));
 			}
+			
 		} catch (final Throwable e) {
 			EncogWorkBench.displayError("Can't Change Directory", e);
 			e.printStackTrace();
