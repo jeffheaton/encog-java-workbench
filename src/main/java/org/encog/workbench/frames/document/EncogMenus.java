@@ -89,7 +89,6 @@ public class EncogMenus {
 	private JMenuItem menuEditConfig;
 	private JMenuItem menuEditFind;
 	
-	private JMenuItem menuViewConnections;
 	private JMenuItem menuViewRBF;
 	
 	private JMenuItem menuToolsTrain;
@@ -207,7 +206,6 @@ public class EncogMenus {
 		this.menuEditConfig.setEnabled(!modal);
 
 		this.menuViewRBF.setEnabled(!modal);
-		this.menuViewConnections.setEnabled(!modal);
 		
 		this.menuToolsTrain.setEnabled(!modal && documentOpen);
 		this.menuToolsGenerate.setEnabled(!modal && documentOpen);
