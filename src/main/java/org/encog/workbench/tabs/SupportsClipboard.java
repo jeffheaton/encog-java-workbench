@@ -4,4 +4,5 @@ public interface SupportsClipboard {
 	void clipboardCopy();
 	void clipboardPaste();
 	void clipboardCut();
+	void clipboardSelectAll();
 }

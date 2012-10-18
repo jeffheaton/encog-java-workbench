@@ -540,4 +540,11 @@ public class EncogDocumentOperations {
 		}
 		
 	}
+
+	public void performEditSelectAll() {
+		EncogCommonTab tab = EncogWorkBench.getInstance().getMainWindow().getTabManager().getCurrentTab();
+		if( tab instanceof SupportsClipboard ) {
+			((SupportsClipboard)tab).clipboardSelectAll();
+		}
+	}
 }

@@ -50,6 +50,7 @@ public class EncogMenus {
 	public static final String EDIT_CUT = "Cut";
 	public static final String EDIT_COPY = "Copy";
 	public static final String EDIT_PASTE = "Paste";
+	public static final String EDIT_SELECT_ALL = "Select All";
 	public static final String EDIT_CONFIG = "Config...";
 	public static final String EDIT_FIND = "Find...";
 
@@ -86,6 +87,7 @@ public class EncogMenus {
 	private JMenuItem menuEditCut;
 	private JMenuItem menuEditCopy;
 	private JMenuItem menuEditPaste;
+	private JMenuItem menuEditSelectAll;
 	private JMenuItem menuEditConfig;
 	private JMenuItem menuEditFind;
 	
@@ -137,6 +139,8 @@ public class EncogMenus {
 				'c'));
 		this.menuEditPaste = this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_PASTE,
 				'v'));
+		this.menuEditSelectAll = this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_SELECT_ALL,
+				'a'));
 		this.menuEdit.addSeparator();
 		this.menuEditConfig = this.menuEdit.add(owner.addItem(this.menuEdit,
 				EncogMenus.EDIT_CONFIG, 'g'));
@@ -203,6 +207,7 @@ public class EncogMenus {
 		this.menuEditCut.setEnabled(!modal && supportsClipboard && documentOpen);
 		this.menuEditCopy.setEnabled(!modal && supportsClipboard && documentOpen);
 		this.menuEditPaste.setEnabled(!modal && supportsClipboard && documentOpen);
+		this.menuEditSelectAll.setEnabled(!modal && supportsClipboard && documentOpen);
 		this.menuEditConfig.setEnabled(!modal);
 
 		this.menuViewRBF.setEnabled(!modal);
@@ -241,6 +246,8 @@ public class EncogMenus {
 			owner.getOperations().performEditCopy();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_PASTE)) {
 			owner.getOperations().performEditPaste();
+		} else if (event.getActionCommand().equals(EncogMenus.EDIT_SELECT_ALL)) {
+			owner.getOperations().performEditSelectAll();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_CONFIG)) {
 			owner.getOperations().performEditConfig();
 		} else if (event.getActionCommand().equals(EncogMenus.EDIT_FIND)) {

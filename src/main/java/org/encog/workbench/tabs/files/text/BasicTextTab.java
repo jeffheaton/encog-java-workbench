@@ -193,6 +193,7 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener,
 					EncogWorkBench.displayError("Not Found",
 							"Could not find, searching from current position.");
 				} else {
+					this.editor.requestFocusInWindow();
 					this.editor.setSelectionStart(idx);
 					this.editor.setSelectionEnd(idx + text.length());
 				}
@@ -217,6 +218,12 @@ public class BasicTextTab extends BasicFileTab implements ComponentListener,
 	@Override
 	public void clipboardCut() {
 		this.editor.cut();
+	}
+
+	@Override
+	public void clipboardSelectAll() {
+		this.editor.requestFocusInWindow();
+		this.editor.selectAll();
 	}
 
 }
