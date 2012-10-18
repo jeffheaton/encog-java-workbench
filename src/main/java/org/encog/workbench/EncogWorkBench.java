@@ -258,6 +258,7 @@ public class EncogWorkBench implements Runnable {
 			System.setProperty(
 					"com.apple.mrj.application.apple.menu.about.name",
 					"Encog Workbench");
+			System.setProperty("apple.eawt.quitStrategy", "CLOSE_ALL_WINDOWS");
 		}
 
 		final EncogWorkBench workBench = EncogWorkBench.getInstance();
