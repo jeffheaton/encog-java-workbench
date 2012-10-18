@@ -24,6 +24,7 @@
 package org.encog.workbench.frames.document;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -31,6 +32,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
+import org.encog.Encog;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.process.CreateNewFile;
 import org.encog.workbench.process.ImportExport;
@@ -118,52 +120,56 @@ public class EncogMenus {
 		this.menuBar = new JMenuBar();
 		this.menuFile = new JMenu("File");
 		this.menuFileNewProject = this.menuFile.add(owner
-				.addItem(this.menuFile, EncogMenus.FILE_NEW_PROJECT, 'n'));
+				.addItem(this.menuFile, EncogMenus.FILE_NEW_PROJECT, 0));
 		this.menuFileChangeDir = this.menuFile.add(owner
-				.addItem(this.menuFile, EncogMenus.FILE_CHANGE_DIR, 'c'));
+				.addItem(this.menuFile, EncogMenus.FILE_CHANGE_DIR, KeyEvent.VK_C));
 		this.menuFileNew = this.menuFile.add(owner
-				.addItem(this.menuFile, EncogMenus.FILE_NEW_FILE, 'f'));
-		this.menuFileImport = this.menuFile.add(owner.addItem(this.menuFile,EncogMenus.FILE_IMPORT,'i'));
+				.addItem(this.menuFile, EncogMenus.FILE_NEW_FILE, KeyEvent.VK_N));
+		this.menuFileImport = this.menuFile.add(owner.addItem(this.menuFile,EncogMenus.FILE_IMPORT,KeyEvent.VK_I));
 		this.menuFileSeve = this.menuFile.add(owner
-				.addItem(this.menuFile, EncogMenus.FILE_SAVE, 's'));
-		this.menuFile.addSeparator();
-		this.menuFileQuit = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_QUIT,
-				'q'));
+				.addItem(this.menuFile, EncogMenus.FILE_SAVE, KeyEvent.VK_S));
+		
+		if (!Encog.isOSX()) {
+			this.menuFile.addSeparator();
+			this.menuFileQuit = this.menuFile.add(owner.addItem(this.menuFile, EncogMenus.FILE_QUIT,
+					KeyEvent.VK_Q));
+		}
+		
 		this.menuFile.addActionListener(this.owner);
 		this.menuBar.add(this.menuFile);
 
 		this.menuEdit = new JMenu("Edit");
 		this.menuEditCut = this.menuEdit.add(owner
-				.addItem(this.menuEdit, EncogMenus.EDIT_CUT, 'x'));
+				.addItem(this.menuEdit, EncogMenus.EDIT_CUT, KeyEvent.VK_X));
 		this.menuEditCopy = this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_COPY,
-				'c'));
+				KeyEvent.VK_C));
 		this.menuEditPaste = this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_PASTE,
-				'v'));
+				KeyEvent.VK_V));
 		this.menuEditSelectAll = this.menuEdit.add(owner.addItem(this.menuEdit, EncogMenus.EDIT_SELECT_ALL,
-				'a'));
+				KeyEvent.VK_A));
 		this.menuEdit.addSeparator();
 		this.menuEditConfig = this.menuEdit.add(owner.addItem(this.menuEdit,
-				EncogMenus.EDIT_CONFIG, 'g'));
+				EncogMenus.EDIT_CONFIG, 0));
 		this.menuEditFind = this.menuEdit.add(owner.addItem(this.menuEdit,
-				EncogMenus.EDIT_FIND, 'f'));		
+				EncogMenus.EDIT_FIND, KeyEvent.VK_F));		
 		this.menuBar.add(this.menuEdit);
 		
 		this.menuView = new JMenu("View");
-		this.menuViewRBF = owner.addItem(this.menuView, EncogMenus.VIEW_RBF, 'r');
+		this.menuViewRBF = owner.addItem(this.menuView, EncogMenus.VIEW_RBF, 0);
 		this.menuBar.add(this.menuView);
 
 		this.menuTools = new JMenu("Tools");
 		//
-		this.menuToolsGenerate = owner.addItem(this.menuTools, EncogMenus.TOOLS_GENERATE_TRAINING, 'g');
-		this.menuToolsTrain = owner.addItem(this.menuTools, EncogMenus.TOOLS_TRAIN, 't');
-		this.menuToolsBenchmark = owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 'k');
-		this.menuToolsEvaluate = owner.addItem(this.menuTools, EncogMenus.TOOLS_EVALUATE, 'e');
-		this.menuToolsValidation = owner.addItem(this.menuTools, EncogMenus.TOOLS_VALIDATION_CHART, 'v');
-		this.menuToolsBin2Ext = owner.addItem(this.menuTools, EncogMenus.TOOLS_BIN2EXTERNAL, 'x');
-		this.menuToolsExt2Bin = owner.addItem(this.menuTools, EncogMenus.TOOLS_EXTERNAL2BIN, 'y');
-		this.menuToolsProben = owner.addItem(this.menuTools, EncogMenus.TOOLS_PROBEN, 'r');
-		this.menuToolsNoise = owner.addItem(this.menuTools, EncogMenus.TOOLS_NOISE, 'n');
-		this.menuToolsWizard = owner.addItem(this.menuTools, EncogMenus.TOOLS_WIZARD, 'w');
+		this.menuToolsGenerate = owner.addItem(this.menuTools, EncogMenus.TOOLS_GENERATE_TRAINING, 0);
+		this.menuToolsTrain = owner.addItem(this.menuTools, EncogMenus.TOOLS_TRAIN, 0);
+		this.menuToolsBenchmark = owner.addItem(this.menuTools, EncogMenus.TOOLS_BENCHMARK, 0);
+		this.menuToolsEvaluate = owner.addItem(this.menuTools, EncogMenus.TOOLS_EVALUATE, 0);
+		this.menuToolsValidation = owner.addItem(this.menuTools, EncogMenus.TOOLS_VALIDATION_CHART, 0);
+		this.menuToolsBin2Ext = owner.addItem(this.menuTools, EncogMenus.TOOLS_BIN2EXTERNAL, 0);
+		this.menuToolsExt2Bin = owner.addItem(this.menuTools, EncogMenus.TOOLS_EXTERNAL2BIN, 0);
+		this.menuToolsProben = owner.addItem(this.menuTools, EncogMenus.TOOLS_PROBEN, 0);
+		this.menuToolsNoise = owner.addItem(this.menuTools, EncogMenus.TOOLS_NOISE, 0);
+		this.menuToolsWizard = owner.addItem(this.menuTools, EncogMenus.TOOLS_WIZARD, 0);
 		this.menuBar.add(this.menuTools);		
 
 		this.menuHelp = new JMenu("Help");
@@ -172,21 +178,6 @@ public class EncogMenus {
 		this.menuBar.add(this.menuHelp);
 
 		owner.setJMenuBar(this.menuBar);
-		
-		this.menuFileQuit.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q,
-                java.awt.Event.CTRL_MASK));
-		
-		this.menuFileNew.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N,
-                java.awt.Event.CTRL_MASK));
-		
-		this.menuFileSeve.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S,
-		                                           java.awt.Event.CTRL_MASK));
-		
-		this.menuToolsTrain.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T,
-                java.awt.Event.CTRL_MASK));
-		
-		this.menuEditFind.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.Event.CTRL_MASK));
-	
 	}
 	
 	public void updateMenus()
@@ -201,7 +192,10 @@ public class EncogMenus {
 		this.menuFileNew.setEnabled(!modal && documentOpen);
 		this.menuFileChangeDir.setEnabled(!modal);
 		this.menuFileNewProject.setEnabled(!modal);
-		this.menuFileQuit.setEnabled(true);
+		
+		if (!Encog.isOSX()) {
+			this.menuFileQuit.setEnabled(true);
+		}
 		this.menuFileImport.setEnabled(!modal && documentOpen);
 		this.menuFileSeve.setEnabled(!modal && documentOpen && currentTab!=null);
 		this.menuEditCut.setEnabled(!modal && supportsClipboard && documentOpen);

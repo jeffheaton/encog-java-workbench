@@ -23,9 +23,11 @@
  */
 package org.encog.workbench.frames;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -35,6 +37,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 
 public abstract class EncogCommonFrame extends JFrame implements
 		WindowListener, ActionListener, MouseListener, ComponentListener {
@@ -56,9 +59,13 @@ public abstract class EncogCommonFrame extends JFrame implements
 	}
 
 	public JMenuItem addItem(final JMenu m, final String s, final int key) {
-
-		final JMenuItem mi = new JMenuItem(s, key);
+		
+		final JMenuItem mi = new JMenuItem(s);
 		mi.addActionListener(this);
+		if( key>0 ) {
+			KeyStroke stroke = KeyStroke.getKeyStroke(key, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+			mi.setAccelerator(stroke);
+		}
 		m.add(mi);
 		return mi;
 	}
