@@ -23,12 +23,15 @@
  */
 package org.encog.workbench.dialogs.wizard.analyst;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 
+import org.encog.app.analyst.EncogAnalyst;
+import org.encog.app.analyst.script.DataField;
 import org.encog.app.analyst.wizard.PredictionType;
 import org.encog.app.analyst.wizard.SourceElement;
 import org.encog.app.generate.TargetLanguage;
@@ -53,7 +56,7 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog
 
 	private final List<String> methods = new ArrayList<String>();
 
-	public RealTimeAnalystWizardDialog() {
+	public RealTimeAnalystWizardDialog(File existingFile) {
 		super(EncogWorkBench.getInstance().getMainWindow());
 
 		List<String> targets = new ArrayList<String>();
@@ -95,6 +98,19 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog
 		this.backwardWindow.setValue(30);
 		((JComboBox) this.prediction.getField()).setSelectedIndex(0);
 		((JComboBox) this.target.getField()).setSelectedIndex(0);
+		
+		loadExistingFile(existingFile);
+	}
+
+	private void loadExistingFile(File existingFile) {
+		EncogAnalyst existingAnalyst = new EncogAnalyst();
+		existingAnalyst.load(existingFile);
+		this.sourceData.getModel().clear();
+		for(DataField field : existingAnalyst.getScript().getFields()) {
+			if( !field.getName().equalsIgnoreCase("prediction") ) {
+				this.sourceData.getModel().addElement("Name: "+field.getName()+", Source: " + field.getSource());
+			}
+		}
 	}
 
 	/**

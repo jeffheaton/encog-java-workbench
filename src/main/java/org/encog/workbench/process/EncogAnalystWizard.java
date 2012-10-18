@@ -148,7 +148,15 @@ public class EncogAnalystWizard {
 	
 	public static void createRealtimeEncogAnalyst(File egaFile) {
 
-		RealTimeAnalystWizardDialog dialog = new RealTimeAnalystWizardDialog();
+		File existingFile = null;
+		
+		if( egaFile.exists() ) {
+			if( EncogWorkBench.askQuestion("Existing Project", "This file already exists.\nWould you like to recreate it from the same source data?")) {
+				existingFile = egaFile;
+			}
+		}
+
+		RealTimeAnalystWizardDialog dialog = new RealTimeAnalystWizardDialog(existingFile);
 		dialog.getBaseName().setValue(egaFile.toString());
 
 		if (dialog.process()) {

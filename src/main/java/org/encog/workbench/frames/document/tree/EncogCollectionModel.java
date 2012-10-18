@@ -231,4 +231,18 @@ public class EncogCollectionModel implements TreeModel {
 		return projectDirectory;
 	}
 
+	public ProjectFile findFirstEGA() {
+		for (ProjectItem item : this.files) {
+			if (item instanceof ProjectFile) {
+				File file = ((ProjectFile) item).getFile();
+				String ext = FileUtil.getFileExt(file);
+				if (ext.equalsIgnoreCase("ega")) {
+					return (ProjectFile)item;
+				}
+			}
+		}
+		
+		return null;
+	}
+
 }

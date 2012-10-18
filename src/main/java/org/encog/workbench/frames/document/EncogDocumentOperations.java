@@ -521,8 +521,13 @@ public class EncogDocumentOperations {
 					EncogAnalystWizard.createEncogAnalyst(null);
 					break;
 				case RealTimeAnalystWizard:
+					ProjectFile existingEGA = EncogWorkBench.getInstance().getMainWindow().getTree().findFirstEGA();
+					String defName = "indicator.ega";
+					if( existingEGA!=null ) {
+						defName = existingEGA.getName();
+					}
 					
-					String name = EncogWorkBench.displayInput("Choose a name for this file (*.ega)", "indicator.ega");
+					String name = EncogWorkBench.displayInput("Choose a name for this file (*.ega)", defName);
 					if( name!=null ) {
 						File basePath = EncogWorkBench.getInstance().getMainWindow()
 								.getTree().getPath();
