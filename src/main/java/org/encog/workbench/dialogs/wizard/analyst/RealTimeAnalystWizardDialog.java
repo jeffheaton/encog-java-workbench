@@ -92,14 +92,16 @@ public class RealTimeAnalystWizardDialog extends EncogPropertiesDialog
 		render();
 
 		this.sourceData.getModel().addElement("Name: time, Source: time");
-		this.sourceData.getModel().addElement("Name: close, Source: Close");
+		this.sourceData.getModel().addElement("Name: close, Source: Close[##]");
 		this.predictionField.setValue("close");
 		this.forwardWindow.setValue(60);
 		this.backwardWindow.setValue(30);
 		((JComboBox) this.prediction.getField()).setSelectedIndex(0);
 		((JComboBox) this.target.getField()).setSelectedIndex(0);
 		
-		loadExistingFile(existingFile);
+		if( existingFile!=null ) {
+			loadExistingFile(existingFile);
+		}
 	}
 
 	private void loadExistingFile(File existingFile) {
