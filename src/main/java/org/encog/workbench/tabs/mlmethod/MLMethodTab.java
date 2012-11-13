@@ -432,12 +432,6 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		report.tablePair("Context",
 				(method instanceof MLContext) ? "true" : "false");
 		
-		
-		if( method instanceof NEATNetwork ) {
-			NEATNetwork neat = (NEATNetwork)method;
-			report.tablePair("NEAT Activation Function", neat.getActivationFunction().getClass().getSimpleName());
-		}
-		
 		if( method instanceof CPN ) {
 			CPN cpn = (CPN)method;
 			report.tablePair("Instar Count", Format.formatInteger(cpn.getInstarCount()));

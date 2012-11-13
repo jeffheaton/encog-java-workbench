@@ -47,7 +47,6 @@ import org.encog.ml.MLMethod;
 import org.encog.neural.flat.FlatNetwork;
 import org.encog.neural.neat.NEATLink;
 import org.encog.neural.neat.NEATNetwork;
-import org.encog.neural.neat.NEATNeuron;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.WorkBenchError;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -215,7 +214,7 @@ public class StructureTab extends EncogCommonTab {
 		int biasCount = 1;
 
 
-		List<DrawnNeuron> neurons = new ArrayList<DrawnNeuron>();
+/*		List<DrawnNeuron> neurons = new ArrayList<DrawnNeuron>();
 		Graph<DrawnNeuron, DrawnConnection> result = new SparseMultigraph<DrawnNeuron, DrawnConnection>();
 		List<DrawnNeuron> connections = new ArrayList<DrawnNeuron>();
 		Map<NEATNeuron,DrawnNeuron> neuronMap = new HashMap<NEATNeuron,DrawnNeuron>();
@@ -269,9 +268,9 @@ public class StructureTab extends EncogCommonTab {
 				result.addEdge(connection, connection.getFrom(),
 						connection.getTo(), EdgeType.DIRECTED);
 			}
-		}
+		}*/
 
-		return result;
+		return null;
 	}
 
 	public Graph<DrawnNeuron, DrawnConnection> buildGraph(FlatNetwork flat) {
