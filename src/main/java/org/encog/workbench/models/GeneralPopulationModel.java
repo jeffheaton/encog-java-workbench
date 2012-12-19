@@ -71,9 +71,9 @@ public class GeneralPopulationModel implements TableModel {
 			case 0:
 				return Format.formatInteger((int)genome.getGenomeID());
 			case 1:
-				return Format.formatInteger(genome.getNeurons().size());
+				return Format.formatInteger(genome.getNeuronsChromosome().size());
 			case 2:
-				return Format.formatInteger(genome.getLinks().size());
+				return Format.formatInteger(genome.getLinksChromosome().size());
 			case 3:
 				return Format.formatDouble(genome.getAmountToSpawn(),2);
 			case 4:

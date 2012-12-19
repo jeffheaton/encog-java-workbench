@@ -215,8 +215,7 @@ public class GenomeStructureTab extends EncogCommonTab {
 		Map<Integer,DrawnNeuron> neuronMap = new HashMap<Integer,DrawnNeuron>();
 		
 		// place all the neurons
-		for(Gene obj : genome.getNeurons().getGenes() ) {
-			NEATNeuronGene neuronGene = (NEATNeuronGene)obj;
+		for(NEATNeuronGene neuronGene : genome.getNeuronsChromosome() ) {
 			String name="";
 			DrawnNeuronType t = DrawnNeuronType.Hidden;
 			
@@ -246,7 +245,7 @@ public class GenomeStructureTab extends EncogCommonTab {
 		}
 		
 		// place all the connections
-		for(Gene obj: genome.getLinks().getGenes() ) {
+		for(Gene obj: genome.getLinksChromosome() ) {
 			NEATLinkGene neatLinkGene = (NEATLinkGene)obj;
 			
 			DrawnNeuron fromNeuron = neuronMap.get((int)neatLinkGene.getFromNeuronID());
