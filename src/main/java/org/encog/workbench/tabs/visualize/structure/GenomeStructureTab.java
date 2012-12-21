@@ -43,8 +43,6 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import org.apache.commons.collections15.Transformer;
-import org.encog.ml.genetic.genes.Gene;
-import org.encog.neural.neat.NEATLink;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.neat.training.NEATLinkGene;
 import org.encog.neural.neat.training.NEATNeuronGene;
@@ -245,9 +243,7 @@ public class GenomeStructureTab extends EncogCommonTab {
 		}
 		
 		// place all the connections
-		for(Gene obj: genome.getLinksChromosome() ) {
-			NEATLinkGene neatLinkGene = (NEATLinkGene)obj;
-			
+		for(NEATLinkGene neatLinkGene: genome.getLinksChromosome() ) {
 			DrawnNeuron fromNeuron = neuronMap.get((int)neatLinkGene.getFromNeuronID());
 			DrawnNeuron toNeuron = neuronMap.get((int)neatLinkGene.getToNeuronID());
 			DrawnConnection connection = new DrawnConnection(fromNeuron,toNeuron,neatLinkGene.getWeight());

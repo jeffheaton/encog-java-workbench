@@ -30,10 +30,10 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import org.encog.ml.genetic.MLMethodGenome;
 import org.encog.ml.genetic.genome.Genome;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATGenome;
-import org.encog.neural.networks.training.genetic.NeuralGenome;
 import org.encog.util.Format;
 import org.encog.workbench.WorkbenchFonts;
 
@@ -104,7 +104,7 @@ public class NEATPopulationInfo extends JPanel {
 			{
 				type = "Neat";
 			}
-			else if( genome instanceof NeuralGenome )
+			else if( genome instanceof MLMethodGenome )
 			{
 				type = "NON-NEAT Neural Network";
 			}
