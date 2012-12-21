@@ -37,9 +37,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
 import org.encog.ml.genetic.genome.Genome;
-import org.encog.ml.genetic.species.Species;
 import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATPopulation;
+import org.encog.neural.neat.NEATSpecies;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
@@ -222,7 +222,7 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 	        	 GenomeStructureTab tab = new GenomeStructureTab(genome);
 	        	 EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
 	         } else if( target==this.speciesTable ) {
-	        	 Species species = (Species)this.population.getSpecies().get(row);
+	        	 NEATSpecies species = this.population.getSpecies().get(row);
 	        	 NEATGenome genome = (NEATGenome)species.getLeader();
 	        	 if(genome!=null) {
 	        		 GenomeStructureTab tab = new GenomeStructureTab(genome);

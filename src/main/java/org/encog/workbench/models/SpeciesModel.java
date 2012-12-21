@@ -26,17 +26,17 @@ package org.encog.workbench.models;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.encog.ml.genetic.population.Population;
-import org.encog.ml.genetic.species.Species;
+import org.encog.neural.neat.NEATPopulation;
+import org.encog.neural.neat.NEATSpecies;
 import org.encog.util.Format;
 
 public class SpeciesModel implements TableModel {
 
-	private Population population;
+	private NEATPopulation population;
 	
 	public static String[] COLUMNS = { "Species ID", "Age", "Best Score", "Stagnant" , "Leader ID", "Members" };
 	
-	public SpeciesModel(Population population)
+	public SpeciesModel(NEATPopulation population)
 	{
 		this.population = population;
 	}
@@ -63,7 +63,7 @@ public class SpeciesModel implements TableModel {
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		Species species = this.population.getSpecies().get(rowIndex);
+		NEATSpecies species = this.population.getSpecies().get(rowIndex);
 		
 		String leader = "none";
 		
