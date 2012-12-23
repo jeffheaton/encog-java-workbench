@@ -27,15 +27,15 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.encog.ml.genetic.innovation.Innovation;
-import org.encog.ml.genetic.population.Population;
+import org.encog.neural.neat.NEATPopulation;
 import org.encog.util.Format;
 
 public class InnovationModel implements TableModel {
 
-	private Population population;
+	private NEATPopulation population;
 	public static String[] COLUMNS = { "Innovation ID", "Info" };
 	
-	public InnovationModel(Population population)
+	public InnovationModel(NEATPopulation population)
 	{
 		this.population = population;
 	}
