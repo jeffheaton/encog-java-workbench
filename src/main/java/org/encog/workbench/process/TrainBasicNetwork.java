@@ -43,6 +43,7 @@ import org.encog.ml.bayesian.training.search.k2.SearchK2;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.folded.FoldedDataSet;
+import org.encog.ml.genetic.MLMethodGeneticAlgorithm;
 import org.encog.ml.svm.SVM;
 import org.encog.ml.svm.training.SVMSearchTrain;
 import org.encog.ml.svm.training.SVMTrain;
@@ -59,7 +60,6 @@ import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
 import org.encog.neural.networks.training.cross.CrossValidationKFold;
-import org.encog.neural.networks.training.genetic.NeuralGeneticAlgorithm;
 import org.encog.neural.networks.training.lma.LevenbergMarquardtTraining;
 import org.encog.neural.networks.training.nm.NelderMeadTraining;
 import org.encog.neural.networks.training.pnn.TrainBasicPNN;
@@ -405,12 +405,12 @@ public class TrainBasicNetwork {
 			final double percentToMate = dialog.getPercentToMate().getValue();
 
 			CalculateScore score = new TrainingSetScore(trainingData);
-			final NeuralGeneticAlgorithm train = new NeuralGeneticAlgorithm(
+			/*final MLMethodGeneticAlgorithm train = new MLMethodGeneticAlgorithm(
 					(BasicNetwork) file.getObject(),
 					new RangeRandomizer(-1, 1), score, populationSize,
 					mutationPercent, percentToMate);
 			train.setTraining(trainingData);
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);*/
 		}
 
 	}
