@@ -83,9 +83,6 @@ public class NEATPopulationInfo extends JPanel {
 		int innovationsSize = 0;
 		double bestScore = 0;
 		
-		if( population.getBest()!=null)
-			bestScore = population.getBest().getScore();
-		
 		if( population.getGenomes()!=null)
 			populationSize = population.getGenomes().size();
 		
