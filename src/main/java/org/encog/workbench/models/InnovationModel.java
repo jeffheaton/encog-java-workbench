@@ -26,8 +26,8 @@ package org.encog.workbench.models;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.encog.ml.genetic.innovation.Innovation;
 import org.encog.neural.neat.NEATPopulation;
+import org.encog.neural.neat.training.innovation.Innovation;
 import org.encog.util.Format;
 
 public class InnovationModel implements TableModel {
