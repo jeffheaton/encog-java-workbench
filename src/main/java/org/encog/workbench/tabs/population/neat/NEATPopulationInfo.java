@@ -30,8 +30,8 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import org.encog.ml.ea.genome.Genome;
 import org.encog.ml.genetic.MLMethodGenome;
-import org.encog.ml.genetic.genome.Genome;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.util.Format;
