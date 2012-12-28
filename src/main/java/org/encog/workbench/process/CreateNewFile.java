@@ -33,7 +33,8 @@ import org.encog.neural.neat.NEATPopulation;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createfile.CreateFileDialog;
 import org.encog.workbench.dialogs.createfile.CreateFileType;
-import org.encog.workbench.dialogs.population.NewPopulationDialog;
+import org.encog.workbench.dialogs.createfile.CreatePopulationDialog;
+import org.encog.workbench.dialogs.population.neat.NewPopulationDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateEmptyTrainingDialog;
 import org.encog.workbench.util.FileUtil;
 
@@ -80,7 +81,7 @@ public class CreateNewFile {
 				name = FileUtil.forceExtension(new File(name).getName(), "egb");
 				File path = new File(basePath, name);
 				createNewEGB(path);
-			} else if( dialog.getTheType() == CreateFileType.NEAT ) {
+			} else if( dialog.getTheType() == CreateFileType.Population ) {
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
 				File path = new File(basePath, name);
 				createNewPopulation(path);
@@ -122,7 +123,7 @@ public class CreateNewFile {
 		}
 	}
 	
-	private static void createNewPopulation(File path) {
+	private static void createPopulationNEAT(File path) {
 		NewPopulationDialog dialog = new NewPopulationDialog();
 
 		if (dialog.process()) {
@@ -135,6 +136,21 @@ public class CreateNewFile {
 			pop.setNeatActivationFunction(dialog.getNeatActivationFunction());
 			EncogWorkBench.getInstance().save(path,pop);
 			EncogWorkBench.getInstance().refresh();
+		}
+	}
+	
+	private static void createPopulationEPL(File path) {
+		
+	}
+	
+	private static void createNewPopulation(File path) {
+		CreatePopulationDialog dialog = new CreatePopulationDialog();
+		if(dialog.process()) 
+		{
+			switch(dialog.getTheType()) {
+			case NEAT:createPopulationNEAT(path);break;
+			case EPL:createPopulationEPL(path);break;
+			}
 		}
 	}
 }

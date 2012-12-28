@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.dialogs.population;
+package org.encog.workbench.dialogs.population.neat;
 
 import java.awt.Frame;
 

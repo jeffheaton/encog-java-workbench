@@ -21,7 +21,7 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.dialogs.population;
+package org.encog.workbench.dialogs.population.neat;
 
 import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.workbench.EncogWorkBench;
