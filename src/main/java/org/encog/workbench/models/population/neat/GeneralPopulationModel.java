@@ -21,27 +21,27 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.models;
+package org.encog.workbench.models.population.neat;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.neat.NEATSpecies;
+import org.encog.neural.neat.training.NEATGenome;
 import org.encog.util.Format;
 
-public class SpeciesModel implements TableModel {
+public class GeneralPopulationModel implements TableModel {
 
 	private NEATPopulation population;
 	
-	public static String[] COLUMNS = { "Species ID", "Age", "Best Score", "Stagnant" , "Leader ID", "Members" };
+	public static String[] COLUMNS = { "Genome ID", "Neurons", "Links", "Spawn Size", "Score" };
 	
-	public SpeciesModel(NEATPopulation population)
+	public GeneralPopulationModel(NEATPopulation population)
 	{
 		this.population = population;
 	}
 	
-	public void addTableModelListener(TableModelListener arg0) {
+	public void addTableModelListener(TableModelListener l) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -59,38 +59,32 @@ public class SpeciesModel implements TableModel {
 	}
 
 	public int getRowCount() {
-		return this.population.getSpecies().size();
+		return this.population.getGenomes().size();
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		NEATSpecies species = this.population.getSpecies().get(rowIndex);
 		
-		String leader = "none";
-		
-		if( species.getLeader()!=null )
-			leader = Format.formatInteger((int)species.getLeader().getGenomeID());
+		NEATGenome genome = (NEATGenome)this.population.getGenomes().get(rowIndex);
 		
 		switch(columnIndex)
 		{
 			case 0:
-				return Format.formatInteger((int)species.getSpeciesID());
+				return Format.formatInteger((int)genome.getGenomeID());
 			case 1:
-				return Format.formatInteger(species.getAge());
+				return Format.formatInteger(genome.getNeuronsChromosome().size());
 			case 2:
-				return Format.formatDouble(species.getBestScore(),4);
+				return Format.formatInteger(genome.getLinksChromosome().size());
 			case 3:
-				return Format.formatInteger(species.getGensNoImprovement());
+				return Format.formatDouble(genome.getAmountToSpawn(),2);
 			case 4:
-				return leader;
-			case 5:
-				return Format.formatInteger(species.getMembers().size());
+				return Format.formatDouble(genome.getScore(),4);
 			default:
 				return "";
 		}
-		
 	}
 
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 

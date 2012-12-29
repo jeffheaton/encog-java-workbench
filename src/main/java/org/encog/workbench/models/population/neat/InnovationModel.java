@@ -21,32 +21,31 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.models;
+package org.encog.workbench.models.population.neat;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.neat.training.NEATGenome;
+import org.encog.neural.neat.training.innovation.Innovation;
 import org.encog.util.Format;
 
-public class GeneralPopulationModel implements TableModel {
+public class InnovationModel implements TableModel {
 
 	private NEATPopulation population;
+	public static String[] COLUMNS = { "Innovation ID", "Info" };
 	
-	public static String[] COLUMNS = { "Genome ID", "Neurons", "Links", "Spawn Size", "Score" };
-	
-	public GeneralPopulationModel(NEATPopulation population)
+	public InnovationModel(NEATPopulation population)
 	{
 		this.population = population;
 	}
 	
-	public void addTableModelListener(TableModelListener l) {
+	public void addTableModelListener(TableModelListener arg0) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public Class<?> getColumnClass(int columnIndex) {
+	public Class<?> getColumnClass(int arg0) {
 		return String.class;
 	}
 
@@ -54,37 +53,32 @@ public class GeneralPopulationModel implements TableModel {
 		return COLUMNS.length;
 	}
 
-	public String getColumnName(int columnIndex) {
-		return COLUMNS[columnIndex];
+	public String getColumnName(int arg0) {
+		return COLUMNS[arg0];
 	}
 
 	public int getRowCount() {
-		return this.population.getGenomes().size();
+		if( this.population.getInnovations()==null)
+			return 0;
+		return this.population.getInnovations().getInnovations().size();
 	}
 
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		
-		NEATGenome genome = (NEATGenome)this.population.getGenomes().get(rowIndex);
-		
-		switch(columnIndex)
+	public Object getValueAt(int arg0, int arg1) {
+		Innovation innovation = this.population.getInnovations().get(arg0);
+
+		switch(arg1)
 		{
 			case 0:
-				return Format.formatInteger((int)genome.getGenomeID());
+				return Format.formatInteger((int)innovation.getInnovationID());
 			case 1:
-				return Format.formatInteger(genome.getNeuronsChromosome().size());
-			case 2:
-				return Format.formatInteger(genome.getLinksChromosome().size());
-			case 3:
-				return Format.formatDouble(genome.getAmountToSpawn(),2);
-			case 4:
-				return Format.formatDouble(genome.getScore(),4);
+				return innovation.toString();
 			default:
 				return "";
 		}
+				
 	}
 
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

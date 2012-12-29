@@ -30,18 +30,13 @@ import java.util.Random;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
-import org.encog.ml.ea.opp.SubtreeCrossover;
-import org.encog.ml.ea.opp.SubtreeMutation;
 import org.encog.ml.ea.score.EmptyScoreFunction;
 import org.encog.ml.prg.EncogProgramContext;
 import org.encog.ml.prg.extension.StandardExtensions;
-import org.encog.ml.prg.train.PrgGenetic;
-import org.encog.ml.prg.train.PrgGenomeFactory;
 import org.encog.ml.prg.train.PrgPopulation;
 import org.encog.ml.prg.train.rewrite.RewriteConstants;
 import org.encog.ml.prg.train.rewrite.algebraic.RewriteAlgebraic;
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.networks.training.genetic.GeneticScoreAdapter;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.createfile.CreateFileDialog;
 import org.encog.workbench.dialogs.createfile.CreateFileType;
@@ -152,6 +147,15 @@ public class CreateNewFile {
 		}
 	}
 	
+	public static void resetEPLPopulation(PrgPopulation pop, int sz) {
+		pop.addRewriteRule(new RewriteConstants());
+		pop.addRewriteRule(new RewriteAlgebraic());
+		Random random = new Random();
+		pop.getContext().getParams().setPopulationSize(sz);
+		pop.getGenomeFactory().factorRandomPopulation(random,
+				pop, new EmptyScoreFunction(), 5);
+	}
+	
 	private static void createPopulationEPL(File path) {
 		CreateEPLPopulationDialog dialog = new CreateEPLPopulationDialog();
 		if( dialog.process() ) {
@@ -164,12 +168,7 @@ public class CreateNewFile {
 			StandardExtensions.createNumericOperators(context.getFunctions());
 
 			PrgPopulation pop = new PrgPopulation(context);
-			pop.addRewriteRule(new RewriteConstants());
-			pop.addRewriteRule(new RewriteAlgebraic());
-			
-			Random random = new Random();
-			pop.getGenomeFactory().factorRandomPopulation(random,
-					pop, new EmptyScoreFunction(), 5);
+			resetEPLPopulation(pop,populationSize);
 
 			EncogWorkBench.getInstance().save(path,pop);
 			EncogWorkBench.getInstance().refresh();

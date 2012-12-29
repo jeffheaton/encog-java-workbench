@@ -21,21 +21,22 @@
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
-package org.encog.workbench.models;
+package org.encog.workbench.models.population.neat;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.neat.training.innovation.Innovation;
+import org.encog.neural.neat.NEATSpecies;
 import org.encog.util.Format;
 
-public class InnovationModel implements TableModel {
+public class SpeciesModel implements TableModel {
 
 	private NEATPopulation population;
-	public static String[] COLUMNS = { "Innovation ID", "Info" };
 	
-	public InnovationModel(NEATPopulation population)
+	public static String[] COLUMNS = { "Species ID", "Age", "Best Score", "Stagnant" , "Leader ID", "Members" };
+	
+	public SpeciesModel(NEATPopulation population)
 	{
 		this.population = population;
 	}
@@ -45,7 +46,7 @@ public class InnovationModel implements TableModel {
 		
 	}
 
-	public Class<?> getColumnClass(int arg0) {
+	public Class<?> getColumnClass(int columnIndex) {
 		return String.class;
 	}
 
@@ -53,29 +54,40 @@ public class InnovationModel implements TableModel {
 		return COLUMNS.length;
 	}
 
-	public String getColumnName(int arg0) {
-		return COLUMNS[arg0];
+	public String getColumnName(int columnIndex) {
+		return COLUMNS[columnIndex];
 	}
 
 	public int getRowCount() {
-		if( this.population.getInnovations()==null)
-			return 0;
-		return this.population.getInnovations().getInnovations().size();
+		return this.population.getSpecies().size();
 	}
 
-	public Object getValueAt(int arg0, int arg1) {
-		Innovation innovation = this.population.getInnovations().get(arg0);
-
-		switch(arg1)
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		NEATSpecies species = this.population.getSpecies().get(rowIndex);
+		
+		String leader = "none";
+		
+		if( species.getLeader()!=null )
+			leader = Format.formatInteger((int)species.getLeader().getGenomeID());
+		
+		switch(columnIndex)
 		{
 			case 0:
-				return Format.formatInteger((int)innovation.getInnovationID());
+				return Format.formatInteger((int)species.getSpeciesID());
 			case 1:
-				return innovation.toString();
+				return Format.formatInteger(species.getAge());
+			case 2:
+				return Format.formatDouble(species.getBestScore(),4);
+			case 3:
+				return Format.formatInteger(species.getGensNoImprovement());
+			case 4:
+				return leader;
+			case 5:
+				return Format.formatInteger(species.getMembers().size());
 			default:
 				return "";
 		}
-				
+		
 	}
 
 	public boolean isCellEditable(int rowIndex, int columnIndex) {

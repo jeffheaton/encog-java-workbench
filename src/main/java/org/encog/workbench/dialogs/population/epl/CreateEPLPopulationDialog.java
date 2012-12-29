@@ -42,6 +42,8 @@ public class CreateEPLPopulationDialog extends EncogPropertiesDialog {
 
 
 		render();
+		this.populationSize.setValue(1000);
+		this.inputSize.setValue(1);
 	}
 
 	public IntegerField getPopulationSize() {
