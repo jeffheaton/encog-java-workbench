@@ -46,8 +46,8 @@ import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 
 public class CreateTrainingDataDialog extends EncogCommonDialog implements
-	ListSelectionListener {
-		
+		ListSelectionListener {
+
 	private JTextField objectNameField;
 	private DefaultListModel model = new DefaultListModel();
 	private JList list = new JList(model);
@@ -62,7 +62,7 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 
 		JPanel top = new JPanel();
 		JPanel bottom = new JPanel();
-		
+
 		this.setSize(500, 250);
 		this.setLocation(50, 100);
 		final Container content = getBodyPanel();
@@ -75,51 +75,50 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0.0;
-		
-		content.add(top,BorderLayout.CENTER);
+
+		content.add(top, BorderLayout.CENTER);
 		bottom.setLayout(gridBag);
-		
+
 		Component comp1 = new JLabel("File Name:  ");
-		this.objectNameField = new JTextField(20); 
-		
+		this.objectNameField = new JTextField(20);
+
 		gridBag.setConstraints(comp1, c);
 		c.weightx = 1.0;
 		gridBag.setConstraints(this.objectNameField, c);
-		
+
 		bottom.add(comp1);
 		bottom.add(this.objectNameField);
-		
-		content.add(bottom,BorderLayout.SOUTH);
-		
+
+		content.add(bottom, BorderLayout.SOUTH);
+
 		this.model.addElement("Copy Training Set from File");
-		this.model.addElement("Market Data Training Set");
-		this.model.addElement("Random Training Set");		
-		this.model.addElement("XOR Temporal Training Set");
-		this.model.addElement("XOR Training Set");
-		this.model.addElement("Iris Dataset");
-		this.model.addElement("Sunspot Dataset");
 		this.model.addElement("Digits");
-		this.model.addElement("Simple Pattern (part 1)");
-		this.model.addElement("Simple Pattern (part 2)");
 		this.model.addElement("Download from URL");
 		this.model.addElement("Fahlman Encoder");
+		this.model.addElement("Formula");
+		this.model.addElement("Iris Dataset");
 		this.model.addElement("Linear");
+		this.model.addElement("Market Data Training Set");
+		this.model.addElement("Random Training Set");
+		this.model.addElement("Simple Pattern (part 1)");
+		this.model.addElement("Simple Pattern (part 2)");
 		this.model.addElement("Sine Wave");
-		
-		
+		this.model.addElement("Sunspot Dataset");
+		this.model.addElement("XOR Temporal Training Set");
+		this.model.addElement("XOR Training Set");
+
 		this.list.addListSelectionListener(this);
 		this.text.setLineWrap(true);
 		this.text.setWrapStyleWord(true);
 		this.text.setEditable(false);
 		scroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		
+
 	}
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5882600361686632769L;
-	
 
 	@Override
 	public void collectFields() throws ValidationException {
@@ -128,91 +127,98 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 			this.type = TrainingDataType.CopyCSV;
 			break;
 		case 1:
-			this.type = TrainingDataType.MarketWindow;
+			this.type = TrainingDataType.Digits;
 			break;
 		case 2:
-			this.type = TrainingDataType.Random;
+			this.type = TrainingDataType.Download;
 			break;
 		case 3:
-			this.type = TrainingDataType.XORTemp;
-			break;
-		case 4:
-			this.type = TrainingDataType.XOR;
-			break;		
-		case 5:
-			this.type = TrainingDataType.Iris;
-			break;		
-		case 6:
-			this.type = TrainingDataType.Sunspots;
-			break;			
-		case 7:
-			this.type = TrainingDataType.Digits;
-			break;		
-		case 8:
-			this.type = TrainingDataType.Patterns1;
-			break;		
-		case 9:
-			this.type = TrainingDataType.Patterns2;
-			break;		
-		case 10:
-			this.type = TrainingDataType.Download;
-			break;		
-		case 11:
 			this.type = TrainingDataType.Encoder;
 			break;
-		case 12:
+		case 4:
+			this.type = TrainingDataType.Formula;
+			break;
+		case 5:
+			this.type = TrainingDataType.Iris;
+			break;
+		case 6:
 			this.type = TrainingDataType.Linear;
 			break;
-		case 13:
+		case 7:
+			this.type = TrainingDataType.MarketWindow;
+			break;
+		case 8:
+			this.type = TrainingDataType.Random;
+			break;
+		case 9:
+			this.type = TrainingDataType.Patterns1;
+			break;
+		case 10:
+			this.type = TrainingDataType.Patterns2;
+			break;
+		case 11:
 			this.type = TrainingDataType.SineWave;
 			break;
+		case 12:
+			this.type = TrainingDataType.Sunspots;
+			break;
+		case 13:
+			this.type = TrainingDataType.XORTemp;
+			break;
+		case 14:
+			this.type = TrainingDataType.XOR;
+			break;
+
 		}
 	}
 
 	@Override
 	public void setFields() {
-		switch (type) {
+		switch (this.type) {
 		case CopyCSV:
 			this.list.setSelectedIndex(0);
 			break;
-		case MarketWindow:
+		case Digits:
 			this.list.setSelectedIndex(1);
 			break;
-		case Random:
+		case Download:
 			this.list.setSelectedIndex(2);
 			break;
-		case XORTemp:
+		case Encoder:
 			this.list.setSelectedIndex(3);
 			break;
-		case XOR:
+		case Formula:
 			this.list.setSelectedIndex(4);
 			break;
 		case Iris:
 			this.list.setSelectedIndex(5);
-			break;	
-		case Sunspots:
-			this.list.setSelectedIndex(6);
-			break;
-		case Digits:
-			this.list.setSelectedIndex(7);
-			break;
-		case Patterns1:
-			this.list.setSelectedIndex(8);
-			break;
-		case Patterns2:
-			this.list.setSelectedIndex(9);
-			break;
-		case Download:
-			this.list.setSelectedIndex(10);
-			break;
-		case Encoder:
-			this.list.setSelectedIndex(11);
 			break;
 		case Linear:
-			this.list.setSelectedIndex(12);
+			this.list.setSelectedIndex(6);
+			break;
+		case MarketWindow:
+			this.list.setSelectedIndex(7);
+			break;
+		case Random:
+			this.list.setSelectedIndex(8);
+			break;
+		case Patterns1:
+			this.list.setSelectedIndex(9);
+			break;
+		case Patterns2:
+			this.list.setSelectedIndex(10);
 			break;
 		case SineWave:
+			this.list.setSelectedIndex(11);
+			break;
+		case Sunspots:
+			this.list.setSelectedIndex(12);
+			break;
+		case XORTemp:
 			this.list.setSelectedIndex(13);
+			break;
+		case XOR:
+			this.list.setSelectedIndex(14);
 			break;
 		}
 
@@ -229,70 +235,62 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 	public void valueChanged(ListSelectionEvent e) {
 		switch (list.getSelectedIndex()) {
 		case 0:
-			this.text
-					.setText("Copy training data from a CSV.");
+			this.text.setText("Copy training data from a CSV.");
 			break;
-								
 		case 1:
 			this.text
-					.setText("Download market data from Yahoo Finance.  You need to enter a ticker symbol and date range.  You must also specify the size of the input window used to predict the output/prediction window.");
+					.setText("The 10 arabic digits.  Width is 5, height is 7.");
 			break;
-
 		case 2:
 			this.text
-					.setText("Create a training set of random numbers.  This is really only useful for some testing purposes.  ");
+					.setText("Enter a URL and the contents will be downloaded to your project.");
 			break;
-
 		case 3:
 			this.text
-					.setText("XOR temporal data.  Represent XOR as a sequence of numbers, 1 input 1 output.  Output is the next predicted input.");
+					.setText("A very simple data set that has the same number of inputs as ideals. Usually a smaller number of hidden neurons is placed between the input and output layers of a neural network trained with this data. The neural network must learn to encode the input to the smaller hidden layer.");
 			break;
-			
 		case 4:
-			this.text
-					.setText("Classic XOR operator as CSV data.");
+			this.text.setText("Generates data from a single-variable formula.");
 			break;
-			
 		case 5:
 			this.text
 					.setText("The Iris dataset is a classic machine learning dataset.  It contains 4 characteristics about 3 different iris species.");
 			break;
-
 		case 6:
 			this.text
-					.setText("Download sunspot information from the Internet.");
+					.setText("Generate linear data in slope-intercept (y=mx+b) form.");
 			break;
 		case 7:
 			this.text
-					.setText("The 10 arabic digits.  Width is 5, height is 7.");
+					.setText("Download market data from Yahoo Finance.  You need to enter a ticker symbol and date range.  You must also specify the size of the input window used to predict the output/prediction window.");
 			break;
-			
 		case 8:
+			this.text
+					.setText("Create a training set of random numbers.  This is really only useful for some testing purposes.  ");
+			break;
+		case 9:
 			this.text
 					.setText("A simple set of patterns.  Width is 5, height is 7.");
 			break;
-
-			
-		case 9:
+		case 10:
 			this.text
 					.setText("More simple patters, eimilar to part 1. Part 2 can be used to find the best match in part 1.  Width is 10, height is 10.");
 			break;
-
-		case 10:
-			this.text
-					.setText("Enter a URL and the contents will be downloaded to your project.");
-			break;
 		case 11:
-			this.text.setText("A very simple data set that has the same number of inputs as ideals. Usually a smaller number of hidden neurons is placed between the input and output layers of a neural network trained with this data. The neural network must learn to encode the input to the smaller hidden layer.");
-			break;
-		case 12:
-			this.text.setText("Generate linear data in slope-intercept (y=mx+b) form.");
-			break;
-		case 13:
 			this.text.setText("Generate one or more cycles of the sine wave.");
 			break;
+		case 12:
+			this.text
+					.setText("Download sunspot information from the Internet.");
+			break;
+		case 13:
+			this.text
+					.setText("XOR temporal data.  Represent XOR as a sequence of numbers, 1 input 1 output.  Output is the next predicted input.");
+			break;
+
 		case 14:
-			this.text.setText("This option allows you to import data from an external indicator.  An indicator is a script that is typically embedded in a financial application, such as NinjaTrader.  To use this you need the Encog Framework indicator installed in NinjaTrader.");
+			this.text.setText("Classic XOR operator as CSV data.");
+			break;
 		}
 
 		this.text.setSelectionStart(0);
@@ -304,4 +302,3 @@ public class CreateTrainingDataDialog extends EncogCommonDialog implements
 		return this.objectNameField.getText();
 	}
 }
-
