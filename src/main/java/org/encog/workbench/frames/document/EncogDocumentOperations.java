@@ -328,6 +328,9 @@ public class EncogDocumentOperations {
 			case Linear:
 				CreateTrainingData.generateLinear(name);
 				break;
+			case Formula:
+				CreateTrainingData.generateFormula(name);
+				break;
 			case SineWave:
 				CreateTrainingData.generateSineWave(name);
 				break;

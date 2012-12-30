@@ -45,6 +45,7 @@ import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataSet;
+import org.encog.ml.prg.EncogProgram;
 import org.encog.util.Format;
 import org.encog.util.benchmark.EncoderTrainingFactory;
 import org.encog.util.benchmark.RandomTrainingFactory;
@@ -53,6 +54,7 @@ import org.encog.util.file.FileUtil;
 import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.trainingdata.CreateEncoderDialog;
+import org.encog.workbench.dialogs.trainingdata.CreateFormulaData;
 import org.encog.workbench.dialogs.trainingdata.CreateLinearTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateMarketTrainingDialog;
 import org.encog.workbench.dialogs.trainingdata.CreateSineTrainingDialog;
@@ -372,6 +374,37 @@ public class CreateTrainingData {
 			for(int i=0;i<elements;i++) {
 				double x = xBegin + (i*incr);
 				double y = (m*x) + b;
+				MLData inputData = new BasicMLData(new double[] {x});
+				MLData idealData = new BasicMLData(new double[] {y});
+				trainingData.add(inputData,idealData);
+			}
+
+			EncogUtility.saveCSV(targetFile, CSVFormat.ENGLISH, trainingData);
+		}
+	}
+	
+	public static void generateFormula(String name) {
+		CreateFormulaData dialog = new CreateFormulaData(
+				EncogWorkBench.getInstance().getMainWindow());
+
+		if (dialog.process()) {
+			double xBegin = dialog.getxBegin().getValue();
+			double xEnd = dialog.getxEnd().getValue();
+			int elements = dialog.getElements().getValue();
+			String formula = dialog.getFormula().getValue();
+			double range = xEnd - xBegin;
+			double incr = range/elements;
+
+			File targetFile = new File(EncogWorkBench.getInstance()
+					.getProjectDirectory(), name);
+			
+			MLDataSet trainingData = new BasicMLDataSet();
+			EncogProgram prg = new EncogProgram(formula);
+			
+			for(int i=0;i<elements;i++) {
+				double x = xBegin + (i*incr);
+				prg.getVariables().setVariable("x", x);
+				double y = prg.evaluate().toFloatValue();
 				MLData inputData = new BasicMLData(new double[] {x});
 				MLData idealData = new BasicMLData(new double[] {y});
 				trainingData.add(inputData,idealData);
