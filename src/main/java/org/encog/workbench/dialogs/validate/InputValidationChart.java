@@ -23,13 +23,12 @@
  */
 package org.encog.workbench.dialogs.validate;
 
-import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.encog.workbench.dialogs.training.NetworkAndTrainingDialog;
+import org.encog.workbench.dialogs.training.MethodAndTrainingDialog;
 
-public class InputValidationChart extends NetworkAndTrainingDialog {
+public class InputValidationChart extends MethodAndTrainingDialog {
 	private static final long serialVersionUID = 3377283752032159041L;
 
 	/**

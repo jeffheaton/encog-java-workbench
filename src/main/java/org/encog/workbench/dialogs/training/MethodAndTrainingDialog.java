@@ -46,7 +46,7 @@ import org.encog.workbench.frames.document.tree.ProjectTraining;
  * common dialog box.
  * @author jheaton
  */
-public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
+public class MethodAndTrainingDialog extends EncogPropertiesDialog {
 
 	private ComboBoxField comboTraining;
 	private ComboBoxField comboNetwork;
@@ -70,15 +70,15 @@ public class NetworkAndTrainingDialog extends EncogPropertiesDialog {
 	 * Construct the dialog box.
 	 * @param owner The owner of the dialog box.
 	 */
-	public NetworkAndTrainingDialog(boolean includePop) {
+	public MethodAndTrainingDialog(boolean includePop) {
 		
 		super(EncogWorkBench.getInstance().getMainWindow());
 		findData(includePop);
-		setTitle("Network and Training Set");
+		setTitle("ML Method and Training Set");
 		setSize(400,400);
 		setLocation(200,200);
 		addProperty(this.comboTraining = new ComboBoxField("training set","Training Set",true,this.trainingSets));
-		addProperty(this.comboNetwork = new ComboBoxField("network","Neural Network",true,this.networks));
+		addProperty(this.comboNetwork = new ComboBoxField("ML method","ML Method",true,this.networks));
 	}
 
 

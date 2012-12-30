@@ -29,7 +29,6 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
-import org.encog.mathutil.randomize.RangeRandomizer;
 import org.encog.ml.MLMethod;
 import org.encog.ml.bayesian.BayesianNetwork;
 import org.encog.ml.bayesian.training.BayesianInit;
@@ -43,7 +42,13 @@ import org.encog.ml.bayesian.training.search.k2.SearchK2;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.folded.FoldedDataSet;
-import org.encog.ml.genetic.MLMethodGeneticAlgorithm;
+import org.encog.ml.ea.opp.SubtreeCrossover;
+import org.encog.ml.ea.opp.SubtreeMutation;
+import org.encog.ml.prg.train.PrgGenetic;
+import org.encog.ml.prg.train.PrgPopulation;
+import org.encog.ml.prg.train.fitness.MultiObjectiveFitness;
+import org.encog.ml.prg.train.rewrite.RewriteConstants;
+import org.encog.ml.prg.train.rewrite.algebraic.RewriteAlgebraic;
 import org.encog.ml.svm.SVM;
 import org.encog.ml.svm.training.SVMSearchTrain;
 import org.encog.ml.svm.training.SVMTrain;
@@ -60,6 +65,7 @@ import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
 import org.encog.neural.networks.training.cross.CrossValidationKFold;
+import org.encog.neural.networks.training.genetic.GeneticScoreAdapter;
 import org.encog.neural.networks.training.lma.LevenbergMarquardtTraining;
 import org.encog.neural.networks.training.nm.NelderMeadTraining;
 import org.encog.neural.networks.training.pnn.TrainBasicPNN;
@@ -192,6 +198,8 @@ public class TrainBasicNetwork {
 			performBayesian(file, trainingData,validationData);
 		} else if (method instanceof BasicPNN ) {
 			performPNN(file,trainingData, validationData);
+		} else if( method instanceof PrgPopulation ) {
+			performPrgPopulationTrain(file,trainingData, validationData);
 		} else if (method instanceof BasicNetwork || method instanceof RBFNetwork ) {
 
 			ChooseBasicNetworkTrainingMethod choose = new ChooseBasicNetworkTrainingMethod(
@@ -718,5 +726,19 @@ public class TrainBasicNetwork {
 		}
 	}
 	
+	private void performPrgPopulationTrain(ProjectEGFile file,
+			MLDataSet trainingData, MLDataSet validationData) {
+		PrgPopulation pop = (PrgPopulation)file.getObject();
+		PrgGenetic train = new PrgGenetic(pop,trainingData);
+		
+		pop.addRewriteRule(new RewriteConstants());
+		pop.addRewriteRule(new RewriteAlgebraic());
+
+		train.addOperation(0.95, new SubtreeCrossover());
+		train.addOperation(0.05, new SubtreeMutation(pop.getContext(),4));
+		
+		startup(file, train, 0.0, validationData);
+		
+	}
 	
 }

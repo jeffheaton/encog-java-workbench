@@ -35,7 +35,7 @@ import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 
-public class TrainDialog extends NetworkAndTrainingDialog {
+public class TrainDialog extends MethodAndTrainingDialog {
 
 	private final CheckField loadToMemory;
 	private ComboBoxField comboValidation;

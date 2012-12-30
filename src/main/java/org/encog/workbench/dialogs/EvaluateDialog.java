@@ -23,7 +23,6 @@
  */
 package org.encog.workbench.dialogs;
 
-import java.awt.Frame;
 import java.io.File;
 
 import javax.swing.JComboBox;
@@ -31,10 +30,10 @@ import javax.swing.JComboBox;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.workbench.dialogs.common.ComboBoxField;
-import org.encog.workbench.dialogs.training.NetworkAndTrainingDialog;
+import org.encog.workbench.dialogs.training.MethodAndTrainingDialog;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 
-public class EvaluateDialog extends NetworkAndTrainingDialog {
+public class EvaluateDialog extends MethodAndTrainingDialog {
 
 	private ComboBoxField comboValidation;
 	
