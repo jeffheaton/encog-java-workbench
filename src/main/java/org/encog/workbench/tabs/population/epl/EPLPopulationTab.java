@@ -28,7 +28,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -36,20 +35,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
-import org.encog.ml.ea.genome.Genome;
+import org.encog.ml.ea.sort.MinimizeScoreComp;
 import org.encog.ml.prg.train.PrgPopulation;
-import org.encog.neural.neat.NEATNetwork;
-import org.encog.neural.neat.NEATSpecies;
 import org.encog.neural.neat.training.NEATGenome;
-import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
-import org.encog.workbench.dialogs.population.neat.EditNEATPopulationDialog;
-import org.encog.workbench.dialogs.population.neat.ExtractGenomes;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.population.epl.EPLPopulationModel;
-import org.encog.workbench.models.population.neat.GeneralPopulationModel;
-import org.encog.workbench.models.population.neat.InnovationModel;
-import org.encog.workbench.models.population.neat.SpeciesModel;
 import org.encog.workbench.process.CreateNewFile;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -59,7 +50,7 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 
 	private JButton btnTrain;
 	private JButton btnEdit;
-	private JButton btnExtract;
+	private JButton btnSort;
 	private JButton btnReset;
 	private JTabbedPane tabViews;
 
@@ -79,10 +70,10 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 		add(buttonPanel, BorderLayout.NORTH);
 		buttonPanel.add(btnTrain = new JButton("Train"));
 		buttonPanel.add(btnEdit = new JButton("Edit Population"));
-		buttonPanel.add(btnExtract = new JButton("Extract Top Genomes"));
+		buttonPanel.add(btnSort = new JButton("Sort"));
 		buttonPanel.add(btnReset = new JButton("Reset"));
 		this.btnTrain.addActionListener(this);
-		this.btnExtract.addActionListener(this);
+		this.btnSort.addActionListener(this);
 		this.btnEdit.addActionListener(this);
 		this.btnReset.addActionListener(this);
 		JPanel mainPanel = new JPanel();
@@ -119,8 +110,8 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 				performTrain();
 			} else if (e.getSource() == this.btnEdit) {
 				//performEdit();
-			} else if (e.getSource() == this.btnExtract) {
-				//performExtract();
+			} else if (e.getSource() == this.btnSort) {
+				performSort();
 			} else if (e.getSource() == this.btnReset) {
 				performReset();
 			}
@@ -170,6 +161,11 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 		} catch(NumberFormatException ex) {
 			EncogWorkBench.displayError("Error", "Invalid population size.");
 		}
+	}
+	
+	private void performSort() {
+		this.population.sort(new MinimizeScoreComp());
+		this.populationTable.repaint();
 	}
 
 	@Override
