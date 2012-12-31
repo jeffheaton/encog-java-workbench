@@ -31,56 +31,44 @@ import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
-import org.encog.workbench.dialogs.common.IntegerField;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
 
-public class CreateEPLPopulationDialog extends EncogPropertiesDialog {
+/**
+ * Basic dialog box that displays two combo boxes used to select
+ * the training set and network to be used.  Subclasses can
+ * add additional fields.  This class is based on the Encog
+ * common dialog box.
+ * @author jheaton
+ */
+public class RescoreDialog extends EncogPropertiesDialog {
 
 	private ComboBoxField comboTraining;
-	private final IntegerField populationSize;
-	private final IntegerField inputSize;
 	
+	/**
+	 * The serial id.
+	 */
+	private static final long serialVersionUID = 3506669325409959724L;
+
 	/**
 	 * All available training sets to display in the combo box.
 	 */
 	private List<ProjectTraining> trainingSets;
 	
-	public CreateEPLPopulationDialog() {
+	/**
+	 * Construct the dialog box.
+	 * @param owner The owner of the dialog box.
+	 */
+	public RescoreDialog() {
 		super(EncogWorkBench.getInstance().getMainWindow());
 		findData();
-		
-		this.setSize(400, 200);
-		this.setTitle("Create EPL Population");
-		
-		addProperty(this.comboTraining = new ComboBoxField("training set","Training Set (optinal)",false,this.trainingSets));
-		addProperty(this.populationSize = new IntegerField("population size","Population Size",true,1,-1));
-		addProperty(this.inputSize = new IntegerField("input size","Input Variables",true,1,-1));
-
-
+		setTitle("Rescore Population");
+		setSize(400,400);
+		setLocation(200,200);
+		addProperty(this.comboTraining = new ComboBoxField("training set","Training Set",true,this.trainingSets));
 		render();
-		this.populationSize.setValue(1000);
-		this.inputSize.setValue(1);
 	}
 
-	public IntegerField getPopulationSize() {
-		return populationSize;
-	}
 
-	/**
-	 * @return the inputSize
-	 */
-	public IntegerField getInputSize() {
-		return inputSize;
-	}
-	
-	
-	
-	/**
-	 * @return the comboTraining
-	 */
-	public ComboBoxField getComboTraining() {
-		return comboTraining;
-	}
 
 	/**
 	 * Obtain the data needed to fill in the network and training set
@@ -89,7 +77,7 @@ public class CreateEPLPopulationDialog extends EncogPropertiesDialog {
 	private void findData() {
 		this.trainingSets = EncogWorkBench.getInstance().getTrainingData();
 	}
-	
+
 	/**
 	 * @return The training set that the user chose.
 	 */
@@ -100,6 +88,12 @@ public class CreateEPLPopulationDialog extends EncogPropertiesDialog {
 		BufferedMLDataSet result = new BufferedMLDataSet(file);
 		return result;
 	}
+	
+	public ComboBoxField getComboTraining() {
+		return this.comboTraining;
+	}
 
-
+	public List<ProjectTraining> getTrainingSets() {
+		return trainingSets;
+	}
 }

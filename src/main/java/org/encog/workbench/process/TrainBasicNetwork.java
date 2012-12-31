@@ -44,9 +44,9 @@ import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.folded.FoldedDataSet;
 import org.encog.ml.ea.opp.SubtreeCrossover;
 import org.encog.ml.ea.opp.SubtreeMutation;
+import org.encog.ml.ea.score.adjust.ComplexityAdjustedScore;
 import org.encog.ml.prg.train.PrgGenetic;
 import org.encog.ml.prg.train.PrgPopulation;
-import org.encog.ml.prg.train.fitness.MultiObjectiveFitness;
 import org.encog.ml.prg.train.rewrite.RewriteConstants;
 import org.encog.ml.prg.train.rewrite.algebraic.RewriteAlgebraic;
 import org.encog.ml.svm.SVM;
@@ -65,7 +65,6 @@ import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
 import org.encog.neural.networks.training.cross.CrossValidationKFold;
-import org.encog.neural.networks.training.genetic.GeneticScoreAdapter;
 import org.encog.neural.networks.training.lma.LevenbergMarquardtTraining;
 import org.encog.neural.networks.training.nm.NelderMeadTraining;
 import org.encog.neural.networks.training.pnn.TrainBasicPNN;
@@ -88,6 +87,7 @@ import org.encog.util.Format;
 import org.encog.util.concurrency.EngineConcurrency;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.WorkBenchError;
+import org.encog.workbench.dialogs.population.epl.TrainEPLPopulationDialog;
 import org.encog.workbench.dialogs.select.SelectDialog;
 import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.dialogs.training.ChooseBasicNetworkTrainingMethod;
@@ -118,14 +118,15 @@ public class TrainBasicNetwork {
 
 	private ProjectEGFile mlMethod;
 	private EncogCommonTab parentTab;
-	
+
 	private MLDataSet wrapTrainingData(MLDataSet trainingData) {
 		final FoldedDataSet folded = new FoldedDataSet(trainingData);
 		return folded;
 	}
-	
-	private MLTrain wrapTrainer(MLDataSet folded, MLTrain train, int foldCount) { 
-		final CrossValidationKFold trainFolded = new CrossValidationKFold(train,foldCount);
+
+	private MLTrain wrapTrainer(MLDataSet folded, MLTrain train, int foldCount) {
+		final CrossValidationKFold trainFolded = new CrossValidationKFold(
+				train, foldCount);
 		return trainFolded;
 	}
 
@@ -133,33 +134,35 @@ public class TrainBasicNetwork {
 		this.mlMethod = mlMethod;
 		this.parentTab = parentTab;
 	}
-	
-	private void performNEATTrain(NEATPopulation population, MLDataSet trainingData, ProjectEGFile file, MLDataSet validationSet) {
-		
+
+	private void performNEATTrain(NEATPopulation population,
+			MLDataSet trainingData, ProjectEGFile file, MLDataSet validationSet) {
+
 		InputNEAT dialog = new InputNEAT();
 
 		if (dialog.process()) {
 			CalculateScore score = new TrainingSetScore(trainingData);
-			
+
 			int kFold = dialog.getKfold().getValue();
-			
-			if( kFold>0 ) {
+
+			if (kFold > 0) {
 				trainingData = this.wrapTrainingData(trainingData);
 			}
 
 			MLTrain train = new NEATTraining(score, population);
-			
-			if( kFold>0 ) {
-				train = this.wrapTrainer(trainingData,train,kFold);
-			}
-			
 
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationSet);
+			if (kFold > 0) {
+				train = this.wrapTrainer(trainingData, train, kFold);
+			}
+
+			startup(file, train, dialog.getMaxError().getValue() / 100.0,
+					validationSet);
 		}
 	}
-	
-	private void performMethodTrain(MLMethod method, MLDataSet trainingData, ProjectEGFile file, MLDataSet validationData) {
-	
+
+	private void performMethodTrain(MLMethod method, MLDataSet trainingData,
+			ProjectEGFile file, MLDataSet validationData) {
+
 		if (method == null) {
 			EncogWorkBench.displayError("Error",
 					"Machine language method is required to train.");
@@ -184,64 +187,64 @@ public class TrainBasicNetwork {
 			for (MLDataPair pair : trainingData) {
 				hp.addPattern(pair.getInput());
 			}
-			if (EncogWorkBench.askQuestion("Hopfield",
-					"Training done, save?")) {
+			if (EncogWorkBench.askQuestion("Hopfield", "Training done, save?")) {
 				file.save();
 			}
 		} else if (method instanceof SOM) {
-			performSOM(file, trainingData,validationData);
+			performSOM(file, trainingData, validationData);
 		} else if (method instanceof SVM) {
-			performSVM(file, trainingData,validationData);
+			performSVM(file, trainingData, validationData);
 		} else if (method instanceof CPN) {
-			performCPN(file, trainingData,validationData);
+			performCPN(file, trainingData, validationData);
 		} else if (method instanceof BayesianNetwork) {
-			performBayesian(file, trainingData,validationData);
-		} else if (method instanceof BasicPNN ) {
-			performPNN(file,trainingData, validationData);
-		} else if( method instanceof PrgPopulation ) {
-			performPrgPopulationTrain(file,trainingData, validationData);
-		} else if (method instanceof BasicNetwork || method instanceof RBFNetwork ) {
+			performBayesian(file, trainingData, validationData);
+		} else if (method instanceof BasicPNN) {
+			performPNN(file, trainingData, validationData);
+		} else if (method instanceof PrgPopulation) {
+			performPrgPopulationTrain(file, trainingData, validationData);
+		} else if (method instanceof BasicNetwork
+				|| method instanceof RBFNetwork) {
 
 			ChooseBasicNetworkTrainingMethod choose = new ChooseBasicNetworkTrainingMethod(
-					EncogWorkBench.getInstance().getMainWindow(),method);
+					EncogWorkBench.getInstance().getMainWindow(), method);
 			if (choose.process()) {
 				switch (choose.getTheType()) {
 				case SCG:
-					performSCG(file, trainingData,validationData);
+					performSCG(file, trainingData, validationData);
 					break;
 				case PropagationResilient:
-					performRPROP(file, trainingData,validationData);
+					performRPROP(file, trainingData, validationData);
 					break;
 				case PropagationBack:
-					performBPROP(file, trainingData,validationData);
+					performBPROP(file, trainingData, validationData);
 					break;
 				case PropagationManhattan:
-					performManhattan(file, trainingData,validationData);
+					performManhattan(file, trainingData, validationData);
 					break;
 				case LevenbergMarquardt:
-					performLMA(file, trainingData,validationData);
+					performLMA(file, trainingData, validationData);
 					break;
 				case Genetic:
-					performGenetic(file, trainingData,validationData);
+					performGenetic(file, trainingData, validationData);
 					break;
 				case Annealing:
-					performAnnealing(file, trainingData,validationData);
+					performAnnealing(file, trainingData, validationData);
 					break;
 				case ADALINE:
-					performADALINE(file, trainingData,validationData);
+					performADALINE(file, trainingData, validationData);
 					break;
 				case PropagationQuick:
-					performQPROP(file, trainingData,validationData);
+					performQPROP(file, trainingData, validationData);
 					break;
 				case SVD:
 					performSVD(file, trainingData);
 					break;
 				case PSO:
-					performPSO(file, trainingData,validationData);
+					performPSO(file, trainingData, validationData);
 					break;
 				case NelderMead:
-					performNelderMead(file, trainingData,validationData);
-					break;					
+					performNelderMead(file, trainingData, validationData);
+					break;
 				}
 			}
 		} else {
@@ -259,28 +262,30 @@ public class TrainBasicNetwork {
 			dialog.setMethod(mlMethod);
 
 		if (dialog.process()) {
-						
+
 			Object obj = dialog.getMethodOrPopulation();
-			
-			if( obj instanceof MLMethod ) {
-				MLMethod method = (MLMethod)obj;
+
+			if (obj instanceof MLMethod) {
+				MLMethod method = (MLMethod) obj;
 				MLDataSet trainingData = dialog.getTrainingSet();
-				ProjectEGFile file = (ProjectEGFile) dialog
-					.getComboNetwork().getSelectedValue();
-				performMethodTrain(method, trainingData, file, dialog.getValidationSet());
+				ProjectEGFile file = (ProjectEGFile) dialog.getComboNetwork()
+						.getSelectedValue();
+				performMethodTrain(method, trainingData, file,
+						dialog.getValidationSet());
 			} else {
-				NEATPopulation population = (NEATPopulation)obj;
+				NEATPopulation population = (NEATPopulation) obj;
 				MLDataSet trainingData = dialog.getTrainingSet();
-				ProjectEGFile file = (ProjectEGFile) dialog
-					.getComboNetwork().getSelectedValue();
-				performNEATTrain(population, trainingData, file,dialog.getValidationSet());
+				ProjectEGFile file = (ProjectEGFile) dialog.getComboNetwork()
+						.getSelectedValue();
+				performNEATTrain(population, trainingData, file,
+						dialog.getValidationSet());
 			}
 
-			
 		}
 	}
 
-	private void performCPN(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performCPN(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		SelectItem selectInstar;
 		SelectItem selectOutstar;
 
@@ -300,21 +305,26 @@ public class TrainBasicNetwork {
 			if (dialog.process()) {
 				double learnRate = dialog.getLearningRate().getValue();
 				boolean init = dialog.getInitWeights().getValue();
-				TrainInstar train = new TrainInstar((CPN)file.getObject(),trainingData,learnRate,init);
-				startup(file,train, dialog.getMaxError().getValue()/100.0, validationData);
+				TrainInstar train = new TrainInstar((CPN) file.getObject(),
+						trainingData, learnRate, init);
+				startup(file, train, dialog.getMaxError().getValue() / 100.0,
+						validationData);
 			}
 		} else if (sel.getSelected() == selectOutstar) {
 			InputOutstar dialog = new InputOutstar();
 
 			if (dialog.process()) {
 				double learnRate = dialog.getLearningRate().getValue();
-				TrainOutstar train = new TrainOutstar((CPN)file.getObject(),trainingData,learnRate);
-				startup(file,train, dialog.getMaxError().getValue()/100.0, validationData);
+				TrainOutstar train = new TrainOutstar((CPN) file.getObject(),
+						trainingData, learnRate);
+				startup(file, train, dialog.getMaxError().getValue() / 100.0,
+						validationData);
 			}
 		}
 	}
 
-	private void performSOM(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performSOM(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 
 		SelectItem selectBasicSOM;
 		SelectItem selectSOMClusterCopy;
@@ -338,7 +348,9 @@ public class TrainBasicNetwork {
 						somDialog.getLearningRate().getValue(), trainingData,
 						somDialog.getNeighborhoodFunction());
 				train.setForceWinner(somDialog.getForceWinner().getValue());
-				startup(file, train, somDialog.getMaxError().getValue() / 100.0, validationData);
+				startup(file, train,
+						somDialog.getMaxError().getValue() / 100.0,
+						validationData);
 			}
 		} else if (sel.getSelected() == selectSOMClusterCopy) {
 			SOMClusterCopyTraining train = new SOMClusterCopyTraining(
@@ -352,42 +364,48 @@ public class TrainBasicNetwork {
 		}
 	}
 
-	private void performADALINE(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performADALINE(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputADALINE dialog = new InputADALINE();
 		if (dialog.process()) {
 			double learningRate = dialog.getLearningRate().getValue();
 
 			MLTrain train = new TrainAdaline((BasicNetwork) file.getObject(),
 					trainingData, learningRate);
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+			startup(file, train, dialog.getMaxError().getValue() / 100.0,
+					validationData);
 		}
 
 	}
 
-	private void performBPROP(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performBPROP(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputBackpropagation dialog = new InputBackpropagation();
 		if (dialog.process()) {
 			double learningRate = dialog.getLearningRate().getValue();
 			double momentum = dialog.getMomentum().getValue();
 			int kFold = dialog.getKfold().getValue();
-			
-			if( kFold>0 ) {
+
+			if (kFold > 0) {
 				trainingData = this.wrapTrainingData(trainingData);
 			}
 
-			MLTrain train = new Backpropagation((BasicNetwork) file.getObject(),
-					trainingData, learningRate, momentum);
-			
-			if( kFold>0 ) {
-				train = this.wrapTrainer(trainingData,train,kFold);
+			MLTrain train = new Backpropagation(
+					(BasicNetwork) file.getObject(), trainingData,
+					learningRate, momentum);
+
+			if (kFold > 0) {
+				train = this.wrapTrainer(trainingData, train, kFold);
 			}
-			
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+
+			startup(file, train, dialog.getMaxError().getValue() / 100.0,
+					validationData);
 		}
 
 	}
 
-	private void performAnnealing(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performAnnealing(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputAnneal dialog = new InputAnneal();
 		if (dialog.process()) {
 			final double startTemp = dialog.getStartTemp().getValue();
@@ -399,12 +417,14 @@ public class TrainBasicNetwork {
 					(BasicNetwork) file.getObject(), score, startTemp,
 					stopTemp, cycles);
 			train.setTraining(trainingData);
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+			startup(file, train, dialog.getMaxError().getValue() / 100.0,
+					validationData);
 		}
 
 	}
 
-	private void performGenetic(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performGenetic(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputGenetic dialog = new InputGenetic();
 		if (dialog.process()) {
 			final int populationSize = dialog.getPopulationSize().getValue();
@@ -413,23 +433,26 @@ public class TrainBasicNetwork {
 			final double percentToMate = dialog.getPercentToMate().getValue();
 
 			CalculateScore score = new TrainingSetScore(trainingData);
-			/*final MLMethodGeneticAlgorithm train = new MLMethodGeneticAlgorithm(
-					(BasicNetwork) file.getObject(),
-					new RangeRandomizer(-1, 1), score, populationSize,
-					mutationPercent, percentToMate);
-			train.setTraining(trainingData);
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);*/
+			/*
+			 * final MLMethodGeneticAlgorithm train = new
+			 * MLMethodGeneticAlgorithm( (BasicNetwork) file.getObject(), new
+			 * RangeRandomizer(-1, 1), score, populationSize, mutationPercent,
+			 * percentToMate); train.setTraining(trainingData); startup(file,
+			 * train, dialog.getMaxError().getValue() / 100.0, validationData);
+			 */
 		}
 
 	}
-	
-	private void performPSO(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+
+	private void performPSO(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputPSO dialog = new InputPSO();
 		if (dialog.process()) {
 			final int particleCount = dialog.getParticleCount().getValue();
 			final double c1 = dialog.getC1().getValue();
 			final double c2 = dialog.getC2().getValue();
-			final double particleInertia = dialog.getParticleInertia().getValue();
+			final double particleInertia = dialog.getParticleInertia()
+					.getValue();
 			final double maxVelocity = dialog.getMaxVelocity().getValue();
 			final double maxWeight = dialog.getMaxWeight().getValue();
 
@@ -443,103 +466,112 @@ public class TrainBasicNetwork {
 			train.setMaxVelocity(maxVelocity);
 			train.setMaxPosition(maxWeight);
 			train.setTraining(trainingData);
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+			startup(file, train, dialog.getMaxError().getValue() / 100.0,
+					validationData);
 		}
 
 	}
 
-	private void performLMA(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performLMA(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputLMA dialog = new InputLMA();
 
 		if (dialog.process()) {
 			LevenbergMarquardtTraining train = new LevenbergMarquardtTraining(
 					(BasicNetwork) file.getObject(), trainingData);
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+			startup(file, train, dialog.getMaxError().getValue() / 100.0,
+					validationData);
 		}
 	}
 
-	private void performManhattan(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performManhattan(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputManhattan dialog = new InputManhattan();
 		if (dialog.process()) {
 			double learningRate = dialog.getFixedDelta().getValue();
 			int kFold = dialog.getKfold().getValue();
 
-			if( kFold>0 ) {
+			if (kFold > 0) {
 				trainingData = this.wrapTrainingData(trainingData);
 			}
-			
+
 			MLTrain train = new ManhattanPropagation(
 					(BasicNetwork) file.getObject(), trainingData, learningRate);
-			
-			if( kFold>0 ) {
-				train = this.wrapTrainer(trainingData,train,kFold);
-			}			
-			
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+
+			if (kFold > 0) {
+				train = this.wrapTrainer(trainingData, train, kFold);
+			}
+
+			startup(file, train, dialog.getMaxError().getValue() / 100.0,
+					validationData);
 		}
 	}
 
-	private void performRPROP(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performRPROP(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputResilient dialog = new InputResilient();
 		if (dialog.process()) {
 			final double initialUpdate = dialog.getInitialUpdate().getValue();
 			final double maxStep = dialog.getMaxStep().getValue();
-						
+
 			int kFold = dialog.getKfold().getValue();
-			
-			if( kFold>0 ) {
+
+			if (kFold > 0) {
 				trainingData = this.wrapTrainingData(trainingData);
 			}
-			
+
 			MLTrain train = new ResilientPropagation(
 					(ContainsFlat) file.getObject(), trainingData,
 					initialUpdate, maxStep);
-			
-			switch( dialog.getRpropType().getSelectedIndex() )
-			{
-				case 0:
-					((ResilientPropagation)train).setRPROPType(RPROPType.RPROPp);
-					break;
-				case 1:
-					((ResilientPropagation)train).setRPROPType(RPROPType.RPROPm);
-					break;
-				case 2:
-					((ResilientPropagation)train).setRPROPType(RPROPType.iRPROPp);
-					break;
-				case 3:
-					((ResilientPropagation)train).setRPROPType(RPROPType.iRPROPm);
-					break;
+
+			switch (dialog.getRpropType().getSelectedIndex()) {
+			case 0:
+				((ResilientPropagation) train).setRPROPType(RPROPType.RPROPp);
+				break;
+			case 1:
+				((ResilientPropagation) train).setRPROPType(RPROPType.RPROPm);
+				break;
+			case 2:
+				((ResilientPropagation) train).setRPROPType(RPROPType.iRPROPp);
+				break;
+			case 3:
+				((ResilientPropagation) train).setRPROPType(RPROPType.iRPROPm);
+				break;
 			}
-			
-			if( kFold>0 ) {
-				train = this.wrapTrainer(trainingData,train,kFold);
+
+			if (kFold > 0) {
+				train = this.wrapTrainer(trainingData, train, kFold);
 			}
-			
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+
+			startup(file, train, dialog.getMaxError().getValue() / 100.0,
+					validationData);
 		}
 	}
 
-	private void performSCG(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performSCG(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputSCG dialog = new InputSCG();
 		if (dialog.process()) {
 			int kFold = dialog.getKfold().getValue();
-			
-			if( kFold>0 ) {
+
+			if (kFold > 0) {
 				trainingData = this.wrapTrainingData(trainingData);
 			}
-			
+
 			MLTrain train = new ScaledConjugateGradient(
 					(BasicNetwork) file.getObject(), trainingData);
-			
-			if( kFold>0 ) {
-				train = this.wrapTrainer(trainingData,train,kFold);
+
+			if (kFold > 0) {
+				train = this.wrapTrainer(trainingData, train, kFold);
 			}
-			
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+
+			startup(file, train, dialog.getMaxError().getValue() / 100.0,
+					validationData);
 		}
 	}
 
-	private void performSVM(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performSVM(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		SelectItem selectBasicSVM;
 		SelectItem selectSearchSVM;
 
@@ -561,7 +593,8 @@ public class TrainBasicNetwork {
 		}
 	}
 
-	private void performSVMSimple(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performSVMSimple(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputSVM dialog = new InputSVM((SVM) file.getObject());
 
 		if (dialog.process()) {
@@ -577,23 +610,23 @@ public class TrainBasicNetwork {
 			str.append("Training Error: ");
 			str.append(Format.formatPercent(error));
 			str.append("\n");
-			
-			if( validationData!=null ) {
+
+			if (validationData != null) {
 				str.append("Validation Error: ");
-				str.append(Format.formatPercent(method.calculateError(validationData)));
+				str.append(Format.formatPercent(method
+						.calculateError(validationData)));
 			}
 			str.append("\nSave training?");
-			
-			
-			if (EncogWorkBench.askQuestion("Training Done",
-					str.toString())) {
+
+			if (EncogWorkBench.askQuestion("Training Done", str.toString())) {
 				file.save();
 			}
 		}
 
 	}
 
-	private void performSVMSearch(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+	private void performSVMSearch(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputSearchSVM dialog = new InputSearchSVM();
 		SVM method = (SVM) file.getObject();
 
@@ -613,99 +646,119 @@ public class TrainBasicNetwork {
 			train.setConstBegin(dialog.getBeginningC().getValue());
 			train.setConstEnd(dialog.getEndingC().getValue());
 			train.setConstStep(dialog.getStepC().getValue());
-			EngineConcurrency.getInstance().setThreadCount(dialog.getThreadCount().getValue());
+			EngineConcurrency.getInstance().setThreadCount(
+					dialog.getThreadCount().getValue());
 			startup(file, train, maxError, validationData);
 		}
 	}
-	
-	private void performQPROP(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+
+	private void performQPROP(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputQPROP dialog = new InputQPROP();
 		if (dialog.process()) {
 			double learningRate = dialog.getLearningRate().getValue();
-			
+
 			int kFold = dialog.getKfold().getValue();
-			
-			if( kFold>0 ) {
+
+			if (kFold > 0) {
 				trainingData = this.wrapTrainingData(trainingData);
 			}
 
-			MLTrain train = new QuickPropagation((BasicNetwork) file.getObject(),
-					trainingData, learningRate);
-			
-			if( kFold>0 ) {
-				train = this.wrapTrainer(trainingData,train,kFold);
+			MLTrain train = new QuickPropagation(
+					(BasicNetwork) file.getObject(), trainingData, learningRate);
+
+			if (kFold > 0) {
+				train = this.wrapTrainer(trainingData, train, kFold);
 			}
-			
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+
+			startup(file, train, dialog.getMaxError().getValue() / 100.0,
+					validationData);
 		}
 
 	}
-	
+
 	private void performSVD(ProjectEGFile file, MLDataSet trainingData) {
-		
-		if( !(file.getObject() instanceof RBFNetwork) ) {
+
+		if (!(file.getObject() instanceof RBFNetwork)) {
 			throw new WorkBenchError("SVD training requires a RBF network.");
 		}
-		RBFNetwork network = (RBFNetwork)file.getObject();
-		if( network.getOutputCount()!=1 ) {
-			throw new WorkBenchError("SVD training requires a single output neuron.");
+		RBFNetwork network = (RBFNetwork) file.getObject();
+		if (network.getOutputCount() != 1) {
+			throw new WorkBenchError(
+					"SVD training requires a single output neuron.");
 		}
 		SVDTraining train = new SVDTraining(network, trainingData);
 		train.iteration();
-		
-		if( EncogWorkBench.askQuestion("Finished Training", "SVD trained to an error of " + Format.formatPercent(train.getError()) + "\nSave network?") ) {
+
+		if (EncogWorkBench.askQuestion(
+				"Finished Training",
+				"SVD trained to an error of "
+						+ Format.formatPercent(train.getError())
+						+ "\nSave network?")) {
 			file.save();
 		}
 	}
-	
-	private void performBayesian(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+
+	private void performBayesian(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 
 		InputBayesian d = new InputBayesian();
 
 		if (d.process()) {
-			BayesianInit theInit =  null;
-			BayesSearch theSearch =  null;
-			BayesEstimator theEstimator =  null;
-			
-			if( ((JComboBox)d.getInitOptions().getField()).getSelectedItem().equals("Empty") ) {
+			BayesianInit theInit = null;
+			BayesSearch theSearch = null;
+			BayesEstimator theEstimator = null;
+
+			if (((JComboBox) d.getInitOptions().getField()).getSelectedItem()
+					.equals("Empty")) {
 				theInit = BayesianInit.InitEmpty;
-			} else if( ((JComboBox)d.getInitOptions().getField()).getSelectedItem().equals("Naive Bayes") ) {
+			} else if (((JComboBox) d.getInitOptions().getField())
+					.getSelectedItem().equals("Naive Bayes")) {
 				theInit = BayesianInit.InitNaiveBayes;
-			} else if( ((JComboBox)d.getInitOptions().getField()).getSelectedItem().equals("No Change") ) {
+			} else if (((JComboBox) d.getInitOptions().getField())
+					.getSelectedItem().equals("No Change")) {
 				theInit = BayesianInit.InitNoChange;
 			}
-			
-			if( ((JComboBox)d.getSearchMethod().getField()).getSelectedItem().equals("K2") ) {
+
+			if (((JComboBox) d.getSearchMethod().getField()).getSelectedItem()
+					.equals("K2")) {
 				theSearch = new SearchK2();
-			} else if( ((JComboBox)d.getSearchMethod().getField()).getSelectedItem().equals("None") ) {
+			} else if (((JComboBox) d.getSearchMethod().getField())
+					.getSelectedItem().equals("None")) {
 				theSearch = new SearchNone();
 			}
-			
-			if( ((JComboBox)d.getEstimateMethod().getField()).getSelectedItem().equals("Simple") ) {
+
+			if (((JComboBox) d.getEstimateMethod().getField())
+					.getSelectedItem().equals("Simple")) {
 				theEstimator = new SimpleEstimator();
-			} else if( ((JComboBox)d.getEstimateMethod().getField()).getSelectedItem().equals("None") ) {
+			} else if (((JComboBox) d.getEstimateMethod().getField())
+					.getSelectedItem().equals("None")) {
 				theEstimator = new EstimatorNone();
 			}
-			
-			TrainBayesian train = new TrainBayesian((BayesianNetwork) file.getObject(),
-					 trainingData, d.getMaxParents().getValue(), theInit,
-						theSearch, theEstimator);
-			
+
+			TrainBayesian train = new TrainBayesian(
+					(BayesianNetwork) file.getObject(), trainingData, d
+							.getMaxParents().getValue(), theInit, theSearch,
+					theEstimator);
+
 			startup(file, train, 0.0, validationData);
 		}
 
 	}
-	
-	private void performPNN(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
 
-		BasicPNN network = (BasicPNN) file.getObject();		
-		TrainBasicPNN train = new TrainBasicPNN(network,trainingData);
+	private void performPNN(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
+
+		BasicPNN network = (BasicPNN) file.getObject();
+		TrainBasicPNN train = new TrainBasicPNN(network, trainingData);
 		train.iteration();
-		EncogWorkBench.displayMessage("Training Complete", "Final error: " + train.getError());
+		EncogWorkBench.displayMessage("Training Complete", "Final error: "
+				+ train.getError());
 
 	}
 
-	private void startup(ProjectEGFile file, MLTrain train, double maxError, MLDataSet validationData) {
+	private void startup(ProjectEGFile file, MLTrain train, double maxError,
+			MLDataSet validationData) {
 		EncogWorkBench.getInstance().setupThreads(train);
 		BasicTrainingProgress tab = new BasicTrainingProgress(train, file,
 				train.getTraining(), validationData);
@@ -713,32 +766,50 @@ public class TrainBasicNetwork {
 			tab.setParentTab(tab);
 		}
 		tab.setMaxError(maxError);
-		EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
+		EncogWorkBench.getInstance().getMainWindow().getTabManager()
+				.openTab(tab);
 	}
-	
-	private void performNelderMead(ProjectEGFile file, MLDataSet trainingData, MLDataSet validationData) {
+
+	private void performNelderMead(ProjectEGFile file, MLDataSet trainingData,
+			MLDataSet validationData) {
 		InputNelderMead dialog = new InputNelderMead();
 
 		if (dialog.process()) {
 			NelderMeadTraining train = new NelderMeadTraining(
 					(BasicNetwork) file.getObject(), trainingData);
-			startup(file, train, dialog.getMaxError().getValue() / 100.0, validationData);
+			startup(file, train, dialog.getMaxError().getValue() / 100.0,
+					validationData);
 		}
 	}
-	
+
 	private void performPrgPopulationTrain(ProjectEGFile file,
 			MLDataSet trainingData, MLDataSet validationData) {
-		PrgPopulation pop = (PrgPopulation)file.getObject();
-		PrgGenetic train = new PrgGenetic(pop,trainingData);
-		
-		pop.addRewriteRule(new RewriteConstants());
-		pop.addRewriteRule(new RewriteAlgebraic());
 
-		train.addOperation(0.95, new SubtreeCrossover());
-		train.addOperation(0.05, new SubtreeMutation(pop.getContext(),4));
-		
-		startup(file, train, 0.0, validationData);
-		
+		TrainEPLPopulationDialog dialog = new TrainEPLPopulationDialog();
+		if (dialog.process()) {
+
+			PrgPopulation pop = (PrgPopulation) file.getObject();
+			PrgGenetic train = new PrgGenetic(pop, trainingData);
+
+			if( dialog.getSimplify().getValue() ) {
+				pop.addRewriteRule(new RewriteConstants());
+				pop.addRewriteRule(new RewriteAlgebraic());
+			}
+
+			train.addOperation(0.95, new SubtreeCrossover());
+			train.addOperation(0.05, new SubtreeMutation(pop.getContext(), 4));
+			
+			ComplexityAdjustedScore adj = new ComplexityAdjustedScore(
+					dialog.getComplexityPenaltyThreshold().getValue(),
+					dialog.getComplexityPentaltyFullThreshold().getValue(),
+					dialog.getComplexityPenalty().getValue(),
+					dialog.getComplexityFullPenalty().getValue());
+
+			train.addScoreAdjuster(adj);
+
+			startup(file, train, 0.0, validationData);
+		}
+
 	}
-	
+
 }

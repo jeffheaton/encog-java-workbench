@@ -28,6 +28,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -35,10 +37,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
+import org.encog.ml.ea.score.AdjustScore;
+import org.encog.ml.ea.score.CalculateGenomeScore;
+import org.encog.ml.ea.score.GeneticScoreAdapter;
+import org.encog.ml.ea.score.parallel.ParallelScore;
 import org.encog.ml.ea.sort.MinimizeScoreComp;
 import org.encog.ml.prg.train.PrgPopulation;
 import org.encog.neural.neat.training.NEATGenome;
+import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.population.epl.RescoreDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.population.epl.EPLPopulationModel;
 import org.encog.workbench.process.CreateNewFile;
@@ -49,7 +57,7 @@ import org.encog.workbench.tabs.visualize.structure.GenomeStructureTab;
 public class EPLPopulationTab extends EncogCommonTab implements ActionListener, MouseListener {
 
 	private JButton btnTrain;
-	private JButton btnEdit;
+	private JButton btnRescore;
 	private JButton btnSort;
 	private JButton btnReset;
 	private JTabbedPane tabViews;
@@ -69,12 +77,12 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 		JPanel buttonPanel = new JPanel();
 		add(buttonPanel, BorderLayout.NORTH);
 		buttonPanel.add(btnTrain = new JButton("Train"));
-		buttonPanel.add(btnEdit = new JButton("Edit Population"));
+		buttonPanel.add(btnRescore = new JButton("Rescore"));
 		buttonPanel.add(btnSort = new JButton("Sort"));
 		buttonPanel.add(btnReset = new JButton("Reset"));
 		this.btnTrain.addActionListener(this);
 		this.btnSort.addActionListener(this);
-		this.btnEdit.addActionListener(this);
+		this.btnRescore.addActionListener(this);
 		this.btnReset.addActionListener(this);
 		JPanel mainPanel = new JPanel();
 		add(mainPanel, BorderLayout.CENTER);
@@ -108,8 +116,8 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 		try {
 			if (e.getSource() == this.btnTrain) {
 				performTrain();
-			} else if (e.getSource() == this.btnEdit) {
-				//performEdit();
+			} else if (e.getSource() == this.btnRescore) {
+				performRescore();
 			} else if (e.getSource() == this.btnSort) {
 				performSort();
 			} else if (e.getSource() == this.btnReset) {
@@ -120,6 +128,18 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 		}
 	}
 
+
+	private void performRescore() {
+		RescoreDialog dialog = new RescoreDialog();
+		
+		if( dialog.process() ) {
+			List<AdjustScore> adjusters = new ArrayList<AdjustScore>();
+			CalculateGenomeScore score = new GeneticScoreAdapter(new TrainingSetScore(dialog.getTrainingSet()));
+			ParallelScore ps = new ParallelScore(this.population,adjusters,score);
+			ps.process();
+			this.populationTable.repaint();
+		}
+	}
 
 	private void performTrain() {
 		
@@ -154,7 +174,7 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 				EncogWorkBench.displayError("Error", "Population size must be at least 10.");				
 				return;
 			}
-			CreateNewFile.resetEPLPopulation(this.population,sz);
+			CreateNewFile.resetEPLPopulation(this.population,sz,null);
 			this.populationTable.repaint();
 			this.repaint();
 			this.pi.repaint();
