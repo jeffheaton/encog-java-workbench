@@ -34,6 +34,7 @@ import org.encog.ml.ea.score.CalculateGenomeScore;
 import org.encog.ml.ea.score.GeneticScoreAdapter;
 import org.encog.ml.prg.EncogProgramContext;
 import org.encog.ml.prg.extension.StandardExtensions;
+import org.encog.ml.prg.generator.PrgGrowGenerator;
 import org.encog.ml.prg.train.PrgPopulation;
 import org.encog.ml.prg.train.rewrite.RewriteConstants;
 import org.encog.ml.prg.train.rewrite.algebraic.RewriteAlgebraic;
@@ -154,8 +155,7 @@ public class CreateNewFile {
 		pop.addRewriteRule(new RewriteAlgebraic());
 		Random random = new Random();
 		pop.getContext().getParams().setPopulationSize(sz);
-		pop.getGenomeFactory().factorRandomPopulation(random,
-				pop, score, 5);
+		(new PrgGrowGenerator(pop.getContext(),score,5)).generate(new Random(), pop);
 	}
 	
 	private static void createPopulationEPL(File path) {
