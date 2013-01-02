@@ -112,21 +112,29 @@ public class EPLTreeTab extends EncogCommonTab {
 				} else if( opcode == StandardExtensions.OPCODE_CONST_INT ) {
 					return (""+((int)node.getParam1()));
 				} else if( node.getTemplate().isOperator() ){
-					return node.getTemplate().getName() + "()";	
-				} else {
 					return node.getTemplate().getName();
+				} else {
+					return node.getTemplate().getName() + "()";	
 				}
 				
 			}});
 		
-		vv.setVertexToolTipTransformer(new ToStringLabeller());
+		vv.setVertexToolTipTransformer(new ToStringLabeller<MappedNode>());
 		
-		/*vv.setVertexToolTipTransformer(new Transformer<DrawnNeuron,String>() {
-			public String transform(DrawnNeuron edge) {
-				return edge.getToolTip();
+		vv.setVertexToolTipTransformer(new Transformer<MappedNode,String>() {
+			public String transform(MappedNode node) {
+				int opcode = node.getTemplate().getOpcode();
+				if( opcode == StandardExtensions.OPCODE_CONST_FLOAT ) {
+					double d = node.getConstValue().toFloatValue();
+					return (""+prg.getContext().getFormat().format(d,10));
+				} else if( opcode == StandardExtensions.OPCODE_CONST_INT ) {
+					return (""+((int)node.getParam1()));
+				} else {
+					return null;
+				}
 			}});
 		
-		vv.setEdgeToolTipTransformer(new Transformer<DrawnConnection,String>() {
+		/*vv.setEdgeToolTipTransformer(new Transformer<DrawnConnection,String>() {
 			public String transform(DrawnConnection edge) {
 				return edge.getToolTip();
 			}});*/
@@ -135,7 +143,7 @@ public class EPLTreeTab extends EncogCommonTab {
 		final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
 		this.setLayout(new BorderLayout());
         add(panel, BorderLayout.CENTER);
-        final AbstractModalGraphMouse graphMouse = new DefaultModalGraphMouse();
+        final AbstractModalGraphMouse graphMouse = new DefaultModalGraphMouse<MappedNode,Integer>();
         vv.setGraphMouse(graphMouse);
         vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint);
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
