@@ -46,6 +46,7 @@ import org.encog.workbench.dialogs.select.SelectItem;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.encog.workbench.tabs.query.general.RegressionQueryTab;
+import org.encog.workbench.tabs.visualize.epl.EPLLatexTab;
 import org.encog.workbench.tabs.visualize.epl.EPLTreeTab;
 
 public class EncogProgramTab extends EncogCommonTab implements ActionListener {
@@ -130,12 +131,25 @@ public class EncogProgramTab extends EncogCommonTab implements ActionListener {
 
 		if (sel.getSelected() == selectTree) {
 			analyzeTree();
+		} else if (sel.getSelected() == selectLatex) {
+			analyzeLatex();
 		} 
 	}
 	
 	private void analyzeTree() {
 		try {
 			EPLTreeTab tab = new EPLTreeTab(this.program);
+			EncogWorkBench.getInstance().getMainWindow().getTabManager()
+					.openModalTab(tab, "Encog Program");	
+			
+		} catch (Throwable t) {
+			EncogWorkBench.displayError("Error", t);
+		}
+	}
+	
+	private void analyzeLatex() {
+		try {
+			EPLLatexTab tab = new EPLLatexTab(this.program);
 			EncogWorkBench.getInstance().getMainWindow().getTabManager()
 					.openModalTab(tab, "Encog Program");	
 			
