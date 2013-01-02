@@ -66,7 +66,7 @@ public class EncogProgramTab extends EncogCommonTab implements ActionListener {
 	public EncogProgramTab(final EncogProgram data) {
 		super(null);
 
-		this.program = (EncogProgram)data;
+		this.program = (EncogProgram) data;
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);
@@ -93,9 +93,22 @@ public class EncogProgramTab extends EncogCommonTab implements ActionListener {
 				performQuery();
 			} else if (action.getSource() == this.buttonVisualize) {
 				this.handleVisualize();
+			} else if (action.getSource() == this.buttonRestructure) {
+				this.handleRestructure();
 			}
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
+		}
+	}
+
+	private void handleRestructure() {
+		try {
+			String source = EncogWorkBench
+					.displayInput("Enter a new expression.");
+			this.program.compileExpression(source);
+			this.produceReport();
+		} catch (Throwable t) {
+			EncogWorkBench.displayError("Compile Error", t);
 		}
 	}
 
@@ -104,8 +117,8 @@ public class EncogProgramTab extends EncogCommonTab implements ActionListener {
 			RegressionQueryTab tab = new RegressionQueryTab(
 					((ProjectEGFile) this.getEncogObject()));
 			EncogWorkBench.getInstance().getMainWindow().getTabManager()
-					.openModalTab(tab, "Query Regression");	
-			
+					.openModalTab(tab, "Query Encog Program");
+
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
 		}
@@ -119,7 +132,7 @@ public class EncogProgramTab extends EncogCommonTab implements ActionListener {
 	public void handleVisualize() {
 		SelectItem selectTree;
 		SelectItem selectLatex;
-		
+
 		List<SelectItem> list = new ArrayList<SelectItem>();
 		list.add(selectTree = new SelectItem("Tree",
 				"View the program as a tree."));
@@ -133,32 +146,30 @@ public class EncogProgramTab extends EncogCommonTab implements ActionListener {
 			analyzeTree();
 		} else if (sel.getSelected() == selectLatex) {
 			analyzeLatex();
-		} 
+		}
 	}
-	
+
 	private void analyzeTree() {
 		try {
 			EPLTreeTab tab = new EPLTreeTab(this.program);
 			EncogWorkBench.getInstance().getMainWindow().getTabManager()
-					.openModalTab(tab, "Encog Program");	
-			
-		} catch (Throwable t) {
-			EncogWorkBench.displayError("Error", t);
-		}
-	}
-	
-	private void analyzeLatex() {
-		try {
-			EPLLatexTab tab = new EPLLatexTab(this.program);
-			EncogWorkBench.getInstance().getMainWindow().getTabManager()
-					.openModalTab(tab, "Encog Program");	
-			
+					.openModalTab(tab, "Encog Program");
+
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
 		}
 	}
 
-	
+	private void analyzeLatex() {
+		try {
+			EPLLatexTab tab = new EPLLatexTab(this.program);
+			EncogWorkBench.getInstance().getMainWindow().getTabManager()
+					.openModalTab(tab, "Encog Program");
+
+		} catch (Throwable t) {
+			EncogWorkBench.displayError("Error", t);
+		}
+	}
 
 	public void produceReport() {
 		HTMLReport report = new HTMLReport();
@@ -172,31 +183,27 @@ public class EncogProgramTab extends EncogCommonTab implements ActionListener {
 		report.tablePair("Input Count",
 				Format.formatInteger(this.program.getInputCount()));
 
-		report.tablePair("Size",
-				Format.formatInteger(this.program.size()));
+		report.tablePair("Size", Format.formatInteger(this.program.size()));
 		report.tablePair("Score",
-				Format.formatDouble(this.program.getScore(),4));
+				Format.formatDouble(this.program.getScore(), 4));
 		report.tablePair("Adjusted Score",
-				Format.formatDouble(this.program.getAdjustedScore(),4));
+				Format.formatDouble(this.program.getAdjustedScore(), 4));
 
 		RenderCommonExpression renderCommonFormat = new RenderCommonExpression();
 		RenderRPN renderRPN = new RenderRPN();
-		
-		
+
 		report.tablePair("Common Format",
 				renderCommonFormat.render(this.program));
-		
+
 		report.tablePair("Reverse Polish Notation (RPN)",
 				renderRPN.render(this.program));
-				
+
 		report.endTable();
-		
 
 		report.endBody();
 		report.endHTML();
 		this.editor.setText(report.toString());
 	}
-
 
 	@Override
 	public String getName() {
