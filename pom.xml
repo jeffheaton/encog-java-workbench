@@ -247,5 +247,10 @@ Authors of this POM file: iirekm, jheaton
       <artifactId>itext</artifactId>
       <version>2.1.7</version>
     </dependency>
+    <dependency>
+      <groupId>org.scilab.forge</groupId>
+      <artifactId>jlatexmath</artifactId>
+      <version>0.9.6</version>
+    </dependency>
   </dependencies>
 </project>

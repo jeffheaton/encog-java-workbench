@@ -27,6 +27,7 @@
 	<classpathentry kind="var" path="M2_REPO/junit/junit/4.8.1/junit-4.8.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/stax/stax-api/1.0.1/stax-api-1.0.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/codehaus/woodstox/wstx-asl/3.2.6/wstx-asl-3.2.6.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/scilab/forge/jlatexmath/0.9.6/jlatexmath-0.9.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/encog-core"/>
 	<classpathentry kind="output" path="target/classes"/>
