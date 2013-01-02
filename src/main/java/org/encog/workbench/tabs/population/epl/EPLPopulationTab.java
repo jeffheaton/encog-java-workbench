@@ -46,6 +46,7 @@ import org.encog.ml.prg.EncogProgram;
 import org.encog.ml.prg.train.PrgPopulation;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.training.TrainingSetScore;
+import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.population.epl.RescoreDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
@@ -142,7 +143,7 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 			CalculateGenomeScore score = new GeneticScoreAdapter(
 					new TrainingSetScore(dialog.getTrainingSet()));
 			ParallelScore ps = new ParallelScore(this.population, adjusters,
-					score);
+					score, 0);
 			ps.process();
 			this.populationTable.repaint();
 		}

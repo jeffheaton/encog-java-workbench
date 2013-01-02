@@ -29,6 +29,7 @@ import java.util.List;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.workbench.EncogWorkBench;
+import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.dialogs.common.EncogPropertiesDialog;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
@@ -43,6 +44,7 @@ import org.encog.workbench.frames.document.tree.ProjectTraining;
 public class RescoreDialog extends EncogPropertiesDialog {
 
 	private ComboBoxField comboTraining;
+	private final CheckField loadToMemory;
 	
 	/**
 	 * The serial id.
@@ -65,7 +67,9 @@ public class RescoreDialog extends EncogPropertiesDialog {
 		setSize(400,400);
 		setLocation(200,200);
 		addProperty(this.comboTraining = new ComboBoxField("training set","Training Set",true,this.trainingSets));
+		addProperty(this.loadToMemory = new CheckField("load to memory","Load to Memory (better performance)"));
 		render();
+		this.loadToMemory.setValue(true);
 	}
 
 
@@ -82,11 +86,14 @@ public class RescoreDialog extends EncogPropertiesDialog {
 	 * @return The training set that the user chose.
 	 */
 	public MLDataSet getTrainingSet() {
-		if( this.comboTraining.getSelectedValue()==null )			
+		if( this.getComboTraining().getSelectedValue()==null )			
 			return null;
-		File file = ((ProjectTraining)this.comboTraining.getSelectedValue()).getFile();
+		File file = ((ProjectTraining)this.getComboTraining().getSelectedValue()).getFile();
 		BufferedMLDataSet result = new BufferedMLDataSet(file);
-		return result;
+		if( this.loadToMemory.getValue())
+			return result.loadToMemory();
+		else
+			return result;
 	}
 	
 	public ComboBoxField getComboTraining() {
