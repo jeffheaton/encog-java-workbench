@@ -42,6 +42,7 @@ import org.encog.ml.ea.score.CalculateGenomeScore;
 import org.encog.ml.ea.score.GeneticScoreAdapter;
 import org.encog.ml.ea.score.parallel.ParallelScore;
 import org.encog.ml.ea.sort.MinimizeScoreComp;
+import org.encog.ml.prg.EncogProgram;
 import org.encog.ml.prg.train.PrgPopulation;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.training.TrainingSetScore;
@@ -52,9 +53,9 @@ import org.encog.workbench.models.population.epl.EPLPopulationModel;
 import org.encog.workbench.process.CreateNewFile;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
-import org.encog.workbench.tabs.visualize.structure.GenomeStructureTab;
 
-public class EPLPopulationTab extends EncogCommonTab implements ActionListener, MouseListener {
+public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
+		MouseListener {
 
 	private JButton btnTrain;
 	private JButton btnRescore;
@@ -97,18 +98,23 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 		this.populationModel = new EPLPopulationModel(population);
 		this.populationTable = new JTable(this.populationModel);
 		this.populationTable.addMouseListener(this);
-		this.populationScroll = new JScrollPane(this.populationTable);		
+		this.populationScroll = new JScrollPane(this.populationTable);
 
 		this.tabViews.addTab("General Population", this.populationScroll);
-		//this.tabViews.addTab("Species", this.speciesScroll);
-		//this.tabViews.addTab("Innovation", this.innovationScroll);
-		
+		// this.tabViews.addTab("Species", this.speciesScroll);
+		// this.tabViews.addTab("Innovation", this.innovationScroll);
+
 		this.populationTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		this.populationTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-		this.populationTable.getColumnModel().getColumn(1).setPreferredWidth(60);
-		this.populationTable.getColumnModel().getColumn(2).setPreferredWidth(90);
-		this.populationTable.getColumnModel().getColumn(3).setPreferredWidth(90);
-		this.populationTable.getColumnModel().getColumn(4).setPreferredWidth(5000);
+		this.populationTable.getColumnModel().getColumn(0)
+				.setPreferredWidth(30);
+		this.populationTable.getColumnModel().getColumn(1)
+				.setPreferredWidth(60);
+		this.populationTable.getColumnModel().getColumn(2)
+				.setPreferredWidth(90);
+		this.populationTable.getColumnModel().getColumn(3)
+				.setPreferredWidth(90);
+		this.populationTable.getColumnModel().getColumn(4)
+				.setPreferredWidth(5000);
 
 	}
 
@@ -128,22 +134,24 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 		}
 	}
 
-
 	private void performRescore() {
 		RescoreDialog dialog = new RescoreDialog();
-		
-		if( dialog.process() ) {
+
+		if (dialog.process()) {
 			List<AdjustScore> adjusters = new ArrayList<AdjustScore>();
-			CalculateGenomeScore score = new GeneticScoreAdapter(new TrainingSetScore(dialog.getTrainingSet()));
-			ParallelScore ps = new ParallelScore(this.population,adjusters,score);
+			CalculateGenomeScore score = new GeneticScoreAdapter(
+					new TrainingSetScore(dialog.getTrainingSet()));
+			ParallelScore ps = new ParallelScore(this.population, adjusters,
+					score);
 			ps.process();
 			this.populationTable.repaint();
 		}
 	}
 
 	private void performTrain() {
-		
-		TrainBasicNetwork t = new TrainBasicNetwork((ProjectEGFile)this.getEncogObject(),this);
+
+		TrainBasicNetwork t = new TrainBasicNetwork(
+				(ProjectEGFile) this.getEncogObject(), this);
 		t.performTrain();
 	}
 
@@ -154,35 +162,32 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getClickCount() == 2) {
-	         JTable target = (JTable)e.getSource();
-	         int row = target.getSelectedRow();
-	         if( target==this.populationTable) {
-	        	 NEATGenome genome = (NEATGenome)this.population.get(row);
-	        	 GenomeStructureTab tab = new GenomeStructureTab(genome);
-	        	 EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
-	         } 
-	   }
-		
-	}
-	
-	public void performReset() {
-		String str = EncogWorkBench.getInstance().displayInput("New population size");
 		try {
-			int sz = Integer.parseInt(str);
-			if( sz<10 ) {
-				EncogWorkBench.displayError("Error", "Population size must be at least 10.");				
-				return;
+			if (e.getClickCount() == 2) {
+				JTable target = (JTable) e.getSource();
+				int row = target.getSelectedRow();
+				if (target == this.populationTable) {
+					EncogProgram genome = (EncogProgram) this.population
+							.get(row);
+					EncogProgramTab tab = new EncogProgramTab(genome);
+					EncogWorkBench.getInstance().getMainWindow()
+							.getTabManager().openTab(tab);
+				}
 			}
-			CreateNewFile.resetEPLPopulation(this.population,sz,null);
-			this.populationTable.repaint();
-			this.repaint();
-			this.pi.repaint();
-		} catch(NumberFormatException ex) {
-			EncogWorkBench.displayError("Error", "Invalid population size.");
+		} catch (Throwable t) {
+			EncogWorkBench.displayError("Error", t);
 		}
+
 	}
-	
+
+	public void performReset() {
+		CreateNewFile.createPopulationEPL(null, this.population);
+
+		this.populationTable.repaint();
+		this.repaint();
+		this.pi.repaint();
+	}
+
 	private void performSort() {
 		this.population.sort(new MinimizeScoreComp());
 		this.populationTable.repaint();
@@ -191,25 +196,25 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener, 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

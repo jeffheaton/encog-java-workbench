@@ -150,15 +150,7 @@ public class CreateNewFile {
 		}
 	}
 	
-	public static void resetEPLPopulation(PrgPopulation pop, int sz, CalculateGenomeScore score) {
-		pop.addRewriteRule(new RewriteConstants());
-		pop.addRewriteRule(new RewriteAlgebraic());
-		Random random = new Random();
-		pop.getContext().getParams().setPopulationSize(sz);
-		(new PrgGrowGenerator(pop.getContext(),score,5)).generate(new Random(), pop);
-	}
-	
-	private static void createPopulationEPL(File path) {
+	public static void createPopulationEPL(File path, PrgPopulation pop) {
 		CreateEPLPopulationDialog dialog = new CreateEPLPopulationDialog();
 		if( dialog.process() ) {
 			int populationSize = dialog.getPopulationSize().getValue();
@@ -175,11 +167,20 @@ public class CreateNewFile {
 
 			StandardExtensions.createNumericOperators(context.getFunctions());
 
-			PrgPopulation pop = new PrgPopulation(context);
-			resetEPLPopulation(pop,populationSize,score);
+			if( pop==null ) {
+				pop = new PrgPopulation(context);
+			}
+			
+			pop.addRewriteRule(new RewriteConstants());
+			pop.addRewriteRule(new RewriteAlgebraic());
 
-			EncogWorkBench.getInstance().save(path,pop);
-			EncogWorkBench.getInstance().refresh();
+			pop.getContext().getParams().setPopulationSize(populationSize);
+			(new PrgGrowGenerator(pop.getContext(),score,5)).generate(new Random(), pop);
+
+			if( path!=null ) {
+				EncogWorkBench.getInstance().save(path,pop);
+				EncogWorkBench.getInstance().refresh();
+			}
 		}
 	}
 	
@@ -189,7 +190,7 @@ public class CreateNewFile {
 		{
 			switch(dialog.getTheType()) {
 			case NEAT:createPopulationNEAT(path);break;
-			case EPL:createPopulationEPL(path);break;
+			case EPL:createPopulationEPL(path,null);break;
 			}
 		}
 	}
