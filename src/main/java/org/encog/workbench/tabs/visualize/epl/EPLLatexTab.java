@@ -28,13 +28,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
-import java.io.FileOutputStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
 import org.encog.ml.prg.EncogProgram;
 import org.encog.ml.prg.util.MappedNode;
+import org.encog.parse.expression.latex.RenderLatexExpression;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.EncogCommonTab;
 import org.scilab.forge.jlatexmath.TeXConstants;
@@ -54,7 +53,8 @@ public class EPLLatexTab extends EncogCommonTab {
 		super(null);
 		
 		try {
-			String latex = "x=\\frac{-b \\pm \\sqrt {b^2-4ac}}{2a}";
+			RenderLatexExpression render = new RenderLatexExpression();
+			String latex = render.render(prg);
 			TeXFormula formula = new TeXFormula(latex);
 			TeXIcon icon = formula
 					.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20);
