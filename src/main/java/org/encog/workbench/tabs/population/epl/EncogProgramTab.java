@@ -114,8 +114,7 @@ public class EncogProgramTab extends EncogCommonTab implements ActionListener {
 
 	private void performQuery() {
 		try {
-			RegressionQueryTab tab = new RegressionQueryTab(
-					((ProjectEGFile) this.getEncogObject()));
+			RegressionQueryTab tab = new RegressionQueryTab(this.program);
 			EncogWorkBench.getInstance().getMainWindow().getTabManager()
 					.openModalTab(tab, "Query Encog Program");
 

@@ -54,12 +54,14 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 	private int inputCount;
 	private int outputCount;
 	private JButton calculateButton;
+	private MLRegression method;
 
-	public RegressionQueryTab(final ProjectEGFile data) {
-		super(data);
+	public RegressionQueryTab(final MLRegression theMethod) {
+		super(null);
+		this.method = theMethod;
 		
-		this.inputCount = getData().getInputCount();
-		this.outputCount = getData().getOutputCount();
+		this.inputCount = theMethod.getInputCount();
+		this.outputCount = theMethod.getOutputCount();
 
 		// create the graphic objects
 		this.setSize(640, 480);
@@ -116,7 +118,7 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 					input.setData(i, value);
 				}
 
-				final MLData output = getData().compute(input);
+				final MLData output = this.method.compute(input);
 
 				for (int i = 0; i < this.outputCount; i++) {
 					this.outputTable.setValueAt(output.getData(i), i, 1);
@@ -130,17 +132,13 @@ public class RegressionQueryTab extends EncogCommonTab implements ActionListener
 
 	}
 
-	public MLRegression getData() {
-		return (MLRegression)((ProjectEGFile)getEncogObject()).getObject();
-	}
-
 	public void mouseClicked(final MouseEvent e) {
 		// TODO Auto-generated method stub
 	}
 	
 	@Override
 	public String getName() {
-		return "Reg :" + this.getEncogObject().getName();
+		return "Query Encog Program";
 	}
 
 }

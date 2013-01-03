@@ -300,8 +300,8 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 					EncogWorkBench.getInstance().getMainWindow().getTabManager()
 							.openModalTab(tab, "Query Classification");					
 				} else if( sel.getSelected()==selectRegression ) {
-					RegressionQueryTab tab = new RegressionQueryTab(
-							((ProjectEGFile) this.getEncogObject()));
+					RegressionQueryTab tab = new RegressionQueryTab((MLRegression)
+							((ProjectEGFile) this.getEncogObject()).getObject());
 					EncogWorkBench.getInstance().getMainWindow().getTabManager()
 							.openModalTab(tab, "Query Regression");					
 				}  else if( sel.getSelected()==selectOCR ) {
