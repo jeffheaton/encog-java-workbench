@@ -200,7 +200,8 @@ public class EPLTreeTab extends EncogCommonTab {
 	}
 	
 	private void graphNode(MappedNode parentNode) {
-		for( MappedNode childNode : parentNode.getChildren() ) {
+		for(int i=parentNode.getChildren().size()-1;i>=0;i--) {
+			MappedNode childNode  = (MappedNode)parentNode.getChildren().get(i); 
 			graphNode(childNode);
 			graph.addEdge(new Integer(edgeIndex++), parentNode, childNode);
 		}
