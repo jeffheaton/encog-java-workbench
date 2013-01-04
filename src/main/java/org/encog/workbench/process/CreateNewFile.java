@@ -152,9 +152,21 @@ public class CreateNewFile {
 	
 	public static void createPopulationEPL(File path, PrgPopulation pop) {
 		CreateEPLPopulationDialog dialog = new CreateEPLPopulationDialog();
+		
+		if( pop!=null ) {
+			dialog.getPopulationSize().setValue(pop.size());
+			
+			for(String varName : pop.getContext().getDefinedVariables() ) {
+				dialog.getInputVariables().getModel().addElement(varName);
+			}
+		} else {
+			dialog.getInputVariables().getModel().addElement("x");
+			dialog.getPopulationSize().setValue(1000);
+		}
+		
 		if( dialog.process() ) {
 			int populationSize = dialog.getPopulationSize().getValue();
-			int inputCount = dialog.getInputSize().getValue();
+			int maxDepth = dialog.getMaxDepth().getValue();
 			
 			CalculateGenomeScore score = null;
 			
@@ -163,7 +175,11 @@ public class CreateNewFile {
 			}
 			
 			EncogProgramContext context = new EncogProgramContext();
-			context.defineVariable("x");
+			
+			for(int i=0;i<dialog.getInputVariables().getModel().getSize();i++) {
+				String str = (String)dialog.getInputVariables().getModel().get(i);
+				context.defineVariable(str);
+			}
 
 			StandardExtensions.createNumericOperators(context.getFunctions());
 
@@ -175,7 +191,7 @@ public class CreateNewFile {
 			pop.addRewriteRule(new RewriteAlgebraic());
 
 			pop.getContext().getParams().setPopulationSize(populationSize);
-			(new PrgGrowGenerator(pop.getContext(),score,5)).generate(new Random(), pop);
+			(new PrgGrowGenerator(pop.getContext(),score,maxDepth)).generate(new Random(), pop);
 
 			if( path!=null ) {
 				EncogWorkBench.getInstance().save(path,pop);
