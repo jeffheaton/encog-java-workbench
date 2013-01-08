@@ -265,19 +265,19 @@ public class TrainBasicNetwork {
 
 			Object obj = dialog.getMethodOrPopulation();
 
-			if (obj instanceof MLMethod) {
-				MLMethod method = (MLMethod) obj;
-				MLDataSet trainingData = dialog.getTrainingSet();
-				ProjectEGFile file = (ProjectEGFile) dialog.getComboNetwork()
-						.getSelectedValue();
-				performMethodTrain(method, trainingData, file,
-						dialog.getValidationSet());
-			} else {
+			if (obj instanceof NEATPopulation) {
 				NEATPopulation population = (NEATPopulation) obj;
 				MLDataSet trainingData = dialog.getTrainingSet();
 				ProjectEGFile file = (ProjectEGFile) dialog.getComboNetwork()
 						.getSelectedValue();
 				performNEATTrain(population, trainingData, file,
+						dialog.getValidationSet());
+			} else if (obj instanceof MLMethod) {
+				MLMethod method = (MLMethod) obj;
+				MLDataSet trainingData = dialog.getTrainingSet();
+				ProjectEGFile file = (ProjectEGFile) dialog.getComboNetwork()
+						.getSelectedValue();
+				performMethodTrain(method, trainingData, file,
 						dialog.getValidationSet());
 			}
 
@@ -791,19 +791,19 @@ public class TrainBasicNetwork {
 			PrgPopulation pop = (PrgPopulation) file.getObject();
 			PrgGenetic train = new PrgGenetic(pop, trainingData);
 
-			if( dialog.getSimplify().getValue() ) {
+			if (dialog.getSimplify().getValue()) {
 				pop.addRewriteRule(new RewriteConstants());
 				pop.addRewriteRule(new RewriteAlgebraic());
 			}
 
 			train.addOperation(0.95, new SubtreeCrossover());
 			train.addOperation(0.05, new SubtreeMutation(pop.getContext(), 4));
-			
-			ComplexityAdjustedScore adj = new ComplexityAdjustedScore(
-					dialog.getComplexityPenaltyThreshold().getValue(),
-					dialog.getComplexityPentaltyFullThreshold().getValue(),
-					dialog.getComplexityPenalty().getValue(),
-					dialog.getComplexityFullPenalty().getValue());
+
+			ComplexityAdjustedScore adj = new ComplexityAdjustedScore(dialog
+					.getComplexityPenaltyThreshold().getValue(), dialog
+					.getComplexityPentaltyFullThreshold().getValue(), dialog
+					.getComplexityPenalty().getValue(), dialog
+					.getComplexityFullPenalty().getValue());
 
 			train.addScoreAdjuster(adj);
 

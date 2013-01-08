@@ -249,12 +249,12 @@ public class EncogDocumentFrame extends EncogCommonFrame {
 			tab = new BayesianNetworkTab(file);
 		} else if( obj instanceof PrgPopulation ) {
 			tab = new EPLPopulationTab(file);
-		} else if( obj instanceof MLMethod ) {
-			tab = new MLMethodTab(file);
 		} else if( obj instanceof NEATPopulation ) {
 			tab = new NEATPopulationTab(file);
 		} else if( obj instanceof TrainingContinuation ){ 
 			tab = new TrainingContTab(file);
+		} else if( obj instanceof MLMethod ) {
+			tab = new MLMethodTab(file);
 		} else {
 			tab = new UnknownObjectTab(file);
 		}

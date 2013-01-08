@@ -38,31 +38,25 @@ public class NewPopulationDialog extends EncogPropertiesDialog implements PopupL
 	private final IntegerField populationSize;
 	private final IntegerField inputNeurons;
 	private final IntegerField outputNeurons;
-	private PopupField outputActivationField;
 	private PopupField neatActivationField;
-	private ActivationFunction outputActivationFunction;
 	private ActivationFunction neatActivationFunction;
 	private IntegerField activationCycles;
 	
 	public NewPopulationDialog() {
 		super(EncogWorkBench.getInstance().getMainWindow());
-		this.setSize(400, 200);
+		this.setSize(500, 300);
 		this.setTitle("Create NEAT Population");
 		
 		addProperty(this.populationSize = new IntegerField("population size","Population Size",true,1,-1));
 		addProperty(this.inputNeurons = new IntegerField("input size","Input Neurons",true,1,-1));
 		addProperty(this.outputNeurons = new IntegerField("output size","output Neurons",true,1,-1));
 		addProperty(this.activationCycles = new IntegerField("cycles","Cycles",true,0,5000));
-		
-		addProperty(this.outputActivationField = new PopupField("output activation",
-				"Output Activation Function", true));
 		addProperty(this.neatActivationField = new PopupField("NEAT activation",
 				"NEAT Activation Function", true));
 
 
 		render();
 		this.setNeatActivationFunction(new ActivationSteepenedSigmoid());
-		this.setOutputActivationFunction(new ActivationLinear());
 	}
 
 	public IntegerField getPopulationSize() {
@@ -78,17 +72,7 @@ public class NewPopulationDialog extends EncogPropertiesDialog implements PopupL
 	}
 	
 	public String popup(PopupField field) {
-		if (field == this.outputActivationField) {
-			ActivationDialog dialog = new ActivationDialog(EncogWorkBench
-					.getInstance().getMainWindow());
-			dialog.setActivation(this.outputActivationFunction);
-			if (!dialog.process())
-				return null;
-			else {
-				this.outputActivationFunction = dialog.getActivation();
-				return dialog.getActivation().getClass().getSimpleName();
-			}
-		} else if (field == this.neatActivationField) {
+		if (field == this.neatActivationField) {
 			ActivationDialog dialog = new ActivationDialog(EncogWorkBench
 					.getInstance().getMainWindow());
 			dialog.setActivation(this.neatActivationFunction);
@@ -102,23 +86,8 @@ public class NewPopulationDialog extends EncogPropertiesDialog implements PopupL
 			return null;
 	}
 
-	public PopupField getOutputActivationField() {
-		return outputActivationField;
-	}
-
 	public PopupField getNeatActivationField() {
 		return neatActivationField;
-	}
-
-	public void setOutputActivationFunction(
-			ActivationFunction activationFunction) {
-		this.outputActivationFunction = activationFunction;
-		this.outputActivationField.setValue(activationFunction.getClass()
-				.getSimpleName());
-	}
-
-	public ActivationFunction getOutputActivationFunction() {
-		return outputActivationFunction;
 	}
 
 	public ActivationFunction getNeatActivationFunction() {
