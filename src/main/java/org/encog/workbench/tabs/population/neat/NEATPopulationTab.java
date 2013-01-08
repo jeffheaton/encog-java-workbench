@@ -57,7 +57,6 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 
 	private JButton btnTrain;
 	private JButton btnEdit;
-	private JButton btnExtract;
 	private JButton btnReset;
 	private JTabbedPane tabViews;
 
@@ -86,10 +85,8 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 		add(buttonPanel, BorderLayout.NORTH);
 		buttonPanel.add(btnTrain = new JButton("Train"));
 		buttonPanel.add(btnEdit = new JButton("Edit Population"));
-		buttonPanel.add(btnExtract = new JButton("Extract Top Genomes"));
 		buttonPanel.add(btnReset = new JButton("Reset"));
 		this.btnTrain.addActionListener(this);
-		this.btnExtract.addActionListener(this);
 		this.btnEdit.addActionListener(this);
 		this.btnReset.addActionListener(this);
 		JPanel mainPanel = new JPanel();
@@ -128,8 +125,6 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 				performTrain();
 			} else if (e.getSource() == this.btnEdit) {
 				performEdit();
-			} else if (e.getSource() == this.btnExtract) {
-				performExtract();
 			} else if (e.getSource() == this.btnReset) {
 				performReset();
 			}

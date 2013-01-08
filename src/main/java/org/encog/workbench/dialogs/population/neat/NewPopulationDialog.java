@@ -56,6 +56,7 @@ public class NewPopulationDialog extends EncogPropertiesDialog implements PopupL
 
 
 		render();
+		this.activationCycles.setValue(1);
 		this.setNeatActivationFunction(new ActivationSteepenedSigmoid());
 	}
 
