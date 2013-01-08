@@ -110,6 +110,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 
 		methods.add("Bayesian Network");
 		methods.add("Feedforward Network");
+		methods.add("NEAT Network");
 		methods.add("RBF Network");
 		methods.add("PNN/GRNN Network");
 		methods.add("Self Organizing Map (SOM)");
@@ -181,12 +182,14 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 			case 1:
 				return WizardMethodType.FeedForward;
 			case 2:
-				return WizardMethodType.RBF;
+				return WizardMethodType.NEAT;
 			case 3:
-				return WizardMethodType.PNN;
+				return WizardMethodType.RBF;
 			case 4:
-				return WizardMethodType.SOM;
+				return WizardMethodType.PNN;
 			case 5:
+				return WizardMethodType.SOM;
+			case 6:
 				return WizardMethodType.SVM;
 			default:
 				return null;
