@@ -144,7 +144,7 @@ public class CreateNewFile {
 			int cycles = dialog.getActivationCycles().getValue();
 			NEATPopulation pop = new NEATPopulation(inputCount,outputCount,populationSize);
 			pop.setActivationCycles(cycles);
-			pop.setNeatActivationFunction(dialog.getNeatActivationFunction());
+			pop.setNEATActivationFunction(dialog.getNeatActivationFunction());
 			EncogWorkBench.getInstance().save(path,pop);
 			EncogWorkBench.getInstance().refresh();
 		}

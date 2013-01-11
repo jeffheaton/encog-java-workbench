@@ -110,7 +110,15 @@ public class NEATPopulationInfo extends JPanel {
 		g.setFont(WorkbenchFonts.getTextFont());
 		g.drawString(Format.formatInteger(population.getPopulationSize()), 200, y);
 		g.drawString(Format.formatInteger(population.getOldAgeThreshold()), 450, y);
-		g.drawString(population.getNeatActivationFunction().getClass().getSimpleName(), 730, y);
+		String af;
+		if( population.isHyperNEAT() ) {
+			af = "HyperNEAT";
+		} else {
+			af = population.getActivationFunctions().getList().get(0).getObj().getClass().getSimpleName();
+		}
+		
+		
+		g.drawString(af, 730, y);
 		y+=fm.getHeight();
 		g.drawString(Format.formatInteger(populationSize), 200, y);
 		g.drawString(Format.formatPercent(population.getOldAgePenalty()), 450, y);

@@ -36,6 +36,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
+import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.ml.ea.genome.Genome;
 import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.neat.NEATPopulation;
@@ -170,9 +171,11 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 				this.population.getYoungBonusAgeThreshold());
 		dialog.getYoungScoreBonus().setValue(
 				this.population.getYoungScoreBonus());
-		dialog.setNeatActivationFunction(this.population
-				.getNeatActivationFunction());
-
+		
+		if( !this.population.isHyperNEAT()) {
+			ActivationFunction af = population.getActivationFunctions().getList().get(0).getObj();
+		}
+	
 		dialog.getActivationCycles().setValue(population.getActivationCycles());
 
 		if (dialog.process()) {
@@ -188,8 +191,10 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 					.getYoungBonusAgeThreshold().getValue());
 			this.population.setYoungScoreBonus(dialog.getYoungScoreBonus()
 					.getValue());
-			this.population.setNeatActivationFunction(dialog
+			if(!this.population.isHyperNEAT()) {
+				this.population.setNEATActivationFunction(dialog
 					.getNeatActivationFunction());
+			}
 
 			this.population.setActivationCycles(dialog.getActivationCycles().getValue());
 			this.pi.repaint();
