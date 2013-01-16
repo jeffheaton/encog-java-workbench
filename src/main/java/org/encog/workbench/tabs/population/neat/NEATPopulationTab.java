@@ -134,30 +134,6 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 		}
 	}
 
-	private void performExtract() {
-		ExtractGenomes dialog = new ExtractGenomes(EncogWorkBench.getInstance()
-				.getMainWindow(), this.population.getPopulationSize());
-
-		if (dialog.process()) {
-			String prefix = dialog.getPrefix().getValue();
-			int count = dialog.getGenomesToExtract().getValue();
-			
-			for(int i=0;i<count;i++)
-			{
-				Genome genome = this.population.getGenomes().get(i);
-				genome.decode();
-				NEATNetwork network = (NEATNetwork)genome.getOrganism();
-				String name = FileUtil.forceExtension( prefix + i, "eg" );
-				File path = new File(EncogWorkBench.getInstance().getProjectDirectory(),name);
-				EncogWorkBench.getInstance().save(path, network);
-				
-			}
-			EncogWorkBench.getInstance().getMainWindow().redraw();
-			
-		}
-
-	}
-
 	private void performEdit() {
 		EditNEATPopulationDialog dialog = new EditNEATPopulationDialog();
 

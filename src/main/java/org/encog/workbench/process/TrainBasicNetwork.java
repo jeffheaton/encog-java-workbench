@@ -29,6 +29,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 import org.encog.mathutil.randomize.NguyenWidrowRandomizer;
+import org.encog.ml.CalculateScore;
 import org.encog.ml.MLMethod;
 import org.encog.ml.bayesian.BayesianNetwork;
 import org.encog.ml.bayesian.training.BayesianInit;
@@ -61,7 +62,6 @@ import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATTraining;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.ContainsFlat;
-import org.encog.neural.networks.training.CalculateScore;
 import org.encog.neural.networks.training.TrainingSetScore;
 import org.encog.neural.networks.training.anneal.NeuralSimulatedAnnealing;
 import org.encog.neural.networks.training.cross.CrossValidationKFold;

@@ -27,11 +27,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+import org.encog.ml.CalculateScore;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
-import org.encog.ml.ea.score.CalculateGenomeScore;
-import org.encog.ml.ea.score.GeneticScoreAdapter;
 import org.encog.ml.prg.EncogProgramContext;
 import org.encog.ml.prg.extension.StandardExtensions;
 import org.encog.ml.prg.generator.PrgGrowGenerator;
@@ -168,10 +167,10 @@ public class CreateNewFile {
 			int populationSize = dialog.getPopulationSize().getValue();
 			int maxDepth = dialog.getMaxDepth().getValue();
 			
-			CalculateGenomeScore score = null;
+			CalculateScore score = null;
 			
 			if( dialog.getTrainingSet()!=null) {
-				score = new GeneticScoreAdapter(new TrainingSetScore(dialog.getTrainingSet()));
+				score = new TrainingSetScore(dialog.getTrainingSet());
 			}
 			
 			EncogProgramContext context = new EncogProgramContext();

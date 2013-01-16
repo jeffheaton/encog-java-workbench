@@ -37,16 +37,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
+import org.encog.ml.CalculateScore;
 import org.encog.ml.ea.score.AdjustScore;
-import org.encog.ml.ea.score.CalculateGenomeScore;
-import org.encog.ml.ea.score.GeneticScoreAdapter;
 import org.encog.ml.ea.score.parallel.ParallelScore;
 import org.encog.ml.ea.sort.MinimizeScoreComp;
 import org.encog.ml.prg.EncogProgram;
+import org.encog.ml.prg.PrgCODEC;
 import org.encog.ml.prg.train.PrgPopulation;
-import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.networks.training.TrainingSetScore;
-import org.encog.util.simple.EncogUtility;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.population.epl.RescoreDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
@@ -140,9 +138,8 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 
 		if (dialog.process()) {
 			List<AdjustScore> adjusters = new ArrayList<AdjustScore>();
-			CalculateGenomeScore score = new GeneticScoreAdapter(
-					new TrainingSetScore(dialog.getTrainingSet()));
-			ParallelScore ps = new ParallelScore(this.population, adjusters,
+			CalculateScore score = new TrainingSetScore(dialog.getTrainingSet());
+			ParallelScore ps = new ParallelScore(this.population, new PrgCODEC(), adjusters,
 					score, 0);
 			ps.process();
 			this.populationTable.repaint();
