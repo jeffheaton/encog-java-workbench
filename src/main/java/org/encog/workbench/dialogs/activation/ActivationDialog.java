@@ -37,6 +37,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.encog.engine.network.activation.ActivationBiPolar;
+import org.encog.engine.network.activation.ActivationBipolarSteepenedSigmoid;
+import org.encog.engine.network.activation.ActivationClippedLinear;
 import org.encog.engine.network.activation.ActivationCompetitive;
 import org.encog.engine.network.activation.ActivationElliott;
 import org.encog.engine.network.activation.ActivationElliottSymmetric;
@@ -51,16 +53,32 @@ import org.encog.engine.network.activation.ActivationSoftMax;
 import org.encog.engine.network.activation.ActivationSteepenedSigmoid;
 import org.encog.engine.network.activation.ActivationStep;
 import org.encog.engine.network.activation.ActivationTANH;
+import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.EncogCommonDialog;
 import org.encog.workbench.dialogs.common.ValidationException;
 
 public class ActivationDialog extends EncogCommonDialog implements ItemListener {
 
-	public static final String[] ACTIVATION_FUNCTION = { "ActivationBiPolar", "ActivationCompetitive",
-			"ActivationGaussian", "ActivationLinear", "ActivationLOG",
-			"ActivationSigmoid", "ActivationSIN", "ActivationSoftMax",
-			"ActivationStep", "ActivationTANH", "ActivationRamp", 
-			"ActivationElliott", "ActivationElliottSymmetric", "ActivationSteepenedSigmoid" };
+	public static final String[] ACTIVATION_FUNCTION = { 
+		"ActivationBiPolar",
+		"ActivationBipolarSteepenedSigmoid",
+		"ActivationClippedLinear",
+		"ActivationCompetitive",
+		"ActivationElliott", 
+		"ActivationElliottSymmetric", 
+		"ActivationGaussian", 
+		"ActivationGaussian", 
+		"ActivationLinear", 
+		"ActivationLOG",
+		"ActivationRamp", 
+		"ActivationSigmoid", 
+		"ActivationSIN", 
+		"ActivationSIN",
+		"ActivationSoftMax",
+		"ActivationSteepenedSigmoid",
+		"ActivationStep", 
+		"ActivationTANH"
+ };
 
 	private JComboBox select = new JComboBox(ACTIVATION_FUNCTION);
 	private EquationPanel equation;
@@ -118,50 +136,11 @@ public class ActivationDialog extends EncogCommonDialog implements ItemListener 
 		boolean der = this.derivative.isSelected();
 		ActivationFunction newActivation = null;
 		
-		switch (this.select.getSelectedIndex()) {
-		case 0:
-			newActivation = new ActivationBiPolar();
-			break;
-		case 1:
-			newActivation = new ActivationCompetitive();
-			break;
-		case 2:
-			newActivation = new ActivationGaussian();
-			break;
-		case 3:
-			newActivation = new ActivationLinear();
-			break;
-		case 4:
-			newActivation = new ActivationLOG();
-			break;
-		case 5:
-			newActivation = new ActivationSigmoid();
-			break;
-		case 6:
-			newActivation = new ActivationSIN();
-			break;
-		case 7:
-			newActivation = new ActivationSoftMax();
-			break;
-		case 8:
-			newActivation = new ActivationStep();
-			break;						
-		case 9:
-			newActivation = new ActivationTANH();
-			break;
-		case 10:
-			newActivation = new ActivationRamp();
-			break;	
-		case 11:
-			newActivation = new ActivationElliott();
-			break;
-		case 12:
-			newActivation = new ActivationElliottSymmetric();
-			break;
-		case 13:
-			newActivation = new ActivationSteepenedSigmoid();
-			break;
-
+		String className = "org.encog.engine.network.activation." + this.select.getSelectedItem();
+		try {
+			newActivation = (ActivationFunction)Class.forName(className).newInstance();
+		} catch (Exception e) {
+			EncogWorkBench.displayError("Error", e);
 		}
 		
 		if( this.activation.getClass() != newActivation.getClass() )
