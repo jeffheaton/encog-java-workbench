@@ -198,6 +198,48 @@ public class GenomeStructureTab extends EncogCommonTab {
         
         
 	}
+	
+	private int calculateDepths(Map<Integer,DrawnNeuron> neuronMap) {
+		boolean done = false;
+		int maxDepth = 0;
+		
+		while(!done) {
+			
+			done = true;
+			for(NEATLinkGene neatLinkGene: genome.getLinksChromosome() ) {
+				DrawnNeuron fromNeuron = neuronMap.get((int)neatLinkGene.getFromNeuronID());
+				DrawnNeuron toNeuron = neuronMap.get((int)neatLinkGene.getToNeuronID());
+				
+				if( toNeuron.getDepth()==-1 ) {
+					if( fromNeuron.getDepth()!=-1 ) {
+						toNeuron.setDepth(fromNeuron.getDepth()+1);
+						maxDepth = Math.max(toNeuron.getDepth(), maxDepth);
+					} else {
+						done = false;
+					}
+				}
+				
+			}
+		}
+		
+		return maxDepth;
+	}
+	
+	private void calculateXY(List<DrawnNeuron> neurons, int maxDepth) {
+		int[] layerTotal = new int[maxDepth+1];
+		int[] layerCurrent = new int[maxDepth+1];
+		
+		for(DrawnNeuron neuron: neurons) {
+			layerTotal[neuron.getDepth()]++;
+		}
+		
+		for(DrawnNeuron neuron: neurons) {
+			layerCurrent[neuron.getDepth()]++;
+			neuron.setX((double)layerTotal.length/neuron.getDepth());
+			neuron.setY((double)layerTotal[neuron.getDepth()]/layerCurrent[neuron.getDepth()]);
+		}
+		
+	}
 
 	private Graph<DrawnNeuron, DrawnConnection> buildGraph(NEATGenome genome) {
 		
@@ -215,14 +257,17 @@ public class GenomeStructureTab extends EncogCommonTab {
 		// place all the neurons
 		for(NEATNeuronGene neuronGene : genome.getNeuronsChromosome() ) {
 			String name="";
+			int depth = -1;
 			DrawnNeuronType t = DrawnNeuronType.Hidden;
 			
 			switch(neuronGene.getNeuronType()) {
 				case Bias:
+					depth = 0;
 					t = DrawnNeuronType.Bias;
 					name="B"+(biasCount++);
 					break;
 				case Input:
+					depth = 0;
 					t = DrawnNeuronType.Input;
 					name="I"+(inputCount++);
 					break;
@@ -237,8 +282,9 @@ public class GenomeStructureTab extends EncogCommonTab {
 			}
 			
 			
-			DrawnNeuron neuron = new DrawnNeuron(t, name, neuronGene.getSplitY(), neuronGene.getSplitX());
+			DrawnNeuron neuron = new DrawnNeuron(t, name);
 			neurons.add(neuron);
+			neuron.setDepth(depth);
 			neuronMap.put((int)neuronGene.getId(), neuron);
 		}
 		
@@ -250,7 +296,9 @@ public class GenomeStructureTab extends EncogCommonTab {
 			fromNeuron.getOutbound().add(connection);
 			toNeuron.getInbound().add(connection);
 		}
-
+		
+		int maxDepth = calculateDepths(neuronMap);
+		calculateXY(neurons,maxDepth);
 		
 		
 		for (DrawnNeuron neuron : neurons) {

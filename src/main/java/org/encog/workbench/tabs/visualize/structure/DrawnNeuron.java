@@ -34,15 +34,14 @@ public class DrawnNeuron {
 	private final List<DrawnConnection> outbound = new ArrayList<DrawnConnection>();
 	private final List<DrawnConnection> inbound = new ArrayList<DrawnConnection>();
 	private String name;
-	private final double x;
-	private final double y;
+	private int depth = -1;
+	private double x;
+	private double y;
 
-	public DrawnNeuron(DrawnNeuronType type, String name, double x, double y) {
+	public DrawnNeuron(DrawnNeuronType type, String name) {
 		super();
 		this.type = type;
 		this.name = name;
-		this.x = x;
-		this.y = y;
 	}
 
 	public String toString() {
@@ -111,5 +110,36 @@ public class DrawnNeuron {
 	public Object getName() {
 		return name;
 	}
+
+	/**
+	 * @return the depth
+	 */
+	public int getDepth() {
+		return depth;
+	}
+
+	/**
+	 * @param depth the depth to set
+	 */
+	public void setDepth(int depth) {
+		this.depth = depth;
+	}
+
+	/**
+	 * @param x the x to set
+	 */
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	/**
+	 * @param y the y to set
+	 */
+	public void setY(double y) {
+		this.y = y;
+	}
+	
+	
+	
 
 }

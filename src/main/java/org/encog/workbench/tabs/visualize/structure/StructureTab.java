@@ -333,7 +333,9 @@ public class StructureTab extends EncogCommonTab {
 				margin = 1.0 - margin;
 				margin /= 2.0;
 
-				DrawnNeuron neuron = new DrawnNeuron(type, name, x+xOffset, y + margin);
+				DrawnNeuron neuron = new DrawnNeuron(type, name);
+				neuron.setX(x+xOffset);
+				neuron.setY(y+margin);
 				neurons.add(neuron);
 
 				if (neuron.getType() == DrawnNeuronType.Hidden
