@@ -84,8 +84,8 @@ public class GenomeStructureTab extends EncogCommonTab {
 		Transformer<DrawnNeuron, Point2D> staticTranformer = new Transformer<DrawnNeuron, Point2D>() {
 
 			public Point2D transform(DrawnNeuron n) {
-				int x = (int) (n.getX() * 600);
-				int y = (int) (n.getY() * 300);
+				int x = (int)(n.getX() * 600);
+				int y = (int)(n.getY() * 300);
 
 				Point2D result = new Point(x + 32, y);
 				return result;
@@ -200,8 +200,10 @@ public class GenomeStructureTab extends EncogCommonTab {
 	}
 	
 	private int calculateDepths(Map<Integer,DrawnNeuron> neuronMap) {
+		List<DrawnNeuron> outputList = new ArrayList<DrawnNeuron>();
 		boolean done = false;
 		int maxDepth = 0;
+		int maxOutputDepth = 0;
 		
 		while(!done) {
 			
@@ -210,16 +212,24 @@ public class GenomeStructureTab extends EncogCommonTab {
 				DrawnNeuron fromNeuron = neuronMap.get((int)neatLinkGene.getFromNeuronID());
 				DrawnNeuron toNeuron = neuronMap.get((int)neatLinkGene.getToNeuronID());
 				
-				if( toNeuron.getDepth()==-1 ) {
-					if( fromNeuron.getDepth()!=-1 ) {
-						toNeuron.setDepth(fromNeuron.getDepth()+1);
-						maxDepth = Math.max(toNeuron.getDepth(), maxDepth);
-					} else {
-						done = false;
+				if( fromNeuron.getDepth()!=-1 ) {
+					int depth = fromNeuron.getDepth()+1;
+					toNeuron.setDepth(Math.max(toNeuron.getDepth(), depth));
+					maxDepth = Math.max(depth, maxDepth);
+					
+					if( toNeuron.getType()==DrawnNeuronType.Output ) {
+						maxOutputDepth = Math.max(maxOutputDepth, depth);
+						outputList.add(toNeuron);
 					}
+				} else {
+					done = false;
 				}
-				
 			}
+		}
+		
+		// all output at the same level
+		for( DrawnNeuron neuron: outputList ) {
+			neuron.setDepth(maxOutputDepth);
 		}
 		
 		return maxDepth;
@@ -235,8 +245,8 @@ public class GenomeStructureTab extends EncogCommonTab {
 		
 		for(DrawnNeuron neuron: neurons) {
 			layerCurrent[neuron.getDepth()]++;
-			neuron.setX((double)layerTotal.length/neuron.getDepth());
-			neuron.setY((double)layerTotal[neuron.getDepth()]/layerCurrent[neuron.getDepth()]);
+			neuron.setX( neuron.getDepth() * ( 1.0/layerTotal.length) );
+			neuron.setY( layerCurrent[neuron.getDepth()] * (1.0/layerTotal[neuron.getDepth()]));
 		}
 		
 	}
