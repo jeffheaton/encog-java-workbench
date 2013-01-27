@@ -222,16 +222,20 @@ public class GenomeStructureTab extends EncogCommonTab {
 						DrawnNeuron toNeuron = neuronMap.get((int) neatLinkGene
 								.getToNeuronID());
 
+						// do not calculate a depth if the from is undefined
 						if (fromNeuron.getDepth() != -1) {
-							int depth = fromNeuron.getDepth() + 1;
-							toNeuron.setDepth(Math.max(toNeuron.getDepth(),
-									depth));
-							maxDepth = Math.max(depth, maxDepth);
+							// if the to is depth 0 (bias or input)
+							if (toNeuron.getDepth() != 0) {
+								int depth = fromNeuron.getDepth() + 1;
+								toNeuron.setDepth(Math.max(toNeuron.getDepth(),
+										depth));
+								maxDepth = Math.max(depth, maxDepth);
 
-							if (toNeuron.getType() == DrawnNeuronType.Output) {
-								maxOutputDepth = Math
-										.max(maxOutputDepth, depth);
-								outputList.add(toNeuron);
+								if (toNeuron.getType() == DrawnNeuronType.Output) {
+									maxOutputDepth = Math.max(maxOutputDepth,
+											depth);
+									outputList.add(toNeuron);
+								}
 							}
 						} else {
 							done = false;
@@ -246,18 +250,7 @@ public class GenomeStructureTab extends EncogCommonTab {
 		for (DrawnNeuron neuron : outputList) {
 			neuron.setDepth(maxDepth);
 		}
-		
-		// all input and bias at the same level
-		for( DrawnNeuron neuron : neuronMap.values() ) {
-			if( neuron.getDepth()==-1) {
-				neuron.setDepth(0);
-			}
-			
-			if( neuron.getType()==DrawnNeuronType.Input || neuron.getType()==DrawnNeuronType.Bias ) {
-				neuron.setDepth(0);
-			}
-		}
-	
+
 		return maxDepth;
 	}
 
@@ -266,6 +259,9 @@ public class GenomeStructureTab extends EncogCommonTab {
 		int[] layerCurrent = new int[maxDepth + 1];
 
 		for (DrawnNeuron neuron : neurons) {
+			if( neuron.getDepth()<0 ) {
+				neuron.setDepth(0);
+			}
 			layerTotal[neuron.getDepth()]++;
 		}
 
