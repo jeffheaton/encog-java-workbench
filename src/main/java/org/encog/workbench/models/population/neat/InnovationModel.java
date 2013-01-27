@@ -23,21 +23,26 @@
  */
 package org.encog.workbench.models.population.neat;
 
+import java.util.HashSet;
+
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.neat.training.innovation.Innovation;
+import org.encog.neural.neat.training.NEATInnovation;
 import org.encog.util.Format;
 
 public class InnovationModel implements TableModel {
 
 	private NEATPopulation population;
 	public static String[] COLUMNS = { "Innovation ID", "Info" };
+	private Object[] keys;
+	
 	
 	public InnovationModel(NEATPopulation population)
 	{
 		this.population = population;
+		this.keys = population.getInnovations().getInnovations().keySet().toArray();
 	}
 	
 	public void addTableModelListener(TableModelListener arg0) {
@@ -64,14 +69,12 @@ public class InnovationModel implements TableModel {
 	}
 
 	public Object getValueAt(int arg0, int arg1) {
-		Innovation innovation = this.population.getInnovations().get(arg0);
-
 		switch(arg1)
 		{
 			case 0:
-				return Format.formatInteger((int)innovation.getInnovationID());
+				return ""+arg0;
 			case 1:
-				return innovation.toString();
+				return this.keys[arg0];
 			default:
 				return "";
 		}

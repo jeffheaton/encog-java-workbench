@@ -246,6 +246,17 @@ public class GenomeStructureTab extends EncogCommonTab {
 		for (DrawnNeuron neuron : outputList) {
 			neuron.setDepth(maxDepth);
 		}
+		
+		// all input and bias at the same level
+		for( DrawnNeuron neuron : neuronMap.values() ) {
+			if( neuron.getDepth()==-1) {
+				neuron.setDepth(0);
+			}
+			
+			if( neuron.getType()==DrawnNeuronType.Input || neuron.getType()==DrawnNeuronType.Bias ) {
+				neuron.setDepth(0);
+			}
+		}
 	
 		return maxDepth;
 	}
