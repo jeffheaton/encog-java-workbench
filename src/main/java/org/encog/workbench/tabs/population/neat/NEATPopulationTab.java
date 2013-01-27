@@ -217,7 +217,7 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 				EncogWorkBench.displayError("Error", "Population size must be at least 10.");				
 				return;
 			}
-			this.population.reset(sz);
+			this.population.reset();
 			this.repaint();
 			this.pi.repaint();
 		} catch(NumberFormatException ex) {
