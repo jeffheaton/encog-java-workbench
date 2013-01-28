@@ -58,8 +58,8 @@ import org.encog.ml.MLRegression;
 import org.encog.ml.MLResettable;
 import org.encog.neural.cpn.CPN;
 import org.encog.neural.flat.FlatNetwork;
-import org.encog.neural.neat.NEATNetwork;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.ContainsFlat;
 import org.encog.neural.pattern.FeedForwardPattern;
 import org.encog.neural.pattern.HopfieldPattern;
 import org.encog.neural.prune.PruneSelective;
@@ -102,6 +102,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	private JButton buttonRestructure;
 	private JButton buttonProperties;
 	private JButton buttonVisualize;
+	private JButton buttonWeights;
 	private final JScrollPane scroll;
 	private final JEditorPane editor;
 	private MLMethod method;
@@ -117,6 +118,10 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		this.toolbar.add(this.buttonQuery = new JButton("Query"));
 		this.toolbar.add(this.buttonTrain = new JButton("Train"));
 		this.toolbar.add(this.buttonRestructure = new JButton("Restructure"));
+		if( this.method instanceof ContainsFlat ) {
+			this.toolbar.add(this.buttonWeights = new JButton("Weights"));
+			this.buttonWeights.addActionListener(this);
+		}
 		this.toolbar.add(this.buttonProperties = new JButton("Properties"));
 		this.toolbar.add(this.buttonVisualize = new JButton("Visualize"));
 
@@ -150,7 +155,9 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 				performProperties();
 			} else if (action.getSource() == this.buttonVisualize) {
 				this.handleVisualize();
-			}
+			} else if (action.getSource() == this.buttonWeights) {
+				this.performWeights();
+			}			
 		} catch (Throwable t) {
 			EncogWorkBench.displayError("Error", t);
 		}
@@ -667,6 +674,11 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	@Override
 	public String getName() {
 		return this.getEncogObject().getName();
+	}
+	
+	public void performWeights() {
+		WeightsTab tab = new WeightsTab((ContainsFlat)this.method);
+		EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
 	}
 
 }
