@@ -26,6 +26,8 @@ package org.encog.workbench.tabs.mlmethod;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,32 +39,29 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 
 import org.encog.neural.flat.FlatNetwork;
-import org.encog.neural.networks.ContainsFlat;
+import org.encog.neural.networks.BasicNetwork;
 import org.encog.workbench.models.WeightsModel;
 import org.encog.workbench.tabs.EncogCommonTab;
 
-public class WeightsTab extends EncogCommonTab implements ActionListener {
+public class WeightsTab extends EncogCommonTab implements ActionListener, ItemListener {
 
 	private WeightsModel model;
 	private JToolBar toolbar;
 	private JTable table;
 
-	private JButton addInputColumn;
-	private JButton delColumn;
-	private JButton addIdealColumn;
-	private JButton addRow;
-	private JButton delRow;
-	private JButton export;
-	private JButton visualize;
+	private JButton buttonSparse;
 	private JComboBox comboView;
 	
-	private ContainsFlat network;
+	private BasicNetwork network;
+	private MLMethodTab owner;
 	
-	public WeightsTab(ContainsFlat theNetwork) {
+	public WeightsTab(MLMethodTab theOwner, BasicNetwork theNetwork) {
 		super(null);
 		
 		this.network = theNetwork;
-		this.model = new WeightsModel(this.network.getFlat());
+		this.network.updateProperties();
+		this.owner = theOwner;
+		this.model = new WeightsModel(this.owner,this.network);
 		FlatNetwork flat = theNetwork.getFlat();
 		
 		Collection<String> layers = new ArrayList<String>();
@@ -84,29 +83,34 @@ public class WeightsTab extends EncogCommonTab implements ActionListener {
 		setLayout(new BorderLayout());
 		this.toolbar = new JToolBar();
 		this.toolbar.setFloatable(false);
-		this.toolbar.add(this.addInputColumn = new JButton("Add Input Column"));
-		this.toolbar.add(this.delColumn = new JButton("Delete Column"));
-		this.toolbar.add(this.addIdealColumn = new JButton("Add Ideal Column"));
-		this.toolbar.add(this.addRow = new JButton("Add Row"));
-		this.toolbar.add(this.delRow = new JButton("Delete Row"));
-		this.toolbar.add(this.export = new JButton("Export"));
-		this.toolbar.add(this.visualize = new JButton("Visualize"));
+		this.toolbar.add(this.buttonSparse = new JButton(""));
 		this.toolbar.add(this.comboView = new JComboBox(layers.toArray()));
-		this.addInputColumn.addActionListener(this);
-		this.delColumn.addActionListener(this);
-		this.addIdealColumn.addActionListener(this);
-		this.addRow.addActionListener(this);
-		this.delRow.addActionListener(this);
-		this.export.addActionListener(this);
 		add(this.toolbar, BorderLayout.PAGE_START);
 		this.table = new JTable(this.model);
 		add(new JScrollPane(this.table), BorderLayout.CENTER);
 		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		this.visualize.addActionListener(this);
-		//new ExcelAdapter( this.table );
+		this.buttonSparse.addActionListener(this);
+		this.comboView.addItemListener(this);
+		actionPerformed(null);
 	}	
 	
 	public void actionPerformed(final ActionEvent action) {
+		if( action!=null && action.getSource()==this.buttonSparse) {
+			this.owner.setDirty(true);
+			if( this.network.getStructure().isConnectionLimited() ) {
+				this.network.getProperties().remove(BasicNetwork.TAG_LIMIT);
+				this.network.updateProperties();
+			} else {
+				this.network.setProperty(BasicNetwork.TAG_LIMIT, BasicNetwork.DEFAULT_CONNECTION_LIMIT);
+				this.network.updateProperties();
+			}
+		}
+		
+		if( this.network.getStructure().isConnectionLimited() ) {
+			this.buttonSparse.setText("Disable Sparse Connections");
+		} else {
+			this.buttonSparse.setText("Enable Sparse Connections");
+		}
 	}
 	
 	public boolean close() throws IOException {
@@ -123,5 +127,12 @@ public class WeightsTab extends EncogCommonTab implements ActionListener {
 	public String getName() {
 		// TODO Auto-generated method stub
 		return "Weights";
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent evt) {
+		if(evt.getStateChange()==ItemEvent.SELECTED) {
+			this.model.setFromLayer(this.comboView.getSelectedIndex());
+		}
 	}
 }

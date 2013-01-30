@@ -118,7 +118,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 		this.toolbar.add(this.buttonQuery = new JButton("Query"));
 		this.toolbar.add(this.buttonTrain = new JButton("Train"));
 		this.toolbar.add(this.buttonRestructure = new JButton("Restructure"));
-		if( this.method instanceof ContainsFlat ) {
+		if( this.method instanceof BasicNetwork ) {
 			this.toolbar.add(this.buttonWeights = new JButton("Weights"));
 			this.buttonWeights.addActionListener(this);
 		}
@@ -677,7 +677,7 @@ public class MLMethodTab extends EncogCommonTab implements ActionListener {
 	}
 	
 	public void performWeights() {
-		WeightsTab tab = new WeightsTab((ContainsFlat)this.method);
+		WeightsTab tab = new WeightsTab(this,(BasicNetwork)this.method);
 		EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
 	}
 

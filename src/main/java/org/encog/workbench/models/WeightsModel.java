@@ -23,64 +23,124 @@
  */
 package org.encog.workbench.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
-import org.encog.neural.flat.FlatNetwork;
-import org.encog.neural.thermal.ThermalNetwork;
+import org.encog.neural.networks.BasicNetwork;
+import org.encog.workbench.tabs.mlmethod.MLMethodTab;
 
-public class WeightsModel extends DefaultTableModel {
+public class WeightsModel implements TableModel {
 	
-	private ThermalNetwork network;
+	private BasicNetwork network;
+	private int fromLayer = 0;
+	private List<TableModelListener> listeners = new ArrayList<TableModelListener>();
+	private MLMethodTab owner;
 	
-	public WeightsModel(FlatNetwork theNetwork) {
+	public WeightsModel(MLMethodTab theOwner, BasicNetwork theNetwork) {
 		super();
-		this.network = network;
+		this.network = theNetwork;
+		this.owner = theOwner;
 	}
 	
 	public void addTableModelListener(TableModelListener l) {
-		// TODO Auto-generated method stub
-		
+		this.listeners.add(l);
 	}
 
 	public Class<?> getColumnClass(int columnIndex) {
-		return String.class;
+		if( columnIndex==0 ) {
+			return String.class;	
+		} else {
+			return Double.class;
+		}
+		
 	}
 
 	public int getColumnCount() {
 		if( this.network==null )
 			return 0;
-		else
-			return this.network.getNeuronCount();
+		else {
+			return this.network.getLayerNeuronCount(this.fromLayer)+1;
+		}
 	}
 
 	public String getColumnName(int columnIndex) {
-		return ""+columnIndex;
+		if( columnIndex==0 ) {
+			return "";
+		} else {
+			String prefix;
+			if( this.fromLayer==0 ) {
+				prefix = "I:";
+			} else {
+				prefix = "H" + this.fromLayer + ":";
+			}
+			return prefix+(columnIndex-1);
+		}
 	}
 
 	public int getRowCount() {
-		if( this.network==null )
+		if( this.network==null ) {
 			return 0;
-		else
-			return this.network.getNeuronCount();
+		} else {
+			return this.network.getLayerNeuronCount(this.fromLayer+1);
+		}
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		
-		return "" + this.network.getWeight(rowIndex, columnIndex);
+		if( this.network==null ) {
+			return 0;
+		} else {
+			if( columnIndex==0 ) {
+				String prefix;
+				if( this.fromLayer==(this.network.getLayerCount()-2) ) {
+					prefix = "O:";
+				} else {
+					prefix = "H" + (this.fromLayer+1) + ":";
+				}
+				
+				return prefix+rowIndex;
+			} else {
+				return new Double(this.network.getWeight(this.fromLayer, columnIndex, rowIndex));
+			}
+		}
 	}
 
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return false;
+		return columnIndex>0;
 	}
 
 	public void removeTableModelListener(TableModelListener l) {
-		// TODO Auto-generated method stub
+		this.listeners.add(l);
 		
 	}
 
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
-		
+		this.owner.setDirty(true);
+		this.network.setWeight(this.fromLayer, columnIndex, rowIndex,((Double)value).doubleValue());
 	}
+
+	/**
+	 * @return the fromLayer
+	 */
+	public int getFromLayer() {
+		return fromLayer;
+	}
+
+	/**
+	 * @param fromLayer the fromLayer to set
+	 */
+	public void setFromLayer(int fromLayer) {
+		final TableModelEvent tce = new TableModelEvent(this,
+				TableModelEvent.ALL_COLUMNS);
+		
+		this.fromLayer = fromLayer;
+		for( TableModelListener lis : this.listeners) {
+			lis.tableChanged(tce);
+		}
+	}
+	
+	
 }
