@@ -202,8 +202,8 @@ public class StructureTab extends EncogCommonTab {
         Border border = BorderFactory.createEtchedBorder();
         controls.setBorder(border);
         add(controls, BorderLayout.NORTH);
-        
-        
+		add(new LegendPanel(false),BorderLayout.SOUTH);
+       
 	}
 
 	private Graph<DrawnNeuron, DrawnConnection> buildGraph(NEATNetwork neat) {

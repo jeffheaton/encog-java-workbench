@@ -43,6 +43,10 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import org.apache.commons.collections15.Transformer;
+import org.encog.engine.network.activation.ActivationBipolarSteepenedSigmoid;
+import org.encog.engine.network.activation.ActivationClippedLinear;
+import org.encog.engine.network.activation.ActivationGaussian;
+import org.encog.engine.network.activation.ActivationSIN;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.neural.neat.training.NEATLinkGene;
 import org.encog.neural.neat.training.NEATNeuronGene;
@@ -103,6 +107,14 @@ public class GenomeStructureTab extends EncogCommonTab {
 					return Color.green;
 				case Context:
 					return Color.cyan;
+				case Linear:
+					return Color.blue;					
+				case Sigmoid:
+					return Color.magenta;
+				case Gaussian:
+					return Color.cyan;
+				case SIN:
+					return Color.gray;
 				default:
 					return Color.red;
 				}
@@ -201,6 +213,7 @@ public class GenomeStructureTab extends EncogCommonTab {
 		Border border = BorderFactory.createEtchedBorder();
 		controls.setBorder(border);
 		add(controls, BorderLayout.NORTH);
+		add(new LegendPanel(true),BorderLayout.SOUTH);
 
 	}
 
@@ -308,7 +321,16 @@ public class GenomeStructureTab extends EncogCommonTab {
 				name = "O" + (outputCount++);
 				break;
 			case Hidden:
-				t = DrawnNeuronType.Hidden;
+				if( neuronGene.getActivationFunction() instanceof ActivationClippedLinear) {
+					t = DrawnNeuronType.Linear;
+				} else if( neuronGene.getActivationFunction() instanceof ActivationBipolarSteepenedSigmoid) {
+					t = DrawnNeuronType.Sigmoid;
+				} else if( neuronGene.getActivationFunction() instanceof ActivationGaussian) {
+					t = DrawnNeuronType.Gaussian;
+				} else if( neuronGene.getActivationFunction() instanceof ActivationSIN) {
+					t = DrawnNeuronType.SIN;
+				}
+
 				name = "H" + (hiddenCount++);
 				break;
 			}

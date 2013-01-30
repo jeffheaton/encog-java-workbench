@@ -29,5 +29,9 @@ public enum DrawnNeuronType {
 	Hidden,
 	Context,
 	Bias,
-	Output
+	Output,
+	Linear,
+	Sigmoid,
+	Gaussian,
+	SIN
 }
