@@ -34,7 +34,7 @@ public class SpeciesModel implements TableModel {
 
 	private NEATPopulation population;
 	
-	public static String[] COLUMNS = { "Species ID", "Age", "Best Score", "Stagnant" , "Leader ID", "Members" };
+	public static String[] COLUMNS = { "Species ID", "Age", "Best Score", "Stagnant" , "Leader ID", "Members", "Offspring" };
 	
 	public SpeciesModel(NEATPopulation population)
 	{
@@ -84,6 +84,8 @@ public class SpeciesModel implements TableModel {
 				return leader;
 			case 5:
 				return Format.formatInteger(species.getMembers().size());
+			case 6:
+				return Format.formatDouble(species.getSpawnsRequired(),2);
 			default:
 				return "";
 		}
