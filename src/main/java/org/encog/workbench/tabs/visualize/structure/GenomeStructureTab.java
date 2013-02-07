@@ -225,8 +225,9 @@ public class GenomeStructureTab extends EncogCommonTab {
 
 		for (int pass = 0; pass < 1; pass++) {
 			boolean done = false;
-			while (!done) {
+			while (!done ) {
 				done = true;
+
 				for (NEATLinkGene neatLinkGene : genome.getLinksChromosome()) {
 					if (neatLinkGene.getFromNeuronID() != neatLinkGene
 							.getToNeuronID()) {
@@ -239,6 +240,10 @@ public class GenomeStructureTab extends EncogCommonTab {
 						if (fromNeuron.getDepth() != -1) {
 							// if the to is depth 0 (bias or input)
 							if (toNeuron.getDepth() != 0) {
+								if( toNeuron.getDepth()==-1) {
+									done = false;
+								}
+								
 								int depth = fromNeuron.getDepth() + 1;
 								toNeuron.setDepth(Math.max(toNeuron.getDepth(),
 										depth));
@@ -250,8 +255,6 @@ public class GenomeStructureTab extends EncogCommonTab {
 									outputList.add(toNeuron);
 								}
 							}
-						} else {
-							done = false;
 						}
 					}
 				}
@@ -262,6 +265,21 @@ public class GenomeStructureTab extends EncogCommonTab {
 		// all output at the same level
 		for (DrawnNeuron neuron : outputList) {
 			neuron.setDepth(maxDepth);
+		}
+		
+		// handle any unassigned neurons, these are hidden neurons with no input.
+		// put them at depth zero, as they are basically bias-like neurons.
+		for (NEATLinkGene neatLinkGene : genome.getLinksChromosome()) {
+			DrawnNeuron fromNeuron = neuronMap
+						.get((int) neatLinkGene.getFromNeuronID());
+			DrawnNeuron toNeuron = neuronMap.get((int) neatLinkGene
+						.getToNeuronID());
+			if( fromNeuron.getDepth()==-1 ) {
+				fromNeuron.setDepth(0);
+			}
+			if( toNeuron.getDepth()==-1 ) {
+				toNeuron.setDepth(0);
+			}
 		}
 
 		return maxDepth;
