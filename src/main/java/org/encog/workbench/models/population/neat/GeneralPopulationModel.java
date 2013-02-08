@@ -34,7 +34,7 @@ public class GeneralPopulationModel implements TableModel {
 
 	private NEATPopulation population;
 	
-	public static String[] COLUMNS = { "Genome ID", "Neurons", "Links", "Spawn Size", "Score" };
+	public static String[] COLUMNS = { "Genome ID", "Neurons", "Links", "Score" };
 	
 	public GeneralPopulationModel(NEATPopulation population)
 	{
@@ -75,8 +75,6 @@ public class GeneralPopulationModel implements TableModel {
 			case 2:
 				return Format.formatInteger(genome.getLinksChromosome().size());
 			case 3:
-				return Format.formatDouble(genome.getAmountToSpawn(),2);
-			case 4:
 				return Format.formatDouble(genome.getScore(),4);
 			default:
 				return "";
