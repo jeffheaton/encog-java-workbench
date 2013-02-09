@@ -45,6 +45,7 @@ import org.encog.mathutil.randomize.Distort;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
 import org.encog.ml.train.MLTrain;
+import org.encog.neural.neat.training.NEATTraining;
 import org.encog.util.Format;
 import org.encog.util.Stopwatch;
 import org.encog.workbench.EncogWorkBench;
@@ -247,6 +248,11 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		g.drawString("Training Error:", 350, y);
 		y += fm.getHeight();
 		g.drawString("Training Type:", 350, y);
+		
+		if( this.train instanceof NEATTraining ) {
+			y += fm.getHeight();
+			g.drawString("Species Count:", 350, y);
+		}
 
 
 		y = fm.getHeight();
@@ -279,6 +285,11 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		y += fm.getHeight();
 		if( train!=null ) {
 			g.drawString(train.getClass().getSimpleName(), 500, y);
+			y += fm.getHeight();
+			if( this.train instanceof NEATTraining ) {
+				NEATTraining neat = (NEATTraining)train;
+				g.drawString(Format.formatInteger(neat.getNEATPopulation().getSpecies().size()), 500, y);
+			}
 		}
 
 

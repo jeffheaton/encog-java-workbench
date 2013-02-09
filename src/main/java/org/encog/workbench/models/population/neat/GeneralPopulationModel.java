@@ -26,6 +26,7 @@ package org.encog.workbench.models.population.neat;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import org.encog.ml.ea.genome.Genome;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.neat.training.NEATGenome;
 import org.encog.util.Format;
@@ -33,12 +34,18 @@ import org.encog.util.Format;
 public class GeneralPopulationModel implements TableModel {
 
 	private NEATPopulation population;
+	private int maxGeneration;
+	public static String[] COLUMNS = { "Genome ID", "Neurons", "Links", "Score", "Age", "Birth Generation" };
 	
-	public static String[] COLUMNS = { "Genome ID", "Neurons", "Links", "Score" };
 	
 	public GeneralPopulationModel(NEATPopulation population)
 	{
 		this.population = population;
+		this.maxGeneration = 0;
+		for(Genome g : population.getGenomes()) {
+			NEATGenome genome = (NEATGenome)g;
+			this.maxGeneration = Math.max(this.maxGeneration, genome.getBirthGeneration());
+		}
 	}
 	
 	public void addTableModelListener(TableModelListener l) {
@@ -76,6 +83,10 @@ public class GeneralPopulationModel implements TableModel {
 				return Format.formatInteger(genome.getLinksChromosome().size());
 			case 3:
 				return Format.formatDouble(genome.getScore(),4);
+			case 4:
+				return Format.formatInteger(this.maxGeneration - genome.getBirthGeneration());
+			case 5:
+				return Format.formatInteger(genome.getBirthGeneration());
 			default:
 				return "";
 		}
