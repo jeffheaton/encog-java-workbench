@@ -183,13 +183,12 @@ public class CreateNewFile {
 			StandardExtensions.createNumericOperators(context.getFunctions());
 
 			if( pop==null ) {
-				pop = new PrgPopulation(context);
+				pop = new PrgPopulation(context,populationSize);
 			}
 			
 			pop.addRewriteRule(new RewriteConstants());
 			pop.addRewriteRule(new RewriteAlgebraic());
 
-			pop.getContext().getParams().setPopulationSize(populationSize);
 			(new PrgGrowGenerator(pop.getContext(),score,maxDepth)).generate(new Random(), pop);
 
 			if( path!=null ) {
