@@ -137,16 +137,9 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 	private void performEdit() {
 		EditNEATPopulationDialog dialog = new EditNEATPopulationDialog();
 
-		dialog.getOldAgePenalty().setValue(this.population.getOldAgePenalty());
-		dialog.getOldAgeThreshold().setValue(
-				this.population.getOldAgeThreshold());
 		dialog.getPopulationSize()
 				.setValue(this.population.getPopulationSize());
 		dialog.getSurvivalRate().setValue(this.population.getSurvivalRate());
-		dialog.getYoungBonusAgeThreshold().setValue(
-				this.population.getYoungBonusAgeThreshold());
-		dialog.getYoungScoreBonus().setValue(
-				this.population.getYoungScoreBonus());
 		
 		if( !this.population.isHyperNEAT()) {
 			ActivationFunction af = population.getActivationFunctions().getList().get(0).getObj();
@@ -155,18 +148,10 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 		dialog.getActivationCycles().setValue(population.getActivationCycles());
 
 		if (dialog.process()) {
-			this.population.setOldAgePenalty(dialog.getOldAgePenalty()
-					.getValue());
-			this.population.setOldAgeThreshold(dialog.getOldAgeThreshold()
-					.getValue());
 			this.population.setPopulationSize(dialog.getPopulationSize()
 					.getValue());
 			this.population
 					.setSurvivalRate(dialog.getSurvivalRate().getValue());
-			this.population.setYoungBonusAgeThreshhold(dialog
-					.getYoungBonusAgeThreshold().getValue());
-			this.population.setYoungScoreBonus(dialog.getYoungScoreBonus()
-					.getValue());
 			if(!this.population.isHyperNEAT()) {
 				this.population.setNEATActivationFunction(dialog
 					.getNeatActivationFunction());
