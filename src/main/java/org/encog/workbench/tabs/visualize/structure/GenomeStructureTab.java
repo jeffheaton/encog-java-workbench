@@ -389,6 +389,6 @@ public class GenomeStructureTab extends EncogCommonTab {
 
 	@Override
 	public String getName() {
-		return "NEAT Genome: " + this.genome.getGenomeID();
+		return "NEAT Genome";
 	}
 }

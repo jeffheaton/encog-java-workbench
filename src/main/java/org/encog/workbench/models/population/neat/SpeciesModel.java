@@ -34,7 +34,7 @@ public class SpeciesModel implements TableModel {
 
 	private NEATPopulation population;
 	
-	public static String[] COLUMNS = { "Species ID", "Age", "Best Score", "Stagnant" , "Leader ID", "Members" };
+	public static String[] COLUMNS = { "Age", "Best Score", "Stagnant" , "Members" };
 	
 	public SpeciesModel(NEATPopulation population)
 	{
@@ -65,24 +65,15 @@ public class SpeciesModel implements TableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		NEATSpecies species = this.population.getSpecies().get(rowIndex);
 		
-		String leader = "none";
-		
-		if( species.getLeader()!=null )
-			leader = Format.formatInteger((int)species.getLeader().getGenomeID());
-		
 		switch(columnIndex)
 		{
 			case 0:
-				return Format.formatInteger((int)species.getSpeciesID());
-			case 1:
 				return Format.formatInteger(species.getAge());
-			case 2:
+			case 1:
 				return Format.formatDouble(species.getBestScore(),4);
-			case 3:
+			case 2:
 				return Format.formatInteger(species.getGensNoImprovement());
-			case 4:
-				return leader;
-			case 5:
+			case 3:
 				return Format.formatInteger(species.getMembers().size());
 			default:
 				return "";

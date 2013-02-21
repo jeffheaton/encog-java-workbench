@@ -35,7 +35,7 @@ public class GeneralPopulationModel implements TableModel {
 
 	private NEATPopulation population;
 	private int maxGeneration;
-	public static String[] COLUMNS = { "Genome ID", "Neurons", "Links", "Score", "Age", "Birth Generation" };
+	public static String[] COLUMNS = { "Neurons", "Links", "Score", "Age", "Birth Generation" };
 	
 	
 	public GeneralPopulationModel(NEATPopulation population)
@@ -76,16 +76,14 @@ public class GeneralPopulationModel implements TableModel {
 		switch(columnIndex)
 		{
 			case 0:
-				return Format.formatInteger((int)genome.getGenomeID());
-			case 1:
 				return Format.formatInteger(genome.getNeuronsChromosome().size());
-			case 2:
+			case 1:
 				return Format.formatInteger(genome.getLinksChromosome().size());
-			case 3:
+			case 2:
 				return Format.formatDouble(genome.getScore(),4);
-			case 4:
+			case 3:
 				return Format.formatInteger(this.maxGeneration - genome.getBirthGeneration());
-			case 5:
+			case 4:
 				return Format.formatInteger(genome.getBirthGeneration());
 			default:
 				return "";
