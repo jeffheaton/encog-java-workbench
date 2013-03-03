@@ -28,7 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -38,14 +38,11 @@ import javax.swing.JTable;
 
 import org.encog.engine.network.activation.ActivationFunction;
 import org.encog.ml.ea.genome.Genome;
-import org.encog.neural.neat.NEATNetwork;
+import org.encog.ml.ea.species.Species;
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.neat.NEATSpecies;
 import org.encog.neural.neat.training.NEATGenome;
-import org.encog.util.file.FileUtil;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.population.neat.EditNEATPopulationDialog;
-import org.encog.workbench.dialogs.population.neat.ExtractGenomes;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.population.neat.GeneralPopulationModel;
 import org.encog.workbench.models.population.neat.InnovationModel;
@@ -76,6 +73,7 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 	private JTable tableGeneralPopulation;
 	private NEATPopulation population;
 	private final NEATPopulationInfo pi;
+	private List<Genome> list;
 
 	public NEATPopulationTab(ProjectEGFile obj) {
 		super(obj);
@@ -118,6 +116,7 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 		this.tabViews.addTab("Species", this.speciesScroll);
 		this.tabViews.addTab("Innovation", this.innovationScroll);
 
+		this.list = this.population.flatten();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -179,11 +178,11 @@ public class NEATPopulationTab extends EncogCommonTab implements ActionListener,
 	         JTable target = (JTable)e.getSource();
 	         int row = target.getSelectedRow();
 	         if( target==this.populationTable) {
-	        	 NEATGenome genome = (NEATGenome)this.population.get(row);
+	        	 NEATGenome genome = (NEATGenome)this.list.get(row);
 	        	 GenomeStructureTab tab = new GenomeStructureTab(genome);
 	        	 EncogWorkBench.getInstance().getMainWindow().getTabManager().openTab(tab);
 	         } else if( target==this.speciesTable ) {
-	        	 NEATSpecies species = this.population.getSpecies().get(row);
+	        	 Species species = this.population.getSpecies().get(row);
 	        	 NEATGenome genome = (NEATGenome)species.getLeader();
 	        	 if(genome!=null) {
 	        		 GenomeStructureTab tab = new GenomeStructureTab(genome);

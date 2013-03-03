@@ -76,9 +76,7 @@ public class EPLPopulationInfo extends JPanel {
 		g.drawString("Best Genome Score:", 20, y);
 		
 		int populationSize = 0;
-		
-		if( population.getGenomes()!=null)
-			populationSize = population.getGenomes().size();
+		populationSize = population.flatten().size();
 			
 		y = fm.getHeight();
 		g.setFont(WorkbenchFonts.getTextFont());

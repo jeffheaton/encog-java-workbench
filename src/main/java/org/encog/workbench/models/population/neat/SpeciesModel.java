@@ -26,8 +26,8 @@ package org.encog.workbench.models.population.neat;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import org.encog.ml.ea.species.Species;
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.neat.NEATSpecies;
 import org.encog.util.Format;
 
 public class SpeciesModel implements TableModel {
@@ -63,7 +63,7 @@ public class SpeciesModel implements TableModel {
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		NEATSpecies species = this.population.getSpecies().get(rowIndex);
+		Species species = this.population.getSpecies().get(rowIndex);
 		
 		switch(columnIndex)
 		{

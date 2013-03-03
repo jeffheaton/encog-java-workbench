@@ -38,6 +38,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
 import org.encog.ml.CalculateScore;
+import org.encog.ml.ea.genome.Genome;
 import org.encog.ml.ea.score.AdjustScore;
 import org.encog.ml.ea.score.parallel.ParallelScore;
 import org.encog.ml.ea.sort.MinimizeScoreComp;
@@ -67,6 +68,7 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 	private final EPLPopulationModel populationModel;
 
 	private PrgPopulation population;
+	private List<Genome> list;
 	private final EPLPopulationInfo pi;
 
 	public EPLPopulationTab(ProjectEGFile obj) {
@@ -114,6 +116,8 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 				.setPreferredWidth(90);
 		this.populationTable.getColumnModel().getColumn(4)
 				.setPreferredWidth(5000);
+		
+		this.list = this.population.flatten();
 
 	}
 
@@ -165,7 +169,7 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 				JTable target = (JTable) e.getSource();
 				int row = target.getSelectedRow();
 				if (target == this.populationTable) {
-					EncogProgram genome = (EncogProgram) this.population
+					EncogProgram genome = (EncogProgram) this.list
 							.get(row);
 					EncogProgramTab tab = new EncogProgramTab(genome);
 					EncogWorkBench.getInstance().getMainWindow()
@@ -187,7 +191,7 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 	}
 
 	private void performSort() {
-		this.population.sort(new MinimizeScoreComp());
+		//this.population.sort(new MinimizeScoreComp());
 		this.populationTable.repaint();
 	}
 

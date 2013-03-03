@@ -82,8 +82,7 @@ public class NEATPopulationInfo extends JPanel {
 		int innovationsSize = 0;
 		double bestScore = 0;
 		
-		if( population.getGenomes()!=null)
-			populationSize = population.getGenomes().size();
+		populationSize = population.flatten().size();
 		
 		if( population.getSpecies()!=null)
 			speciesSize = population.getSpecies().size();
@@ -91,20 +90,7 @@ public class NEATPopulationInfo extends JPanel {
 		if( population.getInnovations()!=null )
 			innovationsSize = population.getInnovations().getInnovations().size();
 		
-		String type = "Unknown";
-		
-		if( population.getGenomes().size()>0 )
-		{
-			Genome genome = population.getGenomes().get(0);
-			if( genome instanceof NEATGenome )
-			{
-				type = "Neat";
-			}
-			else if( genome instanceof MLMethodGenome )
-			{
-				type = "NON-NEAT Neural Network";
-			}
-		}
+		String type = "Neat";
 		
 		y = fm.getHeight();
 		g.setFont(WorkbenchFonts.getTextFont());

@@ -23,6 +23,8 @@
  */
 package org.encog.workbench.models.population.neat;
 
+import java.util.List;
+
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
@@ -35,6 +37,7 @@ public class GeneralPopulationModel implements TableModel {
 
 	private NEATPopulation population;
 	private int maxGeneration;
+	private List<Genome> list;
 	public static String[] COLUMNS = { "Neurons", "Links", "Score", "Age", "Birth Generation" };
 	
 	
@@ -42,7 +45,8 @@ public class GeneralPopulationModel implements TableModel {
 	{
 		this.population = population;
 		this.maxGeneration = 0;
-		for(Genome g : population.getGenomes()) {
+		this.list = this.population.flatten();
+		for(Genome g : list) {
 			NEATGenome genome = (NEATGenome)g;
 			this.maxGeneration = Math.max(this.maxGeneration, genome.getBirthGeneration());
 		}
@@ -66,12 +70,12 @@ public class GeneralPopulationModel implements TableModel {
 	}
 
 	public int getRowCount() {
-		return this.population.getGenomes().size();
+		return this.list.size();
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		NEATGenome genome = (NEATGenome)this.population.getGenomes().get(rowIndex);
+		NEATGenome genome = (NEATGenome)this.list.get(rowIndex);
 		
 		switch(columnIndex)
 		{

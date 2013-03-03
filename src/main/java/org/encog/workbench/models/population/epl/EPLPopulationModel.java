@@ -23,9 +23,12 @@
  */
 package org.encog.workbench.models.population.epl;
 
+import java.util.List;
+
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import org.encog.ml.ea.genome.Genome;
 import org.encog.ml.prg.EncogProgram;
 import org.encog.ml.prg.train.PrgPopulation;
 import org.encog.parse.expression.common.RenderCommonExpression;
@@ -34,12 +37,14 @@ import org.encog.util.Format;
 public class EPLPopulationModel implements TableModel {
 
 	private PrgPopulation population;
+	private List<Genome> list;
 	
 	public static String[] COLUMNS = { "#", "Length", "Score", "Adj. Score", "Expression" };
 	
 	public EPLPopulationModel(PrgPopulation population)
 	{
 		this.population = population;
+		this.list = this.population.flatten();
 	}
 	
 	public void addTableModelListener(TableModelListener l) {
@@ -60,12 +65,12 @@ public class EPLPopulationModel implements TableModel {
 	}
 
 	public int getRowCount() {
-		return this.population.getGenomes().size();
+		return this.list.size();
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		EncogProgram genome = (EncogProgram)this.population.getGenomes().get(rowIndex);
+		EncogProgram genome = (EncogProgram)list.get(rowIndex);
 		RenderCommonExpression render = new RenderCommonExpression();
 		
 		switch(columnIndex)
