@@ -59,7 +59,7 @@ import org.encog.neural.cpn.CPN;
 import org.encog.neural.cpn.training.TrainInstar;
 import org.encog.neural.cpn.training.TrainOutstar;
 import org.encog.neural.neat.NEATPopulation;
-import org.encog.neural.neat.training.NEATTraining;
+import org.encog.neural.neat.NEATUtil;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.ContainsFlat;
 import org.encog.neural.networks.training.TrainingSetScore;
@@ -149,7 +149,7 @@ public class TrainBasicNetwork {
 				trainingData = this.wrapTrainingData(trainingData);
 			}
 
-			MLTrain train = new NEATTraining(score, population);
+			MLTrain train = NEATUtil.constructNEATTrainer(population, score);
 
 			if (kFold > 0) {
 				train = this.wrapTrainer(trainingData, train, kFold);
