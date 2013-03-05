@@ -46,7 +46,7 @@ import org.encog.ml.data.folded.FoldedDataSet;
 import org.encog.ml.ea.opp.SubtreeCrossover;
 import org.encog.ml.ea.opp.SubtreeMutation;
 import org.encog.ml.ea.score.adjust.ComplexityAdjustedScore;
-import org.encog.ml.ea.train.species.TrainEA;
+import org.encog.ml.ea.train.basic.TrainEA;
 import org.encog.ml.prg.train.PrgPopulation;
 import org.encog.ml.prg.train.rewrite.RewriteConstants;
 import org.encog.ml.prg.train.rewrite.algebraic.RewriteAlgebraic;
