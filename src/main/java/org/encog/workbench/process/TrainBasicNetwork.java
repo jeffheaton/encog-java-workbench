@@ -46,7 +46,7 @@ import org.encog.ml.data.folded.FoldedDataSet;
 import org.encog.ml.ea.opp.SubtreeCrossover;
 import org.encog.ml.ea.opp.SubtreeMutation;
 import org.encog.ml.ea.score.adjust.ComplexityAdjustedScore;
-import org.encog.ml.prg.train.PrgGenetic;
+import org.encog.ml.ea.train.species.TrainEA;
 import org.encog.ml.prg.train.PrgPopulation;
 import org.encog.ml.prg.train.rewrite.RewriteConstants;
 import org.encog.ml.prg.train.rewrite.algebraic.RewriteAlgebraic;
@@ -789,7 +789,7 @@ public class TrainBasicNetwork {
 		if (dialog.process()) {
 
 			PrgPopulation pop = (PrgPopulation) file.getObject();
-			PrgGenetic train = new PrgGenetic(pop, trainingData);
+			TrainEA train = new TrainEA(pop, trainingData);
 
 			if (dialog.getSimplify().getValue()) {
 				pop.addRewriteRule(new RewriteConstants());
