@@ -109,6 +109,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		targetLanguages.add("NinjaScript");
 
 		methods.add("Bayesian Network");
+		methods.add("Encog Program (GP)");
 		methods.add("Feedforward Network");
 		methods.add("NEAT Network");
 		methods.add("RBF Network");
@@ -154,7 +155,7 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 		this.normalize.setValue(true);
 		this.balance.setValue(false);
 		this.cluster.setValue(true);
-		((JComboBox)this.method.getField()).setSelectedIndex(1);
+		((JComboBox)this.method.getField()).setSelectedIndex(2);
 		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	
 	}
@@ -180,16 +181,18 @@ public class AnalystWizardDialog extends EncogPropertiesDialog {
 			case 0:
 				return WizardMethodType.BayesianNetwork;
 			case 1:
-				return WizardMethodType.FeedForward;
+				return WizardMethodType.EPL;
 			case 2:
-				return WizardMethodType.NEAT;
+				return WizardMethodType.FeedForward;
 			case 3:
-				return WizardMethodType.RBF;
+				return WizardMethodType.NEAT;
 			case 4:
-				return WizardMethodType.PNN;
+				return WizardMethodType.RBF;
 			case 5:
-				return WizardMethodType.SOM;
+				return WizardMethodType.PNN;
 			case 6:
+				return WizardMethodType.SOM;
+			case 7:
 				return WizardMethodType.SVM;
 			default:
 				return null;
