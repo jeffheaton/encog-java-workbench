@@ -39,6 +39,9 @@ import javax.swing.border.Border;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
 import org.encog.ml.prg.EncogProgram;
+import org.encog.ml.prg.ProgramNode;
+import org.encog.ml.prg.extension.NodeType;
+import org.encog.ml.prg.extension.ProgramExtensionTemplate;
 import org.encog.ml.prg.extension.StandardExtensions;
 import org.encog.workbench.tabs.EncogCommonTab;
 
@@ -58,8 +61,8 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
 
 public class EPLTreeTab extends EncogCommonTab {
 
-	private VisualizationViewer<MappedNode, Integer> vv;
-	private Forest<MappedNode,Integer> graph;
+	private VisualizationViewer<ProgramNode, Integer> vv;
+	private Forest<ProgramNode,Integer> graph;
 	private int edgeIndex = 0;
 	
 	public EPLTreeTab(final EncogProgram prg) {
@@ -69,15 +72,15 @@ public class EPLTreeTab extends EncogCommonTab {
 		// and E is the type of the edges
 		// Graph<V, E> where V is the type of the vertices 
         // and E is the type of the edges
-		this.graph = new DelegateForest<MappedNode, Integer>();
+		this.graph = new DelegateForest<ProgramNode, Integer>();
 
         buildGraph(prg);
         // Add some vertices. From above we defined these to be type Integer.
 		// The Layout<V, E> is parameterized by the vertex and edge types
-        TreeLayout<MappedNode,Integer> treeLayout = new TreeLayout<MappedNode,Integer>(graph);
+        TreeLayout<ProgramNode,Integer> treeLayout = new TreeLayout<ProgramNode,Integer>(graph);
         
-        Transformer<MappedNode,Paint> vertexPaint = new Transformer<MappedNode,Paint>() {
-			public Paint transform(MappedNode v) { return Color.white; }
+        Transformer<ProgramNode,Paint> vertexPaint = new Transformer<ProgramNode,Paint>() {
+			public Paint transform(ProgramNode v) { return Color.white; }
 		};
 	
 
@@ -88,28 +91,23 @@ public class EPLTreeTab extends EncogCommonTab {
 		
 		//Dimension d = new Dimension(600,600);
 		
-		vv =  new VisualizationViewer<MappedNode, Integer>(treeLayout, new Dimension(600,600));
+		vv =  new VisualizationViewer<ProgramNode, Integer>(treeLayout, new Dimension(600,600));
 		
 		//vv.setPreferredSize(d); //Sets the viewing area size
 
 		vv.getRenderer().getVertexLabelRenderer()
 				.setPosition(Renderer.VertexLabel.Position.CNTR);
-		vv.getRenderContext().setVertexLabelTransformer(new Transformer<MappedNode,String>(){
+		vv.getRenderContext().setVertexLabelTransformer(new Transformer<ProgramNode,String>(){
 
 			@Override
-			public String transform(MappedNode node) {
-				int opcode = node.getTemplate().getOpcode();
-				if( opcode == StandardExtensions.OPCODE_VAR ) {
-					int varIndex = (int)node.getParam2(); 
+			public String transform(ProgramNode node) {
+				ProgramExtensionTemplate temp = node.getTemplate();
+				if( temp == StandardExtensions.EXTENSION_VAR_SUPPORT ) {
+					int varIndex = (int)node.getData()[0].toIntValue();
 					return prg.getVariables().getVariableName(varIndex);
-				} else if( opcode == StandardExtensions.OPCODE_CONST_BOOL ) {
-					return (node.getParam1()==0?"[F]":"[T]");
-				} else if( opcode == StandardExtensions.OPCODE_CONST_FLOAT ) {
-					double d = node.getConstValue().toFloatValue();
-					return (""+prg.getContext().getFormat().format(d,1));
-				} else if( opcode == StandardExtensions.OPCODE_CONST_INT ) {
-					return (""+((int)node.getParam1()));
-				} else if( node.getTemplate().isOperator() ){
+				} else if( temp == StandardExtensions.EXTENSION_CONST_SUPPORT ) {
+					return node.getData()[0].toStringValue();
+				} else if( node.getTemplate().getNodeType()==NodeType.OperatorLeft || node.getTemplate().getNodeType()==NodeType.OperatorRight ){
 					return node.getTemplate().getName();
 				} else {
 					return node.getTemplate().getName() + "()";	
@@ -117,16 +115,13 @@ public class EPLTreeTab extends EncogCommonTab {
 				
 			}});
 		
-		vv.setVertexToolTipTransformer(new ToStringLabeller<MappedNode>());
+		vv.setVertexToolTipTransformer(new ToStringLabeller<ProgramNode>());
 		
-		vv.setVertexToolTipTransformer(new Transformer<MappedNode,String>() {
-			public String transform(MappedNode node) {
-				int opcode = node.getTemplate().getOpcode();
-				if( opcode == StandardExtensions.OPCODE_CONST_FLOAT ) {
-					double d = node.getConstValue().toFloatValue();
-					return (""+prg.getContext().getFormat().format(d,10));
-				} else if( opcode == StandardExtensions.OPCODE_CONST_INT ) {
-					return (""+((int)node.getParam1()));
+		vv.setVertexToolTipTransformer(new Transformer<ProgramNode,String>() {
+			public String transform(ProgramNode node) {
+				ProgramExtensionTemplate temp = node.getTemplate();
+				if( temp == StandardExtensions.EXTENSION_CONST_SUPPORT ) {
+					return node.getData()[0].toStringValue();
 				} else {
 					return null;
 				}
@@ -141,7 +136,7 @@ public class EPLTreeTab extends EncogCommonTab {
 		final GraphZoomScrollPane panel = new GraphZoomScrollPane(vv);
 		this.setLayout(new BorderLayout());
         add(panel, BorderLayout.CENTER);
-        final AbstractModalGraphMouse graphMouse = new DefaultModalGraphMouse<MappedNode,Integer>();
+        final AbstractModalGraphMouse graphMouse = new DefaultModalGraphMouse<ProgramNode,Integer>();
         vv.setGraphMouse(graphMouse);
         vv.getRenderContext().setVertexFillPaintTransformer(vertexPaint);
         vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
@@ -191,15 +186,14 @@ public class EPLTreeTab extends EncogCommonTab {
 	}
 	
 	private void buildGraph(EncogProgram prg) {
-	    MapProgram map = new MapProgram(prg);
-	    MappedNode root = map.getRootNode();
+	    ProgramNode root = prg.getRootNode();
 	    graph.addVertex(root);
 	    graphNode(root);
 	}
 	
-	private void graphNode(MappedNode parentNode) {
-		for(int i=parentNode.getChildren().size()-1;i>=0;i--) {
-			MappedNode childNode  = (MappedNode)parentNode.getChildren().get(i); 
+	private void graphNode(ProgramNode parentNode) {
+		for(int i=parentNode.getChildNodes().size()-1;i>=0;i--) {
+			ProgramNode childNode  = (ProgramNode)parentNode.getChildNode(i); 
 			graphNode(childNode);
 			graph.addEdge(new Integer(edgeIndex++), parentNode, childNode);
 		}

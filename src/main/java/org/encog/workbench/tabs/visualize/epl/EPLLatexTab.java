@@ -44,8 +44,6 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 
 public class EPLLatexTab extends EncogCommonTab {
 
-	private VisualizationViewer<MappedNode, Integer> vv;
-	private Forest<MappedNode,Integer> graph;
 	private BufferedImage image;
 	
 	public EPLLatexTab(final EncogProgram prg) {
