@@ -48,8 +48,8 @@ import org.encog.ml.ea.train.basic.TrainEA;
 import org.encog.ml.prg.opp.SubtreeCrossover;
 import org.encog.ml.prg.opp.SubtreeMutation;
 import org.encog.ml.prg.train.PrgPopulation;
+import org.encog.ml.prg.train.rewrite.RewriteAlgebraic;
 import org.encog.ml.prg.train.rewrite.RewriteConstants;
-import org.encog.ml.prg.train.rewrite.algebraic.RewriteAlgebraic;
 import org.encog.ml.svm.SVM;
 import org.encog.ml.svm.training.SVMSearchTrain;
 import org.encog.ml.svm.training.SVMTrain;
@@ -792,8 +792,8 @@ public class TrainBasicNetwork {
 			TrainEA train = new TrainEA(pop, trainingData);
 
 			if (dialog.getSimplify().getValue()) {
-				pop.addRewriteRule(new RewriteConstants());
-				pop.addRewriteRule(new RewriteAlgebraic());
+				train.addRewriteRule(new RewriteConstants());
+				train.addRewriteRule(new RewriteAlgebraic());
 			}
 
 			train.addOperation(0.95, new SubtreeCrossover());

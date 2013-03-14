@@ -40,8 +40,6 @@ import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
 import org.encog.ml.prg.EncogProgram;
 import org.encog.ml.prg.extension.StandardExtensions;
-import org.encog.ml.prg.util.MapProgram;
-import org.encog.ml.prg.util.MappedNode;
 import org.encog.workbench.tabs.EncogCommonTab;
 
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;

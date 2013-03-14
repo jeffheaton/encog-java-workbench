@@ -32,7 +32,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.JLabel;
 
 import org.encog.ml.prg.EncogProgram;
-import org.encog.ml.prg.util.MappedNode;
 import org.encog.parse.expression.latex.RenderLatexExpression;
 import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.tabs.EncogCommonTab;

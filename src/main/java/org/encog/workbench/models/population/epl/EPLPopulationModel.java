@@ -78,7 +78,7 @@ public class EPLPopulationModel implements TableModel {
 			case 0:
 				return ""+rowIndex;
 			case 1:
-				return Format.formatInteger(genome.getProgramLength());
+				return Format.formatInteger(genome.size());
 			case 2:
 				if( Double.isNaN(genome.getScore()) || Double.isInfinite(genome.getScore()) ) {
 					return "NaN";
