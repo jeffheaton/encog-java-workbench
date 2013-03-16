@@ -45,6 +45,7 @@ import org.encog.mathutil.randomize.Distort;
 import org.encog.ml.BasicML;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
+import org.encog.ml.ea.train.EvolutionaryAlgorithm;
 import org.encog.ml.ea.train.basic.BasicEA;
 import org.encog.ml.train.MLTrain;
 import org.encog.util.Format;
@@ -250,7 +251,7 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		y += fm.getHeight();
 		g.drawString("Training Type:", 350, y);
 		
-		if( this.train instanceof BasicML ) {
+		if( this.train instanceof EvolutionaryAlgorithm ) {
 			y += fm.getHeight();
 			g.drawString("Species Count:", 350, y);
 		}
@@ -287,9 +288,9 @@ public class AnalystProgressTab extends EncogCommonTab implements
 		if( train!=null ) {
 			g.drawString(train.getClass().getSimpleName(), 500, y);
 			y += fm.getHeight();
-			if( this.train instanceof BasicML ) {
-				BasicEA neat = (BasicEA)train;
-				g.drawString(Format.formatInteger(neat.getPopulation().getSpecies().size()), 500, y);
+			if( this.train instanceof EvolutionaryAlgorithm ) {
+				EvolutionaryAlgorithm ea = (EvolutionaryAlgorithm)train;
+				g.drawString(Format.formatInteger(ea.getPopulation().getSpecies().size()), 500, y);
 			}
 		}
 

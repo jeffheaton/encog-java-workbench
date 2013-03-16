@@ -47,6 +47,7 @@ import org.encog.ml.ea.score.adjust.ComplexityAdjustedScore;
 import org.encog.ml.ea.train.basic.TrainEA;
 import org.encog.ml.prg.opp.SubtreeCrossover;
 import org.encog.ml.prg.opp.SubtreeMutation;
+import org.encog.ml.prg.species.PrgSpeciation;
 import org.encog.ml.prg.train.PrgPopulation;
 import org.encog.ml.prg.train.rewrite.RewriteAlgebraic;
 import org.encog.ml.prg.train.rewrite.RewriteConstants;
@@ -798,6 +799,7 @@ public class TrainBasicNetwork {
 
 			train.addOperation(0.95, new SubtreeCrossover());
 			train.addOperation(0.05, new SubtreeMutation(pop.getContext(), 4));
+			train.setSpeciation(new PrgSpeciation());
 
 			ComplexityAdjustedScore adj = new ComplexityAdjustedScore(dialog
 					.getComplexityPenaltyThreshold().getValue(), dialog

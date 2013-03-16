@@ -47,6 +47,7 @@ import org.encog.ml.MLError;
 import org.encog.ml.MLMethod;
 import org.encog.ml.MLResettable;
 import org.encog.ml.data.MLDataSet;
+import org.encog.ml.ea.train.EvolutionaryAlgorithm;
 import org.encog.ml.train.MLTrain;
 import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
@@ -87,7 +88,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 * The close button.
 	 */
 	private final JButton buttonClose;
-	
+
 	private final JButton buttonIteration;
 
 	/**
@@ -210,16 +211,14 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	private boolean shouldExit;
 
 	private AtomicInteger resetOption = new AtomicInteger(-1);
-	
+
 	private boolean error = false;
-	
-	
+
 	private String lastMessage = "";
-	
+
 	private MLDataSet validationData;
-	
+
 	private double validationError;
-	
 
 	/**
 	 * Construct the dialog box.
@@ -230,9 +229,10 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	public BasicTrainingProgress(MLTrain train, ProjectEGFile method,
 			MLDataSet trainingData, MLDataSet validationData) {
 		super(method);
-		
-		if( method instanceof MLMethod ) {
-			ValidateNetwork.validateMethodToData((MLMethod)method.getObject(), trainingData);
+
+		if (method instanceof MLMethod) {
+			ValidateNetwork.validateMethodToData((MLMethod) method.getObject(),
+					trainingData);
 		}
 		List<String> list = new ArrayList<String>();
 		list.add("<Select Option>");
@@ -274,28 +274,31 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		this.panelBody.setLayout(new BorderLayout());
 		this.panelBody.add(this.statusPanel = new TrainingStatusPanel(this),
 				BorderLayout.NORTH);
-		this.panelBody.add(this.chartPanel = new ChartPane(this.validationData!=null),
-				BorderLayout.CENTER);
+		this.panelBody.add(this.chartPanel = new ChartPane(
+				this.validationData != null), BorderLayout.CENTER);
 		this.buttonStop.setEnabled(false);
 
 		this.shouldExit = false;
 		this.bodyFont = EncogFonts.getInstance().getBodyFont();
 		this.headFont = EncogFonts.getInstance().getHeadFont();
 		this.status = "Ready to Start";
-		
-	}
-	
-	private void saveMLMethod() {
-		if( this.getEncogObject()!=null ) {
 
-			((ProjectEGFile)this.getEncogObject()).save(train.getMethod());
-			if( this.getParentTab()!=null ) {
-				this.getParentTab().setEncogObject(this.getEncogObject());
+	}
+
+	private void saveMLMethod() {
+
+		if (this.getEncogObject() != null) {
+
+			if (!(train instanceof EvolutionaryAlgorithm) ) {
+				((ProjectEGFile) this.getEncogObject()).save(train.getMethod());
+				if (this.getParentTab() != null) {
+					this.getParentTab().setEncogObject(this.getEncogObject());
+				}
 			}
-		} 
-		
-		if( this.train.canContinue() ) {
-			TrainingContinuation cont = train.pause();	
+		}
+
+		if (this.train.canContinue()) {
+			TrainingContinuation cont = train.pause();
 			String name = FileUtil.getFileName(this.getEncogObject().getFile());
 			name = FileUtil.forceExtension(name + "-cont", "eg");
 			File path = new File(name);
@@ -303,33 +306,34 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 			EncogWorkBench.getInstance().refresh();
 		}
 	}
-	
+
 	private void saveNEATPopulation() {
-		((ProjectEGFile)this.getEncogObject()).save();
+		((ProjectEGFile) this.getEncogObject()).save();
 	}
 
 	private void performClose() {
-		
-		if( error )
+
+		if (error)
 			return;
 
 		if (EncogWorkBench.askQuestion("Training", "Save the training?")) {
 
-			if( this.getEncogObject()!=null ) {
-				Object obj = ((ProjectEGFile)this.getEncogObject()).getObject();
-				
-				if( obj instanceof NEATPopulation ) {
+			if (this.getEncogObject() != null) {
+				Object obj = ((ProjectEGFile) this.getEncogObject())
+						.getObject();
+
+				if (obj instanceof NEATPopulation) {
 					saveNEATPopulation();
 				} else {
 					saveMLMethod();
 				}
 			}
-						
+
 			EncogWorkBench.getInstance().refresh();
 		} else {
-			if( this.getEncogObject()!=null) {
-				((ProjectEGFile)this.getEncogObject()).revert();
-			} 
+			if (this.getEncogObject() != null) {
+				((ProjectEGFile) this.getEncogObject()).revert();
+			}
 		}
 	}
 
@@ -393,7 +397,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		g.drawString("Current Error:", 10, y);
 		y += fm.getHeight();
 		g.drawString("Validation Error:", 10, y);
-		y += fm.getHeight();		
+		y += fm.getHeight();
 		g.drawString("Error Improvement:", 10, y);
 		y += fm.getHeight();
 		g.drawString("Message:", 10, y);
@@ -413,7 +417,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		y += fm.getHeight();
 		g.drawString(Format.formatPercent(this.currentError), 150, y);
 		y += fm.getHeight();
-		if( this.validationData!=null ) {
+		if (this.validationData != null) {
 			g.drawString(Format.formatPercent(this.validationError), 150, y);
 		} else {
 			g.drawString("n/a", 150, y);
@@ -439,7 +443,6 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 			final double d = this.performanceCount / 60.0;
 			str = "  (" + this.nfShort.format(d) + "/sec)";
 		}
-		
 
 		g.drawString(str, 500, y);
 
@@ -482,7 +485,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	 */
 	public void redraw() {
 		this.statusPanel.repaint();
-		this.lastUpdate = System.currentTimeMillis();		
+		this.lastUpdate = System.currentTimeMillis();
 		this.chartPanel.addData(this.iteration, this.train.getError(),
 				this.errorImprovement, this.validationError);
 	}
@@ -500,16 +503,19 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 			// this.method = (MLMethod) method.clone();
 
 			// see if we need to continue training.
-			if( this.train.canContinue() ) {
-				String name = FileUtil.getFileName( getEncogObject().getFile() );
-				name+="-cont.eg";
+			if (this.train.canContinue()) {
+				String name = FileUtil.getFileName(getEncogObject().getFile());
+				name += "-cont.eg";
 				File path = new File(name);
-				if( path.exists() ) {
+				if (path.exists()) {
 					try {
-						TrainingContinuation cont = (TrainingContinuation)EncogDirectoryPersistence.loadObject(path);
+						TrainingContinuation cont = (TrainingContinuation) EncogDirectoryPersistence
+								.loadObject(path);
 						train.resume(cont);
-					} catch(Exception ex) {
-						EncogWorkBench.displayError("Trainning Resume Incompatible", "Cannot use previous training data, training will begin as best it can.");
+					} catch (Exception ex) {
+						EncogWorkBench
+								.displayError("Trainning Resume Incompatible",
+										"Cannot use previous training data, training will begin as best it can.");
 						path.delete();
 					}
 				}
@@ -521,22 +527,24 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 
 				if (this.resetOption.get() != -1) {
 					MLMethod method = null;
-					
-					if( getEncogObject() instanceof ProjectEGFile ) {
-						method = (MLMethod)((ProjectEGFile)getEncogObject()).getObject();
+
+					if (getEncogObject() instanceof ProjectEGFile) {
+						method = (MLMethod) ((ProjectEGFile) getEncogObject())
+								.getObject();
 					}
-					
-					if( method==null )
-					{
+
+					if (method == null) {
 						this.resetOption.set(-1);
-						EncogWorkBench.displayError("Error", "This machine learning method cannot be reset or randomized.");
+						EncogWorkBench
+								.displayError("Error",
+										"This machine learning method cannot be reset or randomized.");
 						return;
 					}
-					
+
 					switch (this.resetOption.get()) {
 					case 0:
 						if (method instanceof MLResettable) {
-							((MLResettable)method).reset();
+							((MLResettable) method).reset();
 						} else {
 							EncogWorkBench
 									.displayError("Error",
@@ -580,21 +588,22 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 					this.status = "Training Complete";
 					this.cancel = true;
 				}
-				
+
 				this.errorImprovement = (this.lastError - this.currentError)
 						/ this.lastError;
-				if( this.validationData!=null ) {
+				if (this.validationData != null) {
 					MLMethod m = train.getMethod();
-					if( m instanceof MLError ) {
-						MLError error = (MLError)m;
-						this.validationError = error.calculateError(this.validationData);
+					if (m instanceof MLError) {
+						MLError error = (MLError) m;
+						this.validationError = error
+								.calculateError(this.validationData);
 					}
 				}
-				if( Double.isInfinite(this.errorImprovement) || Double.isNaN(this.errorImprovement)) {
+				if (Double.isInfinite(this.errorImprovement)
+						|| Double.isNaN(this.errorImprovement)) {
 					this.errorImprovement = 100.0;
 				}
-				
-				
+
 				if (System.currentTimeMillis() - this.lastUpdate > 1000
 						|| this.cancel) {
 					redraw();
@@ -617,7 +626,8 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 			}
 		} catch (Throwable t) {
 			this.error = true;
-			EncogWorkBench.displayError("Error", t, this.getEncogObject(),this.trainingData);
+			EncogWorkBench.displayError("Error", t, this.getEncogObject(),
+					this.trainingData);
 			shutdown();
 			stopped();
 			dispose();
@@ -681,11 +691,11 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 	@Override
 	public void report(int total, int current, String message) {
 		this.lastMessage = message;
-		redraw();		
+		redraw();
 	}
-	
+
 	public void performIteration() {
-		
+
 		for (int i = 0; i < EncogWorkBench.getInstance().getConfig()
 				.getIterationStepCount(); i++) {
 			this.iteration++;
@@ -710,7 +720,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 				this.errorImprovement = 100.0;
 			}
 		}
-		
-		redraw();		
+
+		redraw();
 	}
 }

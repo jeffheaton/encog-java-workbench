@@ -41,7 +41,6 @@ import org.encog.ml.CalculateScore;
 import org.encog.ml.ea.genome.Genome;
 import org.encog.ml.ea.score.AdjustScore;
 import org.encog.ml.ea.score.parallel.ParallelScore;
-import org.encog.ml.ea.sort.MinimizeScoreComp;
 import org.encog.ml.prg.EncogProgram;
 import org.encog.ml.prg.PrgCODEC;
 import org.encog.ml.prg.train.PrgPopulation;
@@ -50,6 +49,9 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.population.epl.RescoreDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.population.epl.EPLPopulationModel;
+import org.encog.workbench.models.population.epl.OpcodeModel;
+import org.encog.workbench.models.population.neat.InnovationModel;
+import org.encog.workbench.models.population.neat.SpeciesModel;
 import org.encog.workbench.process.CreateNewFile;
 import org.encog.workbench.process.TrainBasicNetwork;
 import org.encog.workbench.tabs.EncogCommonTab;
@@ -70,6 +72,14 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 	private PrgPopulation population;
 	private List<Genome> list;
 	private final EPLPopulationInfo pi;
+	
+	private final JScrollPane speciesScroll;
+	private final JTable speciesTable;
+	private final SpeciesModel speciesModel;
+
+	private final JScrollPane opcodesScroll;
+	private final JTable opcodesTable;
+	private final OpcodeModel opcodesModel;
 
 	public EPLPopulationTab(ProjectEGFile obj) {
 		super(obj);
@@ -100,10 +110,19 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 		this.populationTable = new JTable(this.populationModel);
 		this.populationTable.addMouseListener(this);
 		this.populationScroll = new JScrollPane(this.populationTable);
+		
+		this.speciesModel = new SpeciesModel(population);
+		this.speciesTable = new JTable(this.speciesModel);
+		this.speciesScroll = new JScrollPane(this.speciesTable);
+		this.speciesTable.addMouseListener(this);
+
+		this.opcodesModel = new OpcodeModel(population);
+		this.opcodesTable = new JTable(this.opcodesModel);
+		this.opcodesScroll = new JScrollPane(this.opcodesTable);
 
 		this.tabViews.addTab("General Population", this.populationScroll);
-		// this.tabViews.addTab("Species", this.speciesScroll);
-		// this.tabViews.addTab("Innovation", this.innovationScroll);
+		this.tabViews.addTab("Species", this.speciesScroll);
+		this.tabViews.addTab("Opcodes", this.opcodesScroll);
 
 		this.populationTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		this.populationTable.getColumnModel().getColumn(0)

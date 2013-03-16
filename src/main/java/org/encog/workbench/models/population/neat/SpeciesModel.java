@@ -26,17 +26,17 @@ package org.encog.workbench.models.population.neat;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import org.encog.ml.ea.population.Population;
 import org.encog.ml.ea.species.Species;
-import org.encog.neural.neat.NEATPopulation;
 import org.encog.util.Format;
 
 public class SpeciesModel implements TableModel {
 
-	private NEATPopulation population;
+	private Population population;
 	
-	public static String[] COLUMNS = { "Age", "Best Score", "Stagnant" , "Members" };
+	public static String[] COLUMNS = { "Name", "Age", "Best Score", "Stagnant" , "Members" };
 	
-	public SpeciesModel(NEATPopulation population)
+	public SpeciesModel(Population population)
 	{
 		this.population = population;
 	}
@@ -68,12 +68,14 @@ public class SpeciesModel implements TableModel {
 		switch(columnIndex)
 		{
 			case 0:
-				return Format.formatInteger(species.getAge());
+				return "Species #" + (rowIndex+1);
 			case 1:
-				return Format.formatDouble(species.getBestScore(),4);
+				return Format.formatInteger(species.getAge());
 			case 2:
-				return Format.formatInteger(species.getGensNoImprovement());
+				return Format.formatDouble(species.getBestScore(),4);
 			case 3:
+				return Format.formatInteger(species.getGensNoImprovement());
+			case 4:
 				return Format.formatInteger(species.getMembers().size());
 			default:
 				return "";

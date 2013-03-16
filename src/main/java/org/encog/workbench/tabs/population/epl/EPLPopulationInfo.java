@@ -52,36 +52,40 @@ public class EPLPopulationInfo extends JPanel {
 		g.drawRect(0, 0, getWidth()-1, getHeight()-1);
 		g.setFont(WorkbenchFonts.getTitle2Font());
 		FontMetrics fm = g.getFontMetrics();
+		// 20 300 580
 		int y = fm.getHeight();
 		g.drawString("Maximum Population Count:", 20, y);
-		g.drawString("Old Age Threshold:", 300, y);
-		g.drawString("NEAT Act. Function:", 580, y);
+		g.drawString("Input Count:", 300, y);
 		y+=fm.getHeight();
 		g.drawString("Current Population Count:", 20, y);
-		g.drawString("Old Age Penalty:", 300, y);
-		g.drawString("Output Act. Function:", 580, y);
+		g.drawString("Output Count:", 300, y);
 		y+=fm.getHeight();
 		g.drawString("Species Count:", 20, y);
-		g.drawString("Youth Age Threshold:", 300, y);
-		g.drawString("Input Count:", 580, y);
 		y+=fm.getHeight();
-		g.drawString("Innovation Count:", 20, y);
-		g.drawString("Youth Bonus:", 300, y);
-		g.drawString("Output Count:", 580, y);
-		y+=fm.getHeight();
-		g.drawString("Population Type:", 20, y);
-		g.drawString("Survival Rate:", 300, y);
-		g.drawString("Cycles:", 580, y);
+		g.drawString("Max Size:", 20, y);
 		y+=fm.getHeight();
 		g.drawString("Best Genome Score:", 20, y);
 		
-		int populationSize = 0;
-		populationSize = population.flatten().size();
-			
+		int populationSize = population.flatten().size();
+		String bestScore = "n/a";
+		
+		if( population.getBestGenome() !=null ) {
+			bestScore = Format.formatDouble(population.getBestGenome().getScore(),2);
+		}
+		
 		y = fm.getHeight();
 		g.setFont(WorkbenchFonts.getTextFont());
 		g.drawString(Format.formatInteger(population.getPopulationSize()), 200, y);
-		g.drawString(Format.formatInteger(population.getMaxIndividualSize()), 450, y);
+		g.drawString(Format.formatInteger(population.getContext().getDefinedVariables().size()), 480, y);
+		y+=fm.getHeight();
+		g.drawString(Format.formatInteger(populationSize), 200, y);
+		g.drawString(Format.formatInteger(1), 480, y);
+		y+=fm.getHeight();
+		g.drawString(Format.formatInteger(population.getSpecies().size()), 200, y);
+		y+=fm.getHeight();
+		g.drawString(Format.formatInteger(population.getMaxIndividualSize()), 200, y);
+		y+=fm.getHeight();
+		g.drawString(bestScore, 200, y);
 		
 	}
 	

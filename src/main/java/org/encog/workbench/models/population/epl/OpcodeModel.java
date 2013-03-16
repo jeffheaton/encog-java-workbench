@@ -29,19 +29,17 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.encog.ml.ea.genome.Genome;
-import org.encog.ml.prg.EncogProgram;
+import org.encog.ml.prg.extension.ProgramExtensionTemplate;
 import org.encog.ml.prg.train.PrgPopulation;
-import org.encog.parse.expression.common.RenderCommonExpression;
-import org.encog.util.Format;
 
-public class EPLPopulationModel implements TableModel {
+public class OpcodeModel implements TableModel {
 
 	private PrgPopulation population;
 	private List<Genome> list;
 	
-	public static String[] COLUMNS = { "#", "Length", "Score", "Adj. Score", "Species", "Expression" };
+	public static String[] COLUMNS = { "#", "Name", "Type", "Precedence", "Arguments", "Data Size" };
 	
-	public EPLPopulationModel(PrgPopulation population)
+	public OpcodeModel(PrgPopulation population)
 	{
 		this.population = population;
 		this.list = this.population.flatten();
@@ -65,41 +63,27 @@ public class EPLPopulationModel implements TableModel {
 	}
 
 	public int getRowCount() {
-		return this.list.size();
+		return this.population.getContext().getFunctions().getOpCodes().size();
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		EncogProgram genome = (EncogProgram)list.get(rowIndex);
-		RenderCommonExpression render = new RenderCommonExpression();
+		ProgramExtensionTemplate temp = this.population.getContext().getFunctions().getOpCodes().get(rowIndex);
 		
 		switch(columnIndex)
 		{
 			case 0:
 				return ""+rowIndex;
 			case 1:
-				return Format.formatInteger(genome.size());
+				return temp.getName();
 			case 2:
-				if( Double.isNaN(genome.getScore()) || Double.isInfinite(genome.getScore()) ) {
-					return "NaN";
-				} else {
-					return Format.formatDouble(genome.getScore(),4);
-				}
+				return temp.getNodeType().toString();
 			case 3:
-				if( Double.isNaN(genome.getAdjustedScore()) || Double.isInfinite(genome.getAdjustedScore()) ) {
-					return "NaN";
-				} else {
-					return Format.formatDouble(genome.getAdjustedScore(),4);
-				}
+				return ""+temp.getPrecedence();
 			case 4:
-				int speciesIndex = this.population.getSpecies().indexOf(genome.getSpecies());
-				String speciesName = "Unknown";
-				if( speciesIndex>=0 ) {
-					speciesName = "Species #" + (speciesIndex+1);
-				}
-				return speciesName; 
+				return ""+temp.getChildNodeCount();
 			case 5:
-				return render.render(genome);
+				return ""+temp.getDataSize();
 			default:
 				return "";
 		}
