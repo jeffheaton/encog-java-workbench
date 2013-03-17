@@ -50,7 +50,6 @@ import org.encog.workbench.dialogs.population.epl.RescoreDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.population.epl.EPLPopulationModel;
 import org.encog.workbench.models.population.epl.OpcodeModel;
-import org.encog.workbench.models.population.neat.InnovationModel;
 import org.encog.workbench.models.population.neat.SpeciesModel;
 import org.encog.workbench.process.CreateNewFile;
 import org.encog.workbench.process.TrainBasicNetwork;
@@ -106,7 +105,7 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 		mainPanel.add(about, BorderLayout.NORTH);
 		mainPanel.add(tabViews = new JTabbedPane(), BorderLayout.CENTER);
 
-		this.populationModel = new EPLPopulationModel(population);
+		this.populationModel = new EPLPopulationModel(this);
 		this.populationTable = new JTable(this.populationModel);
 		this.populationTable.addMouseListener(this);
 		this.populationScroll = new JScrollPane(this.populationTable);
@@ -176,6 +175,10 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 		TrainBasicNetwork t = new TrainBasicNetwork(
 				(ProjectEGFile) this.getEncogObject(), this);
 		t.performTrain();
+		this.list = this.population.flatten();
+		this.populationTable.repaint();
+		this.repaint();
+		this.pi.repaint();
 	}
 
 	@Override
@@ -205,7 +208,7 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 
 	public void performReset() {
 		CreateNewFile.createPopulationEPL(null, this.population);
-
+		this.list = this.population.flatten();
 		this.populationTable.repaint();
 		this.repaint();
 		this.pi.repaint();
@@ -239,5 +242,18 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 		// TODO Auto-generated method stub
 
 	}
+
+	/**
+	 * @return The flattened list of genomes.
+	 */
+	public List<Genome> getList() {
+		return list;
+	}
+
+	public PrgPopulation getPopulation() {
+		return this.population;
+	}
+	
+	
 
 }

@@ -33,18 +33,17 @@ import org.encog.ml.prg.EncogProgram;
 import org.encog.ml.prg.train.PrgPopulation;
 import org.encog.parse.expression.common.RenderCommonExpression;
 import org.encog.util.Format;
+import org.encog.workbench.tabs.population.epl.EPLPopulationTab;
 
 public class EPLPopulationModel implements TableModel {
 
-	private PrgPopulation population;
-	private List<Genome> list;
+	private EPLPopulationTab owner;
 	
 	public static String[] COLUMNS = { "#", "Length", "Score", "Adj. Score", "Species", "Expression" };
 	
-	public EPLPopulationModel(PrgPopulation population)
+	public EPLPopulationModel(EPLPopulationTab population)
 	{
-		this.population = population;
-		this.list = this.population.flatten();
+		this.owner = population;
 	}
 	
 	public void addTableModelListener(TableModelListener l) {
@@ -65,12 +64,12 @@ public class EPLPopulationModel implements TableModel {
 	}
 
 	public int getRowCount() {
-		return this.list.size();
+		return this.owner.getList().size();
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		EncogProgram genome = (EncogProgram)list.get(rowIndex);
+		EncogProgram genome = (EncogProgram)this.owner.getList().get(rowIndex);
 		RenderCommonExpression render = new RenderCommonExpression();
 		
 		switch(columnIndex)
@@ -92,7 +91,7 @@ public class EPLPopulationModel implements TableModel {
 					return Format.formatDouble(genome.getAdjustedScore(),4);
 				}
 			case 4:
-				int speciesIndex = this.population.getSpecies().indexOf(genome.getSpecies());
+				int speciesIndex = this.owner.getPopulation().getSpecies().indexOf(genome.getSpecies());
 				String speciesName = "Unknown";
 				if( speciesIndex>=0 ) {
 					speciesName = "Species #" + (speciesIndex+1);

@@ -52,32 +52,32 @@ public class CreateNewFile {
 		CreateFileDialog dialog = new CreateFileDialog(EncogWorkBench
 				.getInstance().getMainWindow());
 		dialog.setTheType(CreateFileType.MachineLearningMethod);
-		
-		
+
 		if (dialog.process()) {
 			String name = dialog.getFilename();
-			
-			if( name==null || name.length()==0 ) {
-				EncogWorkBench.displayError("Data Missing", "Must specify a filename.");
+
+			if (name == null || name.length() == 0) {
+				EncogWorkBench.displayError("Data Missing",
+						"Must specify a filename.");
 				return;
 			}
-			
+
 			File basePath = EncogWorkBench.getInstance().getMainWindow()
-			.getTree().getPath();
-			
+					.getTree().getPath();
+
 			if (dialog.getTheType() == CreateFileType.MachineLearningMethod) {
-				
+
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
 					CreateNeuralNetwork.process(path);
 				}
 			} else if (dialog.getTheType() == CreateFileType.TextFile) {
-				
+
 				name = FileUtil.forceExtension(new File(name).getName(), "txt");
 				File path = new File(basePath, name);
 				if (FileUtil.checkOverWrite(path)) {
-					FileUtil.writeFileAsString(path, "");					
+					FileUtil.writeFileAsString(path, "");
 				}
 			} else if (dialog.getTheType() == CreateFileType.CSVFile) {
 
@@ -90,28 +90,26 @@ public class CreateNewFile {
 				name = FileUtil.forceExtension(new File(name).getName(), "egb");
 				File path = new File(basePath, name);
 				createNewEGB(path);
-			} else if( dialog.getTheType() == CreateFileType.Population ) {
+			} else if (dialog.getTheType() == CreateFileType.Population) {
 				name = FileUtil.forceExtension(new File(name).getName(), "eg");
 				File path = new File(basePath, name);
 				createNewPopulation(path);
-			} else if( dialog.getTheType() == CreateFileType.AnalystIndicator ) {
+			} else if (dialog.getTheType() == CreateFileType.AnalystIndicator) {
 				name = FileUtil.forceExtension(new File(name).getName(), "ega");
 				File path = new File(basePath, name);
 				createNewAnalystIndicator(path);
 			}
-			
-			EncogWorkBench.getInstance().getMainWindow().getTree()
-			.refresh();
+
+			EncogWorkBench.getInstance().getMainWindow().getTree().refresh();
 		}
 	}
-	
+
 	private static void createNewAnalystIndicator(File path) {
 		EncogAnalystWizard.createRealtimeEncogAnalyst(path);
-		
+
 	}
 
-	private static void createNewEGB(File file)
-	{
+	private static void createNewEGB(File file) {
 		CreateEmptyTrainingDialog dialog = new CreateEmptyTrainingDialog(
 				EncogWorkBench.getInstance().getMainWindow());
 
@@ -122,8 +120,7 @@ public class CreateNewFile {
 
 			BufferedMLDataSet trainingData = new BufferedMLDataSet(file);
 
-			MLDataPair pair = BasicMLDataPair.createPair(input,
-					output);
+			MLDataPair pair = BasicMLDataPair.createPair(input, output);
 			trainingData.beginLoad(input, output);
 			for (int i = 0; i < elements; i++) {
 				trainingData.add(pair);
@@ -131,7 +128,7 @@ public class CreateNewFile {
 			trainingData.endLoad();
 		}
 	}
-	
+
 	private static void createPopulationNEAT(File path) {
 		NewPopulationDialog dialog = new NewPopulationDialog();
 
@@ -140,67 +137,80 @@ public class CreateNewFile {
 			int inputCount = dialog.getInputNeurons().getValue();
 			int outputCount = dialog.getOutputNeurons().getValue();
 			int cycles = dialog.getActivationCycles().getValue();
-			NEATPopulation pop = new NEATPopulation(inputCount,outputCount,populationSize);
+			NEATPopulation pop = new NEATPopulation(inputCount, outputCount,
+					populationSize);
 			pop.setActivationCycles(cycles);
 			pop.setNEATActivationFunction(dialog.getNeatActivationFunction());
-			EncogWorkBench.getInstance().save(path,pop);
+			EncogWorkBench.getInstance().save(path, pop);
 			EncogWorkBench.getInstance().refresh();
 		}
 	}
-	
+
 	public static void createPopulationEPL(File path, PrgPopulation pop) {
 		CreateEPLPopulationDialog dialog = new CreateEPLPopulationDialog();
-		
-		if( pop!=null ) {
+
+		if (pop != null) {
 			dialog.getPopulationSize().setValue(pop.size());
-			
-			for(String varName : pop.getContext().getDefinedVariables() ) {
+
+			for (String varName : pop.getContext().getDefinedVariables()) {
 				dialog.getInputVariables().getModel().addElement(varName);
 			}
 		} else {
 			dialog.getInputVariables().getModel().addElement("x");
 			dialog.getPopulationSize().setValue(1000);
 		}
-		
-		if( dialog.process() ) {
+
+		if (dialog.process()) {
 			int populationSize = dialog.getPopulationSize().getValue();
 			int maxDepth = dialog.getMaxDepth().getValue();
-			
-			CalculateScore score = null;
-			
-			if( dialog.getTrainingSet()!=null) {
+
+			CalculateScore score;
+
+			if (dialog.getTrainingSet() != null) {
 				score = new TrainingSetScore(dialog.getTrainingSet());
+			} else {
+				score = new ZeroEvalScoreFunction();
 			}
-			
+
 			EncogProgramContext context = new EncogProgramContext();
-			
-			for(int i=0;i<dialog.getInputVariables().getModel().getSize();i++) {
-				String str = (String)dialog.getInputVariables().getModel().get(i);
+
+			for (int i = 0; i < dialog.getInputVariables().getModel().getSize(); i++) {
+				String str = (String) dialog.getInputVariables().getModel()
+						.get(i);
 				context.defineVariable(str);
 			}
 
 			StandardExtensions.createNumericOperators(context.getFunctions());
 
-			if( pop==null ) {
-				pop = new PrgPopulation(context,populationSize);
+			if (pop == null) {
+				pop = new PrgPopulation(context, populationSize);
 			}
 
-			(new PrgGrowGenerator(pop.getContext(),maxDepth)).generate(new Random(), pop, new ZeroEvalScoreFunction());
+			try {
+				EncogWorkBench.getInstance().getMainWindow().beginWait();
+				(new PrgGrowGenerator(pop.getContext(), maxDepth)).generate(
+						new Random(), pop, score);
+			} finally {
+				EncogWorkBench.getInstance().getMainWindow().endWait();
+			}
 
-			if( path!=null ) {
-				EncogWorkBench.getInstance().save(path,pop);
+			if (path != null) {
+				EncogWorkBench.getInstance().save(path, pop);
 				EncogWorkBench.getInstance().refresh();
 			}
 		}
 	}
-	
+
 	private static void createNewPopulation(File path) {
 		CreatePopulationDialog dialog = new CreatePopulationDialog();
-		if(dialog.process()) 
-		{
-			switch(dialog.getTheType()) {
-			case NEAT:createPopulationNEAT(path);break;
-			case EPL:createPopulationEPL(path,null);break;
+		if (dialog.process()) {
+			switch (dialog.getTheType()) {
+			case NEAT:
+				createPopulationNEAT(path);
+				break;
+			case EPL:
+				createPopulationEPL(path, null);
+				break;
 			}
 		}
 	}
