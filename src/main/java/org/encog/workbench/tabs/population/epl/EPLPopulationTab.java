@@ -134,6 +134,8 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 		this.populationTable.getColumnModel().getColumn(3)
 				.setPreferredWidth(90);
 		this.populationTable.getColumnModel().getColumn(4)
+			.setPreferredWidth(90);
+		this.populationTable.getColumnModel().getColumn(5)
 				.setPreferredWidth(5000);
 		
 		this.list = this.population.flatten();
