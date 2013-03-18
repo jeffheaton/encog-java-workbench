@@ -49,7 +49,6 @@ import org.encog.ml.MLResettable;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.ea.train.EvolutionaryAlgorithm;
 import org.encog.ml.train.MLTrain;
-import org.encog.neural.neat.NEATPopulation;
 import org.encog.neural.networks.training.propagation.TrainingContinuation;
 import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.Format;
@@ -287,16 +286,12 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 
 	private void saveMLMethod() {
 
-		if (this.getEncogObject() != null) {
-
-			if (!(train instanceof EvolutionaryAlgorithm) ) {
-				((ProjectEGFile) this.getEncogObject()).save(train.getMethod());
-				if (this.getParentTab() != null) {
-					this.getParentTab().setEncogObject(this.getEncogObject());
-				}
-			}
+		((ProjectEGFile) this.getEncogObject()).save(train.getMethod());
+		if (this.getParentTab() != null) {
+			this.getParentTab().setEncogObject(this.getEncogObject());
+			this.getParentTab().refresh();
 		}
-
+	
 		if (this.train.canContinue()) {
 			TrainingContinuation cont = train.pause();
 			String name = FileUtil.getFileName(this.getEncogObject().getFile());
@@ -306,11 +301,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 			EncogWorkBench.getInstance().refresh();
 		}
 	}
-
-	private void saveNEATPopulation() {
-		((ProjectEGFile) this.getEncogObject()).save();
-	}
-
+	
 	private void performClose() {
 
 		if (error)
@@ -319,14 +310,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		if (EncogWorkBench.askQuestion("Training", "Save the training?")) {
 
 			if (this.getEncogObject() != null) {
-				Object obj = ((ProjectEGFile) this.getEncogObject())
-						.getObject();
-
-				if (obj instanceof NEATPopulation) {
-					saveNEATPopulation();
-				} else {
-					saveMLMethod();
-				}
+				saveMLMethod();
 			}
 
 			EncogWorkBench.getInstance().refresh();
@@ -406,6 +390,12 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		g.drawString("Elapsed Time:", 400, y);
 		y += fm.getHeight();
 		g.drawString("Performance:", 400, y);
+		if( this.train instanceof EvolutionaryAlgorithm ) {
+			y += fm.getHeight();
+			g.drawString("Species Counts:", 400, y);
+			y += fm.getHeight();
+			g.drawString("Best Genome Size:", 400, y);
+		}
 
 		y = fm.getHeight();
 		g.setFont(this.bodyFont);
@@ -445,6 +435,18 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		}
 
 		g.drawString(str, 500, y);
+		
+		if( this.train instanceof EvolutionaryAlgorithm ) {
+			y += fm.getHeight();
+			EvolutionaryAlgorithm ea = (EvolutionaryAlgorithm)this.train;
+			if( ea.getPopulation()!=null ) {
+				g.drawString(Format.formatInteger(ea.getPopulation().getSpecies().size()), 500, y);	
+				y += fm.getHeight();
+				if( ea.getBestGenome()!=null ) {
+					g.drawString(Format.formatInteger(ea.getBestGenome().size()), 500, y);
+				}
+			}
+		}
 
 	}
 

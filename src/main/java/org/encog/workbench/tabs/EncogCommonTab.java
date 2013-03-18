@@ -132,6 +132,8 @@ public abstract class EncogCommonTab extends JPanel {
 		this.setDirty(false);
 	}
 	
+	public void refresh() {}
+	
 	public void updateTitle() {
 		StringBuilder t = new StringBuilder();
 		if( this.isDirty() )

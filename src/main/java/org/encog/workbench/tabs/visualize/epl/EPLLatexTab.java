@@ -39,9 +39,6 @@ import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
-import edu.uci.ics.jung.graph.Forest;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-
 public class EPLLatexTab extends EncogCommonTab {
 
 	private BufferedImage image;
@@ -52,6 +49,7 @@ public class EPLLatexTab extends EncogCommonTab {
 		try {
 			RenderLatexExpression render = new RenderLatexExpression();
 			String latex = render.render(prg);
+			try {
 			TeXFormula formula = new TeXFormula(latex);
 			TeXIcon icon = formula
 					.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20);
@@ -65,6 +63,9 @@ public class EPLLatexTab extends EncogCommonTab {
 			JLabel jl = new JLabel();
 			jl.setForeground(new Color(0, 0, 0));
 			icon.paintIcon(jl, g2, 0, 0);
+			} catch(Exception ex) {
+				throw new UnsupportedOperationException("Can't parse LATEX: " + latex+"\nFrom: " + prg.toString(), ex);
+			}
 
 		} catch (Exception ex) {
 			EncogWorkBench.displayError("Error", ex);		

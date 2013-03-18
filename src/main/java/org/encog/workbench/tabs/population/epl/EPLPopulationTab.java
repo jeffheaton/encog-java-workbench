@@ -175,10 +175,6 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 		TrainBasicNetwork t = new TrainBasicNetwork(
 				(ProjectEGFile) this.getEncogObject(), this);
 		t.performTrain();
-		this.list = this.population.flatten();
-		this.populationTable.repaint();
-		this.repaint();
-		this.pi.repaint();
 	}
 
 	@Override
@@ -208,6 +204,12 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 
 	public void performReset() {
 		CreateNewFile.createPopulationEPL(null, this.population);
+		refresh();
+	}
+
+	@Override
+	public void refresh() {
+		this.population = (PrgPopulation)((ProjectEGFile)getEncogObject()).getObject();
 		this.list = this.population.flatten();
 		this.populationTable.repaint();
 		this.repaint();

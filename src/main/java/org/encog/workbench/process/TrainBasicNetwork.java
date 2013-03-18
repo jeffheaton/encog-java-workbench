@@ -764,7 +764,7 @@ public class TrainBasicNetwork {
 		BasicTrainingProgress tab = new BasicTrainingProgress(train, file,
 				train.getTraining(), validationData);
 		if (this.parentTab != null) {
-			tab.setParentTab(tab);
+			tab.setParentTab(parentTab);
 		}
 		tab.setMaxError(maxError);
 		EncogWorkBench.getInstance().getMainWindow().getTabManager()

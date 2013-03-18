@@ -70,7 +70,10 @@ public class EPLPopulationInfo extends JPanel {
 		String bestScore = "n/a";
 		
 		if( population.getBestGenome() !=null ) {
-			bestScore = Format.formatDouble(population.getBestGenome().getScore(),2);
+			double score = population.getBestGenome().getScore();
+			if( !Double.isInfinite(score) && !Double.isNaN(score) ) {
+				bestScore = Format.formatDouble(population.getBestGenome().getScore(),2);
+			}
 		}
 		
 		y = fm.getHeight();
