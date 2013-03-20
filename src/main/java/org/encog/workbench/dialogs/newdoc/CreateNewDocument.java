@@ -71,12 +71,6 @@ public class CreateNewDocument extends EncogPropertiesDialog {
 		File parent = new File(this.parentDirectory.getValue());
 		File project = new File(parent, this.projectFilename.getValue());
 
-		if (project.toString().indexOf('.') != -1) {
-			EncogWorkBench.displayError("Error",
-					"A project name must not have an extension.");
-			return false;
-		}
-
 		if (project.exists()) {
 			if (!EncogWorkBench
 					.askQuestion(
