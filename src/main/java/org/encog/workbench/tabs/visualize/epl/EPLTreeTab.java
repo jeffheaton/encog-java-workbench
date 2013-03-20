@@ -40,9 +40,11 @@ import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
 import org.encog.ml.prg.EncogProgram;
 import org.encog.ml.prg.ProgramNode;
+import org.encog.ml.prg.expvalue.ExpressionValue;
 import org.encog.ml.prg.extension.NodeType;
 import org.encog.ml.prg.extension.ProgramExtensionTemplate;
 import org.encog.ml.prg.extension.StandardExtensions;
+import org.encog.util.Format;
 import org.encog.workbench.tabs.EncogCommonTab;
 
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
@@ -106,8 +108,13 @@ public class EPLTreeTab extends EncogCommonTab {
 					int varIndex = (int)node.getData()[0].toIntValue();
 					return prg.getVariables().getVariableName(varIndex);
 				} else if( temp == StandardExtensions.EXTENSION_CONST_SUPPORT ) {
-					return node.getData()[0].toStringValue();
-				} else if( node.getTemplate().getNodeType()==NodeType.OperatorLeft || node.getTemplate().getNodeType()==NodeType.OperatorRight ){
+					ExpressionValue expr = node.getData()[0];
+					if( expr.isFloat() ) {
+						return Format.formatDouble(expr.toFloatValue(), 2);
+					} else {
+						return node.getData()[0].toStringValue();
+					}
+				} else if( node.getTemplate().getNodeType().isOperator() ){
 					return node.getTemplate().getName();
 				} else {
 					return node.getTemplate().getName() + "()";	

@@ -290,6 +290,7 @@ public class BasicTrainingProgress extends EncogCommonTab implements Runnable,
 		if (this.getParentTab() != null) {
 			this.getParentTab().setEncogObject(this.getEncogObject());
 			this.getParentTab().refresh();
+			this.getParentTab().setDirty(true);
 		}
 	
 		if (this.train.canContinue()) {

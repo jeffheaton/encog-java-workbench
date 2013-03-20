@@ -47,6 +47,8 @@ public class TrainEPLPopulationDialog extends DialogMaxError {
 	private final IntegerField complexityPentaltyFullThreshold;
 	private final DoubleField complexityFullPenalty;
 	private final CheckField simplify;
+	private final DoubleField mutateProbability;
+	private final DoubleField crossoverProbability;
 	
 	/**
 	 * Construct the dialog box.
@@ -61,6 +63,9 @@ public class TrainEPLPopulationDialog extends DialogMaxError {
 		addProperty(this.complexityPentaltyFullThreshold = new IntegerField("complexity pentalty full threshold","Complexity Pentalty Full Threshold",true,-1,-1));
 		addProperty(this.complexityFullPenalty = new DoubleField("complexity full penalty","Complexity Full Penalty",true,-1,-1));
 		addProperty(this.simplify = new CheckField("simplify","Simplify"));
+		addProperty(this.mutateProbability = new DoubleField("mutation probability","Mutation Probability",true,0,1));
+		addProperty(this.crossoverProbability = new DoubleField("crossover probability","Crossover Probability",true,0,1));
+		
 
 		render();
 		this.complexityPenaltyThreshold.setValue(10);
@@ -68,6 +73,8 @@ public class TrainEPLPopulationDialog extends DialogMaxError {
 		this.complexityPentaltyFullThreshold.setValue(50);
 		this.complexityFullPenalty.setValue(2.0);
 		this.simplify.setValue(true);
+		this.mutateProbability.setValue(0.05);
+		this.crossoverProbability.setValue(0.95);
 
 		this.getMaxError().setValue(EncogWorkBench.getInstance().getConfig().getDefaultError());
 	}
@@ -106,6 +113,22 @@ public class TrainEPLPopulationDialog extends DialogMaxError {
 	public CheckField getSimplify() {
 		return simplify;
 	}
+
+	/**
+	 * @return the mutateProbability
+	 */
+	public DoubleField getMutateProbability() {
+		return mutateProbability;
+	}
+
+	/**
+	 * @return the crossoverProbability
+	 */
+	public DoubleField getCrossoverProbability() {
+		return crossoverProbability;
+	}
+	
+	
 
 	
 }

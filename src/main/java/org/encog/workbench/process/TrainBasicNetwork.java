@@ -797,8 +797,8 @@ public class TrainBasicNetwork {
 				train.addRewriteRule(new RewriteAlgebraic());
 			}
 
-			train.addOperation(0.95, new SubtreeCrossover());
-			train.addOperation(0.05, new SubtreeMutation(pop.getContext(), 4));
+			train.addOperation(dialog.getCrossoverProbability().getValue(), new SubtreeCrossover());
+			train.addOperation(dialog.getMutateProbability().getValue(), new SubtreeMutation(pop.getContext(), 4));
 			train.setSpeciation(new PrgSpeciation());
 
 			ComplexityAdjustedScore adj = new ComplexityAdjustedScore(dialog
