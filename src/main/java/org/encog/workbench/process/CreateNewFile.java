@@ -33,6 +33,7 @@ import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
 import org.encog.ml.fitness.ZeroEvalScoreFunction;
 import org.encog.ml.prg.EncogProgramContext;
+import org.encog.ml.prg.VariableMapping;
 import org.encog.ml.prg.extension.StandardExtensions;
 import org.encog.ml.prg.generator.PrgGrowGenerator;
 import org.encog.ml.prg.train.PrgPopulation;
@@ -152,8 +153,8 @@ public class CreateNewFile {
 		if (pop != null) {
 			dialog.getPopulationSize().setValue(pop.size());
 
-			for (String varName : pop.getContext().getDefinedVariables()) {
-				dialog.getInputVariables().getModel().addElement(varName);
+			for (VariableMapping mapping : pop.getContext().getDefinedVariables()) {
+				dialog.getInputVariables().getModel().addElement(mapping.getName());
 			}
 		} else {
 			dialog.getInputVariables().getModel().addElement("x");
