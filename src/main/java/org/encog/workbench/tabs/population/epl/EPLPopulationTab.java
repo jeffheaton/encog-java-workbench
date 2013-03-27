@@ -50,6 +50,7 @@ import org.encog.workbench.dialogs.population.epl.RescoreDialog;
 import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.models.population.epl.EPLPopulationModel;
 import org.encog.workbench.models.population.epl.OpcodeModel;
+import org.encog.workbench.models.population.epl.SymbolicModel;
 import org.encog.workbench.models.population.neat.SpeciesModel;
 import org.encog.workbench.process.CreateNewFile;
 import org.encog.workbench.process.TrainBasicNetwork;
@@ -79,6 +80,10 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 	private final JScrollPane opcodesScroll;
 	private final JTable opcodesTable;
 	private final OpcodeModel opcodesModel;
+	
+	private final JScrollPane symbolicScroll;
+	private final JTable symbolicTable;
+	private final SymbolicModel symbolicModel;
 
 	public EPLPopulationTab(ProjectEGFile obj) {
 		super(obj);
@@ -117,10 +122,15 @@ public class EPLPopulationTab extends EncogCommonTab implements ActionListener,
 		this.opcodesModel = new OpcodeModel(population);
 		this.opcodesTable = new JTable(this.opcodesModel);
 		this.opcodesScroll = new JScrollPane(this.opcodesTable);
+		
+		this.symbolicModel = new SymbolicModel(population);
+		this.symbolicTable = new JTable(this.symbolicModel);
+		this.symbolicScroll = new JScrollPane(this.symbolicTable);
 
 		this.tabViews.addTab("General Population", this.populationScroll);
 		this.tabViews.addTab("Species", this.speciesScroll);
 		this.tabViews.addTab("Opcodes", this.opcodesScroll);
+		this.tabViews.addTab("Symbolic", this.symbolicScroll);
 
 		this.populationTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		this.populationTable.getColumnModel().getColumn(0)
