@@ -793,8 +793,8 @@ public class TrainBasicNetwork {
 			TrainEA train = new TrainEA(pop, trainingData);
 
 			if (dialog.getSimplify().getValue()) {
-				train.addRewriteRule(new RewriteConstants());
-				train.addRewriteRule(new RewriteAlgebraic());
+				train.getRules().addRewriteRule(new RewriteConstants());
+				train.getRules().addRewriteRule(new RewriteAlgebraic());
 			}
 
 			train.addOperation(dialog.getCrossoverProbability().getValue(), new SubtreeCrossover());
