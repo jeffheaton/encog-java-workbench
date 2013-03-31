@@ -31,6 +31,7 @@ import org.encog.ml.CalculateScore;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
+import org.encog.ml.ea.population.PopulationGenerator;
 import org.encog.ml.prg.EncogProgramContext;
 import org.encog.ml.prg.VariableMapping;
 import org.encog.ml.prg.extension.StandardExtensions;
@@ -189,8 +190,9 @@ public class CreateNewFile {
 
 			try {
 				EncogWorkBench.getInstance().getMainWindow().beginWait();
-				(new PrgGrowGenerator(pop.getContext(), maxDepth)).generate(
-						new Random(), pop, score);
+				PrgGrowGenerator generate = new PrgGrowGenerator(pop.getContext(), maxDepth);
+				generate.setScore(score);
+				generate.generate(new Random(), pop);
 			} finally {
 				EncogWorkBench.getInstance().getMainWindow().endWait();
 			}
