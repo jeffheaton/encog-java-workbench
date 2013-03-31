@@ -33,7 +33,7 @@ public class SymbolicModel implements TableModel {
 
 	private PrgPopulation population;
 	
-	public static String[] COLUMNS = { "#", "Name", "Type", "Is Enum?", "Enum Type", "Enum Item Count" };
+	public static String[] COLUMNS = { "#", "Name", "Type", "Enum Type", "Enum Item Count" };
 	
 	public SymbolicModel(PrgPopulation population)
 	{
@@ -83,10 +83,8 @@ public class SymbolicModel implements TableModel {
 			case 2:
 				return mapping.getVariableType().toString();
 			case 3:
-				return ""+mapping.isEnum();
-			case 4:
 				return ""+mapping.getEnumType();
-			case 5:
+			case 4:
 				return ""+mapping.getEnumValueCount();
 			default:
 				return "";
