@@ -41,7 +41,6 @@ import org.apache.commons.collections15.Transformer;
 import org.encog.ml.prg.EncogProgram;
 import org.encog.ml.prg.ProgramNode;
 import org.encog.ml.prg.expvalue.ExpressionValue;
-import org.encog.ml.prg.extension.NodeType;
 import org.encog.ml.prg.extension.ProgramExtensionTemplate;
 import org.encog.ml.prg.extension.StandardExtensions;
 import org.encog.util.Format;
@@ -199,7 +198,7 @@ public class EPLTreeTab extends EncogCommonTab {
 	}
 	
 	private void graphNode(ProgramNode parentNode) {
-		for(int i=parentNode.getChildNodes().size()-1;i>=0;i--) {
+		for(int i=0;i<parentNode.getChildNodes().size();i++) {
 			ProgramNode childNode  = (ProgramNode)parentNode.getChildNode(i); 
 			graphNode(childNode);
 			graph.addEdge(new Integer(edgeIndex++), parentNode, childNode);
