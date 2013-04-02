@@ -181,12 +181,22 @@ public class EncogProgramTab extends EncogCommonTab implements ActionListener {
 
 		report.tablePair("Input Count",
 				Format.formatInteger(this.program.getInputCount()));
+		
+		String score = "N/A";
+		String adjustedScore = "N/A";
+		
+		if( !Double.isNaN(this.program.getScore())) {
+			score = Format.formatDouble(this.program.getScore(), 4);
+		}
+		
+		if( !Double.isNaN(this.program.getAdjustedScore())) {
+			adjustedScore = Format.formatDouble(this.program.getAdjustedScore(), 4);
+		}
+		
 
 		report.tablePair("Size", Format.formatInteger(this.program.size()));
-		report.tablePair("Score",
-				Format.formatDouble(this.program.getScore(), 4));
-		report.tablePair("Adjusted Score",
-				Format.formatDouble(this.program.getAdjustedScore(), 4));
+		report.tablePair("Score", score);
+		report.tablePair("Adjusted Score",adjustedScore);
 
 		RenderCommonExpression renderCommonFormat = new RenderCommonExpression();
 		RenderRPN renderRPN = new RenderRPN();

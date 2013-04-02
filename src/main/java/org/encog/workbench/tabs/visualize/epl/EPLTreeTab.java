@@ -48,6 +48,7 @@ import org.encog.workbench.tabs.EncogCommonTab;
 
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.DelegateForest;
+import edu.uci.ics.jung.graph.DirectedOrderedSparseMultigraph;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.Layer;
@@ -73,7 +74,7 @@ public class EPLTreeTab extends EncogCommonTab {
 		// and E is the type of the edges
 		// Graph<V, E> where V is the type of the vertices 
         // and E is the type of the edges
-		this.graph = new DelegateForest<ProgramNode, Integer>();
+		this.graph = new DelegateForest<ProgramNode, Integer>(new DirectedOrderedSparseMultigraph<ProgramNode, Integer>());
 
         buildGraph(prg);
         // Add some vertices. From above we defined these to be type Integer.
