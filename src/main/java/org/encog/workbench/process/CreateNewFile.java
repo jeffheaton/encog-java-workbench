@@ -182,7 +182,7 @@ public class CreateNewFile {
 				context.defineVariable(str);
 			}
 
-			StandardExtensions.createNumericOperators(context.getFunctions());
+			StandardExtensions.createNumericOperators(context);
 
 			if (pop == null) {
 				pop = new PrgPopulation(context, populationSize);
