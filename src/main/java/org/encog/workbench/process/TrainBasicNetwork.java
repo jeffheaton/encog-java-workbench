@@ -45,6 +45,7 @@ import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.folded.FoldedDataSet;
 import org.encog.ml.ea.score.adjust.ComplexityAdjustedScore;
 import org.encog.ml.ea.train.basic.TrainEA;
+import org.encog.ml.prg.opp.ConstMutation;
 import org.encog.ml.prg.opp.SubtreeCrossover;
 import org.encog.ml.prg.opp.SubtreeMutation;
 import org.encog.ml.prg.species.PrgSpeciation;
@@ -798,6 +799,7 @@ public class TrainBasicNetwork {
 			}
 
 			train.addOperation(dialog.getCrossoverProbability().getValue(), new SubtreeCrossover());
+			train.addOperation(dialog.getConstMutateProbability().getValue(), new ConstMutation(pop.getContext(),0.5,1.0));
 			train.addOperation(dialog.getMutateProbability().getValue(), new SubtreeMutation(pop.getContext(), 4));
 			train.setSpeciation(new PrgSpeciation());
 
