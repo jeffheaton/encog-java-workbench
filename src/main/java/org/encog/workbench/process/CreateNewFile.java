@@ -31,11 +31,12 @@ import org.encog.ml.CalculateScore;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.buffer.BufferedMLDataSet;
-import org.encog.ml.ea.population.PopulationGenerator;
 import org.encog.ml.prg.EncogProgramContext;
 import org.encog.ml.prg.VariableMapping;
 import org.encog.ml.prg.extension.StandardExtensions;
+import org.encog.ml.prg.generator.PrgGenerator;
 import org.encog.ml.prg.generator.PrgGrowGenerator;
+import org.encog.ml.prg.generator.RampedHalfAndHalf;
 import org.encog.ml.prg.train.PrgPopulation;
 import org.encog.ml.prg.train.ZeroEvalScoreFunction;
 import org.encog.neural.neat.NEATPopulation;
@@ -190,7 +191,7 @@ public class CreateNewFile {
 
 			try {
 				EncogWorkBench.getInstance().getMainWindow().beginWait();
-				PrgGrowGenerator generate = new PrgGrowGenerator(pop.getContext(), maxDepth);
+				RampedHalfAndHalf generate = new RampedHalfAndHalf(pop.getContext(), 2, maxDepth);
 				generate.setScore(score);
 				generate.generate(new Random(), pop);
 			} finally {
