@@ -1,8 +1,8 @@
-Encog 3.1
+Encog 3.2
 
 To launch the workbench, double-click its executable JAR.  Or launch it with:
 
-java -jar encog-workbench-3.1.0-SNAPSHOT-executable
+java -jar encog-workbench-3.2.0-SNAPSHOT-executable
 
 The following links will be helpful getting started with Encog.
 
