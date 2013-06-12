@@ -27,6 +27,7 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -84,6 +85,7 @@ public class AboutTab extends HTMLTab {
 		report.tablePair("Java Version", System.getProperty("java.version"));
 		report.tablePair("Java 64/32-Bit", System.getProperty("sun.arch.data.model"));
 		report.tablePair("Processor Count", ""+Runtime.getRuntime().availableProcessors());
+		report.tablePair("Default Char Encoding", Charset.defaultCharset().toString());
 		report.tablePair("OS Name/Version", ""+ByteOrder.nativeOrder().toString());
 		report.tablePair("Encog Core Version", ""+Encog.VERSION);	
 		report.endTable();
