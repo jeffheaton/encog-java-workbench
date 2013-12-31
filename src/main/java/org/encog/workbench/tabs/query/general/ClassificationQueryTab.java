@@ -32,6 +32,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import org.encog.EncogError;
@@ -75,10 +76,16 @@ public class ClassificationQueryTab extends EncogCommonTab implements ActionList
 		right.setLayout(new BorderLayout());
 		left.add(new JLabel("Input"), BorderLayout.NORTH);
 		right.add(new JLabel("Output"), BorderLayout.NORTH);
-		left.add(this.inputTable = new JTable(new NetworkQueryModel(
-				this.inputCount, 2)), BorderLayout.CENTER);
-		right.add(this.outputTable = new JTable(new NetworkQueryModel(
-				1, 2)), BorderLayout.CENTER);
+		
+		this.inputTable = new JTable(new NetworkQueryModel(
+				this.inputCount, 2));
+		this.outputTable = new JTable(new NetworkQueryModel(
+				1, 2));
+		
+		JScrollPane inputScroll = new JScrollPane(this.inputTable);
+		JScrollPane outputScroll = new JScrollPane(this.outputTable);
+		left.add(inputScroll, BorderLayout.CENTER);
+		right.add(outputScroll, BorderLayout.CENTER);
 		this.add(this.calculateButton = new JButton("Calculate"),
 				BorderLayout.SOUTH);
 		this.outputTable.setEnabled(false);
