@@ -88,7 +88,7 @@ public class MethodAndTrainingDialog extends EncogPropertiesDialog {
 	 * combo boxes.
 	 */
 	private void findData(boolean includePop) {
-		this.trainingSets = EncogWorkBench.getInstance().getTrainingData();
+		this.trainingSets = EncogWorkBench.getInstance().getTrainingData("_train");
 		this.networks = EncogWorkBench.getInstance().getMLMethods(includePop);
 	}
 	

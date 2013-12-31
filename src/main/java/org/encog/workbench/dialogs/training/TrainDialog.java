@@ -34,6 +34,7 @@ import org.encog.workbench.EncogWorkBench;
 import org.encog.workbench.dialogs.common.CheckField;
 import org.encog.workbench.dialogs.common.ComboBoxField;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
+import org.encog.workbench.util.FileUtil;
 
 public class TrainDialog extends MethodAndTrainingDialog {
 
@@ -43,7 +44,7 @@ public class TrainDialog extends MethodAndTrainingDialog {
 	public TrainDialog(boolean includePop) {
 		super(includePop);
 		setSize(600,250);
-		List<ProjectTraining> list = EncogWorkBench.getInstance().getTrainingData();
+		List<ProjectTraining> list = EncogWorkBench.getInstance().getTrainingData("_eval");
 		
 		addProperty(this.comboValidation = new ComboBoxField("validation set","Validation Set (optional)",false,list));
 		addProperty(this.loadToMemory = new CheckField("load to memory",
@@ -52,7 +53,7 @@ public class TrainDialog extends MethodAndTrainingDialog {
 		
 		render();
 		this.loadToMemory.setValue(true);
-		((JComboBox)this.comboValidation.getField()).setSelectedIndex(-1);
+		ensureNonEvalUnselection();
 	}
 
 	/**
@@ -86,4 +87,15 @@ public class TrainDialog extends MethodAndTrainingDialog {
 		else
 			return result;
 	}
+	
+    private void ensureNonEvalUnselection()
+    {
+        JComboBox comboValidation = (JComboBox) this.comboValidation.getField();
+        ProjectTraining selectedItem = (ProjectTraining) comboValidation.getSelectedItem();
+
+        if (selectedItem == null || !FileUtil.getFileName(selectedItem.getFile()).endsWith("_eval"))
+        {
+            comboValidation.setSelectedIndex(-1);
+        }
+    }
 }

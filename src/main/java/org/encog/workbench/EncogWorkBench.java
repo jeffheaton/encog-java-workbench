@@ -26,6 +26,8 @@ package org.encog.workbench;
 import java.awt.Frame;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -47,6 +49,7 @@ import org.encog.workbench.frames.document.tree.ProjectEGFile;
 import org.encog.workbench.frames.document.tree.ProjectFile;
 import org.encog.workbench.frames.document.tree.ProjectItem;
 import org.encog.workbench.frames.document.tree.ProjectTraining;
+import org.encog.workbench.util.FileUtil;
 import org.encog.workbench.util.WorkbenchLogHandler;
 
 /**
@@ -425,4 +428,23 @@ public class EncogWorkBench implements Runnable {
 	public static String displayInput(String prompt, String str) {
 		return JOptionPane.showInputDialog(null, prompt, str);
 	}
+	
+	public List<ProjectTraining> getTrainingData(final String sortFirst) {
+        List<ProjectTraining> list = getTrainingData();
+
+        Collections.sort(list, new Comparator<ProjectTraining>() {
+            @Override
+            public int compare(ProjectTraining p1, ProjectTraining p2) {
+                boolean isFirst1 = FileUtil.getFileName(p1.getFile()).endsWith(sortFirst);
+                boolean isFirst2 = FileUtil.getFileName(p2.getFile()).endsWith(sortFirst);
+
+                if (isFirst1 && !isFirst2) return -1;
+                if (isFirst2 && !isFirst1) return 1;
+
+                return p1.getName().compareTo(p2.getName());
+            }
+        });
+
+        return list;
+    }
 }
