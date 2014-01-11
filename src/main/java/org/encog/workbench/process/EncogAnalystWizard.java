@@ -34,6 +34,7 @@ import org.encog.app.analyst.missing.DiscardMissing;
 import org.encog.app.analyst.missing.MeanAndModeMissing;
 import org.encog.app.analyst.missing.NegateMissing;
 import org.encog.app.analyst.wizard.AnalystWizard;
+import org.encog.app.analyst.wizard.NormalizeRange;
 import org.encog.app.analyst.wizard.PredictionType;
 import org.encog.app.analyst.wizard.SourceElement;
 import org.encog.app.analyst.wizard.WizardMethodType;
@@ -122,6 +123,14 @@ public class EncogAnalystWizard {
 				
 				wizard.setCodeTargetLanguage(dialog.getGenerationTargetLanguage());
 				wizard.setCodeEmbedData(dialog.getEmbedData().getValue());
+				
+				if( wizard.getMethodType()==WizardMethodType.NEAT ) {
+					if(wizard.getRange()==NormalizeRange.NegOne2One ) {
+						if( EncogWorkBench.askQuestion("Range", "NEAT uses a steepend sigmoid function which will not work with the range -1 to 1.\nShould this be switched to 0 to 1?")) {
+							wizard.setRange(NormalizeRange.Zero2One);
+						}
+					}
+				}
 				
 				if( !setSpecific(wizard) )
 					return;
