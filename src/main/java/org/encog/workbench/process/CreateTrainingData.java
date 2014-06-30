@@ -162,6 +162,7 @@ public class CreateTrainingData {
 			File targetFile = new File(EncogWorkBench.getInstance()
 					.getProjectDirectory(), name);
 
+			
 			MLDataSet trainingData = RandomTrainingFactory.generate(
 					System.currentTimeMillis(), elements, input, 0, low, high);
 

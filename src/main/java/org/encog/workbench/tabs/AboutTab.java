@@ -35,11 +35,12 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.encog.Encog;
+import org.encog.util.Format;
 import org.encog.util.HTMLReport;
 import org.encog.workbench.EncogWorkBench;
 
 public class AboutTab extends HTMLTab {
-	
+
 	/**
 	 * JAR files currently in use.
 	 */
@@ -47,9 +48,9 @@ public class AboutTab extends HTMLTab {
 
 	public AboutTab() {
 		super(null);
-		
+
 		setPreferredSize(new Dimension(800, 3000));
-		
+
 		final String path = System.getProperty("java.class.path");
 		final StringTokenizer tok = new StringTokenizer(path, ""
 				+ File.pathSeparatorChar);
@@ -65,12 +66,12 @@ public class AboutTab extends HTMLTab {
 				} catch (final IOException e) {
 					// ignore the JAR
 				}
-			}			
+			}
 		}
-		
+
 		generate();
 	}
-	
+
 	public void generate() {
 		HTMLReport report = new HTMLReport();
 		report.beginHTML();
@@ -80,29 +81,53 @@ public class AboutTab extends HTMLTab {
 		report.h1(title);
 		report.para("Encog Workbench is released under the Apache License.  For more information see the license file released with the Encog Workbench.");
 		report.h3(EncogWorkBench.COPYRIGHT);
-		
+
 		report.beginTable();
 		report.tablePair("Java Version", System.getProperty("java.version"));
-		report.tablePair("Java 64/32-Bit", System.getProperty("sun.arch.data.model"));
-		report.tablePair("Processor Count", ""+Runtime.getRuntime().availableProcessors());
-		report.tablePair("Default Char Encoding", Charset.defaultCharset().toString());
-		report.tablePair("OS Name/Version", ""+ByteOrder.nativeOrder().toString());
-		report.tablePair("Encog Core Version", ""+Encog.VERSION);	
+		report.tablePair("Java 64/32-Bit",
+				System.getProperty("sun.arch.data.model"));
+		report.tablePair("Processor Count", ""
+				+ Runtime.getRuntime().availableProcessors());
+		report.tablePair("Default Char Encoding", Charset.defaultCharset()
+				.toString());
+		report.tablePair("OS Name/Version", ""
+				+ ByteOrder.nativeOrder().toString());
+		report.tablePair("Encog Core Version", "" + Encog.VERSION);
+
+		/* Total number of processors or cores available to the JVM */
+		report.tablePair("Available processors (cores): ", ""
+				+ Runtime.getRuntime().availableProcessors());
+
+		/* Total amount of free memory available to the JVM */
+		report.tablePair("Free memory (bytes): ",
+				Format.formatMemory(Runtime.getRuntime().freeMemory()));
+
+		/* This will return Long.MAX_VALUE if there is no preset limit */
+		long maxMemory = Runtime.getRuntime().maxMemory();
+		/* Maximum amount of memory the JVM will attempt to use */
+		report.tablePair(
+				"Maximum memory (bytes): ",
+				(maxMemory == Long.MAX_VALUE ? "no limit" : Format
+						.formatMemory(maxMemory)));
+
+		/* Total memory currently in use by the JVM */
+		report.tablePair("Total memory (bytes): ",
+				Format.formatMemory(Runtime.getRuntime().totalMemory()));
+
 		report.endTable();
 
 		report.h3("Active JAR Files");
 		report.beginList();
 		for (final String file : this.jars) {
 			report.listItem(file);
-		}		
+		}
 		report.endList();
 		report.endBody();
 		report.endHTML();
-		
-		
+
 		this.display(report.toString());
 	}
-	
+
 	@Override
 	public String getName() {
 		return "About";
