@@ -61,6 +61,9 @@ import org.encog.workbench.util.WorkbenchLogHandler;
  */
 public class EncogWorkBench implements Runnable {
 
+	/**
+	 * The name of the config file.
+	 */
 	public final static String CONFIG_FILENAME = ".EncogWorkbench.conf";
 	public final static String VERSION = "3.3";
 	public static final String COPYRIGHT = "Copyright 2014 by Heaton Research, Inc.";
