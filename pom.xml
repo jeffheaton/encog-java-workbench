@@ -100,6 +100,9 @@ Authors of this POM file: iirekm, jheaton
             <goals>
               <goal>jar</goal>
             </goals>
+            <configuration>
+                <additionalparam>-Xdoclint:none</additionalparam>
+            </configuration>
           </execution>
         </executions>
       </plugin>
