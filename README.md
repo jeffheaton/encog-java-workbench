@@ -1,5 +1,8 @@
 [![Build Status](https://travis-ci.org/encog/encog-java-workbench.svg?branch=master)](https://travis-ci.org/encog/encog-java-workbench)
+
 Encog 3.4
+
+The workbench can be downloaded from the [core release page](https://github.com/encog/encog-java-core/releases)
 
 To launch the workbench, double-click its executable JAR.  Or launch it with:
 
