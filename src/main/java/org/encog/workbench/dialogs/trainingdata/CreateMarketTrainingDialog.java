@@ -55,12 +55,12 @@ public class CreateMarketTrainingDialog  extends EncogPropertiesDialog {
 		setSize(500,400);
 		addProperty(this.ticker = new TextField("ticker","Ticker Symbol",true));
 		addProperty(this.fromMonth = new IntegerField("begin month","Beginning Month(1-12)",true, 1, 12));
-		addProperty(this.fromDay = new IntegerField("begin day","Beginning Day(1-12)",true, 1, 31));
-		addProperty(this.fromYear = new IntegerField("begin year","Beginning Year(1-12)",true, 1900, year));
+		addProperty(this.fromDay = new IntegerField("begin day","Beginning Day(1-31)",true, 1, 31));
+		addProperty(this.fromYear = new IntegerField("begin year","Beginning Year(>= 1900)",true, 1900, year));
 		
 		addProperty(this.toMonth = new IntegerField("end month","Ending Month(1-12)",true, 1, 12));
-		addProperty(this.toDay = new IntegerField("end day","Ending Day(1-12)",true, 1, 31));
-		addProperty(this.toYear = new IntegerField("end year","Ending Year(1-12)",true, 1900, year));
+		addProperty(this.toDay = new IntegerField("end day","Ending Day(1-31)",true, 1, 31));
+		addProperty(this.toYear = new IntegerField("end year","Ending Year(>= 1900)",true, 1900, year));
 		
 		
 		render();
