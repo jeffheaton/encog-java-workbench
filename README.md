@@ -3,15 +3,18 @@ Encog 3.4
 
 To launch the workbench, double-click its executable JAR.  Or launch it with:
 
-java -jar encog-workbench-3.2.0-SNAPSHOT-executable
+java -jar encog-workbench-3.4.0-SNAPSHOT-all
 
 The following links will be helpful getting started with Encog.
 
+To build an executable JAR for the workbench use:
+
+gradle shadowJar
+
 Getting Started:
 
-http://www.heatonresearch.com/wiki/Getting_Started
+http://www.heatonresearch.com/encog
 
 Important Links:
 
 http://www.heatonresearch.com/encog
-http://www.heatonresearch.com/wiki

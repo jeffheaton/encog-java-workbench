@@ -1,9 +1,9 @@
 /*
- * Encog(tm) Workbench v3.3
+ * Encog(tm) Workbench v3.4
  * http://www.heatonresearch.com/encog/
  * https://github.com/encog/encog-java-workbench
  *
- * Copyright 2008-2014 Heaton Research, Inc.
+ * Copyright 2008-2016 Heaton Research, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,8 +65,8 @@ public class EncogWorkBench implements Runnable {
 	 * The name of the config file.
 	 */
 	public final static String CONFIG_FILENAME = ".EncogWorkbench.conf";
-	public final static String VERSION = "3.3";
-	public static final String COPYRIGHT = "Copyright 2014 by Heaton Research, Inc.";
+	public final static String VERSION = "3.4";
+	public static final String COPYRIGHT = "Copyright 2016 by Heaton Research, Inc.";
 
 	/**
 	 * The singleton instance.
