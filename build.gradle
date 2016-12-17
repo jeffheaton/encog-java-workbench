@@ -1,23 +1,48 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+  }
+}
+
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+}
+
+
+
 apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 group = 'org.encog'
-version = '3.3.0'
+version = '3.4.0'
+mainClassName = 'org.encog.workbench.EncogWorkBench'
 
 description = """Encog Workbench"""
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
 
 configurations.all {
 }
 
-repositories {
-     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-     maven { url "http://repo.maven.apache.org/maven2" }
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.encog.workbench.EncogWorkBench'
+    }
 }
+
+repositories {
+	mavenLocal()
+	jcenter()
+	maven { url "http://repo.maven.apache.org/maven2" }
+}
+
 dependencies {
-    compile group: 'org.encog', name: 'encog-core', version:'3.2.0'
+    compile group: 'org.encog', name: 'encog-core', version:'3.4.0-SNAPSHOT'
     compile group: 'jfree', name: 'jcommon', version:'1.0.15'
     compile group: 'jfree', name: 'jfreechart', version:'1.0.13'
     compile group: 'org.hsqldb', name: 'hsqldb', version:'2.0.0'
@@ -36,3 +61,4 @@ dependencies {
     compile group: 'org.scilab.forge', name: 'jlatexmath', version:'0.9.6'
     testCompile group: 'junit', name: 'junit', version:'4.8.1'
 }
+

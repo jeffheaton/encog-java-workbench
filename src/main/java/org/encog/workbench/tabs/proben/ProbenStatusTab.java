@@ -344,7 +344,7 @@ public class ProbenStatusTab extends EncogCommonTab implements
 				trainingName, trainingArgs);
 
 		train.addStrategy(new EndIterationsStrategy(this.maxIterations));
-		train.addStrategy(new EarlyStoppingStrategy(data.getValidationDataSet(),data.getTestDataSet()));
+		train.addStrategy(new EarlyStoppingStrategy(data.getValidationDataSet()));
 		Stopwatch sw = new Stopwatch();
 		sw.start();
 
