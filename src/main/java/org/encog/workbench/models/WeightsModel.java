@@ -1,9 +1,9 @@
 /*
- * Encog(tm) Workbench v3.4
+ * Encog(tm) Java Workbench v3.4
  * http://www.heatonresearch.com/encog/
- * https://github.com/encog/encog-java-workbench
+ * https://github.com/encog/encog-java-examples
  *
- * Copyright 2008-2016 Heaton Research, Inc.
+ * Copyright 2008-2017 Heaton Research, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
