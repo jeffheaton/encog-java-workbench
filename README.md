@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.org/encog/encog-java-workbench.svg?branch=master)](https://travis-ci.org/encog/encog-java-workbench)
 
-Encog 3.4
+I am not developing the Encog Workbench further.  This includes bug fixes and enhancement. (Encog core remains under development) The Workbench code here is implemented using Java Swing, which has been [all but deprecated](https://vaadin.com/blog/clock-ticking-loudly-for-swing-and-swt-users) by Oracle. Like most Swing apps, the Encog workbench does not render that well on high resolution monitors. At this point, I do not have the time (nor see much of a purpose) to update the Encog Workbench.  If you are looking for a GUI-type platform, I suggest having a look at [RapidMiner](https://rapidminer.com/) or [Dataiku](https://www.dataiku.com/dss/editions/).  
+
+Encog 3.4 workbench
+===================
 
 The workbench can be downloaded from the [core release page](https://github.com/encog/encog-java-core/releases)
 
